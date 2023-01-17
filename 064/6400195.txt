@@ -1,0 +1,36 @@
+(inputs=>{
+    let s = inputs[0].split(" ");
+    let a = [];
+    for(let i=0,len=s.length;i<len;i++){
+        let n=Number(s[i]);
+        if(isNaN( n )){//演算子
+            let a1=a.pop();
+            let a2=a.pop();
+            let res=0;
+            switch(s[i]){
+                case "+":{
+                    res=a2+a1;
+                    break;
+                }
+                case "-":{
+                    res=a2-a1;
+                    break;
+                }
+                case "*":{
+                    res=a2*a1;
+                    break;
+                }
+                case "/":{
+                    res=a2/a1;
+                    break;
+                }
+            }
+            a.push(res);
+        }
+        else{//数字
+            a.push(n);
+        }
+    }
+    console.log(a[0]);
+})(require("fs").readFileSync("/dev/stdin","utf-8").trim("\n").split("\n"));
+

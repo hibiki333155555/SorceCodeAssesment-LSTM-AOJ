@@ -1,0 +1,4 @@
+
+s = "Hello World\n"
+s = s * 1000
+print( s )

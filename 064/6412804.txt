@@ -1,0 +1,5 @@
+S = int(input())
+h = /3600
+m = S/60
+s = S
+print(h:m:s)

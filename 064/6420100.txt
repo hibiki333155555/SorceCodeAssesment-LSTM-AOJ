@@ -1,0 +1,10 @@
+#include<stdio.h>
+#define PI 3.141592653589
+
+int main(void)
+{
+    int r;
+    scanf("%d",&r);
+    printf("%.6lf %.6lf\n",PI*2*(double)r,PI*(double)r*(double)r);
+    return 0;
+}

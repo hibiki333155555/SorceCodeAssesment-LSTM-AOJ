@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int x;
+    int y;
+    cin >> x >> y;
+    int sum = 0;
+    while( x != 0 && y != 0 )
+    {
+        for(int i=1;i<x+1;i++)
+        {
+            for (int j=i+1;j<x+1;j++)
+            {
+                if (y-i-j <= x && y-i-j > j) {
+                    sum++;
+                }
+            }
+        }
+        cout << sum;
+        break;
+    }
+    return 0;
+}

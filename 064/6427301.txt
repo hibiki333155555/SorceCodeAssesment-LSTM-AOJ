@@ -1,0 +1,11 @@
+# https://onlinejudge.u-aizu.ac.jp/problems/ITP1_10_B
+import math
+a, b, C_angle = map(int, input().split())
+rad = C_angle * math.pi / 180 # 180 : math.pi = 90 : C_angle
+height = b * math.sin(rad)
+c = math.sqrt(a**2 + b**2 - 2*a*b * math.cos(rad))
+S = a * height * 1/2
+print(f"{S:.8f}")
+print(f"{a+b+c:.8f}")
+print(f"{height:.8f}")
+

@@ -1,0 +1,2 @@
+lst=(int (x) for x in input().split())
+print(min(lst),mux(lst),sum(lst))

@@ -1,0 +1,96 @@
+/***
+ * https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_6_B&lang=ja
+ ***/
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <string>
+#include <cstring>
+#include <iomanip>
+#include <cmath>
+// #include "comp.h"
+using namespace std;
+using ll = long long;
+
+// #define DEBUG
+#define FOR(i, a, b) for (int i = (int)(a); i < (int)(b); ++i)
+#define rep(i, n) for (int i = 0; i < (int)(n); ++i)
+
+struct card
+{
+    char x;
+    int y;
+
+    bool operator<(const card &right) const
+    {
+        return x == right.x ? y < right.y : x < right.x;
+    }
+};
+
+int main()
+{
+#ifndef DEBUG
+    int n, num;
+    char c;
+
+    cin >> n;
+
+    int S[14] = {0};
+    int H[14] = {0};
+    int D[14] = {0};
+    int C[14] = {0};
+
+    rep(i, n)
+    {
+        cin >> c >> num;
+        switch (c)
+        {
+        case 'S':
+            S[num] = num;
+            break;
+        case 'H':
+            H[num] = num;
+            break;
+        case 'D':
+            D[num] = num;
+            break;
+        case 'C':
+            C[num] = num;
+            break;
+        }
+    }
+
+    FOR(i, 1, 14)
+    {
+        if (S[i] == 0)
+            cout << "S " << i << endl;
+    }
+    FOR(i, 1, 14)
+    {
+        if (H[i] == 0)
+            cout << "H " << i << endl;
+    }
+    FOR(i, 1, 14)
+    {
+        if (C[i] == 0)
+            cout << "C " << i << endl;
+    }
+    FOR(i, 1, 14)
+    {
+        if (D[i] == 0)
+            cout << "D " << i << endl;
+    }
+
+#else
+    int j;
+    rep(i, 52)
+    {
+        j = i % 13 + 1;
+        cout << j;
+        if (j == 13)
+            cout << endl;
+    }
+#endif
+}
+

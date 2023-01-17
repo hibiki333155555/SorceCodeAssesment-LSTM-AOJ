@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+#include <complex>
+#include <random>
+#include <functional>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+using vvvll = vector<vvll>;
+using vvvvll = vector<vvvll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+vvll G;
+
+
+
+int main() {
+    ll H, W;
+    cin >> H >> W;
+    vector<string> S(H);
+    pair<ll, ll> ST, SG;
+    rep(i, H) {
+        cin >> S[i];
+        rep(w, W) {
+            if (S[i][w] == 'S')ST = { i,w };
+            if (S[i][w] == 'G')SG = { i,w };
+        }
+    }
+    vector<ll> dist(H * W, 1e16);
+    dist[ST.first * W + ST.second] = 0;
+    vector<bool> seen(H * W, false);
+    priority_queue<pair<ll, ll>, vector<pair<ll, ll>>, greater<pair<ll, ll>>> Q;
+    Q.push({ 0,ST.first * W + ST.second });
+    vll dx = { 1,0,-1,0 };
+    vll dy = { 0,1,0,-1 };
+    map<char, ll> CN;
+    CN['U'] = 3;
+    CN['R'] = 0;
+    CN['D'] = 1;
+    CN['L'] = 2;
+    CN['#'] = -1;
+    CN['S'] = -1;
+    CN['G'] = -1;
+    CN['.'] = -1;
+    while (!Q.empty()) {
+        auto p = Q.top();
+        Q.pop();
+        if (seen[p.second])continue;
+        seen[
+            p.second
+        ] = true;
+
+        ll y = p.second / W;
+        ll x = p.second % W;
+
+        ll ny, nx;
+        rep(d, 4) {
+            ny = y + dy[d];
+            nx = x + dx[d];
+            if (ny < 0 || ny >= H || nx < 0 || nx >= W)continue;
+            if(S[ny][nx]=='#')continue;
+            ll c = 1 - (d == CN[S[y][x]]);
+            if(CN[S[y][x]]!=-1&&CN[S[y][x]]!=d)c=1e16;
+            if (dist[ny * W + nx] <= dist[y * W + x] + c)continue;
+            if (seen[ny * W + nx])continue;
+            dist[ny * W + nx] = dist[y * W + x] + c;
+            Q.push({ dist[ny * W + nx],ny * W + nx });
+        }
+
+    }
+    if (dist[SG.first * W + SG.second] > 1e15)cout << -1 << endl;
+    else cout << dist[SG.first * W + SG.second] << endl;
+
+}
+
+

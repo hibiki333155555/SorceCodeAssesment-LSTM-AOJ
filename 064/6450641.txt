@@ -1,0 +1,9 @@
+A=int(input())
+B=int(input())
+C=A+B
+if C>12:
+    C=C%12
+elif C==0:
+    C=12
+print(C)
+

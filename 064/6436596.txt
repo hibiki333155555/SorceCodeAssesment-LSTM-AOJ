@@ -1,0 +1,156 @@
+
+class List
+  def initialize
+    @arr = []
+    @first_node = nil
+    @last_node = nil
+  end
+
+  def process(op, value)
+
+    case op
+    when 'insert'
+      insert(value)
+    when 'delete'
+      delete(find_node(value))
+    when 'deleteFirst'
+      delete_first
+    when 'deleteLast'
+      delete_last
+    end
+  end
+
+  def print
+    current_node = @first_node
+    values = []
+    loop do
+      break if current_node.nil?
+      values << current_node.value
+      current_node = current_node.next
+    end
+
+    puts values.join(' ')
+  end
+
+  private
+
+  def insert(value)
+
+    node = Node.new(value, @first_node, nil)
+    if @first_node
+      @first_node.update_left(node)
+    end
+    if @last_node.nil?
+      @last_node = node
+    end
+    @first_node = node
+    @arr << node
+  end
+
+  def find_node(value)
+    current_node = @first_node
+    loop do
+      break if current_node.nil?
+      return current_node if current_node.value == value
+      current_node = current_node.next
+    end
+  end
+
+  def delete(node)
+    right = node.right
+    left = node.left
+
+    if right
+      right.update_left(left)
+    else
+      @last_node = left
+    end
+
+    if left
+      left.update_right(right)
+    else
+      @first_node = right
+    end
+  end
+
+  def _delete(value)
+    target = nil
+    current_node = @first_node
+    loop do
+      break if current_node.nil?
+      if current_node.value == value
+        right = current_node.next
+        left = current_node.prev
+        if right
+          right.update_left(left)
+        else
+          @last_node = left
+        end
+
+        if left
+          left.update_right(right)
+        else
+          @first_node = right
+        end
+        break
+      end
+
+      current_node = current_node.next
+    end
+  end
+
+  def delete_first
+    delete(@first_node)
+  end
+
+  def delete_last
+    delete(@last_node)
+end
+
+class Node
+  def initialize(value, right, left)
+    @value = value
+    @right = right
+    @left = left
+  end
+
+  def update_left(node)
+    @left = node
+  end
+
+  def update_right(node)
+    @right = node
+  end
+
+  def next
+    @right
+  end
+
+  def prev
+    @left
+  end
+
+  def value
+    @value
+  end
+end
+
+
+def resolve(arr)
+  list = List.new
+  arr.each do |val|
+    list.process(val[0], val[1].to_i)
+  end
+
+  list.print
+end
+
+n = gets.to_i
+
+arr = []
+n.times do
+  arr << gets.split(' ')
+end
+
+resolve(arr)
+

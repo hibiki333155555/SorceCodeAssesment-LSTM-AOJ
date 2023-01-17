@@ -1,0 +1,21 @@
+inf = 10**18
+from bisect import bisect_left as bl
+
+
+def main():
+    N = int(input())
+    A = [int(input()) for _ in range(N)]
+    dp = [inf]*(N+1)
+    dp[0] = 0
+    #the minimum number of the last digit
+    #the lenght of the IS of length 
+
+    for i in A:
+        index=bl(dp, i)
+        dp[index] = min(dp[index], i)
+    
+    ans = 0 
+    for i in range(N+1):
+        if dp[i]!=inf: ans=i
+    print(ans)
+main()

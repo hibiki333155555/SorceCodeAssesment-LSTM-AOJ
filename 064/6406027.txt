@@ -1,0 +1,12 @@
+#define pi=3.141592658979
+#include<stdio.h>
+ 
+int main(){ 
+    int a;
+ 
+    scanf("%d",&a);
+ 
+    printf("%lf %lf\n",(double)a*a*pi,(double)2*a*pi);
+ 
+    return 0;
+}

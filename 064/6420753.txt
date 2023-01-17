@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(n);i++)
+#define Inf 1000000001
+
+int main(){
+	
+	string s;
+	cin>>s;
+	int n = s.size();
+	vector<int> imos(n+1,0);
+	stack<int> S;
+	rep(i,s.size()){
+		if(isdigit(s[i])){
+			S.push(i);
+		}
+		else if(s[i]==')'){
+			int l = S.top();
+			int num = s[S.top()] - '0';
+			imos[l+1] += num;;
+			imos[i+1] -= num;
+			S.pop();
+		}
+	}
+	
+	rep(i,n)imos[i+1] += imos[i];
+	
+	string ans = "";
+	rep(i,s.size()){
+		if(isalpha(s[i])){
+			char c = s[i];
+			int nn = imos[i];
+			nn %= 26;
+			if(nn<0)nn += 26;
+			rep(j,nn){
+				c++;
+				if(c>'z')c = 'a';
+			}
+			ans += c;
+		}
+	}
+	cout<<ans<<endl;
+	return 0;
+}

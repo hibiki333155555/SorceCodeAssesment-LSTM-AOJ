@@ -1,0 +1,13 @@
+#include<stdio.h>
+
+int main()
+{
+    float r,area,circumference;
+    float pi = 3.141592653589793;
+    scanf("%f",&r);
+    area=pi*r*r;
+    circumference=2*pi*r;
+    printf("%f %f\n",area,circumference);
+    return 0;
+}
+

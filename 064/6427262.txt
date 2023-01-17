@@ -1,0 +1,15 @@
+#include <stdio.h>
+
+int main()
+{
+	int r1, r2, c1, c2;
+	char C1[3], C2[3];
+	scanf("%s %d %s %d", C1, &r1, C2, &r2);
+	if (C1[1] == 0) c1 = C1[0] - 'A';
+	else c1 = (C1[0] - 'A' + 1) * 26 + C1[1] - 'A';
+	if (C2[1] == 0) c2 = C2[0] - 'A';
+	else c2 = (C2[0] - 'A' + 1) * 26 + C2[1] - 'A';
+	printf("%d\n", (r2 - r1 + 1) * (c2 - c1 + 1));
+	fflush(stdout);
+	return 0;
+}

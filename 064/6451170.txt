@@ -1,0 +1,14 @@
+#include <iostream>
+#include <vector>
+#include <iterator>
+#include <cmath>
+using namespace std;
+
+int main(int argc, char const *argv[])
+{
+    int x,result;
+    cin >> x;
+    result=pow(x, 3.0);
+    cout << result << endl;
+    return result;
+}

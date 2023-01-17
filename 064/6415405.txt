@@ -1,0 +1,76 @@
+#include <algorithm>
+#include <bitset>
+#include <cmath>
+#include <complex>
+#include <cstdio>
+#include <iostream>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <random>
+#include <set>
+#include <stack>
+#include <string>
+#include <sys/types.h>
+#include <unistd.h>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+#pragma region macros
+#define _overload(_1, _2, _3, name, ...) name
+#define _rep(i, n) _range(i, 0, n)
+#define _range(i, a, b) for (int i = int(a); i < int(b); ++i)
+#define rep(...) _overload(__VA_ARGS__, _range, _rep, )(__VA_ARGS__)
+#define _rrep(i, n) _rrange(i, n, 0)
+#define _rrange(i, a, b) for (int i = int(a) - 1; i >= int(b); --i)
+#define rrep(...) _overload(__VA_ARGS__, _rrange, _rrep, )(__VA_ARGS__)
+#pragma endregion macros
+
+using namespace std;
+
+template <class T> bool chmax(T &a, const T &b) {
+    return (a < b) ? (a = b, 1) : 0;
+}
+template <class T> bool chmin(T &a, const T &b) {
+    return (b < a) ? (a = b, 1) : 0;
+}
+
+using ll    = long long;
+using R     = long double;
+const R EPS = 1e-9L;  // [-1000,1000]->EPS=1e-8 [-10000,10000]->EPS=1e-7
+inline int sgn(const R &r) {
+    return (r > EPS) - (r < -EPS);
+}
+inline R sq(R x) {
+    return sqrt(max(x, 0.0L));
+}
+
+const int dx[8] = {1, 0, -1, 0, 1, -1, -1, 1};
+const int dy[8] = {0, 1, 0, -1, 1, 1, -1, -1};
+
+const pid_t pid = getpid();
+// Problem Specific Parameter:
+
+int get_mode(int i, int j, int k) {
+    const int da = (j + k) & 1;
+    const int db = (i + k) & 1;
+    const int dc = (i + j) & 1;
+
+    return 4 * da + 2 * db + dc;
+}
+
+int main(void) {
+    int ai, aj, ak;
+    int bi, bj, bk;
+    cin >> ai >> aj >> ak;
+    cin >> bi >> bj >> bk;
+
+    if (get_mode(ai, aj, ak) == get_mode(bi, bj, bk)) {
+        cout << "Yes" << endl;
+    } else {
+        cout << "No" << endl;
+    }
+
+    return 0;
+}

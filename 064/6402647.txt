@@ -1,0 +1,11 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int r;
+    int m;
+    cin >> r >> m;
+    
+    cout << r * m " "<<2*r + 2*m << endl;
+    return 0;
+}

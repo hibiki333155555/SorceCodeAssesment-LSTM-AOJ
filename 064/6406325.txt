@@ -1,0 +1,17 @@
+#include <iostream>
+using namespace std;
+int main(void)
+{
+    int a;
+    cin >> a;
+    int i = 0;
+    while( a != 0)
+    {
+        i++;
+        cout << "Case " << i << ": " << a << endl;
+        cin >> a;
+    }
+    
+}
+
+

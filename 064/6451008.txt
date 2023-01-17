@@ -1,0 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CsharpforAizeOnlineJudge
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string str = Console.ReadLine();
+            string[] s = str.Split(' ');
+            int W = Int32.Parse(s[0]);
+            int H = Int32.Parse(s[1]);
+            int x = Int32.Parse(s[2]);
+            int y = Int32.Parse(s[3]);
+            int r = Int32.Parse(s[4]);
+            if (x >= 0 && y >= 0)
+            {
+                if (x + r <= W)
+                {
+                    Console.WriteLine(y + r <= H ? "Yes" : "No");
+                }
+                else Console.WriteLine("No");
+            }
+            else Console.WriteLine("No");
+        }
+    }
+}
+

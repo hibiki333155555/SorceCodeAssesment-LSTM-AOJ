@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int q;
+  cin >> q;
+  vector<int> a(0);
+  for (int i = 0; i < q; i++) {
+    int x;
+    cin >> x;
+    if (x == 0) {
+      int t;
+      cin >> t;
+      a.push_back(t);
+    }
+    else if ( x == 1) {
+      int t;
+      cin >> t;
+      cout << a.at(t) << endl;
+    }
+    else {
+      a.pop_back();
+    }
+  }
+
+}

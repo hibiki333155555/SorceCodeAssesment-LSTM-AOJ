@@ -1,0 +1,18 @@
+#include<stdio.h>
+main()
+{
+    int x,y;
+    unsigned int w,h,r,p;
+    scanf("%ul %ul %d %d %ul",&w,&h,&x,&y,&r);
+    p=2*r;
+    if(x!=0&&y!=0&&p<=w&&p<=h&&r<x&&r<y&&x<w&&y<h)
+    {
+        printf("Yes\n");
+    }
+    else
+    {
+        printf("No\n");
+    }
+    return 0;
+}
+

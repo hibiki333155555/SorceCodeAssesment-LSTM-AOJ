@@ -1,0 +1,55 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 998244353 
+
+def main():
+    def dfs(x):
+        d[x] = 0
+        ax = a[x]
+        dpx = dp[x]
+        if ax <= k:
+            dpx[ax] = 1
+        for y in v[x]:
+            if d[y]:
+                dfs(y)
+            dpy = dp[y]
+            for i in reversed(range(k+1)):
+                dpyi = dpy[i]
+                ni = i+ax
+                if ni > k or not dpyi:
+                    continue
+                dpx[ni] += dpyi
+                if dpx[ni] >= mod:
+                    dpx[ni] -= mod
+        return 
+      
+    n,k = LI()
+    a = LI()
+    p = LI()
+    v = [[] for _ in range(n)]
+    for i,pi in enumerate(p,1):
+        pi -= 1
+        v[pi].append(i)
+    dp = [[0]*(k+1) for _ in range(n)]
+    d = [1]*n
+    dfs(0)
+    print(dp[0][k])
+    return
+
+
+if __name__ == "__main__":
+    main()
+

@@ -1,0 +1,9 @@
+#include<stdio.h>
+int main(){
+    
+if(i=0;i<1000;i++){
+    printf("Hello World");
+    }
+    
+    return 0;
+}

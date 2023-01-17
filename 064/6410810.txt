@@ -1,0 +1,41 @@
+#include<stdio.h>
+int main(){
+  int a,b,c,x,y,z;
+  scanf("%d %d %d\n",&a,&b,&c);
+  if(a<b&&b<c)
+  {x=c;
+  y=b;
+  z=a;}
+  else if(b<a&&a<c)
+  {
+    x=c;
+    y=a;
+    z=b;
+  }
+  else if(c<a&&a<b)
+  {
+    x=b;
+    y=a;
+    z=c;
+  }
+  else if(a<c&&c<b)
+  {
+    x=b;
+    y=c;
+    z=a;
+  }
+  else if(c<b&&b<a)
+  {
+    x=a;
+    y=b;
+    z=c;
+  }
+  else
+  {
+    x=a;
+    y=c;
+    z=b;
+  }
+  printf("%d %d %d \n",z,y,x);
+  return 0;
+}

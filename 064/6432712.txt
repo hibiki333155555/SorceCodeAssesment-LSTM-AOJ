@@ -1,0 +1,14 @@
+n1=int(input())
+li=list(map(int,input().split()))[:n1]
+n2=int(input())
+li1=list(map(int,input().split()))[:n2]
+li.sort()
+li1.sort()
+ct=0
+for i in range(len(li1)):
+	if li1[i] in li:
+		ct+=1
+if ct==len(li1):
+	print('1')
+else:
+	print('0')

@@ -1,0 +1,14 @@
+while (True):
+    a,b,c = input().split()
+    #a = int(a)
+    #c= int(c)
+    if(b =="+"):
+        print(int(a) + int(c))
+    elif(b == "-"):
+        print(int(a) - int(c)
+    elif(b == "*"):
+        print(int(a) * int(c))
+    elif(b == "/"):
+        print(int(a) // int(c))
+    elif(b == "?"):
+        break

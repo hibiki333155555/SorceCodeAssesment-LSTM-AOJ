@@ -1,0 +1,14 @@
+H,W=map(int,input().split())
+i=0
+j=0
+for i in range(H):
+    for i in range(W):
+        if H==1 or i==H-1 or W==1 or W==j-1:
+            print("#",sep="")
+        else:
+            print(".",sep="")
+        i=i+1
+        j=j+1
+            
+    print()
+            

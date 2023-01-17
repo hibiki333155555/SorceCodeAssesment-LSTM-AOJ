@@ -1,0 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CsharpforAizeOnlineJudge
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+             int n = Int32.Parse(Console.ReadLine());
+             string str = Console.ReadLine();
+             string[] l = str.Split(' ');
+             int max = -1;
+             int min = 20000;
+             int sum = 0;
+             foreach(var v in l)
+             {
+                    int a = Int32.Parse(v);
+                 if (a > max) max = a;
+                 if (a < min) min = a;
+                 sum += a;
+             }
+             Console.WriteLine("{0} {1} {2}", min, max, sum);
+        }
+    }
+}

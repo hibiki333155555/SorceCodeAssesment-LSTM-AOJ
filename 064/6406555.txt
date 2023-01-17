@@ -1,0 +1,58 @@
+#include <stdio.h>
+typedef struct dices {
+    int d[6];
+} dice;
+dice init(int dice_a,int dice_b,int dice_c,int dice_d,int dice_e,int dice_f){
+    dice dic;
+    dic.d[0]=dice_a,dic.d[1]=dice_b,dic.d[2]=dice_c,dic.d[3]=dice_d,dic.d[4]=dice_e,dic.d[5]=dice_f;
+    return dic;
+}
+void dice_reset(dice *dice){for(int i=0;i<6;i++)dice->d[i]=0;}
+void dice_rotation(char direction,dice *dice){
+    int temp;
+    switch(direction){
+        case 'E':
+            temp=dice->d[0];
+            dice->d[0]=dice->d[3];
+            dice->d[3]=dice->d[5];
+            dice->d[5]=dice->d[2];
+            dice->d[2]=temp;
+            break;
+        case 'N':
+            temp=dice->d[0];
+            dice->d[0]=dice->d[1];
+            dice->d[1]=dice->d[5];
+            dice->d[5]=dice->d[4];
+            dice->d[4]=temp;
+            break;
+        case 'S':
+            temp=dice->d[0];
+            dice->d[0]=dice->d[4];
+            dice->d[4]=dice->d[5];
+            dice->d[5]=dice->d[1];
+            dice->d[1]=temp;
+            break;
+        case 'W':
+            temp=dice->d[0];
+            dice->d[0]=dice->d[2];
+            dice->d[2]=dice->d[5];
+            dice->d[5]=dice->d[3];
+            dice->d[3]=temp;
+            break;
+    }
+}
+int main(void){
+    int i,k,j,s[6],side[5]={2,3,5,4,2},a,b,n;
+    char order[6][3] = {"","N","W","E","S","NN"};
+    for(i=0;i<6;i++)scanf("%d",&s[i]);
+    dice dice1={s[0],s[1],s[2],s[3],s[4],s[5]};
+    scanf("%d",&n);
+    for(i=0;i<n;i++){
+        scanf("%d%d",&a,&b);
+        for(j=0;dice1.d[j]!=a;j++);
+        for(k=0;order[j][k]!='\0';k++)dice_rotation(order[j][k],&dice1);
+        for(j=0;b!=dice1.d[side[j]-1];j++);
+        printf("%d\n",dice1.d[side[j+1]-1]);
+    }
+}
+

@@ -1,0 +1,19 @@
+using System;
+
+namespace ConsoleApp3
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] c = Console.ReadLine().Split();
+            int a = int.Parse(c[0]);
+            int b = int.Parse(c[1]);
+            Console.Write(a * b+" ");
+            Console.WriteLine((a + b) * 2);
+
+
+        }
+    }
+}
+

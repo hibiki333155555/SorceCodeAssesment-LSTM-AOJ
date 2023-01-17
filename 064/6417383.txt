@@ -1,0 +1,19 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+
+int main(void)
+{
+    char t[1001],w[11];
+    int count = 0;
+    scanf("%s",w);
+    while(1)
+    {
+        scanf("%s",t);
+        if(strcmp(t,"END_OF_TEXT"))break;
+        if(strcmp(t,w))count++;
+    }
+    printf("%d",count);
+    
+    return 0;
+}

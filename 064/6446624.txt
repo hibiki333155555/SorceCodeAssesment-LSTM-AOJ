@@ -1,0 +1,5 @@
+count = 1
+while gets != nil
+    puts "Case #{count}: gets.to_i"
+    count+=1
+end

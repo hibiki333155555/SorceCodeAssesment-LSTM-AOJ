@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  long long m,n;
+  cin >> m >> n;
+  long long mod = 1000000007, ans = 1;
+  while(n>0){
+    if(n&1) ans = ans*m % mod;
+    m = m*m % mod;
+    n >>= 1;
+  }
+  cout << ans << endl;
+    
+  
+}
+      
+  

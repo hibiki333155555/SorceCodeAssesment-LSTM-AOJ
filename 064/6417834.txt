@@ -1,0 +1,123 @@
+#include <bits/stdc++.h>
+#include <cstdlib>
+#include <cmath>
+#include <algorithm>
+using namespace std;
+using ll = long long;
+using P = pair<ll,ll>;
+using Graph= vector<vector<ll>>; 
+struct edge{ll to ; ll cost ;} ;
+using graph =vector<vector<edge>> ;
+#define rep(i,n) for (ll i=0; i < (n); ++i)
+#define rep2(i,n,m) for(ll i=n;i<=m;i++)
+#define rep3(i,n,m) for(ll i=n;i>=m;i--)
+#define pb push_back
+#define eb emplace_back
+#define ppb pop_back
+#define mpa make_pair
+#define fi first
+#define se second
+const ll INF=1e18 ;
+inline void chmax(ll& a,ll b){a=max(a,b);}
+inline void chmin(ll& a,ll b){a=min(a,b);}
+
+struct UnionFind {
+  vector<int> d;
+  UnionFind(int n=0): d(n,-1) {}
+  int find(int x) {
+    if (d[x] < 0) return x;
+    return d[x] = find(d[x]);
+  }
+  bool unite(int x, int y) {
+    x = find(x); y = find(y);
+    if (x == y) return false;
+    if (d[x] > d[y]) swap(x,y);
+    d[x] += d[y];
+    d[y] = x;
+    return true;
+  }
+  bool same(int x, int y) { return find(x) == find(y);}
+  int size(int x) { return -d[find(x)];}
+};
+
+
+//　 ダイクストラ　ひーぷ　
+/* dijkstra(G,s,dis)
+    入力：グラフ G, 開始点 s, 距離を格納する dis
+    計算量：O(|E|log|V|)
+    副作用：dis が書き換えられる
+*/
+// グラフ　スタート　距離　ひとつ前
+void dijkstra(const graph & g, ll s ,vector<ll> & d,vector<ll> &prev ){
+   ll N = g.size() ; //頂点数
+   d.resize(N,INF) ;
+   prev.resize(N,INF) ;
+   priority_queue<P,vector<P>,greater<P>> pq ;
+   d[s]=0 ;
+   pq.emplace(d[s],s) ;
+   while(!pq.empty()){
+       P p=pq.top() ;
+       pq.pop() ;
+       ll v= p.se;
+       if(d[v]<p.fi) continue ;
+       for(auto & e :g[v]){
+           if(d[e.to]>d[v]+e.cost){
+               d[e.to]=d[v]+e.cost ;
+               prev[e.to]=v ;  //頂点vを使ってe.toに辿り着いた
+               pq.emplace(d[e.to],e.to) ;
+           }
+       }
+    } 
+}
+
+/* get_path(prev, t)
+    入力：dijkstra で得た prev, ゴール t
+    出力： t への最短路のパス
+*/
+vector<ll> get_path(const vector<ll> &prev, ll t) {
+    vector<ll> path;
+    for (ll cur = t; cur != -1; cur = prev[cur]) {
+        path.push_back(cur);
+    }
+    reverse(path.begin(), path.end()); // 逆順なのでひっくり返す
+    return path;
+}
+
+map<ll,ll> factor(ll n){  //素因数とオーダーをマップで管理
+  map <ll,ll> ord ;  
+  for(ll i=2;i*i<=n;i++){
+        if(n%i==0){
+            int res=0;
+            while(n%i==0){
+                n/=i;
+                res++;
+            }
+            ord[i]=res;
+        }
+    }
+   if(n!=1) ord[n]++;
+   return ord ;
+ }
+ 
+
+
+int main(){
+    ll t; cin>>t;
+    while(t--){
+        ll n,m,x,a,b; cin>>n>>m>>x>>a>>b;
+
+        vector<ll> A(n);
+        A[0]=x%m;
+        rep(i,n-1) A[i+1]=((A[i]*a)+b)%m;
+        vector<ll> cnt(m);
+        bool ok=0;
+        rep(i,n){
+            if(cnt[A[i]]) ok=1;
+            cnt[A[i]]++;
+        }
+
+        if(ok) cout<<"Yes"<<endl;
+        else cout<<"No"<<endl;
+    }
+    return 0;
+}

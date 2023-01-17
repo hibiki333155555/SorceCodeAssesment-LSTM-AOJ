@@ -1,0 +1,125 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <map>
+#include <algorithm>
+#include <queue>
+#include <iomanip>
+// clang-format off
+#define rep(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+#define SZ(x) ((int)(x).size())
+using ll = long long;
+// 2^60
+const ll INF = 1LL << 60;
+// lower_bound(ALL(a), 4)
+#define ALL(a)  (a).begin(),(a).end()
+int gcd(int a,int b){return b?gcd(b,a%b):a;}
+int dx[5]={-1,-1,0,1,1};
+int dy[5]={0,-1,-1,-1,0};
+using namespace std;
+// clang-format on
+
+struct UnionFind
+{
+    vector<int> par, siz;
+
+    UnionFind(int n) : par(n, -1), siz(n, 1) {}
+
+    // 根を求める
+    int root(int x)
+    {
+        if (par[x] == -1)
+            return x;
+        else
+            return par[x] = root(par[x]);
+    }
+
+    // x と y が同じグループに属するかどうか (根が一致するかどうか)
+    bool issame(int x, int y)
+    {
+        return root(x) == root(y);
+    }
+
+    // x を含むグループと y を含むグループとを併合する
+    bool unite(int x, int y)
+    {
+        x = root(x), y = root(y);
+        if (x == y)
+            return false;
+        if (siz[x] < siz[y])
+            swap(x, y);
+        par[y] = x;
+        siz[x] += siz[y];
+        return true;
+    }
+
+    // x を含むグループのサイズ
+    int size(int x)
+    {
+        return siz[root(x)];
+    }
+};
+
+int main()
+{
+    cout << fixed << setprecision(16);
+    int w;
+    int h;
+    for (;;)
+    {
+        cin >> w;
+        cin >> h;
+        if (w == 0 && h == 0)
+            break;
+        vector<vector<int>> v(h, vector<int>(w, 0));
+        UnionFind uf(w * h);
+        int x;
+        rep(i, h)
+        {
+            rep(j, w)
+            {
+                cin >> x;
+                if (x == 1)
+                {
+                    v[i][j] = 1;
+                }
+            }
+        }
+        rep(i, h)
+        {
+            rep(j, w)
+            {
+                if (v[i][j] == 1)
+                {
+                    rep(dir, 5)
+                    {
+                        int x = j + dx[dir];
+                        int y = i + dy[dir];
+                        if (0 <= x && x < w && 0 <= y && y < h)
+                        {
+                            if (v[y][x] == 1)
+                            {
+                                uf.unite(i * w + j, y * w + x);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        int cnt = 0;
+        rep(i, h)
+        {
+            rep(j, w)
+            {
+                if (v[i][j] == 1 && uf.root(i * w + j) == i * w + j)
+                {
+                    ++cnt;
+                }
+            }
+        }
+        cout << cnt << endl;
+    }
+}

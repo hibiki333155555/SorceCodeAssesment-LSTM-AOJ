@@ -1,0 +1,6 @@
+import sys
+s=[x.lower() for x in sys.stdin.read().split()]
+s = "".join(s)
+for i in range(26):
+	print(chr(97+i)+ " : " + str(s.count(chr(97+i))))
+

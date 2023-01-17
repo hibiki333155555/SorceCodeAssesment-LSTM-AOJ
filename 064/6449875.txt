@@ -1,0 +1,33 @@
+N,W=map(int,input().split())
+items=[[0,0]]
+# 0 インデックスの情報
+
+for i in range(N):
+    v,w=map(int,input().split())
+    items.append([w,v])
+
+dp=[[0]*(W+1) for i in range(N+1)]
+# DPテーブル作成　品物 i を使う、使わないで考えるので 0 インデックスから始める
+# 横は重さについて　縦は品物を入れるかどうかについて
+
+# dp[i][j] = i 番目までの品物を使って、重さが j 以下になるような最大価値　と定義する
+
+for gyou_i in range(1,N+1):
+    # i 番目の品物を使うかどうか、から考えるから for 文 は 品物から考える
+    for retu_w in range(W+1):
+        # 重さが j(=retu_w) 以下の最大価値を考える
+        w,v=items[gyou_i]
+
+        if retu_w-w<0:
+            # これは今の段階で品物 i が重さが j 以下ではないから入れることができない
+            # 結果はそのまま受け継ぐ形になる
+            dp[gyou_i][retu_w]=dp[gyou_i-1][retu_w]
+        else:
+            # 入れられる場合を考える
+            # 考えるケースは 2 つだけで、品物 i を入れるか入れないかだけ
+            # 入れない場合は上記の if 文と同様にしてその値を受けづくものを考える
+            # 入れる場合は 品物 i-1 の (今いる重さ) - (i の重さ) に i の価値をぶち込んだものを考える
+            # i を入れる、入れないの 2 つをもれなく列挙できたら重い方を採用する
+            dp[gyou_i][retu_w]=max(dp[gyou_i-1][retu_w],dp[gyou_i-1][retu_w-w]+v)
+
+print(dp[N][W])

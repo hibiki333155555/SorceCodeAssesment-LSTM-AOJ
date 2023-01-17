@@ -1,0 +1,13 @@
+using System;
+class program
+{
+    static void Main(string[] args)
+    {
+        string[] s = Console.ReadLine().Split();
+        int a = int.Parse(s[0]);
+        int b = int.Parse(s[1]);
+        decimal c =(int) a;
+        decimal d =(int) b;
+        Console.WriteLine(a / b + " " + a % b + " " + c / b);
+    }
+}

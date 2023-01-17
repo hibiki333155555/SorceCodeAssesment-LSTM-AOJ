@@ -1,0 +1,25 @@
+#include<stdio.h>
+
+int main()
+{
+    for(int i=1; ;i++)
+    {
+
+    int j,k, H, W;
+    scanf("%d %d", &H, &W);
+
+    if(H==0 && W==0)
+        break;
+
+    for(j=1; j<=H; j++)
+    {
+        for(k=1; k<=W; k++)
+        {
+            printf("#");
+        }
+        printf("\n");
+    }
+        }
+    return 0;
+}
+

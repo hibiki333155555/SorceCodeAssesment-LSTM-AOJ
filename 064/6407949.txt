@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+int main()
+{
+	int n, x, max;
+	int a, b, c;
+	int ans;
+
+	while (1) {
+		scanf("%d%d", &n, &x);
+		if (n == 0 && x == 0) break;
+
+		ans = 0;
+		max = n;//
+        if (n > x) max = x;//目指す和よりnがおおきいときは無駄ループが生まれるのでそれ対策
+		for (a = 1; a <= max; a++) {
+			for (b = a + 1; b <= max; b++) {
+				c = x - a - b;//目指す和からaとbを引いて残ったc
+				if (c > b && c <= n) ans++;//そのcがbよりもちゃんと大きく、n内に収まっているならクリア
+			}
+		}
+		printf("%d\n", ans);
+	}
+	return 0;
+}
+

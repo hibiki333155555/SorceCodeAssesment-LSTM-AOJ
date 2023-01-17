@@ -1,0 +1,6 @@
+while true
+    if gets.to_i == 0
+        exit
+    end
+    gets.split.map(&:to_i).sort.join(" ")
+end

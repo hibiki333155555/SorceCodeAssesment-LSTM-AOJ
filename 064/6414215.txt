@@ -1,0 +1,14 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        int W,H,x,y,r;
+        if(x<=W-r&&y<=H-r){
+            System.out.println("Yes");
+        }
+        else{
+            System.out.println("No");
+        }
+    }
+}
+

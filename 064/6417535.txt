@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+#define rep(i,n) for(long long i=0;i<n;++i)
+#define rep1(i,n) for(long long i=1;i<=n;++i)
+#define rrep(i,n) for(long long i=n-1;i>=0;--i)
+#define debug(output) if(debugFlag)cout<<#output<<"= "<<output<<endl
+using lint = long long;
+typedef pair<int,int> P;
+const bool debugFlag=true;
+const lint linf=1.1e18;const lint inf=1.01e9;
+constexpr int MOD=1000000007;
+template<class T>bool chmax(T &a, const T &b) { if(a < b){ a = b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if(a > b){ a = b; return 1; } return 0; }
+
+void solve(){
+  int n,m,v,a,b;cin>>n>>m>>v>>a>>b;
+  if(n>m){
+    cout<<"Yes"<<"\n";
+    return;
+  }
+  bitset<600> memo;
+  v%=m;
+  memo[v]=true;
+  rep(i,n-1){
+    v=v*a+b;
+    v%=m;
+    if(memo[v]){
+      cout<<"Yes"<<"\n";
+      return;
+    }
+    memo[v]=true;
+  }
+  cout<<"No"<<"\n";
+}
+
+signed main(){
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+  int t;cin>>t;
+  rep(i,t)solve();
+  return 0;
+}

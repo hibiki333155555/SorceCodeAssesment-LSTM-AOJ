@@ -1,0 +1,23 @@
+n = int(input())
+a = list(map(int,input().split()))
+q = int(input())
+m = list(map(int,input().split()))
+
+A = sum(a)
+for i in range(q):
+    M = m[i]
+    if A < M:
+        print('no')
+        continue
+    for j in range(2**n):
+        s = 0
+        for k in range(n):
+            if j >> k & 1: s += a[k]
+            if s + sum(a[k+1:]) < M: break
+        if s == M:
+            print('yes')
+            break
+    else:
+        print('no')
+    
+

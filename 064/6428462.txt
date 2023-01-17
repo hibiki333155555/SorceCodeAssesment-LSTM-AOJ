@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+
+ll mod = 1e9 + 7;
+
+vll P(1e6 + 7);
+void s() {
+	rep(i, 1e6 + 7)P[i] = i;
+	P[0] = P[1] = -1;
+	rep(i, 1e6 + 7) {
+		if (P[i] == i) {
+			for (ll j = i * 2; j < 1e6 + 7; j += i) {
+				P[j] = i;
+			}
+		}
+	}
+}
+
+int main() {
+	s();
+	ll N, Q;
+	cin >> N >> Q;
+	rep(q, Q) {
+		ll T, X;
+		cin >> T >> X;
+		ll an = 0;
+		ll XP = 0;
+
+		vll XM;
+		ll XC = X;
+		while (XC != 1) {
+			ll next = P[XC];
+			XM.push_back(next);
+			while (XC % next == 0) {
+
+				XC /= next;
+			}
+		}
+		ll n = XM.size();
+
+		if (T == 1) {
+			rep(bit, (1ll << n)) {
+				ll k = 1;
+				ll num = 0;
+				rep(i, n) {
+					if (bit & (1 << i)) {
+						num++;
+						k *= (XM[i]);
+					}
+				}
+				an += (X / k) * (num % 2 == 0 ? 1 : -1);
+			}
+		}
+		else {
+			rep(bit, (1ll << n)) {
+				ll k = 1;
+				ll num = 0;
+				rep(i, n) {
+					if (bit & (1 << i)) {
+						num++;
+						k *= (XM[i]);
+					}
+				}
+				an -= (X / k) * (num % 2 == 0 ? 1 : -1);
+				an -= (N / k) * (num % 2 == 0 ? -1 : 1);
+				if (X == 1)an++;
+			}
+		}
+		cout << an << endl;
+	}
+
+}
+
+

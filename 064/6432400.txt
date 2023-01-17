@@ -1,0 +1,50 @@
+#include<stdio.h>
+#include<string.h>
+#define LEN 90000
+
+typedef struct pp {
+  char name[100];
+  int t;
+} P;
+
+P Q[LEN];
+int atama, shippo, n;
+
+void enqueue(P x){
+  Q[shippo++] = x;
+}
+
+P dequeue(){
+  P x = Q[atama++];
+  return x;
+}
+
+int min(int a, int b){return a<b ? a : b; }
+
+int main(){
+  int keika = 0, k;
+  int i,q;
+  P u;
+  scanf("%d %d", &n, &q);
+
+  for(i = 1; i <= n; i++){
+    scanf("%s",Q[i].name);
+    scanf("%d",&Q[i].t);
+  }
+  atama = 1; shippo = n+1;
+
+  while(atama != shippo){
+    u = dequeue();
+    k = min(q, u.t);
+    u.t -= k;
+    keika += k;
+    if(u.t > 0)enqueue(u);
+    else{
+      printf("%s %d\n",u.name, keika);
+    }
+  }
+
+  return 0;
+}
+
+

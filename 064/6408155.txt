@@ -1,0 +1,25 @@
+# mon7_D
+n,m,l=map(int,input().split())
+A=[[0]*m for i in range(n)]
+B=[[0]*l for i in range(m)]
+C=[[0]*l for i in range(n)]
+for i in range(n):
+  Amemo=list(map(int,input().split()))
+  for j in range(m):
+    A[i][j]=Amemo[j]
+
+for i in range(m):
+  Bmemo=list(map(int,input().split()))
+  for j in range(l):
+    B[i][j]=Bmemo[j]
+
+for y in range(n):
+  for x in range(l):
+    for z in range(m):
+      C[y][x]+=A[y][z]*B[z][x]
+
+for y in range(n):
+  for x in range(l-1):
+    print(C[y][x], end=' ')
+  print(C[y][l])
+

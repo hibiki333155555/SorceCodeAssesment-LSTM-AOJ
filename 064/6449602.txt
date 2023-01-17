@@ -1,0 +1,22 @@
+import sys
+input = lambda :sys.stdin.readline()[:-1]
+ni = lambda :int(input())
+na = lambda :list(map(int,input().split()))
+yes = lambda :print("yes");Yes = lambda :print("Yes");YES = lambda : print("YES")
+no = lambda :print("no");No = lambda :print("No");NO = lambda : print("NO")
+#######################################################################
+
+c1,r1,c2,r2 = input().split()
+def f(x):
+    if len(x)==1:
+        return ord(x)-65
+    else:
+        a = ord(x[0])-65
+        b = ord(x[1])-65
+        return 26+a*26+b
+r1 = int(r1)
+r2 = int(r2)
+c1 = f(c1)
+c2 = f(c2)
+print((r2-r1+1)*(c2-c1+1))
+

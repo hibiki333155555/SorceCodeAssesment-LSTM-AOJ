@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+queue<int>a[1010];
+int main()
+{
+	int s,q;
+	cin>>s>>q;
+	while(q--)
+	{
+		int num;
+		cin>>num;
+		if(num==0)
+		{
+			int t,x;
+			cin>>t>>x;
+			a[t].push(x);
+		}
+		if(num==1)
+		{
+			int y;
+			cin>>y;
+			if(a[y].empty()==0)
+			{
+				printf("%d\n",a[y].front());
+			}
+		}
+		if(num==2)
+		{
+			int z;
+			cin>>z;
+			if(!a[z].empty())
+			{
+				a[z].pop();	
+			}
+		}
+	}
+	return 0;
+}

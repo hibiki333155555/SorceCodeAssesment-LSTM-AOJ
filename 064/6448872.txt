@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int n,q;
+    
+    cin>>n>>q;
+
+   queue <int> p[n];
+
+
+   while(q--)
+    {
+
+            int a,t;
+            cin>>a;
+            if(a==0)
+            {
+                int x;
+                cin>>t>>x;
+                p[t].push(x);
+
+            }
+            if(a==1)
+            {
+
+               cin>>t;
+                if(p[t].empty())
+                {
+
+                }
+               else
+               {
+                   cout<< p[t].front()<<endl;
+               }
+
+
+
+
+
+            }
+
+            if(a==2)
+            {
+                cin>>t;
+                if(p[t].empty())
+                {
+
+                }
+                else
+                {
+                    p[t].pop();
+                }
+               
+            }
+        }
+
+        return 0;
+
+
+}
+

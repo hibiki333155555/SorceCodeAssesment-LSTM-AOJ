@@ -1,0 +1,10 @@
+
+while True:
+    s = str(input())
+    sum = 0
+    for i in range(len(s)):
+        sum=sum+int(s[i])
+ print(sum)
+    if(str==0):
+        break
+

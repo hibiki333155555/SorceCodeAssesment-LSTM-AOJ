@@ -1,0 +1,29 @@
+import math
+n = int(input())
+x = input().split()
+y = input().split()
+
+#差の絶対値の合計
+p1 = 0
+for i in range(n):
+    p1 += abs(float(x[i])-float(y[i]))
+print(p1)
+
+p2 = 0
+for i in range(n):
+    p2 += (float(x[i])-float(y[i]))**2
+p2 = math.sqrt(p2)
+print(p2)
+
+p3 = 0
+for i in range(n):
+    p3 += abs(float(x[i])-float(y[i]))**3
+p3 = math.pow(p3,1/3)
+print(p3)
+
+p8 = 0
+inf = float("inf")
+for i in range(n):
+    p8 += abs(float(x[i])-float(y[i]))**inf
+p8 = math.pow(p8,1/inf)
+print(p8)

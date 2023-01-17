@@ -1,0 +1,13 @@
+w=input().lower()
+s=0
+while True:
+    A=input().split()
+    if(A=="END_OF_TEXT"):
+        break
+    a=A.lower()
+    for i in a:
+        if(a==w):
+            s+=1
+print(s)
+    
+    

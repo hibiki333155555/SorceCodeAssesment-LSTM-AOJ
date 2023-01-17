@@ -1,0 +1,831 @@
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class Main {
+public static void main(String[] args) throws Exception {
+Scanner sc = new Scanner(System.in);
+PrintWriter pw = new PrintWriter(System.out);
+solve(sc, pw);
+sc.close();
+pw.flush();
+pw.close();
+}
+
+public static void solve(Scanner sc, PrintWriter pw) {
+ModArithmetic ma = ModArithmetic.of(Const.MOD1000000007);
+int n = sc.nextInt();
+int k = sc.nextInt();
+pw.println(ma.comb(k, n, ma.factorial(n + k), ma.factorialInv(n + k)));
+}
+}
+class ModPolynomialFactory {
+public final long MOD;
+public final Convolution cnv;
+public final ModArithmetic ma;
+private ModPolynomialFactory(int mod) {
+this.MOD = mod;
+this.cnv = Convolution.of(mod);
+this.ma = ModArithmetic.of(mod);
+}
+public static ModPolynomialFactory of(int mod) {return new ModPolynomialFactory(mod);}
+public ModPolynomial create(long[] c, int n) {return new ModPolynomial(c, n);}
+public ModPolynomial create(long[] c) {return new ModPolynomial(c);}
+public ModPolynomial cut(ModPolynomial f, int maxDegInclusive) {
+long[] c = new long[maxDegInclusive + 1];
+System.arraycopy(f.C, 0, c, 0, Math.min(f.N, maxDegInclusive + 1));
+return new ModPolynomial(c);
+}
+public ModPolynomial add(ModPolynomial f, ModPolynomial g) {
+long[] hc = new long[Math.max(f.N, g.N)];
+System.arraycopy(f.C, 0, hc, 0, f.N);
+for (int i = 0; i < g.N; i++) hc[i] = hc[i] + g.C[i];
+return new ModPolynomial(hc);
+}
+public ModPolynomial sub(ModPolynomial f, ModPolynomial g) {
+long[] hc = new long[Math.max(f.N, g.N)];
+System.arraycopy(f.C, 0, hc, 0, f.N);
+for (int i = 0; i < g.N; i++) hc[i] = hc[i] - g.C[i];
+return new ModPolynomial(hc);
+}
+public ModPolynomial mul(ModPolynomial f, long a) {
+a = ma.mod(a);
+long[] c = new long[f.N];
+for (int i = 0; i < f.N; i++) c[i] = ma.mul(a, f.C[i]);
+return new ModPolynomial(c);
+}
+public ModPolynomial mul(ModPolynomial f, ModPolynomial g) {return new ModPolynomial(cnv.convolution(f.C, g.C));}
+public ModPolynomial mul(ModPolynomial f, ModPolynomial g, int maxDegInclusive) {return new ModPolynomial(cnv.convolution(f.C, g.C), maxDegInclusive);}
+public ModPolynomial div(ModPolynomial f, ModPolynomial g, int maxDegInclusive) {return mul(f, inv(g, maxDegInclusive), maxDegInclusive);}
+public ModPolynomial inv(ModPolynomial f, int maxDegInclusive) {
+int k = 1;
+ModPolynomial inv = new ModPolynomial(new long[]{ma.inv(f.C[0])});
+while (k < maxDegInclusive + 1) {
+k <<= 1;
+inv = inv.mul(2).sub(inv.mul(inv, k).mul(cut(f, k), k));
+}
+return cut(inv, maxDegInclusive);
+}
+public ModPolynomial differentiate(ModPolynomial f) {
+long[] c = new long[f.N - 1];
+for (int i = 1; i < f.N; i++) c[i - 1] = ma.mul(f.C[i], i);
+return new ModPolynomial(c);
+}
+public ModPolynomial integrate(ModPolynomial f) {
+long[] c = new long[f.N + 1];
+long[] invs = ma.rangeInv(f.N + 1);
+for (int i = 1; i <= f.N; i++) c[i] = ma.mul(f.C[i - 1], invs[i]);
+return new ModPolynomial(c);
+}
+public ModPolynomial log(ModPolynomial f, int maxDegInclusive) {
+return integrate(mul(differentiate(f), inv(f, maxDegInclusive), maxDegInclusive - 1));
+}
+public ModPolynomial exp(ModPolynomial f, int maxDegInclusive) {
+ModPolynomial g = new ModPolynomial(new long[]{1});
+int k = 1;
+while (k < maxDegInclusive + 1) {
+k <<= 1;
+ModPolynomial tmp = sub(cut(f, k), log(g, k));
+tmp.C[0] = ma.add(tmp.C[0], 1);
+g = mul(g, tmp, k);
+}
+return cut(g, maxDegInclusive);
+}
+public ModPolynomial pow(ModPolynomial f, long k, int maxDegInclusive) {
+int t0 = 0;
+while (t0 < f.N && f.C[t0] == 0) t0++;
+if ((long) t0 * k >= f.N) return new ModPolynomial(new long[]{0});
+ModPolynomial g = new ModPolynomial(java.util.Arrays.copyOfRange(f.C, t0, f.N));
+long base = g.C[0];
+g = g.mul(ma.inv(base));
+ModPolynomial h = exp(log(g, maxDegInclusive).mul(k), maxDegInclusive).mul(ma.pow(base, k));
+long[] c = new long[maxDegInclusive + 1];
+System.arraycopy(h.C, 0, c, (int) (t0 * k), (int) (maxDegInclusive + 1 - t0 * k));
+return new ModPolynomial(c);
+}
+public class ModPolynomial {
+final int N;
+final long[] C;
+ModPolynomial(long[] c, int n) {
+this.N = n + 1;
+this.C = new long[N];
+int l = Math.min(N, c.length);
+for (int i = 0; i < l; i++) C[i] = ma.mod(c[i]);
+}
+ModPolynomial(long[] c) {
+int n = c.length - 1;
+while (n > 0 && c[n] == 0) n--;
+this.N = n + 1;
+this.C = new long[N];
+for (int i = 0; i < N; i++) C[i] = ma.mod(c[i]);
+}
+public ModPolynomial add(ModPolynomial f) {return ModPolynomialFactory.this.add(this, f);}
+public ModPolynomial sub(ModPolynomial f) {return ModPolynomialFactory.this.sub(this, f);}
+public ModPolynomial mul(ModPolynomial f) {return ModPolynomialFactory.this.mul(this, f);}
+public ModPolynomial mul(ModPolynomial f, int maxDegInclusive) {
+return ModPolynomialFactory.this.mul(this, f, maxDegInclusive);
+}
+public ModPolynomial mul(long a)  {return ModPolynomialFactory.this.mul(this, a);}
+public ModPolynomial div(ModPolynomial f, int maxDegInclusive) {
+return ModPolynomialFactory.this.div(this, f, maxDegInclusive);
+}
+public ModPolynomial inv(int maxDegInclusive) {
+return ModPolynomialFactory.this.inv(this, maxDegInclusive);
+}
+public ModPolynomial differentiate()  {return ModPolynomialFactory.this.differentiate(this);}
+public ModPolynomial integrate()  {return ModPolynomialFactory.this.integrate(this);}
+public ModPolynomial log(int maxDegInclusive) {return ModPolynomialFactory.this.log(this, maxDegInclusive);}
+public ModPolynomial exp(int maxDegInclusive) {return ModPolynomialFactory.this.exp(this, maxDegInclusive);}
+public ModPolynomial pow(long n, int maxDegInclusive) {
+return ModPolynomialFactory.this.pow(this, n, maxDegInclusive);
+}
+public long   getCoef(int deg) {return C[deg];}
+public long[] getCoefs()   {return C;}
+}
+}
+final class MathUtil{
+private MathUtil(){}
+public static int[] osak(int n) {
+if (n <= 0) throw new AssertionError();
+int[] div = new int[n + 1];
+for (int i = 1; i <= n; i++) {
+if ((i & 1) != 0) {
+div[i] = i;
+} else {
+div[i] = 2;
+}
+}
+for (int i = 3; i <= n; i += 2) {
+if (div[i] == i) {
+if ((long) i * i > n) continue;
+for (int j = i * i; j <= n; j += i << 1) {
+div[j] = i;
+}
+}
+}
+return div;
+}
+public static long inv(long a, long MOD) {
+long b = MOD;
+long u = 1, v = 0;
+while (b > 0) {
+long t = a / b;
+a -= t * b;
+long tmp1 = a; a = b; b = tmp1;
+u -= t * v;
+long tmp2 = u; u = v; v = tmp2;
+}
+u %= MOD;
+return u < 0 ? u + MOD : u;
+}
+public static long pow(long a, long b, long mod) {
+if (mod == 1) return 0;
+if ((a %= mod) < 0) a += mod;
+long pow = 1;
+for (long p = a, c = 1; b > 0;) {
+long lsb = b & -b;
+while (lsb != c) {
+c <<= 1;
+p = (p * p) % mod;
+}
+pow = (pow * p) % mod;
+b ^= lsb;
+}
+return pow;
+}
+public static long garner(long[] c, long[] mods) {
+int n = c.length + 1;
+long[] cnst = new long[n];
+long[] coef = new long[n];
+java.util.Arrays.fill(coef, 1);
+for (int i = 0; i < n - 1; i++) {
+long m1 = mods[i];
+long v = (c[i] - cnst[i] + m1) % m1;
+v = v * pow(coef[i], m1 - 2, m1) % m1;
+
+for (int j = i + 1; j < n; j++) {
+long m2 = mods[j];
+cnst[j] = (cnst[j] + coef[j] * v) % m2;
+coef[j] = (coef[j] * m1) % m2;
+}
+}
+return cnst[n - 1];
+}
+public static int primitiveRoot(int m) {
+if (m == 2) return 1;
+if (m == 167772161) return 3;
+if (m == 469762049) return 3;
+if (m == 754974721) return 11;
+if (m == 998244353) return 3;
+int[] divs = new int[20];
+divs[0] = 2;
+int cnt = 1;
+int x = (m - 1) / 2;
+while (x % 2 == 0) x /= 2;
+for (int i = 3; (long) i * i <= x; i += 2) {
+if (x % i == 0) {
+divs[cnt++] = i;
+while (x % i == 0) x /= i;
+}
+}
+if (x > 1) {
+divs[cnt++] = x;
+}
+for (int g = 2; ; g++) {
+boolean ok = true;
+for (int i = 0; i < cnt; i++) {
+if (pow(g, (m - 1) / divs[i], m) == 1) {
+ok = false;
+break;
+}
+}
+if (ok) return g;
+}
+}
+
+}
+
+class Const {
+public static final long MOD1000000007 = 1000000007;
+public static final long MOD998244353  = 998244353 ;
+public static final long MOD754974721  = 754974721 ;
+public static final long MOD167772161  = 167772161 ;
+public static final long MOD469762049  = 469762049 ;
+}
+
+
+interface Convolution {
+static final int THRESHOLD_NAIVE_CONVOLUTION = 150;
+public static final Convolution C_167772161 = new Convolution167772161();
+public static final Convolution C_469762049 = new Convolution469762049();
+public static final Convolution C_754974721 = new Convolution754974721();
+public long[] convolution(long[] a, long[] b);
+public static Convolution of(int mod) {
+return new ConvolutionAnyMod(mod);
+}
+public static long[] convolutionNaive(long[] a, long[] b, int mod) {
+int n = a.length;
+int m = b.length;
+int k = n + m - 1;
+long[] ret = new long[k];
+for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) ret[i + j] += a[i] * b[j] % mod;
+for (int i = 0; i < k; i++) ret[i] %= mod;
+return ret;
+}
+static int ceilPow2(int n) {
+int x = 0;
+while ((1L << x) < n) x++;
+return x;
+}
+static long[] sumE(int mod, int g) {
+long[] sum_e = new long[30];
+long[] es = new long[30];
+long[] ies = new long[30];
+int cnt2 = Integer.numberOfTrailingZeros(mod - 1);
+long e = MathUtil.pow(g, (mod - 1) >> cnt2, mod);
+long ie = MathUtil.pow(e, mod - 2, mod);
+for (int i = cnt2; i >= 2; i--) {
+es[i - 2] = e;
+ies[i - 2] = ie;
+e = e * e % mod;
+ie = ie * ie % mod;
+}
+long now = 1;
+for (int i = 0; i < cnt2 - 2; i++) {
+sum_e[i] = es[i] * now % mod;
+now = now * ies[i] % mod;
+}
+return sum_e;
+}
+static long[] sumIE(int mod, int g) {
+long[] sum_ie = new long[30];
+long[] es = new long[30];
+long[] ies = new long[30];
+int cnt2 = Integer.numberOfTrailingZeros(mod - 1);
+long e = MathUtil.pow(g, (mod - 1) >> cnt2, mod);
+long ie = MathUtil.pow(e, mod - 2, mod);
+for (int i = cnt2; i >= 2; i--) {
+es[i - 2] = e;
+ies[i - 2] = ie;
+e = e * e % mod;
+ie = ie * ie % mod;
+}
+long now = 1;
+for (int i = 0; i < cnt2 - 2; i++) {
+sum_ie[i] = ies[i] * now % mod;
+now = now * es[i] % mod;
+}
+return sum_ie;
+}
+static final class Convolution754974721 implements Convolution {
+private static final int PRIMITIVE_ROOT = 11;
+private static final int NTT_PRIME = 754974721;
+@Override
+public long[] convolution(long[] a, long[] b) {
+int n = a.length;
+int m = b.length;
+if (n == 0 || m == 0) return new long[0];
+if (Math.max(n, m) <= THRESHOLD_NAIVE_CONVOLUTION) {
+int k = n + m - 1;
+long[] ret = new long[k];
+for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) ret[i + j] += a[i] * b[j] % NTT_PRIME;
+for (int i = 0; i < k; i++) ret[i] %= NTT_PRIME;
+return ret;
+}
+int z = 1 << ceilPow2(n + m - 1);
+long[] na = new long[z];
+long[] nb = new long[z];
+System.arraycopy(a, 0, na, 0, n);
+System.arraycopy(b, 0, nb, 0, m);
+a = na;
+b = nb;
+long[] sume = sumE(NTT_PRIME, PRIMITIVE_ROOT);
+long[] sumie = sumIE(NTT_PRIME, PRIMITIVE_ROOT);
+butterfly(a, sume);
+butterfly(b, sume);
+for (int i = 0; i < z; i++) a[i] = a[i] * b[i] % NTT_PRIME;
+butterflyInv(a, sumie);
+a = java.util.Arrays.copyOf(a, n + m - 1);
+long iz = MathUtil.pow(z, NTT_PRIME - 2, NTT_PRIME);
+for (int i = 0; i < n + m - 1; i++) a[i] = a[i] * iz % NTT_PRIME;
+return a;
+}
+private void butterfly(long[] a, long[] sumE) {
+int h = ceilPow2(a.length);
+for (int ph = 1; ph <= h; ph++) {
+int w = 1 << (ph - 1), p = 1 << (h - ph);
+long now = 1;
+for (int s = 0; s < w; s++) {
+int offset = s << (h - ph + 1);
+for (int i = 0; i < p; i++) {
+long l = a[i + offset];
+long r = a[i + offset + p] * now % NTT_PRIME;
+a[i + offset] = (l + r) % NTT_PRIME;
+a[i + offset + p] = (l - r + NTT_PRIME) % NTT_PRIME;
+}
+int x = Integer.numberOfTrailingZeros(~s);
+now = now * sumE[x] % NTT_PRIME;
+}
+}
+}
+private void butterflyInv(long[] a, long[] sumIE) {
+int h = ceilPow2(a.length);
+for (int ph = h; ph >= 1; ph--) {
+int w = 1 << (ph - 1), p = 1 << (h - ph);
+long inow = 1;
+for (int s = 0; s < w; s++) {
+int offset = s << (h - ph + 1);
+for (int i = 0; i < p; i++) {
+long l = a[i + offset];
+long r = a[i + offset + p];
+a[i + offset] = (l + r) % NTT_PRIME;
+a[i + offset + p] = (NTT_PRIME + l - r) * inow % NTT_PRIME;
+}
+int x = Integer.numberOfTrailingZeros(~s);
+inow = inow * sumIE[x] % NTT_PRIME;
+}
+}
+}
+}
+static final class Convolution167772161 implements Convolution {
+private static final int PRIMITIVE_ROOT = 3;
+private static final int NTT_PRIME = 167772161;
+public long[] convolution(long[] a, long[] b) {
+int n = a.length;
+int m = b.length;
+if (n == 0 || m == 0) return new long[0];
+if (Math.max(n, m) <= THRESHOLD_NAIVE_CONVOLUTION) {
+int k = n + m - 1;
+long[] ret = new long[k];
+for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) ret[i + j] += a[i] * b[j] % NTT_PRIME;
+for (int i = 0; i < k; i++) ret[i] %= NTT_PRIME;
+return ret;
+}
+int z = 1 << ceilPow2(n + m - 1);
+long[] na = new long[z];
+long[] nb = new long[z];
+System.arraycopy(a, 0, na, 0, n);
+System.arraycopy(b, 0, nb, 0, m);
+a = na; b = nb;
+long[] sume = sumE(NTT_PRIME, PRIMITIVE_ROOT);
+long[] sumie = sumIE(NTT_PRIME, PRIMITIVE_ROOT);
+butterfly(a, sume);
+butterfly(b, sume);
+for (int i = 0; i < z; i++) a[i] = a[i] * b[i] % NTT_PRIME;
+butterflyInv(a, sumie);
+a = java.util.Arrays.copyOf(a, n + m - 1);
+long iz = MathUtil.pow(z, NTT_PRIME - 2, NTT_PRIME);
+for (int i = 0; i < n + m - 1; i++) a[i] = a[i] * iz % NTT_PRIME;
+return a;
+}
+private void butterfly(long[] a, long[] sumE) {
+int h = ceilPow2(a.length);
+for (int ph = 1; ph <= h; ph++) {
+int w = 1 << (ph - 1), p = 1 << (h - ph);
+long now = 1;
+for (int s = 0; s < w; s++) {
+int offset = s << (h - ph + 1);
+for (int i = 0; i < p; i++) {
+long l = a[i + offset];
+long r = a[i + offset + p] * now % NTT_PRIME;
+a[i + offset] = (l + r) % NTT_PRIME;
+a[i + offset + p] = (l - r + NTT_PRIME) % NTT_PRIME;
+}
+int x = Integer.numberOfTrailingZeros(~s);
+now = now * sumE[x] % NTT_PRIME;
+}
+}
+}
+private void butterflyInv(long[] a, long[] sumIE) {
+int h = ceilPow2(a.length);
+for (int ph = h; ph >= 1; ph--) {
+int w = 1 << (ph - 1), p = 1 << (h - ph);
+long inow = 1;
+for (int s = 0; s < w; s++) {
+int offset = s << (h - ph + 1);
+for (int i = 0; i < p; i++) {
+long l = a[i + offset];
+long r = a[i + offset + p];
+a[i + offset] = (l + r) % NTT_PRIME;
+a[i + offset + p] = (NTT_PRIME + l - r) * inow % NTT_PRIME;
+}
+int x = Integer.numberOfTrailingZeros(~s);
+inow = inow * sumIE[x] % NTT_PRIME;
+}
+}
+}
+}
+static final class Convolution469762049 implements Convolution {
+private static final int PRIMITIVE_ROOT = 3;
+private static final int NTT_PRIME = 469762049;
+public long[] convolution(long[] a, long[] b) {
+int n = a.length;
+int m = b.length;
+if (n == 0 || m == 0) return new long[0];
+if (Math.max(n, m) <= THRESHOLD_NAIVE_CONVOLUTION) {
+int k = n + m - 1;
+long[] ret = new long[k];
+for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) ret[i + j] += a[i] * b[j] % NTT_PRIME;
+for (int i = 0; i < k; i++) ret[i] %= NTT_PRIME;
+return ret;
+}
+int z = 1 << ceilPow2(n + m - 1);
+long[] na = new long[z];
+long[] nb = new long[z];
+System.arraycopy(a, 0, na, 0, n);
+System.arraycopy(b, 0, nb, 0, m);
+a = na;
+b = nb;
+long[] sume = sumE(NTT_PRIME, PRIMITIVE_ROOT);
+long[] sumie = sumIE(NTT_PRIME, PRIMITIVE_ROOT);
+butterfly(a, sume);
+butterfly(b, sume);
+for (int i = 0; i < z; i++) a[i] = a[i] * b[i] % NTT_PRIME;
+butterflyInv(a, sumie);
+a = java.util.Arrays.copyOf(a, n + m - 1);
+long iz = MathUtil.pow(z, NTT_PRIME - 2, NTT_PRIME);
+for (int i = 0; i < n + m - 1; i++) a[i] = a[i] * iz % NTT_PRIME;
+return a;
+}
+private void butterfly(long[] a, long[] sumE) {
+int h = ceilPow2(a.length);
+for (int ph = 1; ph <= h; ph++) {
+int w = 1 << (ph - 1), p = 1 << (h - ph);
+long now = 1;
+for (int s = 0; s < w; s++) {
+int offset = s << (h - ph + 1);
+for (int i = 0; i < p; i++) {
+long l = a[i + offset];
+long r = a[i + offset + p] * now % NTT_PRIME;
+a[i + offset] = (l + r) % NTT_PRIME;
+a[i + offset + p] = (l - r + NTT_PRIME) % NTT_PRIME;
+}
+int x = Integer.numberOfTrailingZeros(~s);
+now = now * sumE[x] % NTT_PRIME;
+}
+}
+}
+private void butterflyInv(long[] a, long[] sumIE) {
+int h = ceilPow2(a.length);
+for (int ph = h; ph >= 1; ph--) {
+int w = 1 << (ph - 1), p = 1 << (h - ph);
+long inow = 1;
+for (int s = 0; s < w; s++) {
+int offset = s << (h - ph + 1);
+for (int i = 0; i < p; i++) {
+long l = a[i + offset];
+long r = a[i + offset + p];
+a[i + offset] = (l + r) % NTT_PRIME;
+a[i + offset + p] = (NTT_PRIME + l - r) * inow % NTT_PRIME;
+}
+int x = Integer.numberOfTrailingZeros(~s);
+inow = inow * sumIE[x] % NTT_PRIME;
+}
+}
+}
+}
+static final class ConvolutionAnyMod implements Convolution {
+private final int MOD;
+private ConvolutionAnyMod(int mod) {this.MOD = mod;}
+public long[] convolution(long[] a, long[] b) {
+int n = a.length;
+int m = b.length;
+if (n == 0 || m == 0) return new long[0];
+if (Math.max(n, m) <= THRESHOLD_NAIVE_CONVOLUTION) {
+int k = n + m - 1;
+long[] ret = new long[k];
+for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) ret[i + j] += a[i] * b[j] % MOD;
+for (int i = 0; i < k; i++) ret[i] %= MOD;
+return ret;
+}
+int mod1 = 754974721, mod2 = 167772161, mod3 = 469762049;
+long[] c1 = C_754974721.convolution(a, b);
+long[] c2 = C_167772161.convolution(a, b);
+long[] c3 = C_469762049.convolution(a, b);
+int retSize = c1.length;
+long[] ret = new long[retSize];
+long[] mods = {mod1, mod2, mod3, MOD};
+for (int i = 0; i < retSize; ++i) ret[i] = MathUtil.garner(new long[]{c1[i], c2[i], c3[i]}, mods);
+return ret;
+}
+}
+}
+interface ModArithmetic {
+public static ModArithmetic of(long mod) {
+if (mod <= 0) {
+throw new IllegalArgumentException("Negative mod");
+} else if (mod == 1000000007) {
+return new ModArithmetic1000000007();
+} else {
+return new ModArithmeticDynamic(mod);
+}
+}
+public long getMod();
+public long mod(long a);
+public long add(long a, long b);
+public long sub(long a, long b);
+public long mul(long a, long b);
+public long inv(long a);
+public long pow(long a, long b);
+public default long add(long a, long b, long c) {
+return add(a, add(b, c));
+}
+public default long add(long a, long b, long c, long d) {
+return add(a, add(b, add(c, d)));
+}
+public default long mul(long a, long b, long c) {
+return mul(a, mul(b, c));
+}
+public default long mul(long a, long b, long c, long d) {
+return mul(a, mul(b, mul(c, d)));
+}
+public default long div(long a, long b) {
+return mul(a, inv(b));
+}
+public default long[] rangeInv(int n) {
+final long MOD = getMod();
+if (n >= MOD) throw new ArithmeticException("divide by zero");
+long[] invs = new long[n + 1];
+invs[1] = 1;
+for (int i = 2; i <= n; i++) {
+long q = MOD - MOD / i;
+long r = invs[(int) (MOD % i)];
+invs[i] = mul(q, r);
+}
+return invs;
+}
+public default long[] factorial(int n) {
+long[] ret = new long[n + 1];
+ret[0] = 1;
+for (int i = 1; i <= n; i++) ret[i] = mul(ret[i - 1], i);
+return ret;
+}
+public default long[] factorialInv(int n) {
+long facN = 1;
+for (int i = 2; i <= n; i++) facN = mul(facN, i);
+long[] invs = new long[n + 1];
+invs[n] = inv(facN);
+for (int i = n; i > 0; i--) invs[i - 1] = mul(invs[i], i);
+return invs;
+}
+public default long comb(int n, int r, long[] factorial, long[] invFactorial) {
+if (r < 0 || r > n) return 0;
+long inv = mul(invFactorial[r], invFactorial[n - r]);
+return mul(factorial[n], inv);
+}
+public default long naiveComb(long n, long r) {
+if (r < 0 || r > n) return 0;
+r = Math.min(r, n - r);
+long res = 1;
+long[] invs = rangeInv(Math.toIntExact(r));
+for (int d = 1; d <= r; d++) {
+res = mul(res, n--, invs[d]);
+}
+return res;
+}
+public default long perm(int n, int r, long[] factorial, long[] invFactorial) {
+if (r < 0 || r > n) return 0;
+return mul(factorial[n], invFactorial[n - r]);
+}
+public default long naivePerm(long n, long r) {
+if (r < 0 || r > n) return 0;
+long res = 1;
+for (long i = n - r + 1; i <= n; i++) res = mul(res, i);
+return res;
+}
+static final class ModArithmetic1000000007 implements ModArithmetic {
+private static final long MOD = Const.MOD1000000007;
+@Override public long getMod() {return MOD;}
+@Override public long mod(long a) {return (a %= MOD) < 0 ? a + MOD : a;}
+@Override public long add(long a, long b) {
+long s = a + b;
+return s >= MOD ? s - MOD : s;
+}
+@Override public long sub(long a, long b) {
+long s = a - b;
+return s < 0 ? s + MOD : s;
+}
+@Override public long mul(long a, long b) {
+return (a * b) % MOD;
+}
+@Override public long inv(long a) {
+a = mod(a);
+long b = MOD;
+long u = 1, v = 0;
+while (b >= 1) {
+long t = a / b;
+a -= t * b;
+long tmp1 = a; a = b; b = tmp1;
+u -= t * v;
+long tmp2 = u; u = v; v = tmp2;
+}
+// if (a != 1) throw new ArithmeticException("divide by zero");
+return mod(u);
+}
+@Override public long pow(long a, long b) {
+a = mod(a);
+long pow = 1;
+for (long p = a, c = 1; b > 0;) {
+long lsb = b & -b;
+while (lsb != c) {
+c <<= 1;
+p = (p * p) % MOD;
+}
+pow = (pow * p) % MOD;
+b ^= lsb;
+}
+return pow;
+}
+}
+static class ModArithmeticDynamic implements ModArithmetic {
+final long MOD;
+private ModArithmeticDynamic(long mod) {
+this.MOD = mod;
+}
+@Override public long getMod() {
+return MOD;
+}
+@Override public long mod(long a) {
+return (a %= MOD) < 0 ? a + MOD : a;
+}
+@Override public long add(long a, long b) {
+long s = a + b;
+return s >= MOD ? s - MOD : s;
+}
+@Override public long sub(long a, long b) {
+long s = a - b;
+return s < 0 ? s + MOD : s;
+}
+@Override public long mul(long a, long b) {
+return (a * b) % MOD;
+}
+@Override public long inv(long a) {
+a = mod(a);
+long b = MOD;
+long u = 1, v = 0;
+while (b >= 1) {
+long t = a / b;
+a -= t * b;
+long tmp1 = a; a = b; b = tmp1;
+u -= t * v;
+long tmp2 = u; u = v; v = tmp2;
+}
+// if (a != 1) throw new ArithmeticException("divide by zero");
+return mod(u);
+}
+@Override public long pow(long a, long b) {
+a = mod(a);
+long pow = 1;
+for (long p = a, c = 1; b > 0;) {
+long lsb = b & -b;
+while (lsb != c) {
+c <<= 1;
+p = mul(p, p);
+}
+pow = mul(pow, p);
+b ^= lsb;
+}
+return pow;
+}
+}
+}
+class Combinatrics {
+public static long[] perm(int l, int r, ModPolynomialFactory mpf) {
+if (l == r) {
+return new long[]{1};
+}
+return internalPerm(l, r, mpf).getCoefs();
+}
+private static ModPolynomialFactory.ModPolynomial internalPerm(int l, int r, ModPolynomialFactory mpf) {
+if (r - l == 1) {
+return mpf.create(new long[]{-l, 1}, 1);
+} else if (r - l == 2) {
+return mpf.create(new long[]{(long) l * (l + 1), - (2 * l + 1), 1}, 2);
+}
+int m = (l + r) >> 1;
+return mpf.mul(internalPerm(l, m, mpf), internalPerm(m, r, mpf));
+}
+public static long[] stirlingNumber1(int n, ModPolynomialFactory mpf) {
+return perm(0, n, mpf);
+}
+public static long[] stirlingNumber2(int n, ModPolynomialFactory mpf) {
+if (n == 0) {
+return new long[]{1};
+}
+int[] div = MathUtil.osak(n);
+long[] pow = new long[n + 1];
+pow[0] = 0; pow[1] = 1;
+for (int i = 2; i <= n; i++) {
+pow[i] = div[i] == i ? mpf.ma.pow(i, n) : mpf.ma.mul(pow[i / div[i]], pow[div[i]]);
+}
+long[] inv = mpf.ma.factorialInv(n);
+long[] a = new long[n + 1];
+long[] b = new long[n + 1];
+for (int i = 0; i <= n; i++) {
+a[i] = mpf.ma.mul(pow[i], inv[i]);
+b[i] = (i & 1) == 0 ? inv[i] : -inv[i];
+}
+return mpf.mul(mpf.create(a), mpf.create(b), n).getCoefs();
+}
+
+public static long[] bernoulliNumber(int n, ModPolynomialFactory mpf) {
+long[] c = mpf.inv(mpf.create(java.util.Arrays.copyOfRange(mpf.ma.factorialInv(n + 1), 1, n + 2)), n).getCoefs();
+long fac = 1;
+for (int i = 2; i <= n; i++) {
+fac = mpf.ma.mul(fac, i);
+c[i] = mpf.ma.mul(c[i], fac);
+}
+return mpf.create(c).getCoefs();
+}
+
+public static long[] bellNumber(int n, ModPolynomialFactory mpf) {
+long[] bell = stirlingNumber2(n, mpf);
+for (int i = 1; i <= n; i++) {
+bell[i] += bell[i - 1];
+}
+return bell;
+}
+
+public static long[] partitionNumber(int n, ModPolynomialFactory mpf) {
+long[] inv = new long[n + 1];
+inv[0] = 1;
+for (int i = 1, k = 1; k <= n; i++) {
+if ((i & 1) == 0) {
+inv[k]++;
+} else {
+inv[k]--;
+}
+k += 3 * i + 1;
+}
+for (int i = 1, k = 2; k <= n; i++) {
+if ((i & 1) == 0) {
+inv[k]++;
+} else {
+inv[k]--;
+}
+k += 3 * i + 2;
+}
+return mpf.create(inv).inv(n).getCoefs();
+}
+
+public static long[] subsetSum(int n, int[] s, ModPolynomialFactory mpf) {
+int[] a = new int[n + 1];
+for (int e : s) {
+if (e <= 0) throw new AssertionError();
+if (e <= n) a[e]++;
+}
+long[] inv = mpf.ma.rangeInv(n);
+long[] log = new long[n + 1];
+for (int i = 1; i <= n; i++) {
+for (int j = 1; i * j <= n; j++) {
+if ((j & 1) == 0) {
+log[i * j] -= inv[j] * a[i];
+} else {
+log[i * j] += inv[j] * a[i];
+}
+}
+}
+return mpf.create(log).exp(n).getCoefs();
+}
+}
+
+

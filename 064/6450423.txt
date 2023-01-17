@@ -1,0 +1,51 @@
+// #pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+// #pragma GCC optimize("unroll-loops")
+#include<bits/stdc++.h>
+using namespace std;
+
+using P = pair<int, int>;
+const int M = 1000000007;
+
+int main() {
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    int n, m;
+    cin >> n >> m;
+    vector<vector<P>> edge(n);
+    for (int i = 0; i < m; ++i) {
+        int u, v, c;
+        cin >> u >> v >> c;
+        --u;
+        --v;
+        edge[u].emplace_back(c, v);
+    }
+    vector<unordered_set<int>> se(n);
+    se[0].insert(1);
+    queue<P> q;
+    q.emplace(0, 1);
+    while (!q.empty()) {
+        P p = q.front();
+        q.pop();
+        for (auto& e : edge[p.first]) {
+            int l = lcm(p.second, e.first);
+            if (!se[e.second].count(l)) {
+                se[e.second].insert(l);
+                q.emplace(e.second, l);
+            }
+        }
+    }
+    int ma = -1, mi = M;
+    for (auto& i : se[n - 1]) {
+        ma = max(ma, i);
+        mi = min(mi, i);
+    }
+    if (ma == -1) {
+        cout << "IMPOSSIBLE\n";
+    }
+    else {
+        cout << mi << ' ' << ma << '\n';
+    }
+    return 0;
+}
+

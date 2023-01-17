@@ -1,0 +1,13 @@
+import heapq
+import sys
+l=[]
+for i in range(10000000):
+    strings=sys.stdin.readline()[:-1]
+    if strings[0]=="i":
+        heapq.heappush(l,-int(strings[7:]))
+        continue
+    if strings[1]=="x":
+        print(-heapq.heappop(l))
+        continue
+    break
+

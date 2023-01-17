@@ -1,0 +1,12 @@
+from heapq import heappop,heappush
+N = int(input())
+A = list(map(int,input().split()))
+q = []
+for a in A:
+    heappush(q,(-a))
+while len(q) >= 2:
+    big1 = -heappop(q)
+    big2 = -heappop(q)
+    heappush(q,-abs(big1-big2))
+print(abs(heappop(q)))
+

@@ -1,0 +1,34 @@
+#include <iostream>
+#include <limits>
+#include <vector>
+
+
+int main()
+{
+    std::vector<int> R;
+    
+    int N = 0;
+    std::cin >> N;
+
+    R.resize(N);
+
+    for(int i = 0; i < N; ++i)
+    {
+        std::cin >> R[i];
+    }
+
+    long long maxim = std::numeric_limits<long long>::lowest();
+    for(int i = 0; i < N; ++i)
+    {
+        for(int j = i+1; j < N; ++j)
+        {
+            long long candidate = R[j] - R[i];
+            if(candidate > maxim)
+            {
+                maxim = candidate;
+            }
+        }
+    }
+
+    std::cout << maxim << std::endl;
+}

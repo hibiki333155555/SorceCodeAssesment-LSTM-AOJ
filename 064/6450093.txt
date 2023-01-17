@@ -1,0 +1,177 @@
+#pragma GCC optimize("O3")
+#include<bits/stdc++.h> 
+using namespace std;
+using ll=long long;
+using P=pair<ll,ll>;
+template<class T> using V=vector<T>; 
+#define fi first
+#define se second
+#define all(v) (v).begin(),(v).end()
+const ll inf=(1e18);
+const ll mod=998244353;
+// const ll mod=1000000007;
+const vector<int> dy={-1,0,1,0},dx={0,-1,0,1};
+struct __INIT{__INIT(){cin.tie(0);ios::sync_with_stdio(false);cout<<fixed<<setprecision(15);}} __init;
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+template<class T>void debag(const vector<T> &a){cerr<<"debag :";for(auto v:a)cerr<<v<<" ";cerr<<"\n";}
+template<class T>void print(const vector<T> &a){for(auto v:a)cout<<v<<" ";cout<<"\n";}
+struct mint{
+using ull=unsigned long long int;
+ull v;
+mint(ll vv=0){s(vv%mod+mod);}
+mint& s(ull vv){
+v=vv<mod?vv:vv-mod;
+return *this;
+}
+//オーバーロード
+mint operator-()const{return mint()-*this;}//mint型にキャスト
+mint&operator+=(const mint&val){return s(v+val.v);}
+mint&operator-=(const mint&val){return s(v+mod-val.v);}
+mint&operator*=(const mint&val){
+v=ull(v)*val.v%mod;
+return *this;
+}
+mint&operator/=(const mint&val){return *this*=val.inv();}
+mint operator+(const mint&val){return mint(*this)+=val;}
+mint operator-(const mint&val){return mint(*this)-=val;}
+mint operator*(const mint&val){return mint(*this)*=val;}
+mint operator/(const mint&val){return mint(*this)/=val;}
+mint pow(ll n)const{
+mint res(1),x(*this);
+while(n){
+if(n&1)res*=x;
+x*=x;
+n>>=1ll;
+}
+return res;
+}
+mint inv()const{return pow(mod-2);}
+//拡張ユークリッドの互除法
+/* mint inv()const{
+int x,y;
+int g=extgcd(v,mod,x,y);
+assert(g==1);
+if(x<0)x+=mod;
+return mint(x);
+}*/
+friend ostream& operator<<(ostream&os,const mint&val){
+return os<<val.v;
+}//出力
+bool operator<(const mint&val)const{return v<val.v;}
+bool operator==(const mint&val)const{return v==val.v;}
+bool operator>(const mint&val)const{return v>val.v;}
+};
+const ll MAX = 2000010;//設定
+mint fac[MAX], finv[MAX], inv[MAX];
+// テーブルを作る前処理
+void init(){
+fac[0] = fac[1] = 1;
+for(int i=1;i<MAX;i++)fac[i]=fac[i-1]*i;
+finv[MAX-1]=fac[MAX-1].inv();
+for(int i=MAX-2;i>=0;i--)finv[i]=finv[i+1]*(i+1);
+for(int i=MAX-2;i>=1;i--)inv[i]=finv[i]+fac[i-1];
+}
+//階乗
+mint factor(ll n,ll k){
+if (n<k) return 0;
+if (n<0 || k<0) return 0;
+return fac[n]*finv[k];
+}
+// 二項係数計算
+mint COM(int n, int k){
+if (n < k) return 0;
+if (n < 0 || k < 0) return 0;
+return fac[n] * finv[k] * finv[n - k];
+}
+struct NTT{
+    int base,maxb;
+    mint root;
+    vector<int> rv;
+    vector<mint> roots,invr;
+    NTT():base(1),maxb(0),rv({0,1}),roots({mint(0),mint(1)}),invr({mint(0),mint(1)}){
+        int tmp=mod-1;
+        while(!(tmp&1))tmp>>=1,maxb++;
+        root=mint(2);
+        while(root.pow((mod-1)>>1)==mint(1))root+=mint(1);
+        assert(root.pow(mod-1)==mint(1));
+        root=root.pow((mod-1)>>maxb);
+    }
+    void ensure_base(int nb){
+        if(nb<=base)return;
+        rv.resize(1<<nb);
+        roots.resize(1<<nb);
+        invr.resize(1<<nb);
+        for(int i=0;i<(1<<nb);i++){
+            rv[i]=(rv[i>>1]>>1)+((i&1)<<(nb-1));
+        }
+        assert(nb<=maxb);
+        while(base<nb){
+            mint z=root.pow(1<<(maxb-1-base)),invz=z.inv();
+            for(int i=(1<<(base-1));i<(1<<base);i++){
+                roots[(i<<1)]=roots[i];
+                roots[(i<<1)+1]=roots[i]*z;
+                invr[(i<<1)]=invr[i];
+                invr[(i<<1)+1]=invr[i]*invz;
+            }
+            base++;
+        }
+    }
+    void ntt(vector<mint> &a,int n,bool sg=false){
+        assert((n&(n-1))==0);
+        int dif=base-__builtin_ctz(n);
+        for(int i=0;i<n;i++){
+            if(i<(rv[i]>>dif))swap(a[i],a[rv[i]>>dif]);
+        }
+        for(int k=1;k<n;k<<=1){
+            for(int i=0;i<n;i+=2*k){
+                for(int j=0;j<k;j++){
+                    mint z=a[i+j+k]*(sg?roots[j+k]:invr[j+k]);
+                    a[i+j+k]=a[i+j]-z;
+                    a[i+j]+=z;
+                }
+            }
+        }
+        if(sg){
+            mint invn=mint(n).inv();
+            for(int i=0;i<n;i++){
+                a[i]*=invn;
+            }
+        }
+    }
+
+    vector<mint> multiply(vector<mint> a,vector<mint> b){
+        int need=a.size()+b.size();
+        need--;
+        int nb=1;
+        while((1<<nb)<need)nb++;
+        ensure_base(nb);
+        int sz=(1<<nb);
+        a.resize(sz);
+        b.resize(sz);
+       ntt(a,sz);
+       ntt(b,sz);
+        for(int i=0;i<sz;i++){
+            a[i]*=b[i];
+        }
+        ntt(a,sz,true);
+        a.resize(need);
+        return a;
+    }
+};
+int main(){
+    init();
+    NTT ntt;
+    int n,m;
+    cin>>n>>m;
+    V<int> a(m);
+    for(int i=0;i<m;i++)cin>>a[i];
+    V<mint> dp(n+5,mint(0));
+    dp[0]=mint(1);
+    for(int i=0;i<m;i++){
+        V<mint> res(a[i]+1,mint(1));
+        dp=ntt.multiply(dp,res);
+        dp.resize(n+1);
+    }
+    cout<<dp[n]*fac[n]<<"\n";
+}

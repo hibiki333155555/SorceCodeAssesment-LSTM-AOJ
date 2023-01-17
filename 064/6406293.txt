@@ -1,0 +1,12 @@
+/*
+require('fs').readFileSync(0,'utf8').split`
+`.some(l=>([H,W]=l.split` `,+H&&console.log([...Array(+H)].map((_,i)=>(i%2?'.#':'#.').repeat(W).substr(0,W)).join`
+`+`
+`)));
+*/
+require('fs').readFileSync(0,'utf8').split`
+`.some(l=>([H,W]=l.split` `,+H&&(
+for(i=0,s='';i<H;i==H-1&&s+='\n')s+=i++%2?'#':'.';
+console.log(s+`
+`)
+);

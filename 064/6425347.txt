@@ -1,0 +1,28 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+   int n, m;
+   cin >> n >> m;
+   vector<int> vec(n);
+   for (int &v : vec)
+      cin >> v;
+
+   int ans = 0;
+
+   for (int i = 1; i <= m; i++)
+   {
+      int cnt = 0;
+      for (int &v : vec)
+      {
+         if (v == i)
+            ++cnt;
+      }
+      ans = max(ans, cnt);
+   }
+   cout << ans << endl;
+   return 0;
+}
+

@@ -1,0 +1,66 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include <bits/stdc++.h>
+using namespace std;
+const long long MOD1 = 1000000007;
+const long long MOD2 = 998244353;
+typedef long long ll;
+typedef pair<ll, ll> P;
+const long long INF = 1e17;
+template <typename T>
+void input_arr(vector<T>& A, ll N) {
+    for (ll i = 0; i < N; i++) {
+        cin >> A[i];
+    }
+}
+void solve() {
+    ll M, N; cin >> M >> N;
+    vector<string>S(M); input_arr(S,M);
+    ll ans = INF;
+    for (ll i = 0; i < M - 1; i++) {   
+        vector<string>T(M);
+        for (ll j = 0; j < M; j++) {
+            if (j <= i) {
+                for (ll k = 0; k < N; k++) T[j].push_back('o');
+            }
+            else {
+                for (ll k = 0; k < N; k++) {
+                    T[j].push_back('x');
+                }
+            }
+        }
+        ll num = 0;
+        for (ll j = 0; j < M; j++) {
+            for (ll k = 0; k < N; k++) {
+                if (S[j][k] !=T[j][k]) num++;
+            }
+        }
+        ans = min(ans, min(num, M * N - num));
+    }
+    for (ll i = 0; i < N - 1; i++) {
+        vector<string>T(M);
+        for (ll j = 0; j < N; j++) {
+            if (j <= i) {
+                for (ll k = 0; k < M; k++) T[k].push_back('o');
+            }
+            else {
+                for (ll k = 0; k < M; k++) {
+                    T[k].push_back('x');
+                }
+            }
+        }
+        ll num = 0;
+        for (ll j = 0; j < M; j++) {
+            for (ll k = 0; k < N; k++) {
+                if (S[j][k] != T[j][k]) num++;
+            }
+        }
+        ans = min(ans, min(num, M * N - num));
+    }
+    cout << ans << endl;
+}
+int main() {
+    ll T=1;//cin>>T;
+    while(T--)solve();
+}

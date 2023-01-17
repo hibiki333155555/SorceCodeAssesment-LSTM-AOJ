@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+
+int a,b;
+cin>> a >> b;
+int d = a/b;
+int r = a%b;
+double c;
+double f = a/c;
+printf("%d %d %.10f\n",d,r,f);
+}
+

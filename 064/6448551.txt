@@ -1,0 +1,19 @@
+def print_num_list(num_list):
+    print(' '.join([f'{num}' for num in num_list]))
+
+
+n = int(input())
+num_list = list(map(int,input().split()))
+
+print_num_list(num_list)
+
+for i in range(1,n):
+    num = num_list[i]
+    j = i-1
+    while (j>=0 and nums[j]>num):
+        nums[j+1] = nums[j]
+        j -= 1
+    nums[j+1] = num
+    print_num_list(num_list)
+
+

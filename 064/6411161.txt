@@ -1,0 +1,30 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+void _print(vector<int> &v){
+    bool first = true;
+    for(size_t i = 0; i<v.size();i++){
+        if(first) first = false;
+        else cout <<" ";
+        cout << v.at(i);
+    }
+    cout << endl;
+}
+
+int main(){
+    int n,e;
+    vector<int>v;
+    cin>>n;
+    while(n--){
+        cin>>e;
+        v.push_back(e);
+    }
+    vector<int>p(v);
+    if(prev_permutation(p.begin(), p.end()))_print(p);
+    _print(v);
+    if(next_permutation(v.begin(), v.end()))_print(v);
+    return 0;
+}

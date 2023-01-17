@@ -1,0 +1,37 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<vector>
+#include<iomanip>
+#include<tuple>
+#include<map>
+using namespace std;
+
+//実行するときは「g++ File名.cpp」 としたあと「a.exe」と出力すればいい
+
+const long long INF = 1000000000000000;
+
+
+
+int main(){
+    string c1,c2;
+    int r1,r2;
+    cin >> c1 >> r1 >> c2 >> r2;
+    int yoko=r2-r1+1;
+    int R1=0;
+    int power=1;
+    for(int i=c1.size()-1;i>=0;i--){
+        int num=(int)(c1[i]-'A');
+        R1=R1+num*power;
+        power=power*26;
+    }
+    power=1;
+    int R2=0;
+    for(int i=c2.size()-1;i>=0;i--){
+        int num=(int)(c2[i]-'A');
+        R2=R2+num*power;
+        power=power*26;
+    }
+    int tate=R2-R1+1;
+    cout << yoko*tate << endl;
+}

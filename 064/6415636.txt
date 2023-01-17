@@ -1,0 +1,28 @@
+"""
+ref: https://onlinejudge.u-aizu.ac.jp/beta/review.html#HUPC2021Day1/6414694
+"""
+import sys
+sys.setrecursionlimit(10**8)
+mod = 998244353
+n, k = map(int, input().split())
+a = list(map(int, input().split()))
+p = list(map(int, input().split()))
+
+edges = [[] for _ in range(n)]
+for i in range(n-1):
+    edges[p[i]-1].append(i+1)
+
+def dfs(v, dp):
+    ndp = [0]*a[v] + dp
+    ndp = ndp[:k+1]
+    for u in edges[v]: ndp = dfs(u, ndp)
+    res = ndp[:]
+    for i in range(len(dp)): 
+        res[i] += dp[i]
+        res[i] %= mod
+    return res
+
+res = dfs(0, [1])
+ans = res[k] if k < len(res) else 0
+print(ans)
+

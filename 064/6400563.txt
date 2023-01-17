@@ -1,0 +1,26 @@
+
+
+
+
+a,b = map(int,input().split())
+
+
+
+flag = (a==0) or (b==0)
+
+
+while !flag:
+    
+    
+    
+    if a>b:
+        
+        print(b,a)
+        
+        
+    else:
+        
+        print(a,b)
+    
+    
+

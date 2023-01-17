@@ -1,0 +1,3 @@
+_, S = input(), input().split() #数列Sを読み込む
+_, T = input(), input().split() #数列Tを読み込む
+print(sum(t in S for t in T)) #TとSに共通する整数の個数

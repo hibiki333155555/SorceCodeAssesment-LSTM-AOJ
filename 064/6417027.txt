@@ -1,0 +1,31 @@
+#include<stdio.h>
+#define N_MAX 10000
+#define Q_MAX 500
+
+int main()
+{
+  int N, Q;
+  int S[N_MAX], T[Q_MAX];
+  scanf("%d", &N);
+  for(int i = 0; i < N; i++ ){
+    scanf("%d", &S[i]);
+  }
+  scanf("%d", &Q);
+  for(int i = 0; i < Q; i++ ){
+    scanf("%d", &T[i]);
+  }
+
+  int cnt = 0;
+
+  for(int j = 0; j < Q; j++ ){
+    for(int i = 0; i < N; i++ ){
+      if(T[j] == S[i]){
+        // printf("%d", T[j]);
+        cnt++;
+        break;
+      }
+    }
+  }
+
+  printf("%d\n", cnt);
+}

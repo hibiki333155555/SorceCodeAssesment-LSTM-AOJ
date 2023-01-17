@@ -1,0 +1,39 @@
+#include <iostream>
+#include <map>
+using namespace std;
+
+int main(){
+    map<string, int> m;
+    int q;
+    cin >> q;
+    for(int i=0; i<q; i++){
+        int opt;
+        
+        cin >> opt;
+        if(opt == 0){
+            int x;
+            string color;
+            cin >> color >> x;
+            m[color] = x;
+        }
+        else if(opt == 1){
+            string color;
+            cin >> color;
+            cout << m[color] << endl;//m[color]不存在，则返回0
+        }
+        else if(opt == 2){
+            string color;
+            cin >> color;
+            m.erase(color);
+        }
+        else if(opt == 3){
+            string L, R;
+            cin >> L >> R;
+            for(map<string, int>::iterator it=m.lower_bound(L); it!=m.upper_bound(R); it++){
+                cout << (*it).first << ' ' << (*it).second << endl;
+            }
+
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,5 @@
+while (str = gets.chomp) != '-'
+    gets.to_i.times { str += str.slice!(0, gets.to_i) }
+    puts str
+end
+

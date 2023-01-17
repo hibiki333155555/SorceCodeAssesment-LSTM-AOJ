@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+   
+   int num,h,m,s;
+   cin >> num;
+   
+   m = num / 60;
+   s = num % 60;
+   
+   if(num==0)
+       cout << "0:0:0\n"; 
+   else{
+   if(m<60)
+       cout << 0 << ":" << m << ":" << s << '\n';
+       
+   else
+     h = m / 60;
+     m = m % 60;
+     cout << h << ":" << m << ":" << s << '\n';
+   }
+   
+   
+    return 0;
+}
+

@@ -1,0 +1,91 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+#define rep(i,n) for(int i=0;i<n;++i)
+#define rep1(i,n) for(int i=1;i<=n;++i)
+#define debug(output) if(debugFlag)cout<<#output<<"= "<<output<<endl
+using lint = long long;
+typedef pair<int,int> P;
+const bool debugFlag=true;
+const lint linf=1e18+7;
+const lint inf=1e9+7;
+const int MOD=1000000007;
+template<class T>
+class SegTree{
+    int n;
+    vector<T> node;
+    T e;
+    function<T(T,T)> operation;
+    function<T(T,T)> update;
+    public:
+    SegTree(int _n,T _e,function<T(T,T)> _operation,function<T(T,T)> _update):n(_n),e(_e),operation(_operation),update(_update){node.resize(n*2,e);}
+    void change(int i,T x){
+        i+=n;
+        node[i]=update(node[i],x);
+        while(i>1){
+            i>>=1;
+            node[i]=operation(node[i<<1|0],node[i<<1|1]);
+        }
+    }
+    T get(int l,int r){
+        T a=e;
+        T b=e;
+        l+=n;r+=n;
+        while(l<r){
+            if(l&1)a=operation(a,node[l++]);
+            if(r&1)b=operation(node[--r],b);
+            l>>=1;r>>=1;
+        }
+        return operation(a,b);
+    }
+    void input(vector<T>& _input){
+        for(int i=0;i<n;++i){
+            change(i,_input[i]);
+        }
+    }
+};
+struct S{
+  int l,r,ep;
+};
+S e={0,0,0};
+signed main(){
+  int n;cin>>n;
+  string s;cin>>s;
+  auto op=[](S a,S b){
+    S res={0,0,0};
+    res.l+=a.l+b.l;
+    res.r+=a.r+b.r;
+    res.ep=a.ep;
+    res.ep=max(res.ep,b.ep-(a.l-a.r));
+    return res;
+  };
+  auto up=[](S a,S b){return b;};
+  SegTree<S> tree(n,e,op,up);
+  rep(i,n){
+    tree.change(i,{1,0,0});
+  }
+  S R={0,1,1};
+  S L={1,0,0};
+  priority_queue<P,vector<P>,greater<P>> que;
+  vector<int> a(n);
+  rep(i,n)cin>>a[i];
+  lint res=0;
+  rep(i,n){
+    if(s[i]=='(')que.push({a[i],i});
+    else{
+      que.push({-a[i],i});
+      res+=a[i];
+      s[i]=')';
+    }
+  }
+  int cnt=0;
+  while(!que.empty()){
+    auto [cost,i]=que.top();que.pop();
+    tree.change(i,R);
+    if(tree.get(0,n).ep>0)tree.change(i,L);
+    else res+=cost;
+    if(cnt==n/2)break;
+  }
+  cout<<res<<"\n";
+  return 0;
+}

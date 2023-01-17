@@ -1,0 +1,14 @@
+package パソコン甲子園;
+import java.util.Scanner;
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int d;
+		double m;
+		for(d = 0;4 <= d && d <= 400;d++) {
+			m = d * 0.25;
+			System.out.printf("%\n",m);
+		}
+	}
+}
+

@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+
+int GCD(int X, int Y)
+{
+    if (X * Y == 0)
+        return X + Y;
+    else
+        return (X > Y) ? GCD(X % Y, Y) : GCD(X, Y % X);
+}
+
+int main()
+{
+    int X, Y;
+    cin >> X >> Y;
+    cout << GCD(X, Y) << endl;
+
+    return 0;
+}

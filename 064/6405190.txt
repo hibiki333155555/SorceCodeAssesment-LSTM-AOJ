@@ -1,0 +1,10 @@
+#include<stdio.h>
+  int main()
+{
+Double r,area,circumference ,pi=3.1416;
+scanf("%lf",&r);
+area=pi*r*r;
+circumference=2*pi*r;
+//1899
+printf("%lf %lf\n",area,circumference);
+return 0;}

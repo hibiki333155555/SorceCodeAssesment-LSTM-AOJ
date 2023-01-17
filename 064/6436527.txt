@@ -1,0 +1,110 @@
+    #include<iostream>
+    #include<vector>
+    #include<string>
+    #include<iomanip>
+    #include<deque>
+    #include<algorithm>
+    #include<cmath>
+    #include<map>
+    #include<stdio.h>
+    #include<cstring>
+    #include<stack>
+    #include<queue>
+    using namespace std;
+
+    #define rep(i,N) for(int i = 0; i < N; i++)
+    #define ll long long
+
+    int binserch(vector<int>& vec, int key){
+        int l = -1, r = vec.size();
+        while(r - l > 1){
+            int mid = (r + l) / 2;
+            if(vec[mid] >= key){
+                r = mid;
+            }else{
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+
+    int main(){
+
+        int H,W;
+        cin >> H >> W;
+        vector<vector<int>> in_pattern(H, vector<int>(W, 0));
+
+        rep(i, H){
+            rep(j, W){
+                cin >> in_pattern[i][j];
+            }
+        }
+
+        vector<vector<int>> acc_hist(H, vector<int>(W, 0));
+        //最初の1行を埋める
+        rep(j, W){
+            if(in_pattern[0][j] == 0){
+                acc_hist[0][j] = 1;
+            }else{
+                acc_hist[0][j] = 0;
+            }
+        }
+        for(int i = 1; i < H; i++){
+            rep(j, W){
+                if(in_pattern[i][j] == 1){
+                    acc_hist[i][j] = 0;
+                }else{
+                    acc_hist[i][j] = acc_hist[i-1][j] + 1; 
+                }
+            }
+        }
+        int ans = 0;
+
+        // rep(i,H){
+        //     rep(j, W){
+        //         cout << acc_hist[i][j] << " ";
+        //     }cout << "\n";
+        // }
+
+        stack<pair<int, int>> rects;
+        rep(i, H){
+            rep(j, W){
+                if(rects.empty()){
+                    //空の時
+                    rects.push({j, acc_hist[i][j]});
+                }else{
+                    if(acc_hist[i][j] > rects.top().second){
+                        rects.push({j, acc_hist[i][j]});
+                    }else{
+                        //これから入れようと思ってる要素がトップより低いとき
+                        while( rects.empty() == false && acc_hist[i][j] < rects.top().second){
+                            int temp = rects.top().second * (j - rects.top().first);
+                            if(temp > ans) ans = temp;
+                            //最後かどうかの判定
+                            int pos = rects.top().first, hight = rects.top().second;
+                            rects.pop();
+                            if(rects.empty() == true || rects.top().second < acc_hist[i][j]){
+                                //最後だった場合
+                                rects.push({pos, acc_hist[i][j]});
+                            }
+                        }
+                    }
+                }
+            }
+            //次の高さに行く前に総括
+            while(rects.empty() == false){
+                int temp = rects.top().second * (W - rects.top().first);
+                if(temp > ans) ans = temp;
+                rects.pop();
+            }
+        }
+        
+        cout << ans << "\n";
+        // cout << "\n";
+        // rep(i, N+1){
+        //     rep(j, W+1){
+        //         cout << dp[i][j] << " ";
+        //     }cout << "\n";
+        // }
+    }

@@ -1,0 +1,53 @@
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
+#include <complex>
+
+using namespace std;
+
+enum {LEFT = 1, RIGHT = 2, LOWER = 4, UPPER = 8, S = 128};
+
+vector<complex<double>> f(vector<complex<double>> To, vector<complex<double>> From)
+{
+	for (auto from : From) To.push_back(from);
+	return To;
+}
+
+vector<complex<double>> f(const vector<complex<double>>& P, int s, int e)
+{
+	vector<complex<double>> R;
+	for (int i = s; i < e; ++i) R.push_back(P[i]);
+	return R;
+}
+vector<complex<double>> fY(vector<complex<double>>& P, int s, int e, int ff);
+
+vector<complex<double>> fX(vector<complex<double>>& P, int s, int e, int ff)
+{
+	if (ff == 0) return vector<complex<double>> {};
+	if (e - s <= S) return f(P, s, e);
+	sort(P.begin() + s, P.begin() + e, [](auto a, auto b) {return a.real() < b.real();});
+	return f(fY(P, s, (s + e) / 2, ff & ~RIGHT), fY(P, (s + e) / 2, e, ff & ~LEFT));
+}
+
+vector<complex<double>> fY(vector<complex<double>>& P, int s, int e, int ff)
+{
+	if (ff == 0) return vector<complex<double>> {};
+	if (e - s <= S) return f(P, s, e);
+	sort(P.begin() + s, P.begin() + e, [](auto a, auto b) {return a.imag() < b.imag();});
+	return f(fX(P, s, (s + e) / 2, ff & ~UPPER), fX(P, (s + e) / 2, e, ff & ~LOWER));
+}
+
+int main()
+{
+	int n; cin >> n;
+	vector<complex<double>> P(n), R;
+	for (auto& p : P) {double x, y; cin >> x >> y; p = {x, y};}
+	R = fX(P, 0, n, LEFT | RIGHT | LOWER | UPPER);
+	double d = 0;
+	n = (int) R.size();
+	for (int i = 0; i < n; ++i) for (int j = i + 1; j < n; ++j) d = max(d, abs(R[i] - R[j]));
+	cout << fixed << setprecision(12) << d << endl;
+	return 0;
+}
+

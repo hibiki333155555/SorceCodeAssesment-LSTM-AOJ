@@ -1,0 +1,64 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main(){
+    int N,A;
+    string S;
+    cin >> N >> A >> S;
+    char cS[N+2];
+    cS[0]='X';
+    cS[N+1]='X';
+    for(int i=1; i<=N; i++){
+        cS[i]=S[i-1];
+    }
+    bool dir=true;
+    unsigned long long int count=0;
+    while(true){
+        if(dir==true){
+            for(int i=A; i<N+2; i++){
+                count++;
+                if(cS[i]=='#'){
+                    dir=false;
+                    A=i-1;
+                    cS[i]='.';
+                    break;
+                }
+                if(cS[i]=='X'){
+                    A=i-1;
+                    dir=false;
+                    break;
+                }
+            }
+        }
+        else if(dir==false){
+            for(int i=A; i>=0; i--){
+                count++;
+                if(cS[i]=='#'){
+                    dir=true;
+                    A=i+1;
+                    cS[i]='.';
+                    break;
+                }
+                if(cS[i]=='X'){
+                    dir=true;
+                    A=i+1;
+                    break;
+                }
+            }
+        }
+
+        bool judge=true;
+        for(int i=1; i<N+1; i++){
+            if(cS[i]!='.'){
+                judge=false;
+            }
+        }
+        if(judge==true){
+            break;
+        }
+    }
+    cout << count-1 << endl;
+}
+

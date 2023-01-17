@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+typedef unsigned long long ul;
+typedef long double ld;
+#define rep(i, n) for (int i = 0; i < n; i++)
+
+void dfs(vector<vector<ll> > &map, vector<vector<ll> > &check, ll nowh, ll noww,
+         ll h, ll w, ll &count) {
+  if (nowh > h || noww > w || nowh < 0 || noww < 0 ||
+      check.at(nowh).at(noww) == 1 || map.at(nowh).at(noww) == 0) {
+    return;
+  }
+  check.at(nowh).at(noww) = 1;
+  count++;
+  dfs(map, check, nowh + 1, noww, h, w, count);
+  dfs(map, check, nowh, noww + 1, h, w, count);
+  dfs(map, check, nowh - 1, noww, h, w, count);
+  dfs(map, check, nowh, noww - 1, h, w, count);
+}
+
+int main() {
+  ll w, h;
+  while (cin >> w >> h, w && h) {
+    ll island = 0;
+    vector<vector<ll> > map(h, vector<ll>(w));
+    vector<vector<ll> > check(h, vector<ll>(w));
+
+    for (int i = 0; i < h; i++) {
+      for (int j = 0; j < w; j++) {
+        cin >> map.at(i).at(j);
+      }
+    }
+    for (int i = 0; i < h; i++) {
+      for (int j = 0; j < w; j++) {
+        ll count = 0;
+        dfs(map, check, i, j, h - 1, w - 1, count);
+        // cout << count << endl;
+        if (count != 0) {
+          island++;
+        }
+      }
+    }
+    cout << island << endl;
+  }
+}

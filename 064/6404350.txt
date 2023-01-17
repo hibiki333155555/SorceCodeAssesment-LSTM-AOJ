@@ -1,0 +1,10 @@
+N = int(input())
+for i in range(0, N):
+    a = map(int, input().split())
+    b =0 
+    b+=a 
+    c = sort(a)
+    d = a[0]
+    e = a[N-1]
+    print(e,d,c)
+    

@@ -1,0 +1,201 @@
+/*----------------------------------------------------------------------------------------------------------------------------*/
+#define dump(...)
+#define STACK_EXTEND 0
+#include "bits/stdc++.h"
+#include "boost/multiprecision/cpp_int.hpp"
+#include "boost/hana/functional/fix.hpp"
+using namespace std;
+using boost::hana::fix;
+#define F first
+#define S second
+#define DEPS DBL_EPSILON
+#define LDEPS LDBL_EPSILON
+#define all(v) (v).begin(), (v).end()
+#define allr(v) (v).rbegin(), (v).rend()
+#define ENDL "\n"
+using ll = long long;
+using ull = unsigned long long;
+using dd = long double;
+const ll INF = (ll)1e18;
+using P = pair<ll, ll>;
+using T = tuple<ll, ll, ll>;
+// const ll MOD = 1000000007;
+const ll MOD = 998244353;
+const ll dx[8] = {0, 1, 0, -1, 1, 1, -1, -1},
+         dy[8] = {-1, 0, 1, 0, -1, 1, 1, -1};  // 配列：↑から右回り、座標：↓から左回り
+vector<ull> pow10 = {(ull)1e0,  (ull)1e1,  (ull)1e2,  (ull)1e3,  (ull)1e4,  (ull)1e5,  (ull)1e6,
+                     (ull)1e7,  (ull)1e8,  (ull)1e9,  (ull)1e10, (ull)1e11, (ull)1e12, (ull)1e13,
+                     (ull)1e14, (ull)1e15, (ull)1e16, (ull)1e17, (ull)1e18, (ull)1e19};
+template <class T> bool chmax(T& ans, const T& x, bool bEqual = false);
+template <class T> bool chmin(T& ans, const T& x, bool bEqual = false);
+ll npr(ll n, ll r), ncr(ll n, ll r), dgnum(ll x), dgsum(ll x), nstol(string str, ll n), ctol(char c);
+ll powl(ll a, ll n), ap(ll a, ll d, ll n), gp(ll a, ll r, ll n);
+dd euclid(ll x1, ll y1, ll x2 = 0, ll y2 = 0);
+char ltoc(ll x);  // 0 <= x && x <= 9
+vector<ll> ltonv(ll x, ll n);
+string ltons(ll x, ll n), nstons(string str, ll base_n, ll conv_n);
+/*----------------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------------*/
+void Main() {
+    ll n;
+    cin >> n;
+    for (ll i = 0; i < n; ++i) {
+        string x, y;
+        cin >> x >> y;
+        vector<vector<ll>> dp(x.size() + 1, vector<ll>(y.size() + 1, -1));
+        auto ans = fix([&](auto&& f, ll i, ll j) -> ll {
+            if (i == x.size()) return 0;
+            if (j == y.size()) return 0;
+            if (dp[i][j] != -1) return dp[i][j];
+            dp[i][j] = f(i + 1, j);
+            if (x[i] != y[j]) chmax(dp[i][j], f(i, j + 1));
+            if (x[i] == y[j]) chmax(dp[i][j], f(i + 1, j + 1) + 1);
+            return dp[i][j];
+        })(0, 0);
+        cout << ans << ENDL;
+    }
+}
+/*---------------------------------------------------------------------------------------------------------------*/
+ll ncr(ll n, ll r) {
+    ll ans = 1;
+    for (ll d = 1; d <= r; ++d) ans *= n--, ans /= d;
+    return ans;
+}
+ll npr(ll n, ll r) {
+    ll ans = 1;
+    for (ll d = 1; d <= r; ++d) ans *= n--;
+    return ans;
+}
+// xの桁数を返す
+ll dgnum(ll x) {
+    ll ans = 1;
+    while (x >= 10) {
+        ans++;
+        x /= 10;
+    }
+    return ans;
+}
+// xの各桁の数字の合計を返す
+ll dgsum(ll x) {
+    ll ans = 0;
+    while (x > 0) {
+        ans += x % 10;
+        x /= 10;
+    }
+    return ans;
+}
+// n進数を 10進数 に変換して ll で返す
+ll nstol(string str, ll n) {
+    return stoll(str, nullptr, (int)n);
+}
+ll ctol(char c) {
+    return (ll)c - '0';
+}
+ll powl(ll a, ll n) {
+    ll ans = 1;
+    while (n != 0) {
+        if (n % 2 == 1) ans *= a;
+        a *= a;
+        n /= 2;
+    }
+    return ans;
+}
+ll ap(ll a, ll d, ll n) {
+    n = (n - a) / d + 1;  // a ～ n にする。足りなければ切り捨て
+    return ((a * 2) + (n - 1) * d) * n / 2;
+}
+ll gp(ll a, ll r, ll n) {
+    return (a * powl(r, n - 1));
+}
+// マンハッタン距離
+ll manhattan(ll x1, ll y1, ll x2, ll y2) {
+    return abs(x1 - x2) + abs(y1 - y2);
+}
+// ユークリッド距離
+dd euclid(ll x1, ll y1, ll x2, ll y2) {
+    return sqrt((dd)(powl(x1 - x2, 2) + powl(y1 - y2, 2)));
+}
+char ltoc(ll x) {
+    return x + '0';
+}
+// n進数 を n進数 に変換して string で返す
+// アルファベットは小文字、36進数まで
+string nstons(string str, ll base_n, ll conv_n) {
+    return ltons(stoll(str, nullptr, (int)base_n), conv_n);
+}
+// 10進数 を n進数 に変換してコンテナに詰めて返す
+vector<ll> ltonv(ll x, ll n) {
+    vector<ll> num;
+    while (0 < x) {
+        num.push_back(x % n);
+        x /= n;
+    }
+    reverse(all(num));
+    return num;
+}
+// 10進数 を n進数 に変換して string で返す
+// アルファベットは小文字、36進数まで
+string ltons(ll x, ll n) {
+    string s = "";
+    while (0 < x) {
+        if (x % n < 10) {
+            s += x % n + '0';
+        } else {
+            s += x % n + 'a' - 10;
+        }
+        x /= n;
+    }
+    reverse(all(s));
+    return s;
+}
+template <class T> bool chmax(T& ans, const T& x, bool bEqual) {
+    if (ans == x) return bEqual;
+    if (ans < x) {
+        ans = x;
+        return true;
+    }
+    return false;
+}
+template <class T> bool chmin(T& ans, const T& x, bool bEqual) {
+    if (ans == x) return bEqual;
+    if (x < ans) {
+        ans = x;
+        return true;
+    }
+    return false;
+}
+/*----------------------------------------------------------------------------------------------------------------------------*/
+int main() {
+#if STACK_EXTEND
+    auto size = 1024 * 1024 * 1024;
+    void* stack_extend_memory_ = malloc(size);
+    void* stack_extend_origin_memory_;
+    char* stack_extend_dummy_memory_ = (char*)alloca((1 + (int)(((long long)stack_extend_memory_) & 127)) * 16);
+    *stack_extend_dummy_memory_ = 0;
+    asm volatile("mov %%rsp, %%rbx\nmov %%rax, %%rsp/"
+                 : "=b"(stack_extend_origin_memory_)
+                 : "a"((char*)stack_extend_memory_ + (size)-1024));
+#endif
+#ifndef ONLINE_JUDGE
+    auto start = system_clock::now();
+    try {
+#endif
+        ios::sync_with_stdio(false);
+        cin.tie(nullptr);
+        cout << fixed << setprecision(10);
+        Main();
+#ifndef ONLINE_JUDGE
+    } catch (const exception& e) {
+        cout << "Exception : " << e.what() << endl;
+    }
+    cout << endl << "[time] " << duration_cast<milliseconds>(system_clock::now() - start).count() << "ms" << endl;
+#endif
+#if STACK_EXTEND
+    asm volatile("mov %%rax, %%rsp" ::"a"(stack_extend_origin_memory_));
+    free(stack_extend_memory_);
+#endif
+    return 0;
+}
+/*----------------------------------------------------------------------------------------------------------------------------*/
+

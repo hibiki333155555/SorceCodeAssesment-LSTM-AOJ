@@ -1,0 +1,9 @@
+L, N = map(int, input().split())
+A = [int(a) for a in input().split()]
+for i, a in enumerate(A):
+    L -= a
+    if L <= 0:
+        print(i + 1)
+        break
+else:
+    print("No")

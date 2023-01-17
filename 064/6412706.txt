@@ -1,0 +1,15 @@
+word = input().split()[0]
+if(word == "END_OF_FILE"):
+    exit()
+word = word.lower()
+count = 0
+while(True):
+    s = input().split()
+    if s[0] == "END_OF_FILE":
+        break
+    #大文字->小文字変換
+    for i in range(0, len(s)):
+        s[i] = s[i].lower()
+    count += s.count(word)
+print(count)
+

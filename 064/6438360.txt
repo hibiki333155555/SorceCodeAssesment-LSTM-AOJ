@@ -1,0 +1,15 @@
+n, m, l = map(int, input().split())
+A = [list(map(int, input().split())) for _ in range(n)]
+B = [list(map(int, input().split())) for _ in range(m)]
+
+
+for i in range(n):
+    C = []
+    sum = 0
+    for k in range(l):
+        tmp = 0
+        for j in range(m):
+            tmp += A[i][j] * B[j][k]
+        C.append(tmp)
+    print(*C)
+

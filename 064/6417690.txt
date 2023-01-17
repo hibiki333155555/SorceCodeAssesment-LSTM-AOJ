@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(n);i++)
+#define Inf 1000000001
+
+int main(){
+	
+	int a,b,c,d,e,f;
+	cin>>a>>b>>c>>d>>e>>f;
+	
+	if((a+b+c)%2!=0){
+		a++;
+		b--;c--;
+	}
+	if((d+e+f)%2!=0){
+		d++;
+		e--;
+		f--;
+	}
+	
+	if(abs(a-d)%2==1 || abs(b-e)%2==1 || abs(c-f)%2==1 || a+b+c!=d+e+f){
+		cout<<"No"<<endl;
+	}
+	else{
+		cout<<"Yes"<<endl;
+	}
+	
+	return 0;
+}

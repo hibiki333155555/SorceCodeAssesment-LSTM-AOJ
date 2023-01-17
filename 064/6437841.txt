@@ -1,0 +1,38 @@
+#include <stack>
+#include <cstring>
+#include <stdlib.h>
+#include <stdio.h>
+
+using namespace std;
+int main()
+{
+	int a, b;
+	char s[100];
+	stack<int> ist;
+	while(scanf("%s", s) != EOF) {
+		if (s[0] == '+') {
+			b = ist.top();
+			ist.pop();
+			a = ist.top();
+			ist.pop();
+			ist.push(a + b);
+		}else if (s[0] == '-') {
+			b = ist.top();
+			ist.pop();
+			a = ist.top();
+			ist.pop();
+			ist.push(a - b);
+		} else if (s[0] == '*') {
+			b = ist.top();
+			ist.pop();
+			a = ist.top();
+			ist.pop();
+			ist.push(a * b);
+		} else {
+			ist.push(atoi(s));
+		}
+	}
+	printf("%d\n", ist.top());
+	return 0;
+}
+

@@ -1,0 +1,18 @@
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    var x int
+    fmt.Scanf("%d", &x)
+    fmt.Print(x / 3600)
+    x %= 3600
+    fmt.Print(":")
+    fmt.Print(x / 60)
+    x %= 60
+    fmt.Print(":")
+    fmt.Println(x)
+}
+

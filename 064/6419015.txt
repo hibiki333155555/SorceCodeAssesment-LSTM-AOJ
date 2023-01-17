@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long  long;
+int main(){
+    string s;int q,a,b;
+    cin>>s>>q;
+    string intro,temp;
+    for(int i=0;i<q;i++){
+        cin>>intro>>a>>b;
+        if(intro=="print"){
+            cout<<s.substr(a,b-a+1)<<"\n";
+        }
+        if(intro=="reverse"){
+            temp=s.substr(a,b-a+1);
+            reverse(temp.begin(),temp.end());
+            s.replace(a,b-a+1,temp);
+        }
+        if(intro=="replace"){
+            cin>>temp;
+            s.replace(a,b-a+1,temp);
+        }
+    }
+    return 0;
+}

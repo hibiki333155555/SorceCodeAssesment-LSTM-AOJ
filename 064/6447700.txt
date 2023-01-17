@@ -1,0 +1,17 @@
+#include <stdio.h>
+
+int main()
+{
+    int a, b, c;
+    scanf("%d",&a);
+    scanf("%d",&b);
+    scanf("%d",&c);
+        if(((a*a)+(b*b)==(c*c)) || ((b*b)+(c*c)==(a*a)) || ((a*a)+(c*c)==(b*b))){
+            printf("YES");
+        }
+        else{
+            printf("NO");
+        }
+    return 0;
+}
+

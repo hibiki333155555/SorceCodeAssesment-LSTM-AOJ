@@ -1,0 +1,45 @@
+#include <iostream>
+#include <list>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void _dump(list<int>l){
+    if(l.size()==0)
+    {
+        cout << endl;
+        return;
+    }
+    for(auto it = l.begin(); it != l.end(); it++)
+    {
+        cout << *it << ( (next(it) != l.end() ) ? " " : "\n");
+    }
+    return;
+}
+
+int main(){
+    int n, q;
+    cin>>n>>q;
+    
+    int op,s,t,x;
+    vector<list<int>> l(n, list<int>(0));
+    while(q--){
+        cin>>op;
+        switch(op){
+            case 0:
+            cin>>t>>x;
+            l.at(t).push_back(x);
+            break;
+            case 1:
+            cin>>t;
+            _dump(l.at(t));
+            break;
+            case 2:
+            cin>>s>>t;
+            l.at(t).splice(l.at(t).end(), l.at(s));
+            l.at(s).clear();
+        }
+    }
+    return 0;
+}

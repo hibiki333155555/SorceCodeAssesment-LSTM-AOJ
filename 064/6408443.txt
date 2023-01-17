@@ -1,0 +1,22 @@
+T=[]
+Y=[]
+for i in range(4):
+    for j in range(1,14):
+        if i==0:
+            T.append("S"+" "+str(j))
+        if i==1:
+            T.append("H"+" "+str(j))
+        if i==2:
+            T.append("C"+" "+str(j))
+        if i==3:
+            T.append("D"+" "+str(j))
+x=input()
+for i in range(x):
+    a,b=map(str,raw_input().split())
+    Y.append(a+" "+b)
+for s in range(x):
+    if Y[s] in T:
+        T.remove(str(Y[s]))
+
+for i in range(len(T)):
+    print T[i]

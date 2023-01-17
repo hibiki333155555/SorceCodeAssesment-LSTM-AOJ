@@ -1,0 +1,3 @@
+pi = 3.141592653589
+r = float(input())
+print(pi * r**2)

@@ -1,0 +1,4 @@
+import math
+a, b, c, d = map(float, input(), split())
+print(math.hypot(c-a, d-b))
+

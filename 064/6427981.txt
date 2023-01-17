@@ -1,0 +1,16 @@
+c=[]
+while True:
+    s = str(input())
+    sum = 0
+    for i in range(len(s)):
+        sum=sum+int(s[i])
+    c.append(sum)
+    if(str==0):
+        break
+    
+for i in range(len(c)):
+    print(c[i])
+    print()
+    
+    
+

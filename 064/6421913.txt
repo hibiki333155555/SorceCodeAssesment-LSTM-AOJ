@@ -1,0 +1,32 @@
+n,q = [int(x) for x in input().split()]
+
+keys = [x for x in range(n)]
+parents = [x for x in range(n)]
+height = [1 for x in range(n)]
+def find(x):
+    while True:
+        parent = parents[x]
+        if parent == x:
+            return x
+        x = parent
+
+for k in range(q):
+    command = input().split()
+    if command[0] == '0':
+        ry = find(int(command[2]))
+        rx = find(int(command[1]))
+        if height[ry] < height[rx]:
+            parents[ry] = rx
+            height[rx] = max(height[rx],height[ry]+1)
+        else:
+            parents[rx] = ry
+            height[ry] = max(height[rx] + 1,height[ry])
+        
+    elif command[0] == '1':
+        rx = find(int(command[1]))
+        ry = find(int(command[2]))
+        if rx == ry:
+            print('1')
+        else:
+            print('0')
+    

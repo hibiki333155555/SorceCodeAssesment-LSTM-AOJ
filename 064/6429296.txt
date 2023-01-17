@@ -1,0 +1,4 @@
+sample=input().lower()
+letter="abcdefghijklmnopqrstuvwxyz"
+for cap in range(len(letter)):
+    print(f"{letter[cap]} : {sample.count(letter[cap])}")

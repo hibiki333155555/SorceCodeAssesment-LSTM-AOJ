@@ -1,0 +1,16 @@
+while True:
+    S=input().split()
+    if S[1]=="?":
+        break
+    a=int(S[0])
+    b=int(S[2])
+
+    if S[1]=="+":
+        ans=a+b
+    elif S[1]=="-":
+        ans=a-b
+    elif S[1]=="*":
+        ans=a*b
+    elif S[1]=="/":
+        ans=a//b
+    print(ans)

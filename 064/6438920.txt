@@ -1,0 +1,4 @@
+x = y = 1
+for _ in range(int(input())):
+  x, y = x + y, x
+print(y) #出力

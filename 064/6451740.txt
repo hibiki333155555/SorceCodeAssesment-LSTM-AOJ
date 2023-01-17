@@ -1,0 +1,36 @@
+import copy
+
+def bubbleSort(A, n):
+    Atmp = copy.copy(A)
+    for i in range(n-1):
+        for j in range(n-1):
+            if Atmp[j][1] > Atmp[j+1][1]:
+                Atmp[j], Atmp[j+1] = Atmp[j+1], Atmp[j]
+    A1 = ' '.join(Atmp)
+    print(A1)
+    print('Stable')
+    return Atmp
+
+def selectSort(A, n):
+    for i in range(n-1, 0, -1):
+        maxj = i
+        for j in range(i-1, -1, -1):
+            if A[maxj][1] < A[j][1]:
+                maxj = j
+        A[maxj], A[i], = A[i], A[maxj]
+    A2 = ' '.join(A)
+    print(A2)
+    return A
+    
+def isStable(bubble, select, n):
+    if bubble == select:
+        print('Stable')
+    else:
+        print('Not stable')
+
+n = int(input())
+A = list(map(str, input().split()))
+#print(A)
+bubble = bubbleSort(A, n)
+select = selectSort(A, n)
+isStable(bubble, select, n)

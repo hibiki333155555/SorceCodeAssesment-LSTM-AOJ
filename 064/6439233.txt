@@ -1,0 +1,99 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+internal class Program
+{
+    public static void Main()
+    {
+        var nq = Console.ReadLine().Split().Select(x => x.ParseInt()).ToArray();
+        (var n, var q) = (nq[0], nq[1]);
+        var queue = new ReinvQueue<Process>();
+        for (int i = 0; i < n; i++)
+        {
+            var process = Console.ReadLine().Split().ToArray();
+            queue.Enqueue(new Process() { Name = process[0], Time = process[1].ParseInt() });
+        }
+        var output = new List<Process>();
+        var elapsed = 0;
+        while (!queue.IsEmpty)
+        {
+            var process = queue.Dequeue();
+            if (process.Time > q)
+            {
+                process.Time -= q;
+                elapsed += q;
+                queue.Enqueue(process);
+            }
+            else
+            {
+                elapsed += process.Time;
+                process.Time = elapsed;
+                output.Add(process);
+            }
+        }
+
+        output.ForEach(p => Console.WriteLine(p));
+    }
+}
+
+struct Process
+{
+    public string Name;
+    public int Time;
+    public override string ToString()
+    {
+        return $"{Name} {Time.ToString()}";
+    }
+}
+
+class ReinvQueue<T>
+{
+    T[] data;
+    int head;
+    int tail;
+    public ReinvQueue()
+    {
+        data = new T[16];
+        head = 0;
+        tail = 0;
+    }
+
+    public void Enqueue(T item)
+    {
+        if (IsFullCapacity)
+        {
+            var newData = new T[data.Length * 2];
+            if (head == 0)
+                Array.Copy(data, newData, data.Length);
+            else
+            {
+                Array.Copy(data, 0, newData, 0, tail);
+                Array.Copy(data, head, newData, head + data.Length, data.Length - head);
+                head += data.Length;
+            }
+            data = newData;
+        }
+        data[tail++] = item;
+        if (tail == data.Length)
+            tail = 0;
+    }
+
+    public T Dequeue()
+    {
+        if (IsEmpty)
+            throw new InvalidOperationException();
+        var deq = data[head++];
+        if (head == data.Length)
+            head = 0;
+        return deq;
+    }
+
+    public bool IsEmpty => head == tail;
+    bool IsFullCapacity => (tail + 1) % data.Length == head;
+}
+
+internal static class Extensions
+{
+    public static int ParseInt(this string s) => int.Parse(s);
+}

@@ -1,0 +1,6 @@
+x=input()
+X=[]
+for i in range(3,x+1):
+    if i%3==0
+        X.append(i)
+print X

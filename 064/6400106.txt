@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define bokusunny ios::sync_with_stdio(false), cin.tie(nullptr);
+
+#include <atcoder/modint>
+using namespace atcoder;
+
+using mint = modint1000000007;
+const int MOD = 1e9 + 7;
+
+// nxt[i][c] := i(1-index)番目以降で初めてcが出現するindex(なければ-1)
+// NOTE: 文字列が全て英小文字である前提
+vector<vector<int>> calc_next(string &S) {
+  int N = (int)S.size();
+  vector res(N + 1, vector<int>(26, -1));
+  for (int i = N; i >= 1; i--) {
+    for (int c = 0; c < 26; c++) {
+      if (S[i - 1] - 'a' == c) {
+        res[i][c] = i;
+      } else if (i != N) {
+        res[i][c] = res[i + 1][c];
+      }
+    }
+  }
+  return res;
+}
+
+void solve() {
+  string S;
+  cin >> S;
+  int N = (int)S.size();
+  auto T = S;
+  reverse(T.begin(), T.end());
+
+  auto NxtS = calc_next(S);
+  auto NxtT = calc_next(T);
+
+  // Sのi文字目、Tのj文字目まで見てそれらを必ず使う時の回文の種類数
+  vector dp(N + 1, vector<mint>(N + 1));
+  dp[0][0] = 1;
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; i + j <= N; j++) {
+      if (dp[i][j].val() == 0) continue;
+      for (int nxt_c = 0; nxt_c < 26; nxt_c++) {
+        auto nxt_s = NxtS[i + 1][nxt_c];
+        auto nxt_t = NxtT[j + 1][nxt_c];
+
+        if (nxt_s == -1 || nxt_t == -1) continue;
+        if (nxt_s + nxt_t > N) continue;
+        // cout << i << ' ' << j << " -> " << nxt_s << ' ' << nxt_t << endl;
+        dp[nxt_s][nxt_t] += dp[i][j];
+      }
+    }
+  }
+
+  // for (int i = 0; i < (int)dp.size(); i++) {
+  //   for (int j = 0; j < (int)dp[i].size(); j++) {
+  //     cerr << dp[i][j].val() << " ";
+  //   }
+  //   cerr << endl;
+  // }
+
+  mint ans = 0;
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; i + j <= N; j++) {
+      if (dp[i][j].val() == 0) continue;
+
+      vector<bool> Seen(26);
+      for (int k = i; k < N - j; k++) {
+        Seen[S[k] - 'a'] = true;
+      }
+      int cnt = accumulate(Seen.begin(), Seen.end(), 0) + 1;
+      ans += dp[i][j] * cnt;
+    }
+  }
+  ans--;  // 空文字列を除く
+
+  cout << ans.val() << endl;
+}
+
+int main() {
+  bokusunny;
+  solve();
+
+  return 0;
+}
+

@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    int N; cin >> N;
+    vector<int> A(N);
+    rep(i,N) cin >> A[i];
+
+    // dp[i][j] := i番目まで見て, 総和がjとなるか?
+    /*
+    int M = N * *max_element(A.begin(), A.end()) * 2;
+    int BASE = M / 2;
+    vector<vector<bool>> dp(N + 1, vector<bool>(M + 1, false));
+    dp[0][BASE] = true;
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j <= M; j++) {
+            if(dp[i][j]) {
+                if(j + A[i] <= M) dp[i + 1][j + A[i]] = true;
+                if(j - A[i] >= 0) dp[i + 1][j - A[i]] = true;
+            }
+        }
+    }
+    */
+
+    const int M = 220 * 1010 * 2;
+    int BASE = M / 2;
+    bitset<M> dp(M);
+    dp[BASE] = 1;
+    for(int i = 0; i < N; i++) {
+        dp = (dp << A[i]) | (dp >> A[i]);
+    }
+
+    int ans = 1e9;
+    for(int j = 0; j <= M; j++) if(dp[j]) ans = min(ans, abs(j - BASE));
+    cout << ans << endl;
+}

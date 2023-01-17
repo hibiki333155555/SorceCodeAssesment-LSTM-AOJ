@@ -1,0 +1,22 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main(){
+    string str;
+    int n, h;
+    while(true){
+        cin>>str;
+        if(str=="-")break;
+        cin>>n;
+        for(int i=0; i<n; i++){
+            cin>>h;
+            string buf = str.substr(h);
+            int len = str.size();
+            buf += str;
+            str = buf.substr(0, len);
+        }
+        cout << str << endl;
+    }
+}

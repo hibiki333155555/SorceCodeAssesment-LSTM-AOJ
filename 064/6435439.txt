@@ -1,0 +1,49 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    w_list = list(map(int, f.readline().split()))
+
+    sorted_w_list = w_list[:]
+    sorted_w_list.sort()
+
+    min_cost = 0
+    for i in range(n):
+        c_min_w = min(w_list[i:])
+        c_idx = w_list.index(c_min_w)
+        cost = 0
+        num_swaps = 0
+        while c_idx != i:
+            nw = sorted_w_list[c_idx]
+            n_idx = w_list.index(nw)
+            w_list[c_idx], w_list[n_idx] = w_list[n_idx], w_list[c_idx]
+            cost += nw
+            c_idx = n_idx
+            num_swaps += 1
+
+        if i == 0:
+            min_cost += cost + num_swaps * c_min_w
+        else:
+            cost0 = num_swaps * c_min_w
+            cost1 = num_swaps * sorted_w_list[0] + 2 * (sorted_w_list[0] + c_min_w)
+            min_cost += cost + min(cost0, cost1)
+
+    print(min_cost)
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

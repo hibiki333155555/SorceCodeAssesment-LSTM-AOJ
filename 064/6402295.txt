@@ -1,0 +1,8 @@
+while True:
+    x = str(input())
+    sum = 0
+    if x == "0":
+        break
+    for ch in x:
+        sum += int(ch)
+    print(sum)

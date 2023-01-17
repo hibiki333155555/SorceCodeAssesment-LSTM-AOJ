@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(n);i++)
+#define Inf 1000000001
+
+vector<int> get(vector<int> t,int k){
+	int n = t.size();
+	vector dp(30,vector<int>(n));
+	dp[0] = t;
+	for(int i=1;i<30;i++){
+		rep(j,n){
+			dp[i][j] = dp[i-1][dp[i-1][j]];
+		}
+	}
+	vector<int> ret(n);
+	rep(i,n){
+		int cur = i;
+		rep(j,30){
+			if((k>>j)&1){
+				cur = dp[j][cur];
+			}
+		}
+		ret[i] = cur;
+	}
+	return ret;
+}
+
+int main(){
+	int n;
+	cin>>n;
+	vector<int> a(n);
+	rep(i,n)cin>>a[i];
+	
+	vector cur(1,vector<int>(n));
+	rep(i,n)cur[0][i] = i;
+	int q;
+	cin>>q;
+	
+	rep(_,q){
+		int t;
+		cin>>t;
+		if(t==1){
+			vector<int> temp = cur.back();
+			int x,y;
+			cin>>x>>y;
+			swap(temp[x-1],temp[y-1]);
+			cur.push_back(temp);
+		}
+		else if(t==2){
+			cur.pop_back();
+		}
+		else{
+			int k;
+			cin>>k;
+			auto r = get(cur.back(),k);
+			vector<int> b(n);
+			rep(i,n){
+				b[i] = a[r[i]];
+			}
+			swap(a,b);
+		}
+	}
+	
+	rep(i,n){
+		if(i!=0)cout<<' ';
+		cout<<a[i];
+	}
+	cout<<endl;
+	
+	return 0;
+}

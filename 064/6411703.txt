@@ -1,0 +1,12 @@
+import heapq
+l=[]
+for i in range(10000000):
+    strings=input()
+    if strings[0]=="i":
+        heapq.heappush(l,-int(strings[7:]))
+        continue
+    if strings[1]=="x":
+        print(-heapq.heappop(l))
+        continue
+    break
+

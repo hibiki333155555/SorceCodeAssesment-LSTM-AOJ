@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n, S[100000], q, T[50000], cnt = 0;
+    cin >> n;
+    for (int i = 0; i < n; i++)
+        cin >> S[i];
+    cin >> q;
+    for (int i = 0; i < q; i++)
+    {
+        cin >> T[i];
+        int left = 0;
+        int right = n - 1;
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if (T[i] == S[mid])
+            {
+                cnt++;
+                break;
+            }
+            else if (T[i] < S[mid])
+            {
+                right = mid - 1;
+            }
+            else
+            {
+                left = mid + 1;
+            }
+        }
+    }
+    cout << cnt << endl;
+    return 0;
+}

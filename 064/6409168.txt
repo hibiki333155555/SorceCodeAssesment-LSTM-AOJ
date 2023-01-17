@@ -1,0 +1,1 @@
+s='';console.log([...Array(+(''+require('fs').readFileSync(0))).map((_,i)=>(x+=i%3&&i%10-3&&i/10%10-3&&i/100%10-3&&i/1000%10-3?i:'').join` `);

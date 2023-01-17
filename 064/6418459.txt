@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int n,m;
+  cin >> n >> m;
+  vector<vector<int>> a(n,vector<int>(m));
+  vector<int> b(m);
+  for(int i=0; i<n; i++){
+    for(int j=0; j<m; j++) cin >> a.at(i).at(j);
+  }
+  for(int j=0; j<m; j++) cin >> b.at(j);
+  
+  for(int i=0; i<n; i++){
+    int x=0;
+    for(int j=0; j<m; j++){
+      x += a.at(i).at(j)*b.at(j);
+    }
+    cout << x << endl;
+  }
+        
+  return 0;
+        
+}

@@ -1,0 +1,56 @@
+import java.util.*;
+
+public class Main {
+	static int c = 0;
+	public void merge(int[] A, int left, int mid, int right) {
+		int n1 = mid - left;
+		int n2 = right - mid;
+		int[] L = new int[n1 + 1];
+		for (int i = 0; i < n1; i++) {
+			L[i] = A[left + i];
+		}
+		int[] R = new int[n2 + 1];
+		for (int i = 0; i < n2; i++) {
+			R[i] = A[mid + i];
+		}
+		L[n1] = 1000000001;
+		R[n2] = 1000000001;
+		int i = 0;
+		int j = 0;
+		for (int k = left; k < right; k++) {
+			c++;
+			if (L[i] <= R[j]) {
+				A[k] = L[i];
+				i++;
+			} else {
+				A[k] = R[j];
+				j++;
+			}
+		}
+	}
+	
+	public void mergeSort(int[] A, int left, int right) {
+		if ((left + 1) < right) {
+			int mid = (left + right) / 2;
+			mergeSort(A, left, mid);
+			mergeSort(A, mid, right);
+			merge(A, left, mid, right);
+		}
+	}
+	public static void main(String[] args) {
+		Main m = new Main();
+		Scanner scan = new Scanner(System.in);
+		int num = scan.nextInt();
+		int[] a = new int[num]; 
+		for (int i = 0; i < num; i++) {
+			a[i] = scan.nextInt();
+		}
+		m.mergeSort(a, 0, num);
+		for (int i = 0; i < num; i++) {
+			if (i != num - 1) System.out.print(a[i] + " ");
+			else System.out.println(a[i]);
+		}
+		System.out.println(c);
+	}
+}
+

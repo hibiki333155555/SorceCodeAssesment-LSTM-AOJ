@@ -1,0 +1,2 @@
+require('fs').readFileSync(0,'utf8').split`
+`.some(l=>~l.indexOf`?`||console.log(~~eval(l)))

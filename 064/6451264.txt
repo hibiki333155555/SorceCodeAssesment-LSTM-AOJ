@@ -1,0 +1,13 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int a,b,c;
+    cin >> a >> b >> c;
+    float area,cir,h;
+    area = (float) (0.5*a*b*sin(c*3.1416/180));
+    cir = (float)a+b+sqrt(a*a+b*b);
+    h = (float)(area/(0.5*a));
+    printf("%.8f\n%.8f\n%.8f",area,cir,h);
+}
+

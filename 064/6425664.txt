@@ -1,0 +1,18 @@
+def solve(i, s):
+    global A
+    global M
+    if i < len(A):
+        M.append(s + A[i])
+        solve(i + 1,s + A[i])
+        solve(i + 1, s)
+n = int(input())
+A = [int(x) for x in input().split()]
+M = list()
+solve(0, 0)
+q = int(input())
+for m in [int(x) for x in input().split()]:
+    if m in M:
+        print("yes")
+    else:
+        print("no")
+

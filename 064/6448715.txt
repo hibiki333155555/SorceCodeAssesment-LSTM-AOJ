@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+#define endl '\n'
+
+using namespace std;
+
+const int N = 1e6 + 10;
+int r, c, q, n, m;
+int a[N * (int)log2(N)];
+
+int id(int x1, int x2, int x3, int x4) {
+    return x4 + x3 * m + x2 * m * n + x1 * m * n * c;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    while (cin >> r >> c >> q, r || c || q) {
+        n = ceil(log2(r)), m = ceil(log2(c));
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j ++) {
+                cin >> a[id(i, j, 0, 0)];
+            }
+        }
+        for (int k = 1; k < n; k ++) {
+            for (int i = 0; i < r; i ++) {
+                for (int j = 0; j < c; j ++) {
+                    int u = min(r - 1, i + (1 << (k - 1)));
+                    a[id(i, j, k, 0)] = min(a[id(i, j, k - 1, 0)], a[id(u, j, k - 1, 0)]);
+                }
+            }
+        }
+        for (int s = 1; s < m; s ++) {
+            for (int i = 0; i < r; i ++) {
+                for (int j = 0; j < c; j ++) {
+                    int k = min(c - 1, j + (1 << (s - 1)));
+                    a[id(i, j, 0, s)] = min(a[id(i, j, 0, s - 1)], a[id(i, k, 0, s - 1)]);
+                }
+            }
+            for (int k = 1; k < n; k ++) {
+                for (int i = 0; i < r; i ++) {
+                    for (int j = 0; j < c; j ++) {
+                        int u = min(r - 1, i + (1 << (k - 1)));
+                        a[id(i, j, k, s)] = min(a[id(i, j, k - 1, s)], a[id(u, j, k - 1, s)]);
+                    }
+                }
+            }
+        }
+        while (q --) {
+            int r1, c1, r2, c2; cin >> r1 >> c1 >> r2 >> c2;
+            int k = log2(r2 - r1 + 1), s = log2(c2 - c1 + 1);
+            int u = r2 - (1 << k) + 1, v = c2 - (1 << s) + 1;
+            cout << min({a[id(r1, c1, k, s)], a[id(u, c1, k, s)], a[id(r1, v, k, s)], a[id(u, v, k, s)]}) << endl;
+        }
+    }
+    return 0;
+}
+

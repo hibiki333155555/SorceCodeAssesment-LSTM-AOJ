@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+typedef long long ll;
+typedef pair<ll,int> pll;
+vector<pll> G[4000100]; //weight,vertex
+priority_queue<pll,vector<pll>,greater<pll>> que;
+ll d[4000100],INF = 100000000000000000;
+void add_edge(int from,int to,ll weight){ G[from].push_back({weight,to}); }
+void dijkstra(int s){
+    que.push({0,s});
+    while(que.size()){
+        pll p = que.top(); que.pop();
+        ll dis = p.first,pos = p.second;
+        if(d[pos]!=INF) continue;
+        d[pos] = dis;
+        for(auto e:G[pos]){
+            if(d[e.second]==INF) que.push({dis + e.first,e.second});
+        }
+    }
+}
+
+string s[1010];
+int dx[4] = {1,0,-1,0};
+int dy[4] = {0,1,0,-1};
+int main(){
+    int i,j,k,h,w; cin >> h >> w;
+    for(i=0;i<h;i++) cin >> s[i];
+    int st = -1,go = -1;
+    for(i=0;i<h;i++){
+        for(j=0;j<w;j++){
+            d[i*w + j] = INF;
+            for(k=0;k<4;k++){
+                if(s[i][j]=='S') st = i*w + j;
+                if(s[i][j]=='G') go = i*w + j;
+                if(s[i][j]=='#') continue;
+                int now = i*w + j;
+                if(s[i][j]=='L'){
+                    if(j) add_edge(now,i*w + j - 1,0);
+                }else if(s[i][j]=='R'){
+                    if(j<w - 1) add_edge(now,i*w + j + 1,0);
+                }else if(s[i][j]=='U'){
+                    if(i) add_edge(now,(i - 1)*w + j,0);
+                }else if(s[i][j]=='D'){
+                    if(i<h - 1) add_edge(now,(i + 1)*w + j,0);
+                }else{
+                    for(k=0;k<4;k++){
+                        int nx = i + dx[k],ny = j + dy[k];
+                        if(nx<0 || nx>=h || ny<0 || ny>=w || s[nx][ny]=='#') continue;
+                        add_edge(now,nx*w + ny,1);
+                    }
+                }
+            }
+        }
+    }
+    dijkstra(st);
+    if(d[go]!=INF) cout << d[go] << "\n";
+    else cout << -1 << "\n";
+}

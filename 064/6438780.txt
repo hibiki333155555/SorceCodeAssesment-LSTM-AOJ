@@ -1,0 +1,25 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+
+int main() {
+  int q; std::cin >> q;
+  for (int i=0; i<q; i++) {
+    double x1, y1, x2, y2;
+    std::cin >> x1 >> y1 >> x2 >> y2;
+    double unit1_x = (x2 - x1) / std::sqrt(std::pow(x2-x1, 2) + std::pow(y2-y1, 2));
+    double unit1_y = (y2 - y1) / std::sqrt(std::pow(x2-x1, 2) + std::pow(y2-y1, 2));
+    std::cin >> x1 >> y1 >> x2 >> y2;
+    double unit2_x = (x2 - x1) / std::sqrt(std::pow(x2-x1, 2) + std::pow(y2-y1, 2));
+    double unit2_y = (y2 - y1) / std::sqrt(std::pow(x2-x1, 2) + std::pow(y2-y1, 2));
+    double dot = unit1_x * unit2_x + unit1_y * unit2_y;
+    if (dot == 1.0 || dot == -1.0) {
+      std::cout << 2 << std::endl;
+    } else if (dot == 0.0) {
+      std::cout << 1 << std::endl;
+    } else {
+      std::cout << 0 << std::endl;
+    }
+  }
+}
+

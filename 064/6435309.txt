@@ -1,0 +1,11 @@
+a,op,b=input().split
+a=int(a)
+b=int(b)
+if op==+:
+    "+"
+    elif op=-:
+        "-"
+        elif op==*:
+            "*"
+            else:
+                "/"

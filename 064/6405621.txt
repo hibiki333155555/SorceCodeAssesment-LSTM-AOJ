@@ -1,0 +1,18 @@
+#すべてのカードのリスト化
+patterns=["S","H","C","D"]
+numbers=range(1,14)
+all_cards=[[pattern,str(number)] for pattern in patterns for number in numbers]
+#手持ちのカードのリスト化
+a=int(input())
+mycard_list=[]
+for _ in range(a):
+    b,c=input().split()
+    mycard_list.append([b,c])
+#すべてのカードのうち、手持ちのカードにないものをピックアップする
+missing_list=[]
+for x in range(52):
+    if all_cards[x] not in mycard_list:
+        missing_list.append(all_cards[x])
+#手持ちカードにないものを出力する
+for y in range(len(missing_list)):
+    print(" ".join(missing_list[y]))

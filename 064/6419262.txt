@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main( int argc, char** argv ) {
+    for (int i = 0; ;i++) {
+        int x, y;
+        cin >> x >> y;
+        if (x == 0 && y == 0) break;
+        else {
+            cout << min(x, y) << ' ' << max(x, y) << endl;
+        }
+    }
+}

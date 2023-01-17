@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+   int n, i=1;
+   cin >> n;
+   // n = 30;
+
+   while(true) {
+      int x = i;
+      int m = 0;
+
+      if(x % 3 == 0) {
+         cout << " " << i;
+         if(i >= n) {
+            break;
+         }else {
+            i++;
+         }
+      }else{
+         while(m==0 && x!=0) {
+            if(x % 10 == 3) {
+               cout << " " << i;
+               m = 1;
+               if(i >= n) {
+   
+                  break;
+               }else {
+                  i++;
+               }
+            }
+            x /= 10;
+         }
+         if(i >= n) {
+            break;
+         }else if(m == 0) {
+            i++;
+         }
+      }
+   }
+}
+

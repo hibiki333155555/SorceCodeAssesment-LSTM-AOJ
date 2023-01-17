@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    int x,y,t;
+    for(int i = 0; i < 3000; i++){
+        if(x > y){
+            t = x;
+            x = y;
+            y = t;
+        }
+        cout << x << " " << y << endl;
+        cin >> x >> y;
+
+        if(x == 0 && y == 0) break;
+    }
+    return 0;
+}

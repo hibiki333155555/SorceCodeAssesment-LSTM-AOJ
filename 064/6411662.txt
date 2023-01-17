@@ -1,0 +1,42 @@
+use std::collections::BTreeSet;
+use std::cmp::min;
+use std::io::*;
+use std::str::FromStr;
+
+fn read<T: FromStr>() -> T {
+    let stdin = stdin();
+    let stdin = stdin.lock();
+    let token: String = stdin
+        .bytes()
+        .map(|c| c.expect("failed to read char") as char) 
+        .skip_while(|c| c.is_whitespace())
+        .take_while(|c| !c.is_whitespace())
+        .collect();
+    token.parse().ok().expect("failed to parse token")
+}
+
+fn main() {
+   let t = read();
+   for _ in 0..t {
+      let n: usize = read();
+      let m: u64 = read();
+      let v: u64 = read();
+      let a: u64 = read();
+      let b: u64 = read();
+
+      let mut st = BTreeSet::new();
+      let mut now = v % m;
+      st.insert(now);
+      let mut ok = false;
+      for _i in 0..min(n - 1, m as usize + 1) {
+          now = (a * now + b) % m;
+          if st.contains(&now) {
+              ok = true;
+              break;
+          }
+          st.insert(now);
+      }
+
+      println!("{}", if ok { "Yes" } else { "No" });
+   }
+}

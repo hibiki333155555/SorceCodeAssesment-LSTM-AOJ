@@ -1,0 +1,11 @@
+H,W=map(int,raw_input().split())
+i=0
+while True:
+    i++
+    if(H[i]==0 && W[i]==0):break
+    for j in range(H[i]):
+        for k in range(W[i]):
+            print("#")
+        print('\n')
+    print('\n')
+    

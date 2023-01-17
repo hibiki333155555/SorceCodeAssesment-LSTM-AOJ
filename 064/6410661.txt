@@ -1,0 +1,19 @@
+n = int(input())
+s = input()
+A,B,C,D,E = 0,0,0,0,0
+for i in s:
+    if i == A:
+        A += 1
+    elif i == B:
+        B += 1
+    elif i == C:
+        C += 1
+    elif i == D:
+        D += 1
+    else:
+        E += 1
+    
+if A >= 3 or B >= 3 or C <= 3 or D <= 3 or D <= 3 :
+    print('Yes')
+else:
+    print('No')

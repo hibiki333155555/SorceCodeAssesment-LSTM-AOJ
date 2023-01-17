@@ -1,0 +1,3 @@
+l=1
+while l<=1000:
+print("Hello World")

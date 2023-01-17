@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1LL << 60;
+
+long long min(long long a, long long b){
+  if(a<b){
+    return a;
+  }else{
+    return b;
+  }
+}
+
+struct edge{
+  int from;
+  int to;
+  long long weight;
+  edge(int f, int t, long long w): from(f), to(t), weight(w){}
+};
+
+int main(){
+  int v, e, r;
+  cin >> v >> e >> r;
+  //vector<vector<edge> > g(v);
+  vector<edge> g;
+  vector<long long> data(v, INF);
+  for(int i = 0; i < e; i++){
+    int a, b;
+    long long c;
+    cin >> a >> b >> c;
+    g.push_back(edge(a, b, c));
+  }
+  int cur = r;
+  data.at(cur) = 0;
+  for(int j = 0;; j++){
+    bool changed = false;
+    for(int i = 0; i < g.size(); i++){
+      if(data.at(g[i].to) > data.at(g[i].from) + g[i].weight && data.at(g[i].from) != INF){
+        //cout << "d is " << data.at(g[i].from) << " g is " << g[i].weight << endl;
+        changed = true;
+        data.at(g[i].to) = data.at(g[i].from) + g[i].weight;
+      }
+    }
+    if(!changed){
+      break;
+    }
+    if(j == v-1){
+      cout << "NEGATIVE CYCLE" << endl;
+      return 0;
+    }
+  }
+  for(int i = 0; i < data.size(); i++){
+    if(data.at(i) == INF){
+      cout << "INF" << endl;
+    }else{
+      cout << data.at(i) << endl;
+    }
+  }
+  return 0;
+}

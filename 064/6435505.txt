@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int n, m, e;
+vector<vector<int>> graph(10007);
+vector<int> p;
+vector<bool> vis;
+
+bool dfs(int v) {
+  if(vis[v]) return false;
+  vis[v] = true;
+  for(auto u : graph[v]) {
+    if(p[u] == -1 || dfs(p[u])) {
+      p[u] = v;
+      return true;
+    }
+  }
+  return false;
+}
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cin >> n >> m >> e;
+  for(int i = 0; i < e; i++) {
+    int x, y;
+    cin >> x >> y;
+    graph[x].push_back(y);
+  }
+  int matching = 0;
+  p.assign(m, -1);
+  for(int i = 0; i < n; i++) {
+    vis.assign(n, false);
+    matching += dfs(i);
+  }
+  cout << matching << '\n';
+  
+  return 0;
+}
+
+

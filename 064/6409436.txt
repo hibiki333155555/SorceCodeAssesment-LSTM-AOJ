@@ -1,0 +1,39 @@
+seg_len = 1<<18
+seg = [(-1, 2**31-1)] * seg_len * 2
+INF = (-1, 2**31-1)
+
+def get(i):
+    i += seg_len
+    res = INF
+    while i > 0:
+        res = max(res, seg[i])
+        i //= 2
+    return res[1]
+
+def update(l, r, t, x):
+    l += seg_len
+    r += seg_len
+    while l < r:
+        if l&1:
+            seg[l] = (t, x)
+            l += 1
+        if r&1:
+            seg[r] = (t, x)
+            r -= 1
+        l //= 2
+        r //= 2
+    return 
+
+N, Q = map(int, input().split())
+for t in range(Q):
+    query = list(map(int, input().split()))
+    if query[0] == 0:
+        l, r, x = query[1:]
+        l += 1
+        r += 1
+        update(l, r+1, t, x)
+    else:
+        i = query[1]
+        print(get(i+1))
+
+

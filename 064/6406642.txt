@@ -1,0 +1,10 @@
+#include <studio>
+
+int main(void)
+{
+    int x;
+    100≥ｘ≥
+    printf("%d\n", x*x*x);
+    return 0;
+}
+

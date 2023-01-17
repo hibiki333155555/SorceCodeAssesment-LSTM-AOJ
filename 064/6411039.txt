@@ -1,0 +1,12 @@
+#include<stdio.h>
+int main(){
+    float r,area,p;
+    scanf("%f",&r);
+    area=3.1415926535897932384626433*r*r;
+    p=2*3.1415926535897932384626433*r;
+
+    printf("%.6f %.6f\n",area,p);
+
+return 0;
+}
+

@@ -1,0 +1,14 @@
+import statistics
+import math
+N=[]
+A=[]
+while True:
+    n=input()
+    a=list(map(int,raw_input().split()))
+    if n==0:
+        break
+    N.append(n)
+    A.append(a)
+for i in range(len(A)):
+    print statistics.stdev(A[i])
+        

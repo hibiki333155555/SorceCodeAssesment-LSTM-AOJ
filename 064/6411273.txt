@@ -1,0 +1,20 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main(){
+    int n,e;
+    cin>>n;
+    vector<int> v;
+    while(n--){
+        cin>>e;
+        v.push_back(e);
+    }
+    cin>>n;
+    while(n--){
+        cin>>e;
+        cout << lower_bound(v.begin(), v.end(), e) << endl;
+    }
+}

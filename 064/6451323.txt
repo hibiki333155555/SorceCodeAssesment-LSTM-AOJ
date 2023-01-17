@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+#include<math.h>
+
+using namespace std;
+
+int main()
+{
+    int a,b,c;
+    double area=0,angle=0,peri=0,height=0;
+    cin>>a>>b>>c;
+    angle=c*3.14159265358979/180;
+    area=0.5*a*b*sin(angle);
+    peri=(a*a)+(b*b)-(2*a*b*cos(angle));
+    peri=sqrt(peri);
+    peri+=a+b;
+    height=(2*area)/a;
+    cout<<setprecision(10)<<area<<endl;
+    cout<<setprecision(10)<<peri<<endl;
+    cout<<setprecision(10)<<height<<endl;
+
+    return 0;
+}
+

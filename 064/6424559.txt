@@ -1,0 +1,27 @@
+from math import gcd
+from functools import reduce
+
+def lcm_base(x, y):
+    '''
+    最小公倍数を求める関数
+    '''
+    return (x * y) // gcd(x, y)
+
+def lcm_list(numbers):
+    return reduce(lcm_base, numbers, 1)
+
+while True:
+    L = list(map(int, input().split()))
+    if L == [0] * 6:
+        break
+    C = []
+    for i in range(3):
+        a, m = L[2 * i], L[2 * i + 1]
+        cnt = 1
+        x = a
+        while x != 1:
+            x = x * a % m
+            cnt += 1
+        C.append(cnt)
+    print(lcm_list(C))
+

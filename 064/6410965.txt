@@ -1,0 +1,13 @@
+N = int(input())
+a = int(input())
+b = int(input())
+value = -float("inf")
+
+for _ in range(N-2):
+  if b - a >= value:
+    value = b - a
+    
+  new = int(input())
+  a = min(a,new,b)
+  b = max(b,new)
+print(value)

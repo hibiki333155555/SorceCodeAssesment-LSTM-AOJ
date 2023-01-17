@@ -1,0 +1,10 @@
+n=int(input())
+l=list(map(int,input().split()))
+
+l.sort()
+mini=l[0]
+maxi=l[n-1]
+total=0
+for i in range(n):
+    total+=int(l[i])
+print(f"{mini} {maxi} {total}")

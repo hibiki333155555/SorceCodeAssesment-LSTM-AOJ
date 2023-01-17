@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+class Main
+{
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] num = new num[n];
+        
+        
+        for(int i = 0; i < n; i++)
+        {
+             num[i] = sc.nextInt();
+        }
+        int maxNum = num[0];
+        //Maximun numeral
+        for(int i = 1; i < n; i++)
+        {
+            if(num[i] > maxNum) maxNum = num[i];  
+        }
+        int minNum = num[0];
+        //Minimum numeral
+        for(int i = 1; i < n; i++)
+        {
+            if(num[i] < minNum) minNum = num[i];
+        }
+        long sumVal = 0;
+        //Summary Value
+        for(int i = 0; i < n; i++)
+        {
+            sumVal = sumVal + num[i];
+        }
+        System.out.println(minNum + " " + maxNum + " " + sumVal);
+    }
+}

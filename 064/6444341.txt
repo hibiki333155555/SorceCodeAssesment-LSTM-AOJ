@@ -1,0 +1,43 @@
+import java.util.*;
+
+public class Main {
+    // String str = "####################";
+    // String[][][] building = new String[4][3][20];
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int b = sc.nextInt();
+        int f = sc.nextInt();
+        int r = sc.nextInt();
+        int v = sc.nextInt();
+        search(b, f, r, v);
+
+    }
+
+    public static void search(int b, int f, int r, int v) {
+        String str = "####################";
+        String[][][] building = new String[4][3][20];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 20; k++) {
+                    if (k % 2 == 0) {
+                        building[i][j][k] = " ";
+
+                    } else {
+
+                        if (b < 5 || f < 4 || r < 21 || v < 11) {
+                            String v_str = String.valueOf(v);
+                            building[i][j][k] = "0";
+                            building[b][f][r] = v_str;
+
+                        }
+                    }
+                    System.out.print(building[i][j][k]);
+                }
+                System.out.print("\n");
+            }
+            System.out.println(str);
+        }
+    }
+
+}
+

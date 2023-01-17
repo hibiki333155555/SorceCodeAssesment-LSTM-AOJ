@@ -1,0 +1,30 @@
+from collections import deque
+from sys import stdin
+
+n = int(input())
+
+lst = deque()
+
+for i in range(n):
+    command = stdin.readline()[:-1]
+    if command[:6] == 'insert':
+        key = int(command[7:])
+        lst.appendleft(key)
+
+    elif command[6:11] == 'First':
+        lst.popleft()
+    elif command[6:10] == 'Last':
+        lst.pop()
+
+    else:
+        key = int(command[7:])
+        try:
+            lst.remove(key)
+        except:
+            pass
+
+ans = []
+while lst:
+    ans.append(lst.popleft())
+
+print(*ans)

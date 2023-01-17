@@ -1,0 +1,5 @@
+import sys
+input = sys.stdin.readline
+x = int(input().rstrip().split())
+
+print(x**3)

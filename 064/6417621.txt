@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <deque>
+#include <queue>
+#include <string>
+#include <iomanip>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <utility>
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#if __has_include(<atcoder/all>)
+#include <atcoder/all>
+using namespace atcoder;
+#endif
+using namespace std;
+using ll=long long;
+
+ll safe_mod(ll x,ll mod){
+  while(x<0){
+    x+=mod;
+  }
+  return x%mod;
+}
+
+void solve(){
+  ll N,M,v,a,b;
+  cin>>N>>M>>v>>a>>b;
+  unordered_set<ll> us;
+  if(a!=1){
+    ll u=v;
+    us.insert(v%M);
+    for(int i=0;i<min(N,M);i++){
+      // ll a_p=pow_mod(a,i+1,M);
+      // ll u=a_p*v%M+b*safe_mod(a_p-1,M)%M*inv_mod(a-1,M)%M;
+      // u%=M;
+      u=(a*u+b)%M;
+      if(us.find(u)==us.end()){
+        us.insert(u);
+      }else{
+        cout<<"Yes"<<endl;
+        return;
+      }
+    }
+  }else{
+    //us.insert(v);
+    for(int i=0;i<min(N,M);i++){
+      ll u=v+i*b;
+      u%=M;
+      if(us.find(u)==us.end()){
+        us.insert(u);
+      }else{
+        cout<<"Yes"<<endl;
+        return;
+      }
+    }
+  }
+  cout<<"No"<<endl;
+  return;
+}
+
+int main(){
+  ll T;
+  cin>>T;
+  while(T--){
+    solve();
+  }
+}
+
+

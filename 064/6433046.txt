@@ -1,0 +1,11 @@
+#include<iostream>
+using namespace std;
+
+int main(){
+    int a,t,r;
+    cin >> a >> t >> r;
+    double elapse = (1.0*t/a)*r;
+    cout << elapse << endl;
+
+    return 0;
+}

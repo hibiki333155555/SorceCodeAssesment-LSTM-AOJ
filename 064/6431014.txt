@@ -1,0 +1,18 @@
+import java.util.*;
+
+class Main {
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = 1 ;
+        if (n < 2) {
+            int a = sc.nextInt()*10;
+            char op = sc.next().charAt(0);
+            int b = sc.nextInt()*10;
+            if (op == "?") {
+                n = 2;
+            }else {
+                System.out.println((a  op  b)/10);
+            }
+        }
+    }
+}

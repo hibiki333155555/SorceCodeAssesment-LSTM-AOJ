@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    //3.141592653589
+    double r;
+    cin>>r;
+    printf("%f",r*r*3.141592653589);
+    cout<<" ";
+    printf("%f¥n",2*r*3.141592653589);
+
+}

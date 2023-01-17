@@ -1,0 +1,3 @@
+l = input()
+a,b = list(map(int, l.split()))
+print(str(a*b) + " " + str(2*a+2*b))

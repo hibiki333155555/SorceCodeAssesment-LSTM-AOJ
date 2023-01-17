@@ -1,0 +1,29 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+#include<string>
+using namespace std;
+typedef long long ll;
+
+const int N = 1005;
+ll dp[N][N];
+
+int q;
+
+int main() {
+	string a,b;
+	cin>>q;
+	while(q--) {
+		cin>>a>>b;
+		memset(dp,0,sizeof(dp));
+		for(int i=0;i<a.size();i++) {
+			for(int j=0;j<b.size();j++) {
+				if(a[i]==b[j])
+					dp[i+1][j+1] = dp[i][j]+1;
+				else
+					dp[i+1][j+1] = max(dp[i][j+1],dp[i+1][j]);
+			}
+		}
+		cout<<dp[a.size()][b.size()]<<endl;
+	}
+}

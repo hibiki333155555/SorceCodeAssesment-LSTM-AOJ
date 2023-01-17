@@ -1,0 +1,24 @@
+import sys,random,bisect
+from collections import deque,defaultdict
+from heapq import heapify,heappop,heappush
+from itertools import permutations
+from math import gcd
+from fractions import Fraction
+
+input = lambda :sys.stdin.readline().rstrip()
+mi = lambda :map(int,input().split())
+li = lambda :list(mi())
+
+row = []
+for i in range(26):
+    row.append(chr(ord("A")+i))
+for i in range(26):
+    for j in range(26):
+        row.append(chr(ord("A")+i)+chr(ord("A")+j))
+
+r = {s:i for i,s in enumerate(row)}
+
+a,b,c,d = input().split()
+b,d = int(b),int(d)
+
+print((d-b+1)*(r[c]-r[a]+1))

@@ -1,0 +1,80 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+MOD = 1042567
+
+
+def h0(k):
+    return k % MOD
+
+
+def h1(k):
+    return 1 + (k % (MOD - 1))
+
+
+def h(k, i):
+    return (h0(k) + i * h1(k)) % MOD
+
+
+def str2k(s):
+    c_num_dic = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
+    k = 0
+    p = 1
+    for c in s:
+        k += p * c_num_dic[c]
+        p *= 4
+
+    return k
+
+
+def insert(t_list, s):
+    k = str2k(s)
+    i = 0
+    while True:
+        j = h(k, i)
+        if t_list[j] < 0:
+            t_list[j] = k
+            return
+        i += 1
+
+
+def find(t_list, s):
+    k = str2k(s)
+    i = 0
+    while i < MOD:
+        j = h(k, i)
+        if t_list[j] == k:
+            return j
+
+        if t_list[j] < 0:
+            return MOD
+
+        i += 1
+
+    return MOD
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    t_list = [-1] * MOD
+    for _ in range(n):
+        op, s = f.readline().split()
+        if op == 'insert':
+            insert(t_list, s)
+        else:
+            print('yes' if find(t_list, s) < MOD else 'no')
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

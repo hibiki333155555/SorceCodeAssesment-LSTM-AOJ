@@ -1,0 +1,19 @@
+#include <iostream>
+#include <iomanip>
+#include <bits/stdc++.h>
+#include <cctype>
+using namespace std;
+
+int main() {
+   string t;
+   cin >> t;
+   for(int i=0; i<t.size(); i++) {
+      if(islower(t[i])) {
+         t[i] = toupper(t[i]);
+      }else {
+         t[i] = tolower(t[i]);
+      }
+   }
+
+   cout << t << "\n";
+}

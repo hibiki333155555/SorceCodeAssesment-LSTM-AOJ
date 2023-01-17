@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(n);i++)
+#define Inf 1000000001
+
+int main(){
+	
+	int H,W;
+	cin>>H>>W;
+	
+	vector<string> s(H);
+	rep(i,H)cin>>s[i];
+	
+	int sx,sy,gx,gy;
+	rep(i,H){
+		rep(j,W){
+			if(s[i][j]=='S')sx = i,sy = j;
+			if(s[i][j]=='G')gx = i,gy = j;
+		}
+	}
+	
+	vector d(H,vector<int>(W,Inf));
+	d[sx][sy] = 0;
+	deque<pair<int,int>> Q;
+	Q.emplace_back(sx,sy);
+	
+	vector<int> dx = {0,-1,0,1},dy = {1,0,-1,0};
+	while(Q.size()>0){
+		int x = Q.back().first;
+		int y = Q.back().second;
+		Q.pop_back();
+		rep(i,4){
+			if(s[x][y]=='R'&&i!=0)continue;
+			if(s[x][y]=='U'&&i!=1)continue;
+			if(s[x][y]=='L'&&i!=2)continue;
+			if(s[x][y]=='D'&&i!=3)continue;
+			int cost = 1;
+			if(isalpha(s[x][y]) && s[x][y]!='S' && s[x][y]!='G'){
+				cost = 0;
+			}
+			int tx = x + dx[i],ty = y+dy[i];
+			if(tx<0||tx>=H||ty<0||ty>=W)continue;
+			if(s[tx][ty]=='#')continue;
+			if(cost==0){
+				int DD = d[x][y];
+				if(DD<d[tx][ty]){
+					d[tx][ty] = DD;
+					Q.emplace_back(tx,ty);
+				}
+			}
+			else{
+				int DD = d[x][y]+1;
+				if(DD<d[tx][ty]){
+					d[tx][ty] = DD;
+					Q.emplace_front(tx,ty);
+				}
+			}
+		}
+	}
+	/*
+	rep(i,H){
+		rep(j,W){
+			cout<<d[i][j]<<',';
+		}
+		cout<<endl;
+	}
+	*/
+	int ans= d[gx][gy];
+	if(ans==Inf)ans = -1;
+	cout<<ans<<endl;
+			
+	
+	
+	return 0;
+}

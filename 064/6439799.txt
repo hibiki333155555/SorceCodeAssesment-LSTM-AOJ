@@ -1,0 +1,79 @@
+//
+// Created by TangQihui on 2022/3/29.
+//
+#include "iostream"
+using namespace std;
+#define N 25
+int n;
+typedef struct node{
+    int id;
+    int parent,left,right;
+}node;
+node T[N];
+int P[N];
+int f=0;
+void preOrder(int x){
+    if (x!=-1){
+        P[f++] = x;
+        preOrder(T[x].left);
+        preOrder(T[x].right);
+    }
+}
+void inOrder(int x){
+    if (x!=-1){
+        inOrder(T[x].left);
+        P[f++] = x;
+        inOrder(T[x].right);
+    }
+}
+void postOrder(int x){
+    if (x!=-1){
+        postOrder(T[x].left);
+        postOrder(T[x].right);
+        P[f++] = x;
+    }
+}
+int main(){
+    int id,l,r,root;
+    cin>>n;
+    for (int i = 0; i < n; ++i) {
+        T[i].parent = -1;
+    }
+    for (int i = 0; i < n; ++i) {
+        cin>>id>>l>>r;
+        T[id].id = id;
+        T[id].left = l;
+        T[id].right = r;
+        if (l!=-1){
+            T[l].parent = id;
+        }
+        if (r!=-1){
+            T[r].parent = id;
+        }
+    }
+    for (int i = 0; i <n; ++i) {
+        if (T[i].parent==-1)root = i;
+    }
+    preOrder(root);
+    cout<<"Preorder"<<endl;
+    for (int i = 0; i < n; ++i) {
+        cout<<' '<<P[i];
+    }
+    cout<<endl;
+    f = 0;
+    inOrder(root);
+    cout<<"Inorder"<<endl;
+    for (int i = 0; i < n; ++i) {
+        cout<<' '<<P[i];
+    }
+    cout<<endl;
+    f = 0;
+    postOrder(root);
+    cout<<"Postorder"<<endl;
+    for (int i = 0; i < n; ++i) {
+        cout<<' '<<P[i];
+    }
+    cout<<endl;
+    return 0;
+}
+

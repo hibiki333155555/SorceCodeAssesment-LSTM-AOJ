@@ -1,0 +1,9 @@
+c = 0
+n = int(input())
+s = list(map(int, input().split()))
+q = int(input())
+t = list(map(int, input().split()))
+for i in t:
+    if i in s:
+        c += 1
+print(c)

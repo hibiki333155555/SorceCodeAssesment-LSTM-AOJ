@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   int N, M;
+   cin >> N >> M;
+
+   vector<int> c_list(M + 1, 0);
+
+   for (int m = 1; m <= M; m++) {
+      int c;
+      cin >> c;
+      c_list[m] = c;
+   }
+
+   int INF = numeric_limits<int>::max();
+   vector<int> dp(N + 1, INF);
+
+   for (int m = 1; m <= M; m++) {
+      int c = c_list[m];
+      dp[c] = 1;
+   }
+
+   for (int n = 2; n <= N; n++) {
+      int min_count = dp[n];
+
+      for (int m = 1; m <= M; m++) {
+         int c = c_list[m];
+
+         if (n - c <= 0) {
+            continue;
+         }
+
+         if (dp[n - c] == INF) {
+            continue;
+         }
+
+         min_count = min(min_count, dp[n - c] + 1);
+      }
+
+      dp[n] = min_count;
+   }
+
+   cout << dp[N] << endl;
+
+   return 0;
+}
+

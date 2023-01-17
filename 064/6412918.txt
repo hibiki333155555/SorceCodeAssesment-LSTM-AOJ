@@ -1,0 +1,23 @@
+N,Q = map(int,input().split())
+
+A = list(map(int,input().split()))
+Q = list(map(int,input().split()))
+
+for q in Q:
+    res = 0
+    s = 0
+    right = 0
+    for i in range(N):
+        
+        while right < N and s + A[right] <= q:
+            s += A[right]
+            right += 1
+        
+        res += right - i
+        if i == right:
+            right += 1
+        else:
+            s -= A[i]
+    print(res)
+        
+        

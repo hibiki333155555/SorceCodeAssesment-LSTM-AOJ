@@ -1,0 +1,30 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+
+int main(void)
+{
+    char t[100],w[11],x[12]="END_OF_TEXT";
+    int count = 0,i;
+    scanf("%s",w);
+    scanf("%s",t);
+        
+        for(i=0;t!='\0';i++)
+        {
+            t[i]=tolower(t[i]);
+        }
+        if(strcmp(t,w))count++;
+    while(1)
+    {
+        scanf("%s",t);
+        if(strcmp(t,x)==0)break;
+        for(i=0;t!='\0';i++)
+        {
+            t[i]=tolower(t[i]);
+        }
+        if(strcmp(t,w)==0)count++;
+    }
+    printf("%d",count);
+    
+    return 0;
+}

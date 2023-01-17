@@ -1,0 +1,85 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+node_list = []
+
+
+def dfs(node_idx, depth):
+    c_n = node_list[node_idx]
+    n_depth = depth + 1
+    l_idx = c_n[1][0]
+    r_idx = c_n[1][1]
+    c_h = -1
+
+    if l_idx >= 0:
+        l_n = node_list[l_idx]
+        l_n[2] = n_depth
+        l_n[3] = dfs(l_idx, n_depth)
+        c_h = l_n[3]
+
+    if r_idx >= 0:
+        r_n = node_list[r_idx]
+        r_n[2] = n_depth
+        r_n[3] = dfs(r_idx, n_depth)
+        c_h = max(c_h, r_n[3])
+
+    return 0 if c_h < 0 else c_h + 1
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    global node_list
+    node_list = [[-1, [-1, -1], -1, 0, -1] for _ in range(n)]
+    for _ in range(n):
+        i_list = list(map(int, f.readline().split()))
+        p = i_list[0]
+        l_idx = i_list[1]
+        r_idx = i_list[2]
+        node_list[p][1] = [l_idx, r_idx]
+        if l_idx >= 0:
+            node_list[l_idx][0] = p
+            node_list[l_idx][4] = r_idx
+        if r_idx >= 0:
+            node_list[r_idx][0] = p
+            node_list[r_idx][4] = l_idx
+
+    root = -1
+    for i in range(n):
+        if node_list[i][0] == -1:
+            root = i
+            break
+
+    node_list[root][2] = 0
+    node_list[root][3] = dfs(root, 0)
+
+    for i in range(n):
+        p = node_list[i][0]
+        s = node_list[i][4]
+        l_idx = node_list[i][1][0]
+        r_idx = node_list[i][1][1]
+        deg = 2 if l_idx >= 0 and r_idx >= 0 else 1 if l_idx >= 0 or r_idx >= 0 else 0
+        dep = node_list[i][2]
+        h = node_list[i][3]
+        print(f'node {i}: parent = {p}, sibling = {s}, degree = {deg}, depth = {dep}, height = {h}, ', end='')
+        if p == -1:
+            print('root')
+        elif deg > 0:
+            print('internal node')
+        else:
+            print('leaf')
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

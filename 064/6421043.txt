@@ -1,0 +1,95 @@
+// #define _GLIBCXX_DEBUG // for STL debug (optional)
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <string>
+#include <cstring>
+#include <deque>
+#include <list>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <utility>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <complex>
+#include <cmath>
+#include <limits>
+#include <cfloat>
+#include <climits>
+#include <ctime>
+#include <cassert>
+#include <numeric>
+#include <fstream>
+#include <functional>
+#include <bitset>
+using namespace std;
+using ll = long long int;
+using int64 = long long int;
+ 
+template<typename T> void chmax(T &a, T b) {a = max(a, b);}
+template<typename T> void chmin(T &a, T b) {a = min(a, b);}
+template<typename T> void chadd(T &a, T b) {a = a + b;}
+ 
+int dx[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0};
+const int INF = 1LL << 29;
+const ll LONGINF = 1LL << 60;
+const ll MOD = 1000000007LL;
+ 
+int dp[1010][35];
+int main() {
+    int N; cin >> N;
+    vector<int> A(N);
+    for(auto &e : A) cin >> e;
+
+    stack< pair<int, int> > st;
+    int Q; cin >> Q;
+    while(Q--) {
+        int t; cin >> t;
+        if(t == 1) {
+            int x, y; cin >> x >> y;
+            x--; y--;
+            st.emplace(x, y);
+        }
+        if(t == 2) {
+            st.pop();
+        }
+        if(t == 3) {
+            ll K; cin >> K;
+            vector< pair<int, int> > vec;
+            while(!st.empty()) {
+                pair<int, int> e = st.top(); st.pop();
+                vec.emplace_back(e);
+            }
+            reverse(vec.begin(), vec.end());
+            for(auto e : vec) st.emplace(e);
+
+            fill(dp[0], dp[N], -1);
+            for(int i=0; i<N; i++) {
+                dp[i][0] = i;
+            }            
+            for(auto e : vec) {
+                int u, v; tie(u, v) = e;
+                swap(dp[u][0], dp[v][0]);
+            }
+            for(int i=1; i<=30; i++) {
+                for(int j=0; j<N; j++) {
+                    dp[j][i] = dp[dp[j][i-1]][i-1];
+                }
+            }
+            for(int b=0; b<=30; b++) {
+                if(!(K >> b & 1)) continue;
+                vector<int> B(N);
+                for(int i=0; i<N; i++) {
+                    B[i] = A[dp[i][b]];
+                }
+                swap(A, B);
+            }
+        }
+    }
+    for(int i=0; i<N; i++) cout << A[i] << " \n"[i + 1 == N];
+    return 0;
+}
+

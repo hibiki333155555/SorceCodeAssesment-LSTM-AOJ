@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+public class Main {
+
+	public static final int BIG_NUM = 2000000000;
+	public static final long HUGE_NUM = 4000000000000000000L;
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+
+		Scanner scanner = new Scanner(System.in);
+
+		final int SIZE = 105;
+		Stack stack = new Stack(SIZE);
+
+		while(scanner.hasNext()) {
+
+			String tmp = scanner.next();
+			if(tmp.equals("+")) {
+
+				Long b = stack.pop();
+				Long a = stack.pop();
+				stack.push(a+b);
+
+			}else if(tmp.equals("-")) {
+
+				Long b = stack.pop();
+				Long a = stack.pop();
+				stack.push(a-b);
+
+			}else if(tmp.equals("*")) {
+
+				Long b = stack.pop();
+				Long a = stack.pop();
+				stack.push(a*b);
+
+			}else { //オペランド
+
+				Long num = Long.parseLong(tmp);
+				stack.push(num);
+			}
+		}
+
+		System.out.printf("%d\n", stack.pop());
+	}
+}
+
+class Stack{
+
+	Stack(int arg_size){
+		size = arg_size;
+		index = 0;
+		A = new Long[size];
+	}
+
+	public void push(Long value) {
+
+		A[index] = value;
+		index++;
+	}
+
+	public Long pop() {
+
+		--index;
+		return A[index];
+	}
+
+	private int size;
+	private int index;
+	private Long A[];
+
+}

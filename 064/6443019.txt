@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+using namespace std;
+//挺复杂 
+int main()
+{	
+	
+	string W,T; 
+	int sum=0,i,n;
+	cin>>W;
+	cin>>T;
+	while((n=T.compare("END_OF_TEXT"))!=0) //相同时n为0 
+	{
+		if(W.length()==T.length()) //大前提要考虑 
+		{	
+			//把T转化成小写 
+			for(i=0;i<T.length();i++)
+			{
+				if(T[i]>='A'&&T[i]<='Z') 
+					T[i]=T[i]+'a'-'A';
+			} 
+			
+			//逐个对比 
+			for(i=0;i<W.length();i++)
+			{
+				if(W[i]!=T[i])
+					break;
+			}
+			if(i==W.length())
+				sum++;
+			
+			}
+		
+		cin>>T;
+	}
+	cout<<sum<<endl;
+	
+return 0;
+}
+

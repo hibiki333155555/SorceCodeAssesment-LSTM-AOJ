@@ -1,0 +1,72 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 998244353
+
+def main():
+    def comb(a,b):
+        return fact[a]*inv[b]*inv[a-b]%mod
+
+    def gcd(a,b):
+        while a:
+            a,b = b%a,a
+        return b
+
+    N = 10**6
+    fact = [1]*(N+1)
+    for i in range(N):
+        fact[i+1] = fact[i]*(i+1)%mod
+    inv = [None]*(N+1)
+    inv[N] = pow(fact[N],mod-2,mod)
+    for i in reversed(range(N)):
+        inv[i] = inv[i+1]*(i+1)%mod
+    n = I()
+    a = LI()
+    ans = 1
+    a.append(10)
+    n = len(a)
+    v = [[10] for _ in range(10)]+[list(range(10))]
+    for i in range(1,10):
+        for j in range(1,10):
+            if gcd(i,j) != 1 or (i == j == 1):
+                v[i].append(j)
+    s = [1]*n
+    pre = [None]*11
+    for i,ai in enumerate(a):
+        q = []
+        for aj in v[ai]:
+            if pre[aj] is not None:
+                sj = s[pre[aj]]
+                q.append(sj)
+                s[i] += sj
+                pre[aj] = None
+        count = fact[s[i]-1]
+        for sj in q:
+            count *= inv[sj]
+            if count >= mod:
+                count %= mod
+        pre[ai] = i
+        # ans *= count
+        # if ans >= mod:
+        #     ans %= mod
+        if ai == 10:
+            ans = count
+    print(ans)
+    return
+
+
+if __name__ == "__main__":
+    main()
+

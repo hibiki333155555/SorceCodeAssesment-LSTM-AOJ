@@ -1,0 +1,4 @@
+Class Main{
+    Console.WriteLine("Hello World");
+}
+

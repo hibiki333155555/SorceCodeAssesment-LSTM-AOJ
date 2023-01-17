@@ -1,0 +1,19 @@
+import collections
+N = int(input())
+A = list(map(int, input().split()))
+
+l = []
+c = collections.Counter(A)
+
+
+mini = c.most_common()[-1][1] #出現頻度最小要素の回数
+print(mini)
+
+
+for i in range(len(c.most_common())):
+    if c.most_common()[i][1] == mini:
+        l.append(c.most_common()[i][0]) #出現頻度最小要素の項目をリストに追加
+
+print(min(l)) #そのリストでさらに最小の値を出力
+
+

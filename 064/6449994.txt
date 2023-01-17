@@ -1,0 +1,19 @@
+from math import sqrt
+
+n = int(input())
+li = []
+for _ in range(n):
+    li.append(int(input()))
+
+def prime_or_not(n):
+    for i in range(2, int(sqrt(n))+1):
+        if n % i == 0:
+            return False
+    return True
+
+cnt = 0
+for li_i in li:
+    if prime_or_not(li_i):
+        cnt += 1
+
+print(cnt)

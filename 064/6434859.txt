@@ -1,0 +1,7 @@
+while True
+x=int(input())
+if x==0:
+    break
+i=1
+i=i+1
+print("case ",i,":",x,sep="")

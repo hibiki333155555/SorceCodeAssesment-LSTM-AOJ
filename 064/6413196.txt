@@ -1,0 +1,4 @@
+def a = int(input())
+def b = int(input())
+
+print(a*b)

@@ -1,0 +1,36 @@
+#define _GLIBCXX_DEBUG
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+
+int n;
+int A[20] = {};
+
+bool search(int m, int i){
+    if(m==0)
+        return true;
+    else if(i==n)
+        return false;
+    
+    return search(m,i+1) || search(m-A[i],i+1);
+}
+
+int main(){
+    int q,m;
+    scanf("%d",&n);
+    
+    for(int i=0;i<n;i++)
+        scanf("%d",&A[i]);
+    
+    scanf("%d",&q);
+    
+    for(int i=0;i<q;i++){
+        scanf("%d",&m);
+        if(search(m,0))
+            printf("yes");
+        else
+            printf("no");
+    }
+    
+    return 0;
+}

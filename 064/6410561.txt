@@ -1,0 +1,8 @@
+a,b = map(int,raw_input().split())
+A=[]
+B=[]
+for i in range(b):
+    B=list(map(int,raw_input().split()))
+    A.append(B)
+for i in range(b):
+    print A[i]+sum(A)

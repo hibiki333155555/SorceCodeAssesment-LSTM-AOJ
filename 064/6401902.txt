@@ -1,0 +1,26 @@
+import sys
+import bisect
+d = {}
+keys = []
+flag = True
+input()
+for l in sys.stdin:
+    a = l.split()
+    if a[0] == '0':
+        if a[1] not in d:
+            flag = True
+            keys.append(a[1])
+        d[a[1]] = int(a[2])
+    elif a[0] == '1':
+        print(d[a[1]] if a[1] in d else 0)
+    elif a[0] == '2':
+        d[a[1]] = 0
+    else:
+        if flag:
+            keys.sort()
+            flag = False
+        s = bisect.bisect_left(keys, a[1])
+        e = bisect.bisect_right(keys, a[2])
+        for k in keys[s:e]:
+            if d[k] > 0: 
+                print(k, d[k])

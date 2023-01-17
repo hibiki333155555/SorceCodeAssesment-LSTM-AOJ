@@ -1,0 +1,16 @@
+#include <stdio.h>
+ int main(void){
+    int a,b,i,j,k;
+    
+    while(1){
+        scanf("%d %d",&a,&b);
+        for(j=0;j<b;j++){
+            for(k=0;k<a;k++){
+                printf("#");
+            }
+            printf("\n");
+        }
+    }
+    return 0;
+}
+

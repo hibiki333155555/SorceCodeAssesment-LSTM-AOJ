@@ -1,0 +1,12 @@
+L, N = map(int, input().split())
+A = list(map(int, input().split()))
+ans = 0
+i = 0
+while L > 0 and i < N:
+    L -= A[i]
+    i += 1
+    ans += 1
+if L <=0:
+    print(ans)
+else:
+    print("No")

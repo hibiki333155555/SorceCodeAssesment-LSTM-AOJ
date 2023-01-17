@@ -1,0 +1,10 @@
+n = int(input())
+values = list(map(int, input().split()))
+for pos_one in range(len(values)//2):
+    pos_two = len(values) - pos_one - 1
+    if values[pos_one] > values[pos_two]:
+        values[pos_one], values[pos_two] = values[pos_two], values[pos_one]
+print(values)
+for v in values:
+    print(v, end=' ')
+

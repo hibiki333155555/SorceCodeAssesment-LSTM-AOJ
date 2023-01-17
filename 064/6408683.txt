@@ -1,0 +1,29 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    t = set()
+    for _ in range(n):
+        op, s = f.readline().split()
+        if op == 'insert':
+            t.add(s)
+        else:
+            print('yes' if s in t else 'no')
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

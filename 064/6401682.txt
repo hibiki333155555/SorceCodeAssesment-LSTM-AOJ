@@ -1,0 +1,46 @@
+import java.util.Scanner;
+
+class Rectangle {
+    private int width;
+    private int height;
+
+    public Rectangle(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    // 長方形を描画する
+    void dispRectangle() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                System.out.print("#");
+            }
+            // 改行
+            System.out.println();
+        }
+        // 改行
+        System.out.println();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            int height = sc.nextInt();
+            int width = sc.nextInt();
+
+            // 終了条件
+            if (height == 0 && width == 0) {
+                break;
+            }
+
+            // クラスを定義
+            Rectangle rectangle = new Rectangle(width, height);
+
+            // 長方形を描画する
+            rectangle.dispRectangle();
+        }
+    }
+}
+

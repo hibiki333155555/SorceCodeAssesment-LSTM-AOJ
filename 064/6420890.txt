@@ -1,0 +1,95 @@
+#include "iostream"
+#include "climits"
+#include "list"
+#include "queue"
+#include "stack"
+#include "set"
+#include "functional"
+#include "algorithm"
+#include "string"
+#include "map"
+#include "unordered_map"
+#include "unordered_set"
+#include "iomanip"
+#include "cmath"
+#include "random"
+#include "bitset"
+#include "cstdio"
+#include "numeric"
+#include "cassert"
+#include "ctime"
+
+
+using namespace std;
+
+//constexpr long long int MOD = 1000000007;
+constexpr long long int MOD = 998244353;
+constexpr double EPS = 1e-8;
+
+//int N, M, K, T, H, W, L, R;
+long long int N, M, K, T, H, W, L, R;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	int dir[] = { 1,0,-1,0,1 };
+	cin >> H >> W;
+	vector<string>s(H);
+	for (auto& i : s)cin >> i;
+	vector<vector<int>>dis(H, vector<int>(W, MOD));
+	int sy, sx, gy, gx;
+	deque<pair<int, int>>Q;
+	for (int i = 0; i < H; i++) {
+		for (int j = 0; j < W; j++) {
+			if (s[i][j] == 'S') {
+				sy = i;
+				sx = j;
+				dis[i][j] = 0;
+				Q.push_back({ i,j });
+			}
+			if (s[i][j] == 'G') {
+				gy = i;
+				gx = j;
+			}
+		}
+	}
+	while (!Q.empty()) {
+		int cy, cx;
+		tie(cy, cx) = Q.front();
+		Q.pop_front();
+		int st = 0, ed = 4;
+		if (s[cy][cx] == 'D') {
+			st = 0, ed = 1;
+		}
+		if (s[cy][cx] == 'U') {
+			st = 2, ed = 3;
+		}
+		if (s[cy][cx] == 'R') {
+			st = 3, ed = 4;
+		}
+		if (s[cy][cx] == 'L') {
+			st = 1, ed = 2;
+		}
+		for (int d = st; d < ed; d++) {
+			int ny = cy + dir[d];
+			int nx = cx + dir[d + 1];
+			if (ny < 0 || ny >= H || nx < 0 || nx >= W)continue;
+			if (s[ny][nx] == '#')continue;
+			if (st + 1 == ed) {
+				if (dis[ny][nx] > dis[cy][cx]) {
+					dis[ny][nx] = dis[cy][cx];
+					Q.push_front({ ny,nx });
+				}
+			}
+			else {
+				if (dis[ny][nx] > dis[cy][cx] + 1) {
+					dis[ny][nx] = dis[cy][cx] + 1;
+					Q.push_back({ ny,nx });
+				}
+			}
+		}
+	}
+	if (dis[gy][gx] == MOD)dis[gy][gx] = -1;
+	cout << dis[gy][gx] << endl;
+}

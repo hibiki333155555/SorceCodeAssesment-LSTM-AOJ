@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+  int water_area = 0;
+  int diagonal_count = 0;
+
+  int height = 20000;
+  int max = height;
+
+  vector<int> L;
+  vector<char> line;
+  vector<int> L_MAX;
+  vector<int> heights;
+  char c;
+  bool l_start = false;
+  while ((c = getchar()) != EOF) {
+    line.push_back(c);
+    if (height > max) max = height;
+    if (c == '/') {
+      heights.push_back(height++);
+    } else if (c == '\\') {
+      l_start = true;
+      heights.push_back(height--);
+    } else {  // _
+      heights.push_back(height);
+    }
+
+    if (l_start)
+      L_MAX.push_back(max);
+    else
+      L_MAX.push_back(-1);
+  }
+  if (height > max) max = height;
+  heights.push_back(height);
+  if (l_start)
+    L_MAX.push_back(max);
+  else
+    L_MAX.push_back(-1);
+
+  int size = line.size();
+  max = heights[size];
+  int area = 0;
+  int count = 0;
+  for (int i = size - 1; i >= 0; i--) {
+    int R_max = max;
+    int l_max = L_MAX[i];
+    int now_height = min(heights[i], heights[i + 1]);
+    int water_height = min(l_max, R_max) - now_height;
+
+    if (water_height > 0) {
+      area += water_height;
+      water_area += water_height;
+      if (line[i] == '/' || line[i] == '\\') {
+        count++;
+        diagonal_count++;
+      }
+    }
+    if (heights[i] >= max) {
+      if (area != 0) {
+        area -= count / 2;
+        L.push_back(area);
+        area = 0;
+      }
+      count = 0;
+      max = heights[i];
+    }
+  }
+
+  if (area != 0) {
+    area -= count / 2;
+    L.push_back(area);
+  }
+
+  water_area -= diagonal_count / 2;
+
+  cout << water_area << endl;
+  cout << L.size() << ' ';
+  for (int i = L.size() - 1; i > 0; i--) {
+    cout << L[i] << ' ';
+  }
+  if (L.size() != 0)
+    cout << L[0] << endl;
+  else
+    cout << endl;
+}

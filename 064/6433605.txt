@@ -1,0 +1,31 @@
+#include<iostream>
+using namespace std;
+int e[12];
+
+bool a(){
+    for (int i = 0; i < 12; i++){
+        int min = i;
+        for(int j = i + 1; j < 12; j++){
+            if(e[min] > e[j]){
+                min = j;
+            }
+        }
+        swap(e[i], e[min]);
+    }
+    if(e[0] == e[3] && e[4] == e[7] && e[8] == e[11]){
+        return true;
+    }
+    else return false;
+}
+
+int main(){
+    for(int i = 0; i < 12; i++){
+        cin >> e[i];
+    }
+    if(a()){
+        cout << "yes" << endl;
+    }
+    else{
+        cout << "no" << endl;
+    }
+}

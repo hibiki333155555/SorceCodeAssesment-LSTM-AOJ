@@ -1,0 +1,43 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int H = 1;
+    int W = 1;
+    cin>>H>>W;
+    while(H != 0 && W != 0)
+    {
+        for(int i = 0; i < H && i % 2 ==0 ; i++)
+        {
+            for(int x = 0; x < W && x % 2 == 0;x++)
+            {
+                cout<<"#";
+            }
+            for(int y = 0; y < W && y % 2 == 1;y++)
+            {
+                cout<<".";
+            }
+            cout<<endl;
+        }
+
+         for(int j = 0; j < H && j % 2 ==1 ; j++)
+        {
+            for(int m = 0; m < W && m % 2 == 1;m++)
+            {
+                cout<<"#";
+            }
+            for(int n = 0; n < W && n % 2 == 0;n++)
+            {
+                cout<<".";
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+        cout<<endl;
+        cin>>H>>W;
+
+    }
+    return 0;
+}

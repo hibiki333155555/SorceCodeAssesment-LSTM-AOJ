@@ -1,0 +1,86 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef unsigned long long int ull;
+typedef long long int ll;
+typedef pair<ll,ll> pll;
+typedef long double D;
+//typedef complex<D> P;
+#define F first
+#define S second
+//const ll MOD=1000000007;
+const ll MOD=998244353;
+
+template<typename T,typename U>istream & operator >> (istream &i,pair<T,U> &A){i>>A.F>>A.S; return i;}
+template<typename T>istream & operator >> (istream &i,vector<T> &A){for(auto &I:A){i>>I;} return i;}
+template<typename T,typename U>ostream & operator << (ostream &o,const pair<T,U> &A){o<<A.F<<" "<<A.S; return o;}
+template<typename T>ostream & operator << (ostream &o,const vector<T> &A){int i=A.size(); for(auto &I:A){o<<I<<(--i?" ":"");} return o;}
+template<typename T,typename U>T & chmax(T &a,const U &b){if(a<b){a=b;} return a;}
+template<typename T,typename U>T & chmin(T &a,const U &b){if(b<a){a=b;} return a;}
+
+const int MAX=100;
+const int days=5000;
+using BT=bitset<100>;
+
+BT dp[days][MAX]={};
+
+int main(){
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+  
+  ll N,D;
+  cin>>N>>D;
+  vector<vector<pll>> nx(N);
+  for(auto &I:nx){
+    int K;
+    cin>>K;
+    I.resize(K);
+    cin>>I;
+    for(auto &J:I){J.F--;}
+  }
+  for(int i=0;i<N;i++){
+    dp[0][i]=BT(1)<<i;
+  }
+  for(int i=0;i<days;i++){
+    for(int j=0;j<N;j++){
+      for(auto &I:nx[j]){
+	if(i+I.S<days){dp[i+I.S][I.F]|=dp[i][j];}
+      }
+    }
+  }
+  vector<BT> ans(N,0);
+  vector<set<int>> roop(N);
+  for(int i=0;i<N;i++){
+    for(int k=1;k<days;k++){
+      if(dp[k][i][i]){roop[i].insert(k);}
+    }
+  }
+  for(int i=0;i<N;i++){
+    for(int j=0;j<N;j++){
+      int l=0;
+      for(int k=0;k<days && k<=D && l<10000;k++){
+	if(dp[k][i][j]){
+	  int dif=D-k;
+	  if(roop[i].count(dif)){ans[i]|=BT(1)<<j; break;}
+	  for(auto I=roop[i].begin();I!=roop[i].end() && l<10000;I++,l++){
+	    if(dif%(*I)==0){ans[i]|=BT(1)<<j; break;}
+	  }
+	  //break;
+	}
+      }
+    }
+  }
+  int cnt=0,uku=0;
+  for(int i=0;i<N;i++){
+    if(ans[i].count()==N){cnt++;}
+  }
+  cout<<cnt<<endl;
+  for(int i=0;i<N;i++){
+    if(ans[i].count()==N){uku++; cout<<i+1<<(uku==cnt?'\n':' ');}
+  }
+  
+  
+
+  return 0;
+}
+
+

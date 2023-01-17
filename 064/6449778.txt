@@ -1,0 +1,15 @@
+while True:    
+    H,W=map(int,input().split())
+    i=0
+    j=0
+    for i in range(H):
+        for i in range(W):
+            if i==0 or i==H-1 or j==0 or W==j-1:
+                print("#",end="")
+            else:
+                print(".",end="")
+        
+            j=j+1
+            
+        print()
+        i=i+1        

@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+
+int main()
+{
+    while ( true )
+    {
+        std::string str;
+        std::cin >> str;
+        if (str == '-')
+            return 0;
+        
+        int m;
+        std::cin >> m;
+        
+        std::vector<int> h(m);
+        for (int& i : h) {
+            std::cin >> i;
+        }
+        
+        for (int&& i : h) {
+            std::string first( str.begin(), str.begin()+i );
+            std::string second( str.begin()+i, str.end() );
+            
+            str = second + first;
+        }
+        
+        std::cout << str << std::endl;
+    }
+}

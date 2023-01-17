@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	int x, y;
+	char op;
+	while (1) {
+		scanf("%d %c %d", &x, &op, &y);
+		switch (op) {
+		case '+':
+			printf("%d\n", x + y);
+			break;
+
+		case '-':
+			printf("%d\n", x - y);
+			break;
+
+		case '*':
+			printf("%d\n", x * y);
+			break;
+
+		case '/':
+			printf("%d\n", x / y);
+			break;
+
+		default:
+			return (0);
+			break;
+		}
+	}
+
+	return (0);
+}
+

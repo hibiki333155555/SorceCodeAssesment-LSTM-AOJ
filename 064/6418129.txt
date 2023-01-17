@@ -1,0 +1,22 @@
+N,K=map(int,input().split())
+A=list(map(int,input().split()))
+
+A.sort()
+for i in range(N):
+    if K>0:
+        if A[i]==1:
+            A[i]=5
+            K-=1
+        elif A[i]==2:
+            A[i]=6
+            K-=1
+
+A.sort()
+for i in range(N):
+    if K>0:
+        if A[i]!=6:
+            A[i]=6
+            K-=1
+
+print(sum(A))
+

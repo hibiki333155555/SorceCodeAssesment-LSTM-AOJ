@@ -1,0 +1,93 @@
+#include <cassert>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <queue>
+#include <tuple>
+#include <vector>
+
+#define rep(i, a, n) for (int i = (int)(a); i < (int)(n); i++)
+#define rrep(i, a, n) for (int i = ((int)(n - 1)); i >= (int)(a); i--)
+
+namespace ebi {
+
+struct union_find {
+   public:
+    union_find(int _n) : n(_n), data(_n, -1) {}
+
+    int leader(int a) {
+        assert(a >= 0 && a < n);
+        if (data[a] < 0) return a;
+        return data[a] = leader(data[a]);
+    }
+
+    void merge(int a, int b) {
+        a = leader(a);
+        b = leader(b);
+        if (a == b) return;
+        if (size(a) < size(b)) std::swap(a, b);
+        data[a] += data[b];
+        data[b] = a;
+    }
+
+    int size(int a) {
+        assert(a >= 0);
+        a = leader(a);
+        return -data[a];
+    }
+
+    bool same(int a, int b) { return leader(a) == leader(b); }
+
+   private:
+    int n;
+    std::vector<int> data;
+};
+
+using ld = long double;
+
+bool solve() {
+    int n;
+    std::cin >> n;
+    if (n == 0) return false;
+    std::vector<std::tuple<ld, ld, ld, ld>> points(n);
+    for (auto &[x, y, z, r] : points) {
+        std::cin >> x >> y >> z >> r;
+    }
+    union_find uf(n);
+    using P = std::tuple<ld, int, int>;
+    std::priority_queue<P, std::vector<P>, std::greater<P>> que;
+    rep(i, 0, n) {
+        auto &[x, y, z, r] = points[i];
+        rep(j, i + 1, n) {
+            auto &[nx, ny, nz, nr] = points[j];
+            ld ret =
+                (nx - x) * (nx - x) + (ny - y) * (ny - y) + (nz - z) * (nz - z);
+            if ((nr + r) * (nr + r) < ret) {
+                que.push({std::sqrt(ret) - (nr + r), i, j});
+            } else {
+                uf.merge(i, j);
+            }
+        }
+    }
+    ld ans = 0;
+    while (!que.empty()) {
+        auto [d, i, j] = que.top();
+        que.pop();
+        if (uf.same(i, j)) continue;
+        ans += d;
+        uf.merge(i, j);
+    }
+    std::cout << ans << '\n';
+    return true;
+}
+
+}  // namespace ebi
+
+int main() {
+    std::cout << std::fixed << std::setprecision(3);
+    std::cin.tie(nullptr);
+    std::ios::sync_with_stdio(false);
+    while (1) {
+        if (!ebi::solve()) break;
+    }
+}

@@ -1,0 +1,9 @@
+a,b = map(int,input().split())
+if a<b:
+    print(a, "<", b, sep='')
+else if a>b:
+    print(a, ">", b, sep='')
+else a==b:
+    print(a, "==", b, sep='')
+end if
+

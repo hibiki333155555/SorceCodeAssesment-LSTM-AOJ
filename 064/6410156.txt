@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main(){
+   float p[5], W,H,x,y,r;
+   p[1]=W;
+   p[2]=H;
+   p[3]=x;
+   p[4]=y;
+   p[5]=r;
+   scanf("%d %d %d %d %d",&W,&H,&x,&y,&r);
+    if((x+r)<=W && (y+r)<=H && (r-x)>=0 && (r-y)>=0){
+        printf("Yes\n");
+    }
+    else
+        printf("No\n");
+ return 0;
+}
+

@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define ff first
+#define ss second
+#define vec vector
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef pair<double, double> pdd;
+typedef pair<ll, ll> pll;
+constexpr double pi = 3.14159265359;
+vector<int> dxs = {1, 0, -1, 0, 1, 1, -1, -1};
+vector<int> dys = {0, 1, 0, -1, -1, 1, 1, -1};
+int main() {
+    cout << fixed << setprecision(15);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    while (true) {
+        int w, h;
+        cin >> w >> h;
+        vec<vec<int>> ils(h, vec<int>(w));
+        if(w == 0 && h == 0) return 0;
+        rep(i, h) rep(j, w) cin >> ils[i][j];
+        vec<vec<int>> dist(h, vec<int>(w, -1));
+        int count = 0;
+        for(int i = 0; i < h; i++) {
+            for(int j = 0; j < w; j++) {
+                if(ils[i][j] == 1 && dist[i][j] == -1) {
+                    dist[i][j] = 0;
+                    queue<pii> que;
+                    que.push({i, j});
+                    while(!que.empty()) {
+                        auto [x, y] = que.front();
+                        que.pop();
+                        for(int dir = 0; dir < 8; dir++) {
+                            int x2 = x + dxs[dir];
+                            int y2 = y + dys[dir];
+                            if(x2 < 0 || x2 >= h || y2 < 0 || y2 >= w) continue;
+                            if(dist[x2][y2] != -1) continue;
+                            if(ils[x2][y2] == 0) continue;
+                            dist[x2][y2] = dist[x][y] + 1;
+                            que.push({x2, y2});
+                        }
+                    }
+                    count++;
+                }
+            }
+        }
+        cout << count << '\n';
+    }
+}
+

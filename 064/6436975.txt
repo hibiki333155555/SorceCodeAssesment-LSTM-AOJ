@@ -1,0 +1,45 @@
+def resolve(arr, k)
+  size = arr.size
+  left = 1
+  right = 100000 * 10000
+
+  loop do
+    break if right - left < 1
+    mid = (left + right) / 2
+    pick_count = calc_pick_count(arr.dup, mid, k)
+
+    if pick_count >= size
+      right = mid
+    else
+      left = mid + 1
+    end
+  end
+
+  puts right
+end
+
+def calc_pick_count(arr, _p, k)
+  count = 0
+
+  k.times do
+    sum = 0
+    loop do
+      return count if arr.empty?
+      break if sum + arr[0] > _p
+      sum += arr.shift
+
+      count += 1
+    end
+  end
+
+  count
+end
+
+n, k = gets.split(' ').map(&:to_i)
+arr = []
+n.times do
+  arr << gets.to_i
+end
+
+resolve(arr, k)
+

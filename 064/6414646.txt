@@ -1,0 +1,23 @@
+mod = 998244353
+n = int(input())
+A = list(map(int,input().split()))
+F = [1]*(n+1)
+for i in range(n):
+  F[i+1] = F[i]*(i+1)%mod
+I = [1]*(n+1)
+I[n] = pow(F[n],mod-2,mod)
+for i in range(n)[::-1]:
+  I[i] = I[i+1]*(i+1)%mod
+def perm(n,k):
+  if 0 <= k <= n:
+    return F[n]*I[n-k]%mod
+  return 0
+C = [0]*(n+1)
+for i,a in enumerate(A):
+  C[min(i+a,n)] += 1
+t = 0
+ans = 1
+for i,c in enumerate(C):
+  ans = ans*perm(i-t,c)%mod
+  t += c
+print(ans)

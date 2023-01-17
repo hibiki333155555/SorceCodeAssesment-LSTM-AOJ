@@ -1,0 +1,40 @@
+r, c = map(int,raw_input().split())
+A = [map(int, raw_input().split()) for _ in range(r)]
+X=[]
+T=[]
+B=[]
+G=[]
+U=[]
+a=0
+for i in range(r):
+    for j in range(c):
+        x=A[i][j]
+        X.append(x)
+while a<c:
+    for i in range(r):
+        g=A[i][a]
+        G.append(g)
+    a+=1
+e=0
+y=1
+for k in range(r):
+        s=X[e:c*y]
+        S=[str(q) for q in s]
+        S=" ".join(S)
+        t=sum(s)
+        T.append(t)
+        print S,t
+        e+=c
+        y+=1
+e=0
+y=1
+for h in range(c):
+        m=G[e:r*y]
+        u=sum(m)
+        U.append(u)
+        e+=r
+        y+=1
+M=[str(p) for p in U]
+M=" ".join(M)
+print M,sum(T)
+

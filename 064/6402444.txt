@@ -1,0 +1,7 @@
+result = 0
+x, y, z = map(int, input().split(" "))
+if z%x == 0:
+    result += 1
+if z%y == 0:
+    result += 1
+print(result)

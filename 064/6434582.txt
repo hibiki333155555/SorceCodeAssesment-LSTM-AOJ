@@ -1,0 +1,144 @@
+#include<stdio.h>
+#include<iostream>
+#include<stdlib.h>
+#define MAX 1000
+using namespace std;
+
+typedef struct Node
+{
+	int key;
+	Node* parent, * left, * right;
+};
+Node* root, * NIL;
+
+void insert(int k)
+{
+	Node* y = NIL;
+	Node* x = root;
+	Node* z;
+	z = (Node*)malloc(sizeof(Node));
+	z->key = k;
+	z->left = NIL;
+	z->right = NIL;
+	while (x != NIL)
+	{
+		y = x;
+		if (z->key < x->key)
+			x = x->left;
+		else x = x->right;
+	}
+
+	z->parent = y;
+	if (y == NIL)
+		root = z;
+	else if (z->key < y->key)
+		y->left = z;
+	else y->right = z;
+}
+
+void inorder(Node* u)
+{
+	if (u == NIL) return;
+	inorder(u->left);
+	printf(" %d", u->key);
+	inorder(u->right);
+}
+
+void preorder(Node* u)
+{
+	if (u == NIL) return;
+	printf(" %d", u->key);
+	preorder(u->left);
+	preorder(u->right);
+}
+
+void print()
+{
+	inorder(root);
+	cout << endl;
+	preorder(root);
+	cout << endl;
+}
+
+int find(Node* u, int k)
+{
+	while (u != NIL && u->key != k)
+	{
+		if (k < u->key) u = u->left;
+		else u = u->right;
+	}
+	if (u == NIL) return 0;
+	else return u->key;
+}
+
+int t_delete(Node* u, int k)
+{
+	while (u != NIL && u->key != k)
+	{
+		if (k < u->key) u = u->left;
+		else u = u->right;
+	}
+	if (u != NIL)
+	{
+		if (u->left == NIL && u->right == NIL) //dont't have child node
+		{
+			if (u->parent->left == u)
+			{
+				u->parent->left = NIL;
+				delete u;
+				return 1;
+			}
+			else
+			{
+				u->parent->right = NIL;
+				delete u;
+				return 1;
+			}
+		}
+		else if(u->right == NIL)//hava left child
+		{
+			u->key = u->left->key;
+			delete u->left;
+			u->left = NIL;
+			return 1;
+		}
+		else//only have right child   and   both have two children
+		{
+			u->key = u->right->key;
+			delete u->right;
+			u->right = NIL;
+			return 1;
+		}
+	}
+	else return 0;
+}
+
+int main()
+{
+	char s[MAX];
+	int n, k;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> s;
+		if (s[0] == 'i')
+		{
+			cin >> k;
+			insert(k);
+		}
+		else if (s[0] == 'f')
+		{
+			cin >> k;
+			int st = find(root, k);
+			if (st) cout << "yes" << endl;
+			else cout << "no" << endl;
+		}
+		else if (s[0] == 'd')
+		{
+			cin >> k;
+			t_delete(root, k);
+		}
+		else print();
+	}
+	return 0;
+}

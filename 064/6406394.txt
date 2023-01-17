@@ -1,0 +1,2 @@
+a=''+require('fs').readFileSync(0)
+console.log(a**3)

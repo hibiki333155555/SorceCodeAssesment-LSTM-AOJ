@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(void) {
+	double r;
+	
+	/*入力*/
+	scanf("%f", &r);
+	
+	/*出力*/
+	printf("%f %f\n", M_PI * r * r, 2 * M_PI * r);
+	
+	return 0;
+}

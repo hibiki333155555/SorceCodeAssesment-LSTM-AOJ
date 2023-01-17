@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int A,B;
+    cin>>A>>B;
+    if(A>=B){
+        cout<<1<<"\n";
+    }else{
+        if(B%A!=0){
+            cout<<(B/A)+1<<"\n";
+        }else{
+            cout<<B/A<<"\n";
+        }
+    }
+    return(0);
+}

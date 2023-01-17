@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int q;
+  cin >> q;
+  deque<int> v;
+  for(int i=0; i<q; i++){
+    int a;
+    cin >> a;
+    if(a==0){
+      int d,x;
+      cin >> d >> x;
+      if(d==0){
+        v.push_front(x);
+      }else{
+        v.push_back(x);
+      }
+    }else if(a==1){
+      int p;
+      cin >> p;
+      cout << v.at(p) << endl;
+    }else{
+      int d;
+      cin >> d;
+      if(d==0){
+        v.pop_front();
+      }else{
+        v.pop_back();
+      }
+    }
+  }
+  return 0;
+}

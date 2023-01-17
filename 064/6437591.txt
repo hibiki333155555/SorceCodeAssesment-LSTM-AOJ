@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  //入力
+  string source, target, circle;
+  getline(cin, source);
+  getline(cin, target);
+  int answer = 0;
+  
+  //サークルの作成
+  circle = source + source;
+  
+  //メイン
+  for (int i=0; i<circle.size(); i++){
+    if (circle[i] == target[0]){
+      for (int j=0; j<target.size(); j++){
+        if (circle[i + j] != target[j]){
+          break;
+        }
+        
+        else if (j == target.size()-1){
+          answer = 1;
+        }
+      }
+    }
+  }
+  
+  //出力
+  if (answer == 1){
+    cout << "Yes" << endl;
+  }
+  
+  else{
+    cout << "No" << endl;
+  }
+  
+}

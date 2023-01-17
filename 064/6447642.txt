@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+//#define lson (rt<<1)
+//#define rson ((rt<<1)+1)
+//#define mid ((l+r)>>1)
+#define mst(a) memset(a,0,sizeof(a))
+#define cf int Tcodeforces, Tcodeforce;cin>>Tcodeforces;for(Tcodeforce = 1; Tcodeforce <= Tcodeforces; Tcodeforce++)
+typedef long long ll;
+typedef double db;
+const ll maxn = 1e5 +7;
+const ll maxm = 3e1 +7;
+const ll inf = 0x3f3f3f3f;
+const ll mod = 1e9 +7;
+
+int n;
+
+bool cmp(int x, int y) {
+    if(x == 0) return 0;
+    if(y == 0) return 1;
+    return x < y;
+}
+
+int getWPL(int arr[], int n) {  // 对于未建好的霍夫曼树，直接求其 WPL
+  priority_queue<int, vector<int>, greater<int>> huffman;  // 小根堆
+  for (int i = 0; i < n; i++) huffman.push(arr[i]);
+
+  int res = 0;
+  for (int i = 0; i < n - 1; i++) {
+    int x = huffman.top();
+    huffman.pop();
+    int y = huffman.top();
+    huffman.pop();
+    int temp = x + y;
+    res += temp;
+    huffman.push(temp);
+  }
+  return res;
+}
+
+char s[maxn];
+int cnt[maxm];
+
+signed main() {
+    #ifdef moyi_qwq
+        freopen("D:/source file/intxt/in.txt","r",stdin);
+    #endif
+    
+    cin.getline(s,maxn);
+    int l = strlen(s);
+    for(int i = 0; i < l; i++) {
+        cnt[s[i]-'a']++;
+    }
+    int p = 0;
+    //for(int i = 0; i < maxm; i++) {
+    //    cout<<cnt[i]<<" ";
+    //} cout<<endl;
+    sort(cnt,cnt+maxm,cmp);
+    //for(int i = 0; i < maxm; i++) {
+    //    cout<<cnt[i]<<" ";
+    //} cout<<endl;
+    for(int i = 0; i < maxm; i++) {
+        if(cnt[i] == 0) {
+            p = i; break;
+        }
+    }
+    if(p == 1) {
+        cout<<l<<endl;
+        return 0;
+    }
+    cout<<getWPL(cnt,p)<<endl;
+    
+    
+    //cerr<<"Time : "<<1000*((double)clock())/(double)CLOCKS_PER_SEC<<"ms";
+    return (0);
+}
+

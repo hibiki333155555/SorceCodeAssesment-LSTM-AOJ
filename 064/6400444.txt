@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+using Values = vector<pair<int, int>>;
+const int HUGE = (int) ((1U << 31) - 1);
+
+void update(Values& U, vector<int>& F, int k)
+{
+	if (k == 1) return;
+	update(U, F, k / 2);
+	if (U[k / 2].first >= U[k].first) return;
+	U[k] = U[k / 2];
+	F[k] = U[k].second;
+}
+
+void find(Values& U, vector<int>& F, int k)
+{
+	for (int i = k; i > 1; i /= 2) {
+		update(U, F, i ^ 1);
+		F[i / 2] = min(F[i], F[i ^ 1]);
+	}
+}
+
+void update(Values& U, vector<int>& F, int k, int l, int r, int s, int t, int x, int q)
+{
+	if (l >= r || r <= s || t <= l) return;
+	if (s <= l && r <= t) {
+		U[k] = {q, x};
+		F[k] = x;
+		find(U, F, k);
+		return;
+	}
+	int m = (l + r) / 2;
+	update(U, F, 2 * k, l, m, s, t, x, q);
+	update(U, F, 2 * k + 1, m, r, s, t, x, q);
+}
+
+int find(Values& U, vector<int>& F, int k, int l, int r, int s, int t)
+{
+	if (l >= r || r <= s || t <= l) return HUGE;
+	if (s <= l && r <= t) {
+		update(U, F, k);
+		find(U, F, k);
+		return F[k];
+	}
+	int m = (l + r) / 2;
+	return min(find(U, F, 2 * k, l, m, s, t), find(U, F, 2 * k + 1, m, r, s, t));
+}
+
+int main()
+{
+	int n, nn, q, c; cin >> n >> q;
+	for (nn = 1; nn < n; nn *= 2) ;
+	Values U(nn * 2, {q, HUGE}); U[0] = {q, 0};
+	vector<int> F(nn * 2, HUGE); F[0] = 0;
+	for (cin >> c; --q >= 0; cin >> c) switch (c) {
+	case 0: {
+		int s, t, x; cin >> s >> t >> x;
+		update(U, F, 1, 0, nn, s, t + 1, x, q);
+	} break;
+	case 1: {
+		int s, t; cin >> s >> t;
+		cout << find(U, F, 1, 0, nn, s, t + 1) << endl;
+	}
+	}
+	return 0;
+}
+

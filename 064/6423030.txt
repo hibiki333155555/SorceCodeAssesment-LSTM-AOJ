@@ -1,0 +1,8 @@
+n = int(input())
+r = [int(input()) for x in range(n)]
+a = r[1] - r[0]
+for i in range(n-1):
+    tmp = max(r[i+:]) - r[i]
+    if tmp > a:
+        a = tmp
+print(a)

@@ -1,0 +1,4 @@
+import math
+A,B,C = map(int,input().split())
+ans = math.lcm(A,B,C)
+print(ans)

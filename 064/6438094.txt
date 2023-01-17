@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+	//for省略
+#define rep(i,x,max) for(int i = (int)x; i < (int)max; i++)
+	//イテレータ省略
+#define all(x) x.begin(),x.end()
+	//逆イテレータ省略
+#define rall(x) x.rbegin(),x.rend()
+	//long long省略
+#define ll long long
+	//スペース省略
+#define spa " "
+	//Yes,No省略
+#define YES cout << "Yes" << endl
+#define NO cout << "No" << endl
+
+int n,q;
+vector<int> s,t;
+
+bool isOK(int index, int key){
+    if(s[index] >= key) return true;
+    else return false;
+}
+
+bool binary_search(int key){
+    int ng = -1;
+    int ok = (int)s.size();
+
+    while(abs(ok - ng) > 1){
+        int mid = (ok + ng) / 2;
+
+        if(isOK(mid, key)) ok = mid;
+        else ng = mid;
+    }
+    
+    if(s[ok] == key) return true;
+    else return false;
+}
+
+int main(void){
+    cin >> n;
+    s.resize(n);
+    rep(i,0,n) cin >> s[i];
+    cin >> q;
+    t.resize(q);
+    rep(i,0,q) cin >> t[i];
+    int cnt = 0;
+
+    rep(i,0,q){
+        if(binary_search(t[i])) cnt++;
+    }
+
+    cout << cnt << endl;
+}

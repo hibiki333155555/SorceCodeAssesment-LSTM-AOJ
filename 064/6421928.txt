@@ -1,0 +1,7 @@
+a,b = map(int, input().split())
+
+f1 = a // b
+f2 = a % b
+f3 = a / b
+
+print(f"{fi} {f2} {f3}")

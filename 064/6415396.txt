@@ -1,0 +1,16 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+int main( )
+{
+    int a = 0, b = 0;
+   cin >> a >> b;
+   int men = a * b;
+   int shu = a * 2 + b * 2;
+   cout << men  << ends;
+   cout << " " << ends;
+   cout << shu << endl;
+   
+}

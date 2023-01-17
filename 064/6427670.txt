@@ -1,0 +1,28 @@
+from itertools import permutations
+
+
+K=int(input())
+RC=set(tuple(map(int,input().split()))for _ in range(K))
+A=[]
+for l in permutations(range(8),8):
+    X=[[True for _ in range(8)]for _ in range(8)]
+    f=1
+    for i,j in enumerate(l):
+        if X[i][j]:
+            for x in range(8):
+                for y in range(8):
+                    if x==i or y==j or abs(x-i)==abs(y-j):X[x][y]=False
+        else:f=0
+    if f:
+        Ans=[["."for _ in range(8)] for _ in range(8)]
+        for i,j in enumerate(l):
+            Ans[i][j]="Q"
+        for ans in Ans:
+            print(*ans,sep="")        
+
+
+
+
+
+
+

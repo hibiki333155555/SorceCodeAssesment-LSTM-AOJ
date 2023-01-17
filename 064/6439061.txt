@@ -1,0 +1,29 @@
+def count_inversion_number(seq):
+    from bisect import bisect 
+    res = 0
+    
+    def count(arr):
+        nonlocal res
+        m = len(arr)
+        mid = m//2
+        lft, rgt = arr[:mid], arr[mid:]
+        
+        if len(lft) > 1:
+            lft = count(lft)
+        if len(rgt) > 1:
+            rgt = count(rgt)
+            
+        for v in lft:
+            idx = bisect(rgt, v)
+            res += idx
+            
+        return sorted(arr)
+    
+    count(seq)
+    return res
+    
+    
+n = int(input())
+A = list(map(int, input().split()))
+ans = count_inversion_number(A)
+print(ans)

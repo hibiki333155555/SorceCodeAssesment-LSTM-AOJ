@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int N;
+  cin >> N;
+  int l=sqrt(N),p=2;
+  cout << N << ":";
+  while(p<=l && p<=N){
+    if(N%p == 0){
+      cout << " " << p;
+      N/=p;
+      l = sqrt(N);
+    }else{
+      p++;
+    }
+  }
+  cout << " " << N << endl;
+  return 0;
+}
+      
+  

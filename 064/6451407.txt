@@ -1,0 +1,3 @@
+x=input()
+pribt(x**3)
+

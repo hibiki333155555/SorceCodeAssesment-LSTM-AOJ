@@ -1,0 +1,152 @@
+#include<iostream>
+using namespace std;
+class cards{
+private:
+    char character;
+    int value;
+public:
+    cards() : character('*'), value(0){}
+    cards(const cards &a) : character(a.character), value(a.value){}
+    cards(char character_, int value_) : character(character_), value(value_){}
+    ~cards(){}
+    bool operator<(const cards& a)
+    {
+        return (value < a.value);
+    }
+    bool operator<=(const cards &a) { return (value <= a.value); }
+    bool operator!=(const cards &a) { return (character != a.character) || (value != a.value); }
+    friend istream &operator>>(istream &is, cards &a);
+    friend ostream &operator<<(ostream &os, const cards &a);
+};
+
+inline void swap(cards &a, cards &b);
+int partition(cards* a, int low, int high);
+void quickSort(cards* a, int low, int high);
+void print(const cards* a, int low, int high);
+void merge(cards *a, int low, int mid, int high);
+void mergeSort(cards *a, int low, int high);
+
+int main()
+{
+    int n{0}, i{0};
+    cin >> n;
+    cards *dataSet = new cards[n];
+    cards *testSet = new cards[n];
+    while (i < n)
+    {
+        cin >> dataSet[i];
+        testSet[i] = dataSet[i];
+        i++;
+    }
+
+    mergeSort(testSet, 0, n);
+    quickSort(dataSet, 0, n - 1);
+    int flag = 1;
+    for (int i = 0; i < n; ++i)
+    {
+        if(testSet[i] != dataSet[i])
+        {
+            flag = 0;
+            break;
+        }
+    }
+    if(flag == 1)
+        cout << "Stable" << endl;
+    else
+        cout << "Not stable" << endl;
+    print(dataSet, 0, n);
+    delete[] dataSet;
+    delete[] testSet;
+    return 0;
+}
+
+void quickSort(cards* a, int low, int high)
+{
+    int q = 0;
+    if(low < high)
+    {
+        q = partition(a, low, high);
+        quickSort(a, low, q - 1);
+        quickSort(a, q + 1, high);
+    }
+}
+int partition(cards* a, int low, int high)
+{
+    int i = low - 1;
+    cards x = a[high];
+    for (int j = low; j < high; ++j)
+    {
+        if(a[j] <= x)
+        {
+            i++;
+            swap(a[i], a[j]);
+        }
+    }
+    ++i;
+    swap(a[i], a[high]);
+    return i;
+}
+void swap(cards &a, cards &b)
+{
+    cards tem;
+    tem = a;
+    a = b;
+    b = tem;
+}
+void print(const cards* a, int low, int high)
+{
+    if(low < high)
+    {
+        for (int i = 0; i < high; ++i)
+        {
+            cout << a[i] << endl;
+        }
+    }
+}
+istream &operator>>(istream &is, cards &a)
+{
+    cin >> a.character >> a.value;
+    return is;
+}
+ostream &operator<<(ostream &os, const cards &a)
+{
+    os << a.character << " " << a.value;
+    return os;
+}
+void merge(cards *a, int low, int mid, int high)
+{
+    int n1 = mid - low, n2 = high - mid;
+    cards *left = new cards[n1 + 1];
+    cards *right = new cards[n2 + 1];
+    for (int i = 0; i < n1; ++i)
+    {
+        left[i] = a[low + i];
+    }
+    for (int i = 0; i < n2; ++i)
+    {
+        right[i] = a[mid + i];
+    }
+    left[n1] = right[n2] = cards('*', 1e9+1);
+    int j = 0, k = 0;
+    for (int i = low; i < high; i++)
+    {
+        if(left[j] <= right[k])
+        {
+            a[i] = left[j++];
+        }
+        else
+            a[i] = right[k++];
+    }
+    delete[] left;
+    delete[] right;
+}
+void mergeSort(cards *a, int low, int high)
+{
+    if(low + 1 < high)
+    {
+        int mid = (low + high) / 2;
+        mergeSort(a, low, mid);
+        mergeSort(a, mid, high);
+        merge(a, low, mid, high);
+    }
+}

@@ -1,0 +1,10 @@
+A, B = map(int, input().split())
+ans = 0
+for i in reversed(range(len(bin(max(A, B))[2:]))):
+    a = (A >> i) & 1
+    b = (B >> i) & 1
+    if a != b:
+        break
+    ans += 1
+print(ans)
+

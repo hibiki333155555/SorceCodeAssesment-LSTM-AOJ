@@ -1,0 +1,58 @@
+   #include <bits/stdc++.h>
+    using namespace std;
+    #include <math.h>
+    #include <iomanip>
+    #include <cstdint>
+    #include <string>
+    #include <sstream>
+    template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+    template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+    #define rep(i,n) for (int i = 0; i < (n); ++i)
+
+    typedef long long ll;
+    typedef unsigned long long ull;
+    using P=pair<ll,ll>;
+    const int INF=1001001001;
+    const int mod=998244353;
+    
+    void solve(){
+	    int n;
+        string s;
+        cin>>n>>s;
+        vector<int>a(n);
+        rep(i,n)cin>>a[i];
+        
+        ll ans=0;
+        rep(z,2){
+            vector<int>b(n);
+            rep(i,n)b[i]=s[i]=='('?1:-1;
+            priority_queue<P,vector<P>,greater<P>>q;
+            int sum=0;
+            rep(i,n){
+                sum+=b[i];
+                if(b[i]==-1){q.push({a[i],i});}
+                if(sum<0){
+                    auto p=q.top();q.pop();
+                    int val=p.first,j=p.second;
+                    ans+=val;
+                    s[j]*=-1;
+                    sum+=2;
+                }
+            }
+            reverse(s.begin(),s.end());
+            reverse(a.begin(),a.end());
+            rep(i,n)s[i]=(s[i]=='('?')':'(');
+            //cout<<s<<endl;
+        }
+
+        cout<<ans<<endl;
+    }  
+
+    int main(){
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        
+        solve();  
+
+        return 0;
+    }

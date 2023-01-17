@@ -1,0 +1,26 @@
+#include <iostream>
+#include <map>
+using namespace std;
+
+int main(){
+    map<string, int> m;
+    int q;
+    cin >> q;
+    for(int i=0; i<q; i++){
+        int opt;
+        string color;
+        cin >> opt >> color;
+        if(opt == 0){
+            int x;
+            cin >> x;
+            m[color] = x;
+        }
+        else if(opt == 1){
+            cout << m[color] << endl;//m[color]不存在，则返回0
+        }
+        else if(opt == 2){
+            m.erase(color);
+        }
+    }
+    return 0;
+}

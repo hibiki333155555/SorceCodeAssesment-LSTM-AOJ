@@ -1,0 +1,38 @@
+#include<iostream>
+#include<queue>
+#include<string>
+#include<utility>
+int main(){
+    int n;
+    std::cin>>n;
+    int t;
+    std::cin>>t;
+    using process=std::pair<std::string,int>;
+    std::queue<process>que;
+    std::string str;
+    int cost;
+    for(int i=0;i!=n;++i){
+        std::cin>>str;
+        std::cin>>cost;
+        que.push(std::make_pair(str,cost));
+    }
+    int time=0;{
+    std::queue<int> que;
+    int n;
+    std::cin>>n;
+    std::pair<std::string,int> p;
+}
+    while(!que.empty()){
+        auto p=que.front();
+        que.pop();
+        p.second-=t;
+        if(p.second>0){
+            que.push(std::make_pair(p.first,p.second));
+            time+=t;
+        }
+        else{
+            time+=(t+p.second);
+            std::cout<<p.first<<" "<<time<<std::endl;
+        }
+    }
+}

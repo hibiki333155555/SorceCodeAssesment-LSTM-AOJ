@@ -1,0 +1,118 @@
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+using namespace std;
+#define EPS (1e-10)
+#define equal(a,b) (abs(a-b)<EPS)
+
+static const int COUNTER_CLOCKWISE = 1;
+static const int CLOCKWISE = -1;
+static const int ON_SEGMENT = 0;
+static const int ONLINE_FRONT = 2;
+static const int ONLINE_BACK = -2;
+class Point {
+public:
+	double x, y;
+	/*构造函数*/
+	Point() {}
+	Point(double x, double y) :x(x), y(y) {}
+	/*针对加法的重载*/
+	Point operator + (Point& p) { return Point(x + p.x, y + p.y); }
+	Point operator - (Point& p) { return Point(x - p.x, y - p.y); }
+	Point operator * (double a) { return Point(a * x, a * y); }
+	Point operator / (double a) { return Point(x / a, y / a); }
+
+	/*返回向量的模*/
+	double abs() { return(sqrt(x * x + y * y)); }
+};
+
+/*写成大写防止和vector冲突*/
+typedef Point Vector;
+
+/*这里用Line表示线段*/
+class Line {
+public:
+	Point p1, p2;
+	Line() {}
+	Line(Point p1, Point p2) :p1(p1), p2(p2) {}
+	/*获取直线的方向向量*/
+	Vector GetVector() { return Point(p2.x - p1.x, p2.y - p1.y); }
+};
+
+/*计算两个向量的内积*/
+double dot(Vector v1, Vector v2)
+{
+	return v1.x * v2.x + v1.y * v2.y;
+}
+
+/*计算两个向量的外积 v1积v2*/
+double cross(Vector v1, Vector v2)
+{
+	return v1.x * v2.y - v1.y * v2.x;
+}
+
+/*判断三个点的顺逆时针关系*/
+int ccw(Point p0, Point p1, Point p2)
+{
+	if (cross(p1 - p0, p2 - p0) > 0) return COUNTER_CLOCKWISE;
+	if (cross(p1 - p0, p2 - p0) < 0) return CLOCKWISE;
+	if (dot(p2 - p0, p1 - p0) < 0) return  ONLINE_BACK;
+	if ((p1 - p0).abs() < (p2 - p0).abs()) return ONLINE_FRONT;
+	return ON_SEGMENT;
+}
+
+bool ifInterSection(Line l1, Line l2)
+{
+	return (ccw(l1.p1,l1.p2,l2.p1)*ccw(l1.p1,l1.p2,l2.p2)<=0&&
+			ccw(l2.p1,l2.p2,l1.p1)*ccw(l2.p1,l2.p2,l1.p2)<=0);
+}
+
+/*求取一个点到直线l的距离*/
+double PointToLine(Point p, Line l)
+{
+	/*首先要算出投影点*/
+	Vector base = l.GetVector();
+	Vector p1_to_p(p.x - l.p1.x, p.y - l.p1.y);
+
+	double t = dot(base, p1_to_p) / pow(base.abs(), 2);
+
+	Point touying(l.p1.x + base.x * t, l.p1.y + base.y * t);
+	double distance = sqrt(pow(p.x - touying.x, 2) + pow(p.y - touying.y, 2));
+	return distance;
+}
+
+/*求取一个点到线段l的距离*/
+double PointToS(Point p, Line l)
+{
+	if(dot(l.p2-l.p1,p-l.p1)<0)
+		return (p-l.p1).abs();
+	else if(dot(l.p1-l.p2,p-l.p2)<0)
+		return (p-l.p2).abs();
+	else
+		return PointToLine(p,l);
+}
+
+/*求取两个线段之间的距离*/
+double LineToLine(Line l1,Line l2)
+{
+	if(ifInterSection(l1,l2))
+		return 0.0;
+	double min=PointToS(l1.p1,l2);
+	min=min>PointToS(l1.p2,l2)?PointToS(l1.p2,l2): min;
+	min=min>PointToS(l2.p1,l1)?PointToS(l2.p1,l1): min;
+	min=min>PointToS(l2.p2,l1)?PointToS(l2.p2,l1): min;
+	return min;
+}
+
+int main()
+{
+	Line l1, l2;
+	int q = 0; cin >> q;
+	for (int i = 0; i < q; i++)
+	{
+		cin >> l1.p1.x >> l1.p1.y >> l1.p2.x >> l1.p2.y;
+		cin >> l2.p1.x >> l2.p1.y >> l2.p2.x >> l2.p2.y;
+		cout<<setiosflags(ios::fixed)<<setprecision(10)<<LineToLine(l1,l2)<<endl;
+	}
+	return 0;
+}

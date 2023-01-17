@@ -1,0 +1,134 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int op(int a, int b){
+    return a + b;
+}
+const int e = 0;
+
+
+template<typename T>
+struct segtree{
+    vector<T> s;
+    int bitsize; //bitsizeがs.size()のbit長
+    //葉は、s[s.size() / 2] - s[s.size() - 1]
+    //s[a]の子ノードはs[2 * a + 1]、s[2 * a + 2]
+    segtree<T>(const int n){
+        int d = 1;
+        bitsize = 0;
+        while (2 * n > d) {
+            d <<= 1;
+            bitsize++;
+        }
+        s.resize(d - 1);
+
+        for (T &x : s) x = e;
+    }
+
+    int upper(){
+        return s.size() / 2 + 1;
+    }
+
+    pair<int, int> child(int a){
+        return {2 * a + 1, 2 * a + 2};
+    }
+
+    int parent(int a){
+        return (a - 1) / 2;
+    }
+
+    int leaf(int a){
+        return a + s.size() / 2;
+    }
+
+    bool isleaf(int a){
+        return (s.size() / 2 <= a && a < s.size());
+    }
+
+    void __set(int a){
+        if(a == 0) return;
+        a = parent(a);
+        auto ch = child(a);
+        s[a] = op(s[ch.first], s[ch.second]);
+
+        __set(a);
+        return;
+    }
+
+    void set(int a, T b){
+        s[leaf(a)] = b;
+        __set(leaf(a));
+        return;
+    }
+
+    T __get(int now, int l, int r, int bit, int mid, int L, int R){
+        //cout << "get: " << now << " | [" << l << " , " << r << ") / " << bit << endl;
+        if (l >= r) return e;
+        if (isleaf(now)) return s[now];
+
+        int mask = (1<<bit) - 1;
+        if (((l ^ r) & 1<<bit) && !((l | r) & mask)) return s[now];
+        else {
+            auto ch = child(now);
+            bit--;
+            int mid1 = (L + mid) / 2, mid2 = (R + mid) / 2;
+            return op(__get(ch.first, l, min(r, mid), bit, mid1, L, R / 2), __get(ch.second, max(l, mid), r, bit, mid2, R / 2, R));
+        }
+    }
+
+    T get(int l, int r){
+        //[l, r)
+        assert(0 <= l && 0 < r && leaf(l) < s.size() && leaf(r) <= s.size());
+        if (l >= r) return e;
+        return __get(0, l, r, bitsize - 1, upper() / 2, 0, upper());
+    }
+
+    T at(int a){
+        return s[leaf(a)];
+    }
+
+    /*
+
+                000-1000 
+           00-100    100-1000
+       0-10 10-100 100-110 110-1000
+       0 1  10 11  100 101 110 111
+
+              100   :0
+           10    110    :1 2
+         1  11 101 111  :3 4 5 6
+        - - - - - - - - 
+    
+    */
+};
+
+int main() {
+    /*segtree<int> seg(4);
+    seg.set(0, 3);
+    seg.set(1, 1);
+    seg.set(2, 4);
+    seg.set(3, 1);
+
+    cout << "bitsize: " << seg.bitsize << endl;
+
+    cout << seg.get(0, 1) << endl;// 3
+    cout << seg.get(0, 3) << endl;// 8
+    cout << seg.get(1, 4) << endl;// 6
+    cout << seg.get(0, 4) << endl;// 9
+
+    cout << "seg: ";
+    for (auto x : seg.s) cout << x << ' ';
+    cout << endl;*/
+
+    int n, q;
+    cin >> n >> q;
+    segtree<int> seg(n);
+    for (int i = 0; i < q; i++){
+        int c, a, b;
+        cin >> c >> a >> b;
+        a--;
+        if (c == 0) seg.set(a, seg.at(a) + b);
+        else cout << seg.get(a, b) << endl;
+    }
+}
+

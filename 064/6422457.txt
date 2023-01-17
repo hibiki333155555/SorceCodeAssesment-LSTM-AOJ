@@ -1,0 +1,32 @@
+#include <iostream>
+
+using namespace std;
+
+
+int main() {
+    while (true) {
+        char op[2];
+        int a, b;
+        cin >> a >> op >> b;
+        int res = 0;
+        switch (op[0]) {
+            case '+':
+                res = a + b;
+                break;
+            case '-':
+                res = a - b;
+                break;
+            case '*':
+                res = a * b;
+                break;
+            case '/':
+                res = a / b;
+                break;
+            case '?':
+                return 0;
+        }
+        cout << res << endl;
+    }
+    return 0;
+}
+

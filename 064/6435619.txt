@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int INF = 1001001001;
+const int MOD = 1000000007;
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
+
+int main(){
+    int n;cin>>n;
+    map<string,bool> mp;
+    for(int i=0;i<n;i++) {
+        string str;string a;cin>>str>>a;
+        if(str=="insert")
+            mp[a]=true;
+        else {
+            if(mp[a]) cout << "yes" << endl;
+            else cout << "no" << endl;
+        }
+    }
+}

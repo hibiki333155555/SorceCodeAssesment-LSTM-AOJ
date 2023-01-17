@@ -1,0 +1,21 @@
+#include <iostream>
+using namespace std;
+
+void gcd(int a,int b){
+    int tmp;
+    if(a){
+        return 1;
+    }
+    if(a < b){
+        tmp = b;
+        b = a;
+        a = tmp;
+    }
+    gcd(b , a%b);
+    cout << b;
+}
+int main(){
+    int a,b;
+    cin >> a >> b;
+    gcd(a,b);
+}

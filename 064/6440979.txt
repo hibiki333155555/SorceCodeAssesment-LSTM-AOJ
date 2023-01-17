@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+typedef long long ll;
+using namespace std;
+
+void solve(int M, int N) {
+    vector<bool> flag(7368795);
+
+    int i = M;
+    while (N) {
+        while (flag[i])
+            i++;
+
+        for (int j = i; j < 7368795; j += i)
+            flag[j] = true;
+
+        N--;
+    }
+
+    for (int i = M; i < 7368795; ++i) {
+        if (!flag[i]) {
+            cout << i << "\n";
+            return;
+        }
+    }
+}
+
+int main() {
+    cin.tie(0);
+    ios_base::sync_with_stdio(false);
+
+    int N, M;
+    while (cin >> M >> N, M)
+        solve(M, N);
+
+    return 0;
+}
+

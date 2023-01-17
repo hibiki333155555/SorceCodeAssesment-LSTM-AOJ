@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+
+
+using namespace std;
+
+int main ()
+{
+	double r, a, c;
+	cin >> r;
+	a = 3.1415926535 * r * r;
+	c = 2 * 3.1415926535 * r;
+
+	cout << fixed << setprecision (6) << a << " " << c << endl;
+	
+	return 0;
+}

@@ -1,0 +1,23 @@
+using System;
+
+namespace AOJ_ITP1_9_B
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var inputLine = string.Empty;
+            while ((inputLine = Console.ReadLine()) != "-")
+            {
+                var count = int.Parse(Console.ReadLine());
+                for (int i = 0; i < count; i++)
+                {
+                    var pos = int.Parse(Console.ReadLine());
+                    inputLine = inputLine.Substring(pos) + inputLine.Substring(0, pos);
+                }
+                Console.WriteLine(inputLine);
+            }
+        }
+    }
+}
+

@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+int MAX_NUM = 1000000;
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   vector<int> dp1(MAX_NUM, MAX_NUM);
+   vector<int> dp2(MAX_NUM, MAX_NUM);
+
+   vector<int> n_list1;
+   vector<int> n_list2;
+
+   for (int i = 1; i <= 180; i++) {
+      int n = i * (i + 1) * (i + 2) / 6;
+
+      dp1[n] = 1;
+      n_list1.push_back(n);
+
+      if (n % 2 == 1) {
+         dp2[n] = 1;
+         n_list2.push_back(n);
+      }
+   }
+
+   for (int i = 1; i < MAX_NUM; i++) {
+      for (auto v : n_list1) {
+         if (i - v <= 0) {
+            break;
+         }
+
+         dp1[i] = min(dp1[i], dp1[i - v] + 1);
+      }
+
+      for (auto v : n_list2) {
+         if (i - v <= 0) {
+            break;
+         }
+
+         dp2[i] = min(dp2[i], dp2[i - v] + 1);
+      }
+   }
+
+   while (true) {
+      int n;
+      cin >> n;
+
+      if (n == 0) {
+         break;
+      }
+
+      cout << dp1[n] << " " << dp2[n] << endl;
+   }
+
+   return 0;
+}
+

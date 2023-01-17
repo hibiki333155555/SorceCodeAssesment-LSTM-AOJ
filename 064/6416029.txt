@@ -1,0 +1,16 @@
+#include<bits/stdc++.h>
+#include<cmath>
+using namespace std;
+
+int main(){
+
+    long double a,b,c,d,ans;
+
+    cin>>a>>b>>c>>d;
+    ans=sqrt(pow(c-a,2)+ pow(d-b,2));
+
+    cout<<fixed<<setprecision(10)<<ans<<endl;
+
+    return 0;
+}
+

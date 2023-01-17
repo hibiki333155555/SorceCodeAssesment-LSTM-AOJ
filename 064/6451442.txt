@@ -1,0 +1,12 @@
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+int main(int argc, char const *argv[])
+{
+    int x,result;
+    cin >> x;
+    result=x*x*x;
+    cout << result << endl;
+    return result;
+}

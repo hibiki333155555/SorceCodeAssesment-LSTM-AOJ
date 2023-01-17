@@ -1,0 +1,7 @@
+while(True): 
+    X = int(input())
+    a = 1
+    print(f"Case {a}: X")
+    a += 1
+    if(X==0):
+        break

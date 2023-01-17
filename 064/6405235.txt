@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+
+
+
+int main() {
+   ll N;
+   cin>>N;;
+   vector<pair<ll,ll>> P(N),F(N);vll ANS(N);
+   rep(i,N){
+      ll p;
+      cin>>p;
+      P[i]={p,i};
+   }
+   rep(i,N){
+      ll f;
+      cin>>f;
+      F[i]={f,i};
+   }
+   sort(all(P));
+   sort(all(F));
+   ll k=0;
+   vector<bool> USE(N,false);
+   rep(i,N){
+      while(k<N&&P[i].first>=F[k].first){
+         k++;
+      }
+      if(k<N){ANS[P[i].second]=F[k].first;k++;USE[F[k].second]=true;}
+      else ANS[P[i].second]=-1;
+   }
+   ll d=0;
+   rep(i,N){
+      if(ANS[i]==-1){
+         while(USE[d])d++;
+         ANS[i]=F[d].first;
+         USE[d]=true;
+      }
+   }
+   rep(i,N)cout<<ANS[i]<<(i==N-1?"\n":" ");
+
+}
+

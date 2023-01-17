@@ -1,0 +1,6 @@
+import sys
+
+words = sys.stdin.read()
+alp = [0 for in range(26)]
+for i in range(97, 123):
+    print("%s : %d" % (chr(i), words.count(chr(i))))

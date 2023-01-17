@@ -1,0 +1,39 @@
+function* main() {
+    const v = [ ]
+    const q = Number(yield 0)
+    for (let i = 0; i < q; i++) {
+        const ps = (yield 0).split(' ')
+        const qq = Number(ps[0])
+        if (qq === 0) {
+            const d = Number(ps[1])
+            const x = Number(ps[2])
+            if (d === 0) {
+                v.unshift(x)
+            } else {
+                v.push(x)
+            }
+        } else if (qq === 1) {
+            const n = v[Number(ps[1])]
+            process.stdout.write(String(n) + '\n')
+        } else if (qq === 2) {
+            const d = Number(ps[1])
+            if (d === 0) {
+                v.shift()
+            } else {
+                v.pop()
+            }
+        }
+    }
+}
+
+const m = main()
+m.next()
+
+const reader = require('readline').createInterface({
+    input: process.stdin
+})
+
+reader.on('line', (line) => {
+    m.next(line)
+})
+

@@ -1,0 +1,46 @@
+#include<iostream>
+using namespace std;
+int arr[100];
+int main()
+{
+	int t;
+	cin>>t;
+	while (t--)
+	{
+		for (int i=1;i<=10;i++)
+		{
+			cin>>arr[i];
+		}
+		int t1=0,t2=-1;
+		int f=0;
+		for (int i=1;i<=10;i++)
+		{
+			if (arr[i]>t1&&arr[i]>t2)
+			{
+				if (t1<t2)
+					t2=arr[i];
+				else
+					t1=arr[i];
+			}
+			else if (arr[i]>t1&&arr[i]<t2)
+			{
+				t1=arr[i];
+			}
+			else if (arr[i]>t2&&arr[i]<t1)
+			{
+				t2=arr[i];
+			}
+			else
+			{
+				f=1;
+				break;
+			}
+		}
+		if (f)
+		{
+			cout<<"No"<<endl;
+		}
+		else
+			cout<<"Yes"<<endl;
+	}
+}

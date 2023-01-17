@@ -1,0 +1,4 @@
+import math
+r=map(float,input())
+L=2*r*math.pi
+print(L)

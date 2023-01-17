@@ -1,0 +1,29 @@
+#![allow(dead_code)]
+fn input_line() -> String {
+    let mut buf = String::new();
+
+    std::io::stdin().read_line(&mut buf).unwrap();
+
+    buf = buf.trim().to_string();
+
+    return buf;
+}
+
+fn main() {
+    let s: String = input_line();
+    let v: Vec<i32> = s.split(" ").map(|x| x.parse::<i32>().unwrap()).collect();
+    let start = v[0];
+    let end = v[1];
+    let dividend = v[2];
+
+    let mut count: i32 = 0;
+
+    for i in start..(end + 1) {
+        if (dividend % i) == 0 {
+            count += 1;
+        }
+    }
+
+    println!("{}", count);
+}
+

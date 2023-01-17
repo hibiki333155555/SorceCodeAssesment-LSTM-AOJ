@@ -1,0 +1,56 @@
+#include<iostream>
+using namespace std;
+
+int main()
+{ 
+	char st[50];
+	int m, f, r;
+	int i = 0;
+	int j = 0;
+
+	//input
+	while (1) {
+		cin >> m >> f >> r;
+		
+		//三つとも-1の時入力を止める
+		if (m == -1 && f == -1 && r == -1) {
+			break;
+		}
+		//中間、期末が欠席の場合F
+		else if (m == -1 || f == -1) {
+			st[i] = 'F';
+		}
+		//Aの判定
+		else if((m+f)>=80){
+			st[i] = 'A';
+		}
+		//Bの判定
+		else if ((m + f) >= 65 && (m + f) < 80) {
+			st[i] = 'B';
+		}
+		//Cの判定
+		else if ((m + f) >= 50 && (m + f) < 65) {
+			st[i] = 'C';
+		}
+		//再試で救われる人の判定
+		else if ((m + f) >= 30 && (m + f) < 50 && r >= 50) {
+			st[i] = 'C';
+		}
+		//Dの判定(再試を受けていない人は除外）
+		else if ((m + f) >= 30 && (m + f) < 50 && r < 50 && r>=0) {
+			st[i] = 'D';
+		}
+		//Fの判定
+		else if ((m + f) < 30) {
+			st[i] = 'F';
+		}
+		i++;
+	}
+	//出力
+	while (j < i ) {
+		cout << st[j] << "\n";
+		j++;
+	}
+
+
+}

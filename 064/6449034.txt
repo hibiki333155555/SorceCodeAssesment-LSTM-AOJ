@@ -1,0 +1,12 @@
+#include <iostream>
+using namespace std;
+
+main(){
+    int W,H,x,y,r;
+    if(W<=x+r && H<=y+r)
+    cout << "Yes\n";
+    else cout << "No\n";
+    
+    return 0;
+    
+}

@@ -1,0 +1,172 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define rep(i, n) for (int i = 0; i < n; i++)
+#define all(v) v.begin(), v.end()
+template <class T, class U>
+inline bool chmax(T &a, U b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+template <class T, class U>
+inline bool chmin(T &a, U b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+constexpr int INF = 1000000000;
+constexpr ll llINF = 3000000000000000000;
+constexpr int mod = 998244353;
+const ll half = (mod + 1) / 2;
+constexpr double eps = 1e-10;
+vector<int> prime_list(int n) {
+    vector<int> v(n + 1), res;
+    for (int i = n; i >= 2; i--) {
+        for (int j = i; j <= n; j += i) v[j] = i;
+    }
+    for (int i = 2; i <= n; i++) {
+        if (v[i] == i) res.push_back(i);
+    }
+    return res;
+}
+vector<int> next_divisor(int n) {
+    vector<int> v(n + 1);
+    for (int i = n; i >= 2; i--) {
+        for (int j = i; j <= n; j += i) v[j] = i;
+    }
+    return v;
+}
+ll modpow(ll a, ll b, ll m = mod) {
+    ll res = 1;
+    while (b) {
+        if (b & 1) {
+            res *= a;
+            res %= m;
+        }
+        a *= a;
+        a %= m;
+        b >>= 1;
+    }
+    return res;
+}
+vector<ll> inv, fact, factinv;
+void init_fact(int n) {
+    inv.resize(n + 1);
+    fact.resize(n + 1);
+    factinv.resize(n + 1);
+    inv[0] = 0;
+    inv[1] = 1;
+    fact[0] = 1;
+    factinv[0] = 1;
+    for (ll i = 1; i <= n; i++) {
+        if (i >= 2) inv[i] = mod - ((mod / i) * inv[mod % i] % mod);
+        fact[i] = (fact[i - 1] * i) % mod;
+        factinv[i] = factinv[i - 1] * inv[i] % mod;
+    }
+}
+ll modinv(ll a, ll m = mod) {
+    // gcd(a,m) must be 1
+    ll b = m, u = 1, v = 0;
+    while (b) {
+        ll t = a / b;
+        a -= t * b;
+        swap(a, b);
+        u -= t * v;
+        swap(u, v);
+    }
+    u %= m;
+    if (u < 0) u += m;
+    return u;
+}
+ll comb(int a, int b) {
+    if (a < b || a < 0 || b < 0) return 0;
+    return fact[a] * factinv[a - b] % mod * factinv[b] % mod;
+}
+struct S {
+    long long val;
+    int sz;
+};
+using F = long long;
+
+S op(S a, S b) { return S{a.val + b.val, a.sz + b.sz}; }
+S e() { return S{0, 0}; }
+S mapping(F f, S x) { return S{x.val + f * x.sz, x.sz}; }
+F composition(F f, F g) { return f + g; }
+F id() { return 0; }
+struct segtree {
+    int sz = 1;
+    vector<S> d;
+    vector<F> lz;
+    segtree(vector<S> a) {
+        int n = a.size();
+        while (sz < n) sz <<= 1;
+        d.resize(sz * 2 - 1, e());
+        lz.resize(sz * 2 - 1, id());
+        for (int i = 0; i < n; i++) d[i + sz - 1] = a[i];
+        for (int i = sz - 2; i >= 0; i--) d[i] = op(d[i * 2 + 1], d[i * 2 + 2]);
+    }
+    void eval(int k) {
+        d[k] = mapping(lz[k], d[k]);
+        if (k <= sz - 2) {
+            lz[k * 2 + 1] = composition(lz[k], lz[k * 2 + 1]);
+            lz[k * 2 + 2] = composition(lz[k], lz[k * 2 + 2]);
+        }
+        lz[k] = id();
+    }
+    void update(int a, int b, F f, int k = 0, int l = 0, int r = -1) {
+        eval(k);
+        if (r == -1) r = sz;
+        if (r <= a || b <= l) return;
+        if (a <= l && r <= b) {
+            lz[k] = composition(f, lz[k]);
+            eval(k);
+            return;
+        }
+        int m = (l + r) >> 1;
+        update(a, b, f, k * 2 + 1, l, m);
+        update(a, b, f, k * 2 + 2, m, r);
+        d[k] = op(d[k * 2 + 1], d[k * 2 + 2]);
+    }
+    S prod(int a, int b, int k = 0, int l = 0, int r = -1) {
+        eval(k);
+        if (r == -1) r = sz;
+        if (r <= a || b <= l) return e();
+        if (a <= l && r <= b) return d[k];
+        int m = (l + r) >> 1;
+        S vl = prod(a, b, k * 2 + 1, l, m);
+        S vr = prod(a, b, k * 2 + 2, m, r);
+        return op(vl, vr);
+    }
+};
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    segtree seg(vector<S>(n, S{0, 1}));
+    while (q--) {
+        int type, s, t;
+        cin >> type >> s >> t;
+        s--;
+        if (type == 0) {
+            int x;
+            cin >> x;
+            seg.update(s, t, x);
+        } else {
+            cout << seg.prod(s, t).val << endl;
+        }
+    }
+}
+int main() {
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    /*int t;
+    cin >> t;
+    while (t--)*/
+    solve();
+}
+

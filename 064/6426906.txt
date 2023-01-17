@@ -1,0 +1,9 @@
+#include<stdio.h>
+
+
+int main(void){
+    int t;
+    scanf("%d",&t);
+    printf("%d",t*t*t);
+    return 0;
+}

@@ -1,0 +1,5 @@
+num = int(input())
+input_list = input().split()
+
+print(" ".join(input_list.reverse()))
+      

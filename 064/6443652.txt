@@ -1,0 +1,125 @@
+import sys
+import heapq
+import copy
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+dx_dy_tuple = ((1, 0), (0, 1), (-1, 0), (0, -1))
+
+
+def show_puzzle(puzzle, width, height):
+    for y in range(height):
+        for x in range(width):
+            print(f'{puzzle[y][x]:2d}', end=' ')
+        print('')
+    return
+
+
+def calc_manhattan_distance_table(width, num_idx, goal_state):
+    manhattan_distance_table = [[0] * num_idx for _ in range(num_idx)]
+
+    for c_num in range(num_idx):
+        g_idx = goal_state.index(c_num)
+        gx = g_idx % width
+        gy = g_idx // width
+        for c_idx in range(num_idx):
+            cx = c_idx % width
+            cy = c_idx // width
+
+            manhattan_distance_table[c_num][c_idx] = abs(gx - cx) + abs(gy - cy)
+
+    return manhattan_distance_table
+
+
+def calc_manhattan_distance(num_idx, manhattan_distance_table, state):
+    m_dist = 0
+    for c_idx in range(num_idx):
+        c_num = state[c_idx]
+        m_dist += manhattan_distance_table[c_num][c_idx]
+    return m_dist
+
+
+def get_next_state_list(adjacency_list, manhattan_distance_table, c_h_dist, c_state, c_zero_idx):
+    next_state_list = []
+    for n_idx in adjacency_list[c_zero_idx]:
+        num_c_state_n_idx = c_state[n_idx]
+        n_state = copy.copy(c_state)
+        n_state[c_zero_idx] = c_state[n_idx]
+        n_state[n_idx] = 0
+        n_h_dist = c_h_dist \
+                   - manhattan_distance_table[0][c_zero_idx] - manhattan_distance_table[num_c_state_n_idx][n_idx] \
+                   + manhattan_distance_table[0][n_idx] + manhattan_distance_table[num_c_state_n_idx][c_zero_idx] + 1
+        next_state_list.append((n_h_dist, n_state, n_idx))
+    return next_state_list
+
+
+def solve_a_star(num_idx, adjacency_list, manhattan_distance_table, start_state, zero_idx, goal_state):
+    m_dist = calc_manhattan_distance(num_idx, manhattan_distance_table, start_state)
+    h_q = [(m_dist, 0, start_state, zero_idx)]
+    searched_state_tuple_set = set()
+
+    heapq.heapify(h_q)
+    while len(h_q) > 0:
+        c_h_dist, c_num_moves, c_state, c_zero_idx = heapq.heappop(h_q)
+        if c_state == goal_state:
+            return c_num_moves
+
+        next_state_list = get_next_state_list(adjacency_list, manhattan_distance_table,
+                                              c_h_dist, c_state, c_zero_idx)
+        for next_state in next_state_list:
+            next_state_tuple = tuple(next_state[1])
+            if next_state_tuple not in searched_state_tuple_set:
+                searched_state_tuple_set.add(next_state_tuple)
+                n_h_dist = next_state[0]
+                n_state = next_state[1]
+                n_zero_idx = next_state[2]
+                n_num_moves = c_num_moves + 1
+                heapq.heappush(h_q, (n_h_dist, n_num_moves, n_state, n_zero_idx))
+
+    return 0
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    goal_state = []
+    width = 3
+    height = 3
+    num_idx = width * height
+    adjacency_list = [[] for _ in range(num_idx)]
+
+    for y in range(height):
+        offset = y * width
+        for x in range(width):
+            idx = offset + x
+            goal_state.append(idx + 1)
+
+            for dx, dy in dx_dy_tuple:
+                nx = x + dx
+                ny = y + dy
+                n_idx = ny * width + nx
+                if 0 <= nx < width and 0 <= ny < height:
+                    adjacency_list[idx].append(n_idx)
+
+    goal_state[-1] = 0
+    manhattan_distance_table = calc_manhattan_distance_table(width, num_idx, goal_state)
+    start_state = []
+    for _ in range(height):
+        row = list(map(int, f.readline().split()))
+        start_state += row
+
+    zero_idx = start_state.index(0)
+
+    min_num_moves = solve_a_star(num_idx, adjacency_list, manhattan_distance_table, start_state, zero_idx, goal_state)
+
+    print(min_num_moves)
+    return
+
+
+if __name__ == '__main__':
+    main()
+

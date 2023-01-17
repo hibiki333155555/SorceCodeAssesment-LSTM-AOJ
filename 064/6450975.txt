@@ -1,0 +1,65 @@
+
+use proconio::input;
+
+fn main() {
+    input! {
+        n : usize,
+        m : usize,
+        a : [usize; m]
+    }
+    const MOD : usize = 998_244_353;
+
+    let mut cnt = vec![0; n+1]; cnt[0] = 1;
+    for a in a {
+        let mut b = vec![1; a+1];
+
+        let bit = 64 - (cnt.len() + b.len()).leading_zeros() as usize;
+
+        cnt.resize(1<<bit, 0);
+        b.resize(1<<bit, 0);
+        ntt(&mut cnt, bit, false);
+        ntt(&mut b, bit, false);
+
+
+
+        for (cnt, &b) in cnt.iter_mut().zip(b.iter()) { *cnt *= b; *cnt %= MOD; }
+        ntt(&mut cnt, bit, true);
+
+        let inv = pow(1<<bit, MOD-2, MOD);
+        for cnt in cnt.iter_mut() { *cnt *= inv; *cnt %= MOD; }
+        cnt.resize(n+1, 0);
+    }
+
+
+    println!("{}", cnt[n] * (1..=n).fold(1, |acc, v| acc * v % MOD) % MOD);
+}
+
+fn pow(mut n:usize, mut x:usize, _mod :usize) -> usize { let mut res = 1; while x != 0 { if x&1 == 1 { res *= n; res %= _mod; } n *= n; n %= _mod; x /= 2; } res }
+fn ntt(x :&mut Vec<usize>, bit : usize, inverse : bool) -> () {
+    const MOD : usize = 998_244_353;
+    let n = x.len();
+    assert!(n == 1<<bit);
+    assert!(bit <= 32);
+
+    let mask1 = n - 1;
+
+    let mut pv_zeta = pow(3, 119, MOD);
+    for _ in 0..23usize.saturating_sub(bit) { pv_zeta *= pv_zeta; pv_zeta %= MOD; }
+    if !inverse { pv_zeta = pow(pv_zeta, MOD-2, MOD); }
+
+    let mut zeta = vec![1; n];
+    for i in 1..n { zeta[i] = zeta[i-1] * pv_zeta % MOD; }
+
+    for i in 0..bit {
+        let mask2 = mask1 >> i + 1;
+        let mut tmp = vec![0; n];
+        for j in 0..n {
+            let lower = j & mask2;
+            let upper = j ^ lower;
+            let shifted = upper << 1 & mask1;
+            tmp[j] = x[shifted | lower] + zeta[upper] * x[shifted | mask2 + 1 | lower] % MOD;
+            tmp[j] %= MOD;
+        }
+        *x = tmp;
+    }
+}

@@ -1,0 +1,9 @@
+r, c = map(int, input().split())
+sum_list = [0 for _ in range(c+1)]
+for i in range(r):
+  row = list(map(int, input().split()))
+  row.append(sum(row))
+  print(' '.join([str(j) for j in row]))
+  for j in range(c+1):
+    sum_list[j] += row[j]
+print(' '.join([str(i) for i in sum_list]))

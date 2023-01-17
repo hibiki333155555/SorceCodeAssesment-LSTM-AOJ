@@ -1,0 +1,50 @@
+def print_list(lst):
+    print(" ".join([str(i) for i in lst]))
+
+def swap_element(lst, i, j):
+    tmp = lst[i]
+    lst[i] = lst[j]
+    lst[j] = tmp
+
+def insertion_sort(original_lst, g, cnt):
+    lst = original_lst.copy()
+    for i in range(g, len(lst)):
+        v = lst[i]
+        j = i - g
+        while j >= 0 and lst[j] > v:
+            lst[j + g] = lst[j]
+            j -= g
+            cnt += 1
+        lst[j + g] = v
+    return lst, cnt
+
+def shell_sort(original_lst, g_list):
+    lst = original_lst.copy()
+    cnt = 0
+    for g in g_list:
+        lst, cnt = insertion_sort(lst, g, cnt)
+    return lst, cnt
+
+if __name__ == "__main__":
+    n = int(input())
+    lst = []
+    for i in range(n):
+        lst.append(int(input()))
+
+    g = 1
+    g_list = [g]
+    while True:
+        g = 3 * g + 1
+        if g > n / 9:
+            break
+        g_list.append(g)
+    g_list = g_list[::-1]
+
+    sorted_lst, cnt = shell_sort(lst, g_list)
+
+    print(len(g_list))
+    print_list(g_list)
+    print(cnt)
+    for i in range(n):
+        print(sorted_lst[i])
+

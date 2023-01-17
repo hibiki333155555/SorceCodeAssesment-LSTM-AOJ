@@ -1,0 +1,19 @@
+from collections import deque
+
+n, q = map(int, input().split())
+
+d = deque()
+
+for i in range(n):
+    name, time = input().split()
+    d.append((name, int(time)))
+
+t = 0
+while d:
+    name, time = d.popleft()
+    if time > q:
+        t += q
+        d.append((name, time-q))
+    else:
+        t += time
+        print(name, t)

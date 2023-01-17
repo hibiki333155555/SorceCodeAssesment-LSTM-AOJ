@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+int main()
+{
+	char buf[1250];
+	char *p, c;
+
+	gets(buf);
+	p = buf;
+	while (*p) {
+		c = *p++;
+		if (isupper(c)) c = tolower(c);
+		else if (islower(c)) c = toupper(c);
+		putchar(c);
+	}
+	putchar('\n');
+	return 0;
+}
+

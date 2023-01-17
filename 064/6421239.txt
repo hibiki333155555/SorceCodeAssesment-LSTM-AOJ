@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    ll N,M,K,X; cin >> N >> M >> K >> X;
+    vector<ll> A(N);
+    rep(i,N) cin >> A[i];
+    ll a = *max_element(A.begin(), A.end());
+    cout << (a * K >= X * M ? "Yes" : "No") << endl;
+}

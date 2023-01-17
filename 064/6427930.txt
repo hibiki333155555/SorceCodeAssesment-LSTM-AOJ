@@ -1,0 +1,15 @@
+c=[]
+while True:
+    str = input().split()
+    sum = 0
+    for i in range(str.len()):
+        str[i]=int(str[i])
+        sum+=str[i]
+    c.append(sum)
+    if(str==0):
+        break
+    
+for i in range(c.len()):
+    print(c[i])
+    print()
+    

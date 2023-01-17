@@ -1,0 +1,39 @@
+#include<iostream>
+using namespace std;
+
+static const int NMAX = 50000;
+static const int MMAX = 20;
+static const int INFTY =1 << 29;
+
+/*用来存储面值的数组*/
+int C[MMAX] = {};
+
+/*动态规划表,T[j]表示解决j元钱的最小数量*/
+int T[NMAX+1] = {};
+
+int mini(int a, int b)
+{
+	return a < b ? a : b;
+}
+
+void solve(int n,int m)
+{
+	for (int i = 1; i < NMAX; i++)
+		T[i] = INFTY;
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j+C[i] <= n; j++)
+			T[j+C[i]] = mini(T[j + C[i]], T[j] + 1);
+	}
+}
+
+int mian()
+{
+	int n = 0; int m = 0;
+	cin >> n >> m;
+	for (int i = 0; i < m; i++)
+		cin >> C[i];
+	solve(n, m);
+	cout << T[n]<<endl;
+	return 0;
+}

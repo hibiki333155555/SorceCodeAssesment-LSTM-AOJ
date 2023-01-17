@@ -1,0 +1,67 @@
+import java.util.Scanner;
+//http://www.ipsj.or.jp/07editj/promenade/4304.pdf
+//http://algorithms.blog55.fc2.com/blog-entry-131.html
+//http://algorithms.blog55.fc2.com/blog-entry-132.html
+//http://algorithms.blog55.fc2.com/blog-entry-133.html
+//最大正方形の問題はDPだったけど最大長方形は累積和とスタックを組み合わせてる
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		//while(true) {
+			int N=sc.nextInt();
+			//if(N==0) {
+			//	break;
+			//}
+			long[] stacks=new long[N+1];
+			int counter=0;
+			long mltp=100000000000L;
+			long now_h=0;
+			long max=0;		//最大長方形の面積
+			stacks[0]=0;
+			counter++;
+			for(int i=0; i<N; i++) {		//スタックに入れる
+				long h=sc.nextLong();
+				if(i==0) {	//スタックが空なら追加
+					stacks[counter]=((long)i)*mltp+h;
+					counter++;
+				}
+				else {
+					if(now_h<h) {		//今のほうが高いならスタックに追加
+						stacks[counter]=((long)i)*mltp+h;
+						counter++;
+					}
+					else if(now_h==h) {	//同じなら何もしない
+						//
+					}
+					else if(now_h>h) {
+						while(counter-1>=0 && stacks[counter-1]%mltp>=h) {//例えば今高さが2,3,5,8とはいっていて、いま3が入った時、長方形が維持できるのはさいしょの2,3のみ
+							max=Math.max(max,(i-stacks[counter-1]/mltp)*(stacks[counter-1]%mltp));
+							//pl(max);
+							counter--;
+						}
+						stacks[counter]=(stacks[counter]/mltp)*mltp+h;
+						//pl(stacks[counter]);
+						counter++;
+					}
+				}
+				now_h=h;
+			}
+			//スタック取り出し
+			for(int i=counter-1; i>=0; i--) {
+				max=Math.max(max, (N-stacks[i]/mltp)*(stacks[i]%mltp));
+			}
+			pl(max);
+		//}
+		sc.close();
+	}
+	public static void pl(Object o) {
+		System.out.println(o);
+	}
+	public static void pl() {
+		System.out.println();
+	}
+	public static void p(Object o) {
+		System.out.print(o);
+	}
+}
+

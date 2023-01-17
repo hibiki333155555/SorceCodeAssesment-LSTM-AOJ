@@ -1,0 +1,28 @@
+def rec_mergesort(seq):#seqをなんらかの昇順にソート
+    global count 
+    mid = len(seq)//2
+    lft, rgt = seq[:mid], seq[mid:]
+    
+    if len(lft) > 1:
+        lft = rec_mergesort(lft)
+    if len(rgt) > 1:
+        rgt = rec_mergesort(rgt)
+        
+    res = []
+    count += len(lft) + len(rgt)
+    while lft and rgt:
+        if lft[-1] >= rgt[-1]: #ここで隣接二項間の関係を定義
+            res.append(lft.pop())
+        else:
+            res.append(rgt.pop())
+    
+    res.reverse() #値が大きい順にresに追加していき、ここでひっくり返す
+    return (lft or rgt) + res
+
+
+n = int(input())
+seq = list(map(int, input().split()))
+count = 0
+seq = rec_mergesort(seq)
+print(*seq)
+print(count)

@@ -1,0 +1,64 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 998244353
+
+def main():
+    def comb(a,b):
+        return fact[a]*inv[b]*inv[a-b]%mod
+
+    def gcd(a,b):
+        while a:
+            a,b = b%a,a
+        return b
+
+    N = 10**6
+    fact = [1]*(N+1)
+    for i in range(N):
+        fact[i+1] = fact[i]*(i+1)%mod
+    inv = [None]*(N+1)
+    inv[N] = pow(fact[N],mod-2,mod)
+    for i in reversed(range(N)):
+        inv[i] = inv[i+1]*(i+1)%mod
+    n = I()
+    a = LI()
+    s1 = a.count(1)
+    s5 = a.count(5)
+    s7 = a.count(7)
+    a = [i for i in a if i not in (1,5,7)]
+    n = len(a)
+    ans = comb(n+s1,s1)*comb(n+s1+s5,s5)*comb(n+s1+s5+s7,s7)%mod
+    a.append(6)
+    n = len(a)
+    s2 = s3 = 0
+    for i,ai in enumerate(a):
+        if ai == 6:
+            count = comb(s2+s3,s2)
+            ans *= count
+            if ans >= mod:
+                ans %= mod
+            s2 = s3 = 0
+        else:
+            if ai in (3,9):
+                s3 += 1
+            else:
+                s2 += 1
+    print(ans)
+    return
+
+
+if __name__ == "__main__":
+    main()
+

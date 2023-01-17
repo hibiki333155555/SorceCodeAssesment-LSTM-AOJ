@@ -1,0 +1,12 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    double r;
+    double pi = 3.141592653589;
+    cin >> r;
+    cout << r * r * pi << " " << 2 * r * pi << endl;
+
+    return 0;
+
+}

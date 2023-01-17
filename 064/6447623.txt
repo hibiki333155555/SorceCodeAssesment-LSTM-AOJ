@@ -1,0 +1,28 @@
+n, m, l = map(int, input().split())
+
+A = list()
+B = list()
+C = list()
+for i in range(m+n):
+    row = list(map(int, input().split()))
+    if i < n:
+        A.append(row)
+    else:
+        B.append(row)
+
+for j in range(n):
+    C.append(list())
+    for k in range(l):
+        new_value = 0
+        for o in range(m):
+            new_value += A[j][o]*B[o][k]
+        C[j].append(new_value)
+
+print()
+for i in range(n):
+    for j in range(l):
+        if j == l-1:
+            print(C[i][j])
+        else:
+            print(C[i][j], end=" ")
+

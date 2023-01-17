@@ -1,0 +1,851 @@
+#define no_unique_address maybe_unused
+#line 1 "aoj/PrimeNumber.test.cpp"
+#define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_1_C&lang=ja"
+#line 2 "math/is_prime.hpp"
+#include <cstdint>
+#include <type_traits>
+#line 2 "algorithm/bit.hpp"
+#include <limits>
+#line 3 "meta/settings.hpp"
+
+#ifndef KYOPRO_BASE_INT
+#define KYOPRO_BASE_INT std::int64_t
+#endif
+
+#ifndef KYOPRO_BASE_UINT
+#define KYOPRO_BASE_UINT std::uint64_t
+#endif
+
+#ifndef KYOPRO_BASE_FLOAT
+#define KYOPRO_BASE_FLOAT double
+#endif
+
+#ifndef KYOPRO_DEFAULT_MOD
+#define KYOPRO_DEFAULT_MOD static_cast<KYOPRO_BASE_UINT>(998244353)
+#endif
+
+#ifndef KYOPRO_DECIMAL_PRECISION
+#define KYOPRO_DECIMAL_PRECISION static_cast<KYOPRO_BASE_UINT>(12)
+#endif
+
+#ifndef KYOPRO_INF_DIV
+#define KYOPRO_INF_DIV static_cast<KYOPRO_BASE_UINT>(3)
+#endif
+
+#ifndef KYOPRO_BUFFER_SIZE
+#define KYOPRO_BUFFER_SIZE static_cast<KYOPRO_BASE_UINT>(2048)
+#endif
+#line 5 "algorithm/bit.hpp"
+
+namespace kyopro {
+  template<class _typeT>
+  constexpr KYOPRO_BASE_INT pop_count(_typeT _x) noexcept {
+    constexpr auto _digits = std::numeric_limits<std::make_unsigned_t<_typeT>>::digits;
+    static_assert(_digits <= std::numeric_limits<unsigned long long>::digits, "Integer size is too long");
+    if constexpr (_digits <= std::numeric_limits<unsigned int>::digits) return __builtin_popcount(_x);
+    else if constexpr (_digits <= std::numeric_limits<unsigned long>::digits) return __builtin_popcountl(_x);
+    else return __builtin_popcountll(_x);
+  }
+
+  template<class _typeT>
+  constexpr KYOPRO_BASE_INT leading_zero(_typeT _x) noexcept {
+    constexpr auto _digits = std::numeric_limits<std::make_unsigned_t<_typeT>>::digits;
+    static_assert(_digits <= std::numeric_limits<unsigned long long>::digits, "Integer size is too long");
+    if (_x == 0) return 0;
+    if constexpr (_digits <= std::numeric_limits<unsigned int>::digits) return __builtin_clz(_x) + _digits - std::numeric_limits<unsigned int>::digits;
+    else if constexpr (_digits <= std::numeric_limits<unsigned long>::digits) return __builtin_clzl(_x) + _digits - std::numeric_limits<unsigned long>::digits;
+    else return __builtin_clzll(_x) + _digits - std::numeric_limits<unsigned long long>::digits;
+  }
+
+  template<class _typeT>
+  constexpr KYOPRO_BASE_INT trailing_zero(_typeT _x) noexcept {
+    constexpr auto _digits = std::numeric_limits<std::make_unsigned_t<_typeT>>::digits;
+    static_assert(_digits <= std::numeric_limits<unsigned long long>::digits, "Integer size is too long");
+    if constexpr (_digits <= std::numeric_limits<unsigned int>::digits) return __builtin_ctz(_x);
+    else if constexpr (_digits <= std::numeric_limits<unsigned long>::digits) return __builtin_ctzl(_x);
+    else return __builtin_ctzll(_x);
+  }
+
+  template<class _typeT>
+  constexpr KYOPRO_BASE_INT bit_len(_typeT _x) noexcept {
+    constexpr auto _digits = std::numeric_limits<std::make_unsigned_t<_typeT>>::digits;
+    static_assert(_digits <= std::numeric_limits<unsigned long long>::digits, "Integer size is too long");
+    if (_x == 0) return 0;
+    if constexpr (_digits <= std::numeric_limits<unsigned int>::digits) return std::numeric_limits<unsigned int>::digits - __builtin_clz(_x);
+    else if constexpr (_digits <= std::numeric_limits<unsigned long>::digits) return std::numeric_limits<unsigned long>::digits - __builtin_clzl(_x);
+    else return std::numeric_limits<unsigned long long>::digits - __builtin_clzll(_x);
+  }
+
+  template<class _typeT>
+  constexpr KYOPRO_BASE_INT floor_bit(_typeT _x) noexcept {
+    return bit_len(_x >> static_cast<_typeT>(1));
+  }
+
+  template<class _typeT>
+  constexpr KYOPRO_BASE_INT ceil_bit(_typeT _x) noexcept {
+    if (_x == 0) return 0;
+    return bit_len(_x - static_cast<_typeT>(1));
+  }
+}
+#line 2 "math/DynamicModInt.hpp"
+#include <cassert>
+#line 2 "algorithm/Hash.hpp"
+#include <cstddef>
+#line 4 "algorithm/Hash.hpp"
+#include <functional>
+#include <initializer_list>
+#include <tuple>
+#line 8 "algorithm/Hash.hpp"
+#include <utility>
+#line 2 "meta/trait.hpp"
+#include <iterator>
+#include <queue>
+#line 5 "meta/trait.hpp"
+#include <stack>
+#line 9 "meta/trait.hpp"
+
+template<>
+struct std::is_integral<__int128_t>: std::true_type {};
+template<>
+struct std::is_signed<__int128_t>: std::true_type {};
+template<>
+struct std::is_integral<__uint128_t>: std::true_type {};
+template<>
+struct std::is_unsigned<__uint128_t>: std::true_type {};
+#ifdef __SIZEOF_FLOAT128__
+template<>
+struct std::is_floating_point<__float128>: std::true_type {};
+#endif
+
+namespace kyopro {
+  template<KYOPRO_BASE_UINT _size>
+  struct int_least {
+  private:
+    static constexpr auto _get_type() noexcept {
+      static_assert(_size <= 128, "Integer size is too long");
+      if constexpr (_size <= 8) return std::int_least8_t();
+      if constexpr (_size <= 16) return std::int_least16_t();
+      if constexpr (_size <= 32) return std::int_least32_t();
+      if constexpr (_size <= 64) return std::int_least64_t();
+      else return __int128_t();
+    }
+
+  public:
+    using type = decltype(_get_type());
+  };
+
+  template<KYOPRO_BASE_UINT _size>
+  using int_least_t = typename int_least<_size>::type;
+
+  template<KYOPRO_BASE_UINT _size>
+  struct uint_least {
+  private:
+    static constexpr auto _get_type() noexcept {
+      static_assert(_size <= 128, "Integer size is too long");
+      if constexpr (_size <= 8) return std::uint_least8_t();
+      if constexpr (_size <= 16) return std::uint_least16_t();
+      if constexpr (_size <= 32) return std::uint_least32_t();
+      if constexpr (_size <= 64) return std::uint_least64_t();
+      else return __uint128_t();
+    }
+
+  public:
+    using type = decltype(_get_type());
+  };
+
+  template<KYOPRO_BASE_UINT _size>
+  using uint_least_t = typename uint_least<_size>::type;
+
+  template<class, class = void>
+  struct is_iterator: std::false_type {};
+  template<class _typeT>
+  struct is_iterator<_typeT, std::void_t<typename std::iterator_traits<_typeT>::iterator_category>>: std::true_type {};
+
+  template<class _typeT>
+  constexpr bool is_iterator_v = is_iterator<_typeT>::value;
+
+  template<class, class = void>
+  struct is_iterable: std::false_type {};
+  template<class _typeT>
+  struct is_iterable<_typeT, std::enable_if_t<is_iterator_v<decltype(std::begin(std::declval<_typeT>()))>>>: std::true_type {};
+
+  template<class _typeT>
+  constexpr bool is_iterable_v = is_iterable<_typeT>::value;
+
+  template<class>
+  struct is_tuple: std::false_type {};
+  template<class _typeT, class _typeU>
+  struct is_tuple<std::pair<_typeT, _typeU>>: std::true_type {};
+  template<class... _typeArgs>
+  struct is_tuple<std::tuple<_typeArgs...>>: std::true_type {};
+
+  template<class _typeT>
+  constexpr bool is_tuple_v = is_tuple<_typeT>::value;
+
+  template<class, class = void>
+  struct is_container_adapter: std::false_type {};
+  template<class _typeT>
+  struct is_container_adapter<_typeT, std::void_t<decltype(std::empty(std::declval<_typeT>()))>>: std::negation<is_iterable<_typeT>> {};
+
+  template<class _typeT>
+  constexpr bool is_container_adapter_v = is_container_adapter<_typeT>::value;
+}
+#line 11 "algorithm/Hash.hpp"
+
+namespace kyopro {
+  template<class, class = void>
+  struct Hash;
+
+  template<class _typeT>
+  struct Hash<_typeT, std::enable_if_t<std::is_scalar_v<_typeT>>> {
+  private:
+    [[no_unique_address]] std::hash<_typeT> _hashser;
+
+  public:
+    constexpr std::size_t operator ()(_typeT a) const noexcept {
+      return _hasher(a);
+    }
+  };
+
+  template<class _typeT>
+  struct Hash<_typeT, std::enable_if_t<is_tuple_v<_typeT>>> {
+    template<std::size_t _i = 0>
+    constexpr std::size_t operator ()(const _typeT& _a) const noexcept {
+      if constexpr (_i == std::tuple_size_v<_typeT>) return std::tuple_size_v<_typeT>;
+      else {
+        std::uint_fast64_t _seed = operator()<_i + 1>(_a);
+        return _seed ^ (Hash<std::tuple_element_t<_i, _typeT>>()(std::get<_i>(_a)) + 0x9e3779b97f4a7c15LU + (_seed << 12) + (_seed >> 4));
+      }
+    }
+  };
+
+  template<class _typeT>
+  struct Hash<_typeT, std::enable_if_t<is_iterable_v<_typeT>>> {
+  private:
+    [[no_unique_address]] Hash<decltype(*std::begin(std::declval<_typeT>()))> _hasher;
+
+  public:
+    constexpr std::size_t operator ()(const _typeT& _a) const noexcept {
+      std::uint_fast64_t _seed = _a.size();
+      for (auto& _i: _a) _seed ^= _hasher(_i) + 0x9e3779b97f4a7c15LU + (_seed << 12) + (_seed >> 4);
+      return _seed;
+    }
+  };
+}
+#line 2 "meta/constant.hpp"
+#include <array>
+#line 3 "math/power.hpp"
+
+namespace kyopro {
+  template<class _typeT>
+  constexpr _typeT power(_typeT _a, KYOPRO_BASE_UINT _n, _typeT _init = 1) noexcept {
+    while (_n > 0) {
+      if (_n & 1) _init *= _a;
+      _a *= _a;
+      _n >>= 1;
+    }
+    return _init;
+  }
+}
+#line 7 "meta/constant.hpp"
+
+namespace kyopro {
+  template<class _typeT>
+  inline constexpr _typeT MOD = KYOPRO_DEFAULT_MOD;
+  inline constexpr KYOPRO_BASE_INT mod = MOD<KYOPRO_BASE_INT>;
+
+  template<class _typeT>
+  inline constexpr _typeT INF = std::numeric_limits<_typeT>::max() / KYOPRO_INF_DIV;
+  inline constexpr KYOPRO_BASE_INT inf = INF<KYOPRO_BASE_INT>;
+
+  template<class _typeT, KYOPRO_BASE_UINT _decimal_precision = KYOPRO_DECIMAL_PRECISION>
+  inline constexpr KYOPRO_BASE_FLOAT EPS = static_cast<_typeT>(1) / power(10ULL, _decimal_precision);
+  inline constexpr KYOPRO_BASE_FLOAT eps = EPS<KYOPRO_BASE_FLOAT>;
+
+  template<class _typeT>
+  inline constexpr _typeT PI = 3.14159265358979323846;
+  inline constexpr KYOPRO_BASE_FLOAT pi = PI<KYOPRO_BASE_FLOAT>;
+
+  inline constexpr std::array<std::pair<KYOPRO_BASE_INT, KYOPRO_BASE_INT>, 4> beside{{{1, 0}, {0, 1}, {-1, 0}, {0, -1}}};
+  inline constexpr std::array<std::pair<KYOPRO_BASE_INT, KYOPRO_BASE_INT>, 8> around{{{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}}};
+}
+#line 4 "math/mod.hpp"
+
+namespace kyopro {
+  template<class _typeT, class _typeU>
+  constexpr std::common_type_t<_typeT, _typeU> floor_mod(_typeT _x, _typeU _m) noexcept {
+    static_assert(std::is_integral_v<_typeT> && std::is_integral_v<_typeU>, "Integer is required");
+    if constexpr (std::is_unsigned_v<_typeT> || std::is_unsigned_v<_typeU>) return _x % _m;
+    return (_x %= _m) < 0 ? _x + _m : _x;
+  }
+
+  template<class _typeT, class _typeU>
+  constexpr std::common_type_t<_typeT, _typeU> ceil_mod(_typeT _x, _typeU _m) noexcept {
+    return _m - floor_mod(_x - 1, _m) - static_cast<_typeT>(1);
+  }
+}
+#line 6 "math/Montgomery.hpp"
+
+namespace kyopro {
+  template<class _typeT>
+  struct Montgomery {
+    static_assert(std::is_unsigned_v<_typeT>, "Unsigned integer is required");
+
+    _typeT mod;
+
+  private:
+    using _larger_type = uint_least_t<std::numeric_limits<_typeT>::digits * 2>;
+
+    _typeT _r, _n2;
+
+  public:
+    constexpr void set_mod(_typeT _mod) noexcept {
+      mod = _mod;
+      _n2 = -static_cast<_larger_type>(mod) % mod;
+      _typeT _t = 0;
+      _r = 0;
+      for (int _i = 0; _i < std::numeric_limits<_typeT>::digits; ++_i) {
+        if (!(_t & 1)) {
+          _t += mod;
+          _r += static_cast<_typeT>(1) << static_cast<_typeT>(_i);
+        }
+        _t >>= 1;
+      }
+    }
+
+    constexpr KYOPRO_BASE_INT get_mod() const noexcept {
+      return mod;
+    }
+
+    Montgomery() noexcept = default;
+    Montgomery(_typeT _mod) noexcept {
+      set_mod(_mod);
+    }
+
+    constexpr _typeT transform(_typeT _x) const noexcept {
+      return reduce(static_cast<_larger_type>(_x) * _n2);
+    }
+
+    constexpr _typeT inverse_transform(_typeT _x) const noexcept {
+      return reduce(_x);
+    }
+
+    constexpr _typeT reduce(_larger_type _x) const noexcept {
+      _typeT _y = (_x + static_cast<_larger_type>(static_cast<_typeT>(_x) * _r) * mod) >> std::numeric_limits<_typeT>::digits;
+      return _y >= mod ? _y - mod : _y;
+    }
+  };
+}
+#line 10 "math/DynamicModInt.hpp"
+
+namespace kyopro {
+  template<class _typeT, KYOPRO_BASE_UINT = 0>
+  struct DynamicModInt {
+    static_assert(std::is_unsigned_v<_typeT>, "Unsigned integer is required");
+
+  private:
+    using _larger_type = uint_least_t<std::numeric_limits<_typeT>::digits * 2>;
+
+    inline static Montgomery<_typeT> _montgomery;
+
+  public:
+    _typeT value;
+
+    static void set_mod(_typeT _mod) noexcept {
+      _montgomery.set_mod(_mod);
+    }
+
+    static KYOPRO_BASE_INT get_mod() noexcept {
+      return _montgomery.mod;
+    }
+
+    KYOPRO_BASE_INT get_val() noexcept {
+      return _montgomery.inverse_transform(value);
+    }
+
+    DynamicModInt() noexcept = default;
+    DynamicModInt(_typeT _value) noexcept: value(_montgomery.transform(floor_mod(_value, _montgomery.mod))) {}
+
+    template<class _typeU>
+    explicit operator _typeU() const noexcept { return _montgomery.inverse_transform(value); }
+
+    static DynamicModInt raw(_typeT _n) noexcept {
+      DynamicModInt _res;
+      _res.value = _n;
+      return _res;
+    }
+
+    DynamicModInt power(_typeT _n) const noexcept {
+      DynamicModInt _res = 1, _a = *this;
+      while (_n > 0) {
+        if (_n & 1) _res = _res * _a;
+        _a = _a * _a;
+        _n >>= 1;
+      }
+      return _res;
+    }
+
+    DynamicModInt inv() const noexcept {
+      _typeT _a = value, _b = _montgomery.mod;
+      std::make_signed_t<_typeT> _u = 1, _v = 0;
+      while (_b > 0) {
+        _typeT _t = _a / _b;
+        _a -= _t * _b;
+        std::swap(_a, _b);
+        _u -= _t * _v;
+        std::swap(_u, _v);
+      }
+      return static_cast<DynamicModInt>(_u);
+    }
+
+    DynamicModInt operator +() const noexcept { return *this; }
+
+    DynamicModInt operator -() const noexcept { return value == 0 ? 0 : _montgomery.mod - value; }
+
+    DynamicModInt& operator ++() noexcept {
+      if (++value >= _montgomery.mod) value -= _montgomery.mod;
+      return *this;
+    }
+
+    DynamicModInt operator ++(int) noexcept {
+      DynamicModInt _before = *this;
+      operator ++();
+      return _before;
+    }
+
+    DynamicModInt& operator --() noexcept {
+      if (value == 0) value = _montgomery.mod;
+      --value;
+      return *this;
+    }
+
+    DynamicModInt operator --(int) noexcept {
+      DynamicModInt _before = *this;
+      operator --();
+      return _before;
+    }
+
+    DynamicModInt& operator +=(DynamicModInt _rhs) noexcept {
+      if ((value += _rhs.value) >= mod) value -= mod;
+      return *this;
+    }
+
+    DynamicModInt& operator -=(DynamicModInt _rhs) noexcept {
+      if (value < _rhs.value) value += mod;
+      value -= _rhs.value;
+      return *this;
+    }
+
+    DynamicModInt& operator *=(DynamicModInt _rhs) noexcept {
+      value = _montgomery.reduce(static_cast<_larger_type>(value) * _rhs.value);
+      return *this;
+    }
+
+    DynamicModInt& operator /=(DynamicModInt _rhs) noexcept {
+      value = _montgomery.reduce(static_cast<_larger_type>(value) * _rhs.inv().value);
+      return *this;
+    }
+
+    friend DynamicModInt operator +(DynamicModInt _lhs, DynamicModInt _rhs) noexcept { return _lhs += _rhs; }
+
+    friend DynamicModInt operator -(DynamicModInt _lhs, DynamicModInt _rhs) noexcept { return _lhs -= _rhs; }
+
+    friend DynamicModInt operator *(DynamicModInt _lhs, DynamicModInt _rhs) noexcept { return _lhs *= _rhs; }
+
+    friend DynamicModInt operator /(DynamicModInt _lhs, DynamicModInt _rhs) noexcept { return _lhs /= _rhs; }
+
+    friend bool operator ==(DynamicModInt _lhs, DynamicModInt _rhs) noexcept { return _lhs.value == _rhs.value; }
+
+    friend bool operator !=(DynamicModInt _lhs, DynamicModInt _rhs) noexcept { return _lhs.value != _rhs.value; }
+
+    template<class _typeScanner>
+    void scan(_typeScanner& _scanner) {
+      std::int_fast64_t _value;
+      _scanner.scan(_value);
+      value = _montgomery.transform(floor_mod(_value, _montgomery.mod));
+    }
+
+    template<class _typePrinter>
+    void print(_typePrinter& _printer) const {
+      _printer.print(_montgomery.inverse_transform(value));
+    }
+  };
+
+  template<class _typeT, KYOPRO_BASE_UINT _kind>
+  struct Hash<DynamicModInt<_typeT, _kind>> { std::size_t operator ()(DynamicModInt<_typeT, _kind> _a) const noexcept { return static_cast<std::size_t>(_a); } };
+}
+#line 7 "math/is_prime.hpp"
+
+namespace kyopro {
+  template<class _typeT>
+  constexpr bool is_prime(_typeT _x) {
+    using _typeU = std::make_unsigned_t<_typeT>;
+    using _typeDynamicModInt = DynamicModInt<_typeU, KYOPRO_BASE_UINT(-1)>;
+    _typeU _n = _x;
+    if (_n <= 1) return false;
+    if (!(_n & 1)) return _n == 2;
+    _typeDynamicModInt::set_mod(_n);
+    std::uint_fast64_t _d = (_n - 1) >> trailing_zero(_n - 1);
+    _typeDynamicModInt _one = 1, _minus_one = _n - 1;
+    auto ng = [&](std::uint_fast64_t _a) noexcept {
+      auto _y = _typeDynamicModInt(_a).power(_d);
+      std::uint_fast64_t _t = _d;
+      while (_y != _one and _y != _minus_one and _t != _n - 1) _y *= _y, _t <<= 1;
+      if (_y != _minus_one and !(_t & 1)) return true;
+      return false;
+    };
+    if (std::numeric_limits<_typeU>::digits <= 32 || _n < (static_cast<_typeU>(1) << 32)) {
+      for (auto _i: (std::uint_fast64_t[3]){2, 7, 61}) {
+        if (_n <= _i) return true;
+        if (ng(_i)) return false;
+      }
+    } else {
+      for (auto _i: (std::uint_fast64_t[7]){2, 325, 9375, 28178, 450775, 9780504, 1795265022}) {
+        if (_n <= _i) return true;
+        if (ng(_i)) return false;
+      }
+    }
+    return true;
+  }
+}
+#line 2 "system/in.hpp"
+#include <unistd.h>
+#line 6 "system/in.hpp"
+#include <cstdio>
+#include <string>
+#line 14 "system/in.hpp"
+
+namespace kyopro {
+  template<KYOPRO_BASE_UINT _buf_size = KYOPRO_BUFFER_SIZE>
+  struct Reader {
+  private:
+    int _fd, _idx;
+    std::array<char, _buf_size> _buffer;
+
+  public:
+    Reader() {
+      read(_fd, _buffer.begin(), _buf_size);
+    }
+    Reader(int _fd): _fd(_fd), _idx(0), _buffer() {
+      read(_fd, _buffer.begin(), _buf_size);
+    }
+    Reader(FILE* _fp): _fd(fileno(_fp)), _idx(0), _buffer() {
+      read(_fd, _buffer.begin(), _buf_size);
+    }
+
+    struct iterator {
+    private:
+      Reader& _reader;
+
+    public:
+      using difference_type = void;
+      using value_type = void;
+      using pointer = void;
+      using reference = void;
+      using iterator_category = std::input_iterator_tag;
+
+      iterator() noexcept = default;
+      iterator(Reader& _reader) noexcept: _reader(_reader) {}
+
+      iterator& operator ++() {
+        ++_reader._idx;
+        if (_reader._idx == _buf_size) {
+          read(_reader._fd, _reader._buffer.begin(), _buf_size);
+          _reader._idx = 0;
+        }
+        return *this;
+      }
+
+      iterator operator ++(int) {
+        iterator _before = *this;
+        operator ++();
+        return _before;
+      }
+
+      char& operator *() const {
+        return _reader._buffer[_reader._idx];
+      }
+    };
+
+    iterator begin() noexcept {
+      return iterator(*this);
+    }
+  };
+
+  Reader input(0);
+
+  template<class _typeIterator, KYOPRO_BASE_UINT _decimal_precision = KYOPRO_DECIMAL_PRECISION>
+  struct Scanner {
+  private:
+    template<class, class = void>
+    struct _has_scan: std::false_type {};
+    template<class _typeT>
+    struct _has_scan<_typeT, std::void_t<decltype(std::declval<_typeT>().scan(std::declval<Scanner&>()))>>: std::true_type {};
+
+  public:
+    static constexpr KYOPRO_BASE_UINT decimal_precision = _decimal_precision;
+    _typeIterator itr;
+
+    Scanner() noexcept = default;
+    Scanner(_typeIterator _itr) noexcept: itr(_itr) {}
+
+    void discard_space() {
+      while (('\t' <= *itr && *itr <= '\r') || *itr == ' ') ++itr;
+    }
+
+    void scan(char& _a) {
+      discard_space();
+      _a = *itr;
+      ++itr;
+    }
+    void scan(std::string& _a) {
+      discard_space();
+      for (auto& _i: _a) {
+        _i = *itr;
+        ++itr;
+      }
+    }
+    void scan(bool& _a) {
+      discard_space();
+      while ('0' <= *itr && *itr <= '9') {
+        if (*itr != '0') _a = true;
+        ++itr;
+      }
+    }
+    template<class _typeT, std::enable_if_t<std::is_arithmetic_v<_typeT> && !_has_scan<_typeT>::value>* = nullptr>
+    void scan(_typeT& _a) {
+      discard_space();
+      bool _sgn = false;
+      if constexpr (!std::is_unsigned_v<_typeT>) if (*itr == '-') {
+        _sgn = true;
+        ++itr;
+      }
+      _a = 0;
+      for (; '0' <= *itr && *itr <= '9'; ++itr) _a = _a * 10 + *itr - '0';
+      if (*itr == '.') {
+        ++itr;
+        if constexpr (std::is_floating_point_v<_typeT>) {
+          constexpr std::uint_fast64_t _power_decimal_precision = power(10ULL, _decimal_precision);
+          _typeT _d = 0;
+          std::uint_fast64_t _i = 1;
+          for (; '0' <= *itr && *itr <= '9' && _i < _power_decimal_precision; _i *= 10) {
+            _d = _d * 10 + *itr - '0';
+            ++itr;
+          }
+          _a += _d / _i;
+        }
+        while ('0' <= *itr && *itr <= '9') ++itr;
+      }
+      if constexpr (!std::is_unsigned_v<_typeT>) if (_sgn) _a = -_a;
+    }
+    template<std::size_t _i = 0, class _typeT, std::enable_if_t<is_tuple_v<_typeT> && !_has_scan<_typeT>::value>* = nullptr>
+    void scan(_typeT& _a) {
+      if constexpr (_i < std::tuple_size_v<_typeT>) {
+        scan(std::get<_i>(_a));
+        scan<_i + 1>(_a);
+      }
+    }
+    template<class _typeT, std::enable_if_t<is_iterable_v<_typeT> && !_has_scan<_typeT>::value>* = nullptr>
+    void scan(_typeT& _a) {
+      for (auto& _i: _a) scan(_i);
+    }
+    template<class _typeT, std::enable_if_t<_has_scan<_typeT>::value>* = nullptr>
+    void scan(_typeT& _a) {
+      _a.scan(*this);
+    }
+
+    void operator ()() {}
+    template<class _typeHead, class... _typeArgs>
+    void operator ()(_typeHead& _head, _typeArgs&... _args) {
+      scan(_head);
+      operator ()(_args...);
+    }
+  };
+
+  Scanner<Reader<>::iterator> scan(input.begin());
+}
+#line 13 "system/out.hpp"
+
+namespace kyopro {
+  template<KYOPRO_BASE_UINT _buf_size = KYOPRO_BUFFER_SIZE>
+  struct Writer {
+  private:
+    int _fd, _idx;
+    std::array<char, _buf_size> _buffer;
+
+  public:
+    Writer() noexcept = default;
+    Writer(int _fd) noexcept: _fd(_fd), _idx(0), _buffer() {}
+    Writer(FILE* _fp) noexcept: _fd(fileno(_fp)), _idx(0), _buffer() {}
+
+    ~Writer() {
+      write(_fd, _buffer.begin(), _idx);
+    }
+
+    struct iterator {
+    private:
+      Writer& _writer;
+
+    public:
+      using difference_type = void;
+      using value_type = void;
+      using pointer = void;
+      using reference = void;
+      using iterator_category = std::output_iterator_tag;
+
+      iterator() noexcept = default;
+      iterator(Writer& _writer) noexcept: _writer(_writer) {}
+
+      iterator& operator ++() {
+        ++_writer._idx;
+        if (_writer._idx == _buf_size) {
+          write(_writer._fd, _writer._buffer.begin(), _buf_size);
+          _writer._idx = 0;
+        }
+        return *this;
+      }
+
+      iterator operator ++(int) {
+        iterator _before = *this;
+        operator ++();
+        return _before;
+      }
+
+      char& operator *() const {
+        return _writer._buffer[_writer._idx];
+      }
+
+      void flush() const {
+        write(_writer._fd, _writer._buffer.begin(), _writer._idx);
+      }
+    };
+
+    iterator begin() noexcept {
+      return iterator(*this);
+    }
+  };
+
+  Writer output(1), error(2);
+
+  template<class _typeIterator, bool _sep = true, bool _end = true, bool _debug = false, bool _comment = false, bool _flush = false, KYOPRO_BASE_UINT _decimal_precision = KYOPRO_DECIMAL_PRECISION>
+  struct Printer {
+  private:
+    template<class, class = void>
+    struct _has_print: std::false_type {};
+    template<class _typeT>
+    struct _has_print<_typeT, std::void_t<decltype(std::declval<_typeT>().print(std::declval<Printer&>()))>>: std::true_type {};
+
+    void _print_sep() {
+      if constexpr (_debug) {
+        print(',');
+      }
+      print(' ');
+    }
+
+  public:
+    static constexpr bool sep = _sep, end = _end, debug = _debug, flush = _flush;
+    static constexpr KYOPRO_BASE_UINT decimal_precision = _decimal_precision;
+
+    _typeIterator itr;
+
+    Printer() noexcept = default;
+    Printer(_typeIterator _itr) noexcept: itr(_itr) {}
+
+    void print(char _a) {
+      *itr = _a;
+      ++itr;
+    }
+    void print(const char* _a) {
+      for (; *_a; ++_a) print(*_a);
+    }
+    void print(const std::string& _a) {
+      for (auto _i: _a) print(_i);
+    }
+    void print(bool _a) {
+      print(static_cast<char>('0' + _a));
+    }
+    template<class _typeT, std::enable_if_t<std::is_arithmetic_v<_typeT> && !_has_print<_typeT>::value>* = nullptr>
+    void print(_typeT _a) {
+      if constexpr (std::is_signed_v<_typeT>) if (_a < 0) {
+        print('-');
+        _a = -_a;
+      }
+      std::uint_fast64_t _p = _a;
+      _a -= _p;
+      std::string _s;
+      do {
+        _s += '0' + _p % 10;
+        _p /= 10;
+      } while (_p > 0);
+      for (auto _i = _s.rbegin(); _i != _s.rend(); ++_i) print(*_i);
+      if constexpr (std::is_integral_v<_typeT>) return;
+      print('.');
+      for (int _i = 0; _i < static_cast<int>(_decimal_precision); ++_i) {
+        _a *= 10;
+        print('0' + static_cast<std::uint_fast64_t>(_a) % 10);
+      }
+    }
+    template<std::size_t _i = 0, class _typeT, std::enable_if_t<is_tuple_v<_typeT> && !_has_print<_typeT>::value>* = nullptr>
+    void print(const _typeT& _a) {
+      if constexpr (_debug && _i == 0) print('{');
+      if constexpr (std::tuple_size_v<_typeT> != 0) print(std::get<_i>(_a));
+      if constexpr (_i + 1 < std::tuple_size_v<_typeT>) {
+        if constexpr (_sep) _print_sep();
+        print<_i + 1>(_a);
+      } else if constexpr (_debug) print('}');
+    }
+    template<class _typeT, std::enable_if_t<is_iterable_v<_typeT> && !_has_print<_typeT>::value>* = nullptr>
+    void print(const _typeT& _a) {
+      if constexpr (_debug) print('{');
+      if (std::empty(_a)) return;
+      for (auto _i = std::begin(_a); ; ) {
+        print(*_i);
+        if (++_i != std::end(_a)) {
+          if constexpr (_sep) {
+            if constexpr (_debug) {
+              print(',');
+              print(' ');
+            } else if constexpr (std::is_arithmetic_v<std::decay_t<decltype(std::declval<_typeT>()[0])>>) print(' ');
+            else print('\n');
+          }
+        } else break;
+      }
+      if constexpr (_debug) print('}');
+    }
+    template<class _typeT, std::enable_if_t<_has_print<_typeT>::value>* = nullptr>
+    void print(const _typeT& _a) {
+      _a.print(*this);
+    }
+
+    template<bool _first = true>
+    void operator ()() {
+      if constexpr (_comment && _first) print('#');
+      if constexpr (_end) print('\n');
+      if constexpr (_flush) itr._flush();
+    }
+    template<bool _first = true, class _typeHead, class... _typeArgs>
+    void operator ()(_typeHead&& _head, _typeArgs&&... _args) {
+      if constexpr (_comment && _first) print('#');
+      if constexpr (_sep && !_first) _print_sep();
+      print(_head);
+      operator ()<false>(std::forward<_typeArgs>(_args)...);
+    }
+  };
+
+  Printer<Writer<>::iterator, false, false> print(output.begin()), eprint(error.begin());
+  Printer<Writer<>::iterator> println(output.begin()), eprintln(error.begin());
+  Printer<Writer<>::iterator, true, true, true, true> debug(output.begin()), edebug(error.begin());
+}
+#line 4 "aoj/PrimeNumber.test.cpp"
+
+int main() {
+  int t;
+  kyopro::scan(t);
+  int cnt = 0;
+  for (int i = 0; i < t; ++i) {
+    long long x;
+    kyopro::scan(x);
+    if (kyopro::is_prime(x)) ++cnt;
+  }
+  kyopro::println(cnt);
+}

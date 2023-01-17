@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+
+#define ll long long
+#define ld long double
+#define rep(i,a,b) for (int i = a; i < b; i++)
+
+using namespace std;
+
+int main(){
+    int a,b;
+    cin >> a >> b;
+    int d = a / b;
+    int r = a % b;
+    ld f = (ld)a /  (ld)b;
+    cout << setprecision(10);
+    cout << d <<" "<< r <<" "<< f << endl;
+    //system("pause");
+    return 0;
+}

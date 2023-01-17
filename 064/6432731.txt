@@ -1,0 +1,42 @@
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    long long n,n1,c=0;
+    std::cin >> n;
+        vector<int> v(n);
+for(long long i=0;i<n;i++)
+    {
+        cin>>v[i];
+    }
+    cin>>n1;
+        vector<int> v1(n1);
+for(long long i=0;i<n;i++)
+    {
+        cin>>v1[i];
+    }
+    
+    for(long long i=0;i<n;i++)
+    {
+           for(long long j=0;j<n1;j++)
+           {
+               if(v1[j]==v[i])
+               {
+                   c++;
+               }
+           }
+    }
+    if(c==n1)
+    {
+        std::cout << 1;
+    }
+    else
+    {
+        cout<<0;
+    }
+    
+    return 0;
+}

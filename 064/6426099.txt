@@ -1,0 +1,29 @@
+import java.util.Scanner;
+
+public class Main {
+	
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);				
+		boolean flag = true;
+		
+		while (flag) {
+//		  縦の長さ
+		  int H = sc.nextInt();
+//		  横の長さ
+		  int W = sc.nextInt();
+		
+		  if (H != 0 && W != 0) {
+		    for (int i = 0; i < H; i++) {
+			    for (int j = 0; j < W; j++) {
+				    System.out.print('#');
+			    }
+			    System.out.println();
+		    }
+		  System.out.println();
+		  } else {
+		  flag = false;
+		  }
+		}
+    }
+}

@@ -1,0 +1,42 @@
+def sfps(F,n,mod,a):
+  # F*(a[0][0] x^a[0][1] + ...) を n 次まで求める
+  G=[0]*(n+1)
+  Fn=len(F)
+  for i in range(n+1):
+    for j0,j1 in a:
+      if 0<=i-j1<Fn:
+        G[i]+=j0*F[i-j1]
+        G[i]%=mod
+  return G
+ 
+def inv_sfps(F,n,mod,a):
+  # F/(a[0][0] x^a[0][1] + ...) を n 次まで求める
+  # a[0][1], a[1][1], ... は昇順
+  Fn=len(F)
+  G=[0]*(n+1)
+  a0,a1=a[0]
+  inv0=pow(a0,mod-2,mod)
+  for i in range(n+1):
+    if i+a1<Fn:
+      G[i]=F[i+a1]*inv0%mod
+  for i in range(n+1):
+    for j0,j1 in a[1:]:
+      K=j0*inv0%mod
+      if i+j1-a1<n+1:
+        G[i+j1-a1]-=K*G[i]
+        G[i+j1-a1]%=mod
+  return G
+
+mod=998244353
+n,m=map(int, input().split())
+a=list(map(int,input().split()))
+
+now=[1]+[0]*(n+1)
+for i in a:
+  now=sfps(now,n+1,mod,[(1,0),(-1,i+1)])
+  now=inv_sfps(now,n+1,mod,[(1,0),(-1,1)])
+ans=now[n]%998244353
+for i in range(1,n+1):
+  ans*=i
+  ans%=998244353
+print(ans)

@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  int a, x;
+  cin >> a;
+  
+  int m = 100000;
+  int M = -100000;
+  int sum=0;
+  
+  for (int i = 0; i < a; i++){
+    cin >> x;
+    m = min(m, x);
+    M = max(M, x);
+    sum = sum + x;
+  }
+  
+  cout << m << " " << M << " " << sum << endl;
+}

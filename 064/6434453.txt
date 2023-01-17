@@ -1,0 +1,64 @@
+import sys
+import math
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def merge(a_list, tmp_list, left, mid, right):
+    n0 = mid - left
+    for i in range(n0):
+        tmp_list[i] = a_list[left + i]
+    tmp_list[n0] = math.inf
+
+    n0 += 1
+    n1 = right - mid
+    for i in range(n1):
+        tmp_list[n0 + i] = a_list[mid + i]
+    tmp_list[n0 + n1] = math.inf
+
+    i = 0
+    j = n0
+    num_comparisons = 0
+    for k in range(left, right):
+        if tmp_list[i] <= tmp_list[j]:
+            a_list[k] = tmp_list[i]
+            i += 1
+        else:
+            a_list[k] = tmp_list[j]
+            j += 1
+        num_comparisons += 1
+    return num_comparisons
+
+
+def merge_sort(a_list, tmp_list, left, right):
+    if left + 1 < right:
+        mid = (left + right) // 2
+        num_comparisons0 = merge_sort(a_list, tmp_list, left, mid)
+        num_comparisons1 = merge_sort(a_list, tmp_list, mid, right)
+        return merge(a_list, tmp_list, left, mid, right) + num_comparisons0 + num_comparisons1
+
+    return 0
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    a_list = list(map(int, f.readline().split()))
+    tmp_list = [0] * (n + 2)
+    num_comparisons = merge_sort(a_list, tmp_list, 0, n)
+    print(*a_list)
+    print(num_comparisons)
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

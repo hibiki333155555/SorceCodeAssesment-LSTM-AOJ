@@ -1,0 +1,136 @@
+#pragma GCC optimize("O3")
+#include<bits/stdc++.h> 
+using namespace std;
+using ll=long long;
+using P=pair<ll,ll>;
+template<class T> using V=vector<T>; 
+#define fi first
+#define se second
+#define all(v) (v).begin(),(v).end()
+const ll inf=(1e18);
+const ll mod=998244353;
+// const ll mod=1000000007;
+const vector<int> dy={-1,0,1,0},dx={0,-1,0,1};
+struct __INIT{__INIT(){cin.tie(0);ios::sync_with_stdio(false);cout<<fixed<<setprecision(15);}} __init;
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+template<class T>void debag(const vector<T> &a){cerr<<"debag :";for(auto v:a)cerr<<v<<" ";cerr<<"\n";}
+template<class T>void print(const vector<T> &a){for(auto v:a)cout<<v<<" ";cout<<"\n";}
+using ld=long double;
+const ld eps=1e-9;
+template<typename T>
+struct Matrix{
+      vector<vector<T>> mat;
+      Matrix(int n=1,int m=1,T x=T(0)):mat(n,vector<T>(m,x)){}
+      void init(int n,int m,T x=T(0)){
+            mat=vector<vector<T>>(n,vector<T>(m,x));
+      }
+      int size(){return mat.size();}
+      inline vector<T> &operator [](int i){return mat[i];}
+};
+template<typename T>
+int GaussJordan(Matrix<T> &a,bool is_extended=false){
+      int h=a.size(),w=a[0].size();
+      int rank=0;
+      for(int i=0;i<w;i++){
+            if(is_extended&&i==w-1)break;
+            int piv=-1;
+             T ma=eps;
+             for(int j=rank;j<h;j++){
+                   if(abs(a[j][i])>ma){
+                          ma=abs(a[j][i]);
+                          piv=j;
+                   }
+             }
+             if(piv==-1)continue;
+             swap(a[piv],a[rank]);
+             T d=a[rank][i];
+             for(int j=0;j<w;j++)a[rank][j]/=d;
+             for(int j=0;j<h;j++){
+                   if(j==rank||abs(a[j][i])<=eps)continue;
+                   T v=a[j][i];
+                   for(int k=0;k<w;k++){
+                         a[j][k]-=a[rank][k]*v;
+                   }
+             }
+             rank++;
+      }
+      return rank;
+}
+template<typename T>
+vector<T> linear_equation(Matrix<T> &a,vector<T> &b){
+      int h=a.size(),w=a[0].size();
+      Matrix<T> mat(h,w+1);
+      for(int i=0;i<h;i++){
+            for(int j=0;j<w;j++){
+                  mat[i][j]=a[i][j];
+            }
+            mat[i][w]=b[i];
+      }
+      int rank=GaussJordan(mat,true);
+      vector<T> res;
+      for(int i=rank;i<h;i++)if(abs(mat[i][w])>eps)return res;
+      res.assign(w,0);
+      for(int i=0;i<rank;i++)res[i]=mat[i][w];
+      return res;
+}
+void solve(){
+    int n,s,t;
+    cin>>n>>s>>t;
+    if(max({n,s,t})==0)exit(0);
+    s--;t--;
+    V<int> sign(n);
+    for(int i=0;i<n;i++)cin>>sign[i];
+    V<V<ll>> a(n,V<ll>(n));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>a[i][j];
+        }
+    }
+    V<ll> dp(n,inf);
+    dp[t]=0;
+    V<bool> used(n,false);
+    for(int i=0;i<n;i++){
+        int v=-1;
+        ll res=inf;
+        for(int j=0;j<n;j++){
+            if(used[j])continue;
+            if(chmin(res,dp[j])){
+                v=j;
+            }
+        }
+        if(v==-1)break;
+        for(int j=0;j<n;j++){
+            if(a[v][j]==0)continue;
+            chmin(dp[j],dp[v]+a[v][j]);
+        }
+        used[v]=true;
+    }
+    if(dp[s]>=inf){
+        cout<<"impossible"<<"\n";
+        return;
+    }
+    Matrix<long double> A(n,n);
+    V<long double> b(n);
+    for(int i=0;i<n;i++){
+        if(i==t)continue;
+        for(int j=0;j<n;j++){
+            if(a[i][j]==0)continue;
+            if(sign[i]==1&&dp[j]+a[j][i]!=dp[i])continue;
+            A[i][i]+=1.0;
+            A[i][j]-=1.0;
+            b[i]+=a[j][i];
+        }
+    }
+    A[t][t]=1.0;
+    b[t]=0;
+    auto res=linear_equation(A,b);
+    if(res.empty()){
+        cout<<"impossible"<<"\n";
+    }else{
+        cout<<res[s]<<"\n";
+    }
+}
+int main(){
+    while(1)solve();
+}

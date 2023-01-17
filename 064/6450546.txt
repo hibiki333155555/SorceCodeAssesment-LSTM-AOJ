@@ -1,0 +1,22 @@
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+ii = lambda: int(input())
+mi = lambda: map(int, input().split())
+li = lambda: list(mi())
+
+n = ii()
+
+rep = [input() for _ in range(n)]
+ans = [False for _ in range(n)]
+for i in range(n):
+    for j in range(n):
+        if i == j : continue
+        cnt = 0
+        for v in range(len(rep[0])):
+            if rep[i][v] != rep[j][v]:
+                cnt += 1
+        if cnt <= 1:
+            ans[i] = True
+
+print(sum(ans))
+

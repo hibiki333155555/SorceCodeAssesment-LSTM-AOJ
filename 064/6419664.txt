@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+
+const int win_point  = 3;
+const int drow_point = 1;
+
+enum index
+{
+  taro, hanako
+};
+
+int main()
+{
+    int n;
+    std::cin >> n;
+    
+    int point[2] = { 0 };
+    
+    for (int i = 0;i < n;++i) {
+        std::string han, tar;
+        
+        std::cin >> tar >> han;
+        if (tar > han)
+            point[taro] += win_point;
+        else if (tar < han)
+            point[hanako] += win_point;
+        else {
+            point[taro] += drow_point;
+            point[hanako] += drow_point;
+        }
+    }
+    
+    std::cout << point[taro] << ' ' << point[hanako] << std::endl;
+    return 0;
+}

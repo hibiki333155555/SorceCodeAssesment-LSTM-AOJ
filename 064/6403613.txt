@@ -1,0 +1,19 @@
+from collections import deque
+
+L=list(input().split())
+
+D=deque()
+ope=["+","-","*"]
+for i in L:
+    if i in ope:
+        a=D.popleft()
+        b=D.popleft()
+        if i=="+":
+            D.append(a+b)
+        elif i=="-":
+            D.append(a-b)
+        else:
+            D.append(a*b)
+    else:
+        D.append(int(i))
+print(D.popleft())

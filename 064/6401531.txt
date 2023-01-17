@@ -1,0 +1,21 @@
+#include<stdio.h>
+int main() {
+    int al[30] = {0};
+    char b[2000] = {0};
+    int i, j, n;
+    i = 0;
+    while (scanf("%c", &b[i]) != EOF) {
+        if (b[i] >= 'A' && b[i] <= 'Z') {
+          n =  b[i] - 'A';
+          al[n] += 1;
+    } else if (b[i] >= 'a' && b[i] <= 'z' )  {
+        n = b[i] - 'a';
+        al[n] += 1; }
+        i = i+1;
+    }
+  for (j=97; j <= 122; j++ ) {
+      n = j - 'a';
+      printf("%c : %d\n", j, al[n] );
+                }
+     return 0;
+    }

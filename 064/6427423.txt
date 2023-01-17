@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define ll long long
+#define fix(ans,x) fixed << setprecision(x)<<ans
+int main(){
+    vector<int> ymd(3),ans(3);
+    for(int i=0;i<3;i++)cin>>ymd[i];
+    for(int i=0;i<3;i++)cin>>ans[i];
+    if(ymd>ans)swap(ymd,ans);
+    if(ymd[1]==ans[1]&&ymd[2]==ans[2]){
+        cout<<ans[0]-ymd[0]<<endl;
+    }else if(ans[1]==ymd[1]){
+        if(ans[2]>ymd[2]){
+            cout<<ans[0]-ymd[0]+1<<endl;
+        }else{
+            cout<<ans[0]-ymd[0]<<endl;
+        }
+    }else if(ans[1]>ymd[1]){
+        cout<<ans[0]-ymd[0]+1<<endl;
+    }else{
+        cout<<ans[0]-ymd[0]<<endl;
+    }
+    return 0;
+}
+

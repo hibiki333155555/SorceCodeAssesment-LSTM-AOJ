@@ -1,0 +1,71 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <set>
+#include <queue>
+#include <map>
+#include <stdio.h>
+#include <iomanip>
+#include <stack>
+using namespace std;
+using ll = long long;
+
+
+
+
+int main()
+{
+	int n;
+	cin >> n;
+	vector<vector<int>> ren1(3, vector<int>(10));
+	vector<vector<int>> ren2(3, vector<int>(10));
+	vector<vector<int>> ren3(3, vector<int>(10));
+	vector<vector<int>> ren4(3, vector<int>(10));
+	for (int i = 0; i < n; i++) {
+		int b, f, r, v;
+		cin >> b >> f >> r >> v;
+		if (b == 1) {
+			ren1[f - 1][r - 1] = v;
+		}
+		else if (b == 2) {
+			ren2[f - 1][r - 1] = v;
+		}
+		else if (b == 3) {
+			ren3[f - 1][r - 1] = v;
+		}
+		else if (b == 4) {
+			ren4[f - 1][r - 1] = v;
+		}
+		
+	}
+
+	for (int j = 0; j < 3; j++) {
+		for (int r = 0; r < 10; r++) {
+			cout << " "<<ren1[j][r];
+		}
+		cout << endl;
+	}
+	cout << "###################" << endl;
+	for (int j = 0; j < 3; j++) {
+		for (int r = 0; r < 10; r++) {
+			cout << " " << ren2[j][r];
+		}
+		cout << endl;
+	}
+	cout << "###################" << endl;
+	for (int j = 0; j < 3; j++) {
+		for (int r = 0; r < 10; r++) {
+			cout << " " << ren3[j][r];
+		}
+		cout << endl;
+	}
+	cout << "###################" << endl;
+	for (int j = 0; j < 3; j++) {
+		for (int r = 0; r < 10; r++) {
+			cout << " " << ren4[j][r];
+		}
+		cout << endl;
+	}
+	return 0;
+}

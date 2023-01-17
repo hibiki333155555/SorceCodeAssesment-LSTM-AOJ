@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+
+void dumpArray(std::vector<int> &vec){
+    for (size_t i = 0; i < vec.size(); ++i){
+        std::cout << (i == 0 ? "" : " ") << vec[i];
+    }
+    std::cout << std::endl;
+}
+
+int insertSort(std::vector<int> &vec){
+    // for j = 2 to vec.lenght();
+    for (size_t j = 1; j <vec.size(); ++j){
+        int key = vec[j];
+        int i = j - 1;
+        while( i >= 0 && vec[i] > key{
+            vec[i+1] = vec[i];
+            --i;
+        }
+        vec[i+1] = key;
+    }
+    dumpArray(vec);
+}
+int main(void){
+    int amount, number = 0;
+    std::cin >> amount;
+    std::vector<int>vec;
+    vec.reserve(amount);
+    for (int i = 0; i < amount; ++i){
+        std::cin >> number;
+        vec.emplace_back(number);
+    }
+    dumpArray();
+    insertSort(vec);
+    
+}

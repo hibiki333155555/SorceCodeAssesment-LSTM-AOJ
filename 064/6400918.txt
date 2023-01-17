@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int a,b;
+char op;
+
+int main(){
+  while(true){
+    cin >> a >> op >> b;
+    if (op == '+'){
+      cout << a + b << endl;
+      continue;
+    }
+    if (op == '-'){
+cout << a - b << endl;
+      continue;
+    }
+    if (op == '*'){
+cout << a * b << endl;
+      continue;
+    }
+    if (op == '/'){
+cout << a / b << endl;
+      continue;
+    }
+    if (op == '?'){
+      return 0;
+    }
+}
+}
+

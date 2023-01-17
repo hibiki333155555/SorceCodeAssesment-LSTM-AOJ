@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <algorithm>
+
+using ll = long long int;
+using P = std::pair<ll, ll>;
+const int INF = (1<<30);
+const ll INFLL = (1LL<<60);
+const ll MOD = (ll)(1e9+7);
+
+#define l_ength size
+
+void mul_mod(ll& a, ll b){
+	a *= b;
+	a %= MOD;
+}
+
+void add_mod(ll& a, ll b){
+	a = (a<MOD)?a:(a-MOD);
+	b = (b<MOD)?b:(b-MOD);
+	a += b;
+	a = (a<MOD)?a:(a-MOD);
+}
+
+ll x[33],y[33];
+std::vector<P> v,u;
+std::priority_queue<P> pq;
+
+/*
+void init(int i=0, int l=0, int r=segsize){
+	if(r-l>1){
+		init(i*2+1,l,(l+r)/2);
+		init(i*2+2,(l+r)/2,r);
+		segvalue[i] = std::max(segvalue[i*2+1],segvalue[i*2+2]);
+		segrange[i] = P(segrange[i*2+1].first,segrange[i*2+2].second);
+	}else{
+		segvalue[i] = v[l].second;
+		segrange[i] = P(v[l].first,v[l].first);
+	}
+}
+
+ll query(ll a, ll b, int i=0, int l=0, int r=segsize){
+	if(b<segrange[i].first || segrange[i].second<a){
+		return -INFLL;
+	}
+	if(a <= segrange[i].first && segrange[i].second <= b){
+		return segvalue[i];
+	}
+	return std::max(query(a,b,i*2+1,l,(l+r)/2),query(a,b,i*2+2,(l+r)/2,r));
+}
+*/
+
+void solve(int i, int n, bool flag, ll vl=0ll, ll sc=0ll){
+	if(i == n){
+		if(flag){
+			u.push_back(P(vl,sc));
+			// ans = std::max(ans,sc+query(-d-vl,d-vl));
+		}else{
+			v.push_back(P(vl,sc));
+		}
+	}else{
+		// Annaが取る
+		solve(i+1,n,flag,vl-x[i],sc-y[i]);
+		// Brunoが取る
+		solve(i+1,n,flag,vl+x[i],sc+y[i]);
+		// 誰も取らない
+		solve(i+1,n,flag,vl,sc);
+	}
+}
+
+int main(void){
+	int n,m,i,j=0;
+	ll d,ans=0ll;
+	v.reserve(14348907);
+	u.reserve(14348907);
+	scanf("%d%lld",&n,&d);
+	m = n/2;
+	for(i=0; i<n; ++i){
+		scanf("%lld%lld",&x[i],&y[i]);
+	}
+	solve(m,n,false);
+	solve(0,m,true);
+	n = v.l_ength(); m = u.l_ength();
+	std::sort(v.begin(),v.end(),std::greater<P>());
+	std::sort(u.begin(),u.end());
+	// std::cout << n << " " << m << std::endl;
+	for(i=0; i<n; ++i){
+		while(j<m && u[j].first <= d-v[i].first){
+			// std::cout << i << " " << j << std::endl;
+			pq.push(P(u[j].second,u[j].first)); ++j;
+		}
+		while(!pq.empty()){
+			if(pq.top().second < (-d-v[i].first)){
+				pq.pop();
+				continue;
+			}
+			ans = std::max(ans,pq.top().first+v[i].second);
+			break;
+		}
+	}
+	/*
+	segsize = v.l_ength();
+	init();
+	// solve(0,m,true);
+	*/
+	printf("%lld\n",ans);
+	return 0;
+}
+

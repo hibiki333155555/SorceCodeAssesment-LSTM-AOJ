@@ -1,0 +1,10 @@
+N = int(input())
+
+num = 0
+for i in range(10**5):
+  if num==0:
+    print(' ', end='')
+  num += 3
+  if num<=N:
+    print(num, end=' ')
+  

@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int a= sc.nextInt();
+        int b= sc.nextInt();
+        int d=a/b;
+        int r=a%b;
+        double f=a/(double)b;
+        
+        public static String format(double d){
+            if(d == (int) d){
+            return String.format("%d",(int)d);
+                
+            }
+            else{
+            return String.format("%s",d);
+            }
+            
+        }
+        
+        System.out.println(d+" "+r+" "+f));
+        
+    }
+}
+

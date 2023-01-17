@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int n;
+bool S[13] = { false };
+bool H[13] = { false };
+bool C[13] = { false };
+bool D[13] = { false };
+
+int main(){
+  cin >> n;
+  for (int i = 0; i < n; i++){
+    char c;
+    int j;
+    cin >> c >> j;
+    if (c == 'S') S[j - 1] = true;
+    if (c == 'H') H[j - 1] = true;
+    if (c == 'C') C[j - 1] = true;
+    if (c == 'D') D[j - 1] = true;
+  }
+
+  for (int i = 0; i < 13; i++){
+    if (!S[i]) cout << "S " << i + 1 << endl;
+  }
+  for (int i = 0; i < 13; i++){
+    if (!H[i]) cout << "H " << i + 1 << endl;
+  }
+  for (int i = 0; i < 13; i++){
+    if (!C[i]) cout << "C " << i + 1 << endl;
+  }
+  for (int i = 0; i < 13; i++){
+    if (!D[i]) cout << "D " << i + 1 << endl;
+  }
+}
+

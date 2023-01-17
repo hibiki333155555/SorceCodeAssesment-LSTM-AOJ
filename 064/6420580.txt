@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    int N, L;
+    cin >> L >> N;
+    int ind = -1;
+    vector<int> a(N);
+    for(int i = 0; i < N; i++) cin >> a[i];
+    for(int i = 0; i < N; i++){
+        if(L <= a[i]){
+            cout << i + 1 << endl;
+            return 0;
+        }
+        L -= a[i];
+    }
+    cout << "No" << endl; 
+}

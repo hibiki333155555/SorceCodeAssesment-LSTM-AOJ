@@ -1,0 +1,11 @@
+def polygon_area(p):
+    return abs(sum(p[i][0] * p[i - 1][1]
+                   - p[i][1] * p[i - 1][0] for i in range(len(p)))) / 2
+
+n = int(input())
+while n > 0:
+    p = [tuple(map(int, input().split())) for _ in range(n)]
+    print(polygon_area(p))
+    _ = input()
+    n = int(input())
+

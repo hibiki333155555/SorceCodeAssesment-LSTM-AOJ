@@ -1,0 +1,29 @@
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <numeric>
+#include <string>
+using namespace std;
+
+
+int main()
+{
+    string str;
+    int sum;
+    while(true)
+    {
+        getline(cin, str);
+        if(str.compare("0") == 0)
+            break;
+        sum = 0;
+        for(auto e:str)
+            sum += e;
+        sum -= '0'*str.length();
+        cout << sum << endl;
+    }
+    
+
+
+    return 0;
+}

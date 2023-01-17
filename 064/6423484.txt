@@ -1,0 +1,61 @@
+#include <iostream>
+#include <list>
+#include <string>
+
+//次は処理をそれぞれ関数にする
+void insert(int input)
+{
+}
+
+int main()
+{
+    std::list<int> L;
+    int n;
+    std::cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        std::string order;
+        std::cin >> order;
+
+        int key;
+        if (order == "insert") // insertの処理　先頭にキーを追加
+        {
+            std::cin >> key;
+            L.push_front(key);
+        }
+        else if (order == "delete") // deleteの処理 先頭に近い1要素のみ消す キーが無かったら無視
+        {
+            std::cin >> key;
+
+            for (auto it = L.begin(); it != L.end(); it++)
+            {
+                if (*it == key) //先頭から要素を探す
+                {
+                    L.erase(it); // 1つだけ消す
+                    break;
+                }
+            }
+            //要素が無かったら何もしない
+        }
+        else if (order == "deleteFirst") // deletefirstの処理　先頭を削除
+        {
+            L.pop_front();
+        }
+        else if (order == "deleteLast") // deletelastの処理　末尾を削除
+        {
+            L.pop_back();
+        }
+    }
+
+    for (auto it = L.begin(); it != L.end(); it++) // listの中身を表示する
+    {
+        if (it != L.begin())
+        {
+            std::cout << " ";
+        }
+        std::cout << *it;
+    }
+    std::cout << std::endl;
+    return 0;
+}
+

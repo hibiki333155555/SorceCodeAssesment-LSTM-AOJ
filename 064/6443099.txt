@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+typedef long long ll;
+using namespace std;
+
+int main() {
+    // cin.tie(0);
+    // ios_base::sync_with_stdio(false);
+
+    vector<int> A(4);
+    while (true) {
+        rep(i, 4) cin >> A[i];
+        sort(A.rbegin(), A.rend());
+        if (A[0] == 0)
+            break;
+
+        int cnt = 0;
+        while (cnt != 3) {
+            int mi = 1e9, id = -1;
+            rep(i, 4) {
+                if (A[i] <= 0) continue;
+                if (A[i] < mi) {
+                    mi = A[i];
+                    id = i;
+                }
+            }
+
+            rep(i, 4) {
+                if (i == id) continue;
+                if (A[i] > 0) A[i] -= mi;
+            }
+
+            cnt = 0;
+            rep(i, 4) {
+                if (A[i] == 0)
+                    cnt++;
+            }
+        }
+
+        rep(i, 4) {
+            if (A[i] > 0)
+                cout << A[i] << "\n";
+        }
+    }
+
+    return 0;
+}
+

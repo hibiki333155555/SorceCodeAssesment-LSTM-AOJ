@@ -1,0 +1,6 @@
+a,op,b = input().split()
+
+while True:
+    if op == "?":
+        break
+    print("{} {} {}".format(a,op,b))

@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define repl(i, l, r) for (int i = (l); i < (int)(r); ++i)
+#define rep(i, n) repl(i, 0, n)
+#define CST(x) cout << fixed << setprecision(x)
+#define all(x) (x).begin(), (x).end()
+#define sz(x) (int)(x).size()
+using ll = long long;
+constexpr ll MOD = 1000000007;
+constexpr int inf = 1e9 + 10;
+constexpr ll INF = (ll)4e18 + 10;
+template <typename T>
+using MaxHeap = priority_queue<T>;
+template <typename T>
+using MinHeap = priority_queue<T, vector<T>, greater<T>>;
+template <typename T>
+inline bool chmax(T &a, T b) {
+    return ((a < b) ? (a = b, true) : (false));
+}
+template <typename T>
+inline bool chmin(T &a, T b) {
+    return ((a > b) ? (a = b, true) : (false));
+}
+template <typename T>
+inline void yn(const T &a) {
+    ((a) ? (cout << "Yes" << endl) : (cout << "No" << endl));
+}
+template <typename T>
+inline void YN(const T &a) {
+    ((a) ? (cout << "YES" << endl) : (cout << "NO" << endl));
+}
+int main() {
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    ios::sync_with_stdio(false);
+
+    int a, b, c, d, e, f;
+    cin >> a >> b >> c >> d >> e >> f;
+    d -= a, e -= b, f -= c;
+
+    int up, down;
+    if ((a + b + c) % 2 == 0) {  //上向き
+        if (d + e + f < 0 or 1 < d + e + f) {
+            yn(0);
+            return 0;
+        }
+        if ((d + e + f) % 4 == 0) {  // down=up
+            up = (abs(d) + abs(e) + abs(f)) / 2;
+            down = up;
+        } else {  // down=up-1
+            int m = abs(d) + abs(e) + abs(f);
+            m = min({abs(d + 1) + abs(e - 1) + abs(f - 1), abs(d - 1) + abs(e + 1) + abs(f - 1),
+                     abs(d - 1) + abs(e - 1) + abs(f + 1)});
+            if (m % 4) {
+                yn(0);
+                return 0;
+            }
+            up = m / 2 + 1;
+            down = up - 1;
+        }
+    } else {  //下向き
+        if (d + e + f < -1 or 0 < d + e + f) {
+            yn(0);
+            return 0;
+        }
+        if ((d + e + f) % 4 == 0) {  // down=up
+            up = (abs(d) + abs(e) + abs(f)) / 2;
+            down = up;
+        } else {  // down=up+1
+            int m = abs(d) + abs(e) + abs(f);
+            m = min({abs(d + 1) + abs(e - 1) + abs(f - 1), abs(d - 1) + abs(e + 1) + abs(f - 1),
+                     abs(d - 1) + abs(e - 1) + abs(f + 1)});
+            if (m % 4) {
+                yn(0);
+                return 0;
+            }
+            up = m / 2;
+            down = up + 1;
+        }
+    }
+
+    for (int i = 0; i <= up; ++i) {
+        if (d < -i) continue;
+        int t = up - (d - i - i);
+        if (t < -down or down < t or (down + t) % 2) continue;
+        int j = (down + t) / 2;
+        int z = e - i + j, cnt = up - i + down - j;
+        if (z < -cnt or cnt < z or (cnt + z) % 2) continue;
+        int w = (cnt + z) / 2;
+        if (f == i - j - w + (cnt - w)) {
+            yn(1);
+            return 0;
+        }
+    }
+    yn(0);
+
+    return 0;
+}

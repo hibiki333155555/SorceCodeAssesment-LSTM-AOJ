@@ -1,0 +1,21 @@
+#include<stdio.h>
+int main()
+{
+    int a,b,c,d;
+    scanf("%d %d %d",&a,&b,&c);
+    d=0;
+    int i=a;
+    while(i<=b)
+    {
+        if(c%i==0)
+        {
+            d++;
+        }
+        i++;
+    
+    }
+    printf("%d\n",d);
+    
+    return 0;
+
+}

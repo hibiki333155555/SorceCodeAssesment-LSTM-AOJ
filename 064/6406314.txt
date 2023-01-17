@@ -1,0 +1,8 @@
+#include<iostream>
+
+int main(void){
+    int La,Lo;
+    std::cin>>La>>Lo;
+    std::cout<<La/3600<<' '<<Lo/3600<<std::endl;
+    return 0;
+}

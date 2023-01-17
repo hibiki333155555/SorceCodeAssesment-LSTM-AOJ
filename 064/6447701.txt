@@ -1,0 +1,15 @@
+#include <stdio.h>
+int main (void)
+{
+    int a;
+    scanf_s("%d", &a);
+    printf("%d", a);
+    
+    int b;
+    scanf_s("%d", &b);
+    printf("%d", b);
+    
+    printf("%d, %d", a*b, 2*(a+b));
+    
+    return 0;
+}

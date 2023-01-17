@@ -1,0 +1,16 @@
+a,b = map(int, input().split())
+a = bin(a)[2:]
+b = bin(b)[2:]
+la, lb = len(a), len(b)
+
+if la < lb:
+    a, b, la, lb = b, a, lb, la
+
+b = "0" * (la-lb) + b
+
+for i in range(la):
+    if a[i] != b[i]:
+        print(i)
+        break
+else:
+    print(la)

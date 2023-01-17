@@ -1,0 +1,30 @@
+import java.util.Scanner;
+import java.util.Arrays;
+public static void main(String[] args){
+    Scanner scan = new Scanner(System.in);
+    int N = scan.nextInt();
+    int Array[];
+    Array = new int[N];
+    Arrays.fill(Array, 0);
+    
+    for(int i=0; i<N; i++){
+        Arrary[i] = scan.nextInt();
+    }
+    insertionSort(Array, N);
+}
+
+public void insertionSort(int[] Array, int N){
+    for(int i=1; i<N-1; i++){
+        int v = Array[i];
+        int j = i-1;
+        while(j>=0 && Array[j]>v){
+            Array[j+1] = Array[j];
+            j--;
+            Array[j+1] = v;
+        }
+    }
+    for(int i=0; i<N; i++){
+        System.out.print(Array[i] + " ");
+    }
+    
+}

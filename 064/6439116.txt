@@ -1,0 +1,9 @@
+r = int(input())
+
+pi = 3.141592653589
+
+area = r * r * pi
+
+circumference = (r + r) * pi
+
+print(area, circumference)

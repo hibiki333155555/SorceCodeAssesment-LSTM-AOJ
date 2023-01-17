@@ -1,0 +1,37 @@
+V, E, r = map(int, input().split())
+graph = [[] for _ in range(V)]
+for _ in range(E):
+    s, t, d = map(int, input().split())
+    graph[s].append((t, d))
+
+def bellman_ford(s):
+    INF = 10**15
+    dist = [INF] * V
+    dist[s] = 0
+    
+    for i in range(V):
+        update = False
+        for now in range(V):
+            # nowに到達できてなかったら, 更新しない
+            if dist[now] == INF: continue
+            for to, cost in graph[now]:
+                if dist[to] > dist[now] + cost:
+                    dist[to] = dist[now] + cost
+                    update = True
+
+        # 更新しなかったら終了
+        if not update:
+            break
+        
+        # V回目に更新が行われていたら, 負閉路が存在
+        if i == V - 1:
+            return False
+    
+    return dist
+
+dist = bellman_ford(r)
+if not d:
+    print("NEGATIVE CYCLE")
+else:
+    for d in dist:
+        print(d)

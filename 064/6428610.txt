@@ -1,0 +1,15 @@
+n,m = input().split()
+n = int(n)
+m = int(m)
+num_a = []
+num_b = []
+ans = []
+for i in range(n):
+    num_a = [[int(x) for x in input().split()]]
+for i in range(m):
+    num_b = [int(x) for x in input().split()]
+for i in range(n):
+    for j in range(m):
+        ans.append(num_b[i]*num_a[i][0])
+    print(sum(ans))
+    ans = []

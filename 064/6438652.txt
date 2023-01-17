@@ -1,0 +1,6 @@
+num_line=1
+while n=int(input())!=0:
+    print("Case",num_line":",n)
+    num_line=num_line+1
+else:
+    break

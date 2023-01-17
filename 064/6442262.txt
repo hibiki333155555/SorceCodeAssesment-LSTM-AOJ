@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <array>
+#include <algorithm>
+#include <math.h>
+#include <iomanip>
+#include <map>
+#include <queue>
+#include <climits>
+
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+typedef unsigned int ui;
+
+ull gcd (ull a, ull b) {
+  if(b == 0) return a;
+
+  return gcd(b, a % b);
+}
+
+ull lcm (ull a, ull b){
+  // バッファ溢れを抑えるために順番大事！！！
+  return a / gcd(a, b) * b;
+}
+
+ull calcDigitLength(ull n, int count) {
+  if(n < 10) return count + 1;
+
+  return calcDigitLength(n/10, count+1);
+}
+
+const ll MAX_N =1e18;
+
+vector<int> vec;
+vector<vector<int>> henn;
+vector<bool> checkUnfinished;
+vector<int> resVec;
+
+void bfs (int u) {
+  resVec.push_back(u);
+  checkUnfinished[u] = false;
+  vector<int> hens =  henn[u];
+
+  for(int i=0; i< hens.size(); i++) {
+    int next_p = hens[i];
+    vec[next_p]--;
+
+    if(vec[next_p] == 0 && checkUnfinished[u]) {
+      resVec.push_back(u);
+      checkUnfinished[u] = false;
+    }
+  }
+}
+
+int main () {
+  int v, e, s, t;
+  cin >> v >> e;
+  for(int i=0; i<v; i++) {
+    vec.push_back(0);
+    checkUnfinished.push_back(true);
+    vector<int> tmp;
+    henn.push_back(tmp);
+  }
+  for(int i=0; i<e; i++) {
+    cin >> s >> t;
+    vec[t]++;
+    henn[s].push_back(t);
+  }
+  while(resVec.size() < v) {
+    for(int i = 0; i < v; i++) {
+      if(checkUnfinished[i] && vec[i] == 0) bfs(i);
+    }
+  }
+
+  for(int i=0; i<v; i++) {
+    cout << resVec[i] << endl;
+  }
+}
+

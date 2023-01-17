@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+namespace geometry2d{
+    const double EPS = 1e-10;
+
+    int sgn(const double a){
+        return (a < -EPS ? -1 : (a > EPS ? +1 : 0));
+    }
+
+    struct Point{
+        double x, y;
+        Point() = default;
+        Point(double _x, double _y) : x(_x), y(_y){}
+
+        double length() const {
+            return std::sqrt(x*x + y*y);
+        }
+
+        double lengthSquare() const {
+            return x*x + y*y;
+        }
+
+        double dot(const Point &other) const {
+            return this->x*other.x + this->y*other.y;
+        }
+
+        double cross(const Point &other) const {
+            return x*other.y - y*other.x;
+        }
+
+        double distanceFrom(const Point &other) const {
+            return std::sqrt((this->x-other.x)*(this->x-other.x)
+            + (this->y*other.y)*(this->y*other.y));
+        }
+
+        Point normalized() const {
+            return {x/length(), y/length()};
+        }
+
+        Point normalUnitVector() const {
+            return {-normalized().y, normalized().x};
+        }
+
+        bool isZero() const {
+            return x == 0.0 && y == 0.0;
+        }
+    };
+}
+
+int main(){
+    using namespace geometry2d;
+    int q; cin >> q;
+    while(q--){
+        int x0, y0, x1, y1;
+        cin >> x0 >> y0 >> x1 >> y1;
+        Point p1(x1-x0, y1-y0);
+        int x2, y2, x3, y3;
+        cin >> x2 >> y2 >> x3 >> y3;
+        Point p2(x3-x2, y3-y2);
+        if(p1.dot(p2) == 0.0) cout << 1;
+        else if(p1.cross(p2) == 0.0) cout << 2;
+        else cout << 0;
+        cout << '\n';
+    }
+    return 0;
+}

@@ -1,0 +1,26 @@
+#include <stdio.h>
+int main()
+{
+    for (int i = 1;; i++)
+    {
+        int H, W;
+        scanf("%d %d", &H, &W);
+
+        if (H == 0 && W == 0)
+            break;
+
+        for (int j = 1; j <= H; j++)
+        {
+
+            for (int k = 1; k <= W; k++)
+            {
+                printf("#");
+            }
+            printf("\n");
+        }
+
+        printf("\n");
+    }
+
+    return 0;
+}

@@ -1,0 +1,73 @@
+// 2021hot03-D.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+//
+
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+#define PI acos(-1)
+#define sin60 sin(60 * PI/180)
+
+typedef struct point {
+	double x, y;
+	point(double x, double y) {
+		this->x = x;
+		this->y = y;
+	}
+}point;
+
+int main()
+{
+	//cout << sin60 << endl;
+	int n;
+	cin >> n;
+	point p1(0, 0), p2(100, 0);
+	vector<point> res;
+	res.push_back(p1);
+	res.push_back(p2);
+	//for (int i = 0; i < 4; i++) {
+	//	res.push_back(point(-1, -1));
+	//}
+	for (int i = 1; i <= n; i++) {
+		for (int j = 0; j < res.size() - 1; j += 4) {
+			point a = res[j], b = res[j + 1];
+			double dx = abs(b.x - a.x) / 3, dy = abs(b.y - a.y) / 3;
+			vector<point> temp;
+			if (a.x < b.x && a.y < b.y) {//情形一
+				temp.push_back(point(a.x + dx, a.y + dy));
+				temp.push_back(point(a.x, a.y + 2 * dy));
+				temp.push_back(point(b.x - dx, b.y - dy));
+			}
+			else if (a.x > b.x && a.y > b.y) {//情形一的另一个方向
+				temp.push_back(point(a.x - dx, a.y - dy));
+				temp.push_back(point(a.x, a.y - 2 * dy));
+				temp.push_back(point(b.x + dx, b.y + dy));
+			}
+			else if (a.x < b.x && a.y > b.y) {//情形二
+				temp.push_back(point(a.x + dx, a.y - dy));
+				temp.push_back(point(b.x, a.y - dy));
+				temp.push_back(point(b.x - dx, b.y + dy));
+			}
+			else if (a.x > b.x && a.y < b.y) {//情形二的另一个方向
+				temp.push_back(point(a.x - dx, a.y + dy));
+				temp.push_back(point(b.x, a.y + dy));
+				temp.push_back(point(b.x + dx, a.y - dy));
+			}
+			else if (a.y == b.y && a.x < b.x) {//情形三
+				temp.push_back(point(a.x + dx, a.y));
+				temp.push_back(point((a.x + b.x) / 2, a.y + sin60 * dx));
+				temp.push_back(point(b.x - dx, a.y));
+			}
+			else if (a.y == b.y && a.x > b.x) {//情形三的另一个方向
+				temp.push_back(point(a.x - dx, a.y));
+				temp.push_back(point((a.x + b.x) / 2, a.y - sin60 * dx));
+				temp.push_back(point(b.x + dx, a.y));
+			}
+			res.insert(res.begin() + j + 1, temp.begin(), temp.end());
+		}
+	}
+	for (int i = 0; i < res.size(); i++) {
+		printf("%0.8lf %0.8lf\n", res[i].x, res[i].y);
+	}
+}
+

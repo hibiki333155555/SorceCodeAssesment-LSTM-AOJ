@@ -1,0 +1,78 @@
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+struct Vec {
+  double x, y;
+  double value;
+  friend Vec operator+(Vec lhs, const Vec& rhs) {
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+    return lhs;
+  };
+  friend Vec operator-(Vec lhs, const Vec& rhs) {
+    lhs.x -= rhs.x;
+    lhs.y -= rhs.y;
+    return lhs;
+  };
+  Vec& operator+=(const Vec& rhs) {
+    x += rhs.x;
+    y += rhs.y;
+    return *this;
+  };
+  Vec& operator-=(const Vec& rhs) {
+    x -= rhs.x;
+    y -= rhs.y;
+    return *this;
+  };
+  friend bool operator<(const Vec& lhs, const Vec& rhs) {
+    return lhs.value < rhs.value;
+  };
+  double cross(const Vec& rhs) {
+    return x*rhs.y - y*rhs.x;
+  };
+  double angle(const Vec& rhs) {
+    double dot = x*rhs.x + y*rhs.y;
+    double lhs_len = std::sqrt(x*x + y*y);
+    double rhs_len = std::sqrt(rhs.x*rhs.x + rhs.y*rhs.y);
+    return std::acos(dot / lhs_len / rhs_len);
+  }
+  double dist(const Vec& rhs) {
+    return std::sqrt((x-rhs.x)*(x-rhs.x) + (y-rhs.y)*(y-rhs.y));
+  }
+};
+
+int main() {
+  int n; std::cin >> n;
+  std::vector<Vec> vecs(n);
+  for (int i=0; i<n; i++) std::cin >> vecs[i].x >> vecs[i].y;
+  
+  for (int i=0; i<n; i++) vecs[i].value = (vecs[0]-vecs[n-1]).cross(vecs[i]-vecs[0]);
+  auto max_elem = std::max_element(vecs.begin(), vecs.end());
+  
+  double max_dist = 0.0;
+  int current = 0;
+  double cur_rem_angle = (vecs[0]-vecs[n-1]).angle(vecs[1]-vecs[0]);
+  int opposite = std::distance(vecs.begin(), max_elem);
+  double opp_rem_angle = (vecs[n-1]-vecs[0]).angle(vecs[(opposite+1)%n]-vecs[opposite]);
+  while(current < n) {
+    double dist = vecs[opposite].dist(vecs[current]);
+    if (max_dist < dist) max_dist = dist;
+    if (cur_rem_angle < opp_rem_angle) {
+      opp_rem_angle -= cur_rem_angle;
+      current++;
+      cur_rem_angle = (vecs[current]-vecs[(n+(current-1)%n)%n]).angle(
+        vecs[(current+1)%n]-vecs[current]);
+    } else {
+      cur_rem_angle -= opp_rem_angle;
+      opposite++;
+      opposite %= n;
+      opp_rem_angle = (vecs[opposite]-vecs[(n+(opposite-1)%n)%n]).angle(
+        vecs[(opposite+1)%n]-vecs[opposite]);
+    }
+  }
+  std::cout << std::fixed << std::setprecision(7) << max_dist << std::endl;
+}
+

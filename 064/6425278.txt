@@ -1,0 +1,19 @@
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.Scanner;
+
+public class Main {
+	
+	@SuppressWarnings("resource")
+	public static void main(String[] args){
+		Scanner sc = new Scanner(System.in);				
+		BigDecimal r = sc.nextBigDecimal();
+		BigDecimal r2 = new BigDecimal(3.141592);
+		BigDecimal r3 = r.add(r);
+		BigDecimal bd = r.multiply(r);
+		BigDecimal bd1 = bd.multiply(r2 , MathContext.DECIMAL32);
+		BigDecimal bd2 = r3.multiply(r2 , MathContext.DECIMAL32);
+		
+		System.out.println(bd1 + " " + bd2);
+    }
+}

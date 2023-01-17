@@ -1,0 +1,5 @@
+d=int(input())
+print d/3600,
+print (d%3600)/60,
+print d%60
+

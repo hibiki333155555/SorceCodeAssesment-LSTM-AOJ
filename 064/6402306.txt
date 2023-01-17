@@ -1,0 +1,110 @@
+import sys
+
+# sys.setrecursionlimit(200005)
+int1 = lambda x: int(x)-1
+pDB = lambda *x: print(*x, end="\n", file=sys.stderr)
+p2D = lambda x: print(*x, sep="\n", end="\n\n", file=sys.stderr)
+def II(): return int(sys.stdin.readline())
+def LI(): return list(map(int, sys.stdin.readline().split()))
+def LLI(rows_number): return [LI() for _ in range(rows_number)]
+def LI1(): return list(map(int1, sys.stdin.readline().split()))
+def LLI1(rows_number): return [LI1() for _ in range(rows_number)]
+def SI(): return sys.stdin.readline().rstrip()
+dij = [(0, 1), (-1, 0), (0, -1), (1, 0)]
+# dij = [(0, 1), (-1, 0), (0, -1), (1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+inf = (1 << 63)-1
+# inf = (1 << 31)-1
+# md = 10**9+7
+md = 998244353
+
+class Sieve:
+    def __init__(self, n):
+        self.plist = [2]  # n以下の素数のリスト
+        min_prime_factor = [2, 0]*(n//2+1)
+        for x in range(3, n+1, 2):
+            if min_prime_factor[x] == 0:
+                min_prime_factor[x] = x
+                self.plist.append(x)
+                if x**2 > n: continue
+                for y in range(x**2, n+1, 2*x):
+                    if min_prime_factor[y] == 0:
+                        min_prime_factor[y] = x
+        self.min_prime_factor = min_prime_factor
+
+    def isprime(self, x):
+        return self.min_prime_factor[x] == x
+
+    # これが素因数分解(prime factorization)
+    def pfct(self, x):
+        pp, ee = [], []
+        while x > 1:
+            mpf = self.min_prime_factor[x]
+            if pp and mpf == pp[-1]:
+                ee[-1] += 1
+            else:
+                pp.append(mpf)
+                ee.append(1)
+            x //= mpf
+        return pp
+
+class Bit:
+    def __init__(self, op, e, n):
+        self.op = op
+        self.e = e
+        self.n = n+1
+        self.table = [e() for _ in range(self.n)]
+
+    def update(self, i, x):
+        i += 1
+        while i < self.n:
+            self.table[i] = self.op(self.table[i], x)
+            i += i & -i
+
+    # [0,i]
+    def prod(self, i):
+        i += 1
+        res = self.e()
+        while i > 0:
+            res = self.op(res, self.table[i])
+            i -= i & -i
+        return res
+
+def op(a, b):
+    return a*b%md
+
+e = lambda: 1
+
+from collections import defaultdict
+
+sv = Sieve(10**6)
+
+n = II()
+aa = LI()
+q = II()
+lr = LLI1(q)
+
+cm = [1]
+for a in aa: cm.append(cm[-1]*a%md)
+inv = [1]*(n+1)
+inv[-1] = pow(cm[-1], md-2, md)
+for i in range(n)[::-1]: inv[i] = inv[i+1]*aa[i]%md
+
+bit = Bit(op, e, n)
+ans = [0]*q
+i = 0
+ptoj = defaultdict(lambda: -1)
+for qi, (l, r) in sorted(enumerate(lr), key=lambda x: x[1][1]):
+    cur = defaultdict(int)
+    while i < n and i <= r:
+        pp = sv.pfct(aa[i])
+        for p in pp: cur[p] = i
+        i += 1
+    for p, j in cur.items():
+        k = ptoj[p]
+        if k != -1: bit.update(k, p*pow(p-1, md-2, md)%md)
+        bit.update(j, (p-1)*pow(p, md-2, md)%md)
+        ptoj[p] = j
+    ans[qi] = cm[r+1]*inv[l]%md*bit.prod(r)%md*pow(bit.prod(l-1), md-2, md)%md
+
+print(*ans, sep="\n")
+

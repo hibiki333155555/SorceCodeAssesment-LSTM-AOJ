@@ -1,0 +1,10 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int main(){
+    int a,b;cin >> a >> b ;
+    double f1,f2;
+    f1=a/b;f2=1.0*a/b;
+    cout << f1 << ' ' << a%b << ' ';
+    printf("%.12lf\n", f2);
+}

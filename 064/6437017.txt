@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define fol(i,s,g) for(int i=(int)(s); i<(int)(g); i++)
+#define fix(ans,k) fixed << setprecision(k) << (double)ans
+
+int main(){
+    string s;
+    while(cin>>s&&s!="#"){
+        char now='A';
+        bool ans=true;
+        fol(i,0,s.size()){
+            if(now=='A'){
+                s[i]=='0' ? now='X' : now='Y';
+            }else if(now=='X'){
+                s[i]=='0' ? ans=false : now='Z';
+            }else if(now=='Y'){
+                s[i]=='0' ? now='X' : ans=false;
+            }else if(now=='Z'){
+                s[i]=='0' ? now='W' : now='B';
+            }else if(now=='W'){
+                s[i]=='0' ? now='B' : now='Y';
+            }else{
+                s[i]=='0' ? now='Y' : now='X';
+            }
+        }
+        if(now!='B') ans=false;
+        cout<<(ans ? "Yes\n" : "No\n");
+    }
+    return 0;
+}

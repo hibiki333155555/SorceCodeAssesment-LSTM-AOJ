@@ -1,0 +1,6 @@
+def main():
+    a = input()
+    print(int(a**3))
+
+if __name__ == '__main__':
+    main()

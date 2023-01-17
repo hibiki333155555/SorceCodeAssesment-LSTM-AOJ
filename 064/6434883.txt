@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void insert(int A[], int N, int G[], int m, int cnt){
+    int hoge=0,j,g;
+    for(int s=0;s<m;s++){
+        g=G[s];
+        for(int i=g;i<N;i++){
+            hoge=A[i];
+            j=i-g;
+            while(j>=0&&A[j]>hoge){
+                A[j+g]=A[j];
+                A[j]=hoge;
+                j=j-g;
+                cnt++;
+            }
+        }
+    }
+}
+
+void shell(int A[], int N){
+    int cnt=0, m=2;
+    int G[m]={4,1};
+    for(int i=0;i<m;i++) insert(A, N, G, m, cnt);
+    cout<<m<<endl;
+    for(int i=0;i<m;i++){
+        if(i!=m-1) cout<<G[i]<<" ";
+        else cout<<G[i]<<endl;
+    }
+}
+
+int main(){
+    int N; cin>>N;
+    int A[N]; for(int i=0;i<N;i++) cin>>A[i];
+    shell(A,N);
+
+    for(int i=0;i<N;i++) cout<<A[i]<<endl;
+    return 0;
+}

@@ -1,0 +1,90 @@
+#include <algorithm>
+#include <bits/stdc++.h>
+#include <cmath>
+using namespace std;
+using ll = long long;
+template <typename T> using MaxHeap = priority_queue<T>;
+template <typename T> using MinHeap = priority_queue<T, vector<T>, greater<T>>;
+#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define ff first
+#define ss second
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define all(a) a.begin(), a.end()
+
+const ll INF = 1e18;
+const ll mod = 998244353;
+
+int main() {
+    ll h, w;
+    cin >> h >> w;
+    string kabe = "";
+    rep(i, w + 2) kabe += "#";
+    vector<string> s(h + 2);
+    s[0] = kabe;
+    s[h + 1] = kabe;
+    pll start = {0,0};
+    pll goal = {0,0};
+    rep(i, h) {
+        string ch;
+        cin >> ch;
+        rep(j, w)if(ch[j] == 'S')start = {i+1,j+1};
+        rep(j, w)if(ch[j] == 'G')goal = {i+1,j+1};
+        s[i + 1] = "#" + ch + "#";
+    }
+
+    int idou[] = {-1, 1}; //上下左右1マス移動用
+    queue<pll> q;
+    q.push(start); // start
+    map<pll, ll> dist;
+    dist[start] = 0;
+    while (!q.empty()) {
+        auto v = q.front();
+        q.pop();
+        //cout<<v.ff<<" "<<v.ss<<endl;
+        for (auto c : idou) {
+            ll x = v.ff + c;
+            ll y = v.ss;
+            if (s[x][y] == '#') continue;
+            ll xx = x;
+            ll yy = y;
+            while(!(s[xx][yy] == 'S' || s[xx][yy] == 'G' || s[xx][yy] == '.')){
+                if(s[xx][yy] == 'U')xx--;
+                if(s[xx][yy] == 'D')xx++;
+                if(s[xx][yy] == 'L')yy--;
+                if(s[xx][yy] == 'R')yy++;
+                if(s[xx][yy] == '#')break;
+            }
+            if(s[xx][yy] == '#')continue;
+            if(xx == v.ff && yy == v.ss)continue;
+            if(dist.count({xx,yy}))continue;
+            dist[{xx, yy}] = dist[v] + 1;
+            q.push({xx, yy});
+        }
+        for (auto c : idou) {
+            ll x = v.ff;
+            ll y = v.ss + c;
+            if (s[x][y] == '#') continue;
+            ll xx = x;
+            ll yy = y;
+            while(!(s[xx][yy] == 'S' || s[xx][yy] == 'G' || s[xx][yy] == '.')){
+                if(s[xx][yy] == 'U')xx--;
+                if(s[xx][yy] == 'D')xx++;
+                if(s[xx][yy] == 'L')yy--;
+                if(s[xx][yy] == 'R')yy++;
+                if(s[xx][yy] == '#')break;
+            }
+            if(s[xx][yy] == '#')continue;
+            if(xx == v.ff && yy == v.ss)continue;
+            if(dist.count({xx,yy}))continue;
+            dist[{xx, yy}] = dist[v] + 1;
+            q.push({xx, yy});
+        }
+        if(dist.count(goal)){
+            cout<<dist[goal]<<endl;
+            return 0;
+        }
+    }
+    cout<<-1<<endl;
+}
+

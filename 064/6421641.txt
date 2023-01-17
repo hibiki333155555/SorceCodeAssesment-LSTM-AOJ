@@ -1,0 +1,117 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef vector<vector<int>> vvi;
+typedef vector<vector<ll>> vvl;
+
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef vector<pii> vpii;
+typedef vector<pll> vpll;
+
+#define FOR(i, a, b) for(ll i=(a); i<(b); ++i)
+#define REP(i, n) FOR(i, 0, n)
+#define NREP(i, n) FOR(i, 1, n+1)
+
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+
+ll MODpow(ll x, ll n, ll mod){
+	ll res=1;
+	while(n>0){
+		if(n&1) res=res*x%mod;
+		x=x*x%mod;
+		n >>= 1;
+	}
+	return res;
+}
+
+ll POW(ll x, ll n){
+	ll res=1;
+	while(n>0){
+		if(n&1) res=res*x;
+		x=x*x;
+		n >>= 1;
+	}
+	return res;
+}
+
+ll MODcomb(ll n, ll r, ll mod, vl& fact, vl &inv){
+	ll res=1;
+	if(n>=r){
+		res=fact[n]%mod;
+		res=res*inv[r]%mod;
+		res=res*inv[n-r]%mod;
+	}
+	return res;
+}
+
+const ll nmax = 2e5 + 100;
+const ll MOD = 998244353;
+ll dp[nmax][2];	// posi, islow -> cnt
+
+vl fact(nmax), inv(nmax);
+void init() {
+	REP(i, nmax) {
+		if(i == 0) {fact[i] = 1;}
+		else {fact[i] = fact[i-1] * i % MOD;}
+	}
+	REP(i, nmax) {
+		if(i == 0) {inv[nmax-1-i] = MODpow(fact[nmax-1-i], MOD-2, MOD);}
+		else {inv[nmax-1-i] = inv[nmax-i] * (nmax - i) % MOD;}
+	}
+	return;
+}
+
+int main(void){
+	init();
+	string S; cin >> S;
+	ll len = S.length();
+	vl vec(len, 0);
+	REP(i, len) {
+		vec[i] = S[i] - '0';
+	}
+	
+	ll k; cin >> k;
+	
+	ll res = 0;
+	ll done = 0;
+	ll now = 0;
+	REP(i, len) {
+		ll n = vec[i];
+		
+		if(n == 1) {
+			ll rest = len-1-i;
+			if(done <= k && rest >= k-done) {
+				ll base = MODpow(2, rest, MOD) - 1;
+				ll mult = MODcomb(rest-1, k-done-1, MOD, fact, inv);
+				
+				ll mid = (base + now) * mult % MOD;
+				res += mid;
+			}
+			
+			done++;
+			now += MODpow(2, rest, MOD);
+			now %= MOD;
+		}
+	}
+	
+	if(done == k) {
+		REP(i, len) {
+			if(vec[i]) {
+				ll mid = MODpow(2, len-1-i, MOD);
+				res += mid;
+				res %= MOD;
+			}
+		}
+	}
+	
+	cout << res << endl;
+	
+	return 0;
+}

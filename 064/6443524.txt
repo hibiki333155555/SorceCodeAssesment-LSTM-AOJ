@@ -1,0 +1,51 @@
+n = int(input())
+
+list = []
+
+for i in range(n):
+    suit, rank = input().split()
+    rank = int(rank)
+    pair = []
+    pair.append(suit)
+    pair.append(rank)
+    list.append(pair)
+
+s = []
+h = []
+c = []
+d = []
+
+for j in range(len(list)):
+    l = list[j]
+    if l[0] == "S":
+        s.append(l[1])
+    elif l[0] == "H":
+        h.append(l[1])
+    elif l[0] == 'C':
+        c.append(l[1])
+    elif l[0] == 'D':
+        d.append(l[1])
+
+answer = []
+print(s)
+print(h)
+print(c)
+print(d)
+for k in [s, h, c, d]:
+    p = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+    m = [x for x in set(p)-set(k)]
+    print(m)
+    for o in range(len(m)):
+        if k == s:
+            answer.append(['S', m[o]])
+        elif k == h:
+            answer.append(['H', m[o]])
+        elif k == c:
+            answer.append(['C', m[o]])
+        else:
+            answer.append(['D', m[o]])
+
+for q in range(len(answer)):
+    print(answer[q][0], end=" ")
+    print(answer[q][1])
+

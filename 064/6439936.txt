@@ -1,0 +1,24 @@
+numbers = []
+number = 0
+sentences = ""
+ccc = 0
+ddd = 0
+
+while ddd <= ccc:
+    sentence = input()
+    sentences = sentences + sentence
+    if ccc == 0 and sentence[2] == "i":
+        ccc = 0
+    elif ccc == 0 and sentence[2] == "e":
+        ccc = 2
+    elif ccc == 0:
+        ccc = 3
+    ddd = ddd + 1
+
+for i in range(26):
+    number = sentences.count(chr(65+i)) + sentences.count(chr(97+i))
+    numbers = numbers + [number]
+
+for i in range(26):
+    print(chr(97+i) + " : " + str(numbers[i]))
+

@@ -1,0 +1,13 @@
+while True:
+  H, W = map(int, input().split())
+    for i in range(1, H+1):
+        if i % 2 == 1 and W % 2 == 0:
+            print("#." * (W/2))
+        elif i % 2 == 1 and W % 2 == 1:
+            print("#." * ((W-1)/2 + "#")
+        elif i % 2 == 0 and W % 2 == 0:
+            print(".#" * (w/2))
+        else:
+            print(".#" * ((W-1)/2 + ".")
+            
+print()

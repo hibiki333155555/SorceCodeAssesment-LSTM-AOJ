@@ -1,0 +1,14 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int Sec = sc.nextInt();
+        int h = Sec/3600;
+        int m = (Sec%3600)/60;
+        int s = (Sec%3600)%60;
+        System.out.printf("%d:%d:%d",h,m,s);
+        //System.out.println("");
+        
+    }
+}

@@ -1,0 +1,19 @@
+
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+
+int main() 
+{
+int a,b,c;
+cin >> a >> b >> c;
+double S,L,h;
+S = 0.5 * a * b * sin((double)c/180*M_PI);
+L = a + b + sqrt(a * a + b * b - 2 * a * b * cos((double)c/180*M_PI));
+h = b * sin((double)c/180*M_PI);
+cout << setprecision(4) << fixed << S <<endl;
+cout << setprecision(4) << fixed << L <<endl;
+cout << setprecision(4) << fixed << h <<endl;
+  }

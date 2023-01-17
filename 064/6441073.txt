@@ -1,0 +1,19 @@
+#include <iostream>
+#include <iomanip>
+#include <vector>
+
+struct Point {
+  double x, y;
+};
+
+int main() {
+  int n; std::cin >> n;
+  std::vector<Point> ps(n);
+  for (int i=0; i<n; i++) std::cin >> ps[i].x >> ps[i].y;
+  double area = 0.0;
+  for (int i=2; i<n; i++) {
+    area += (ps[i-1].x - ps[0].x) * (ps[i].y - ps[0].y);
+    area -= (ps[i].x - ps[0].x) * (ps[i-1].y - ps[0].y);
+  }
+  std::cout << std::fixed << std::setprecision(1) << area / 2.0 << std::endl;
+}

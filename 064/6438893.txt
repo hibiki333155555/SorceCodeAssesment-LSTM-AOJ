@@ -1,0 +1,29 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+static const int nmax = 50000;
+static const int mmax = 20;
+static const int inf = (1 << 29);
+int main(void){
+    int n,m;
+    int c[mmax + 1];
+    int t[nmax + 1];
+    
+    cin >> n >> m;
+    
+    for(int i = 1; i <= m; i++){
+        cin >> c[i];
+    }
+    
+    for(int i = 0; i <= nmax; i++) t[i] = inf;
+    t[0] = 0;
+    for(int i = 1; i <= m; i++){
+        for(int j = 0; j+c[i] <= n; j++){
+            t[j+c[i]] = min(t[j+c[i]], t[j]+1);
+        }
+        
+    }
+    
+    cout << t[n] << endl;
+}

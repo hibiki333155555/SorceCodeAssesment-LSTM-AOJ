@@ -1,0 +1,3 @@
+x=input()
+prin= str((x//3600)+":"+(x%3600//60)+":"+(x%60))
+print prin

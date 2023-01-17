@@ -1,0 +1,5 @@
+r = float(input())
+float(a) = 3.14159*r*r 
+float(b) = 2*3.14159*r
+print(f"{a} {b}")
+

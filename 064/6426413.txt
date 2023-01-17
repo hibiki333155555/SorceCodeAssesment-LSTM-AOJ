@@ -1,0 +1,3 @@
+from fractions import Fraction
+a,b = map(int,input().split())
+print(a//b,a%b,Fraction(a)/Fraction(b))

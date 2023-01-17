@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+
+int main(){
+	cin.tie(nullptr);
+	ios::sync_with_stdio(false);
+	int n,a; cin >> n >> a;
+	string s; cin >> s;
+	s="X"+s+"X";
+	vector<int> l,r;
+	for(int i=a+1;i<=n;i++){
+		if(s[i]=='#'){
+			r.push_back(i);
+		}
+	}
+	for(int i=a-1;i>=1;i--){
+		if(s[i]=='#'){
+			l.push_back(i);
+		}
+	}
+	int rsz=(int)(r.size());
+	int lsz=(int)(l.size());
+	while(rsz-1>lsz){
+		l.push_back(0);
+		lsz++;
+	}
+	while(lsz>rsz){
+		r.push_back(n+1);
+		rsz++;
+	}
+	int sz=lsz+rsz;
+	int cur=a;
+	ll res=0;
+	for(int i=0;i<sz;i++){
+		if(i%2==0){
+			res+=(ll)abs(r[i/2]-cur);
+			cur=r[i/2];
+		}
+		else{
+			res+=(ll)abs(l[i/2]-cur);
+			cur=l[i/2];
+		}
+	}
+	cout << res << endl;
+}

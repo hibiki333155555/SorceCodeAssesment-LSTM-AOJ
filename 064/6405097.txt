@@ -1,0 +1,56 @@
+#include <iostream>
+
+using namespace std;
+
+void printArray(int a[], int n)
+{
+    for (int i = 0; i < n; ++i) {
+	cout << a[i];
+	if (i < n - 1)
+	    cout << " ";
+	else
+	    cout << endl;
+    }
+}
+
+// 反転数を返す
+int bubbleSort(int a[], int n)
+{
+    int nInv = 0;      // 反転数
+    int flag = 1;      // 反転がまだあるという印
+    for (int i = 0; flag; ++i) {
+	// この時点で a[0] から a[i-1] までに
+	// 最も小さいものから i 番目に小さなものが順に並んでいる
+	flag = 0;
+	// もしこのまま a[i+1] から a[n-1] まで左右の反転がなければ終了
+	for (int j = n - 1; j > i; --j) {
+	    if (a[j - 1] > a[j]) {
+		swap(a[j - 1], a[j]);
+		flag = 1;  
+		++nInv;
+		//		printArray(a, n);
+	    }
+	}
+    }
+    return nInv;
+}		
+    
+int main()
+{
+    int N;
+    cin >> N;
+
+    int A[N];
+    for (int i = 0; i < N; ++i)
+	cin >> A[i];
+
+    int nInv;
+    nInv = bubbleSort(A, N);
+
+    printArray(A, N);
+    cout << nInv << endl;
+    
+    return 0;
+}
+	    
+

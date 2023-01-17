@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+using namespace std;
+//挺复杂 
+int main()
+{	
+	int m,i,sum,num;
+	string s; 
+	
+	cin>>s;
+	
+	
+	while(s[0]!='-')
+	{
+		cin>>m;
+		sum=0;
+		for(i=0;i<m;i++)//其实不用每步都看 加起来除余就行 
+		{
+			cin>>num;	
+			sum+=num;
+		}
+		
+		sum=sum%s.length();
+		
+		for(i=0;i<s.length();i++)
+		{
+			if(i+sum>=s.length())//注意判断输出的字符位置 
+				cout<<s[i+sum-s.length()];	
+			else
+				cout<<s[i+sum];
+		} 
+		cout<<endl;	
+		
+		cin>>s;
+	
+	}
+
+	
+return 0;
+}
+

@@ -1,0 +1,37 @@
+# coding: utf-8
+
+from collections import deque
+import sys
+input = sys.stdin.readline
+
+def insert(t, x):
+    L[t].append(x)
+
+def dump(t):
+    print(*L[t])
+    
+def splice(s, t):
+    if L[t]:
+        if len(L[s]) == 1:
+            L[t].append(L[s][0])
+        elif len(L[t]) == 1:
+            L[s].appendleft(L[t][0])
+            L[t] = L[s]
+        else:
+            L[t].extend(L[s])
+    else:
+        L[t] = L[s]
+    L[s] = deque()
+
+n, q = map(int, input().split())
+L = deque([deque() for _ in range(n)])
+
+for _ in range(q):
+    que, *val = map(int, input().split())
+    
+    if que == 0:
+        insert(val[0], val[1])
+    elif que == 1:
+        dump(val[0])
+    elif que == 2:
+        splice(val[0], val[1])

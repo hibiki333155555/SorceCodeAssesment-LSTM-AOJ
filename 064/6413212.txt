@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+const double PI =acos(-1);
+const long double EPS = 1e-14;
+
+long cnt = 0;
+
+void insertionSort(vector<long>& A, long n, long g){
+  for(long i = g; i < n; i++){
+    long v = A[i];
+    long j = i - g;
+    while(j >= 0 && A[j] > v){
+      A[j + g] = A[j];
+      j = j - g;
+      cnt++;
+    }
+    A[j + g] = v;
+  }               
+}
+
+void shellSort(vector<long>& A, long n){
+  long m = 0;
+  vector<long> G;
+  for(long i = 1; i < n; i *= 3 + 1){
+    G.push_back(i);
+  }
+  m = G.size();
+  for(long i = G.size() - 1; 0 <= i; i--){
+    insertionSort(A, n, G[i]);
+  }
+  cout << m << endl;
+  for(long i = 0; i < G.size(); i++){
+    cout << G[i];
+    if(i == G.size() - 1){
+      cout << endl;
+    }else{
+      cout << " ";
+    }
+  }
+  cout << cnt << endl;
+}
+
+int main(){
+  long n;
+  cin >> n;
+  vector<long> A(n);
+  for(long i = 0; i < n; i++){
+    cin >> A[i];
+  }
+  shellSort(A, n);
+  for(long i = 0; i < n; i++){
+    cout << A[i] << endl;
+  }
+  return 0;
+}

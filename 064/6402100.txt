@@ -1,0 +1,12 @@
+n = int(input())
+
+if n % 2 == 0:
+    print(1)
+else:
+    n += 1
+    ans = 1
+    while n % 2 == 0:
+        n //= 2
+        ans *= 2
+    print(ans)
+

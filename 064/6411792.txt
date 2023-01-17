@@ -1,0 +1,15 @@
+n = int(input())
+s_t = 0
+s_h = 0
+
+for i in range(n):
+    cards = input().split()
+    if cards[0] == cards[1]:
+        s_t += 1
+        s_h += 1
+    elif cards[0] > cards[1]:
+        s_t += 3
+    else:
+        s_h += 3
+
+print(f'{s_t} {s_h}')

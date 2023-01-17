@@ -1,0 +1,23 @@
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <numeric>
+#include <string>
+using namespace std;
+
+
+
+int main()
+{
+    string str, ps;
+    cin >> ps;
+    
+    istream_iterator<string> isi(cin), eof;
+
+    int num = 0;
+    for_each(isi, eof, [&num, &ps](auto& e){if(ps == e) num++;});
+    cout << num << endl;
+
+    return 0;
+}

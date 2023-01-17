@@ -1,0 +1,27 @@
+#include<stdio.h>
+int main()
+{
+    int N[3],i,j,temp,size=3;
+    for(i=0;i<=2;i++)
+        scanf("%d",&N[i]);
+
+    for(i=0;i<size-1;i++)
+    {
+        for(j=0;j<size-1-i;j++)
+        {
+            if(N[j]>N[j+1])
+            {
+                temp=N[j];
+                N[j]=N[j+1];
+                N[j+1]=temp;
+            }
+        }
+    }
+
+    for(i=0;i<=2;i++)
+        printf("%d ",N[i]);
+        printf("\n");
+    return 0;
+}
+
+

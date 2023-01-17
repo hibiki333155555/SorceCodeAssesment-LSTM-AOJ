@@ -1,0 +1,62 @@
+    #include<iostream>
+    #include<vector>
+    #include<string>
+    #include<iomanip>
+    #include<deque>
+    #include<algorithm>
+    #include<cmath>
+    #include<map>
+    #include<stdio.h>
+    #include<cstring>
+    #include<stack>
+    #include<queue>
+    using namespace std;
+
+    #define rep(i,N) for(int i = 0; i < N; i++)
+    #define ll long long
+
+    int binserch(vector<int>& vec, int key){
+        int l = -1, r = vec.size();
+        while(r - l > 1){
+            int mid = (r + l) / 2;
+            if(vec[mid] >= key){
+                r = mid;
+            }else{
+                l = mid;
+            }
+        }
+        return r;
+    }
+
+
+    int main(){
+        int N;
+        cin >> N;
+
+        vector<int> a(N);
+        rep(i, N){
+            cin >> a[i];
+        }
+
+        vector<int> ans = {a[0]};
+
+        for(int i = 1; i < a.size(); i++){
+            int pos = binserch(ans, a[i]);
+            if(ans[ans.size() - 1] < a[i]){
+                ans.push_back(a[i]);
+            }else{
+                if(ans[pos] != a[i])ans[pos] = a[i];
+            }
+            // rep(j, ans.size()){
+            //     cout << ans[j] << " ";
+            // }cout << "\n";
+        }
+
+        cout << ans.size() << "\n";
+        // cout << "\n";
+        // rep(i, N+1){
+        //     rep(j, W+1){
+        //         cout << dp[i][j] << " ";
+        //     }cout << "\n";
+        // }
+    }

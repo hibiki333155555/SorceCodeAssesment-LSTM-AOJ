@@ -1,0 +1,17 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int W, H, x, y, r;
+    string str;
+    cin >> W >> H >> x >> y >> r;
+    
+    if(x + r > W || x - r < 0) str = "No";
+    else if (y + r > H || y - r < 0) str = "No";
+    else str  = "Yes";
+    
+    cout << str << endl;
+    
+    return 0;
+}

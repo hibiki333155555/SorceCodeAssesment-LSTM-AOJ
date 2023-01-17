@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+
+#define ll long long
+#define ld long double
+#define rep(i,a,b) for (int i = a; i < b; i++)
+#define irep(i,a,b) for (int i = a; i > b; i--)
+
+using namespace std;
+
+int main(){
+    int r,c;
+    cin >> r >> c;
+    vector<vector<int>> A(r+1,vector<int>(c+1));
+    
+    int sum = 0;
+    rep(i,0,r){
+        sum = 0;
+        rep(j,0,c){
+        cin >> A[i][j];
+        sum += A[i][j];
+        }
+        A[i][c] = sum;
+    }
+    int m = 0;
+    rep(i,0,c){
+        sum = 0;
+        rep(j,0,r){
+            sum += A[j][i];
+        }
+        m += sum;
+        A[r][i] = sum;
+    }
+    A[r][c] = m;
+
+    rep(i,0,r+1){
+        rep(j,0,c+1){
+            cout << A[i][j];
+            if (j != c) cout << " ";
+        }
+        cout << endl;
+    }
+    //system("pause");
+    return 0;
+}

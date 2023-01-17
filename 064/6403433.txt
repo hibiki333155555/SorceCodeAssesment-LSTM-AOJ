@@ -1,0 +1,175 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include<bits/stdc++.h> 
+using namespace std;
+using ll=long long;
+using P=pair<ll,ll>;
+template<class T> using V=vector<T>; 
+#define fi first
+#define se second
+#define all(v) (v).begin(),(v).end()
+const ll inf=(1e18);
+const ll mod=998244353;
+// const ll mod=1000000007;
+const vector<int> dy={-1,0,1,0},dx={0,-1,0,1};
+struct __INIT{__INIT(){cin.tie(0);ios::sync_with_stdio(false);cout<<fixed<<setprecision(15);}} __init;
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+template<class T>void debag(const vector<T> &a){cerr<<"debag :";for(auto v:a)cerr<<v<<" ";cerr<<"\n";}
+template<class T>void print(const vector<T> &a){for(auto v:a)cout<<v<<" ";cout<<"\n";}
+struct mint{
+using ull=unsigned long long int;
+ull v;
+mint(ll vv=0){s(vv%mod+mod);}
+mint& s(ull vv){
+v=vv<mod?vv:vv-mod;
+return *this;
+}
+//オーバーロード
+mint operator-()const{return mint()-*this;}//mint型にキャスト
+mint&operator+=(const mint&val){return s(v+val.v);}
+mint&operator-=(const mint&val){return s(v+mod-val.v);}
+mint&operator*=(const mint&val){
+v=ull(v)*val.v%mod;
+return *this;
+}
+mint&operator/=(const mint&val){return *this*=val.inv();}
+mint operator+(const mint&val){return mint(*this)+=val;}
+mint operator-(const mint&val){return mint(*this)-=val;}
+mint operator*(const mint&val){return mint(*this)*=val;}
+mint operator/(const mint&val){return mint(*this)/=val;}
+mint pow(ll n)const{
+mint res(1),x(*this);
+while(n){
+if(n&1)res*=x;
+x*=x;
+n>>=1ll;
+}
+return res;
+}
+mint inv()const{return pow(mod-2);}
+//拡張ユークリッドの互除法
+/* mint inv()const{
+int x,y;
+int g=extgcd(v,mod,x,y);
+assert(g==1);
+if(x<0)x+=mod;
+return mint(x);
+}*/
+friend ostream& operator<<(ostream&os,const mint&val){
+return os<<val.v;
+}//出力
+bool operator<(const mint&val)const{return v<val.v;}
+bool operator==(const mint&val)const{return v==val.v;}
+bool operator>(const mint&val)const{return v>val.v;}
+};
+struct Mo{
+      int w;
+      int nl,nr,ptr;
+      vector<int> l,r,ord;
+      vector<bool> v;
+ 
+ 
+      Mo(int n,vector<pair<int,int>> &q):w(int(sqrt(n))),nl(0),nr(0),ptr(0),v(n,false) {
+           int m=int(q.size());
+           for(int i=0;i<m;i++){
+                  insert(q[i].fi,q[i].se);
+           }
+           build();
+      }
+ 
+      void insert(int a,int b){//[a,b)
+         l.emplace_back(a);
+         r.emplace_back(b);
+      }
+ 
+      void build(){
+           ord.resize(int(l.size()));
+           iota(ord.begin(),ord.end(),0);
+           sort(ord.begin(),ord.end(),[&](int a,int b){
+                if(l[a]/w!=l[b]/w)return l[a]<l[b];
+                if((l[a]/w)&1)return r[a]<r[b];
+                return r[a]>r[b];
+           });
+      }
+ 
+      template<typename Add,typename Del,typename Calc>
+      void process(Add &add,Del &del,Calc  &calc){
+           assert(l.size()==ord.size());
+           auto distribute=[&](int idx){
+                    v[idx].flip();
+                    if(v[idx])add(idx);
+                    else del(idx);
+           };
+          for(const int id:ord){
+           while(nl>l[id])distribute(--nl);
+           while(nr<r[id])distribute(nr++);
+           while(nl<l[id])distribute(nl++);
+           while(nr>r[id])distribute(--nr);
+           calc(id);
+          }
+      }
+};
+int main(){
+    int n;
+    cin>>n;
+    V<ll> a(n);
+    V<V<int>> s(n);
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+        ll cp=a[i];
+        for(ll j=2;j*j<=cp;j++){
+            bool c=false;
+            while(cp%j==0){
+                cp/=j;
+                c=true;
+            }
+            if(c)s[i].emplace_back(j);
+        }
+        if(cp!=1)s[i].emplace_back(cp);
+    }
+    int q;
+    cin>>q;
+    V<pair<int,int>> que(q);
+    for(int i=0;i<q;i++){
+        cin>>que[i].fi>>que[i].se;
+        que[i].fi--;
+    }
+    V<int> v(1000005,0);
+    V<mint> inv(1000005,mint(1));
+    for(int i=1;i<1000005;i++){
+        inv[i]=mint(i).inv();
+    }
+    mint ans=mint(1);
+    mint val=mint(1);
+    V<mint> res(q);
+    auto add=[&](int idx){
+        val*=mint(a[idx]);
+        for(auto u:s[idx]){
+            if(v[u]==0){
+                ans*=mint(u-1);
+                val*=inv[u];
+            }
+            v[u]++;
+        }
+    };
+    auto del=[&](int idx){
+        val*=inv[a[idx]];
+        for(auto u:s[idx]){
+            if(v[u]==1){
+                ans*=inv[u-1];
+                val*=mint(u);
+            }
+            v[u]--;
+        }
+    };
+    auto calc=[&](int idx){
+        res[idx]=ans*val;
+    };
+    Mo mo(n+1,que);
+    mo.process(add,del,calc);
+    for(int i=0;i<q;i++){
+        cout<<res[i]<<"\n";
+    }
+}

@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(vector<vector<int>> &dp, vector<int> &w, int l, int r){
+  if(dp.at(l).at(r-1) != -1) return dp.at(l).at(r-1);
+  
+  if(r-l <= 1) return 0;
+  
+  int ans = 0;
+  if((r-l)%2 == 0 && abs(w.at(l)-w.at(r-1)) <= 1
+     && solve(dp,w,l+1,r-1) == r-l-2){
+    dp.at(l).at(r-1) = r-l;
+    ans = r-l;
+  }else{
+    for(int i=1; i<r-l; i++){
+      ans = max(ans, solve(dp,w,l,l+i)+solve(dp,w,l+i,r) );
+    }
+    dp.at(l).at(r-1) = ans;
+  }
+  
+  return ans;
+}
+    
+
+int main(){
+  while(true){
+    int N;
+    cin >> N;
+    if (N==0) break;
+    vector<int> w(N);
+    vector<vector<int>> dp(N,vector<int>(N,-1));
+    for(int i=0; i<N; i++) cin >> w.at(i);
+    cout << solve(dp,w,0,N) << endl;
+  }
+  return 0;
+}

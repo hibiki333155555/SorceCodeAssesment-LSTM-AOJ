@@ -1,0 +1,671 @@
+#pragma region Macros
+//#pragma GCC target("avx2")
+// #pragma GCC optimize("O3")
+// #pragma comment(linker, "/stack:200000000")
+#ifdef ONLINE_JUDGE
+// #pragma GCC optimize("unroll-loops")
+// #pragma GCC target("popcnt")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,fma,abm,mmx,avx,avx2,tune=native")
+// #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,fma,abm,mmx,avx,avx2")
+// #pragma GCC target("avx2")
+#endif
+#pragma GCC optimize("Ofast")
+#ifdef noimi
+#define oj_local(a, b) b
+#else
+#define oj_local(a, b) a
+#endif
+
+#define LOCAL if(oj_local(0, 1))
+#define OJ if(oj_local(1, 0))
+
+#include <algorithm>
+#include <array>
+#include <bitset>
+#include <cassert>
+#include <cctype>
+#include <cfenv>
+#include <cfloat>
+#include <chrono>
+#include <cinttypes>
+#include <climits>
+#include <cmath>
+#include <complex>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <immintrin.h>
+#include <initializer_list>
+#include <iomanip>
+#include <ios>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <map>
+#include <memory>
+#include <new>
+#include <numeric>
+#include <ostream>
+#include <queue>
+#include <random>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <streambuf>
+#include <string>
+#include <tuple>
+#include <type_traits>
+#include <typeinfo>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+using namespace std;
+using ll = long long;
+using ull = unsigned long long int;
+using i128 = __int128_t;
+using pii = pair<int, int>;
+using pll = pair<ll, ll>;
+using ld = long double;
+template <typename T> using vc = vector<T>;
+template <typename T> using vvc = vector<vc<T>>;
+template <typename T> using vvvc = vector<vvc<T>>;
+using vi = vc<int>;
+using vl = vc<ll>;
+using vpi = vc<pii>;
+using vpl = vc<pll>;
+template <class T> using pq = priority_queue<T>;
+template <class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
+template <typename T> int si(const T &x) { return x.size(); }
+template <class T, class S> inline bool chmax(T &a, const S &b) { return (a < b ? a = b, 1 : 0); }
+template <class T, class S> inline bool chmin(T &a, const S &b) { return (a > b ? a = b, 1 : 0); }
+vi iota(int n) {
+    vi a(n);
+    return iota(a.begin(), a.end(), 0), a;
+}
+template <typename T> vi iota(const vector<T> &a, bool greater = false) {
+    vi res(a.size());
+    iota(res.begin(), res.end(), 0);
+    sort(res.begin(), res.end(), [&](int i, int j) {
+        if(greater) return a[i] > a[j];
+        return a[i] < a[j];
+    });
+    return res;
+}
+
+// macros
+#define overload5(a, b, c, d, e, name, ...) name
+#define overload4(a, b, c, d, name, ...) name
+#define endl '\n'
+#define REP0(n) for(ll jidlsjf = 0; jidlsjf < n; ++jidlsjf)
+#define REP1(i, n) for(ll i = 0; i < (n); ++i)
+#define REP2(i, a, b) for(ll i = (a); i < (b); ++i)
+#define REP3(i, a, b, c) for(ll i = (a); i < (b); i += (c))
+#define rep(...) overload4(__VA_ARGS__, REP3, REP2, REP1, REP0)(__VA_ARGS__)
+#define per0(n) for(int jidlsjf = 0; jidlsjf < (n); ++jidlsjf)
+#define per1(i, n) for(ll i = (n)-1; i >= 0; --i)
+#define per2(i, a, b) for(ll i = (a)-1; i >= b; --i)
+#define per3(i, a, b, c) for(ll i = (a)-1; i >= (b); i -= (c))
+#define per(...) overload4(__VA_ARGS__, per3, per2, per1, per0)(__VA_ARGS__)
+#define fore0(a) rep(a.size())
+#define fore1(i, a) for(auto &&i : a)
+#define fore2(a, b, v) for(auto &&[a, b] : v)
+#define fore3(a, b, c, v) for(auto &&[a, b, c] : v)
+#define fore4(a, b, c, d, v) for(auto &&[a, b, c, d] : v)
+#define fore(...) overload5(__VA_ARGS__, fore4, fore3, fore2, fore1, fore0)(__VA_ARGS__)
+#define fi first
+#define se second
+#define pb push_back
+#define ppb pop_back
+#define ppf pop_front
+#define eb emplace_back
+#define drop(s) cout << #s << endl, exit(0)
+#define si(c) (int)(c).size()
+#define lb(c, x) distance((c).begin(), lower_bound(all(c), (x)))
+#define ub(c, x) distance((c).begin(), upper_bound(all(c), (x)))
+#define rng(v, l, r) v.begin() + l, v.begin() + r
+#define all(c) begin(c), end(c)
+#define rall(c) rbegin(c), rend(c)
+#define SORT(v) sort(all(v))
+#define REV(v) reverse(all(v))
+#define UNIQUE(x) SORT(x), x.erase(unique(all(x)), x.end())
+template <typename T = ll, typename S> T SUM(const S &v) { return accumulate(all(v), T(0)); }
+#define MIN(v) *min_element(all(v))
+#define MAX(v) *max_element(all(v))
+#define overload2(_1, _2, name, ...) name
+#define vec(type, name, ...) vector<type> name(__VA_ARGS__)
+#define vv(type, name, h, ...) vector<vector<type>> name(h, vector<type>(__VA_ARGS__))
+#define vvv(type, name, h, w, ...) vector<vector<vector<type>>> name(h, vector<vector<type>>(w, vector<type>(__VA_ARGS__)))
+#define vvvv(type, name, a, b, c, ...)                                                                                                                         \
+    vector<vector<vector<vector<type>>>> name(a, vector<vector<vector<type>>>(b, vector<vector<type>>(c, vector<type>(__VA_ARGS__))))
+#define vvvvv(type, name, a, b, c, d, ...) vector name(a, vector(b, vector(c, vector(d, vector<type>(__VA_ARGS__)))))
+#define vvvvvv(type, name, a, b, c, d, e, ...) vector name(a, vector(b, vector(c, vector(d, vector(e, vector<type>(__VA_ARGS__))))))
+constexpr pii dx4[4] = {pii{1, 0}, pii{0, 1}, pii{-1, 0}, pii{0, -1}};
+constexpr pii dx8[8] = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+
+namespace yesno_impl {
+const string YESNO[2] = {"NO", "YES"};
+const string YesNo[2] = {"No", "Yes"};
+const string yesno[2] = {"no", "yes"};
+const string firstsecond[2] = {"second", "first"};
+const string FirstSecond[2] = {"Second", "First"};
+const string possiblestr[2] = {"impossible", "possible"};
+void YES(bool t = 1) { cout << YESNO[t] << endl; }
+void NO(bool t = 1) { YES(!t); }
+void Yes(bool t = 1) { cout << YesNo[t] << endl; }
+void No(bool t = 1) { Yes(!t); }
+void yes(bool t = 1) { cout << yesno[t] << endl; }
+void no(bool t = 1) { yes(!t); }
+void first(bool t = 1) { cout << firstsecond[t] << endl; }
+void First(bool t = 1) { cout << FirstSecond[t] << endl; }
+void possible(bool t = 1) { cout << possiblestr[t] << endl; }
+}; // namespace yesno_impl
+using namespace yesno_impl;
+
+#define INT(...)                                                                                                                                               \
+    int __VA_ARGS__;                                                                                                                                           \
+    IN(__VA_ARGS__)
+#define LL(...)                                                                                                                                                \
+    ll __VA_ARGS__;                                                                                                                                            \
+    IN(__VA_ARGS__)
+#define STR(...)                                                                                                                                               \
+    string __VA_ARGS__;                                                                                                                                        \
+    IN(__VA_ARGS__)
+#define CHR(...)                                                                                                                                               \
+    char __VA_ARGS__;                                                                                                                                          \
+    IN(__VA_ARGS__)
+#define DBL(...)                                                                                                                                               \
+    double __VA_ARGS__;                                                                                                                                        \
+    IN(__VA_ARGS__)
+#define VEC(type, name, size)                                                                                                                                  \
+    vector<type> name(size);                                                                                                                                   \
+    IN(name)
+#define VEC2(type, name1, name2, size)                                                                                                                         \
+    vector<type> name1(size), name2(size);                                                                                                                     \
+    for(int i = 0; i < size; i++) IN(name1[i], name2[i])
+#define VEC3(type, name1, name2, name3, size)                                                                                                                  \
+    vector<type> name1(size), name2(size), name3(size);                                                                                                        \
+    for(int i = 0; i < size; i++) IN(name1[i], name2[i], name3[i])
+#define VV(type, name, h, w)                                                                                                                                   \
+    vector<vector<type>> name(h, vector<type>(w));                                                                                                             \
+    IN(name)
+int scan() { return getchar(); }
+void scan(int &a) { cin >> a; }
+void scan(long long &a) { cin >> a; }
+void scan(char &a) { cin >> a; }
+void scan(double &a) { cin >> a; }
+void scan(string &a) { cin >> a; }
+template <class T, class S> void scan(pair<T, S> &p) { scan(p.first), scan(p.second); }
+template <class T> void scan(vector<T> &);
+template <class T> void scan(vector<T> &a) {
+    for(auto &i : a) scan(i);
+}
+template <class T> void scan(T &a) { cin >> a; }
+void IN() {}
+template <class Head, class... Tail> void IN(Head &head, Tail &...tail) {
+    scan(head);
+    IN(tail...);
+}
+
+
+
+#define TEST                                                                                                                                                   \
+    INT(testcases);                                                                                                                                            \
+    while(testcases--)
+
+istream &operator>>(istream &is, i128 &v) {
+    string s;
+    is >> s;
+    v = 0;
+    for(int i = 0; i < (int)s.size(); i++) {
+        if(isdigit(s[i])) { v = v * 10 + s[i] - '0'; }
+    }
+    if(s[0] == '-') { v *= -1; }
+    return is;
+}
+
+ostream &operator<<(ostream &os, const i128 &v) {
+    if(v == 0) { return (os << "0"); }
+    i128 num = v;
+    if(v < 0) {
+        os << '-';
+        num = -num;
+    }
+    string s;
+    for(; num > 0; num /= 10) { s.push_back((char)(num % 10) + '0'); }
+    reverse(s.begin(), s.end());
+    return (os << s);
+}
+namespace aux {
+template <typename T, unsigned N, unsigned L> struct tp {
+    static void output(std::ostream &os, const T &v) {
+        os << std::get<N>(v) << (&os == &cerr ? ", " : " ");
+        tp<T, N + 1, L>::output(os, v);
+    }
+};
+template <typename T, unsigned N> struct tp<T, N, N> {
+    static void output(std::ostream &os, const T &v) { os << std::get<N>(v); }
+};
+} // namespace aux
+template <typename... Ts> std::ostream &operator<<(std::ostream &os, const std::tuple<Ts...> &t) {
+    if(&os == &cerr) { os << '('; }
+    aux::tp<std::tuple<Ts...>, 0, sizeof...(Ts) - 1>::output(os, t);
+    if(&os == &cerr) { os << ')'; }
+    return os;
+}
+template <class T, class S> ostream &operator<<(ostream &os, const pair<T, S> &p) {
+    if(&os == &cerr) { return os << "(" << p.first << ", " << p.second << ")"; }
+    return os << p.first << " " << p.second;
+}
+template <class Ch, class Tr, class Container> std::basic_ostream<Ch, Tr> &operator<<(std::basic_ostream<Ch, Tr> &os, const Container &x) {
+    bool f = true;
+    if(&os == &cerr) os << "[";
+    for(auto &y : x) {
+        if(&os == &cerr)
+            os << (f ? "" : ", ") << y;
+        else
+            os << (f ? "" : " ") << y;
+        f = false;
+    }
+    if(&os == &cerr) os << "]";
+    return os;
+}
+
+#ifdef noimi
+#undef endl
+void debug() { cerr << endl; }
+void debug(bool) { cerr << endl; }
+template <class Head, class... Tail> void debug(bool is_front, Head head, Tail... tail) {
+    if(!is_front) cerr << ", ";
+    cerr << head;
+    debug(false, tail...);
+}
+
+#define dump(args...)                                                                                                                                          \
+    {                                                                                                                                                          \
+        vector<string> _debug = _split(#args, ',');                                                                                                            \
+        err(true, begin(_debug), args);                                                                                                                        \
+    }
+
+vector<string> _split(const string &s, char c) {
+    vector<string> v;
+    stringstream ss(s);
+    string x;
+    while(getline(ss, x, c)) {
+        if(empty(v))
+            v.eb(x);
+        else {
+            bool flag = false;
+            for(auto [c, d] : {pair('(', ')'), pair('[', ']'), pair('{', '}')}) {
+                if(count(all(v.back()), c) != count(all(v.back()), d)) flag = true;
+            }
+            if(flag)
+                v.back() += "," + x;
+            else
+                v.eb(x);
+        }
+    }
+    return move(v);
+}
+
+void err(bool, vector<string>::iterator) { cerr << endl; }
+template <typename T, typename... Args> void err(bool is_front, vector<string>::iterator it, T a, Args... args) {
+    if(!is_front) cerr << ", ";
+    cerr << it->substr((*it)[0] == ' ', (*it).size()) << " = " << a, err(false, ++it, args...);
+}
+
+// #define dump(...) cerr << #__VA_ARGS__ << " : ", debug(true, __VA_ARGS__)
+#else
+#define dump(...) static_cast<void>(0)
+#define dbg(...) static_cast<void>(0)
+#endif
+void OUT() { cout << endl; }
+template <class Head, class... Tail> void OUT(const Head &head, const Tail &...tail) {
+    cout << head;
+    if(sizeof...(tail)) cout << ' ';
+    OUT(tail...);
+}
+
+template <typename T> static constexpr T inf = numeric_limits<T>::max() / 2;
+
+template <class F> struct REC {
+    F f;
+    REC(F &&f_) : f(std::forward<F>(f_)) {}
+    template <class... Args> auto operator()(Args &&...args) const { return f(*this, std::forward<Args>(args)...); }
+};
+
+template <class S> vector<pair<S, int>> runLength(const vector<S> &v) {
+    vector<pair<S, int>> res;
+    for(auto &e : v) {
+        if(res.empty() or res.back().fi != e)
+            res.eb(e, 1);
+        else
+            res.back().se++;
+    }
+    return res;
+}
+vector<pair<char, int>> runLength(const string &v) {
+    vector<pair<char, int>> res;
+    for(auto &e : v) {
+        if(res.empty() or res.back().fi != e)
+            res.eb(e, 1);
+        else
+            res.back().se++;
+    }
+    return res;
+}
+
+int toint(const char &c, const char start = 'a') { return c - start; }
+int toint(const char &c, const string &chars) { return find(all(chars), c) - begin(chars); }
+int alphabets_to_int(const char &c) { return (islower(c) ? c - 'a' : c - 'A' + 26); }
+template <typename T> auto toint(const T &v, const char &start = 'a') {
+    vector<decltype(toint(v[0]))> ret;
+    ret.reserve(v.size());
+    for(auto &&e : v) ret.emplace_back(toint(e, start));
+    return ret;
+}
+template <typename T> auto toint(const T &v, const string &start) {
+    vector<decltype(toint(v[0]))> ret;
+    ret.reserve(v.size());
+    for(auto &&e : v) ret.emplace_back(toint(e, start));
+    return ret;
+}
+// a -> 0, A -> 26
+template <typename T> auto alphabets_to_int(const T &s) {
+    vector<decltype(alphabets_to_int(s[0]))> res;
+    res.reserve(s.size());
+    for(auto &&e : s) { res.emplace_back(alphabets_to_int(e)); }
+    return res;
+}
+
+template <class T, class F> T bin_search(T ok, T ng, const F &f) {
+    while(abs(ok - ng) > 1) {
+        T mid = ok + ng >> 1;
+        (f(mid) ? ok : ng) = mid;
+    }
+    return ok;
+}
+template <class T, class F> T bin_search_double(T ok, T ng, const F &f, int iter = 80) {
+    while(iter--) {
+        T mid = (ok + ng) / 2;
+        (f(mid) ? ok : ng) = mid;
+    }
+    return ok;
+}
+
+struct Setup_io {
+    Setup_io() {
+        ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+        cout << fixed << setprecision(11);
+    }
+} setup_io;
+
+#pragma endregion
+
+namespace fast_gcd {
+using u64 = uint64_t;
+using u32 = uint32_t;
+
+__attribute__((target("bmi"))) constexpr u64 binary_gcd(u64 a, u64 b) {
+    if(a == 0 || b == 0) return a + b;
+    int n = __builtin_ctzll(a);
+    int m = __builtin_ctzll(b);
+    a >>= n;
+    b >>= m;
+    while(a != b) {
+        int m = __builtin_ctzll(a - b);
+        bool f = a > b;
+        u64 c = f ? a : b;
+        b = f ? b : a;
+        a = (c - b) >> m;
+    }
+    return a << min(n, m);
+}
+} // namespace fast_gcd
+
+using fast_gcd::binary_gcd;
+// q / p
+struct frac {
+    template <typename T> static constexpr inline T gcd(const T a, const T b) { return (b == 0) ? a : gcd(b, a % b); }
+    ll q, p;
+    inline constexpr void simplify() {
+        if(p < 0) {
+            p *= -1;
+            q *= -1;
+        }
+        ll g = binary_gcd(q < 0 ? -q : q, p);
+        if(g) {
+            p /= g;
+            q /= g;
+            if(p == 0 and q < 0) q = 1;
+        }
+    }
+    constexpr frac(ll q = 0, ll p = 1) noexcept : q(q), p(p) { simplify(); }
+
+    constexpr bool operator<(const frac &r) const { return q * r.p < p * r.q; }
+    constexpr bool operator>(const frac &r) const { return q * r.p > p * r.q; }
+    constexpr bool operator<=(const frac &r) const { return q * r.p <= p * r.q; }
+    constexpr bool operator>=(const frac &r) const { return q * r.p >= p * r.q; }
+    template <class T> constexpr bool operator<(const T &r) const { return *this < frac(r); }
+    template <class T> constexpr bool operator>(const T &r) const { return *this > frac(r); }
+    constexpr bool operator==(const frac &r) const { return q * r.p == p * r.q; }
+    constexpr bool operator!=(const frac &r) const { return !((*this) == r); }
+    constexpr frac operator+() const noexcept { return *this; }
+    constexpr frac operator-() const noexcept { return frac(-q, p); }
+    constexpr frac operator+(const frac r) const noexcept { return frac(*this) += r; }
+    constexpr frac operator-(const frac r) const noexcept { return frac(*this) -= r; }
+    constexpr frac operator*(const frac r) const noexcept { return frac(*this) *= r; }
+    constexpr frac operator/(const frac r) const noexcept { return frac(*this) /= r; }
+    constexpr frac &operator+=(const frac &r) noexcept {
+        ll g = binary_gcd(p, r.p);
+        q = r.p / g * q + p / g * r.q;
+        p = p / g * r.p;
+        (*this).simplify();
+        return *this;
+    }
+    constexpr frac &operator-=(const frac &r) noexcept {
+        ll g = binary_gcd(p, r.p);
+        q = r.p / g * q - p / g * r.q;
+        p = p / g * r.p;
+        (*this).simplify();
+        return *this;
+    }
+    constexpr frac &operator*=(const frac &r) noexcept {
+        q *= r.q;
+        p *= r.p;
+        (*this).simplify();
+        return *this;
+    }
+    constexpr frac &operator/=(const frac &r) noexcept {
+        q *= r.p;
+        p *= r.q;
+        (*this).simplify();
+        return *this;
+    }
+
+    void print() {
+        long double tmp = (long double)q / (long double)p;
+        cout << tmp;
+    }
+};
+
+istream &operator>>(istream &is, frac &p) {
+    ll a;
+    is >> a;
+    p = frac(a, 1);
+    return is;
+}
+ostream &operator<<(ostream &os, const frac &r) { return os << 1.0 * r.q / r.p; }
+namespace Geometry {
+using T = ll;
+inline constexpr int type(T x, T y) {
+    if(x == 0 and y == 0) return 0;
+    if(y < 0 or (y == 0 and x > 0)) return -1;
+    return 1;
+}
+struct Point {
+    T x, y;
+    constexpr Point(T _x = 0, T _y = 0) : x(_x), y(_y) {}
+    constexpr Point operator+() const noexcept { return *this; }
+    constexpr Point operator-() const noexcept { return Point(-x, -y); }
+    constexpr Point operator+(const Point &p) const { return Point(x + p.x, y + p.y); }
+    constexpr Point operator-(const Point &p) const { return Point(x - p.x, y - p.y); }
+    constexpr Point &operator+=(const Point &p) { return x += p.x, y += p.y, *this; }
+    constexpr Point &operator-=(const Point &p) { return x -= p.x, y -= p.y, *this; }
+    constexpr T operator*(const Point &p) const { return x * p.x + y * p.y; }
+    constexpr Point &operator*=(const T &k) { return x *= k, y *= k, *this; }
+    constexpr Point operator*(const T &k) { return (*this *= k); }
+    constexpr bool operator==(const Point &r) const noexcept { return r.x == x and r.y == y; }
+
+    constexpr bool operator<(const Point &r) const {
+        int L = type(x, y), R = type(r.x, r.y);
+        if(L != R) return L < R;
+
+        T X = x * r.y, Y = r.x * y;
+        if(X != Y) return X > Y;
+        return x < r.x;
+    }
+};
+ostream &operator<<(ostream &os, const Point &p) { return os << p.x << " " << p.y; }
+istream &operator>>(istream &is, Point &p) {
+    is >> p.x >> p.y;
+    return is;
+}
+
+struct Line {
+    Point a, b;
+    Line() = default;
+    Line(Point a, Point b) : a(a), b(b) {}
+    // ax + by = c
+    Line(T A, T B, T C) {
+        if(A == 0) {
+            a = Point(0, C / B), Point(1, C / B);
+        } else if(B == 0) {
+            a = Point(C / A, 0), b = Point(C / A, 1);
+        } else {
+            a = Point(0, C / B), b = Point(C / A, 0);
+        }
+    }
+};
+ostream &operator<<(ostream &os, Line &p) { return os << p.a << " to " << p.b; }
+istream &operator>>(istream &is, Line &p) { return is >> p.a >> p.b; }
+
+struct Segment : Line {
+    Segment() = default;
+    Segment(Point a, Point b) : Line(a, b) {}
+};
+
+ostream &operator<<(ostream &os, Segment &p) { return os << p.a << " to " << p.b; }
+istream &operator>>(istream &is, Segment &p) {
+    is >> p.a >> p.b;
+    return is;
+}
+
+struct Circle {
+    Point p;
+    T r;
+    Circle() = default;
+    Circle(Point p, T r) : p(p), r(r) {}
+};
+
+using pt = Point;
+using Points = vector<pt>;
+T cross(const pt &x, const pt &y) { return x.x * y.y - x.y * y.x; }
+T dot(const pt &x, const pt &y) { return x.x * y.x + x.y * y.y; }
+
+T abs2(const pt &x) { return dot(x, x); }
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C
+// 点の回転方向
+int ccw(const Point &a, Point b, Point c) {
+    b = b - a, c = c - a;
+    if(cross(b, c) > 0) return +1;   // "COUNTER_CLOCKWISE"
+    if(cross(b, c) < 0) return -1;   // "CLOCKWISE"
+    if(dot(b, c) < 0) return +2;     // "ONLINE_BACK"
+    if(abs2(b) < abs2(c)) return -2; // "ONLINE_FRONT"
+    return 0;                        // "ON_SEGMENT"
+}
+
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_A
+// 平行判定
+bool parallel(const Line &a, const Line &b) { return (cross(a.b - a.a, b.b - b.a) == 0); }
+
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_A
+// 垂直判定
+bool orthogonal(const Line &a, const Line &b) { return (dot(a.a - a.b, b.a - b.b) == 0); }
+
+bool intersect(const Line &l, const Point &p) { return abs(ccw(l.a, l.b, p)) != 1; }
+
+bool intersect(const Line &l, const Line &m) { return !parallel(l, m); }
+
+bool intersect(const Segment &s, const Point &p) { return ccw(s.a, s.b, p) == 0; }
+
+bool intersect(const Line &l, const Segment &s) { return cross(l.b - l.a, s.a - l.a) * cross(l.b - l.a, s.b - l.a) <= 0; }
+
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_B
+bool intersect(const Segment &s, const Segment &t) { return ccw(s.a, s.b, t.a) * ccw(s.a, s.b, t.b) <= 0 && ccw(t.a, t.b, s.a) * ccw(t.a, t.b, s.b) <= 0; }
+
+Point crosspoint(const Line &l, const Line &m) {
+    T A = cross(l.b - l.a, m.b - m.a);
+    T B = cross(l.b - l.a, l.b - m.a);
+    if(A == 0 and B == 0) return m.a;
+    return m.a + (m.b - m.a) * (B / A);
+}
+
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_C
+Point crosspoint(const Segment &l, const Segment &m) { return crosspoint(Line(l), Line(m)); }
+
+// http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_3_B
+// 凸性判定
+bool is_convex(const Points &p) {
+    int n = (int)p.size();
+    for(int i = 0; i < n; i++) {
+        if(ccw(p[(i + n - 1) % n], p[i], p[(i + 1) % n]) == -1) return false;
+    }
+    return true;
+}
+
+Points convex_hull(Points &p) {
+    int n = p.size(), k = 0;
+    if(n <= 2) return p;
+    sort(begin(p), end(p), [](pt x, pt y) { return (x.x != y.x ? x.x < y.x : x.y < y.y); });
+    Points ch(2 * n);
+    for(int i = 0; i < n; ch[k++] = p[i++]) {
+        if(k >= 2) dump(k, ch, cross(ch[k - 1] - ch[k - 2], p[i] - ch[k - 1]));
+        while(k >= 2 && cross(ch[k - 1] - ch[k - 2], p[i] - ch[k - 1]) <= 0) --k;
+    }
+    for(int i = n - 2, t = k + 1; i >= 0; ch[k++] = p[i--]) {
+        while(k >= t && cross(ch[k - 1] - ch[k - 2], p[i] - ch[k - 1]) <= 0) --k;
+    }
+    ch.resize(k - 1);
+    return ch;
+}
+T area2(const Points &p) {
+    T res = 0;
+    rep(i, si(p)) { res += cross(p[i], p[i == si(p) - 1 ? 0 : i + 1]); }
+    return res;
+}
+} // namespace Geometry
+
+using namespace Geometry;
+int main() {
+    INT(n);
+    VEC(int, a, n);
+    Points P(n + 2);
+    P[0] = Point(0, 0);
+    rep(i, n) P[i + 1] = Point(i, a[i]);
+    P[n + 1] = Point(n - 1, 0);
+    auto ch = convex_hull(P);
+    dump(ch);
+    int ma = 0;
+    rep(i, 2, si(ch) - 1) { chmax(ma, abs((ch[i + 1].x - ch[i].x).q)); }
+    OUT(ma);
+}

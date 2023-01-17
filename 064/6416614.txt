@@ -1,0 +1,30 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<ctype.h>
+#include<string.h>
+char *gets(char *s);
+
+int main() {
+ char buf[300], *t, *h, *p;
+ int taro, hanako;
+ int i, n, ret;
+ gets(buf);
+ n = atoi(buf);
+ taro = hanako = 0;
+ for ( i=0; i<n; i++ )  {
+     gets(buf); p = buf;
+     while (isspace(*p)) p++;
+     t = p;
+     while (isalpha(*p)) p++;
+     *p++ = 0;
+     while (isspace(*p)) p++;
+     h = p;
+     while (isalpha(*p)) p++;
+     *p++ = 0;
+     ret = strcmp(t, h);
+     if (ret < 0) taro += 3;
+     else if (ret < 0) hanako += 3;
+     else hanako++, taro++; }
+     printf("%d %d\n", taro, hanako);
+     return 0;
+}

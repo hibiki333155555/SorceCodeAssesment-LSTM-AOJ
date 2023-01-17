@@ -1,0 +1,10 @@
+let [n, ...inputArr] = require(`fs`).readFileSync(`/dev/stdin`, `utf8`).split(`\n`).map(Number);
+
+let minVal = inputArr[0];
+let maxVal = inputArr[1] - minVal;
+for (let i=1; i<n; i++) {
+    maxVal = Math.max(maxVal, inputArr[i] - minVal);
+    minVal = Math.min(minVal, inputArr[i]);
+}
+
+console.log(maxVal);

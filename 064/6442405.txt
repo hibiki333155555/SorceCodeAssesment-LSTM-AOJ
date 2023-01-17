@@ -1,0 +1,43 @@
+//#include<bits/stdc++.h>
+#include<iostream>
+#include<math.h>
+#include<string.h>
+#include<stdio.h>
+using namespace std;
+//
+int main()
+{	
+	
+	int r,c,i,j;
+	int a[101][101],b[102][102]={0};
+	cin>>r>>c;
+	
+	for(i=1;i<=r;i++)
+		for(j=1;j<=c;j++)	
+		{
+			cin>>a[i][j];
+			b[i][j]=a[i][j];
+			b[i][c+1]+=a[i][j];
+			b[r+1][j]+=a[i][j];
+			b[r+1][c+1]+=a[i][j];
+		}
+	
+	for(i=1;i<=r+1;i++)
+	{
+		for(j=1;j<=c+1;j++)
+		{
+			if(j!=c+1)
+				cout<<b[i][j]<<" ";
+			else
+				cout<<b[i][j]<<endl;
+		}
+		
+		//	cout<<endl;
+	}
+	
+	
+
+return 0;
+}
+
+

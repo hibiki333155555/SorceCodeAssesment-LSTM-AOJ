@@ -1,0 +1,3 @@
+lines = open(0).readlines()
+nums = list(map(int, lines[1].split()))
+print(min(nums), max(nums), sum(nums))

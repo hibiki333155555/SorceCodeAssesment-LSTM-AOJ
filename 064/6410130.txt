@@ -1,0 +1,45 @@
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <numeric>
+#include <string>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+inline double square(double num)
+{
+    return num*num;
+}
+
+int main()
+{
+    int n;
+    int arr[1001];
+
+    while(true)
+    {
+        double sum = 0, ave;
+        cin >> n;
+        if(n == 0)
+            break;
+
+        for(int i=0;i<n;i++)
+        {
+            cin >> arr[i];
+            sum += arr[i];
+        }
+
+        ave = sum/n;
+
+        sum = 0;
+        for(int i=0; i<n; i++)
+            sum += (arr[i]-ave)*(arr[i]-ave);
+        
+        printf("%.8f\n", sqrt(sum/n));
+    }
+    
+
+    return 0;
+}

@@ -1,0 +1,88 @@
+//
+// Created by TangQihui on 2022/3/19.
+//
+#include "iostream"
+using namespace std;
+typedef struct {
+    char c;
+    int value;
+}Card;
+Card C[100000];
+Card C1[100000];
+Card A[50000];
+Card B[50000];
+int partition(int p,int r){
+    Card x = C[r-1];
+    int i = p-1;
+    for (int j = p; j < r-1; ++j) {//从p开始
+        if(C[j].value<=x.value){
+            i++;
+            Card k = C[i];
+            C[i] = C[j];
+            C[j] = k;
+        }
+    }
+    i++;
+    Card k = C[i];
+    C[i] = C[r-1];
+    C[r-1] = k;
+    return i;
+}
+void merge(int left,int mid,int right){
+    int n1 = mid-left;
+    int n2 = right-mid;
+    for (int i = 0; i < n1; ++i) {
+        A[i] = C1[left+i];
+    }
+    A[n1].value = 2000000000;
+    for (int i = 0; i < n2; ++i) {
+        B[i] = C1[mid+i];
+    }
+    B[n2].value = 2000000000;
+    int j = 0,m=0;
+    for (int i = left; i < right; ++i) {
+        if (A[j].value<=B[m].value){
+            C1[i] = A[j++];
+        }else C1[i] = B[m++];
+    }
+}
+void mergeSort(int left,int right){
+    if(right-left>1){
+        int mid = (left+right)/2;
+        mergeSort(left,mid);
+        mergeSort(mid,right);
+        merge(left,mid,right);
+    }
+}
+void quickSort(int p,int n){
+    if(p<n){
+        int q = partition(p,n);
+        quickSort(p,q);
+        quickSort(q+1,n);
+    }
+}
+int main(){
+    int n;
+    cin>>n;
+    for (int i = 0; i < n; ++i) {
+        cin>>C[i].c>>C[i].value;
+        C1[i].c = C[i].c;
+        C1[i].value = C[i].value;
+    }
+    mergeSort(0,n);
+    quickSort(0,n);
+    int f = 1;
+    for (int i = 0; i < n; ++i) {
+        if (C[i].c!=C1[i].c){
+            f = 0;
+            break;
+        }
+    }
+    if (f)cout<<"Stable"<<endl;
+    else cout<<"Not stable"<<endl;
+    for (int i = 0; i < n; ++i) {
+        cout<<C[i].c<<' '<<C[i].value<<endl;
+    }
+    return 0;
+}
+

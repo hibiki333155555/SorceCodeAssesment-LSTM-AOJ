@@ -1,0 +1,20 @@
+n=int(input())
+a=["S","H","C","D"]
+b=list()
+for i in range(n):
+    c,d=input().split()
+    e=int(d)
+    if(c=="S"):
+        b.appned(0+e)
+    elif(c=="H"):
+        b.append(13+e)
+    elif(c=="C"):
+        b.append(26+e)
+    elif(c=="D"):
+        b.append(39+e)
+for i in range(1,53):
+    if (b.find(i)==False):
+        print(a[(i//13)]," ",n%13)
+    
+
+    

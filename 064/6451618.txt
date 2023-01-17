@@ -1,0 +1,487 @@
+#pragma region Template
+#pragma region Basic
+// 設定
+#include <bits/stdc++.h>
+using namespace std;
+#ifdef _DEBUG
+#define PRE_COMMAND          \
+    cin.rdbuf(in.rdbuf());   \
+    cout.rdbuf(out.rdbuf()); \
+    cout << fixed << setprecision(15);
+#else
+#define PRE_COMMAND                    \
+    cout << fixed << setprecision(15); \
+    ios::sync_with_stdio(false);       \
+    cin.tie(0);
+#endif
+// よく使う型
+using ll = long long;
+using vi = vector<int>;
+using vl = vector<ll>;
+using vvi = vector<vector<int>>;
+using vvl = vector<vector<ll>>;
+// 多重vector用
+template <typename T> struct arg_type;
+template <typename T, typename U> struct arg_type<T(U)> { typedef U type; };
+#define VTYPE(T) vector<arg_type<void(T)>::type>
+#define VEC1(T, v, ...) VTYPE(T) v(__VA_ARGS__)
+#define VEC2(T, v, s, ...) vector<VTYPE(T)> v(s, VTYPE(T)(__VA_ARGS__))
+#define VEC3(T, v, s, t, ...) \
+    vector<vector<VTYPE(T)>> v(s, vector<VTYPE(T)>(t, VTYPE(T)(__VA_ARGS__)))
+// priority_queue用
+template <class T> using PRIQ = priority_queue<T, vector<T>, greater<T>>;
+template <class T> using PRIQR = priority_queue<T>;
+// マクロ
+#define REP(i, n) for (int i = 0, i##_len = (n); i < i##_len; ++i)
+#define FOR(i, a, b) for (int i = (a), i##_len = (b); i < i##_len; ++i)
+#define FORD(i, a, b) for (int i = (a), i##_len = (b); i > i##_len; --i)
+#define FORR(t, a) for (auto t : a)
+#define ALL(x) (x).begin(), (x).end()  // sortなどの引数を省略したい
+#define MT(...) make_tuple(__VA_ARGS__)
+#define MP(x, y) make_pair(x, y)
+#define SZ(x) ((int)(x).size())
+#define UNUSED_VARIABLE(x) ((void)(&x))  // 使わない引数の警告を消す
+// 定数
+const double EPS = 1e-10, PI = acos(-1.0);
+const int IINF = 1010101010;
+const long long LINF = 1010101010101010101;
+// 関数
+template <class T> auto MAX(T& seq) { return *max_element(ALL(seq)); }
+template <class T> auto MIN(T& seq) { return *min_element(ALL(seq)); }
+template <class T> auto SUM(T& seq) {
+    return accumulate(++ALL(seq), *seq.begin());
+}
+template <class T> void REV(T& seq) { reverse(ALL(seq)); }
+template <class T> void SORT(T& seq) { sort(ALL(seq)); }
+template <class T, class S> void SORT(T& seq, S ordr) { sort(ALL(seq), ordr); }
+template <class T> void SORTR(vector<T>& seq) { sort(ALL(seq), greater<T>()); }
+template <class T, class S> void MMINS(multimap<T, S>& a, T b, S c) {
+    a.insert(make_pair(b, c));
+}
+template <class T> inline bool CHMAX(T& l, T r) {
+    return ((l < r) ? (l = r, true) : (false));
+}
+template <class T> inline bool CHMIN(T& l, T r) {
+    return ((l > r) ? (l = r, true) : (false));
+}
+template <class T> ll pow(ll n, T k) {
+    ll now = 1;
+    while (k) {
+        if (k & 1) now *= n;
+        n *= n;
+        k >>= 1;
+    }
+    return now;
+}
+template <class T> ll pow(int n, T k) { return pow((ll)n, k); }
+template <class T> int pow(int n_0, T k, int mod) {
+    if (n_0 >= mod) n_0 %= mod;
+    if (n_0 < 0) n_0 += mod;
+    unsigned long long n = (unsigned long long)n_0, now = 1;
+    while (k) {
+        if (k & 1) now = (now * n) % mod;
+        n = (n * n) % mod;
+        k >>= 1;
+    }
+    return (int)now;
+}
+void yn(bool flag) { cout << (flag ? "YES" : "NO") << '\n'; }
+// 数値の文字列を数値の配列に変換
+vector<int> STR_2_VI(string& s) {
+    vector<int> ret(ALL(s));
+    for_each(ALL(ret), [](int& i) { return i -= 48; });
+    return ret;
+}
+#pragma endregion Basic
+#pragma region overload
+// 演算子のオーバーロード
+// 要素の追加
+template <class T> void operator+=(vector<T>& l, T r) { l.push_back(r); }
+template <class T> void operator+=(set<T>& l, T r) { l.insert(r); }
+template <class T> void operator+=(multiset<T>& l, T r) { l.insert(r); }
+template <class T> void operator>>=(deque<T>& l, T r) { l.push_back(r); }
+template <class T> void operator<<=(deque<T>& l, T r) { l.push_front(r); }
+template <class T, class V, class C>
+void operator+=(priority_queue<T, V, C>& l, T r) {
+    l.push(r);
+}
+// 配列の追加
+template <class T, class S> void operator+=(vector<T>& l, S& r) {
+    copy(ALL(r), back_inserter(l));
+}
+template <class T, class S> void operator+=(set<T>& l, S& r) {
+    copy(ALL(r), inserter(l, l.end()));
+}
+template <class T, class S> void operator+=(multiset<T>& l, S& r) {
+    copy(ALL(r), inserter(l, l.end()));
+}
+// 配列の結合
+template <class T, class S> vector<T> operator+(vector<T> l, S& r) {
+    return copy(ALL(r), back_inserter(l));
+}
+template <class T, class S> set<T> operator+(set<T> l, S& r) {
+    return copy(ALL(r), inserter(l, l.end()));
+}
+template <class T, class S> multiset<T> operator+(multiset<T> l, S& r) {
+    return copy(ALL(r), inserter(l, l.end()));
+}
+// 要素の削除
+template <class T> void operator-=(set<T>& l, T r) { l.erase(r); }
+template <class T> void operator-=(multiset<T>& l, T r) {
+    auto it = l.find(r);
+    if (it != l.end()) l.erase(it);
+}
+template <class T, class S> void operator-=(map<T, S>& l, T r) { l.erase(r); }
+// 要素のpop
+template <class T> T operator--(vector<T>& l) {
+    T ret = l.back();
+    l.pop_back();
+    return ret;
+}
+template <class T> T operator--(deque<T>& l) {
+    T ret = l.front();
+    l.pop_front();
+    return ret;
+}
+template <class T> T operator--(deque<T>& l, int r) {
+    T ret = l.back();
+    l.pop_back();
+    return ret;
+}
+template <class T, class V, class C> T operator--(priority_queue<T, V, C>& l) {
+    T ret = l.top();
+    l.pop();
+    return ret;
+}
+// 文字列の繰り返し
+string operator*(string& l, size_t r) {
+    string ret = l;
+    for (size_t i = 1; i < r; i++) { ret += l; }
+    return ret;
+}
+#pragma endregion overload
+#pragma region Input
+// INPUT関数
+template <class T1, class T2>
+istream& operator>>(istream& is, pair<T1, T2>& t) {
+    return cin >> get<0>(t) >> get<1>(t);
+}
+template <class T1> istream& operator>>(istream& is, tuple<T1>& t) {
+    return cin >> get<0>(t);
+}
+template <class T1, class T2>
+istream& operator>>(istream& is, tuple<T1, T2>& t) {
+    return cin >> get<0>(t) >> get<1>(t);
+}
+template <class T1, class T2, class T3>
+istream& operator>>(istream& is, tuple<T1, T2, T3>& t) {
+    return cin >> get<0>(t) >> get<1>(t) >> get<2>(t);
+}
+template <class T1, class T2, class T3, class T4>
+istream& operator>>(istream& is, tuple<T1, T2, T3, T4>& t) {
+    return cin >> get<0>(t) >> get<1>(t) >> get<2>(t) >> get<3>(t);
+}
+template <class T1, class T2, class T3, class T4, class T5>
+istream& operator>>(istream& is, tuple<T1, T2, T3, T4, T5>& t) {
+    return cin >> get<0>(t) >> get<1>(t) >> get<2>(t) >> get<3>(t) >> get<4>(t);
+}
+template <class T> istream& operator>>(istream& is, vector<T>& vec) {
+    for (T& x : vec) is >> x;
+    return is;
+}
+template <class Head> void INPUT(Head& head) { cin >> head; }
+template <class Head, class... Tail> void INPUT(Head& head, Tail&... tail) {
+    INPUT(head);
+    INPUT((tail)...);
+}
+#pragma endregion Input
+#pragma region Print
+// PRINT関数
+template <class T1, class T2>
+ostream& operator<<(ostream& os, const pair<T1, T2>& t) {
+    return os << get<0>(t) << " " << get<1>(t);
+}
+template <class T1> ostream& operator<<(ostream& os, const tuple<T1>& t) {
+    return os << get<0>(t);
+}
+template <class T1, class T2>
+ostream& operator<<(ostream& os, const tuple<T1, T2>& t) {
+    return os << get<0>(t) << " " << get<1>(t);
+}
+template <class T1, class T2, class T3>
+ostream& operator<<(ostream& os, const tuple<T1, T2, T3>& t) {
+    return os << get<0>(t) << " " << get<1>(t) << " " << get<2>(t);
+}
+template <class T1, class T2, class T3, class T4>
+ostream& operator<<(ostream& os, const tuple<T1, T2, T3, T4>& t) {
+    return os << get<0>(t) << " " << get<1>(t) << " " << get<2>(t) << " "
+              << get<3>(t);
+}
+template <class T1, class T2, class T3, class T4, class T5>
+ostream& operator<<(ostream& os, const tuple<T1, T2, T3, T4, T5>& t) {
+    return os << get<0>(t) << " " << get<1>(t) << " " << get<2>(t) << " "
+              << get<3>(t) << " " << get<4>(t);
+}
+template <class T> ostream& COUT_MAIN(ostream& os, const T& v) {
+    if (v.empty()) return os;
+    typename T::const_iterator ii = v.begin();
+    os << *ii++;
+    for (; ii != v.end(); ++ii) os << " " << *ii;
+    return os;
+}
+template <class T> ostream& operator<<(ostream& os, const vector<T>& v) {
+    return COUT_MAIN(os, v);
+}
+template <class T> ostream& operator<<(ostream& os, const set<T>& v) {
+    return COUT_MAIN(os, v);
+}
+template <class T> ostream& operator<<(ostream& os, const multiset<T>& v) {
+    return COUT_MAIN(os, v);
+}
+template <class T> ostream& operator<<(ostream& os, const deque<T>& v) {
+    return COUT_MAIN(os, v);
+}
+template <class T, class S>
+ostream& operator<<(ostream& os, const map<T, S>& m) {
+    for (typename map<T, S>::const_iterator ii = m.begin(); ii != m.end();) {
+        os << tuple<T, S>(*(ii++));
+        if (ii != m.end()) os << '\n';
+    }
+    return os;
+}
+template <class T, class S>
+ostream& operator<<(ostream& os, const multimap<T, S>& m) {
+    for (typename multimap<T, S>::const_iterator ii = m.begin();
+         ii != m.end();) {
+        os << tuple<T, S>(*(ii++));
+        if (ii != m.end()) os << '\n';
+    }
+    return os;
+}
+template <class T, class V, class C>
+ostream& operator<<(ostream& os, priority_queue<T, V, C> v) {
+    if (v.empty()) return os;
+    os << v.top();
+    v.pop();
+    while (!v.empty()) {
+        os << " " << v.top();
+        v.pop();
+    }
+    return os;
+}
+void PRINT() {}
+template <class Head> void PRINT(Head&& head) { cout << head << '\n'; }
+template <class Head, class... Tail> void PRINT(Head&& head, Tail&&... tail) {
+    cout << head << ' ';
+    PRINT(forward<Tail>(tail)...);
+}
+#pragma endregion Print
+#pragma endregion Template
+
+struct unionfind {
+    int n;
+    vector<int> tree_leader, tree_size;
+    unionfind(int temp) : n(temp) {
+        tree_leader.assign(n, 0);
+        tree_size.assign(n, 1);
+        for (int i = 0; i < n; i++) { tree_leader[i] = i; }
+    }
+    //結合
+    bool merge(int index1, int index2) {
+        int l1 = leader(index1), l2 = leader(index2);
+        if (l1 != l2) {
+            if (tree_size[l1] <= tree_size[l2]) {
+                tree_leader[l1] = l2;
+                tree_size[l2] = tree_size[l1] + tree_size[l2];
+            } else {
+                tree_leader[l2] = l1;
+                tree_size[l1] = tree_size[l1] + tree_size[l2];
+            }
+            return true;
+        }
+        return false;
+    }
+    //同じか判定
+    bool same(int index1, int index2) {
+        return leader(index1) == leader(index2);
+    }
+    // leaderを探す
+    int leader(int index) {
+        vector<int> temp_list(0);
+        int temp = tree_leader[index];
+        while (index != temp) {
+            temp_list.push_back(index);
+            index = temp;
+            temp = tree_leader[index];
+        }
+        for (int i : temp_list) { tree_leader[i] = index; }
+        return index;
+    }
+    // 連結成分のサイズ
+    int size(int index) { return tree_size[leader(index)]; }
+    // 「一つの連結成分の頂点番号のリスト」のリスト
+    vector<vector<int>> groups() {
+        int cnt = -1;
+        vector<int> id_list(n, -1);
+        vector<vector<int>> ret;
+        for (int i = 0; i < n; i++) {
+            int l = leader(i);
+            if (id_list[l] == -1) {
+                id_list[l] = ++cnt;
+                ret.push_back({i});
+            } else {
+                ret[id_list[l]].push_back(i);
+            }
+        }
+        return ret;
+    }
+    // 連結成分の個数
+    int components() { return (int)groups().size(); }
+};
+
+template <class T = int> struct unionfind_weighted {
+    int n;
+    vector<int> tree_leader, tree_size;
+    vector<T> tree_weight;
+
+    unionfind_weighted(int temp) : n(temp) {
+        tree_leader.assign(n, 0);
+        tree_size.assign(n, 1);
+        tree_weight.assign(n, 0);
+        for (int i = 0; i < n; i++) { tree_leader[i] = i; }
+    }
+    //距離情報込みで結合、index2はindex1よりdistだけ大きい
+    void merge(int index1, int index2, T dist) {
+        int l1, l2;
+        T k1, k2;
+        tie(l1, k1) = leader(index1), tie(l2, k2) = leader(index2);
+        if (l1 != l2) {
+            if (tree_size[l1] <= tree_size[l2]) {
+                tree_leader[l1] = l2;
+                tree_weight[l1] = dist - k1 + k2;
+                tree_size[l2] = tree_size[l1] + tree_size[l2];
+            } else {
+                tree_leader[l2] = l1;
+                tree_weight[l2] = -dist + k1 - k2;
+                tree_size[l1] = tree_size[l1] + tree_size[l2];
+            }
+        }
+    }
+    //同じグループか判定
+    //違うなら(0, 0)、同じなら(1, 距離(=index2-index1))を返す
+    tuple<bool, T> same_diff(int index1, int index2) {
+        int l1, l2, k1, k2;
+        tie(l1, k1) = leader(index1), tie(l2, k2) = leader(index2);
+        if (l1 == l2) {
+            return make_tuple(true, k1 - k2);
+        } else {
+            return make_tuple(false, 0);
+        }
+    }
+    // leaderとleaderまでの距離を返す
+    tuple<int, T> leader(int index) {
+        vector<int> temp_list(0);
+        int parent = tree_leader[index];
+        T dist = 0;
+        while (index != parent) {
+            temp_list.push_back(index);
+            dist += tree_weight[index];
+            index = parent;
+            parent = tree_leader[index];
+        }
+        T dist2 = dist, temp_dist;
+        for (int i : temp_list) {
+            tree_leader[i] = index, temp_dist = tree_weight[i];
+            tree_weight[i] = dist2;
+            dist2 -= temp_dist;
+        }
+        return make_tuple(index, dist);
+    }
+    // 連結成分のサイズ
+    int size(int index) { return tree_size[get<0>(leader(index))]; }
+    // 「一つの連結成分の頂点番号のリスト」のリスト
+    vector<vector<int>> groups() {
+        int cnt = -1;
+        vector<int> id_list(n, -1);
+        vector<vector<int>> ret;
+        for (int i = 0; i < n; i++) {
+            int l = get<0>(leader(i));
+            if (id_list[l] == -1) {
+                id_list[l] = ++cnt;
+                ret.push_back({i});
+            } else {
+                ret[id_list[l]].push_back(i);
+            }
+        }
+        return ret;
+    }
+    // 連結成分の個数
+    int components() { return (int)groups().size(); }
+};
+
+int main() {
+    PRE_COMMAND
+    int n, q;
+    INPUT(n, q);
+    unionfind_weighted<ll> uf(n);
+
+    int t, x, y;
+    ll z;
+    REP(i, q) {
+        INPUT(t, x, y);
+        if (t == 0) {
+            INPUT(z);
+            uf.merge(x, y, z);
+        } else {
+            auto [s, d] = uf.same_diff(x, y);
+            if (s) {
+                PRINT(d);
+            } else {
+                PRINT("?");
+            }
+        }
+    }
+
+    /*
+    unionfind uf(5);
+    // 初期状態ではどのノードもマージされていない
+    PRINT("マージ前の連結成分の一覧");
+    for (auto g : uf.groups()) PRINT(g);
+    PRINT("");
+
+    // (1)0と3、2と4をマージする
+    // これにより連結成分の一覧は[0, 3], [1], [2, 4]となる
+    uf.merge(0, 3);
+    uf.merge(2, 4);
+    PRINT("0と3、2と4をマージ");
+    PRINT("");
+
+    // (2)0と3が同じグループか、0と1が同じグループか
+    PRINT("0と3が同じグループか");
+    PRINT(uf.same(0, 3));
+    PRINT("0と1が同じグループか");
+    PRINT(uf.same(0, 1));
+    PRINT("");
+
+    // (3)4の属するグループの根
+    PRINT("4の属するグループの根");
+    PRINT(uf.leader(4));
+    PRINT("");
+
+    // (4)0の属するグループの要素の個数
+    PRINT("0の属するグループの要素の個数");
+    PRINT(uf.size(0));
+    PRINT("");
+
+    // (5)連結成分の一覧
+    PRINT("マージ後の連結成分の一覧");
+    for (auto g : uf.groups()) PRINT(g);
+    PRINT("");
+
+    // (6)連結成分の個数
+    PRINT("連結成分の個数");
+    PRINT(uf.components());
+    PRINT("");
+    */
+}
+

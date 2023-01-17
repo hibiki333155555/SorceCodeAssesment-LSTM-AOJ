@@ -1,0 +1,26 @@
+N = int(input())
+S = [int(num) for num in input().split()]
+Q = int(input())
+T = [int(num) for num in input().split()]
+counter = 0
+
+
+def binary_search(num: int) -> bool:
+    start = 0
+    last = N-1
+    while last >= start:
+        # print(start, last)
+        center = int((start+last)/2)
+        # print(center)
+        if num == S[center]:
+            return True
+        elif num > S[center]:
+            start = center + 1
+        elif num < S[center]:
+            last = center - 1
+    return False
+
+for num in T:
+    if binary_search(num):
+        counter += 1
+print(counter)

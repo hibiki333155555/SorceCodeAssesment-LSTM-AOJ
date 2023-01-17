@@ -1,0 +1,80 @@
+
+
+#include <bits/stdc++.h>
+#include <iostream>
+#include <limits>
+#include <numeric>
+#include <type_traits>
+#include <bitset>
+#include <map>
+#include <unordered_map>
+#include <set>
+
+using namespace std;
+
+#define rep(i,n,m) for(ll (i)=(n);(i)<(m);(i)++)
+#define rrep(i,n,m) for(ll (i)=(n);(i)>(m);(i)--)
+using ll = long long;
+const ll mod = 998244353;
+const ll inf = 1e9;
+const ll INF = 1e18;
+
+
+void pline(vector<ll> lis){
+    rep(i,0,lis.size()){
+        printf ("%lld",lis[i]);
+        if (i != lis.size()-1) printf(" ");
+        else printf("\n");
+    }
+}
+
+int main(){
+
+    ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    //ModFac mf(200000);
+
+    ll N,K;
+    cin >> N >> K;
+
+    ll ans = 0;
+
+    vector<ll> A(7,0);
+    rep(i,0,N){
+        ll na;
+        cin >> na;
+        A[na]++;
+        ans += na;
+    }
+
+    rep(i,1,7){
+
+        ll pick = min(K,A[i]);
+        K -= pick;
+        ll nex;
+
+        if (i == 1){
+            nex = 5;
+        }else{
+            nex = 6;
+        }
+
+        ans += (nex - i) * pick;
+        A[i] -= pick;
+        A[nex] += pick;
+    }
+
+    cout << ans << endl;
+
+
+}
+
+/*
+
+1 -> 5 (4)
+2 -> 6 (4)
+3
+
+
+*/

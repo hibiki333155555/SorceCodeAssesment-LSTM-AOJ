@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define N 10000000
+void insert(char *);
+int find(char *);
+int hash(char *);
+void init();
+int hashtable[N];
+int main(){
+    init();
+    int n;
+    char order[7];
+    char str[13];
+    scanf("%d",&n);
+    while(n--){
+        scanf("%s%s",order,str);
+        if(0==strcmp(order,"insert"))insert(str);
+        else if(0==strcmp(order,"find")){
+            if(find(str))printf("yes\n");
+            else printf("no\n");
+        }else exit(9);
+    }
+    return 0;
+}
+void insert(char str[]){hashtable[hash(str)]++;}
+int find(char str[]){if(hashtable[hash(str)]==0)return 0;else return 1;}
+int hash(char str[]){
+    int hashValue=0;
+    int A=1,C=11,G=37,T=71;
+    int len=strlen(str);//ヌル文字は含まない
+    //printf("strlen-> %d\n",len);
+    for(int i=0;i<len;i++){
+        if(i==0&&str[0]=='A')hashValue+=879;
+        if(str[i]=='A')hashValue+=i*A;
+        else if(str[i]=='C')hashValue+=i*C;
+        else if(str[i]=='G')hashValue+=i*G;
+        else if(str[i]=='T')hashValue+=i*T;
+        else exit(8);
+    }//例として三文字の文字列を考える。012で[2]にはヌル文字。strlenは2を返す。そして文字列の前2つの要素に用がある。だからこれforの条件にはそのまま置いておくだけでいい。
+    //printf("hashvalue : %d\n",hashValue);
+    return hashValue;
+}
+void init(){
+    for(int i=0;i<N;i++)hashtable[i]=0;
+}

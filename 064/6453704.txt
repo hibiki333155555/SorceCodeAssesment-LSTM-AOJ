@@ -1,0 +1,22 @@
+count = 1
+while count >= 1:
+    a = list(input().split())
+
+    if a[1] == '+':
+        result = int(a[0]) + int(a[2])
+        print(result)
+
+    if a[1] == '-':
+        result = int(a[0]) - int(a[2])
+        print(result)
+
+    if a[1] == '*':
+        result = int(a[0]) * int(a[2])
+        print(result)
+
+    if a[1] == '/':
+        result = int(a[0]) / int(a[2])
+        print(int(result))
+    
+    if a[1] == '?':
+        break

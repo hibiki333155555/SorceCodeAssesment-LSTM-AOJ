@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+const long long MOD = 998244353;
+long long modpow(long long a, long long b){
+	long long ans = 1;
+	while (b > 0){
+		if (b % 2 == 1){
+			ans *= a;
+			ans %= MOD;
+		}
+		a *= a;
+		a %= MOD;
+		b /= 2;
+	}
+	return ans;
+}
+long long modinv(long long a){
+	return modpow(a, MOD - 2);
+}
+int main(){
+  int N;
+  cin >> N;
+  vector<int> a, b, c;
+  vector<vector<int>> id(N + 1, vector<int>(N + 1));
+  int M = 0;
+  for (int i = 0; i <= N; i++){
+    for (int j = 0; j <= N - i; j++){
+      a.push_back(i);
+      b.push_back(j);
+      c.push_back(N - i - j);
+      id[i][j] = M;
+      M++;
+    }
+  }
+  long long X = modinv(N * (N - 1) / 2);
+  X = MOD - X;
+  vector<vector<long long>> P(M, vector<long long>(M + 1, 0));
+  for (int i = 0; i < M; i++){
+    P[i][i] = 1;
+    if (i > 0){
+      P[i][M] = 1;
+      if (a[i] >= 2){
+        long long p = a[i] * (a[i] - 1) / 2 * X % MOD;
+        P[i][id[a[i] - 2][b[i] + 2]] += p;
+      }
+      if (b[i] >= 2){
+        long long p = b[i] * (b[i] - 1) / 2 * X % MOD;
+        P[i][id[a[i]][b[i] - 2]] += p;
+      }
+      if (c[i] >= 2){
+        long long p = c[i] * (c[i] - 1) / 2 * X % MOD;
+        P[i][id[a[i] + 2][b[i]]] += p;
+      }
+      if (a[i] >= 1 && b[i] >= 1){
+        long long p = a[i] * b[i] * X % MOD;
+        P[i][id[a[i] - 1][b[i]]] += p;
+      }
+      if (b[i] >= 1 && c[i] >= 1){
+        long long p = b[i] * c[i] * X % MOD;
+        P[i][id[a[i] + 1][b[i] - 1]] += p;
+      }
+      if (c[i] >= 1 && a[i] >= 1){
+        long long p = c[i] * a[i] * X % MOD;
+        P[i][id[a[i]][b[i] + 1]] += p;
+      }
+    }
+  }
+  for (int i = 0; i < M; i++){
+    int p = i;
+    for (int j = i + 1; j < M; j++){
+      if (P[j][i] != 0){
+        p = j;
+      }
+    }
+    swap(P[p], P[i]);
+    if (P[i][i] != 0){
+      for (int j = i + 1; j <= M; j++){
+        P[i][j] *= modinv(P[i][i]);
+        P[i][j] %= MOD;
+      }
+      for (int j = 0; j < M; j++){
+        if (i != j){
+          for (int k = i + 1; k <= M; k++){
+            P[j][k] += MOD - P[j][i] * P[i][k] % MOD;
+            P[j][k] %= MOD;
+          }
+        }
+      }
+    }
+  }
+  cout << P[id[N][0]][M] << endl;
+}

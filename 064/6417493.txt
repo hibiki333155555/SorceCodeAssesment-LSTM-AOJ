@@ -1,0 +1,46 @@
+#define rep(i,n) for(int i=0;i<(int)(n);i++)
+#define ALL(v) v.begin(),v.end()
+typedef long long ll;
+ 
+#include<bits/stdc++.h>
+using namespace std;
+ 
+int main(){
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  
+  int n,k;
+  cin>>n>>k;
+  vector<ll> A(n);
+  rep(i,n) cin>>A[i];
+  
+  sort(ALL(A));
+  rep(i,n){
+    if(k<=0) break;
+    if(A[i]==1){
+      A[i]=5;
+      k--;
+    }
+    else if(A[i]<6){
+      A[i]=6;
+      k--;
+    }
+  }
+  
+  if(k>0){
+    sort(ALL(A));
+    rep(i,n){
+      if(k<=0) break;
+      if(A[i]<6){
+        A[i]=6;
+        k--;
+      }
+    }
+  }
+  ll ans=0;
+  rep(i,n) ans+=A[i];
+  cout<<ans<<endl;
+  
+  
+  return 0;
+}

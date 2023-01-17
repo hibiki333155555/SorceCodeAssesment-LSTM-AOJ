@@ -1,0 +1,103 @@
+import std.stdio, std.string, std.conv;
+import std.algorithm, std.math;
+import std.range;
+import std.container.rbtree, std.container.dlist;
+import std.container.binaryheap, std.container.array;
+import std.typecons;
+
+alias mstring = char[];
+const long INF = 1L << 60L;
+// const long mod = 1_000_000_000 + 7;
+const long mod = 998_244_353L;
+
+void chmin (T)(ref T x, T y) {
+  x = min(x, y);
+}
+
+void chmax (T)(ref T x, T y) {
+  x = max(x, y);
+}
+
+// 単一の数値を取得
+// readln.chomp.to!int;
+//  or
+// int a;
+// readf("%s\n", a);
+
+// 複数の数値を取得(可変数個の場合推奨)
+// readln.chomp.split.map!(to!long).array
+
+// 複数の数値を取得(固定数個の場合、推奨)
+// int a, b;
+// readf("%s %s\n", &a, &b);
+
+// インデントを一個ずらして複数の数値を取得(累積和とかで1-indexedの方が良い時がある)
+// long[] vs = readln.chomp.split.map!(to!long).array;
+// vs = [0L] ~ vs;
+
+// 小数点は以下で指定
+// double ret = 10.0;
+// writefln("%.12f", ret);
+
+// 配列の最後の要素は arr[$-1] でアクセスできる
+
+void main () {
+  int H, N;
+  readf("%s %s\n", &H, &N);
+  auto mp = new int[][](H, 4);
+  foreach (i; 0 .. N) {
+    int x, y;
+    readf("%s %s\n", &y, &x);
+    mp[H - 1 - x][y] = 1;
+  }
+
+  auto dp = new long[][](H, 1 << 4);
+  foreach (i; 0 .. H)
+    foreach (s; 0 .. (1 << 4))
+      dp[i][s] = -INF;
+
+  int init = 0;
+  foreach (j; 0 .. 4)
+    init |= mp[0][3 - j] << j;
+  dp[0][init] = 0L;
+
+  foreach (i; 1 .. H) {
+    // s...i行の初期状態. 荷物が置けない場所にビットが立っている
+    int s = 0;
+    foreach (j; 0 .. 4)
+      s |= (mp[i][3 - j] << j);
+
+    // 何も置かないバターンの最適解更新
+    foreach (ps; 0 .. (1 << 4))
+      chmax (dp[i][s], dp[i - 1][ps]);
+
+    // 1個以上置くパターンの最適解更新
+    foreach (ps; 0 .. (1 << 4)) {
+      if (dp[i - 1][ps] < 0L)
+        continue;
+
+      // 1個置くパターン
+      foreach (k; 0 .. 3) {
+        int pat = (1 << k) | (1 << (k + 1));
+        if (s & pat)
+          continue;
+        if (ps & pat)
+          continue;
+        chmax(dp[i][s | pat], dp[i - 1][ps] + 1L);
+      }
+
+      // 2個置くパターン
+      int pat = 15;
+      if (s & pat)
+        continue;
+      if (ps & pat)
+        continue;
+      chmax(dp[i][s | pat], dp[i - 1][ps] + 2L);
+    }
+  }
+
+  long ret = 0L;
+  foreach (s; 0 .. (1 << 4))
+    chmax (ret, dp[H - 1][s]);
+  writeln(ret);
+}

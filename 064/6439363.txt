@@ -1,0 +1,16 @@
+def countingsort(A):
+    from collections import Counter 
+    C = Counter()
+    for a in A:
+        C[a] += 1 
+    
+    res = []
+    for k in sorted(C.keys()):
+        res.extend([k]*C[k])
+    return res
+
+
+n = int(input())
+A = list(map(int, input().split()))
+B = countingsort(A)
+print(*B)

@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+typedef long long ll;
+using namespace std;
+
+int main() {
+    cin.tie(0);
+    ios_base::sync_with_stdio(false);
+
+    int N;
+    cin >> N;
+    vector<vector<string>> S(3, vector<string>(N));
+    rep(i, 3) rep(j, N) cin >> S[i][j];
+
+    vector flag(N, vector(N, vector<bool>(N)));
+    rep(i, 3) {
+        rep(j, N) rep(k, N) {
+            if (S[i][j][k] == '0') {
+                rep(l, N) {
+                    if (i == 0)
+                        flag[l][k][N - j - 1] = true;
+                    if (i == 1)
+                        flag[N - j - 1][l][k] = true;
+                    if (i == 2)
+                        flag[k][N - j - 1][l] = true;
+                }
+            }
+        }
+    }
+
+    rep(i, 3) {
+        rep(j, N) rep(k, N) {
+            if (S[i][j][k] == '1') {
+                bool f = false;
+                rep(l, N) {
+                    if (i == 0 && !flag[l][k][N - j - 1]) {
+                        f = true;
+                        break;
+                    }
+                    if (i == 1 && !flag[N - j - 1][l][k]) {
+                        f = true;
+                        break;
+                    }
+                    if (i == 2 && !flag[k][N - j - 1][l]) {
+                        f = true;
+                        break;
+                    }
+                }
+
+                if (!f) {
+                    cout << "No\n";
+                    return 0;
+                }
+            }
+        }
+    }
+
+    cout << "Yes\n";
+
+    return 0;
+}

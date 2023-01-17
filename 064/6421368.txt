@@ -1,0 +1,35 @@
+P1 = 1010001133
+P2 = 998833447
+
+N = int(input())
+A = [(ord(a) - 80) ** 2 + 123 for a in input()]
+S1 = [0]
+T1 = [0]
+po1 = [1]
+for _ in range(N):
+    po1.append(po1[-1] * 31 % P1)
+
+a = 1
+for i in range(N):
+    a = a * 31 % P1
+    S1.append((S1[-1] + a * A[i]) % P1)
+a = 1
+for i in range(N)[::-1]:
+    a = a * 31 % P1
+    T1.append((T1[-1] + a * A[i]) % P1)
+
+ans = 0
+for l in range(1, N):
+    r = N - l
+    if l <= r:
+        if (T1[r] - T1[r-l]) % P1 == S1[l] * po1[r-l] % P1:
+            ans += 1
+        else:
+            pass
+    else:
+        if (S1[l] - S1[l-r]) % P1 == T1[r] * po1[l-r] % P1:
+            ans += 1
+        else:
+            pass
+        
+print(ans)

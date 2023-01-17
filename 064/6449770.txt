@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include<iostream>
+using namespace std;
+
+int main(){
+    double r, pi = 3.141592653589;
+    double r1, r2;
+    cin >> r >> pi >> r1 >> r2;
+    
+    r1 = r*r*pi;
+    r2 = 2*r*pi
+    
+    // cout << c << " " << d << " " << e << endl;
+    printf("%.8lf %.8lf", r1, r2);
+    
+
+    return 0;
+}
+
+

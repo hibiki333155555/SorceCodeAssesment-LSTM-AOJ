@@ -1,0 +1,7 @@
+n = int(input())
+A = set(map(int, input().split()))
+m = int(input())
+B = set(map(int, input().split()))
+
+for i in A.union(B):
+    print(i)

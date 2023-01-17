@@ -1,0 +1,82 @@
+// #define _GLIBCXX_DEBUG
+#include<bits/stdc++.h>
+// #include <atcoder/all>
+#define rep(i, n) for (long long i = 0; i < (n); i++)
+#define rep1(i, n) for(long long i = 1; i <= (n); i++)
+#define all(v) v.begin(),v.end()
+#define decimal(n) cout << fixed << setprecision(n);
+using namespace std;
+// using namespace atcoder;
+using ll = long long; using vl = vector<ll>; using P = pair<ll, ll>;
+using vi = vector<int>; using vvi = vector<vi>;
+using vvl = vector<vl>; using vc = vector<char>; using vvc = vector<vc>;
+// using mint = modint998244353;
+const ll MOD = 998244353;
+// using mint = modint1000000007;
+// const ll MOD = 1000000007;
+const ll MAX = 2000100; const ll inf = 3e18;
+const int INF = 2e9; const long double pi = acos(-1);
+template<class T>bool chmax(T& a, const T& b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T>bool chmin(T& a, const T& b) { if (b < a) { a = b; return 1; } return 0; }
+ll lcm(ll a, ll b){ return (a * b) / gcd(a, b); }
+
+vvl G;
+ll n;
+
+// グラフ、頂点の入次数、頂点数を受け取り、そのトポロジカルソートを記録した配列を返す関数
+vector<ll> topological_sort() {
+    // トポロジカルソートを記録する配列
+    vector<ll> sorted_vertices;
+    // 入次数を管理する配列
+    vector<ll> indegree(n);
+    rep(i, n){
+      for(ll go : G[i]) indegree[go]++;
+    }
+
+    // 入次数が0の頂点を発見したら、処理待ち頂点としてキューに追加する
+    queue<ll> que;
+    for (ll i = 0; i < n; i++) {
+        if (indegree[i] == 0) {
+            que.push(i);
+        }
+    }
+
+    // キューが空になるまで、操作1~3を繰り返す
+    while (que.empty() == false) {
+        // キューの先頭の頂点を取り出す
+        ll v = que.front();
+        que.pop();
+
+        // その頂点と隣接している頂点の入次数を減らし、0になればキューに追加
+        for (ll i = 0; i < G[v].size(); i++) {
+            ll u = G[v][i];
+            indegree[u] -= 1;
+            if (indegree[u] == 0) que.push(u);
+        }
+        // 頂点vを配列の末尾に追加する 
+        sorted_vertices.emplace_back(v);
+    }
+
+    // トポロジカルソートを返す
+    return sorted_vertices;
+}
+
+int main(){
+  ll m; cin >> n >> m;
+  G.resize(n);
+  rep(i, m){
+    ll a, b; cin >> a >> b;
+    G[a].emplace_back(b);
+  }
+
+  auto sorted_vertices = topological_sort();
+
+  if(sorted_vertices.size() != n){
+    cout << -1 << endl;
+    return 0;
+  }
+  rep(i, sorted_vertices.size()){
+    cout << sorted_vertices[i] << endl;
+  }
+
+}

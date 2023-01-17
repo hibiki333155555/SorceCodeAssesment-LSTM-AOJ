@@ -1,0 +1,35 @@
+#include<stdio.h>
+#include<vector>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+int lcs(string v, string s){
+  vector<vector<int> > dp(v.size()+1,vector<int>(s.size()+1));
+  for(int i = 0; i <= v.size(); i++){
+    for(int j = 0; j <= s.size(); j++){
+      if((i==0)||(j==0)){
+        dp.at(i).at(j) = 0;
+      }
+      else{
+        if(v.at(i-1) == s.at(j-1)){
+          dp.at(i).at(j) = dp.at(i-1).at(j-1) + 1;
+        }
+        else{
+          dp.at(i).at(j) = max(dp.at(i-1).at(j),dp.at(i).at(j-1));
+        }
+      }
+    }
+  }
+  return dp.at(v.size()).at(s.size());
+}
+          
+int main(){
+  int q;
+  scanf("%d",&q);
+  for(int i = 0; i < q; i++){
+    string v,s;
+    cin >> v >> s;
+    printf("%d\n",lcs(v,s));
+  }
+}

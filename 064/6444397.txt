@@ -1,0 +1,29 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+bool isdigit(char c){
+    return c>='0' && c<='9';
+}
+int main(){
+    stack <int> s;
+    char c;
+    while(cin >> c){
+        if(isdigit(c)) s.push(c-'0');
+        else{
+            int a = s.top();
+            s.pop();
+            int b = s.top();
+            s.pop();
+            switch(c){
+                case '+': s.push(a+b);break;
+                case '-': s.push(b-a);break;
+                case '*': s.push(a*b);break;
+                case '/': s.push(b/a);break;
+            }
+            // cout << s.top() << endl;
+        }
+    }
+    cout << s.top() << endl;
+    return 0;
+}

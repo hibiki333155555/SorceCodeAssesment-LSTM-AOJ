@@ -1,0 +1,85 @@
+import java.util.Scanner;
+
+public class Main {
+
+	public static final int BIG_NUM = 2000000000;
+	public static final int MOD = 1000000007;
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+
+		int V = sc.nextInt();
+		int E = sc.nextInt();
+
+		int min_dist[][] = new int[V][V];
+
+		for(int i = 0; i < V; i++){
+			for(int k = 0; k < V; k++){
+				if(i == k){
+					min_dist[i][k] = 0;
+				}else{
+					min_dist[i][k] = BIG_NUM;
+				}
+			}
+		}
+
+		int from,to,cost;
+
+		for(int loop = 0; loop < E; loop++){
+			from = sc.nextInt();
+			to = sc.nextInt();
+			cost = sc.nextInt();
+
+			min_dist[from][to] = Math.min(min_dist[from][to],cost);
+		}
+
+		for(int mid = 0; mid < V; mid++){
+			for(int start = 0; start < V; start++){
+				if(min_dist[start][mid] == BIG_NUM)continue;
+				for(int goal = 0; goal < V; goal++){
+					if(min_dist[mid][goal] == BIG_NUM)continue;
+					min_dist[start][goal] = Math.min(min_dist[start][goal], min_dist[start][mid]+min_dist[mid][goal]);
+				}
+			}
+		}
+
+
+		boolean FLG = true;
+
+		for(int i = 0; i < V; i++){
+			if(min_dist[i][i] < 0){
+				FLG = false;
+				break;
+			}
+		}
+
+		if(!FLG){System.out.println("NEGATIVE CYCLE");
+			return;
+		}
+
+		StringBuilder ans = new StringBuilder();
+
+		for(int i = 0; i < V; i++){
+			if(min_dist[i][0] != BIG_NUM){
+
+				ans.append(Integer.toString(min_dist[i][0]));
+			}else{
+				ans.append("INF");
+			}
+			for(int k = 1; k < V; k++){
+				if(min_dist[i][k] != BIG_NUM){
+
+					ans.append(" ").append(Integer.toString(min_dist[i][k]));
+				}else{
+					ans.append(" ").append("INF");
+				}
+			}
+			ans.append("\n");
+		}
+		System.out.print(ans.toString());
+	}
+}
+
+
+

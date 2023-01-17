@@ -1,0 +1,22 @@
+#include<stdio.h>
+#include<stdlib.h>
+int pop();
+void push(int);
+void show();
+int head=0;
+int stuck[100000000];
+int main(){
+    char a[100];
+    while(EOF!=scanf("%s ",&a)){
+        if(a=='+')push(pop()+pop());
+        else if(a=='-'){int pop1=pop(),pop2=pop();push(pop2-pop1);}
+        else if(a=='*')push(pop()*pop());
+        else push(atoi(a));
+        show();
+    }
+    printf("%d\n",pop());
+    return 0;
+}
+int pop(){return stuck[head--];}
+void push(int n){stuck[++head]=n;}
+void show(){for(int i=0;i<10;i++)printf("%d|",stuck[i]);printf("%d\n",head);}

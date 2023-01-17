@@ -1,0 +1,119 @@
+N = 10001
+
+BIT_COUNT = [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2,
+3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3,
+3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 1,
+2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5,
+3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5,
+6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 1, 2, 2, 3, 2, 3,
+3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4,
+5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5,
+4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4,
+5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 3, 4,
+4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 4, 5, 5, 6, 5, 6, 6, 7, 5,
+6, 6, 7, 6, 7, 7, 8]
+
+def count_bit(val)
+  return val.to_s(2).count("1")
+  # count = 0
+  # # while val > 0
+  # #   count += val & 1
+  # #   val >>= 1
+  # # end
+  # while val > 0
+  #   count += BIT_COUNT[val & 255]
+  #   val >>= 8
+  # end
+  # return count
+end  
+
+# def count_change(val)
+#   cur_bit = val & 1
+#   count = cur_bit
+#   while val > 0
+#     val >>= 1
+#     new_bit = val & 1
+#     count += new_bit ^ cur_bit
+#     cur_bit = new_bit
+#   end
+#   return count
+# end
+
+# 256.times{|c|
+#   print "#{count_bit(c)}, "
+# }
+# exit
+
+loop{
+  n, r = gets.chomp.split.map(&:to_i)
+  break if n == 0 && r == 0
+  img = Array.new(N, 0)
+  n.times{
+    x1, y1, x2, y2 = gets.chomp.split.map(&:to_i)
+    y = y1
+    while y < y2
+      ones = x2-x1
+      # val = ("1"*ones).to_i(2) << x1 | img[y]
+      yval = img[y]
+      val = ((1 << ones).pred) << x1 | yval
+      loc_y = y+1
+      # while loc_y < y2 && img[loc_y] == yval
+      #   img[loc_y] = val
+      #   loc_y += 1
+      # end
+      # img[y] = val
+
+      while loc_y < y2 && img[loc_y] == yval
+        loc_y += 1
+      end
+      img[y...loc_y] = Array.new(loc_y-y, val)
+
+      y = loc_y
+    end
+  }
+
+  area = 0
+  y = 0
+  while y < N-1
+    count = count_bit(img[y])
+    loc_y = y+1
+    while loc_y < N-1 && img[y] == img[loc_y]
+      area += count
+      loc_y += 1
+    end
+    area += count
+    y = loc_y
+  end
+  puts area
+
+  if r == 2
+    contour = 0
+    y = 0
+    while y < N-1
+      val_y = img[y]
+      val_yp = img[y+1]
+      val_ym = img[y-1]
+      contour += count_bit((val_y | val_ym) ^ val_ym)
+      contour += count_bit((val_y | val_yp) ^ val_yp)
+      # contour += count_bit(val_y & (~ val_ym))
+      # contour += count_bit(val_y & (~ val_yp))
+      # contour += count_bit(val_y ^ (val_y << 1))
+      y += 1
+    end
+
+    y = 0
+    while y < N-1
+      val_y = img[y]
+      row_count = count_bit(val_y ^ (val_y << 1))
+      loc_y = y+1
+      while loc_y < N-1 && img[loc_y] == val_y
+        contour += row_count
+        loc_y += 1
+      end
+      contour += row_count
+      y = loc_y
+    end
+    puts contour
+  end
+}
+

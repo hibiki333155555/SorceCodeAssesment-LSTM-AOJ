@@ -1,0 +1,26 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+int main(){
+    int n,e;
+    vector<int>a,b;
+    cin>>n;
+    while(n--){
+        cin>>e;
+        a.push_back(e);
+    }
+    cin>>n;
+    while(n--){
+        cin>>e;
+        b.push_back(e);
+    }
+    std::vector<int> result;
+    set_union(a.begin(), a.end(), b.begin(), b.end(), inserter(result));
+    for(int i = 0; i < result.size(); i++){
+        cout << result.at(i) << endl;
+    }
+    return 0;
+}

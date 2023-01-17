@@ -1,0 +1,29 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ITP1_8_C
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var wordCounter = new int['z' + 1 - 'a'];
+            var line = string.Empty;
+            while ((line = Console.ReadLine()) != null)
+            {
+                foreach (var word in line.Select(c => char.ToLower(c)))
+                {
+                    if (word < 'a' || word > 'z')
+                        continue;
+                    wordCounter[word - 'a']++;
+                }
+            }
+
+            for (int i = 0; i < wordCounter.Length; i++)
+            {
+                Console.WriteLine($"{(char)(i + 'a')} : {wordCounter[i]}");
+            }
+        }
+    }
+}
+

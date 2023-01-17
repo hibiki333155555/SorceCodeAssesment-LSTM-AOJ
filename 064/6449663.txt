@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+//#include<stdlib.h>
+//#include<string.h>
+//#include<ctype.h>
+//#include<stdio.h>
+using namespace std;
+//分析见书《挑战程序设计竞赛2》上P92 
+
+int search(int A[],int x,int y)
+{
+	int i;
+	for(i=0;i<x;i++)
+		if(y==A[i])
+			return 1;
+	return 0;
+}
+
+int main()
+{	
+	int n,q,i,num;
+	int sum=0;
+	int S[10005];
+	
+	cin>>n;
+	for(i=0;i<n;i++)
+		cin>>S[i];
+	cin>>q;
+	for(i=0;i<q;i++)
+	{
+		cin>>num;
+		if(search(S,n,num)==1)
+			sum++;
+	
+	}
+	cout<<sum<<endl;
+	
+	
+return 0;
+}
+

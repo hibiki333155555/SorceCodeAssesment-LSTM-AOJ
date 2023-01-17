@@ -1,0 +1,31 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int EditDistance(string a, string b) {
+    int distance = 0;
+    int arr[a.size()][b.size()];
+    for (size_t i = 0; i < a.size(); i++) {
+        for (size_t j = 0; j < b.size(); j++) {
+            if (i == 0 || j == 0 || a.at(i) == b.at(j)) arr[i][j] = 0;
+            else if (a.at(i) != b.at(j)) arr[i][j] = arr[i-1][j-1] + 1;
+        }
+    }
+    for (size_t i = 0; i < a.size(); i++) {
+        for (size_t j = 0; j < b.size(); j++) {
+            cout << arr[i][j] << " ";
+        }
+        cout << endl;
+    }
+    distance = arr[a.size()-1][b.size()-1]; 
+    return distance;
+}
+
+int main() {
+    string a;
+    string b;
+    cin >> a >> b;
+    int distance = EditDistance(a, b);
+    cout << distance << endl;
+    return 0;
+}

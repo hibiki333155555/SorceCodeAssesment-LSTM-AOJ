@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+#include<cmath>
+using namespace std;
+
+int main(){
+
+    int a,b,c;
+    long double S,L,h,d;
+    double pi  = acos(-1);
+    
+
+    cin>>a>>b>>c;
+    double C = c*pi/180;
+
+    S=(a*b*sin(C))/2;
+    d=sqrt(pow(a,2)+pow(b,2)-2*a*cos(C));
+    L=a+b+d;
+    h=2*S/a;
+
+    cout<<fixed<<setprecision(10)<<S<<endl;
+    cout<<fixed<<setprecision(10)<<L<<endl;
+    cout<<fixed<<setprecision(10)<<h<<endl;
+
+    return 0;
+}
+

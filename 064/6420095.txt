@@ -1,0 +1,26 @@
+import bisect
+
+
+N = int(input())
+tmp = []
+tmp.append('5')
+tmp.append('1')
+tmp.append('3')
+tmp.append('2')
+tmp.append('4')
+
+inf = 10000000000
+dp = [inf]*N
+nums = []
+
+for i in range(N):
+    nums.append(int(input()))
+    
+for num in nums:
+    pos = bisect.bisect_left(dp, num)
+    dp[pos] = num
+ans = 0
+for i in range(N):
+    if dp[i] < inf:
+        ans += 1
+print(ans)

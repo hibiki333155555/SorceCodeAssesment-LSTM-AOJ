@@ -1,0 +1,18 @@
+from audioop import reverse
+
+
+s = list(input())
+q = int(input())
+
+for i in range(q):
+    com = input().split()
+    com[1], com[2] = int(com[1]), int(com[2])
+    if com[0] == 'print':
+        print(''.join(s[com[1]:com[2]+1]))
+    elif com[0] == 'reverse':
+        reverse(s[com[1]:com[2]+1])
+    else:
+        com[3] = list(com[3])
+        for j in range(len(com[3])):
+            com[1+j] = com[3][j]
+            

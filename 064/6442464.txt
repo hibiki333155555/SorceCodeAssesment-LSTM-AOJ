@@ -1,0 +1,41 @@
+//#include<bits/stdc++.h>
+#include<iostream>
+#include<math.h>
+#include<string.h>
+#include<stdio.h>
+using namespace std;
+//
+int main()
+{	
+	
+	int n,m,l;
+	int i,j,k;
+	long long a[102][102],b[102][102];
+	long long c[102][102];
+	
+	cin>>n>>m>>l;
+	for(i=1;i<=n;i++)
+		for(j=1;j<=m;j++)
+			cin>>a[i][j];
+	for(i=1;i<=m;i++)
+		for(j=1;j<=l;j++)
+			cin>>b[i][j];
+			
+	for(i=1;i<=n;i++)
+		for(j=1;j<=l;j++)
+			for(k=1;k<=m;k++)
+				c[i][j]+=a[i][k]*b[k][j];
+		
+	for(i=1;i<=n;i++)
+	{
+		for(j=1;j<=l;j++)
+		{
+			if(j!=l)
+				printf("%lld ",c[i][j]);
+			else
+				printf("%lld\n",c[i][j]);
+		}
+	}
+return 0;
+}
+

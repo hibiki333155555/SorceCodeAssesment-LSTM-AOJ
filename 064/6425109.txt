@@ -1,0 +1,12 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define ll long long
+#define fix(ans,x) fixed << setprecision(x)<<ans
+int main(){
+    int f;
+    cin>>f;
+    cout<<(f-30)/2<<endl;
+    return 0;
+}
+

@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+using ll = long long;
+const int MX = 200010;
+ll f[MX],inv[MX],fi[MX];
+constexpr ll mod = 998244353;
+void solve(){
+    inv[1] = 1;
+    for(int i=2;i<MX;i++){
+        inv[i] = mod - (mod/i)*inv[mod%i]%mod;
+    }
+    f[0] = fi[0] = 1;
+    for(int i=1;i<MX;i++){
+        f[i] = f[i-1]*i%mod;
+        fi[i] = fi[i-1]*inv[i]%mod;
+    }
+}
+
+ll nck(ll n, ll k){
+    if(n<0 || k<0 || n<k) return 0;
+    return f[n]*fi[k]%mod*fi[n-k]%mod;
+}
+
+ll pw(ll a,ll x){
+    ll ret = 1;
+    while(x){
+        if(x&1) (ret *= a) %= mod;
+        (a *= a) %= mod; x /= 2;
+    }
+    return ret;
+}
+
+int main(){
+    solve();
+    string N; cin >> N;
+    int i,n = N.size(),k;
+    cin >> k;
+    ll ans = 0,now = 0;
+    int c = 0;
+    for(i=0;i<n;i++){
+        if(N[i]=='1'){
+            int ret = k - c;
+            if(ret>=0) (ans += now*pw(2,n - i)%mod*nck(n - i - 1,ret)%mod) %= mod;
+            //cout << ans << endl;
+            if(ret>=1) (ans += (pw(2,n - 1 - i) - 1)*nck(n - 2 - i,ret - 1)%mod) %= mod;
+            c++;
+        }
+        now *= 2;
+        now += N[i] - '0';
+        //cout << now << " " << ans << " " << n - i - 1 << endl;
+    }
+    if(c==k) (ans += now) %= mod;
+    cout << ans << endl;
+    //cout << now << endl;
+}

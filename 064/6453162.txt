@@ -1,0 +1,104 @@
+#include <bits/stdc++.h>
+using namespace std;
+int fa[105];
+int find(int x)
+{
+    return x==fa[x]?x:fa[x]=find(fa[x]);
+}
+void join(int x,int y)
+{
+    int tx=find(x),ty=find(y);
+    if(tx!=ty)
+    {
+        fa[ty]=tx;
+    }
+}
+vector<pair<int,pair<int,int>>>Edge;
+bool f(int n,int index)
+{
+    for(int i=0;i<n;i++)
+    {
+        fa[i]=i;
+    }
+
+    for(int j=0;j<Edge.size();j++)
+    {
+        if(j==index)
+            continue;
+        auto i=Edge[j];
+        join(i.second.first,i.second.second);
+    }
+    int root= find(0);
+    bool jud= false;
+    for(int i=1;i<n;i++)
+    {
+        if(find(i)!=root)
+        {
+            jud=true;
+            break;
+        }
+    }
+    return jud;
+}
+int main()
+{
+    int n,m;
+    while (scanf("%d%d",&n,&m)!=EOF)
+    {
+
+        if(n==m and n==0)
+            break;
+        int x,y,cost,sum=0;
+        while (m--)
+        {
+            scanf("%d%d%d",&x,&y,&cost);
+            if(cost<=0)
+            {
+                sum+=cost;
+            }
+            else
+            {
+                Edge.push_back({cost,{x, y}});
+
+            }
+
+        }
+        std::sort(Edge.begin(), Edge.end());
+
+
+
+
+        if(!f(n,-1))
+        {
+
+            int tmp=Edge[0].first+Edge[1].first;
+            bool jud= false;
+            for(int i=0;i<Edge.size() and Edge[i].first<tmp;i++)
+            {
+                jud=f(n,i);
+                if(jud)
+                {
+                    sum+=Edge[i].first;
+                    break;
+                }
+            }
+            if(!jud)
+            {
+                sum+=tmp;
+            }
+
+
+        }
+        cout<<sum<<endl;
+        for(int i=0;i<n;i++)
+        {
+            cout<<i<<" "<<find(i)<<endl;
+        }
+
+
+        Edge.clear();
+    }
+
+    return 0;
+}
+

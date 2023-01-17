@@ -1,0 +1,91 @@
+#include <bits/stdc++.h>
+#define be(v) (v).begin(),(v).end()
+#define pb(q) push_back(q)
+#define rep(i, n) for(int i=0;i<n;i++)
+#define all(i, v) for(auto& i : v)
+typedef long long ll;
+using namespace std;
+const ll mod=1000000007, INF=(1LL<<60);
+#define doublecout(a) cout<<fixed<<setprecision(10)<<a<<endl;
+
+int main() {
+    cin.tie(0);
+    cout.tie(0);
+    ios::sync_with_stdio(false);
+    int h, w;
+    cin >> h >> w;
+    int sy, sx, gy, gx;
+    vector<string> s(h);
+    rep(i, h) {
+        cin >> s[i];
+        rep(j, w) {
+            if(s[i][j] == 'S') {
+                sy = i;
+                sx = j;
+                s[i][j] = '.';
+            } else if(s[i][j] == 'G') {
+                gy = i;
+                gx = j;
+                s[i][j] = '.';
+            }
+        }
+    }
+    int inf = (1 << 30);
+    deque<tuple<int, int, int>> dq; //dist, y, x
+    vector<vector<int>> dist(h, vector<int> (w, inf));
+    dist[sy][sx] = 0;
+    dq.push_back({0, sy, sx});
+    int dx[4] = {-1, 0, 0, 1}, dy[4] = {0, -1, 1, 0};
+    while(!dq.empty()) {
+        auto [d, i, j] = dq.front();
+        dq.pop_front();
+        if(i == gy && j == gx) break;
+        if(d > dist[i][j]) continue;
+        if(s[i][j] == '#') continue;
+        if(s[i][j] == 'U') {
+            int y = i - 1;
+            int x = j;
+            if(x < 0 || x >= w || y < 0 || y >= h) continue;
+            if(s[y][x] == '#') continue;
+            if(d >= dist[y][x]) continue;
+            dist[y][x] = d;
+            dq.push_front({d, y, x});
+        } else if(s[i][j] == 'D') {
+            int y = i + 1;
+            int x = j;
+            if(x < 0 || x >= w || y < 0 || y >= h) continue;
+            if(s[y][x] == '#') continue;
+            if(d >= dist[y][x]) continue;
+            dist[y][x] = d;
+            dq.push_front({d, y, x});
+        } else if(s[i][j] == 'L') {
+            int y = i;
+            int x = j - 1;
+            if(x < 0 || x >= w || y < 0 || y >= h) continue;
+            if(s[y][x] == '#') continue;
+            if(d >= dist[y][x]) continue;
+            dist[y][x] = d;
+            dq.push_front({d, y, x});
+        } else if(s[i][j] == 'R') {
+            int y = i;
+            int x = j + 1;
+            if(x < 0 || x >= w || y < 0 || y >= h) continue;
+            if(s[y][x] == '#') continue;
+            if(d >= dist[y][x]) continue;
+            dist[y][x] = d;
+            dq.push_front({d, y, x});
+        } else {
+            rep(k, 4) {
+                int y = dy[k] + i;
+                int x = dx[k] + j;
+                if(x < 0 || x >= w || y < 0 || y >= h) continue;
+                if(s[y][x] == '#') continue;
+                if(d + 1 >= dist[y][x]) continue;
+                dist[y][x] = d + 1;
+                dq.push_front({d + 1, y, x});
+            }
+        }
+    }
+    cout << (dist[gy][gx] == inf ? -1 : dist[gy][gx]) << endl;
+    return 0;
+}

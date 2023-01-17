@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<ctype.h>
+
+int* splitstr(char* str,int *n){
+    int cn=1;
+    char* s=(char*)malloc(sizeof(char)*2);
+    int* ret=(int*)malloc(sizeof(int)*(cn));
+    char c=' ';
+    sprintf(s,"%c",c);
+    for(char* p=strtok(str,s);p;p=strtok(NULL,s)){
+        ret=(int*)realloc(ret,sizeof(int)*(cn+1));
+        ret[cn-1]=strtol(p,NULL,10);
+        cn++; 
+    }
+    ret=(int*)realloc(ret,sizeof(int)*(cn));
+    *n=cn;
+    s=NULL;
+    return ret; 
+}
+
+
+int main(void){
+    char* line;
+    int linesize=0;
+    char *result;
+    int n,m;
+    int*row,*col;
+    while(1){
+        scanf("%d %d\n",&n,&m);
+        if(n==0 && m==0)break;
+        char r=' ';
+        int cn[10]={0};
+        if ((result = getline(&line,&linesize,stdin)) != NULL){
+            row=splitstr(line,&n);
+        }
+        if ((result = getline(&line,&linesize,stdin)) != NULL){
+            col=splitstr(line,&m);
+        }
+        int c;
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++){
+                c=row[i]*col[j];
+                    while(c>0){
+                    int r=c%10;
+                    cn[r]++;
+                    c/=10;
+                }
+            }
+    for(int i=0;i<9;i++)printf("%d ",cn[i]);
+    printf("%d\n",cn[9]);
+    }
+}

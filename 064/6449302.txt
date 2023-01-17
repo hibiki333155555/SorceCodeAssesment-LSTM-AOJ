@@ -1,0 +1,559 @@
+#pragma region Template
+#pragma region Basic
+// 設定
+#include <bits/stdc++.h>
+using namespace std;
+#ifdef _DEBUG
+#define PRE_COMMAND          \
+    cin.rdbuf(in.rdbuf());   \
+    cout.rdbuf(out.rdbuf()); \
+    cout << fixed << setprecision(15);
+#else
+#define PRE_COMMAND                    \
+    cout << fixed << setprecision(15); \
+    ios::sync_with_stdio(false);       \
+    cin.tie(0);
+#endif
+// よく使う型
+using ll = long long;
+using vi = vector<int>;
+using vl = vector<ll>;
+using vvi = vector<vector<int>>;
+using vvl = vector<vector<ll>>;
+// 多重vector用
+template <typename T> struct arg_type;
+template <typename T, typename U> struct arg_type<T(U)> { typedef U type; };
+#define VTYPE(T) vector<arg_type<void(T)>::type>
+#define VEC1(T, v, ...) VTYPE(T) v(__VA_ARGS__)
+#define VEC2(T, v, s, ...) vector<VTYPE(T)> v(s, VTYPE(T)(__VA_ARGS__))
+#define VEC3(T, v, s, t, ...) \
+    vector<vector<VTYPE(T)>> v(s, vector<VTYPE(T)>(t, VTYPE(T)(__VA_ARGS__)))
+// priority_queue用
+template <class T> using PRIQ = priority_queue<T, vector<T>, greater<T>>;
+template <class T> using PRIQR = priority_queue<T>;
+// マクロ
+#define REP(i, n) for (int i = 0, i##_len = (n); i < i##_len; ++i)
+#define FOR(i, a, b) for (int i = (a), i##_len = (b); i < i##_len; ++i)
+#define FORD(i, a, b) for (int i = (a), i##_len = (b); i > i##_len; --i)
+#define FORR(t, a) for (auto t : a)
+#define ALL(x) (x).begin(), (x).end()  // sortなどの引数を省略したい
+#define MT(...) make_tuple(__VA_ARGS__)
+#define MP(x, y) make_pair(x, y)
+#define SZ(x) ((int)(x).size())
+#define UNUSED_VARIABLE(x) ((void)(&x))  // 使わない引数の警告を消す
+// 定数
+const double EPS = 1e-10, PI = acos(-1.0);
+const int IINF = 1010101010;
+const long long LINF = 1010101010101010101;
+// 関数
+template <class T> auto MAX(T& seq) { return *max_element(ALL(seq)); }
+template <class T> auto MIN(T& seq) { return *min_element(ALL(seq)); }
+template <class T> auto SUM(T& seq) {
+    return accumulate(++ALL(seq), *seq.begin());
+}
+template <class T> void REV(T& seq) { reverse(ALL(seq)); }
+template <class T> void SORT(T& seq) { sort(ALL(seq)); }
+template <class T, class S> void SORT(T& seq, S ordr) { sort(ALL(seq), ordr); }
+template <class T> void SORTR(vector<T>& seq) { sort(ALL(seq), greater<T>()); }
+template <class T, class S> void MMINS(multimap<T, S>& a, T b, S c) {
+    a.insert(make_pair(b, c));
+}
+template <class T> inline bool CHMAX(T& l, T r) {
+    return ((l < r) ? (l = r, true) : (false));
+}
+template <class T> inline bool CHMIN(T& l, T r) {
+    return ((l > r) ? (l = r, true) : (false));
+}
+template <class T> ll pow(ll n, T k) {
+    ll now = 1;
+    while (k) {
+        if (k & 1) now *= n;
+        n *= n;
+        k >>= 1;
+    }
+    return now;
+}
+template <class T> ll pow(int n, T k) { return pow((ll)n, k); }
+template <class T> int pow(int n_0, T k, int mod) {
+    if (n_0 >= mod) n_0 %= mod;
+    if (n_0 < 0) n_0 += mod;
+    unsigned long long n = (unsigned long long)n_0, now = 1;
+    while (k) {
+        if (k & 1) now = (now * n) % mod;
+        n = (n * n) % mod;
+        k >>= 1;
+    }
+    return (int)now;
+}
+void yn(bool flag) { cout << (flag ? "YES" : "NO") << '\n'; }
+// 数値の文字列を数値の配列に変換
+vector<int> STR_2_VI(string& s) {
+    vector<int> ret(ALL(s));
+    for_each(ALL(ret), [](int& i) { return i -= 48; });
+    return ret;
+}
+#pragma endregion Basic
+#pragma region overload
+// 演算子のオーバーロード
+// 要素の追加
+template <class T> void operator+=(vector<T>& l, T r) { l.push_back(r); }
+template <class T> void operator+=(set<T>& l, T r) { l.insert(r); }
+template <class T> void operator+=(multiset<T>& l, T r) { l.insert(r); }
+template <class T> void operator>>=(deque<T>& l, T r) { l.push_back(r); }
+template <class T> void operator<<=(deque<T>& l, T r) { l.push_front(r); }
+template <class T, class V, class C>
+void operator+=(priority_queue<T, V, C>& l, T r) {
+    l.push(r);
+}
+// 配列の追加
+template <class T, class S> void operator+=(vector<T>& l, S& r) {
+    copy(ALL(r), back_inserter(l));
+}
+template <class T, class S> void operator+=(set<T>& l, S& r) {
+    copy(ALL(r), inserter(l, l.end()));
+}
+template <class T, class S> void operator+=(multiset<T>& l, S& r) {
+    copy(ALL(r), inserter(l, l.end()));
+}
+// 配列の結合
+template <class T, class S> vector<T> operator+(vector<T> l, S& r) {
+    return copy(ALL(r), back_inserter(l));
+}
+template <class T, class S> set<T> operator+(set<T> l, S& r) {
+    return copy(ALL(r), inserter(l, l.end()));
+}
+template <class T, class S> multiset<T> operator+(multiset<T> l, S& r) {
+    return copy(ALL(r), inserter(l, l.end()));
+}
+// 要素の削除
+template <class T> void operator-=(set<T>& l, T r) { l.erase(r); }
+template <class T> void operator-=(multiset<T>& l, T r) {
+    auto it = l.find(r);
+    if (it != l.end()) l.erase(it);
+}
+template <class T, class S> void operator-=(map<T, S>& l, T r) { l.erase(r); }
+// 要素のpop
+template <class T> T operator--(vector<T>& l) {
+    T ret = l.back();
+    l.pop_back();
+    return ret;
+}
+template <class T> T operator--(deque<T>& l) {
+    T ret = l.front();
+    l.pop_front();
+    return ret;
+}
+template <class T> T operator--(deque<T>& l, int r) {
+    T ret = l.back();
+    l.pop_back();
+    return ret;
+}
+template <class T, class V, class C> T operator--(priority_queue<T, V, C>& l) {
+    T ret = l.top();
+    l.pop();
+    return ret;
+}
+// 文字列の繰り返し
+string operator*(string& l, size_t r) {
+    string ret = l;
+    for (size_t i = 1; i < r; i++) { ret += l; }
+    return ret;
+}
+#pragma endregion overload
+#pragma region Input
+// INPUT関数
+template <class T1, class T2>
+istream& operator>>(istream& is, pair<T1, T2>& t) {
+    return cin >> get<0>(t) >> get<1>(t);
+}
+template <class T1> istream& operator>>(istream& is, tuple<T1>& t) {
+    return cin >> get<0>(t);
+}
+template <class T1, class T2>
+istream& operator>>(istream& is, tuple<T1, T2>& t) {
+    return cin >> get<0>(t) >> get<1>(t);
+}
+template <class T1, class T2, class T3>
+istream& operator>>(istream& is, tuple<T1, T2, T3>& t) {
+    return cin >> get<0>(t) >> get<1>(t) >> get<2>(t);
+}
+template <class T1, class T2, class T3, class T4>
+istream& operator>>(istream& is, tuple<T1, T2, T3, T4>& t) {
+    return cin >> get<0>(t) >> get<1>(t) >> get<2>(t) >> get<3>(t);
+}
+template <class T1, class T2, class T3, class T4, class T5>
+istream& operator>>(istream& is, tuple<T1, T2, T3, T4, T5>& t) {
+    return cin >> get<0>(t) >> get<1>(t) >> get<2>(t) >> get<3>(t) >> get<4>(t);
+}
+template <class T> istream& operator>>(istream& is, vector<T>& vec) {
+    for (T& x : vec) is >> x;
+    return is;
+}
+template <class Head> void INPUT(Head& head) { cin >> head; }
+template <class Head, class... Tail> void INPUT(Head& head, Tail&... tail) {
+    INPUT(head);
+    INPUT((tail)...);
+}
+#pragma endregion Input
+#pragma region Print
+// PRINT関数
+template <class T1, class T2>
+ostream& operator<<(ostream& os, const pair<T1, T2>& t) {
+    return cout << get<0>(t) << " " << get<1>(t);
+}
+template <class T1> ostream& operator<<(ostream& os, const tuple<T1>& t) {
+    return cout << get<0>(t);
+}
+template <class T1, class T2>
+ostream& operator<<(ostream& os, const tuple<T1, T2>& t) {
+    return cout << get<0>(t) << " " << get<1>(t);
+}
+template <class T1, class T2, class T3>
+ostream& operator<<(ostream& os, const tuple<T1, T2, T3>& t) {
+    return cout << get<0>(t) << " " << get<1>(t) << " " << get<2>(t);
+}
+template <class T1, class T2, class T3, class T4>
+ostream& operator<<(ostream& os, const tuple<T1, T2, T3, T4>& t) {
+    return cout << get<0>(t) << " " << get<1>(t) << " " << get<2>(t) << " "
+                << get<3>(t);
+}
+template <class T1, class T2, class T3, class T4, class T5>
+ostream& operator<<(ostream& os, const tuple<T1, T2, T3, T4, T5>& t) {
+    return cout << get<0>(t) << " " << get<1>(t) << " " << get<2>(t) << " "
+                << get<3>(t) << " " << get<4>(t);
+}
+template <class T> ostream& COUT_MAIN(ostream& os, const T& v) {
+    if (v.empty()) return os;
+    typename T::const_iterator ii = v.begin();
+    os << *ii++;
+    for (; ii != v.end(); ++ii) os << " " << *ii;
+    return os;
+}
+template <class T> ostream& operator<<(ostream& os, const vector<T>& v) {
+    return COUT_MAIN(os, v);
+}
+template <class T> ostream& operator<<(ostream& os, const set<T>& v) {
+    return COUT_MAIN(os, v);
+}
+template <class T> ostream& operator<<(ostream& os, const multiset<T>& v) {
+    return COUT_MAIN(os, v);
+}
+template <class T> ostream& operator<<(ostream& os, const deque<T>& v) {
+    return COUT_MAIN(os, v);
+}
+template <class T, class S>
+ostream& operator<<(ostream& os, const map<T, S>& m) {
+    for (typename map<T, S>::const_iterator ii = m.begin(); ii != m.end();) {
+        os << tuple<T, S>(*(ii++));
+        if (ii != m.end()) os << '\n';
+    }
+    return os;
+}
+template <class T, class S>
+ostream& operator<<(ostream& os, const multimap<T, S>& m) {
+    for (typename multimap<T, S>::const_iterator ii = m.begin();
+         ii != m.end();) {
+        os << tuple<T, S>(*(ii++));
+        if (ii != m.end()) os << '\n';
+    }
+    return os;
+}
+template <class T, class V, class C>
+ostream& operator<<(ostream& os, priority_queue<T, V, C> v) {
+    if (v.empty()) return os;
+    os << v.top();
+    v.pop();
+    while (!v.empty()) {
+        os << " " << v.top();
+        v.pop();
+    }
+    return os;
+}
+void PRINT() {}
+template <class Head> void PRINT(Head&& head) { cout << head << '\n'; }
+template <class Head, class... Tail> void PRINT(Head&& head, Tail&&... tail) {
+    cout << head << ' ';
+    PRINT(forward<Tail>(tail)...);
+}
+#pragma endregion Print
+#pragma endregion Template
+
+// Tはコストの型、デフォルトはint
+template <class T = int> struct graph {
+    int n, m;  // グラフの頂点数、辺の数（無向辺の場合は有向辺１本ずつと数える）
+    bool directed, weighted;  // 無向かどうか、重み付きかどうか
+    struct edge {
+        int src, to;
+        T cost;
+        edge(int _src, int _to) : src(_src), to(_to) { cost = 1; }
+        edge(int _src, int _to, int _cost) : src(_src), to(_to), cost(_cost) {}
+        // coutによる出力
+        friend ostream& operator<<(ostream& os, const edge& e) {
+            os << e.src << " " << e.to << " " << e.cost;
+            return os;
+        }
+    };
+    using edges = vector<edge>;
+    vector<edges> graph_main;
+    // 頂点数、有向か無向か（デフォルトは無向）、重みの有無（デフォルトは無し）
+    graph(int _n, bool _d = false, bool _w = false)
+        : n(_n), m(0), directed(_d), weighted(_w) {
+        graph_main.resize(n);
+    }
+    // 重み無しのコンストラクタ
+    // 頂点数、辺情報のtuple、頂点番号の起算点（デフォルトは1-based）、有向か無向か（デフォルトは無向）
+    graph(int _n, vector<tuple<int, int>>& st, int b = 1, bool _d = false) {
+        n = _n, directed = _d, weighted = false;
+        m = (int)st.size() * (directed ? 1 : 2);
+        graph_main.resize(n);
+        for (auto&& [s, t] : st) {
+            graph_main[s - b].push_back(edge(s - b, t - b, 1));
+            if (!directed) graph_main[t - b].push_back(edge(t - b, s - b, 1));
+        }
+    }
+    // 重み有りのコンストラクタ（引数は重み無しと同様）
+    graph(int _n, vector<tuple<int, int, T>>& stc, int b = 1, bool _d = false) {
+        n = _n, directed = _d, weighted = true;
+        m = (int)stc.size() * (directed ? 1 : 2);
+        graph_main.resize(n);
+        for (auto&& [s, t, c] : stc) {
+            graph_main[s - b].push_back(edge(s - b, t - b, c));
+        }
+    }
+    // 標準入力からの受け取り
+    // 頂点数、辺数、頂点番号の起算点（デフォルトは1-based）、有向か無向か（デフォルトは無向）、重みの有無（デフォルトは無し）
+    graph(int _n, int _m, int b = 1, bool _d = false, bool _w = false) {
+        n = _n, m = _m, directed = _d, weighted = _w;
+        int s, t;
+        graph_main.resize(n);
+        if (weighted) {
+            T c;
+            for (int i = 0; i < m; i++) {
+                cin >> s >> t >> c;
+                graph_main[s - b].push_back(edge(s - b, t - b, c));
+                if (!directed) {
+                    graph_main[t - b].push_back(edge(t - b, s - b, c));
+                }
+            }
+        } else {
+            for (int i = 0; i < m; i++) {
+                cin >> s >> t;
+                graph_main[s - b].push_back(edge(s - b, t - b, 1));
+                if (!directed) {
+                    graph_main[t - b].push_back(edge(t - b, s - b, 1));
+                }
+            }
+        }
+        if (!directed) m *= 2;
+    }
+    // 辺の追加（0-basedであることに注意！）
+    // 始点、終点、コスト（デフォルトは1）
+    void add_edge(int s, int t, T c = 1) {
+        graph_main[s].push_back(edge(s, t, c));
+        if (!directed) graph_main[t].push_back(edge(t, s, c));
+        m += (directed ? 1 : 2);
+    }
+    // 単項演算子[]の定義
+    edges& operator[](int i) { return graph_main[i]; }
+    // coutによる出力
+    friend ostream& operator<<(ostream& os, const graph<T>& g) {
+        if (g.graph_main.empty()) return os;
+        typename vector<edges>::const_iterator ii = g.graph_main.begin();
+        typename edges::const_iterator jj = (*ii).begin();
+        bool flag = false;
+        for (; ii != g.graph_main.end(); ++ii) {
+            typename edges::const_iterator jj = (*ii).begin();
+            for (; jj != (*ii).end(); ++jj) {
+                if (flag) os << '\n';
+                os << *jj;
+                flag = true;
+            }
+        }
+        return os;
+    }
+};
+
+// 入力：グラフ、根
+// 出力：最小コスト
+template <class T> T ChuLiu(graph<T>& g_pre, int root) {
+    // グラフを変換
+    int n = g_pre.n, m = g_pre.m, idx = 0;
+    vector<vector<tuple<int, T, int>>> g(n);
+    vector<tuple<int, int, T>> g_restore;
+    for (int i = 0; i < n; i++) {
+        for (auto& e : g_pre[i]) {
+            g_restore.push_back(make_tuple(e.src, e.to, e.cost));
+            g[i].push_back(make_tuple(e.to, e.cost, idx++));
+        }
+    }
+    // 前処理
+    vector<int> leader(n), weight(n, 1);
+    iota(leader.begin(), leader.end(), 0);
+    deque<deque<int>> edge_deques;
+    deque<vector<tuple<int, int>>> changed_deque;
+    vector<int> mst;
+    T res = 0;
+    // 本処理
+    while (true) {
+        // それぞれの頂点に入る最小の辺を見つける
+        vector<tuple<int, T, int>> min_edge(n, make_tuple(-1, -1, -1));
+        for (int src = 0; src < n; src++) {
+            int src2 = leader[src];
+            for (auto& [to, cost, idx] : g[src]) {
+                if (to == root) continue;  // 根に入る辺は考える必要がない
+                int to2 = leader[to];
+                if (src2 == to2) continue;  // 既に縮約されている辺は考えない
+                if (get<0>(min_edge[to2]) == -1) {
+                    min_edge[to2] = make_tuple(src2, cost, idx);
+                } else if (get<1>(min_edge[to2]) > cost) {
+                    min_edge[to2] = make_tuple(src2, cost, idx);
+                }
+            }
+        }
+        // 辺を使って部分グラフを作る
+        vector<vector<tuple<int, T, int>>> g_sub(n);
+        for (int to = 0; to < n; to++) {
+            if (to == root) continue;  // 根に入る辺は考える必要がない
+            if (to != leader[to]) continue;  // 縮約された辺は除外
+            int src, idx;
+            T cost;
+            tie(src, cost, idx) = min_edge[to];
+            if (src == -1) return -1;  // 入る辺がない場合は作れないので終了
+            g_sub[src].push_back(make_tuple(to, cost, idx));
+        }
+        // 閉路の検索
+        vector<int> state(n, 0);
+        vector<bool> visited(n, false);
+        deque<tuple<int, T, int>> path;
+        bool loop_flag = false;
+        for (int src = 0; src < n; src++) {
+            if (state[src] > 0 or (int)(g_sub[src].size()) == 0) continue;
+            path = {make_tuple(src, -1, -1)};
+            while (!path.empty()) {
+                int u = get<0>(path.back());
+                if (visited[u]) {  // 閉路ができた
+                    loop_flag = true;
+                    break;
+                }
+                int& s = state[u];
+                if (s == (int)g_sub[u].size()) {  // もう見るところがない
+                    path.pop_back();
+                    if (!path.empty()) visited[get<0>(path.back())] = false;
+                    continue;
+                }
+                visited[u] = true;
+                path.push_back(g_sub[u][s++]);
+            }
+            // 閉路ができたとき
+            if (loop_flag) break;
+        }
+        // 閉路ができたときの処理
+        if (loop_flag) {
+            // 閉路の抽出と辺のコストの再計算
+            deque<int> loop_deque, edge_deque;
+            auto [r_first, c_first, idx] = path.back();
+            path.pop_back();
+            loop_deque.push_front(r_first);
+            edge_deque.push_front(idx);
+            res += c_first;
+            for (int src = 0; src < n; src++) {
+                for (auto& [to, cost, idx] : g[src]) {
+                    if (leader[to] == r_first) cost -= c_first;
+                }
+            }
+            while (true) {
+                auto [r, c, idx] = path.back();
+                path.pop_back();
+                if (r == r_first) break;
+                loop_deque.push_front(r);
+                edge_deque.push_back(idx);
+                res += c;
+                for (int src = 0; src < n; src++) {
+                    for (auto& [to, cost, idx] : g[src]) {
+                        if (leader[to] == r) cost -= c;
+                    }
+                }
+            }
+            edge_deques.push_back(edge_deque);
+            // 閉路の縮約
+            int r = -1, w = (int)(1e9);
+            vector<tuple<int, int>> changed;
+            for (int v : loop_deque) {
+                if (weight[v] < w) {
+                    r = v;
+                    w = weight[v];
+                }
+            }
+            // 復元用の履歴、ここの計算量改善は必要
+            for (int v : loop_deque) {
+                if (v != r) {
+                    for (int u = 0; u < n; u++) {
+                        if (leader[u] == v) {
+                            changed.push_back(make_tuple(u, v));
+                        }
+                    }
+                }
+            }
+            for (int v : loop_deque) {
+                if (v != r) {
+                    leader[v] = r;
+                    weight[v] += weight[r];
+                }
+            }
+            for (int v = 0; v < n; v++) leader[v] = leader[leader[v]];
+            changed_deque.push_back(changed);
+        }
+        // 閉路ができていないとき
+        else {
+            for (int to = 0; to < n; to++) {
+                if (to == root) continue;  // 根に入る辺は考える必要がない
+                if (to != leader[to]) continue;  // 縮約された頂点は除外
+                res += get<1>(min_edge[to]);
+                mst.push_back(get<2>(min_edge[to]));
+            }
+            break;
+        }
+    }
+    // 復元パート
+    while (!edge_deques.empty()) {
+        deque<int> edge_deque = edge_deques.back();
+        edge_deques.pop_back();
+        vector<tuple<int, int>> changed = changed_deque.back();
+        changed_deque.pop_back();
+        // 閉路に入る辺を特定する
+        int shrinked = leader[get<0>(g_restore[edge_deque.back()])];
+        int in_edge = -1;
+        for (int idx : mst) {
+            if (leader[get<1>(g_restore[idx])] == shrinked) in_edge = idx;
+        }
+        // leaderの復元を行う
+        for (auto& [u, v] : changed) leader[u] = v;
+        // 使わない辺を特定し、それ以外の辺を入れる
+        int in_point = leader[get<1>(g_restore[in_edge])];
+        for (int idx : edge_deque) {
+            if (leader[get<1>(g_restore[idx])] != in_point) {
+                mst.push_back(idx);
+            }
+        }
+    }
+    graph<T> res_g(n, true, true);
+    for (int idx : mst) {
+        auto& [src, to, cost] = g_restore[idx];
+        res_g.add_edge(src, to, cost);
+    }
+    ll pikachu = 0;
+    for (int i = 0; i < n; i++) {
+        for (auto& [src, to, cost] : res_g[i]) { pikachu += cost; }
+    }
+    PRINT(pikachu);
+    return res;
+}
+
+int main() {
+    PRE_COMMAND
+    int n, m, r;
+    INPUT(n, m, r);
+    graph<ll> g(n, m, 0, true, true);
+    ChuLiu(g, r);
+}
+

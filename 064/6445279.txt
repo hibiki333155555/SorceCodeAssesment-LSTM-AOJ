@@ -1,0 +1,13 @@
+n=int(input())
+A=list(int(input())for _ in range(n))
+
+def LIS(A):
+    dp, Q = [], []
+    import bisect
+    for a in A:
+        i = bisect.bisect_left(dp, a)
+        if len(dp) <= i:dp.append(a)
+        elif a < dp[i]:dp[i] = a
+        Q.append(len(dp))
+    return Q
+print(LIS(A)[-1])

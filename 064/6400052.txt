@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ITP_1_6A
+{
+    public class Card
+    {
+        public int B { get; set; }
+        public int F { get; set; }
+        public int R { get; set; }
+        public int V { get; set; }
+    }
+    //public class CardComparer : IEqualityComparer<Card>
+    //{
+    //    public bool Equals(Card i_lhs, Card i_rhs)
+    //    {
+    //        if (i_lhs.Suit == i_rhs.Suit &&
+    //            i_lhs.Number == i_rhs.Number)
+    //        {
+    //            return true;
+    //        }
+    //        return false;
+    //    }
+
+    //    public int GetHashCode(Card i_obj)
+    //    {
+    //        // 本当はnullチェックをしなきゃ駄目だよ。
+    //        return i_obj.Number ^ i_obj.Suit.GetHashCode();
+    //    }
+    //}
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var N = System.Console.ReadLine().Trim().Split(' ').Select(s => int.Parse(s)).ToArray();
+
+
+
+            var array = new int[N[0], N[1]];
+            var array_ = new int[N[1]];
+
+            for (int i = 0; i < N[0]; i++)
+            {
+                var line = Console.ReadLine().Trim().Split(' ').Select(s => int.Parse(s)).ToArray();
+                for (int j = 0; j < N[1]; j++)
+                {
+                    array[i, j] = line[j];
+                }
+
+            }
+
+            for (int i = 0; i < N[1]; i++)
+            {
+                var line = Console.ReadLine().Trim().Split(' ').Select(s => int.Parse(s)).ToArray();
+                array_[i] = line[0];
+            }
+
+            for (int i = 0; i < N[0]; i++)
+            {
+                int n = 0;
+                for (int j = 0; j < N[1]; j++)
+                {
+                    n += array[i, j] * array_[j];
+                }
+                Console.WriteLine("{0}", n);
+
+            }
+
+
+            return;
+        }
+
+    }
+}
+

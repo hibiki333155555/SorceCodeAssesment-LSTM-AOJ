@@ -1,0 +1,52 @@
+n = int(input())
+
+for i in range(n):
+
+    s = input()
+    t = input()
+    M = len(s)
+    N = len(t)
+
+    DP=[[0]*(N+1) for i in range(M+1)]
+
+    l=[[] for i in range(N+M)]
+
+    #ii = [0]*(M+1)
+    #jj = [0]*(N+1)
+
+    for i in range(M):
+        for j in range(N):
+            if s[i] != t[j]:
+                DP[i+1][j+1] = max(DP[i][j+1], DP[i+1][j])
+            elif s[i] == t[j]:
+                DP[i+1][j+1] = min(DP[i][j+1]+1, DP[i+1][j]+1)
+                if DP[i][j+1] == DP[i+1][j]:
+                    num = DP[i+1][j+1]
+    #                ii[num-1] = i
+    #                jj[num-1] = j
+                    l[num].append((i,j))
+    lcs_n = DP[M][N] 
+    print(lcs_n)
+#print(l)
+"""
+ans1 = []
+ans2 = []
+nowi = 10**18
+nowj = 10**18
+for k in range(lcs_n, 0, -1):
+    flag = 0
+    for item in l[k]:
+        if item[0] < nowi and item[1] < nowj and flag == 0:
+            nowi = item[0]
+            nowj = item[1]
+            if s[item[0]] != t[item[1]]:
+                print(aiueo)
+            ans1.append(s[item[0]])
+            ans2.append(t[item[1]])
+            flag = 1
+ans1.reverse()
+ans2.reverse()
+print("".join(ans1))
+#print("".join(ans2))
+
+"""

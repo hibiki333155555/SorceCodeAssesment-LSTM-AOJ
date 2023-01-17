@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    using Real = double;
+    int n; Real r; cin >> n >> r;
+    vector< Real > x(n), y(n), z(n);
+    rep(i,n) cin >> x[i] >> y[i] >> z[i];
+
+    Real intersect = 0;
+    rep(i,n)rep(j,n)if(i < j) {
+        Real d = 0;
+        d += (x[i] - x[j]) * (x[i] - x[j]);
+        d += (y[i] - y[j]) * (y[i] - y[j]);
+        d += (z[i] - z[j]) * (z[i] - z[j]);
+        d = sqrt(d);
+        if(d < 2 * r) {
+            interset += (2.0 / 3.0) * M_PI * (r - d / 2.0) * (r - d / 2.0) * (2.0 * r + d / 2.0);
+        }
+    }
+
+    Real ans = 4 * M_PI * r * r * r / 3.0 * n - intersect;
+    cout << fixed << setprecision(20) << ans << endl;
+}

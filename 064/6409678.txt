@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int is, js, ks, ig, jg, kg;
+    cin >> is >> js >> ks >> ig >> jg >> kg;
+    int iodd = abs(is - ig) & 1, jodd = abs(js - jg) & 1, kodd = abs(ks - kg) & 1;
+    if ((iodd and jodd and kodd) or (!iodd and !jodd and !kodd))
+        cout << "Yes" << endl;
+    else
+        cout << "No" << endl;
+}

@@ -1,0 +1,16 @@
+def selectionsort(a,n):
+  c = 0
+  for i in range(0,n):
+    m = i
+    for j in range(i,n):
+      if a[j]<a[m]:
+        m = j
+    if i != m:
+      a[i], a[m] = a[m], a[i]
+      c += 1
+  return c
+n = int(input().strip())
+a = list(map(int, input().strip().split()))
+c = selectionsort(a,n)
+print(' '.join(map(str,a)))
+print(c)

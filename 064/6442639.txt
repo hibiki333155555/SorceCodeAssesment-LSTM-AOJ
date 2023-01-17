@@ -1,0 +1,16 @@
+a = input()
+X = input()
+
+S = sorted(set(X))
+#print(S)
+
+
+d = {}
+for i in S:
+    d[i] = X.count(i)  #字典
+
+#print(d)
+
+min = min(d, key=d.get)
+print(min)
+

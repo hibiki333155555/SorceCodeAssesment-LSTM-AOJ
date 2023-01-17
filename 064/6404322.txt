@@ -1,0 +1,13 @@
+while (True):
+    a,b,c = map(input().split())
+    if(b =="+"):
+        print(int(a)+int(b))
+    elif(b == "-"):
+        print(int(a)-int(b))
+    elif(b=="*"):
+        print(int(a)*int(b))
+    elif(b=="/"):
+        print(int(a)/int(b))
+    elif(b == "?"):
+        break
+    

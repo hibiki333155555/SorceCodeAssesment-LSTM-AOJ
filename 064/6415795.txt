@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+const double PI =acos(-1);
+const long double EPS = 1e-14;
+
+int main(){
+  stack<long> sta;
+  string s, sss;
+  getline(cin, s);
+  stringstream ss;
+  
+  ss << s;
+  
+  while( getline(ss, sss, ' ')){
+    if(sss == "+"){
+      long y = sta.top();
+      sta.pop();
+      long x = sta.top();
+      sta.pop();
+      x += y;
+      sta.push(x);
+    }else if(sss == "-"){
+      long y = sta.top();
+      sta.pop();
+      long x = sta.top();
+      sta.pop();
+      x -= y;
+      sta.push(x);
+    }else if(sss == "*"){
+      long y = sta.top();
+      sta.pop();
+      long x = sta.top();
+      sta.pop();
+      x *= y;
+      sta.push(x);
+    }else{
+      sta.push(atoi(sss.c_str()));
+    }
+  }
+  cout << sta.top() << endl;
+  return 0;
+}

@@ -1,0 +1,20 @@
+W,H,x,y,r=gets.split(' ').map(&:to_i) 
+
+
+# 長方形が小さすぎるパターン
+if W < r || H < r
+    puts "No"
+
+# 円の座標が0以下
+elsif x <= 0, y <= 0 
+    puts "No"
+
+# 半径が座標を上回るパターン
+elsif x < r || y < r
+    puts "No"
+
+elsif r < W - x || r < H - y 
+    puts "No"
+else
+    puts "Yes"
+end

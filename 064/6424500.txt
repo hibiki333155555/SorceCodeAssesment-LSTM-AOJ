@@ -1,0 +1,7 @@
+a,b = map(int,input().split())
+c = a*b
+d = a+a+b+b
+c = str(c)
+d = str(d)
+print(c+" "+d)
+

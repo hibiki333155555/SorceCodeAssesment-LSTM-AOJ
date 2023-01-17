@@ -1,0 +1,22 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main(){
+    long long a,b;
+    cin >> a >> b;
+    
+    long long d,r;
+    double d_a, d_b;
+    double f;
+    d_a = (double)a;
+    d_b = (double)b;
+    
+    d = a / b;
+    r = a % b;
+    f = d_a / d_b;
+    
+    cout << d << " " << r << " " << setprecision(8) << f << endl;
+    
+    return 0;
+}

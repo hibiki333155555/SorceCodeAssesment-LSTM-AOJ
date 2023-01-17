@@ -1,0 +1,12 @@
+#include<stdio.h>
+int main(void){
+    
+    int i=1, x;
+    
+    for(;;i++){
+        scanf("%d", &x);
+        if(x==0)break;
+        printf("Case i: x\n");
+    }
+    return 0;
+}

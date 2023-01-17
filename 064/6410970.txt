@@ -1,0 +1,22 @@
+L = ["END"]
+cur = 0
+q = int(input())
+queies = list(input().split())
+
+for i in queries:
+    if len(i) == 2:
+        query = i[0]
+        item = i[1]
+    else:
+        query = i[0]
+    
+    
+    if query == "1":
+        L.insert(0,item)
+    
+    elif query == "2":
+        cur += item
+    else:
+        del L[cur]
+        cur -= 1
+print(L[cur])

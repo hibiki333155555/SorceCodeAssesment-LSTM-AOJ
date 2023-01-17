@@ -1,0 +1,179 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(ll i=0;i<n;i++)
+#define repl(i,l,r) for(ll i=(l);i<(r);i++)
+#define per(i,n) for(ll i=(n)-1;i>=0;i--)
+#define perl(i,r,l) for(ll i=r-1;i>=l;i--)
+#define fi first
+#define se second
+#define all(x) (x).begin(),(x).end()
+#define CST(x) cout<<fixed<<setprecision(x)
+#define rev(x) reverse(x);
+using ll=long long;
+using vl=vector<ll>;
+using vvl=vector<vector<ll>>;
+using pl=pair<ll,ll>;
+using vpl=vector<pl>;
+using vvpl=vector<vpl>;
+const ll MOD=1000000007;
+const ll MOD9=998244353;
+const int inf=1e9+10;
+const ll INF=4e18;
+const ll dy[9]={0,-1,0,1,1,1,-1,-1,0};
+const ll dx[9]={1,0,-1,0,1,-1,1,-1,0};
+template<class T> inline bool chmin(T& a, T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+const int mod = MOD9;
+const int max_n = 200005;
+struct mint {
+  ll x; // typedef long long ll;
+  mint(ll x=0):x((x%mod+mod)%mod){}
+  mint operator-() const { return mint(-x);}
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) { (x *= a.x) %= mod; return *this;}
+  mint operator+(const mint a) const { return mint(*this) += a;}
+  mint operator-(const mint a) const { return mint(*this) -= a;}
+  mint operator*(const mint a) const { return mint(*this) *= a;}
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+  bool operator==(const mint &p) const { return x == p.x; }
+  bool operator!=(const mint &p) const { return x != p.x; }
+  // for prime mod
+  mint inv() const { return pow(mod-2);}
+  mint& operator/=(const mint a) { return *this *= a.inv();}
+  mint operator/(const mint a) const { return mint(*this) /= a;}
+};
+istream& operator>>(istream& is, mint& a) { return is >> a.x;}
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
+using vm=vector<mint>;
+using vvm=vector<vm>;
+struct combination {
+  vector<mint> fact, ifact;
+  combination(int n):fact(n+1),ifact(n+1) {
+    assert(n < mod);
+    fact[0] = 1;
+    for (int i = 1; i <= n; ++i) fact[i] = fact[i-1]*i;
+    ifact[n] = fact[n].inv();
+    for (int i = n; i >= 1; --i) ifact[i-1] = ifact[i]*i;
+  }
+  mint operator()(int n, int k) {
+    if (k < 0 || k > n) return 0;
+    return fact[n]*ifact[k]*ifact[n-k];
+  }
+}comb(max_n);
+
+
+
+unordered_map<ll,mint> memo;
+mint PR(ll t){
+    if(memo.count(t))return memo[t];
+    else return memo[t]=mint(3).pow(t);
+}
+unordered_map<ll,mint> memo2;
+mint INV(mint p){
+    if(memo2.count(p.x))return memo2[p.x];
+    else return memo2[p.x]=p.pow(MOD9-2);
+}
+
+namespace NTT {
+    //MOD9のNTT auto c=NTT::mul(a,b)で受け取り。
+	vector<mint> tmp;
+	size_t sz = 1;
+    mint PrimitiveRoot=3;
+	struct NTTPart {
+		static std::vector<mint> ntt(std::vector<mint> a, bool inv = false) {
+			size_t mask = sz - 1;
+			size_t p = 0;
+			for (size_t i = sz >> 1; i >= 1; i >>= 1) {
+				auto& cur = (p & 1) ? tmp : a;
+				auto& nex = (p & 1) ? a : tmp;
+				mint e = PR((MOD9 - 1) / sz * i);
+				if (inv) e = INV(e);
+				mint w = 1;
+				for (size_t j = 0; j < sz; j += i) {
+					for (size_t k = 0; k < i; ++k) {
+						nex[j + k] = cur[((j << 1) & mask) + k] + cur[(((j << 1) + i) & mask) + k] * w;
+					}
+					w *= e;
+				}
+				++p;
+			}
+			if (p & 1) std::swap(a, tmp);
+			if (inv) {
+				mint invSz = INV(mint(sz));
+				for (size_t i = 0; i < sz; ++i) a[i] *= invSz;
+			}
+			return a;
+		}
+		static std::vector<mint> mul(std::vector<mint> a, std::vector<mint> b) {
+			a = ntt(a);
+			b = ntt(b);
+			for (size_t i = 0; i < sz; ++i) a[i] = a[i] * b[i];
+			a = ntt(a, true);
+			return a;
+		}
+	};
+	std::vector<mint> mul(std::vector<mint> a, std::vector<mint> b) {
+		size_t m = a.size() + b.size() - 1;
+		sz = 1;
+		while (m > sz) sz <<= 1;
+		tmp.resize(sz);
+		a.resize(sz, 0);
+		b.resize(sz, 0);
+		vector<mint> c=NTTPart::mul(a, b);
+		c.resize(m);
+		return c;
+	}
+};
+
+int main(){
+    long long N=2010,K=2010;
+    vector<vector<long long>> S(N + 1, vector<long long>(K + 1, 0));
+    S[0][0] = 1;
+    for (long long n = 1; n < N + 1; n++) {
+        for (long long k = 1; k < K + 1; k++) {
+            S[n][k] = (k * S[n - 1][k] + S[n - 1][k - 1]) % MOD9;
+        }
+    }
+    vector<mint> bell(2010);
+    rep(i,2010)rep(j,2010){bell[i]+=S[i][j];}
+    ll n,m;cin >> n >> m;
+    vm dp(1,1);
+    rep(i,m){
+        ll a;cin >> a;
+        vm cof(a+1);
+        rep(j,a+1)cof[j]=1;//bell[j]*comb.ifact[j];
+        dp=NTT::mul(dp,cof);
+        while(dp.size()>n+1)dp.pop_back();
+    }
+   // for(auto p:dp)cout << p <<" ";cout << endl;
+    if(dp.size()<=n)cout << 0 << endl;
+    else cout << dp[n]*comb.fact[n] << endl;
+}
+
+

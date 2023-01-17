@@ -1,0 +1,36 @@
+# https://onlinejudge.u-aizu.ac.jp/courses/lesson/2/ITP1/10/ITP1_10_C
+move_index_map = {
+    'N': [1,5,2,3,0,4],
+    'E': [3,1,0,5,4,2],
+    'S': [4,0,2,3,5,1],
+    'W': [2,1,5,0,4,3],
+}
+
+dice = list(map(int, input().split()))
+
+qn = int(input())
+
+for _ in range(qn):
+    t, f = map(int, input().split())
+    
+    found_front = False
+    for _ in range(4):
+        if dice[1] == f:
+            found_front = True
+            break
+        dice = [dice[i] for i in move_index_map['N']]
+        
+    if not found_front:
+        if dice[2] == f:
+            dice = [dice[i] for i in move_index_map['W']]
+        else:
+            dice = [dice[i] for i in move_index_map['E']]
+        dice = [dice[i] for i in move_index_map['S']]
+    
+    for _ in range(4):
+        if dice[0] == t:
+            break
+        dice = [dice[i] for i in move_index_map['E']]
+    
+    print(dice[2])
+

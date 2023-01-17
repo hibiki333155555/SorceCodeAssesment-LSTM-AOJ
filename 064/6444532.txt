@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   while (true) {
+      int n, x;
+      cin >> n >> x;
+
+      if (n == 0 && x == 0) {
+         break;
+      }
+
+      int count = 0;
+
+      for (int i = 1; i <= n; i++) {
+         for (int j = i + 1; j <= n; j++) {
+            int k = x - i - j;
+
+            if (k <= j) {
+               break;
+            }
+
+            if (k > n) {
+               continue;
+            }
+
+            if (i == k || j == k) {
+               continue;
+            }
+
+            count++;
+         }
+      }
+
+      cout << count << endl;
+   }
+
+   return 0;
+}
+

@@ -1,0 +1,263 @@
+#include <bits/stdc++.h>
+#if __has_include(<atcoder/all>)
+#include <atcoder/all>
+using namespace atcoder;
+#endif
+using namespace std;
+
+/*
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+*/
+
+#define ll long long
+#define rep(i, n) for (ll i = 0; i < n; ++i)
+#define rep_up(i, a, n) for (ll i = a; i < n; ++i)
+#define rep_down(i, a, n) for (ll i = a; i >= n; --i)
+#define P pair<ll, ll>
+#define pb push_back
+#define bit_count(x) __builtin_popcountll(x)
+#define gcd(a,b) __gcd(a,b)
+#define lcm(a,b) a / gcd(a,b) * b
+#define endl "\n"
+
+#define all(v) v.begin(), v.end()
+#define fi first
+#define se second
+#define vvvvll vector< vector <vector <vector<ll> > > >
+#define vvvll vector< vector< vector<ll> > >
+#define vvll vector< vector<ll> >
+#define vll vector<ll>
+#define pqll priority_queue<ll>
+#define pqllg priority_queue<ll, vector<ll>, greater<ll>>
+
+template<class T> inline void vin(vector<T>& v) { rep(i, v.size()) cin >> v.at(i); }
+template <class T>
+using V = vector<T>;
+
+constexpr ll INF = (1ll << 60);
+//constexpr ll mod = 1000000007;
+constexpr ll mod = 998244353;
+
+constexpr double pi = 3.14159265358979323846;
+template <typename T>
+inline bool chmax(T &a, T b)
+{
+    if (a < b)
+    {
+        a = b;
+        return 1;
+    }
+    return 0;
+}
+template <typename T>
+inline bool chmin(T &a, T b)
+{
+    if (a > b)
+    {
+        a = b;
+        return 1;
+    }
+    return 0;
+}
+template <typename T>
+void pt(T val)
+{
+    cout << val << "\n";
+}
+template <typename T>
+void pt_vll(vector<T> &v)
+{
+    ll vs = v.size();
+    rep(i, vs)
+    {
+        cout << v[i];
+
+        if (i == vs - 1)
+            cout << "\n";
+        else
+            cout << " ";
+    }
+}
+ll mypow(ll a, ll n)
+{
+    ll ret = 1;
+    if (n == 0)
+        return 1;
+    if (a == 0)
+        return 0;
+    rep(i, n)
+    {
+        if (ret > (ll)(9e18 + 10) / a)
+            return -1;
+        ret *= a;
+    }
+    return ret;
+}
+long long modpow(long long a, long long n, long long mod)
+{
+    long long res = 1;
+    while (n > 0)
+    {
+        if (n & 1)
+            res = res * a % mod;
+        a = a * a % mod;
+        n >>= 1;
+    }
+    return res;
+}
+long long modinv(long long a, long long m)
+{
+    long long b = m, u = 1, v = 0;
+    while (b)
+    {
+        long long t = a / b;
+        a -= t * b;
+        swap(a, b);
+        u -= t * v;
+        swap(u, v);
+    }
+    u %= m;
+    if (u < 0)
+        u += m;
+    return u;
+}
+
+const int MAX = 10010000;
+long long fac[MAX], finv[MAX], inv[MAX];
+// テーブルを作る前処理
+void COMinit()
+{
+    fac[0] = fac[1] = 1;
+    finv[0] = finv[1] = 1;
+    inv[1] = 1;
+    for (ll i = 2; i < MAX; i++)
+    {
+        fac[i] = fac[i - 1] * i % mod;
+        inv[i] = mod - inv[mod % i] * (mod / i) % mod;
+        finv[i] = finv[i - 1] * inv[i] % mod;
+    }
+}
+
+// 二項係数計算
+long long COM(ll n, ll k)
+{
+    if (n < k)
+        return 0;
+    if (n < 0 || k < 0)
+        return 0;
+    return fac[n] * (finv[k] * finv[n - k] % mod) % mod;
+}
+
+vector<ll> enum_div(ll n)
+{ //約数全列挙
+    vector<ll> ret;
+    for (ll i = 1; i * i <= n; ++i)
+    {
+        if (n % i == 0)
+        {
+            ret.push_back(i);
+            if (i * i != n)
+            {
+                ret.push_back(n / i);
+            }
+        }
+    }
+    return ret;
+}
+
+void make_prime(vector<ll> &ret, ll n)
+{ //素因数分解
+    ll x = n;
+    for (ll i = 2; i * i <= x; i++)
+    {
+        while (n % i == 0)
+        {
+            n /= i;
+            ret.push_back(i);
+        }
+    }
+    if (n != 1)
+    {
+        ret.push_back(n);
+    }
+    return;
+}
+
+vector<bool> prime(1000010, true);
+vector<ll> pri(1000010);
+vector<bool> isprime(int N)
+{ //素数判定
+    if (N >= 0)
+        prime[0] = false;
+    if (N >= 1)
+        prime[1] = false;
+    for (ll i = 2; i * i <= N; i++)
+    {
+        if (!prime[i])
+        {
+            continue;
+        }
+        for (ll j = i * i; j <= N; j += i)
+        {
+            if (prime[j])
+                pri[j] = i;
+            prime[j] = false;
+        }
+    }
+    return prime;
+}
+
+map<ll,ll> compression(vector<ll> v){
+    map<ll,ll> ret;
+    ll cnt = 0;
+    sort(v.begin(),v.end());
+    for(ll i=0; i<v.size(); i++){
+        if(!ret.count(v[i])){
+            ret[v[i]] = cnt;
+            cnt++;
+        }
+    }
+    return ret;
+}
+
+//素因数分解: void make_prime(vector<ll> &ret, ll n)
+//素数判定　: vector<bool> isprime(int N)
+//約数全列挙: vector<ll> enum_div(ll n)
+
+void solve(){
+    ll n, m, k, cnt = 0, sum = 0, ans = 0;
+    cin>>n;
+    V<string> s(n);
+    rep(i,n){
+        cin>>s[i];
+    }
+    k=s[0].size();
+    rep(i,n){
+        ll flag=0;
+        rep(j,n){
+            if(i==j) continue;
+            sum=0;
+            rep(l,k){
+                if(s[i][l]!=s[j][l]) sum++;
+            }
+            if(sum<=1){
+                flag=1;
+                break;
+            }
+        }
+        if(flag==1) ans++;
+    }
+    pt(ans);
+}
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    //cout << fixed << setprecision(16);
+    //ll T;
+    //cin>>T;
+    //rep(ca,T)
+    solve();
+}   

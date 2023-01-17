@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <stdbool.h>
+int main(void){
+    long N;
+    long a,b,c,d;
+    long M=1000000000+7;
+    while(true){
+        long s=0;
+        scanf("%ld\n",&N);
+        if(N==0)break;
+        scanf("%ld %ld %ld %ld\n",&a,&b,&c,&d);
+        long A=((c-a+1)*(c+a)/2)%M;
+        long B=((d-b+1)*(d+b)/2)%M;
+        printf("%ld\n",(A*B)%M);
+    }
+return 0;
+}
+

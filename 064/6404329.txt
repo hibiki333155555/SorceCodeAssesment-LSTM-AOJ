@@ -1,0 +1,194 @@
+#define READ_FROM_FILE 0
+
+#if READ_FROM_FILE
+#include <fstream>
+#endif
+
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+
+using namespace std;
+
+const int move_forward = 1;
+const int get_money = 2;
+const int lose_money = 3;
+
+
+class Rational {
+private:
+	int numerator_;
+	int denominator_;
+
+private:
+	int gcd(int x, int y) {
+		if (x < y) {
+			swap(x, y);
+		}
+
+		if (y == 0) {
+			return x;
+		}
+		else {
+			return gcd(y, x % y);
+		}
+	}
+
+	int lcm(int x, int y) {
+		return x * y / gcd(x, y);
+	}
+
+public:
+	Rational(int n) : numerator_(n), denominator_(1){}
+
+	Rational(int n, int d) : numerator_(n), denominator_(d){
+		int g = gcd(n, d);
+		numerator_ /= g;
+		denominator_ /= g;
+		return;
+	}
+	
+	void add(const Rational& r) {
+		int tn = this->numerator_;
+		int td = this->denominator_;
+		int rn = r.numerator_;
+		int rd = r.denominator_;
+		int d = lcm(td, rd);
+		int n = tn * d / td + rn * d / rd;
+		Rational result(n, d);
+
+		numerator_ = result.get_n();
+		denominator_ = result.get_d();
+		return;
+	}
+
+	void div(const Rational& r) {
+		int n = this->numerator_ * r.denominator_;
+		int d = this->denominator_ * r.numerator_;
+		Rational result(n, d);
+
+		numerator_ = result.get_n();
+		denominator_ = result.get_d();
+		return;
+	}
+
+	void mul(const Rational& r) {
+		int n = this->numerator_ * r.numerator_;
+		int d = this->denominator_ * r.denominator_;
+		Rational result(n, d);
+
+		numerator_ = result.get_n();
+		denominator_ = result.get_d();
+		return;
+	}
+
+	int cast_int() {
+		return numerator_ / denominator_;
+	}
+	
+	int get_n() const{
+		return numerator_;
+	}
+
+	int get_d() const{
+		return denominator_;
+	}
+};
+
+
+int solve(const vector<pair<int, int>>& c_vec, const vector<int>& v_vec, const int x, const int y) {
+	vector<unordered_map<int, Rational>> dp(y + 1);
+	Rational expected_money(0);
+
+	dp[0].insert(pair<int, Rational>(0, Rational(1)));
+
+	for (int i = 0; i < y; i++) {
+		for (const auto &m : dp[i]) {
+			int c_money = m.first;
+			const Rational prob = m.second;
+			
+			for (const int& v : v_vec) {
+				int j = i + v;
+				int e = -1;
+				int a = -1;
+				int n_money = c_money;
+
+				j = min(j, y);
+				e = c_vec[j].first;
+				a = c_vec[j].second;
+
+				if (e == move_forward) {
+					j += a;
+					j = min(j, y);
+				}
+				else if (e == get_money) {
+					n_money += a;
+				}
+				else if (e == lose_money) {
+					n_money = max(0, n_money - a);
+				}
+
+				if (dp[j].count(n_money) == 0) {
+					dp[j].insert(pair<int, Rational>(n_money, prob));
+					dp[j].at(n_money).div(x);
+				}
+				else {
+					Rational r = prob;
+
+					r.div(x);
+					dp[j].at(n_money).add(r);
+				}
+			}
+		}
+	}
+
+	for (auto it = dp[y].begin(); it != dp[y].end(); it++) {
+		Rational r(it->first);
+
+		r.mul(it->second);
+		expected_money.add(r);
+	}
+
+	return expected_money.cast_int();
+}
+
+
+int main(int argc, char** argv) {
+#if READ_FROM_FILE
+	ifstream ifs("test0.txt");
+	cin.rdbuf(ifs.rdbuf());
+#endif
+	while (true) {
+		int x = -1;
+		int y = -1;
+		int z = -1;
+		int v = -1;
+		int n = -1;
+		int e = -1;
+		int a = -1;
+		vector<pair<int, int>> c_vec;
+		vector<int> v_vec;
+
+		cin >> x >> y >> z;
+		if (x == 0 && y == 0 && z == 0) {
+			break;
+		}
+
+		for (int i = 0; i < x; i++) {
+			cin >> v;
+			v_vec.push_back(v);
+		}
+
+		c_vec.resize(y + 1, pair<int, int>(0, 0));
+		for (int i = 0; i < z; i++) {
+			cin >> n >> e >> a;
+			c_vec[n].first = e;
+			c_vec[n].second = a;
+		}
+		cout << solve(c_vec, v_vec, x, y) << endl;
+	}
+
+	return 0;
+}
+

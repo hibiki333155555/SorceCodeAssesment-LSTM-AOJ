@@ -1,0 +1,8 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    double a,t,r; cin>>a>>t>>r;
+    r=r/a;
+    cout<<r*t<<endl;
+    return 0;
+}

@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int queue[2000000];
+int size;
+
+void heap(int n){
+	int left, right;
+	int largest, tmp;
+	left = 2*n+1; largest = n; right = (n+1)*2;
+	//left comp
+	if((size > left) && (queue[n] < queue[left])){
+		largest = left;
+	}
+	//right comp
+	if((size > right) && (queue[largest] < queue[right])){
+		largest = right;
+	}
+	if(largest != n){
+		tmp = queue[largest];
+		queue[largest] = queue[n];
+		queue[n] = tmp;
+		heap(largest);
+	}
+}			
+
+void build_heap(){
+	int n = size - 1;
+	while(n){
+		n = (n-1) >> 1;
+		heap(n);
+	}
+}
+
+void insert(int k){
+	queue[size] = k;
+	size++;
+	build_heap();
+}
+
+void extract(){
+	printf("%d\n", queue[0]);
+	size--;
+	queue[0] = queue[size];
+	heap(0);
+}
+
+int main(){
+	int k;
+	char inst[10];
+	while(1){
+		scanf("%s", inst);
+		if(inst[0] == 'i'){
+			scanf("%d", &k);
+			insert(k);
+		}else if(strcmp(inst, "extract") == 0){
+			extract();
+		}else{
+			break;
+		}
+	}
+	return 0;
+}
+

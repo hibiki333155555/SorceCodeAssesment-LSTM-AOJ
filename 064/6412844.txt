@@ -1,0 +1,31 @@
+from collections import deque
+
+
+v,e,r = map(int,input().split())
+edge = [[] for _ in range(v)]
+
+for _ in range(e):
+    a,b,c = map(int,input().split())
+    edge[a].append([b,c])
+
+ans = ["INF"]*v
+ans[r] = 0
+check = [True]*v
+q = deque()
+q.append([r,-1])
+
+while q:
+    now, old = q.popleft()
+    check[now] = False
+    for to,cost in edge[now]:
+        if to == old or check[to] == False:
+            continue
+        if ans[to] == "INF":
+            ans[to] = cost + ans[now]
+            q.append([to, now])
+        else:
+            ans[to] = min(ans[to], cost + ans[now])
+            q.append([to,now])
+
+for i in ans:
+    print(i)

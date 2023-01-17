@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<vector>
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<set>
+#include<map>
+using namespace std;
+
+int main(){
+  int n;
+  int cnt = 0;
+  scanf("%d",&n);
+  vector<int> vec(n);
+  for (int i = 0; i < n; i++){
+    scanf("%d",&vec.at(i));
+    bool flag = false;
+    for (int j = 2; j*j <= vec.at(i); j++){
+      if(vec.at(i)%j == 0){
+        flag = true;
+      }
+    }
+    if (flag == false){
+      cnt++;
+    }
+  }
+  printf("%d",cnt);
+  
+  
+}
+  

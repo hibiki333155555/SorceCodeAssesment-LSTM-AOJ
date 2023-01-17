@@ -1,0 +1,82 @@
+#include<iostream>
+#include<cstdio>
+#include<cstdlib>
+#include<string>
+using namespace std;
+
+struct Node{
+	int key;
+	Node *parent, *left, *right;
+};
+
+typedef struct Node node;
+
+node* root;
+node* pre;
+
+void buildtree(int key, node** ptr){
+	if(*ptr == nullptr){
+		*ptr = (node*)malloc(sizeof(node));
+		(*ptr)->key = key;
+		(*ptr)->left = nullptr;
+		(*ptr)->right = nullptr;
+		if(*ptr == root){
+			(*ptr)->parent = nullptr;
+		}
+		else{
+			(*ptr)->parent = pre;
+		}
+		return;
+	}
+	pre = *ptr;
+	if(key > (*ptr)->key){
+		buildtree(key, &((*ptr)->right));
+	}
+	else{
+		buildtree(key, &((*ptr)->left));
+	}
+}
+
+void preorder(node* ptr){
+	if(ptr == nullptr){
+		return;
+	}	
+	printf("%d ", ptr->key);
+	preorder(ptr->left);
+	preorder(ptr->right);
+}
+
+void inorder(node *ptr){
+	if(ptr == nullptr){
+		return;
+	}
+	inorder(ptr->left);
+	printf("%d ", ptr->key);
+	inorder(ptr->right);
+}
+
+
+void print(node *ptr){
+	inorder(ptr);
+	cout << endl;
+	preorder(ptr);
+}
+
+
+int main(){
+	int n;
+	string s;
+	cin >> n;
+	while(n--){
+		cin >> s;
+		if(s[0] == 'i'){
+			int key;
+			scanf("%d", &key);
+			buildtree(key, &root);
+		}
+		else if(s[0] == 'p'){
+			print(root);
+		}
+	}
+	return 0;
+}

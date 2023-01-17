@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+string S[100];
+int main(){
+  int h,w;
+  cin>>h>>w;
+  for(int i=0;i<h;i++)cin>>S[i];
+  int ans=1e5;
+  for(int i=1;i<h;i++)for(int k=0;k<2;k++){
+    int t=0;
+    for(int x=0;x<h;x++)for(int y=0;y<w;y++){
+      if((x<i)^(S[x][y]=='o')^k)t++;
+    }
+    ans=min(ans,t);
+  }
+  for(int j=1;j<w;j++)for(int k=0;k<2;k++){
+    int t=0;
+    for(int x=0;x<h;x++)for(int y=0;y<w;y++){
+      if((y<j)^(S[x][y]=='o')^k)t++;
+    }
+    ans=min(ans,t);
+  }
+  cout<<ans<<endl;
+}

@@ -1,0 +1,5 @@
+i = input().split("\n")
+case = 1
+for n in i:
+    print(f"Case {case}: {n}")
+    case += 1

@@ -1,0 +1,8 @@
+Total_second = int(input())
+Total_minute = Total_second//60
+Hour = Total_minute//60
+Minute = Total_minute%60
+Second = Total_second%60
+
+print (Hour,Minute,Second.split(:))
+

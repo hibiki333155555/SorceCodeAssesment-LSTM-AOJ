@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int main(void){
+    int num[10][10]={0};
+    int i,j,n,hSum,vSum,sum;
+    
+    while(1){
+        sum=0;
+        scanf("%d",&n);
+        
+        if(n==0) break;
+        
+        for(i=0;i<n;i++){
+            for(j=0;j<n;j++){
+                scanf("%d",&num[i][j]);
+            }
+        }
+        
+        for(i=0;i<n;i++){
+            hSum=0;
+            for(j=0;j<n;j++){
+                hSum+=num[i][j];
+                printf("%d ",num[i][j]);
+            }
+            printf("%d\n",hSum);
+        }
+        for(i=0;i<n;i++){
+            vSum=0;
+            for(j=0;j<n;j++){
+                vSum+=num[j][i];
+            }
+            printf("%d ",vSum);
+            sum+=vSum;
+        }
+        printf("%d\n",sum);
+    }
+}

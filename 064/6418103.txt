@@ -1,0 +1,32 @@
+#include<stdio.h>
+int main() {
+    int m, n, l;
+    scanf("%d %d %d", &n, &m, &l);
+    int A[100][100];
+    int B[100][100];
+    long long C[100][100];
+    int i, j, k;
+    for ( i=0; i<n; ++i) {
+        for ( j=0; j<m; ++j) {
+            scanf("%d", &A[i][j]);
+    }
+}
+    for ( i=0; i<m; i++) {
+        for ( j=0; j<l; ++j) {
+            scanf("%d", &B[i][j]);
+        }
+    }
+    for ( i=0; i<n; ++i) {
+        for ( j=0; j<m; ++j) {
+            for ( k=0; j<l; ++j)   {
+       c[i][k] += A[i][j]*B[j][k];     
+           }
+     }
+}
+for ( i=0; i<n; i++ ) {
+    for (j=0; j<l; j++)  {
+        printf("%lld", C[i][j]));
+    }
+    printf("%lld\n", C[i][j] );  }
+    return 0;
+}

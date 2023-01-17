@@ -1,0 +1,20 @@
+stack = []
+for i in input().split():
+    if i == '+':
+        a1 = stack.pop(int(-1))
+        a2 = stack.pop(int(-1))
+        pop = a1 + a2
+        stack.append(pop)
+    elif i == '-':
+        a1 = stack.pop(int(-1))
+        a2 = stack.pop(int(-1))
+        pop = a1 - a2
+        stack.append(pop)
+    elif i == '*':
+        a1 = stack.pop(int(-1))
+        a2 = stack.pop(int(-1))
+        pop = a1 * a2
+        stack.append(pop)
+    else:
+        stack.append(int(i))
+print(*stack)

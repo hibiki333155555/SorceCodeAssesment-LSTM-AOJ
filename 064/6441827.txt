@@ -1,0 +1,122 @@
+def range_overlap_eq?(x1s, x1e, x2s, x2e)
+  x1s <= x2e && x2s <= x1e
+end
+
+def range_overlap_lt?(x1s, x1e, x2s, x2e)
+  x1s < x2e && x2s < x1e
+end
+
+def covered_range(x1s, x1e, x2s, x2e)
+  [[x1s, x2s].min, [x1e, x2e].max]
+end
+
+#
+# merge r1 into ranges
+#
+def merge_ranges4(r1, ranges)
+  overlap_ranges, new_ranges = ranges.partition{|r2| range_overlap_eq?(*r1, *r2) }
+  overlap_ranges << r1
+
+  new_r = overlap_ranges.transpose
+  new_r[0] = new_r[0].min
+  new_r[1] = new_r[1].max
+
+  new_ranges << new_r
+  return new_ranges
+end  
+
+
+def merge_ranges3(r1, ranges)
+  overlap_ranges = ranges.select{|r2| range_overlap_eq?(*r1, *r2) }
+  overlap_ranges << r1
+
+  new_r = overlap_ranges.transpose
+  new_r[0] = new_r[0].min
+  new_r[1] = new_r[1].max
+
+  return ranges - overlap_ranges + [new_r]
+end  
+
+def merge_ranges(r1, ranges)
+  out_ranges = []
+  overlap_ranges = [r1]
+  ranges.each{|r2|
+    # if range_overlap_eq?(*r1, *r2)
+    if r1[0] <= r2[1] && r2[0] <= r1[1]
+      overlap_ranges << r2
+    else
+      out_ranges << r2
+    end
+  }
+
+  new_r = overlap_ranges.transpose
+  new_r[0] = new_r[0].min
+  new_r[1] = new_r[1].max
+  out_ranges << new_r
+
+  return out_ranges
+end  
+
+# r1 - ranges2
+def subtract_range(r1, ranges2)
+  ranges2.each{|r2|
+    if range_overlap_lt?(*r1, *r2)
+      ans_range = []
+      if r1[0] < r2[0]
+        ans_range << [r1[0], r2[0]]
+      end
+      if r1[1] > r2[1]
+        ans_range << [r2[1], r1[1]]
+      end
+      return ans_range, true
+    end
+  }
+
+  return [r1], false
+end
+  
+# ranges1 - ranges2
+def subtract_ranges(ranges1, ranges2)
+  out_ranges = []
+  v1 = ranges1.dup
+  loop{
+    break if v1.empty?
+    new_v1 = []
+    v1.each{|r1|
+      sub_range, is_overlap = subtract_range(r1, ranges2)
+      if is_overlap
+        new_v1 += sub_range
+      else
+        out_ranges << r1
+      end
+    }
+    v1 = new_v1
+  }
+  return out_ranges
+end
+
+loop{
+  line = gets
+  n, r = line.chomp.split.map(&:to_i)
+  break if n == 0 && r == 0
+  hash = Hash.new{[]}
+  n.times{
+    line = gets
+    x1, y1, x2, y2 = line.chomp.split.map(&:to_i)
+    r1 = [x1, x2]
+    (y1...y2).each{|y|
+      hash[y] = merge_ranges(r1, hash[y])
+    }
+  }
+  puts hash.map{|k, v| v.map{|xs, xe| xe-xs}.sum }.sum
+  if r == 2
+    contour = 0
+    hash.each{|k, v|
+      contour += subtract_ranges(v, hash[k-1]).map{|xs, xe| xe-xs}.sum
+      contour += subtract_ranges(v, hash[k+1]).map{|xs, xe| xe-xs}.sum
+      contour += v.size * 2
+    }
+    puts contour
+  end
+}
+

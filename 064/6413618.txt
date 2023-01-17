@@ -1,0 +1,34 @@
+import java.util.*;
+
+public class Main{
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int[] counter = new int[26];
+
+        String str = scan.nextLine();
+        str = str.toLowerCase();
+        char[] charArray = str.toCharArray();
+
+        String letter = "abcdefghijklmnopqrstuvwxyz";
+        char[] letterArray = letter.toCharArray();
+
+        for (int x = 0; x < str.length(); x++) {
+            int i = 0;
+            for (int y = 0; y < letterArray.length; y++) {
+                if (charArray[x] == letterArray[y]) {
+                    counter[i]++;
+                }
+                i++;
+            }
+        }
+
+        for (int i = 0; i < 26; i++) {
+            System.out.printf("%c : %d\n", letterArray[i], counter[i]);
+        }
+
+        scan.close();
+
+    }
+}
+

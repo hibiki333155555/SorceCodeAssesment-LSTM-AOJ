@@ -1,0 +1,13 @@
+a,b,c = map(int,input().split())
+count = a
+ans=0
+while True:
+    
+    if count==b :
+        break
+    
+    cal = count%c
+    if cal == 0:
+        ans= ans+1
+    
+    count = count+1

@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+#define rep(i,cc,n) for(int i=cc;i<n;++i)
+#define drep(i,cc,n) for(int i=cc;i>=n;--i)
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+const long long INF = 1LL << 60;
+const long long  MOD = 1e9 + 7;
+long double PI = 3.14159265358979;
+typedef long long ll;
+using namespace std;
+
+struct Unionfind{
+    vector<int> p, siz;
+    Unionfind(int n){
+        p.resize(n, -1);
+        siz.resize(n, 1);
+    }
+
+    //親を求める
+    int find(int x){
+        if(p[x] == -1) return x;
+        else return p[x] = find(p[x]);
+    }
+
+    //xを含むグループと y を含むグループをくっつける
+    void unite(int x, int y){
+        x = find(x);
+        y = find(y);
+ 
+        if(x == y) return;
+        //union by size (y 側のサイズが小さくなるようにする)
+        if(siz[x] < siz[y]) swap(x, y);
+        siz[x] += siz[y];
+        p[y] = x;
+    }
+
+    //xを含むグループのサイズ
+    int size(int x) {
+        return siz[find(x)];
+    }
+};
+
+//辺の構造体
+struct Edge{
+    ll u,v,cost;
+    //後ろにconstつける！
+    bool operator<(const Edge& e) const {return this->cost<e.cost;}
+};
+
+int main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+
+    int v, e;
+    cin >> v >> e;
+
+    vector<Edge> ed(e);
+
+    rep(i,0,e){
+        ll s, t, w;
+        cin >> s >> t >> w;
+
+        ed[i].u = s;
+        ed[i].v = t;
+        ed[i].cost = w;
+    }
+
+    sort(ed.begin(), ed.end());
+    Unionfind uni(v);
+    
+    ll ans = 0;
+    rep(i,0,e){
+        if(uni.find(ed[i].u) == uni.find(ed[i].v)) continue;
+        ans += ed[i].cost;
+        uni.unite(ed[i].u, ed[i].v);
+    }
+    cout << ans << endl;
+    return 0;        
+}

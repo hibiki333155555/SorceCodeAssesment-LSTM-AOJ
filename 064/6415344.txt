@@ -1,0 +1,16 @@
+while True:
+    x = int(input())
+    if x == 0:
+        break
+    ans = 10**18
+    for i in range(x // 500 + 1):
+        for j in range((x - 500 * i) // 300 + 1):
+            if (x - 500 * i - 300 * j) % 200 == 0:
+                k = (x - 500 * i - 300 * j) // 200
+                temp = 0
+                temp += k // 5 * 1520 + k % 5 * 380
+                temp += j // 4 * 1870 + j % 4 * 550
+                temp += i // 3 * 2244 + i % 3 * 850
+                ans = min(ans, temp)
+    print(ans)
+

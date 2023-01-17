@@ -1,0 +1,15 @@
+#include<stdio.h>
+#include<math.h>
+int main() {
+    double a, b, C;
+    double c;
+    double S, L, h;
+    scanf("%lf, %lf, %lf\n", a, b, C);
+    C = C*M_PI/2;
+    S = sin(C)*a*b/2;
+    c = sqrt(a*a+b*b-2*a*b*cos(C));
+    L = a+b+c;
+    h = S*2/a;
+    printf("%lf\n%lf\n%lf\n", S, L, h);
+    return 0;
+}

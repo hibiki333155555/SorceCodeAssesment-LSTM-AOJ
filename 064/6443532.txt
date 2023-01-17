@@ -1,0 +1,6 @@
+S = int(input())
+h = S / 3600
+S = S - h*3600
+m = S/60
+S = S - m*60
+print(f'{h}:{m}:{S}')

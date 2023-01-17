@@ -1,0 +1,179 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using Int = long long;
+const char newl = '\n';
+
+template<typename T1,typename T2> inline void chmin(T1 &a,T2 b){if(a>b) a=b;}
+template<typename T1,typename T2> inline void chmax(T1 &a,T2 b){if(a<b) a=b;}
+template<typename T> void drop(const T &x){cout<<x<<endl;exit(0);}
+template<typename T=int>
+vector<T> read(size_t n){
+  vector<T> ts(n);
+  for(size_t i=0;i<n;i++) cin>>ts[i];
+  return ts;
+}
+
+//INSERT ABOVE HERE
+const int MAX = 2e5+10;
+int as[4][MAX];
+signed solve(){
+  int n,s;
+  cin>>n>>s;
+
+  for(int i=0;i<n;i++){
+    for(int j=0;j<4;j++){
+      cin>>as[j][i];
+    }
+  }
+
+  int hira=0,deko=0,boko=0;
+  int latte=0,malta=0;
+  int cnt[4]={};
+  for(int i=0;i<n;i++){
+    int num=0;
+    for(int j=0;j<4;j++){
+      if(as[j][i]==1) hira++,num++;
+      if(as[j][i]==2) deko++;
+      if(as[j][i]==3) boko++;
+    }
+    assert(num<=3);
+    cnt[num]++;
+    if(num==0) continue;
+    for(int j=0;j<4;j++){
+      if(as[j][i]==1 or as[(j+2)%4][i]==1) continue;
+      if(as[j][i]==2) latte++;
+      if(as[j][i]==3) malta++;
+    }
+  }
+
+  auto print=[&](int a,int b,int c,int d){
+    int sym=(a==c and b==d);
+    if(s==0) assert(!sym);
+    if(s==1) assert( sym);
+    cout<<a<<' '<<b<<' '<<c<<' '<<d<<newl;
+
+    if(a==2) deko++;
+    if(a==3) boko++;
+    if(b==2) deko++;
+    if(b==3) boko++;
+    if(c==2) deko++;
+    if(c==3) boko++;
+    if(d==2) deko++;
+    if(d==3) boko++;
+    assert(deko==boko);
+  };
+
+  // 1 * (n+1)
+  if(cnt[3]>0){
+    if(cnt[3]==1){
+      assert(abs(deko-boko)==1);
+      if(deko+1==boko+0){
+        print(1,1,1,2);
+        return 0;
+      }
+      if(deko+0==boko+1){
+        print(1,1,1,3);
+        return 0;
+      }
+      abort();
+    }
+    if(deko+2==boko+0){
+      print(1,2,1,2);
+      return 0;
+    }
+    if(deko+1==boko+1){
+      print(1,2,1,3);
+      return 0;
+    }
+    if(deko+0==boko+2){
+      print(1,3,1,3);
+      return 0;
+    }
+    abort();
+  }
+
+  assert(cnt[2]>=3);
+
+  if(cnt[2]==3){
+    if(deko+2==boko+0){
+      print(1,1,2,2);
+      return 0;
+    }
+    if(deko+1==boko+1){
+      print(1,1,2,3);
+      return 0;
+    }
+    if(deko+0==boko+2){
+      print(1,1,3,3);
+      return 0;
+    }
+    abort();
+  }
+
+  if(cnt[1]&1){
+    if(deko+3==boko+0){
+      print(1,2,2,2);
+      return 0;
+    }
+    if(deko+2==boko+1){
+      //assert(0);
+      if(latte==malta) print(1,2,2,3);
+      else print(1,2,3,2);
+      return 0;
+    }
+    if(deko+1==boko+2){
+      //assert(0);
+      if(latte==malta) print(1,2,3,3);
+      else print(1,3,2,3);
+      return 0;
+    }
+    if(deko+0==boko+3){
+      print(1,3,3,3);
+      return 0;
+    }
+    abort();
+  }
+
+  assert(latte==malta);
+
+  if(deko+4==boko+0){
+    print(2,2,2,2);
+    return 0;
+  }
+
+  if(deko+3==boko+1){
+    print(2,2,2,3);
+    return 0;
+  }
+
+  if(deko+2==boko+2){
+    if(s==0) print(2,2,3,3);
+    if(s==1) print(2,3,2,3);
+    return 0;
+  }
+
+  if(deko+1==boko+3){
+    print(2,3,3,3);
+    return 0;
+  }
+
+  if(deko+0==boko+4){
+    print(3,3,3,3);
+    return 0;
+  }
+
+  abort();
+}
+
+signed main(){
+  cin.tie(0);
+  ios::sync_with_stdio(0);
+
+  int T;
+  cin>>T;
+  while(T--) solve();
+
+  return 0;
+}
+

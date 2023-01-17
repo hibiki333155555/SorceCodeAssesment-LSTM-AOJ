@@ -1,0 +1,44 @@
+import sys
+input = sys.stdin.readline
+
+a,b,c=map(int,input().split())
+d,e,f=map(int,input().split())
+
+d-=a
+e-=b
+f-=c
+
+A=[d,e,f]
+while True:
+    A.sort()
+
+    if 0 in A:
+        break
+
+    if abs(A[0])>abs(A[2]):
+        x=A[2]
+        A[0]+=x
+        A[2]-=x
+
+        if A[1]<0:
+            A[1]+=x
+        else:
+            A[1]-=x
+    else:
+        x=-A[0]
+        A[0]+=x
+        A[2]-=x
+
+        if A[1]<0:
+            A[1]+=x
+        else:
+            A[1]-=x
+
+
+B=[abs(a) for a in A]
+if len(B)!=len(set(B)):
+    print("Yes")
+else:
+    print("No")
+        
+

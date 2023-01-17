@@ -1,0 +1,35 @@
+import java.util.*;
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int num = sc.nextInt();
+    int help = 0;
+    int one = 0;
+    int two = 0;
+    HashSet<Integer> meow = new HashSet<>();
+    for(int a = 0; a<num; a++){
+      help = sc.nextInt();
+      if(help == 0){
+        one = sc.nextInt();
+        meow.add(one);
+        System.out.println(meow.size());
+      }
+      if(help == 1){
+        one = sc.nextInt();
+        if(meow.contains(one)){System.out.println("1");}
+        else{System.out.println("0");}
+      }
+      if(help == 2){
+        one = sc.nextInt();
+        meow.remove(one);
+      }
+      if(help == 3){
+        one = sc.nextInt();
+        two = sc.nextInt();
+        for(int c = one; c<=two; c++){
+          if(meow.contains(c)){System.out.println(c);}
+        }
+      }
+    }
+  }
+}

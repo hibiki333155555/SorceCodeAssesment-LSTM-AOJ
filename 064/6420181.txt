@@ -1,0 +1,41 @@
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <string>
+#include <vector>
+using namespace std;
+
+
+int main()
+{
+    
+    int n;
+    cin >> n;
+    auto p = vector<double>(n+1, 0), q = vector<double>(n+1, 0);
+    for(int i =1;i<=n;i++)
+        cin >> p[i];
+    for(int i =0;i<=n;i++)
+        cin>>q[i];
+    
+    auto e = vector<vector<double>>(n+2, vector<double>(n+1, 0));
+    auto w = vector<vector<double>>(n+2, vector<double>(n+1, 0));
+    for(int i = 1; i <= n+1; i++)
+        w[i][i-1] = e[i][i-1] = q[i-1];
+
+    double tmp;
+    for(int l=1; l<=n; l++)
+        for(int i=1,j; i<=n-l+1; i++)
+        {
+            j = i+l-1;
+            e[i][j] = 1e9;
+            w[i][j] = w[i][j-1] + p[j]+q[j];
+            for(int r=i; r<=j; r++)
+                e[i][j] = e[i][j] < (tmp=e[i][r-1]+e[r+1][j]+w[i][j]) ? e[i][j] : tmp;
+        }
+    
+    cout << e[1][n] << endl;
+    return 0;
+}

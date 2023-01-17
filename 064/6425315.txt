@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <stack>
+#include <set>
+#include <numeric>
+using namespace std;
+typedef long long Int;
+typedef long long ll;
+const int Inf = 1e9 + 7;
+const Int INF = (Int)1e18 + 7;
+const double EPS = 1e-10;
+
+void solve() {
+  string S, T;
+  cin >> S >> T;
+  int N = (int)S.size();
+  int M = (int)T.size();
+  vector<vector<int>> dp(N+1, vector<int>(M+1, Inf));
+  for (int i = 0; i <= N; i++) dp[i][0] = i;
+  for (int j = 0; j <= M; j++) dp[0][j] = j;
+  for (int i = 1; i <= N; i++)
+    for (int j = 1; j <= M; j++) {
+      dp[i][j] = min(dp[i][j], dp[i-1][j]+1);
+      dp[i][j] = min(dp[i][j], dp[i][j-1]+1);
+      dp[i][j] = min(dp[i][j], dp[i-1][j-1] + (S[i-1] != T[j-1]));
+    }
+  //for (int i = 0; i <= N; i++) {
+  //  for (int j = 0; j <= M; j++)
+  //    printf("%4d", dp[i][j]);
+  //  printf("\n");
+  //}
+  cout << dp[N][M] << endl;
+}
+
+int main() {
+  solve();
+  return 0;
+}

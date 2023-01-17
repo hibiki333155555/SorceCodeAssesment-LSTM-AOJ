@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+
+struct Point {
+  int x, y;
+};
+
+bool check(const std::vector<Point>& ps) {
+  int n = ps.size();
+  for (int i=0; i<n; i++) {
+    const Point& center = ps[i];
+    const Point& left = ps[(n + (i-1) % n) % n];
+    const Point& right = ps[(i+1) % n];
+    Point vec_l = { left.x - center.x, left.y - center.y };
+    Point vec_r = { right.x - center.x, right.y - center.y };
+    int cross_z = vec_r.x * vec_l.y - vec_r.y * vec_l.x;
+    if (cross_z < 0) return false;
+  }
+  return true;
+}
+
+int main() {
+  int n; std::cin >> n;
+  std::vector<Point> ps(n);
+  for (int i=0; i<n; i++) std::cin >> ps[i].x >> ps[i].y;
+  std::cout << check(ps) << std::endl;
+}

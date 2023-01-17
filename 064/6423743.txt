@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+#ifdef MY_DEBUG
+  #include "dprint.cpp"
+  # define dprint(a, ...);                 \
+      do {                                 \
+          printf("line : %d, func : %s\n", \
+                __LINE__, __func__);       \
+          dprint(#a,a,##__VA_ARGS__ );     \
+      } while (0)
+#else
+  #define dprint(a,...) 
+#endif
+using namespace std;
+void dsf(int h,int w,int x,int y,vector<vector<bool>>&vec){
+    vec[x][y]=false;
+    for (int dx = -1; dx <=1; dx++)
+    {
+        for (int dy = -1; dy <=1; dy++)
+      {
+          if(dx==0&&dy==0)continue;
+          int x2=x+dx;
+          int y2=y+dy;
+          if(x2<0||x2>=h)continue;
+          if(y2<0||y2>=w)continue;
+          if(vec[x2][y2]==true){
+            dsf(h,w,x2,y2,vec);
+          }
+      }
+    }
+}
+bool  solve(int h,int w,vector<vector<bool>>&vec){
+  int x,y;
+  bool flag=false;
+  for (int i = 0; i < h; i++){
+    for(int j=0;j<w;j++){
+      if(vec[i][j]==true){
+        //親決定
+        x=i;y=j;
+        flag=true;
+        break;
+      }
+    }
+    if(flag==true)break;
+  }
+  if(flag==false)return false;//もう島がない
+  dsf(h,w,x,y,vec);
+  return true;//まだ島があった
+}
+int main() {
+  while (true)
+  {
+    
+    int w,h;
+    cin >>w>>h;
+    if(w==0&&h==0)break;
+    vector<vector<bool>> vec(h, vector<bool>(w));
+    for (int i = 0; i < h; i++){
+      for(int j=0;j<w;j++){
+        int temp;
+
+        cin >> temp;
+        if(temp==1){vec[i][j]=true;
+        }else {vec[i][j]=false;}
+      }
+    }
+    bool ret=true;
+    int count=0;
+    while(ret==true){
+      ret =solve(h,w,vec);
+      if(ret==true)count++;
+    }
+    cout << count << endl;
+  }
+
+return 0;
+}

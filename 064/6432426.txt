@@ -1,0 +1,3 @@
+a, b = gets.split.map(&:to_oi)
+puts ("#{a/b}#{a%b}#{(a%b)/b}")
+

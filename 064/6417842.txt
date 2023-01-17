@@ -1,0 +1,27 @@
+def solve():
+    ans = []
+    while(1):
+        N = int(input())
+        if N==0:
+            break
+        W = list(map(int,input().split()))
+        dp = [[0]*N for _ in range(N)]
+        for d in range(1,N):
+            for i in range(N-d):
+                j = i+d
+                if d%2==1:
+                    if dp[i+1][j-1]==d-1:
+                        if abs(W[i] - W[j])<=1:
+                            dp[i][j] = d+1 
+                        else:
+                            dp[i][j] = d-1
+                    for k in range(i+1,j):
+                        new = dp[i][k]+dp[k+1][j]
+                        if new > dp[i][j]:
+                            dp[i][j] = new
+                else:
+                    dp[i][j] = max(dp[i+1][j], dp[i][j-1])
+        ans.append(dp[0][-1])
+    for a in ans:
+        print(a)
+solve()

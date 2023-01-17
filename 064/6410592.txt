@@ -1,0 +1,10 @@
+a,b = map(int,raw_input().split())
+A=[]
+for i in range(b):
+    B=list(map(int,raw_input().split()))
+    A.append(B)
+for i in range(b):
+    s=sum(A[i])
+    f=[str(a) for a in A[i]]
+    f=" ".join(f)
+    print f, s

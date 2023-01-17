@@ -1,0 +1,2 @@
+a.b = map(int,input().sprit())
+print(a*b , a+b*2)

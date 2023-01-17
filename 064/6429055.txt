@@ -1,0 +1,18 @@
+#include <stdio.h>
+
+int main(vodi) {
+	int i, j, dataset[10000];
+	
+	/*入力*/
+	for (i = 0; i < 10000; i++) {
+		scanf("%d", &dataset[i]);
+		if (dataset[i] == 0) break;
+	}
+	
+	/*出力*/
+	for (j = 0; j < i ; j++) {
+		printf("Case %d: %d\n", j+1, dataset[j]);
+	}
+	
+	return 0;
+}

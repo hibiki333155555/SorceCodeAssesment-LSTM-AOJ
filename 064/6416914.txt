@@ -1,0 +1,39 @@
+
+import java.util.*;
+public class Main {
+
+	static int N;
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		int[] arr = new int[N+1];
+		for(int i=1;i<=N;i++) {
+			int node = sc.nextInt();
+			arr[i] = node;
+		}
+		buildMaxHeap(arr);
+		for(int i=1;i<=N;i++) {
+			System.out.print(" "+arr[i]);
+		}
+	}
+	public static void buildMaxHeap(int[] arr) {
+		for(int i=(arr.length-1)/2;i>=1;i--) {
+			maxHeapify(arr, i);
+		}
+	}
+	public static void maxHeapify(int[] arr, int i) {
+		int l = i/2;
+		int r = i/2+1;
+		int largest = i;
+		if(l<=N && arr[l]>arr[i]) largest = l;
+		else largest = i;
+		if(r<=N && arr[r]>arr[largest]) largest = r;
+		if(largest != i) {
+			int place = arr[i];
+			arr[i] = arr[largest];
+			arr[largest] = place;
+			maxHeapify(arr, largest);
+		}
+	}
+}
+

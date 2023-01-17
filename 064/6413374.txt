@@ -1,0 +1,11 @@
+rt = []
+i = 1
+n = int(input())
+x = input().splitlines
+while i <= n:
+    rt.append(x[i-1])
+rm = rt[0]
+while i < n:
+    if rm < rt[i]:
+        rm = rt[i]
+print(rm)

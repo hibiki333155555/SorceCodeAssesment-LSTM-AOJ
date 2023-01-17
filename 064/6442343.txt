@@ -1,0 +1,7 @@
+S = int(input())
+h = int(S / 3600)
+S = (S - h * 3600)
+m = int(S / 60)
+s = (S - m * 60)
+
+print("{}:{}:{}".format(h, m, s))

@@ -1,0 +1,10 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int r;
+    int m;
+    cin >> r >> m;
+    cout << r * m << endl;
+    return 0;
+}

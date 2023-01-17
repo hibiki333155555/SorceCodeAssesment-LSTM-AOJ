@@ -1,0 +1,15 @@
+while True:
+    try:
+        str = input()
+    except EOFError:
+        break
+    
+cnt = [0 for i in range(26)]
+for s in str.lower():
+    num = ord(s) - ord('a')
+    if 0 <= num < 26: cnt[num] += 1
+    
+for i, c in enumerate(cnt):
+    print(f"{chr(i + ord('a'))} : {c}")
+
+

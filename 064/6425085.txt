@@ -1,0 +1,1 @@
+main(){char s[16];int i,n;scanf("%d",&n);for(i=0;i<n;i++){int r=0,c=0,o=0;while(1){scanf("%s",s);if(strcmp(s,"HIT")==0){if(r!=3){r++;}else if(r==3){c++;}}else if(strcmp(s,"HOMERUN")==0){c+=r+1;r=0;}else if(strcmp(s,"OUT")==0){o++;}if(o==3) break;}printf("%d\n",c);}}

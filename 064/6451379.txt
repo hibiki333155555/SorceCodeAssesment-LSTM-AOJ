@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+	int n;
+	cin >> n;
+	vector< vector<string> >mat(n, vector<string>(5));
+	for (int i = 0; i < n; i++)
+	{
+		cin >> mat[i][0] >> mat[i][1] >> mat[i][2] >> mat[i][3] >> mat[i][4];
+	}
+	sort(mat.begin(), mat.end());
+	for (int i = 0; i < n; i++) {
+		cout << mat[i][0] << " " << mat[i][1] << " " << mat[i][2] << " " << mat[i][3] << " " << mat[i][4] << endl;
+	}
+	return 0;
+}

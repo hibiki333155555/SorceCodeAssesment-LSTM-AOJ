@@ -1,0 +1,30 @@
+def insertion_sort(a, n, g):
+    global count
+    for i in range(g, n):
+        v = a[i]
+        j = i-g
+        while j >= 0 and a[j] > v:
+            a[j+g] = a[j]
+            j = j - g
+            count += 1
+        a[j+g] = v
+    return
+
+
+n = int(input())
+a = [int(input()) for x in range(n)]
+count = 0
+k = 1
+g = []
+while (3**k-1)/2 <= len(a):
+    g.append(int((3**k-1)/2))
+    k += 1
+g.reverse()
+for i in range(len(g)):
+    insertion_sort(a, len(a), g[i])
+
+print(len(g))
+print(" ".join(map(str, g)))
+print(count)
+for i in a:
+    print(i)

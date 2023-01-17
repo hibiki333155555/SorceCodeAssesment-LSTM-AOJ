@@ -1,0 +1,10 @@
+#include<stdio.h>
+main()
+{
+int x,s;
+scanf("%d",&x);
+if(1<=x<=100)
+{
+printf("%d\n",x*x*x);
+}
+}

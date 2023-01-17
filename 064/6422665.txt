@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+int main(void){
+
+    int n;
+    scanf("%d", &n);
+
+    int cards[4][13];
+    int i, j;
+    for(i = 0; i < 4; i++) for(j = 0; j < 13; j++) cards[i][j] = 0; // initialize
+
+    char br, sym;
+    int rank;
+    i = n;
+    while(i--){
+        scanf("%c", &br); // read break line
+        scanf("%c %d", &sym, &rank);
+        switch (sym){
+            case 'S': cards[0][rank - 1] = 1; break;
+            case 'H': cards[1][rank - 1] = 1; break;
+            case 'C': cards[2][rank - 1] = 1; break;
+            case 'D': cards[3][rank - 1] = 1; break;
+            default: printf("exception: sym: %c, rank: %.2d\n", sym, rank);
+        }
+    }
+
+    char syms[4] = {'S', 'H', 'C', 'D'};
+    for(i = 0; i < 4; i++){
+        for(j = 0; j < 13; j++){
+            // printf("%c %.2d: %d\n", syms[i], j + 1, cards[i][j]);
+            if(!cards[i][j]) printf("%c %d\n", syms[i], j + 1);
+        }
+    }
+
+    return 0;
+}

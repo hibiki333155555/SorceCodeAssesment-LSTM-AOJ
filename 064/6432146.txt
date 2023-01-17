@@ -1,0 +1,28 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ALDS1_1_A
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            Console.ReadLine();
+            var data = Console.ReadLine().Split().Select(d => int.Parse(d)).ToArray();
+            Console.WriteLine(string.Join(" ", data));
+            for (int i = 1; i < data.Length; i++)
+            {
+                var v = data[i];
+                var j = i - 1;
+                while (j >= 0 && data[j] > v)
+                {
+                    data[j + 1] = data[j];
+                    j--;
+                }
+                data[j + 1] = v;
+                Console.WriteLine(string.Join(" ", data));
+            }
+        }
+    }
+}
+

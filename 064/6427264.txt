@@ -1,0 +1,96 @@
+#include <stdio.h>
+
+typedef struct Edge {
+	struct Edge *next;
+	int v, cost[8];
+} edge;
+
+void chmin(int* a, int b)
+{
+	if (*a > b) *a = b;
+}
+
+void chmax(int* a, int b)
+{
+	if (*a < b) *a = b;
+}
+
+int encode(int y[])
+{
+	int i, x = y[0] * 3 + y[1];
+	for (i = 2; i < 8; i++) x = (x << 1) + y[i];
+	return x;
+}
+
+void decode(int x, int y[])
+{
+	int i;
+	for (i = 7; i >= 2; i--) {
+		y[i] = x % 2;
+		x >>= 1;
+	}
+	y[1] = x % 3;
+	y[0] = x / 3;
+}
+
+int main()
+{
+	const int prime[8] = {2, 3, 5, 7, 11, 13, 17, 19};
+	int i, j, N, M, u, w, c;
+	edge *adj[1001] = {}, e[2001], *p;
+	scanf("%d %d", &N, &M);
+	for (i = 0; i < M; i++) {
+		scanf("%d %d %d", &u, &w, &c);
+		e[i].v = w;
+		e[i].next = adj[u];
+		adj[u] = &(e[i]);
+		for (j = 0; j < 8; j++) {
+			e[i].cost[j] = 0;
+			while (c % prime[j] == 0) {
+				e[i].cost[j]++;
+				c /= prime[j];
+			}
+		}
+	}
+	
+	int flag[1001][960] = {}, q[1000001][2], head, tail, x, y[8], z[8];
+	flag[1][0] = 1;
+	q[0][0] = 1;
+	q[0][1] = 0;
+	for (head = 0, tail = 1; head < tail; head++) {
+		u = q[head][0];
+		x = q[head][1];
+		decode(x, y);
+		for (p = adj[u]; p != NULL; p = p->next) {
+			w = p->v;
+			for (i = 0; i < 8; i++) {
+				z[i] = y[i];
+				chmax(&(z[i]), p->cost[i]);
+			}
+			x = encode(z);
+			if (flag[w][x] == 0) {
+				flag[w][x] = 1;
+				q[tail][0] = w;
+				q[tail++][1] = x;
+			}
+		}
+	}
+	
+	int min = 1 << 30, max = 0, tmp;
+	for (x = 0; x < 960; x++) {
+		if (flag[N][x] == 0) continue;
+		decode(x, y);
+		for (i = 0, tmp = 1; i < 8; i++) {
+			while (y[i] > 0) {
+				tmp *= prime[i];
+				y[i]--;
+			}
+		}
+		chmin(&min, tmp);
+		chmax(&max, tmp);
+	}
+	if (max == 0) printf("IMPOSSIBLE\n");
+	else printf("%d %d\n", min, max);
+	fflush(stdout);
+	return 0;
+}

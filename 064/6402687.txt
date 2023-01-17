@@ -1,0 +1,5 @@
+r = float(input())
+pi = 3.1415926535
+s = pi*r*r
+l = 2*pi*r
+print(f"{s:.7f} {l:.7f}")

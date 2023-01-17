@@ -1,0 +1,52 @@
+# クラスを宣言
+class Node:
+  # コンストラクタを宣言
+  def __init__(self,index):
+    # メソッドを定義
+    self.index = index # Node （頂点） の番号を定義
+    self.nears = set() # 隣接 Node のリストを定義
+    self.sign = False # 探索済みかどうかを定義
+
+  def __repr__(self):
+    return f'Node index:{self.index} Node nears:{self.nears} Node sign:{self.sign}'
+v,e,r=map(int,input().split())
+C=[[float("inf")for i in range(v+1)]for j in range(v+1)]
+nodes=[Node(i) for i in range(v+1)]
+for _ in range(e):
+    s,t,d=map(int,input().split())
+    C[s][t]=d
+    nodes[s].nears.add(t)
+
+import heapq
+def dij(st):
+    searched=set([st])
+    path=[float("inf")]*(v+1)
+    path[st]=0
+    h=[]
+    heapq.heapify(h)
+    for i in nodes[st].nears:
+        heapq.heappush(h,[C[st][i],i])
+    """print(st,en,path)
+    hh=h.copy()
+    while hh:
+        hhh=heapq.heappop(hh)
+        print(hhh)"""
+    while len(searched)<v and h:
+        cost,ind=heapq.heappop(h)
+        if ind not in searched:
+            path[ind]=cost
+            searched.add(ind)
+        for i in nodes[ind].nears-searched:
+            excost=path[ind]+C[ind][i]
+            heapq.heappush(h,[excost,i])
+        """print(st,en,path)
+        hh=h.copy()
+        while hh:
+            hhh=heapq.heappop(hh)
+            print(hhh)"""
+    for i in path[:-1]:
+        if i==float("inf"):
+            print("INF")
+        else:
+            print(i)
+dij(r)

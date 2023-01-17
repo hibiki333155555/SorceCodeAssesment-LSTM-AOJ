@@ -1,0 +1,140 @@
+#include <bits/stdc++.h>
+//#include<atcoder/all>
+using namespace std;
+//using namespace atcoder;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+
+ll mod = 1e9 + 7;
+
+
+int main() {
+	ll N;
+	cin >> N;
+	string S, T;
+	cin >> S >> T;
+	ll mod = 998244353;
+	ll an = 0;
+	string siin = "qwrtypsdfghjklzxcvbnm";
+	string boin = "aiueo";
+	rep(s, 21) {//1,4文字目
+		char P = siin[s];
+		rep(b, 5) {//2文字目
+			char B = boin[b];
+			rep(c, 5) {//3文字目
+				char C = boin[c];
+				if (P == 'w' && B == 'a' && C == 'i') {
+					cout << "";
+				}
+				if (b == c)continue;
+				vector<vll> DPSJ(N + 1, vll(5, 0));
+				vector<vll> DPTJ(N + 1, vll(5, 0));
+				vector<vll> DPT(N + 1, vll(5, 0));
+				vector<vll> DPS(N + 1, vll(5, 0));
+				DPTJ[0][0] = 1;
+				DPSJ[0][0] = 1;
+				rep(i, N) {
+					DPT[i + 1][1] += DPT[i][1] + DPT[i][0];
+					DPS[i + 1][4] += DPS[i][4] + DPS[i][3];
+					DPT[i + 1][4] += DPT[i][4] + DPT[i][3];
+					DPS[i + 1][1] += DPS[i][1] + DPS[i][0];
+					if (S[i] < P) {
+						DPS[i + 1][1] += DPSJ[i][0] + DPSJ[i][1];
+						DPS[i + 1][4] += DPSJ[i][3] + DPSJ[i][4];
+					}
+					else if (S[i] == P) {
+						DPSJ[i + 1][1] += DPSJ[i][1] + DPSJ[i][0];
+						DPSJ[i + 1][4] += DPSJ[i][4] + DPSJ[i][3];
+
+
+					}
+
+					if (T[i] < P) {
+						DPT[i + 1][1] += DPTJ[i][0] + DPTJ[i][1];
+						DPT[i + 1][4] += DPTJ[i][3] + DPTJ[i][4];
+					}
+					else if (T[i] == P) {
+						DPTJ[i + 1][1] += DPTJ[i][1] + DPTJ[i][0];
+						DPTJ[i + 1][4] += DPTJ[i][4] + DPTJ[i][3];
+
+					}
+
+					DPSJ[i + 1][1] %= mod;
+					DPTJ[i + 1][4] %= mod;
+					DPSJ[i + 1][4] %= mod;
+					DPTJ[i + 1][1] %= mod;
+					DPS[i + 1][1] %= mod;
+					DPS[i + 1][4] %= mod;
+					DPT[i + 1][1] %= mod;
+					DPT[i + 1][4] %= mod;
+
+					DPS[i + 1][2] += DPS[i][2] + DPS[i][1];
+					DPT[i + 1][2] += DPT[i][2] + DPT[i][1];
+					if (S[i] < B) {
+						DPS[i + 1][2] += DPSJ[i][1] + DPSJ[i][2];
+
+					}
+					else if (S[i] == B) {
+						DPSJ[i + 1][2] += DPSJ[i][1] + DPSJ[i][2];
+
+					}
+
+					if (T[i] < B) {
+						DPT[i + 1][2] += DPTJ[i][1] + DPTJ[i][2];
+
+					}
+					else if (T[i] == B) {
+						DPTJ[i + 1][2] += DPTJ[i][1] + DPTJ[i][2];
+
+					}
+
+					DPSJ[i + 1][2] %= mod;
+					DPTJ[i + 1][2] %= mod;
+					DPS[i + 1][2] %= mod;
+					DPT[i + 1][2] %= mod;
+
+					DPS[i + 1][3] += DPS[i][3] + DPS[i][2];
+					DPT[i + 1][3] += DPT[i][3] + DPT[i][2];
+					if (S[i] < C) {
+						DPS[i + 1][3] += DPSJ[i][2] + DPSJ[i][3];
+
+					}
+					else if (S[i] == C) {
+						DPSJ[i + 1][3] += DPSJ[i][3] + DPSJ[i][2];
+
+					}
+
+					if (T[i] < C) {
+						DPT[i + 1][3] += DPTJ[i][2] + DPTJ[i][3];
+
+					}
+					else if (T[i] == C) {
+						DPTJ[i + 1][3] += DPTJ[i][3] + DPTJ[i][2];
+
+					}
+
+					DPSJ[i + 1][3] %= mod;
+					DPTJ[i + 1][3] %= mod;
+					DPS[i + 1][3] %= mod;
+					DPT[i + 1][3] %= mod;
+
+
+
+
+				}
+				if (DPS[N][4] + DPSJ[N][4] - DPT[N][4] >= 1) {
+					//cout << P << B << C << P << endl;
+				}
+				an += max(DPS[N][4] + DPSJ[N][4] - DPT[N][4],0ll);
+				an %= mod;
+			}
+		}
+
+	}
+	cout << an << endl;
+
+}
+
+

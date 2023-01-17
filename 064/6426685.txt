@@ -1,0 +1,25 @@
+n=int(input())
+l_s,l_h,l_c,l_d=[],[],[],[]
+for i in range(n):
+    mark,number = input().split()
+    if mark=='S':
+        l_s.append(int(number))
+    elif mark=='H':
+        l_h.append(int(number))
+    elif mark=='C':
+        l_c.append(int(number))
+    elif mark=='D':
+        l_d.append(int(number))
+        
+for i in range(1,14):
+    if i not in l_s:
+        print(f'S {i}')
+for i in range(1,14):
+    if i not in l_h:
+        print(f'H {i}')
+for i in range(1,14):
+    if i not in l_c:
+        print(f'C {i}')
+for i in range(1,14):
+    if i not in l_d:
+        print(f'D {i}')

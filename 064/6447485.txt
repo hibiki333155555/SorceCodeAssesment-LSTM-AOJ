@@ -1,0 +1,11 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int a,b;
+    double d;
+    cin>>a>>b;
+    d=a/b;
+    cout<<a/b<<" "<<a%b<<" ";
+    printf("%.7lf¥n",d);
+}

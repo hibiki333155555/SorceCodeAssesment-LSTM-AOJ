@@ -1,0 +1,11 @@
+s = str()
+while True:
+    try:
+        s += input().lower()
+    except:
+        break
+s = re.sub(r'[^a-z]+', '', s)
+alp = [chr(i) for i in range(97, 97+26)]    # アルファベット列取得
+# alp = 'abcdefghijklmnopqrstuvwxyz'
+for target in alp:
+    print(f"{target} : {s.count(target)}"

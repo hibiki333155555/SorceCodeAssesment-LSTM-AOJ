@@ -1,0 +1,34 @@
+// 優先度付きキューによる実装
+# include <bits/stdc++.h>
+using namespace std;
+using MinHeap = priority_queue<int, vector<int>, greater<int>>;
+
+int main() {
+   // 1. 入力
+   int N, K;
+   cin >> N >> K;
+   MinHeap heap;
+   for (int i = 0; i < N; ++i) {
+      int a;
+      cin >> a;
+      heap.push(a);
+   }
+
+   // 2. 操作を行う
+   for (int _i = 0; _i < K; ++_i) {
+      int a = heap.top();
+      heap.pop();
+      if (a == 1) heap.push(5);
+      else heap.push(6);
+   }
+
+   // 3. 総和を求める
+   int ans = 0;
+   for (int i = 0; i < N; ++i) {
+      ans += heap.top();
+      heap.pop();
+   }
+
+   // 4. 答えの出力
+   cout << ans << '\n';
+}

@@ -1,0 +1,7 @@
+#include<iostream>
+
+int main(void){
+    int La,Lo;
+    cin>>La>>Lo;
+    cout<<La/3600<<' '<<Lo/3600<<endl;
+}

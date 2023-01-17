@@ -1,0 +1,93 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+//#include<stdlib.h>
+//#include<string.h>
+//#include<ctype.h>
+//#include<stdio.h>
+using namespace std;
+//分析见书《挑战程序设计竞赛2》上P65
+
+struct work{
+	int num;
+	int time;
+};
+
+struct work Q[100005];
+int head,tail,sum=0;
+int N=100003;//环形队列 
+void initialize()
+{
+	head=0;
+	tail=0;
+}
+void isFull()
+{
+	
+}
+int isEmpty()
+{
+	if(head==tail)
+		return 1;
+	else
+		return 0;	
+}
+struct work dequeue()
+{
+	struct work x=Q[head];
+	if(head+1>=N)
+		head=0;
+	else
+		head++;
+	return x;
+}
+void enqueue(struct work x)
+{
+	Q[tail]=x;
+	if(tail+1>=N)
+		tail=0;
+	else
+		tail++;
+}
+
+int main()
+{	
+	int n,q,i;
+	char ch;//过滤p 
+	struct work t;
+	cin>>n>>q;
+	
+	initialize(); 
+	for(i=0;i<n;i++)
+	{
+		cin>>ch;
+		cin>>t.num>>t.time;
+		enqueue(t);
+	} //完成初始化队列 
+	
+	
+	while(!isEmpty()) 
+	{
+		if(Q[head].time<=q)
+		{
+			t=dequeue();
+			sum+=t.time;
+			cout<<"p"<<t.num<<" "<<sum<<endl;
+			
+		}
+		else
+		{
+			t=dequeue();
+			sum+=q;
+			t.time-=q;
+			enqueue(t);
+		}
+	}
+	
+
+return 0;
+}
+

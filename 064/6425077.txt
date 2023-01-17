@@ -1,0 +1,9 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    double a,t,r;
+    cin>>a>>t>>r;
+    printf("%6lf\n",r/(a/t));
+    return(0);
+}

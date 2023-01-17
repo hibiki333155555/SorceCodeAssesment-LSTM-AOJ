@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+
+    string str,mg,p;
+    int num,a,b;
+
+    cin>>str;
+    cin>>num;
+
+    for(int i=0;i<num;++i){
+
+        cin>>mg>>a>>b;
+        if(mg=="replace"){
+            cin>>p;
+            str=str.replace(a,b-a+1,p);
+        }
+        else if(mg=="reverse"){
+            string str1=str.substr(a,b-a+1);
+            reverse(str1.begin(),str1.end());
+            str=str.replace(a,b-a+1,str1);
+
+        }
+        else if(mg=="print"){
+            cout<<str.substr(a,b-a+1)<<endl;
+        }
+    }
+    
+
+    return 0;
+}
+

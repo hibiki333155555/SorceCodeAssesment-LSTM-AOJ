@@ -1,0 +1,7 @@
+n = 0
+while True:
+    a = int(input())
+    if a == 0:
+        pass
+    n+=1
+    print('Case ',n,': ',a)

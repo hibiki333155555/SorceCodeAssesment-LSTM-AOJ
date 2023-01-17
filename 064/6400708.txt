@@ -1,0 +1,74 @@
+import sys
+import math
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+class FordFulkerson:
+    def __init__(self, num_vertexes):
+        self._num_vertexes = num_vertexes
+        self._goal = math.inf
+        self._graph = [[] for _ in range(num_vertexes)]
+        self._is_used = [False] * num_vertexes
+        return
+
+    def _dfs(self, v, f):
+        if v == self._goal:
+            return f
+
+        self._is_used[v] = True
+        for edge in self._graph[v]:
+            u, c, b_edge = edge
+            if c > 0 and not self._is_used[u]:
+                mf = self._dfs(u, min(c, f))
+                if mf > 0:
+                    edge[1] -= mf
+                    b_edge[1] += mf
+                    return mf
+
+        return 0
+
+    def add_edge(self, v, u, c):
+        f_edge = [u, c, None]
+        f_edge[2] = b_edge = [v, 0, f_edge]
+        self._graph[v].append(f_edge)
+        self._graph[u].append(b_edge)
+        return
+
+    def calc_max_flow(self, s, t):
+        total_flow = 0
+        self._goal = t
+        f = math.inf
+        while f > 0:
+            self._is_used = [False] * self._num_vertexes
+            f = self._dfs(s, f)
+            total_flow += f
+
+        return total_flow
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    num_vertexes, num_edges = map(int, f.readline().split())
+    ff = FordFulkerson(num_vertexes)
+    start = 0
+    goal = num_vertexes - 1
+    for _ in range(num_edges):
+        v, u, c = map(int, f.readline().split())
+        ff.add_edge(v, u, c)
+
+    print(ff.calc_max_flow(start, goal))
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

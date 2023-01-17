@@ -1,0 +1,245 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct iofast_t {
+    iofast_t() {
+        ios::sync_with_stdio(false);
+        cin.tie(nullptr);
+    }
+} iofast;
+
+struct uns_t {} uns;
+template <typename Element, typename Head, typename ...Args>
+auto vec(Element init, Head arg, Args ...args) {
+    if constexpr (sizeof...(Args) == 0) return vector(arg, init);
+    else return vector(arg, vec(init, args...));
+}
+template <typename Element, typename Head, typename ...Args>
+auto vec(uns_t, Head arg, Args ...args) {
+    return vec(Element(), arg, args...);
+}
+
+template <typename Container>
+auto distance(const Container &c, decltype(begin(c)) iter) {
+    return distance(begin(c), iter);
+}
+
+template <typename RIter, typename Compare = less<typename iterator_traits<RIter>::value_type>>
+auto isort(RIter first, RIter last, Compare comp = Compare()) {
+    vector<int> i(distance(first, last));
+    iota(begin(i), end(i), 0);
+    sort(begin(i), end(i), [&](auto x, auto y) {
+        return comp(*(first + x), *(first + y));
+    });
+    return i;
+}
+
+template <typename, template <typename> typename, typename = void_t<>>
+struct detect : false_type {};
+template <typename T, template <typename> typename Check>
+struct detect<T, Check, void_t<Check<T>>> : true_type {};
+template <typename T, template <typename> typename Check>
+constexpr inline bool detect_v = detect<T, Check>::value;
+
+template <typename T>
+using has_member_sort = decltype(declval<T>().sort());
+
+template <typename Container, typename Compare = less<typename Container::value_type>>
+auto sorted(Container c, Compare comp = Compare()) {
+    if constexpr (detect_v<Container, has_member_sort>) {
+        c.sort(comp);
+        return c;
+    }
+    else {
+        sort(begin(c), end(c), comp);
+        return c;
+    }
+}
+
+template <typename Container, typename Compare = equal_to<typename Container::value_type>>
+auto uniqued(Container c, Compare comp = Compare()) {
+    c.erase(unique(begin(c), end(c), comp), end(c));
+    return c;
+}
+
+template <typename T, typename Compare = less<T>>
+T &chmin(T &l, T r, Compare &&f = less<T>()) { return l = min(l, r, f); }
+template <typename T, typename Compare = less<T>>
+T &chmax(T &l, T r, Compare &&f = less<T>()) { return l = max(l, r, f); }
+
+int main() {
+    int h, w, n; cin >> h >> w >> n;
+    int sy, sx; cin >> sy >> sx; --sy; --sx;
+    int gy, gx; cin >> gy >> gx; --gy; --gx;
+
+    auto imos = vec<int>(0, h + h + 1, w + w + 1);
+
+    auto at = [&](int y, int x) -> int & {
+        return imos[h + y][w + x];
+    };
+
+    for (int i = 0; i < n; ++i) {
+        int y, x, k; cin >> y >> x >> k; --y; --x;
+
+        int y1 = y + k;
+        int x1 = x;
+
+        int y2 = y;
+        int x2 = x + k;
+
+        int y3 = y - k;
+        int x3 = x;
+
+        int y4 = y;
+        int x4 = x - k;
+
+        int ry1 = y1 + x1;
+        int rx1 = y1 - x1;
+
+        int ry2 = y2 + x2;
+        int rx2 = y2 - x2;
+
+        int ry3 = y3 + x3;
+        int rx3 = y3 - x3;
+
+        int ry4 = y4 + x4;
+        int rx4 = y4 - x4;
+
+        swap(ry1, ry2);
+        swap(rx1, rx2);
+
+        swap(ry3, ry4);
+        swap(rx3, rx4);
+
+        at((ry1 + rx1) / 2, (ry1 - rx1) / 2) += 1;
+        at((ry2 + rx2 + 2) / 2, (ry2 - rx2 - 2) / 2) -= 1;
+
+        at((ry4 + rx4 - 2) / 2, (ry4 - rx4 - 2) / 2) -= 1;
+        at((ry3 + rx3) / 2, (ry3 - rx3 - 4) / 2) += 1;
+    }
+
+    for (int i = -h; i <= h; ++i) {
+        int y = i, x = -w;
+
+        auto p = vec<array<int, 2>>(uns, 0);
+
+        while (-h <= y && x <= w) {
+            p.push_back({ y, x });
+            y -= 1; x += 1;
+            //int py = y, px = x;
+        }
+        reverse(begin(p), end(p));
+
+        if (!empty(p)) {
+            auto [py, px] = p[0];
+            for (int i = 1; i < size(p); ++i) {
+                auto [y, x] = p[i];
+                at(y, x) += at(py, px);
+                py = y; px = x;
+            }
+        }
+    }
+
+    for (int i = -w + 1; i <= w; ++i) {
+        int y = h, x = i;
+
+        auto p = vec<array<int, 2>>(uns, 0);
+        while (-h < y && x < w) {
+            p.push_back({ y, x });
+            y -= 1; x += 1;
+        }
+        reverse(begin(p), end(p));
+
+        if (!empty(p)) {
+            auto [py, px] = p[0];
+            for (int i = 1; i < size(p); ++i) {
+                auto [y, x] = p[i];
+                at(y, x) += at(py, px);
+                py = y; px = x;
+            }
+        }
+    }
+
+    for (int i = h; -h <= i; --i) {
+        int y = i, x = -w;
+
+        auto p = vec<array<int, 2>>(uns, 0);
+        while (y < h && x < w) {
+            p.push_back({ y, x });
+            y += 1; x += 1;
+        }
+        reverse(begin(p), end(p));
+
+        if (!empty(p)) {
+            auto [py, px] = p[0];
+            for (int i = 1; i < size(p); ++i) {
+                auto [y, x] = p[i];
+                at(y, x) += at(py, px);
+                py = y; px = x;
+            }
+        }
+    }
+
+    for (int i = -w + 1; i <= w; ++i) {
+        int y = -h, x = i;
+
+        auto p = vec<array<int, 2>>(uns, 0);
+        while (y < h && x < w) {
+            p.push_back({ y, x });
+            y += 1; x += 1;
+        }
+        reverse(begin(p), end(p));
+
+        if (!empty(p)) {
+            auto [py, px] = p[0];
+            for (int i = 1; i < size(p); ++i) {
+                auto [y, x] = p[i];
+                at(y, x) += at(py, px);
+                py = y; px = x;
+            }
+        }
+    }
+
+    auto f = vec<int>(0, h, w);
+    for (int i = -h; i <= h; ++i) {
+        for (int j = -w; j <= w; ++j) {
+            if (at(i, j)) {
+                f[(i + j) / 2][(i - j) / 2] = 1;
+            }
+        }
+    }
+
+    auto vis = vec<bool>(false, h, w);
+    queue<array<int, 2>> que;
+
+    que.push({ sy, sx });
+    while (!empty(que)) {
+        auto [y, x] = que.front(); que.pop();
+
+        for (int i = -1; i <= 1; ++i) {
+            for (int j = -1; j <= 1; ++j) {
+                if (abs(i) && abs(j)) {
+                    continue;
+                }
+
+                int ny = y + i;
+                int nx = x + j;
+
+                if (min(ny, nx) < 0 || h <= ny || w <= nx) {
+                    continue;
+                }
+
+                if (vis[y + i][x + j]) {
+                    continue;
+                }
+
+                vis[ny][nx] = true;
+                que.push({ny, nx});
+            }
+        }
+    }
+
+    cout << (vis[gy][gx] ? "Yes" : "No") << endl;
+}
+
+

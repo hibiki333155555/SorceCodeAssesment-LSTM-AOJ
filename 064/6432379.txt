@@ -1,0 +1,23 @@
+using System;
+
+namespace AOJ_ALDS1_1_D
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var n = int.Parse(Console.ReadLine());
+            var sub = int.MinValue;
+            var min = int.MaxValue;
+            for (int i = 0; i < n; i++)
+            {
+                var cur = int.Parse(Console.ReadLine());
+                sub = Math.Max(cur - min, sub);
+                min = Math.Min(cur, min);
+            }
+            Console.WriteLine(sub);
+
+        }
+    }
+}
+

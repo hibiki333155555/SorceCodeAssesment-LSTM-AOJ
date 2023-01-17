@@ -1,0 +1,59 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+double dist(double x,double y,double z,double xx,double yy,double zz){
+    return sqrt((x-xx)*(x-xx)+(y-yy)*(y-yy)+(z-zz)*(z-zz));
+}
+
+double cal(double d,double r){
+    return acos(-1.0)*2.0/3.0*(r-d/2.0)*(r-d/2.0)*(2*r+d/2.0);
+}
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    int n; cin >> n;
+    double r; cin >> r;
+    double res = (double)n*4*acos(-1.0)*r*r*r/3.0;
+    vector<int> x(n),y(n),z(n);
+    for(int i=0;i<n;i++){
+        cin >> x[i] >> y[i] >> z[i];
+    }
+    for(int i=0;i<n;i++){
+        res -= cal(dist(x[i],y[i],z[i],x[(i+1)%n],y[(i+1)%n],z[(i+1)%n]), r);
+    }
+    printf("%.9f\n",res);
+}
+

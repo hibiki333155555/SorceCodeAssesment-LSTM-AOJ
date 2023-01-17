@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define fol(i,s,g) for(int i=(int)(s); i<(int)(g); i++)
+#define fix(ans,k) fixed << setprecision(k) << ans
+
+int main(){
+    int c[6];
+    fol(i,0,6) cin>>c[i];
+    int ans;
+    ans = c[0]+c[1]*5+c[2]*10+c[3]*50+c[4]*100+c[5]*500;
+    if(ans>=1000) cout<<"1\n";
+    else cout<<"0\n";
+    return 0;
+}

@@ -1,0 +1,35 @@
+#include<stdio.h>
+
+int main(void)
+{
+    int r,c;
+    int x,y;
+    scanf("%d %d",&r,&c);
+    int a[r+1][c+1];
+    for(x=0;x<r;x++)
+    {
+        a[x][c]=0;
+        for(y=0;y<c;y++)
+        {
+            scanf("%d",&a[x][y]);
+            a[x][c]+=a[x][y];
+        }
+    }
+    for(y=0;y<c;y++)
+    {
+        a[r][y]=0;
+       for(x=0;x<r;x++)
+       {
+           a[r][y]+=a[x][y];
+       }
+    }
+     for(x=0;x<r+1;x++)
+    {
+        for(y=0;y<c+1;y++)
+        {
+          printf("%d ",a[x][y]);
+        }
+        printf("\n");
+    }
+    return 0;
+}

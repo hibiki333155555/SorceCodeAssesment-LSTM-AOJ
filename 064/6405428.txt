@@ -1,0 +1,15 @@
+using System;
+class program
+{
+    static void Main()
+    {
+        var n = int.Parse(Console.ReadLine());
+        string[] line = Console.ReadLine().Split();
+        for(int i = n; i > 0; i--)
+        {
+            var t = int.Parse(line[i]);
+            if(i == 1)Console.WriteLine(t);
+            else Console.Write("{0} ",t);
+        }
+    }
+}

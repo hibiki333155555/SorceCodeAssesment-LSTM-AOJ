@@ -1,0 +1,3 @@
+def solve(x):
+    return x**3
+

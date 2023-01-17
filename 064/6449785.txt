@@ -1,0 +1,16 @@
+#include<stdio.h>
+int main()
+{
+	char c[2][4];
+	int r[2];
+	scanf("%s%d%s%d", c[0], &r[0], c[1], &r[1]);
+	int cc[2];
+	int i, j;
+	for (j = 0; j < 2; j++)
+		for (i = 0, cc[j] = 0; c[j][i] != '\0'; i++)
+			cc[j] = 26 * cc[j] + (int)(c[j][i] - 'A' + 1);
+	r[0]--;
+	cc[0]--;
+	printf("%d\n", (r[1] - r[0]) * (cc[1] - cc[0]));
+	return 0;
+}

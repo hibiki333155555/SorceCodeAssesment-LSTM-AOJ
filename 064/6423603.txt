@@ -1,0 +1,43 @@
+def bubble_sort(a):
+    n = len(a)
+    f = True
+    while f:
+        f = False
+        for i in range(n-1, 0, -1):
+            if get_card_num(a[i]) < get_card_num(a[i-1]):
+                a[i], a[i-1] = a[i-1], a[i]
+                f = True
+    return a
+
+
+def selection_sort(a):
+    n = len(a)
+    for i in range(n):
+        minj = i
+        for j in range(i+1, n):
+            if get_card_num(a[j]) < get_card_num(a[minj]):
+                minj = j
+        a[i], a[minj] = a[minj], a[i]
+    return a
+
+
+def get_card_num(card):
+    return int(card[1:])
+
+
+def is_stable(orig, target):
+    for i in range(len(target)-1):
+        if get_card_num(target[i]) == get_card_num(target[i+1]):
+            if orig.index(target[i]) > orig.index(target[i+1]):
+                return False
+    return True
+
+
+c = input()
+bs = bubble_sort(c.split(" "))
+ss = selection_sort(c.split(" "))
+print(" ".join(bs))
+print("Stable" if is_stable(c, bs) else "Not stable")
+print(" ".join(ss))
+print("Stable" if is_stable(c, ss) else "Not stable")
+

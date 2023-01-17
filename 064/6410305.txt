@@ -1,0 +1,41 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    ll n,m,d; cin >> n >> m >> d;
+    vector<pair<int,int>> v(n);
+    for(int i=0;i<n;i++){
+        cin >> v[i].first >> v[i].second;
+    }
+    sort(v.begin(), v.end());
+    ll L=-1,R=2e9;
+    while(R-L>1){
+        ll mid=(L+R)/2;
+        ll last=-2e9;
+        int cnt=0;
+        for(int i=0;i<n;i++){
+            if(v[i].second>=mid and v[i].first>=last+d){
+                last=v[i].first;
+                cnt++;
+            }
+        }
+        if(cnt>=m){
+            L=mid;
+        }
+        else{
+            R=mid;
+        }
+    }
+    cout << L << endl;
+}
+

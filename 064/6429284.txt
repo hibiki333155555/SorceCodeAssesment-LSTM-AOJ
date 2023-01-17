@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+const long long INF = 1LL << 60; // 十分大きな値に
+typedef long long ll;
+typedef long double ld;
+
+int main() {
+    ll n; cin >> n;
+    vector<ll> s(n);
+    for (ll i=0; i<n; i++) {
+        cin >> s[i];
+    }
+    ll q; cin >> q;
+    vector<ll> t(q);
+    for (ll i=0; i<q; i++) {
+        cin >> t[i];
+    }
+
+    sort(s.begin(), s.end());
+    sort(t.begin(), t.end());
+
+    ll cnt=0;
+    for (ll i=0; i<q; i++) {
+        // t[i]がsに存在しているか確認する。
+        if (binary_search(s.begin(), s.end(), t[i])) {
+            cnt++;
+        }
+    }
+    cout << cnt << endl;
+}

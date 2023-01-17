@@ -1,0 +1,37 @@
+import sys
+input=sys.stdin.readline
+f=lambda:[*map(int,input().split())]
+from collections import deque
+while True:
+    w,h=f()
+    if w==0 and h==0:
+        break
+    H,V=[],[]
+    for i in range(2*h-1):
+        a=f()
+        if i%2==0:
+            H.append(a)
+        else:
+            V.append(a)
+    visited=[[False]*w for _ in range(h)]
+    q=deque()
+    q.append((0,0,1))
+    res=0
+    while q:
+        y,x,z=q.popleft()
+        if y==h-1 and x==w-1:
+            res=z
+            break
+        if 1<=y and V[y-1][x]==0 and visited[y-1][x]==False:
+            visited[y-1][x]=True
+            q.append((y-1,x,z+1))
+        if x<w-1 and H[y][x]==0 and visited[y][x+1]==False:
+            visited[y][x+1]=True
+            q.append((y,x+1,z+1))
+        if 1<=x and H[y][x-1]==0 and visited[y][x-1]==False:
+            visited[y][x-1]=True
+            q.append((y,x-1,z+1))
+        if y<h-1 and V[y][x]==0 and visited[y+1][x]==False:
+            visited[y+1][x]=True
+            q.append((y+1,x,z+1))
+    print(res)

@@ -1,0 +1,54 @@
+import sys
+sys.setrecursionlimit(10**9) 
+from statistics import mean, median, harmonic_mean, mode
+from decimal import Decimal
+from math import gcd, log, log2, log10, pow, pi, sin, cos, tan, asin, acos, atan
+from collections import Counter, deque, defaultdict
+from heapq import heappush, heappop, heappushpop, heapify, heapreplace, merge
+from bisect import bisect_left, bisect_right, bisect, insort_left, insort_right, insort
+from itertools import accumulate, product, permutations, combinations
+from functools import reduce, partial
+import operator
+ans=[]
+while 1:
+    W,H=map(int,input().split())
+    if W==H==0:break
+    C=list(list(map(int,input().split()))for _ in range(H))
+
+    D=[(1,0),(0,1),(1,1),(-1,0),(0,-1),(-1,-1),(1,-1),(-1,1)]
+    G = [[] for _ in range(W*H)]
+    for i in range(H):
+        for j in range(W):
+            if C[i][j]==0:continue
+
+            for di,dj in D:
+                ii=i+di
+                jj=j+dj
+                if 0<=ii<H and 0<=jj<W:
+                    if C[ii][jj]==0:continue
+
+                    y=W*ii+jj
+                    x=W*i+j                
+                    G[x].append(y)           
+
+
+
+    cnt=[0 for _ in range(W*H)]
+
+    c=1
+    def dfs(now,done):#now=現在地，pre=前にいた場所
+        cnt[now]=c# 訪れたノードを追加
+        for nxt in G[now]:
+            if nxt not in done:
+                dfs(nxt,done+[now])
+
+    for i in range(H):
+        for j in range(W):
+            if C[i][j]==1 and cnt[W*i+j]==0:
+                dfs(W*i+j,[])
+                c+=1
+
+    ans.append(c-1)
+    
+for a in ans:
+    print(a)

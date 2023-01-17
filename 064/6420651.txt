@@ -1,0 +1,27 @@
+#include <algorithm>
+#include <bits/stdc++.h>
+#include <cmath>
+using namespace std;
+using ll = long long;
+template <typename T> using MaxHeap = priority_queue<T>;
+template <typename T> using MinHeap = priority_queue<T, vector<T>, greater<T>>;
+#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define ff first
+#define ss second
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define all(a) a.begin(), a.end()
+
+const ll INF = 1e18;
+const ll mod = 998244353;
+
+int main() {
+    ll x,n;
+    cin>>n>>x;
+    vector<ll>m(n);
+    rep(i,n)cin>>m[i];
+    ll nas = 0;
+    rep(i,n)if(m[i] >= x)nas++;
+    cout<<nas<<endl;
+}
+

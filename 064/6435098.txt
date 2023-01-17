@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+#define fastio ios::sync_with_stdio(false);cin.tie(0);
+#define endl "\n"
+using namespace std;
+typedef double ld;
+typedef long long ll;
+void solve(){
+
+}
+//int a[7]={5,2,4,6,1,3};
+int a[110];
+void sor(int len){
+	for(int i=1;i<=len-1;i++){
+		int key=a[i];
+		int j=i-1;
+		while(j>=0&&a[j]>key){
+			a[j+1]=a[j];
+//			for(int i=0;i<len;i++){
+//				cout<<a[i]<<" ";
+//			}
+//			cout<<"\n";
+			j--;
+		}
+		a[j+1]=key;
+		for(int i=0;i<len;i++){
+			cout<<a[i];
+			if(i!=len-1)cout<<" ";
+		}
+		if(i!=len-1)cout<<"\n";
+	}
+}
+int main(){
+	int n;
+	cin>>n;
+	for(int i=0;i<n;i++)cin>>a[i];
+//	for(int i=0;i<n;i++)cout<<a[i]<<" ";
+//	cout<<"\n";
+	sor(n);
+	return 0;
+}
+

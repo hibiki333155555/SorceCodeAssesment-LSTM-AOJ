@@ -1,0 +1,12 @@
+#include<stdio.h>
+
+int main()
+{
+    int a,b;
+    double f1,f2;
+    scanf("%d%d",&a,&b);
+    f1=a;
+    f2=b;
+    printf("%d %d %lf\n",a/b,a%b,f1/f2);
+    return 0;
+}

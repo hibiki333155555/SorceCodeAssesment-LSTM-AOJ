@@ -1,0 +1,3 @@
+X =  input().split()
+
+print(X.swapcase())

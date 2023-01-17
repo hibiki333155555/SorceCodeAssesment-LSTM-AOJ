@@ -1,0 +1,24 @@
+n = int(input())
+a = list(map(int, input().split()))
+
+min_a = None
+max_a = None
+sum_a = 0
+
+for idx in range(n):
+
+    i = a[idx]
+
+    if idx == 0:
+        min_a = i
+        max_a = i
+        sum_a += i
+        continue
+
+    if i < min_a:
+        min_a = i
+    elif i > max_a:
+        max_a = i
+    sum_a += i
+
+print(min_a, max_a, sum_a)

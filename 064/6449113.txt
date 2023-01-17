@@ -1,0 +1,36 @@
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <complex>
+
+using namespace std;
+
+complex<double> in() {double x, y; cin >> x >> y; return {x, y};}
+
+int main()
+{
+	int n; cin >> n;
+	vector<complex<double>> P(n);
+	for (auto& p : P) p = in();
+	int q; cin >> q;
+	for (; q > 0; --q) {
+		complex<double> p1 = in(), p2 = in();
+		auto PP = P;
+		auto inv_p = abs(p2 - p1) / (p2 - p1);
+		for (auto& pp : PP) pp = (pp - p1) * inv_p;
+		double a = 0;
+		int i = 0;
+		for (; PP[i].imag() > 0; ++i) ;
+		for (; PP[i % n].imag() <= 0; ++i) ;
+		auto dp = PP[i % n] - PP[(i - 1) % n];
+		a = dp.real() * PP[i % n].imag() / dp.imag() * PP[i % n].imag();
+		for (++i; PP[i % n].imag() > 0; ++i) {
+			a += (PP[i % n].real() - PP[(i - 1) % n].real()) * (PP[i % n].imag() + PP[(i - 1) % n].imag());
+		}
+		dp = PP[i % n] - PP[(i - 1) % n];
+		a += dp.real() * PP[(i - 1) % n].imag() / dp.imag() * PP[(i - 1) % n].imag();
+		cout << fixed << setprecision(8) << a * -0.5 << endl;
+	}
+	return 0;
+}
+

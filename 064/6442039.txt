@@ -1,0 +1,28 @@
+#include<iostream>
+using namespace std;
+int n;
+int A[n];
+
+bool solve(a,b){
+    if(b==0)return true;
+    else if(a>=n)return false;
+    
+    return solve(a+1,b) || solve(a+1,b-A[a])
+}
+
+int main(){
+    bool result;
+    cin>>n;
+    for(int i=0;i<n;i++)cin>>A[i];
+
+    int q;
+    cin>>q;
+    int m[q];
+    for(int i=0;i<q;i++)cin>>m[i];
+    
+    for(int i=0;i<q;i++){
+        result = solve(0,m[i]);
+    }
+    return 0;
+}
+

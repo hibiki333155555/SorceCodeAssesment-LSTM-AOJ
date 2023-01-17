@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+using namespace std;
+
+vector<vector <int> > field;
+int H,W;
+void dfs(int h,int w){
+    field[h][w] = 0;
+
+    int nh , nw;
+
+    for(int dx = -1; dx < 1; dx++){
+        for(int dy = -1; dy < 1; dy++){
+            nh = h + dx;
+            nw = w + dy;
+            
+            if(nh < 0 || nh >= H || nw < 0 || nw >=W){
+                continue;
+            }
+            if(field[nh][nw] == 0){
+                continue;
+            }
+            dfs(nh,nw);
+        }
+    }
+    
+}
+
+int main(){
+    
+    while(1){
+        cin >> W >> H;
+
+        if(W == 0 && H == 0){
+            break;
+        }
+        field.assign(H,vector<int>(W,0));
+
+        for(int h = 0; h < H ; h++){
+            for(int w = 0; w < W ; w++){
+                cin >> field[h][w];
+            }
+        }
+        int cnt = 0;
+        for(int h = 0; h < H ; h++){
+            for(int w = 0; w < W ; w++){
+                if(field[h][w] == 0){
+                    continue;
+                } 
+                dfs(h,w);
+                cnt++;
+            }
+        }
+        
+        cout << cnt << endl;
+
+    }
+}

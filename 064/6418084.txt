@@ -1,0 +1,3 @@
+ABC = list(map(int,input().split()))
+ABC.sort()
+print('%d' %ABC[1])

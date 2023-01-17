@@ -1,0 +1,388 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i, n) for (int i = 0; i < n; i++)
+#define rep2(i, x, n) for (int i = x; i <= n; i++)
+#define rep3(i, x, n) for (int i = x; i >= n; i--)
+#define each(e, v) for (auto &e : v)
+#define pb push_back
+#define eb emplace_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define sz(x) (int)x.size()
+using ll = long long;
+using pii = pair<int, int>;
+using pil = pair<int, ll>;
+using pli = pair<ll, int>;
+using pll = pair<ll, ll>;
+
+template <typename T>
+bool chmax(T &x, const T &y) {
+    return (x < y) ? (x = y, true) : false;
+}
+
+template <typename T>
+bool chmin(T &x, const T &y) {
+    return (x > y) ? (x = y, true) : false;
+}
+
+template <typename T>
+int flg(T x, int i) {
+    return (x >> i) & 1;
+}
+
+template <typename T>
+void print(const vector<T> &v, T x = 0) {
+    int n = v.size();
+    for (int i = 0; i < n; i++) cout << v[i] + x << (i == n - 1 ? '\n' : ' ');
+    if (v.empty()) cout << '\n';
+}
+
+template <typename T>
+void printn(const vector<T> &v, T x = 0) {
+    int n = v.size();
+    for (int i = 0; i < n; i++) cout << v[i] + x << '\n';
+}
+
+template <typename T>
+int lb(const vector<T> &v, T x) {
+    return lower_bound(begin(v), end(v), x) - begin(v);
+}
+
+template <typename T>
+int ub(const vector<T> &v, T x) {
+    return upper_bound(begin(v), end(v), x) - begin(v);
+}
+
+template <typename T>
+void rearrange(vector<T> &v) {
+    sort(begin(v), end(v));
+    v.erase(unique(begin(v), end(v)), end(v));
+}
+
+template <typename T>
+vector<int> id_sort(const vector<T> &v, bool greater = false) {
+    int n = v.size();
+    vector<int> ret(n);
+    iota(begin(ret), end(ret), 0);
+    sort(begin(ret), end(ret), [&](int i, int j) { return greater ? v[i] > v[j] : v[i] < v[j]; });
+    return ret;
+}
+
+template <typename S, typename T>
+pair<S, T> operator+(const pair<S, T> &p, const pair<S, T> &q) {
+    return make_pair(p.first + q.first, p.second + q.second);
+}
+
+template <typename S, typename T>
+pair<S, T> operator-(const pair<S, T> &p, const pair<S, T> &q) {
+    return make_pair(p.first - q.first, p.second - q.second);
+}
+
+template <typename S, typename T>
+istream &operator>>(istream &is, pair<S, T> &p) {
+    S a;
+    T b;
+    is >> a >> b;
+    p = make_pair(a, b);
+    return is;
+}
+
+template <typename S, typename T>
+ostream &operator<<(ostream &os, const pair<S, T> &p) {
+    return os << p.first << ' ' << p.second;
+}
+
+struct io_setup {
+    io_setup() {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        cout << fixed << setprecision(15);
+    }
+} io_setup;
+
+const int inf = (1 << 30) - 1;
+const ll INF = (1LL << 60) - 1;
+const int MOD = 1000000007;
+// const int MOD = 998244353;
+
+template <typename T, bool ismin = true>
+struct Convex_Hull_Trick {
+    vector<T> a, b; // y = ax+b
+    deque<int> que;
+
+    Convex_Hull_Trick(){};
+
+    bool empty() const { return que.empty(); }
+
+    T f(int i, const T &x) const { return a[i] * x + b[i]; }
+
+    bool judge(int i, int j, int k) const { return (b[k] - b[j]) * (a[j] - a[i]) >= (b[j] - b[i]) * (a[k] - a[j]); }
+
+    void add_line_left(T p, T q) {
+        if (!ismin) p *= -1, q *= -1;
+        int k = a.size();
+        a.push_back(p), b.push_back(q);
+        while (que.size() >= 2 && judge(k, que[0], que[1])) que.pop_front();
+        que.push_front(k);
+    }
+
+    void add_line_right(T p, T q) {
+        if (!ismin) p *= -1, q *= -1;
+        // assert(empty() || a.back() >= p);
+        int k = a.size();
+        a.push_back(p), b.push_back(q);
+        if (!empty() && a[que.back()] == p) {
+            if (b[que.back()] <= q) return;
+            que.pop_back();
+        }
+        while (que.size() >= 2 && judge(que[que.size() - 2], que[que.size() - 1], k)) que.pop_back();
+        que.push_back(k);
+    }
+
+    T query(T x) {
+        assert(!empty());
+        int l = 0, r = que.size();
+        while (r - l > 1) {
+            int m = (l + r) / 2;
+            (f(que[m - 1], x) >= f(que[m], x) ? l : r) = m;
+        }
+        return ismin ? f(que[l], x) : -f(que[l], x);
+    }
+
+    T query_monotone_inc(T x) {
+        assert(!empty());
+        while (que.size() >= 2 && f(que[0], x) >= f(que[1], x)) que.pop_front();
+        return ismin ? f(que[0], x) : -f(que[0], x);
+    }
+
+    T query_monotone_dec(T x) {
+        assert(!empty());
+        while (que.size() >= 2 && f(que[que.size() - 1], x) >= f(que[que.size() - 2], x)) que.pop_back();
+        return ismin ? f(que[que.size() - 1], x) : -f(que[que.size() - 1], x);
+    }
+};
+
+template <typename T, bool is_min = true>
+struct Li_Chao_Tree {
+    const T INF_T = numeric_limits<T>::max() / 2;
+    vector<T> as, bs;
+    int n;
+
+    vector<int> ts;
+    vector<int> pre_id;
+    vector<T> pre_a, pre_b;
+
+    Li_Chao_Tree(int m) {
+        n = 1;
+        while (n < m) n <<= 1;
+        as.assign(2 * n, 0), bs.assign(2 * n, INF_T);
+    }
+
+    void add_line(const T &a, const T &b, int ti, int i, const T &l, const T &r) {
+        ts.push_back(ti);
+        pre_id.push_back(i);
+        pre_a.push_back(as[i]), pre_b.push_back(bs[i]);
+        T l1 = as[i] * l + bs[i], l2 = a * l + b;
+        T r1 = as[i] * r + bs[i], r2 = a * r + b;
+        if (l1 <= l2 && r1 <= r2) return;
+        if (l1 >= l2 && r1 >= r2) {
+            as[i] = a, bs[i] = b;
+            return;
+        }
+        T m = (l + r - 1) / 2;
+        T m1 = as[i] * m + bs[i], m2 = a * m + b;
+        if (m1 > m2) {
+            if (l1 <= l2) {
+                add_line(as[i], bs[i], ti, 2 * i, l, m);
+            } else {
+                add_line(as[i], bs[i], ti, 2 * i + 1, m + 1, r);
+            }
+            as[i] = a, bs[i] = b;
+        } else {
+            if (l1 >= l2) {
+                add_line(a, b, ti, 2 * i, l, m);
+            } else {
+                add_line(a, b, ti, 2 * i + 1, m + 1, r);
+            }
+        }
+    }
+
+    void add_line(const T &a, const T &b, int ti) { // 直線 y = ax+b を追加
+        add_line(is_min ? a : -a, is_min ? b : -b, ti, 1, 0, n - 1);
+    }
+
+    T query(const T &x, int i, const T &l, const T &r) const {
+        if (l == r) return as[i] * x + bs[i];
+        T m = (l + r - 1) / 2;
+        if (x <= m) return min(as[i] * x + bs[i], query(x, 2 * i, l, m));
+        return min(as[i] * x + bs[i], query(x, 2 * i + 1, m + 1, r));
+    }
+
+    T query(const T &x) const {
+        T ret = query(x, 1, 0, n - 1);
+        return is_min ? ret : -ret;
+    }
+
+    void undo(const int &t) {
+        while (!empty(ts)) {
+            int k = sz(ts) - 1;
+            if (ts[k] != t) break;
+            int i = pre_id[k];
+            as[i] = pre_a[k], bs[i] = pre_b[k];
+            ts.pop_back();
+            pre_id.pop_back();
+            pre_a.pop_back(), pre_b.pop_back();
+        }
+    }
+};
+
+vector<ll> ca;
+
+template <typename T, T id>
+struct DynamicLiChaoTree {
+    struct Line {
+        T a, b;
+
+        Line(T a, T b) : a(a), b(b) {}
+
+        inline T get(T x) const { return a * x + b; }
+    };
+
+    struct Node {
+        Line x;
+        Node *l, *r;
+
+        Node(const Line &x) : x{x}, l{nullptr}, r{nullptr} {}
+    };
+
+    Node *root;
+
+    DynamicLiChaoTree() : root{nullptr} {}
+
+    //~DynamicLiChaoTree() { rec_delete(root); }
+
+    void rec_delete(Node *now) {
+        if (!now) return;
+        rec_delete(now->l), rec_delete(now->r);
+        delete now;
+    }
+
+    Node *add_line(Node *t, Line &x, const int &l, const int &r, const T &x_l, const T &x_r) {
+        if (!t) return new Node(x);
+
+        T t_l = t->x.get(ca[l]), t_r = t->x.get(ca[r]);
+
+        if (t_l <= x_l && t_r <= x_r) {
+            return t;
+        } else if (t_l >= x_l && t_r >= x_r) {
+            t->x = x;
+            return t;
+        } else {
+            int m = (l + r) / 2;
+            if (m == r) --m;
+            T t_m = t->x.get(ca[m]), x_m = x.get(ca[m]);
+            if (t_m > x_m) {
+                swap(t->x, x);
+                if (x_l >= t_l)
+                    t->l = add_line(t->l, x, l, m, t_l, t_m);
+                else
+                    t->r = add_line(t->r, x, m + 1, r, t_m + x.a * (ca[m + 1] - ca[m]), t_r);
+            } else {
+                if (t_l >= x_l)
+                    t->l = add_line(t->l, x, l, m, x_l, x_m);
+                else
+                    t->r = add_line(t->r, x, m + 1, r, x_m + x.a * (ca[m + 1] - ca[m]), x_r);
+            }
+            return t;
+        }
+    }
+
+    void add_line(const T &a, const T &b) {
+        Line x(a, b);
+        root = add_line(root, x, 0, ca.size() - 1, x.get(ca[0]), x.get(ca[ca.size() - 1]));
+    }
+
+    T query(const Node *t, const int &l, const int &r, const int &x) const {
+        if (!t) return id;
+        if (l == r) return t->x.get(ca[x]);
+        int m = (l + r) / 2;
+        if (m == r) --m;
+        if (x <= m)
+            return min(t->x.get(ca[x]), query(t->l, l, m, x));
+        else
+            return min(t->x.get(ca[x]), query(t->r, m + 1, r, x));
+    }
+
+    T query(const int &x) const { return query(root, 0, ca.size() - 1, x); }
+};
+
+using DLT = DynamicLiChaoTree<ll, INF>;
+
+vector<vector<ll>> dp;
+
+struct Data {
+    int l, r;
+    vector<DLT> cht;
+
+    Data(int L, int R, int i) : cht(R - L) {
+        l = i, r = i + 1;
+        rep(j, R - L) cht[j].add_line(-i, dp[L + j][i]);
+    }
+
+    Data() {}
+};
+
+void merge(Data &a, Data &b, int L, int R) {
+    if (a.r - a.l > b.r - b.l) {
+        for (int i = b.l; i < b.r; i++) { rep(j, R - L) a.cht[j].add_line(-i, dp[L + j][i]); }
+    } else {
+        for (int i = a.l; i < a.r; i++) { rep(j, R - L) b.cht[j].add_line(-i, dp[L + j][i]); }
+        swap(a, b);
+    }
+    chmin(a.l, b.l), chmax(a.r, b.r);
+}
+
+int main() {
+    int N, K;
+    cin >> N >> K;
+
+    vector<ll> a(N);
+    rep(i, N) cin >> a[i];
+    ca = a;
+    rearrange(ca);
+
+    dp.assign(K + 1, vector<ll>(N + 1, INF));
+    rep(i, K + 1) dp[i][0] = 0;
+
+    int D = 20;
+    int L = 0;
+
+    for (int L = 0; L < K; L += D) {
+        int R = min(K, L + D);
+        stack<int> st;
+        vector<Data> ds(N);
+        vector<Li_Chao_Tree<ll>> lct(R - L, N + 1);
+        rep(i, N) {
+            Data y(L, R, i);
+            while (!empty(st)) {
+                int x = st.top();
+                if (a[x] > a[i]) break;
+                st.pop();
+                merge(y, ds[x], L, R);
+                rep(j, R - L) lct[j].undo(x);
+                // cout << i << ' ' << x << '\n';
+            }
+            st.push(i);
+            ds[i] = y;
+
+            rep(j, R - L) {
+                ll tmp = y.cht[j].query(lb(ca, a[i]));
+                if (tmp < INF / 2) lct[j].add_line(a[i], tmp, i);
+                dp[L + j + 1][i + 1] = lct[j].query(i + 1);
+            }
+        }
+    }
+
+    // rep(i, K + 1) print(dp[i]);
+    cout << dp[K][N] << '\n';
+}

@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+#ifdef MY_DEBUG
+  #include "dprint.cpp"
+  # define dprint(a, ...);                 \
+      do {                                 \
+          printf("line : %d, func : %s\n", \
+                __LINE__, __func__);       \
+          dprint(#a,a,##__VA_ARGS__ );     \
+      } while (0)
+#else
+  #define dprint(a,...) 
+#endif
+using namespace std;
+vector<vector<int>> A;
+vector<vector<int>> B;
+void solve(){
+
+  
+}
+int main() {
+  while(true){
+ int w,h;
+ cin >>w>>h;
+ if(w==0&&h==0)break;
+ A=vector<vector<int>>(h+2,vector<int>(w+1,1));
+ B=vector<vector<int>>(h+1,vector<int>(w+2,1));
+ for (int i = 1; i <= h-1; i++){
+   for (int j = 1; j <= w-1; j++)
+   {
+     cin >> A[i][j];
+   }
+    for (int j = 1; j <= w; j++)
+   {
+     cin >> B[i][j];
+   }
+ }
+    for (int j = 1; j <= w-1; j++)
+   {
+     cin >> A[h][j];
+   }
+
+ vector<vector<int>> used(h+2,vector<int>(w+2,-1));
+
+queue<pair<int,int>>q;
+q.emplace(1,1);
+used[1][1]=0;
+while(q.empty()==false){
+  auto v = q.front();q.pop();
+  int v_x=v.first;
+  int v_y=v.second;
+
+  int dx[]={1,0,-1,0};
+  int dy[]={0,1,0,-1};
+
+  for (int i = 0; i < 4; i++)
+  {
+    int next_x=v_x+dx[i];
+    int next_y=v_y+dy[i];
+    if(next_x<0||next_x>w)continue;
+    if(next_y<0||next_y>h)continue;
+    if(i==0){
+      if(A[v_y][v_x]==1)continue;
+    }else if(i==1){
+      if(B[v_y][v_x]==1)continue;
+    }else if(i==2){
+      if(A[v_y][v_x-1]==1)continue;
+    }else if(i==3){
+      if(B[v_y-1][v_x]==1)continue;
+
+    }
+    if(used[next_y][next_x]==-1||(used[v_y][v_x]+1<used[next_y][next_x])){
+        used[next_y][next_x]=used[v_y][v_x]+1;
+        q.emplace(next_x,next_y);
+    }
+  }
+}
+if(used[h][w]==-1){
+  cout << 0 << endl;
+}else{
+cout <<  used[h][w]+1<< endl;
+}
+  }
+return 0;
+}

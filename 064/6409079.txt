@@ -1,0 +1,6 @@
+import math
+a, b, C=map(int,input().split())
+S=1/2*a*b*math.sin(C)
+L=a+b+math.sqrt(a**2+b**2-2*a*b*math.cos(C))
+H=2*S/a
+print(S, L, H)

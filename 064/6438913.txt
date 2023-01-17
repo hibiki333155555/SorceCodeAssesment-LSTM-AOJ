@@ -1,0 +1,13 @@
+words = input()
+words = words.replace(" ", "")
+list = "abcdefghijklmnopqrstuvwxyz"
+dict = dict()
+for i in range(len(list)):
+    dict[list[i]] = 0
+
+for j in range(len(words)):
+    dict[words[j]] += 1
+
+for k in dict.keys():
+    print("{}:{}".format(k, dict[k]))
+

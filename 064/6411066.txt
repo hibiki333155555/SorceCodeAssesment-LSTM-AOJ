@@ -1,0 +1,54 @@
+class Dice:
+    def __init__(self, labels):
+        self.labels = labels
+
+    def get_top(self):
+        return self.labels[0]
+
+    def get_right_from_topfront(self, top, front):
+        tmp = self.labels
+        v_l = [[tmp[1], tmp[2], tmp[4], tmp[3]],
+               [tmp[0], tmp[3], tmp[5], tmp[2]],
+               [tmp[0], tmp[1], tmp[5], tmp[4]],
+               [tmp[0], tmp[4], tmp[5], tmp[1]],
+               [tmp[0], tmp[2], tmp[5], tmp[3]],
+               [tmp[1], tmp[3], tmp[4], tmp[2]]]
+        for i in v_l:
+            if top in i:
+                if i[(i.index(top)+1) % 4] == front:
+                    return self.labels[v_l.index(i)]
+
+    def roll(self, direction):
+        tmp = self.labels
+        if direction == "S":
+            self.labels = [tmp[4], tmp[0], tmp[2], tmp[3], tmp[5], tmp[1]]
+        if direction == "E":
+            self.labels = [tmp[3], tmp[1], tmp[0], tmp[5], tmp[4], tmp[2]]
+        if direction == "W":
+            self.labels = [tmp[2], tmp[1], tmp[5], tmp[0], tmp[4], tmp[3]]
+        if direction == "N":
+            self.labels = [tmp[1], tmp[5], tmp[2], tmp[3], tmp[0], tmp[4]]
+
+
+n = int(input())
+dices = [0 for x in range(n)]
+for i in range(n):
+    dices[i] = Dice(list(map(int, input().split(" "))))
+
+yes = True
+for i in range(n):
+    for j in range(n):
+        if i == j:
+            continue
+        for direction in "NNNNENNNNENNNNENNNNESWNNNNWWNNNN":
+            dices[i].roll(direction)
+            if dices[i].labels == dices[j].labels:
+                print("No")
+                yes = False
+                break
+        if yes is False:
+            break
+    if yes is False:
+        break
+if yes:
+    print("Yes")

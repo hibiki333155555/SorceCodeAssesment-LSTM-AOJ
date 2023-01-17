@@ -1,0 +1,154 @@
+#include "utilitys.hpp"
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ALL(x) (x).begin(), (x).end()
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+
+// Luzhiled's memo
+template <typename G> struct DoublingLowestCommonAncestor {
+    const int LOG;
+    vector<int> dep;
+    const G &g;
+    vector<vector<int>> table;
+
+    DoublingLowestCommonAncestor(const G &g)
+        : g(g), dep(g.size()), LOG(32 - __builtin_clz(g.size())) {
+        table.assign(LOG, vector<int>(g.size(), -1));
+    }
+
+    void dfs(int idx, int par, int d) {
+        table[0][idx] = par;
+        dep[idx] = d;
+        for (auto &to : g[idx]) {
+            if (to != par) dfs(to, idx, d + 1);
+        }
+    }
+
+    void build() {
+        dfs(0, -1, 0);
+        for (int k = 0; k + 1 < LOG; k++) {
+            for (int i = 0; i < table[k].size(); i++) {
+                if (table[k][i] == -1)
+                    table[k + 1][i] = -1;
+                else
+                    table[k + 1][i] = table[k][table[k][i]];
+            }
+        }
+    }
+
+    int query(int u, int v) {
+        if (dep[u] > dep[v]) swap(u, v);
+        for (int i = LOG - 1; i >= 0; i--) {
+            if (((dep[v] - dep[u]) >> i) & 1) v = table[i][v];
+        }
+        if (u == v) return u;
+        for (int i = LOG - 1; i >= 0; i--) {
+            if (table[i][u] != table[i][v]) {
+                u = table[i][u];
+                v = table[i][v];
+            }
+        }
+        return table[0][u];
+    }
+
+    int calc_dist(int u, int v) {
+        const int lca = query(u, v);
+        return dep[u] + dep[v] - 2 * dep[lca];
+    }
+
+    int cst(int v, int d) {
+        int now = v;
+        REP(i, LOG) {
+            if (d & (1 << i)) {
+                now = table[i][now];
+                if (now == -1) break;
+            }
+        }
+        return now;
+    }
+};
+
+#include "static_mod.hpp"
+using Fp = StaticModint<998244353>;
+
+int main() {
+    int N;
+    cin >> N;
+    vector<int> A(N - 1), B(N - 1);
+    vector<vector<int>> Tree(N);
+    REP(i, N - 1) {
+        cin >> A[i] >> B[i];
+        --A[i], --B[i];
+        Tree[A[i]].pb(B[i]);
+        Tree[B[i]].pb(A[i]);
+    }
+
+    DoublingLowestCommonAncestor doub(Tree);
+    doub.build();
+
+    vector<Fp> dp_par(N), dp_sum(N);
+    vector<vector<Fp>> dp_chd(N);
+    vector<int> subtree_size(N);
+    auto dfs1 = rec_lambda([&](auto &&self, const int v, const int p) -> pair<int, Fp> {
+        subtree_size[v] = 1;
+        dp_sum[v] = 1;
+        if (v != 0 and len(Tree[v]) == 1) {
+            return make_pair(1, Fp(2));
+        }
+        for (const int t : Tree[v]) {
+            if (t == p) {
+                dp_chd[v].pb(0);
+                continue;
+            }
+            const auto [s, vl] = self(t, v);
+            dp_sum[v] += vl;
+            dp_chd[v].pb(vl);
+            subtree_size[v] += s;
+        }
+        return make_pair(subtree_size[v], Fp(2) * dp_sum[v]);
+    });
+    dfs1(0, -1);
+    map<int, int> ids;
+
+    auto dfs2 =
+        rec_lambda([&](auto &&self, const int v, const int p, const Fp val) -> void {
+            dp_par[v] = val;
+            dp_sum[v] += val;
+
+            REP(i, len(Tree[v])) {
+                const int t = Tree[v][i];
+                if (t == p) continue;
+                ids[t] = i;
+                self(t, v, Fp(2) * (dp_sum[v] - dp_chd[v][i]));
+            }
+        });
+    dfs2(0, -1, 0);
+
+    int Q;
+    cin >> Q;
+    vector<int> X(Q), Y(Q);
+    REP(i, Q) {
+        cin >> X[i] >> Y[i];
+        --X[i], --Y[i];
+        if (doub.dep[X[i]] > doub.dep[Y[i]]) swap(X[i], Y[i]);
+        const int lca = doub.query(X[i], Y[i]);
+        if (lca == X[i]) {
+            const int base_dist = doub.calc_dist(X[i], Y[i]);
+            const Fp v1 = dp_sum[Y[i]] - dp_par[Y[i]];
+            const int cst = doub.cst(Y[i], base_dist - 1);
+
+            const Fp v2 = dp_sum[X[i]] - dp_chd[X[i]][ids[cst]];
+            cout << (Fp(v1) * Fp(v2) * Fp(2).pow(base_dist)).val() << eoln;
+        } else {
+            const int base_dist = doub.calc_dist(X[i], Y[i]);
+            const Fp v1 = dp_sum[X[i]] - dp_par[X[i]];
+            const Fp v2 = dp_sum[Y[i]] - dp_par[Y[i]];
+            cout << (Fp(v1) * Fp(v2) * Fp(2).pow(base_dist)).val() << eoln;
+        }
+    }
+}

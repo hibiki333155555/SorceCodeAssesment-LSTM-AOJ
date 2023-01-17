@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    struct Point {
+        int i, j, k;
+        Point() {}
+        Point(int i, int j, int k) : i(i), j(j), k(k) {}
+    };
+
+    Point s, t;
+    cin >> s.i >> s.j >> s.k;
+    cin >> t.i >> t.j >> t.k;
+    s.i -= t.i; s.j -= t.j; s.k -= t.k;
+
+    // find n s.t.
+    // sum(I) = s.i, I \in {+1, -1}^n
+    // sum(J) = s.j, J \in {+1, -1}^n
+    // sum(K) = s.k, K \in {+1, -1}^n
+
+    Point m((s.i % 2 + 2) % 2, (s.j % 2 + 2) % 2, (s.k % 2 + 2) % 2);
+    cout << (m.i == m.j && m.j == m.k ? "Yes" : "No") << endl;
+}

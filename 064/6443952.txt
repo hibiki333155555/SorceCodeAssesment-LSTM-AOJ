@@ -1,0 +1,7 @@
+pi = 3.14159265358979
+r = float(input())
+
+S = pi*(r**2)
+C = 2*pi*r
+
+print(format(S, '.6f'), format(C, '.6f'), sep=' ')

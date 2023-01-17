@@ -1,0 +1,14 @@
+while True:
+    a, op, b = input().split()
+    if op == "?":
+        break
+    elif op == "+":
+        print(int(a + b))
+    elif op == "-":
+        print(int(a - b))
+    elif op == "*":
+        print(int(a * b))
+    elif op == "/":
+        print(int(a / b))
+    else:
+        pass

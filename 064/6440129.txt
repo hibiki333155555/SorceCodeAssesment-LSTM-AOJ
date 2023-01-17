@@ -1,0 +1,94 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+
+template<class Info, class Merge = plus<Info>>
+struct SegmentTree {
+    const int n;
+    const Merge merge;
+    vector<Info> info;
+    SegmentTree(int n) : n(n), merge(Merge()), info(4 << (32 - __builtin_clz(n))) {}
+    SegmentTree(vector<Info> init) : SegmentTree(init.size()) {
+        function<void(int, int, int)> build = [&](int p, int l, int r) {
+            if (r - l == 1) {
+                info[p] = init[l];
+                return;
+            }
+            int m = (l + r) / 2;
+            build(2 * p, l, m);
+            build(2 * p + 1, m, r);
+            pull(p);
+        };
+        build(1, 0, n);
+    }
+    void pull(int p) {
+        info[p] = merge(info[2 * p], info[2 * p + 1]);
+    }
+    void modify(int p, int l, int r, int x, const Info &v) {
+        if (r - l == 1) {
+            info[p] = v;
+            return;
+        }
+        int m = (l + r) / 2;
+        if (x < m) {
+            modify(2 * p, l, m, x, v);
+        } else {
+            modify(2 * p + 1, m, r, x, v);
+        }
+        pull(p);
+    }
+    void modify(int p, const Info &v) {
+        modify(1, 0, n, p, v);
+    }
+    Info rangeQuery(int p, int l, int r, int x, int y) {
+        if (l >= y || r <= x) {
+            return Info();
+        }
+        if (l >= x && r <= y) {
+            return info[p];
+        }
+        int m = (l + r) / 2;
+        return merge(rangeQuery(2 * p, l, m, x, y), rangeQuery(2 * p + 1, m, r, x, y));
+    }
+    Info rangeQuery(int l, int r) {
+        return rangeQuery(1, 0, n, l, r);
+    }
+};
+
+struct info {
+    int val;
+    info(int val = INT_MAX) : val(val) {}
+    friend info operator+(const info &A, const info &B) {
+        return info(min(A.val, B.val));
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n, INT_MAX);
+    SegmentTree<info> seg(n);
+    for (int i = 0; i < n; ++i) {
+        seg.modify(i, INT_MAX);
+    }
+
+    while (m--) {
+        int op, x, y;
+        cin >> op;
+        if (op == 0) {
+            cin >> x >> y;
+            seg.modify(x, y);
+        } else {
+            cin >> x >> y;
+            y++;
+            cout << seg.rangeQuery(x, y).val << "\n";
+        }
+    }
+
+    return 0;
+}

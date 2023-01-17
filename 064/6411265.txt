@@ -1,0 +1,183 @@
+#include <iostream>
+
+#define up 0
+#define left 1
+#define down 2
+#define right 3
+// 改一下以便用数组
+using namespace std;
+
+int move_x[4] = { -1, 0, 1, 0 };
+int move_y[4] = { 0, -1, 0, 1 };
+// 用数组重构移动
+
+int level = 1e9;
+
+
+int r[16][4][4] = { 6, 5, 4, 3,
+	5, 4, 3, 2,
+	4, 3, 2, 1,
+	3, 2, 1, 0,
+
+	0, 1, 2, 3,
+	1, 2, 3, 4,
+	2, 3, 4, 5,
+	3, 4, 5, 6,
+
+	1, 0, 1, 2,
+	2, 1, 2, 3,
+	3, 2, 3, 4,
+	4, 3, 4, 5,
+
+	2, 1, 0, 1,
+	3, 2, 1, 2,
+	4, 3, 2, 3,
+	5, 4, 3, 4,
+
+	3, 2, 1, 0,
+	4, 3, 2, 1,
+	5, 4, 3, 2,
+	6, 5, 4, 3,
+
+	1, 2, 3, 4,
+	0, 1, 2, 3,
+	1, 2, 3, 4,
+	2, 3, 4, 5,
+
+	2, 1, 2, 3,
+	1, 0, 1, 2,
+	2, 1, 2, 3,
+	3, 2, 3, 4,
+
+	3, 2, 1, 2,
+	2, 1, 0, 1,
+	3, 2, 1, 2,
+	4, 3, 2, 3,
+
+	4, 3, 2, 1,
+	3, 2, 1, 0,
+	4, 3, 2, 1,
+	5, 4, 3, 2,
+
+	2, 3, 4, 5,
+	1, 2, 3, 4,
+	0, 1, 2, 3,
+	1, 2, 3, 4,
+
+	3, 2, 3, 4,
+	2, 1, 2, 3,
+	1, 0, 1, 2,
+	2, 1, 2, 3,
+
+	4, 3, 2, 3,
+	3, 2, 1, 2,
+	2, 1, 0, 1,
+	3, 2, 1, 2,
+
+	5, 4, 3, 2,
+	4, 3, 2, 1,
+	3, 2, 1, 0,
+	4, 3, 2, 1,
+
+	3, 4, 5, 6,
+	2, 3, 4, 5,
+	1, 2, 3, 4,
+	0, 1, 2, 3,
+
+	4, 3, 4, 5,
+	3, 2, 3, 4,
+	2, 1, 2, 3,
+	1, 0, 1, 2,
+
+	5, 4, 3, 4,
+	4, 3, 2, 3,
+	3, 2, 1, 2,
+	2, 1, 0, 1 };
+
+int f[4][4] = { 0 }; // 映射
+
+// 重写
+
+
+bool dfs(unsigned long long& board, int zx, int zy, int pri, int thre, int dep, int prv)
+{
+
+	if (pri == 0)
+	{
+		level = min(dep, level);
+		return true;
+	}
+	if ((pri + dep) > thre) return false;
+	for (size_t i = 0; i < 4; i++)
+	{
+		int now_x = zx + move_x[i];
+		int now_y = zy + move_y[i];
+		if (zx < 0 || zx>3 || zy < 0 || zy>3)	continue;
+		if ((2 + prv) % 4 == i) continue;
+		unsigned long long chosen = board & (static_cast<unsigned long long>(15) << (f[now_x][now_y]));
+
+		int newpri = pri -r[chosen>>f[now_x][now_y]][now_x][now_y]+r[chosen>>f[now_x][now_y]][zx][zy];
+		
+		
+		unsigned long long newboard = ((chosen >> f[now_x][now_y]) << f[zx][zy]) + board;
+		newboard &= (~(static_cast<unsigned long long>(15) << (f[now_x][now_y])));
+		
+		
+		bool done = dfs(newboard, now_x, now_y, newpri, thre, dep + 1, i);
+		if (done)
+			return true;
+	}
+	return false;
+}
+
+
+bool ida(unsigned long long& board, int zx, int zy, int pri)
+{
+	bool done = false;
+	for (size_t i = pri; i <= 60; i++)
+	{
+		done = dfs(board, zx, zy, pri, i, 0, -5);
+		if (done)
+			return true;
+	}
+	return done;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+	unsigned long long start = 0, t;
+	int pri = 0, zx, zy;
+	for (size_t i = 0; i < 4; i++)
+	{
+		for (size_t j = 0; j < 4; j++)
+		{
+			f[i][j] = 4 * (i * 4 + j);
+		}
+	}
+	for (size_t i = 0; i < 4; i++)
+	{
+		for (size_t j = 0; j < 4; j++)
+		{
+			cin >> t;
+			if (!t)
+			{
+				zx = i;
+				zy = j;
+				pri -= r[t][i][j];
+			}
+			start += (t << f[i][j]);
+			pri += r[t][i][j];
+		}
+	}
+
+
+
+	if (ida(start, zx, zy, pri))
+		cout << level << endl;
+	else
+		cout << 0 << endl;
+	return 0;
+}

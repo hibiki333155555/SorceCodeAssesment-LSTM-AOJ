@@ -1,0 +1,131 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i, n) for (decltype(n) i = 0; i < (n); ++i)
+#define rep3(i, s, n) for (decltype(n) i = (s); i < (n); ++i)
+#define repR(i, n) for (decltype(n) i = (n)-1; i >= 0; --i)
+#define rep3R(i, s, n) for (decltype(n) i = (n)-1; i >= (s); --i)
+#define repit(it, c) for (auto it = (c).begin(); it != (c).end(); ++it)
+#define repitR(it, c) for (auto it = (c).rbegin(); it != (c).rend(); ++it)
+#define all(x) ::std::begin(x), ::std::end(x)
+#define allR(x) ::std::rbegin(x), ::std::rend(x)
+
+using ll = long long;
+
+template <typename T, typename U>
+inline bool chmax(T &current, const U &test) {
+  if (current < test) {
+    current = test;
+    return true;
+  }
+  return false;
+}
+template <typename T, typename U>
+inline bool chmin(T &current, const U &test) {
+  if (current > test) {
+    current = test;
+    return true;
+  }
+  return false;
+}
+
+const int INF = 1e9;
+
+template <typename T>
+struct BIT {
+  int n;
+  vector<T> bit[2];
+  BIT(int n_) { init(n_); }
+  void init(int n_) {
+    n = n_ + 1;
+    for (int p = 0; p < 2; p++) bit[p].assign(n, 0);
+  }
+
+  // input: 1-index
+  void add_sub(int p, int i, T x) {
+    for (int idx = i; idx < n; idx += (idx & -idx)) {
+      bit[p][idx] += x;
+    }
+  }
+  // input: 0-index [l, r)
+  void add(int l, int r, T x) {
+    add_sub(0, l + 1, -x * l);
+    add_sub(0, r + 1, x * r);
+    add_sub(1, l + 1, x);
+    add_sub(1, r + 1, -x);
+  }
+  // input: 1-index [0, i]
+  T sum_sub(int p, int i) {
+    T s(0);
+    for (int idx = i; idx > 0; idx -= (idx & -idx)) {
+      s += bit[p][idx];
+    }
+    return s;
+  }
+  // input: 0-index [0, i]
+  T sum(int i) {
+    i++;
+    return sum_sub(0, i) + sum_sub(1, i) * i;
+  }
+  // input: 0-index [l, r)
+  T query(int l, int r) { return sum(r - 1) - sum(l - 1); }
+  // input: 0-index [0, t) 内での lower_bound
+  int lower_bound(int t, T w) {
+    if (w < 0) {
+      return -1;
+    }
+    int x = -1, r = 1;
+    while (r < t + 1) r = r << 1;
+    for (int len = r; len > 0; len = len >> 1) {
+      if (x + len < t + 1 &&
+          bit[0][x + len] + bit[1][x + len] * (x + len) < w) {
+        w -= bit[0][x + len] + bit[1][x + len] * (x + len);
+        x += len;
+      }
+    }
+    return x + 1;
+  }
+  int upper_bound(int t, T w) {
+    if (w < 0) {
+      return 0;
+    }
+    int x = -1, r = 1;
+    while (r < t + 1) r = r << 1;
+    for (int len = r; len > 0; len = len >> 1) {
+      if (x + len < t + 1 &&
+          bit[0][x + len] + bit[1][x + len] * (x + len) <= w) {
+        w -= bit[0][x + len] + bit[1][x + len] * (x + len);
+        x += len;
+      }
+    }
+    return x;
+  }
+};
+
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+  constexpr char endl = '\n';
+  ///////////////////////////
+
+  int n, q;
+  cin >> n >> q;
+  BIT<ll> bit(n);
+
+  rep(i, q) {
+    int query;
+    cin >> query;
+    if (query == 0) {
+      int s, t, x;
+      cin >> s >> t >> x;
+      s--;
+      t--;
+      bit.add(s, t + 1, x);
+    } else {
+      int s, t;
+      cin >> s >> t;
+      s--; t--;
+      ll op = bit.query(s, t+1);
+      cout << op << endl;
+    }
+  }
+}

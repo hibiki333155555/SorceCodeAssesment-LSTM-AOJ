@@ -1,0 +1,14 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a, b;
+    int d, r;
+    double f;
+    
+    cin >> a >> b;
+    
+    printf("%d %d %.8lf\n", a / b, a % b, a / b );
+    return 0;
+}

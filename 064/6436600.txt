@@ -1,0 +1,36 @@
+def merge(seq, p, q, r):
+    global count
+    n = q - p + 1
+    m = r - q 
+    lft = [float('inf')]*(n+1) #コピー元の配列より1つ長い
+    rgt = [float('inf')]*(m+1) #コピー元の配列より1つ長い
+    for i in range(n):
+        lft[i] = seq[p+i]
+    for j in range(m):
+        rgt[j] = seq[q+j+1]
+        
+    i, j = 0, 0 
+    for k in range(p, r+1):
+        count += 1
+        if lft[i] <= rgt[j]:
+            seq[k] = lft[i]
+            i += 1
+        else:
+            seq[k] = rgt[j]
+            j += 1
+    
+    
+def merge_sort(seq, p, r): #seqの区間[p, r]をsort
+    if p < r:
+        q = (p + r) // 2
+        merge_sort(seq, p, q)
+        merge_sort(seq, q+1, r)
+        merge(seq, p, q, r)
+        
+        
+n = int(input())
+seq = list(map(int, input().split()))
+count = 0
+merge_sort(seq, 0, n-1)
+print(*seq)
+print(count)

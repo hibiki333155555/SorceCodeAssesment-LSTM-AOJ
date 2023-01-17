@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    int i = 0;
+    int a,b;
+    vector<int> v;
+    while (i < n) {
+        cin>>a>>b;
+        if(a % b != 0) {
+            v.push_back(a%b);
+        } else {
+            v.push_back(b);
+        }
+        i++;
+    }
+    for(int i=0;i<v.size();i++){
+        cout<<v[i]<<endl;
+    }
+    return(0);
+}
+

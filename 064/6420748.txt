@@ -1,0 +1,24 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include<bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+const int INF = 1e9;
+const ll inf = 1LL<<62;
+
+void solve() {
+  ll n, m, k, x; cin >> n >> m >> k >> x;
+  vector<ll> a(n);
+  for (int i=0; i<n; i++) cin >> a[i];
+  cout << (*max_element(a.begin(), a.end())*k >= x*m ? "Yes" : "No") << '\n';
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  // int t; cin >> t;
+  /*while (t--)*/ solve();
+}
+

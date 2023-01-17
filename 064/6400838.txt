@@ -1,0 +1,128 @@
+
+from collections import deque
+
+class CostGraph:
+    '''辺に重みがあるグラフ
+    使い方:
+        単一始点最短経路
+        ・幅優先探索 bfs() O(|E|)
+            重みが 1 のとき
+        ・ベルマンフォード法 bellman() O(|V||E|)
+            負の重みも可
+        ・ダイクストラ法 dijkstra() O(|E|log|V|)
+            重みは正のみ
+        全点対最短経路
+        ・ワーシャルフロイド法 warshall) O(|V|^3)
+            メモリも O(|V|^2) 使う
+        最小全域木
+        ・プリム法 prim() O(|V|^2)
+        ・クラスカル法 kruskal() O(|E|log|V|)
+    '''
+    def __init__(self, N):
+        '''初期化 CostGraph(頂点数)
+        使い方:
+            平面座標を扱うときは (i, j) → i * W + j 等で整数に変換する
+        Args:
+            N (int): 頂点数
+        Returns:
+            void
+        '''
+        self.n = N
+        self.edges = [[] for i in range(N)]  # 辺の情報
+        self.pos = []  # 辺の番号 (From, edges[From]内の辺情報の位置)
+        self.dist = dict()  # 距離をメモするところ
+        self.prev = dict()  # 直前の通過点をメモするところ
+
+    def addEdge(self, From, To, dist=1):
+        '''辺の追加 addEdge(始点, 終点, 重み)
+        Args:
+            From (int): 始点の番号
+            To (int): 終点の番号
+            dist (num): 辺の重み, 初期値 1
+        Returns:
+            int: 辺の番号
+        '''
+        assert 0 <= From < self.n
+        assert 0 <= To < self.n
+        m = len(self.pos)
+        self.pos.append((From, len(self.edges[From])))
+        self.edges[From].append({'to':To, 'dist':dist})
+        return m
+
+    def getEdge(self, i):
+        '''辺情報の取得 getEdge(辺番号)
+        Args:
+            i (int): 辺の番号
+        Returns:
+            dict: 辺の情報 {'from':始点, 'to':終点, 'dist':重み}
+        '''
+        assert 0 <= i < len(self.pos)
+        e = self.edges[self.pos[i][0]][self.pos[i][1]]
+        return {'from':self.pos[i][0],
+                'to':e['to'],
+                'dist':e['dist']}
+
+    def getGraph(self):
+        '''全ての辺の情報を取得
+        Returns:
+            list: i番目の辺のdict
+        '''
+        res = []
+        for i in range(len(self.pos)):
+            res.append(self.getEdge(i))
+        return res
+
+    def changeEdge(self, i, dist):
+        '''辺の容量を変更する changeEdge(辺番号, 新重み)
+        Args:
+            i (int): 変更する辺の番号
+            dist (num): 変更後の重み
+        Returns:
+            void
+        '''
+        assert 0 <= i < len(self.pos)
+        e = self.edges[self.pos[i][0]][self.pos[i][1]]
+        e['dist'] = dist
+
+    def bfs(self, st, inf=-1):
+        '''1点からの最短距離 bfs(始点, inf=到達不可能を表すモノ) O(|E|)
+        Args:
+            st (int): 始点の番号
+            inf (num): 到達不可能なときの値 -1
+        Returns:
+            int[]: iへの最短距離
+        '''
+        assert 0 <= st < self.n
+        d = [inf]*self.n
+        d[st] = 0
+        pre = [i for i in range(self.n)]
+        q = deque()
+        q.append(st)
+        while q:
+            now = q.popleft()
+            for e in self.edges[now]:
+                if d[e['to']] != inf:
+                    continue
+                d[e['to']] = d[now] + e['dist']
+                pre[e['to']] = now
+                q.append(e['to'])
+        self.dist[st] = d
+        self.prev[st] = pre
+        return d
+
+def main():
+    # 入力・下処理
+    n = int(input())
+    cg = CostGraph(n)
+    for i in range(n):
+        u = list(map(int, input().split()))
+        for v in u[2:]:
+            cg.addEdge(u[0]-1, v-1)
+    # 計算・出力
+    dist = cg.bfs(0, inf=-1)
+    for i in range(n):
+        print('{} {}'.format(i+1, dist[i]))
+
+if __name__ == "__main__":
+    main()
+

@@ -1,0 +1,10 @@
+
+loop{
+num = gets.to_i
+
+if num != 0
+    puts num
+else 
+    break
+end
+}

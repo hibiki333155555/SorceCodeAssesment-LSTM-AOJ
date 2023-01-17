@@ -1,0 +1,26 @@
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <string>
+#include <vector>
+using namespace std;
+
+
+int main()
+{
+    
+    int n,val;
+    cin >> n;
+    int mn=1e9, res=-1e9;
+    while(n--!=0)
+    {
+        cin >> val;
+        res = res > val-mn  ? res : val-mn;
+        mn = mn < val ? mn : val;
+    }
+    cout << res << endl;
+    return 0;
+}

@@ -1,0 +1,4 @@
+l=int(input())
+l=0
+while l<=1000:
+print("Hello World")

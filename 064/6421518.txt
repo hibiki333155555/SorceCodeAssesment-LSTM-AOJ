@@ -1,0 +1,176 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef vector<vector<int>> vvi;
+typedef vector<vector<ll>> vvl;
+
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef vector<pii> vpii;
+typedef vector<pll> vpll;
+
+#define FOR(i, a, b) for(ll i=(a); i<(b); ++i)
+#define REP(i, n) FOR(i, 0, n)
+#define NREP(i, n) FOR(i, 1, n+1)
+
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+
+using SimpleGraph = vector<vector<ll>>;
+struct Edge{
+    ll to, cost;
+    Edge(ll t, ll c) : to(t), cost(c) { }
+};
+using Graph = vector<vector<Edge>>;
+struct Edge3{
+    ll from, to, cost;
+    Edge3(ll f, ll t, ll c) : from(f), to(t), cost(c) { }
+};
+using EdgeGraph = vector<vector<Edge3>>;
+
+ll H, W;
+bool isvalid(ll x, ll y) {
+    if(0 <= x && x < H && 0 <= y && y < W) {return true;}
+    else {return false;}
+}
+
+ll bert(ll x, ll y) {
+    return (x * W + y);
+}
+
+const ll INF = 1e15;
+
+int main(void){
+    cin >> H >> W;
+    vvl B(H, vl(W, 0));
+    vl cond(H*W, 0);
+    ll S = 0, T = 0;
+    REP(i, H) {
+        string str; cin >> str;
+        REP(j, W) {
+            ll v = bert(i, j);
+            
+            if(str[j] == '#') {B[i][j] = 1; cond[v] = 1;}
+            else {B[i][j] = 0; cond[v] = 0;}
+            
+            if(str[j] == 'S') {S = v;}
+            if(str[j] == 'V') {T = v;}
+        }
+    }
+    
+    ll M; cin >> M;
+    vpll wall(M);
+    map<ll, vl> mp;
+    REP(i, M) {
+        ll a, b, t; cin >> a >> b >> t;
+        a--, b--;
+        
+        ll v = bert(a, b);
+        wall[i] = {t, v};
+        mp[t].push_back(v);
+    }
+    sort(wall.begin(), wall.end());
+    
+    
+    ll N = H * W;
+    SimpleGraph G(N);
+    REP(i, H) {
+        REP(j, W) {
+            ll v = bert(i, j);
+            
+            for(ll di = -1; di <= 1; ++di) {
+                for(ll dj = -1; dj <= 1; ++dj) {
+                    if(abs(di) + abs(dj) != 1) {continue;}
+                    
+                    ll ni = i + di, nj = j + dj;
+                    if(!isvalid(ni, nj)) {continue;}
+                    
+                    ll nv = bert(ni, nj);
+                    if(cond[v]==0 && cond[nv]==0) {
+                        G[v].push_back(nv);
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    queue<ll> que;
+    vl dist(N, INF);
+    que.push(S);
+    dist[S] = 0;
+    
+    ll now = 0, check = 0;
+    while(que.size()) {
+        ll v = que.front();
+        que.pop();
+        ll d = dist[v];
+        
+        for(auto ban:mp[d+1]) {
+            cond[ban] = 1;
+        }
+        mp[d+1].clear();
+        
+        for(auto nv:G[v]) {
+            if(cond[nv]) {continue;}
+            if(dist[nv] != INF) {continue;}
+            
+            dist[nv] = d + 1;
+            if(nv == T) {
+                now = d + 1;
+                check = 1;
+                break;
+            }
+            que.push(nv);
+        }
+        
+        if(check) {break;}
+    }
+    
+    if(check == 0) {
+        cout << "No" << endl;
+        return 0;
+    }
+    
+    queue<ll> q2;
+    vl dist2(N, INF);
+    q2.push(T);
+    dist2[T] = dist[T];
+    
+    ll check2 = 0;
+    while(q2.size()) {
+        ll v = q2.front();
+        q2.pop();
+        ll d = dist2[v];
+        
+        for(auto ban:mp[d+1]) {
+            cond[ban] = 1;
+        }
+        mp[d+1].clear();
+        
+        for(auto nv:G[v]) {
+            if(cond[nv]) {continue;}
+            if(dist2[nv] != INF) {continue;}
+            
+            dist2[nv] = d + 1;
+            if(nv == S) {
+                now = d + 1;
+                check2 = 1;
+                break;
+            }
+            q2.push(nv);
+        }
+        
+        if(check2) {break;}
+    }
+    
+    if(check2) {cout << "Yes" << endl;}
+    else {cout << "No" << endl;}
+    
+    return 0;
+}

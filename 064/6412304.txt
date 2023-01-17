@@ -1,0 +1,12 @@
+#include <stdio.h>
+int main(void){
+    // Your code here!
+    double r,are,circ;
+    double p=3.141592653589;
+    scanf("%lf", &r);
+    are = r*2*p;
+    circ = r*r*p;
+    printf("%f %f\n", circ, are);
+    return 0;
+}
+

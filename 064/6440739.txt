@@ -1,0 +1,8 @@
+n=int(input())
+lst=list(map(int,input().split()))
+
+x=min(lst)
+y=max(lst)
+z=sum(lst)
+
+print(x,y,z)

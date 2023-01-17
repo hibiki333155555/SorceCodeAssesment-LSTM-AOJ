@@ -1,0 +1,37 @@
+class RollingHash:
+
+    __slots__ = ["root", "mod", "hs", "pw"]
+
+    def __init__(self, string, root, mod):
+        self.root = root
+        self.mod = mod
+        self.hs = [0] * (len(string) + 1)
+        self.pw = [1] * (len(string) + 1)
+        for i in range(len(string)):
+            self.hs[i + 1] = (self.hs[i] * self.root + ord(string[i])) % self.mod
+            self.pw[i + 1] = self.pw[i] * self.root % self.mod
+
+    def get_hash(self, l, r):
+        "get the hash of s[l:r] (0 <= l <= r <= len(s))"
+        return (self.hs[r] - self.hs[l] * self.pw[r - l]) % self.mod
+
+    def __getitem__(self, index):
+        "RH[l:r] is equivalent to RH.get_hash(l, r)"
+        if isinstance(index, slice):
+            return self.get_hash(index.start, index.stop)
+        else:
+            return 0
+
+N = int(input())
+S = input()
+forward = RollingHash(S, 10003, 6435805146278881223)
+reverse = RollingHash(S[::-1], 10003, 6435805146278881223)
+answer = 0
+for i in range(1, N):
+    w = min(N - i, i)
+    l1 = i - w
+    r2 = i + w
+    answer += forward.get_hash(l1, i) == reverse.get_hash(N - r2, N - i)
+
+print(answer)
+

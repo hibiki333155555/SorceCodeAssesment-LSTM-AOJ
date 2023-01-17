@@ -1,0 +1,83 @@
+def subtract_range(r1, ranges2)
+  r10, r11 = r1
+  ranges2.each{|r2|
+    r20, r21 = r2
+    if r10 < r21 && r20 < r11
+      ans_range = []
+      if r10 < r20
+        ans_range << [r10, r20]
+      end
+      if r11 > r21
+        ans_range << [r21, r11]
+      end
+      return ans_range, true
+    end
+  }
+
+  return [r1], false
+end
+  
+# ranges1 - ranges2
+def subtract_ranges(ranges1, ranges2)
+  out_ranges = []
+  v1 = ranges1.dup
+  loop{
+    break if v1.empty?
+    new_v1 = []
+    v1.each{|r1|
+      sub_range, is_overlap = subtract_range(r1, ranges2)
+      if is_overlap
+        new_v1 += sub_range
+      else
+        out_ranges << r1
+      end
+    }
+    v1 = new_v1
+  }
+  return out_ranges
+end
+
+loop{
+  n, r = gets.chomp.split.map(&:to_i)
+  break if n == 0 && r == 0
+  hash = Hash.new{[]}
+  n.times{
+    # line = gets
+    x1, y1, x2, y2 = gets.chomp.split.map(&:to_i)
+    y = y1
+    while y < y2
+      ranges = hash[y]
+      out_ranges = []
+      new_r0, new_r1 = x1, x2
+      ranges.each{|r2|
+        r20, r21 = r2
+        if new_r0 <= r21 && r20 <= new_r1
+          new_r0 = (new_r0 < r20)? new_r0 : r20
+          new_r1 = (new_r1 > r21)? new_r1 : r21
+        else
+          out_ranges << r2
+        end
+      }
+      out_ranges << [new_r0, new_r1]
+
+      loc_y = y+1
+      while loc_y < y2 && ranges == hash[loc_y]
+        hash[loc_y] = out_ranges
+        loc_y += 1
+      end
+      hash[y] = out_ranges
+      y = loc_y
+    end
+  }
+  puts hash.map{|k, v| v.map{|xs, xe| xe-xs}.sum }.sum
+  if r == 2
+    contour = 0
+    hash.each{|k, v|
+      contour += subtract_ranges(v, hash[k-1]).map{|xs, xe| xe-xs}.sum
+      contour += subtract_ranges(v, hash[k+1]).map{|xs, xe| xe-xs}.sum
+      contour += v.size * 2
+    }
+    puts contour
+  end
+}
+

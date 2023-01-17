@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+typedef long long ll;
+using namespace std;
+
+void solve(string S) {
+    vector<string> field(1);
+    int h = 0;
+    for (char c : S) {
+        if (c == 'b')
+            field[h].push_back(c);
+        else if (isdigit(c)) {
+            rep(i, c - '0') field[h].push_back('.');
+        } else {
+            field.push_back("");
+            h++;
+        }
+    }
+
+    int sy, sx, ty, tx;
+    cin >> sy >> sx >> ty >> tx;
+    sy--, sx--, ty--, tx--;
+    swap(field[sy][sx], field[ty][tx]);
+
+    rep(i, field.size()) field[i].push_back('a');
+
+    string ans = "";
+    for (auto s : field) {
+        int cnt = 0;
+        for (char c : s) {
+            if (c == '.')
+                cnt++;
+            else {
+                if (cnt != 0)
+                    ans += to_string(cnt);
+                if (c == 'a') ans += '/';
+                if (c == 'b') ans += 'b';
+                cnt = 0;
+            }
+        }
+    }
+
+    rep(i, ans.size() - 1) cout << ans[i];
+    cout << "\n";
+}
+
+int main() {
+    cin.tie(0);
+    ios_base::sync_with_stdio(false);
+
+    string S;
+    while (cin >> S) {
+        if (S == "#") break;
+        solve(S);
+    }
+
+    return 0;
+}
+

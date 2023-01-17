@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+#include <list>
+
+using namespace std;
+
+typedef struct
+{
+  string name;
+  int time;
+} process;
+
+
+int main(int argc, char const *argv[])
+{
+  int n, q;
+
+  cin >> n >> q;
+
+  list<process> ps;
+  for (int i = 0; i < n; i++)
+  {
+    string name;
+    int time;
+    cin >> name >> time;
+
+    process p = {name, time};
+    ps.push_back(p);
+  }
+  
+  int sumtime = 0;
+  while (ps.size() != 0)
+  {
+    process p = ps.front();
+    ps.pop_front();
+    
+    if (p.time <= q)
+    {
+      sumtime += p.time;
+      cout << p.name << " " << sumtime << endl;
+    }
+    else
+    {
+      p.time -= q;
+      sumtime += q;
+      ps.push_back(p);
+    }
+  }
+
+  return 0;
+}
+

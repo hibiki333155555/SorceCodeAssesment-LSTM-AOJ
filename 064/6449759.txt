@@ -1,0 +1,32 @@
+N,M=map(int,input().split())
+X=[list(map(int,input().split())) for i in range(N)]
+V=[0]*(M+1)
+for i in range(N):
+  X[i][1]-=1
+  V[X[i][1]]+=X[i][0]
+  V[X[i][2]]-=X[i][0]
+for i in range(M):
+  V[i+1]+=V[i]
+for i in range(int(input())):
+  d,e=map(int,input().split())
+  V[e-1]-=d
+Q=[0]*(M+1)
+P=[-1]*M
+ANS=0
+for i in range(N):
+  P[X[i][1]]=max(P[X[i][1]],X[i][2])
+W=0
+R=-1
+for i in range(M):
+  R=max(R,P[i])
+  W-=Q[i]
+  if W+V[i]<0:
+    if R<=i:
+      print(-1)
+      exit()
+    ANS-=V[i]+W
+    C=-V[i]-W
+    Q[R]+=C
+    W+=C
+print(ANS)
+

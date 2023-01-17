@@ -1,0 +1,72 @@
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.prev = None
+        self.next = None
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.nil = Node(None) 
+        self.nil.prev = self.nil
+        self.nil.next = self.nil 
+
+#連結リストの先頭にキーxを持つ要素を継ぎ足す関数
+    def insert(self, key):
+        new = Node(key)
+        new.next = self.nil.next   
+        self.nil.next.prev = new   
+        self.nil.next = new        
+        new.prev = self.nil        
+
+    def listSearch(self, key):
+        cur = self.nil.next
+        while cur != self.nil and cur.key != key:
+            cur = cur.next
+        return cur
+
+#要素を削除する関数
+    def deleteNode(self, t):
+        if t == self.nil:
+            return
+        t.prev.next = t.next
+        t.next.prev = t.prev
+
+#リストの先頭の要素を削除する関数
+    def deleteFirst(self):
+        self.deleteNode(self.nil.next) 
+
+#リストの末尾の要素を削除する関数
+    def deleteLast(self):
+        self.deleteNode(self.nil.prev)
+
+    def deleteKey(self, key):
+        self.deleteNode(self.listSearch(key))
+
+
+if __name__ == '__main__':
+    import sys
+    input = sys.stdin.readline  
+
+    n = int(input())
+
+    dll = DoublyLinkedList()
+
+    for _ in range(n):
+
+        com = input().rstrip()
+        if com[0] == 'i':
+            dll.insert(com[7:])
+        elif com[6] == 'F':
+            dll.deleteFirst()
+        elif com[6] == 'L':
+            dll.deleteLast()
+        else:
+            dll.deleteKey(com[7:])
+
+    cur = dll.nil.next
+    ans = []
+    while cur != dll.nil:
+        ans.append(cur.key)
+        cur = cur.next
+
+    print(' '.join(ans))

@@ -1,0 +1,5 @@
+require('fs').readFileSync(0,'utf8').split`
+`.some(l=>([H,W]=l.split` `,+H&&console.log([...Array(+H)].map((_,i)=>(i%2?'.#':'#.').repeat(W).substr(0,W)).join`
+`+`
+`)));
+

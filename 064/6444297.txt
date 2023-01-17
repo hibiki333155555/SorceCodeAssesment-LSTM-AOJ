@@ -1,0 +1,98 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#define I 0x7fffffff
+
+using namespace std;
+
+//原始版本
+/* int* dijkstra(vector<vector<pair<int, int> > >& list)
+{
+    int num = list.size();
+    bool* pd = new bool[num];
+    int* track = new int[num];
+    for (int i = 0;i < num;++i)
+    {
+        track[i] = I;
+        pd[i] = false;
+    }
+    track[0] = 0;
+    int dot, minVal;
+    while (true)
+    {
+        minVal = I;
+        dot = -1;
+        for (int i = 0;i < num;++i)
+        {
+            if (!pd[i] && track[i] < minVal)
+            {
+                dot = i;
+                minVal = track[i];
+            }
+        }
+        if (dot == -1)
+            return track;
+        pd[dot] = true;
+        for (int j = 0;j < list[dot].size();++j)
+            if (!pd[list[dot][j].first])
+                track[list[dot][j].first] = min(list[dot][j].second + track[dot], track[list[dot][j].first]);
+    }
+} */
+
+//优先级队列优化
+int* dijkstra_pri(vector<vector<pair<int, int> > >& list)
+{
+    int num = list.size(), mark, val;
+    priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > help;
+    bool* pd = new bool[num];
+    int* track = new int[num];
+    for (int i = 0;i < num;++i)
+    {
+        pd[i] = false;
+        track[i] = I;
+    }
+    track[0] = 0;
+    help.push(make_pair(track[0], 0));
+    while (!help.empty())
+    {
+        mark = help.top().second;
+        if (pd[mark])
+        {
+            help.pop();
+            continue;
+        }
+        val = help.top().first;
+        help.pop();
+        pd[mark] = true;
+        for (int i = 0;i < list[mark].size();++i)
+        {
+            if (!pd[list[mark][i].first])
+            {
+                track[list[mark][i].first] = min(track[list[mark][i].first], track[mark] + list[mark][i].second);
+                help.push(make_pair(track[list[mark][i].first], list[mark][i].first));
+            }
+        }
+    }
+    return track;
+}
+
+int main()
+{
+    int m, n, node, value, temp;
+    cin >> n;
+    vector<vector<pair<int, int> > > Input(n);
+    int* key = new int[n];
+    while (n--)
+    {
+        cin >> temp >> m;
+        while (m--)
+        {
+            cin >> node >> value;
+            Input[temp].push_back(make_pair(node, value));
+        }
+    }
+    key = dijkstra_pri(Input);
+    for (int i = 0;i < Input.size();++i)
+        cout << i << " " << key[i] << endl;
+    return 0;
+}

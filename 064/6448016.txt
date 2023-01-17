@@ -1,0 +1,26 @@
+n, m, l = map(int, input().split())
+
+nm_matrix = [[0 for j in range(m)]for i in range(n)]
+ml_matrix = [[0 for j in range(l)]for i in range(m)]
+output_matrix = [[0 for j in range(l)]for i in range(n)]
+
+for i in range(n):
+    nm_input = [int(j) for j in input().split()]
+    for k in range(m):
+        nm_matrix[i][k] = nm_input[k]
+        
+for i in range(m):
+    ml_input = [int(j) for j in input().split()]
+    for k in range(l):
+        ml_matrix[i][k] = ml_input[k]
+
+for i in range(n):
+    for j in range(l):
+        for k in range(m):
+            output_matrix[i][j] += nm_matrix[i][k]*ml_matrix[k][j]
+        
+for i in range(n):
+    print(f'{output_matrix[n][0]}',end='')
+    for j in range(1,l):
+        print(f' {output_matrix[n][j]}',end='')
+    print()

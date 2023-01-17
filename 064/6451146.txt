@@ -1,0 +1,46 @@
+one_one=[0,0,0,0,0,0,0,0,0,0]
+one_two=[0,0,0,0,0,0,0,0,0,0]
+one_three=[0,0,0,0,0,0,0,0,0,0]
+two_one=[0,0,0,0,0,0,0,0,0,0]
+two_two=[0,0,0,0,0,0,0,0,0,0]
+two_three=[0,0,0,0,0,0,0,0,0,0]
+three_one=[0,0,0,0,0,0,0,0,0,0]
+three_two=[0,0,0,0,0,0,0,0,0,0]
+three_three=[0,0,0,0,0,0,0,0,0,0]
+four_one=[0,0,0,0,0,0,0,0,0,0]
+four_two=[0,0,0,0,0,0,0,0,0,0]
+four_three=[0,0,0,0,0,0,0,0,0,0]
+frequency=int(input())
+i=0
+while i<frequency:
+    b,f,r,v=map(int,input().split())
+    if b==1:
+        if f==1:
+            one_one[r]=one_one[r]+v
+        elif f==2:
+            one_two[r]=one_two[r]+v
+        elif f==3:
+            one_three[r]=one_three[r]+v
+    elif b==2:
+        if f==1:
+            two_one[r]=two_one[r]+v
+        elif f==2:
+            two_two[r]=two_one[r]+v
+        elif f==3:
+            two_three[r]=two_three[r]+v
+    elif b==3:
+        if f==1:
+            three_one[r]=three_one[r]+v
+        elif f==2:
+            three_two[r]=three_one[r]+v
+        elif f==3:
+            three_three[r]=three_three[r]+v
+    elif b==4:
+        if f==1:
+            four_one[r]=four_one[r]+v
+        elif f==2:
+            four_two[r]=four_two[r]+v
+        elif f==3:
+            four_three[r]=four_three[r]+v
+sharp="####################"
+print("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s"%(one_one,one_two,one_three,sharp,two_one,two_two,two_three,sharp,three_one,three_two,three_three,sharp,four_one,four_two,four_three))

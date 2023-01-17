@@ -1,0 +1,43 @@
+#include<stdio.h>
+#define N 10000
+int A[N],n;
+
+/*int liner(int key){
+  int j;
+  for(j=0 ;j<n ;j++){
+    if(key == A[j]) return 1;
+  }
+  return 0;
+  }*/
+
+int liner(int key){
+  int i = 0;
+  A[n] = key;
+  while(A[i] != key){
+    i++;
+    if(i == n) return 0;
+  }
+  return 1;
+}
+
+int main(){
+  int i;
+  scanf("%d",&n);
+
+  for(i=0 ;i<n ;i++){
+    scanf("%d",&A[i]);
+  }
+  
+  int m,key,count = 0;
+  scanf("%d",&m);
+
+  for(i=0 ;i<m ;i++){
+    scanf("%d",&key);
+    if(liner(key)) count++;
+  }
+
+  printf("%d\n",count);
+
+  return 0;
+}
+

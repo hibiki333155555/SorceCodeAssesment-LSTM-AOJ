@@ -1,0 +1,20 @@
+str = input()
+q = int(input())
+
+for i in range(q):
+  command = input().split()
+  a, b = command[1], command[2]
+  a = int(a)
+  b = int(b)
+    
+  if command[0] == "print":
+    print(str[a:b+1])
+  elif command[0] == "reverse":
+    str_list = list(str)
+    str_list2 = list(reversed(str_list[a:b+1]))
+    str_list = str_list[:a] + str_list2 + str_list[b+1:]
+    str = "".join(str_list)
+  else:
+    str_list = list(str)
+    str_list[a:b+1] = command[3]
+    str = "".join(str_list)

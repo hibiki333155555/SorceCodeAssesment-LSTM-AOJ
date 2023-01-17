@@ -1,0 +1,31 @@
+from collections import Counter
+N, K = map(int, input().split())
+A = list(map(int, input().split()))
+c = Counter(A)
+# 1->5 or 2->6にするのが最もお得
+ans = sum(A)
+for i in range(K):
+  if c[1] > 0:
+    c[1] -= 1
+    c[5] += 1
+    ans += 4
+  elif c[2] > 0:
+    c[2] -= 1
+    c[6] += 1
+    ans += 4
+  elif c[3] > 0:
+    c[3] -= 1
+    c[6] += 1
+    ans += 3
+  elif c[4] > 0:
+    c[4] -= 1
+    c[6] += 1
+    ans += 2
+  elif c[5] > 0:
+    c[5] -= 1
+    c[6] += 1
+    ans += 1
+  else:
+    # 6しかない
+    break
+print(ans)

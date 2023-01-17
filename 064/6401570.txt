@@ -1,0 +1,59 @@
+import java.util.Scanner;
+
+class Calculator {
+    private int a, b;
+    private char op;
+
+    public Calculator(int a, int b, char op) {
+        this.a = a;
+        this.b = b;
+        this.op = op;
+    }
+
+    // 計算する
+    public int calc() {
+        switch (op) {
+            case '+':
+                return (a + b);
+            case '-':
+                return (a - b);
+            case '*':
+                return (a * b);
+            case '/':
+                return (a / b);
+            default:
+                return -1;
+        }
+    }
+
+    // 結果を表示する
+    public void showCalc() {
+        System.out.println(calc());
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            // 値を取得する
+            int a = sc.nextInt();
+            // 文字列の先頭の1文字を取得する
+            char op = sc.next().charAt(0);
+            int b = sc.nextInt();
+
+            // 終了条件
+            if (op == '?') {
+                break;
+            }
+
+            // クラスを定義する
+            Calculator calculator = new Calculator(a, b, op);
+
+            // 結果を表示する
+            calculator.showCalc();
+        }
+    }
+}
+

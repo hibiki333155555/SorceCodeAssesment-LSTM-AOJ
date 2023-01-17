@@ -1,0 +1,8 @@
+ a = int(input())
+ b = int(input())
+ c = int(input())
+ 0 < a, b, c < 100
+ if a < b < c:
+     print("Yes")
+else:
+    print("No")     

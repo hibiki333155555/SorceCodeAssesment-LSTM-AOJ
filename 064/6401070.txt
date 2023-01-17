@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+#define FOR(i, a, b) for(ll i = (a); i < (b); ++i)
+#define FORR(i, a, b) for(ll i = (a); i > (b); --i)
+#define REP(i, n) for(ll i = 0; i < (n); ++i)
+#define REPR(i, n) for(ll i = n; i >= 0; i--)
+#define FOREACH(x, a) for(auto &(x) : (a))
+#define dump(x) cout << #x << " = " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define SP << " " <<
+using namespace std;
+using ll = long long;
+using P = pair<ll, ll>;
+
+#define int long long
+
+struct Node {
+  int id;
+  int parent = -1;
+  int right = -1;
+  int child = -1;
+};
+
+vector<Node> nodes;
+
+int get_depth(int id) {
+  int depth = 0;
+  Node node = nodes[id];
+  if(node.parent == -1) { return 0; }
+  while(node.parent != -1) {
+    node = nodes[node.parent];
+    depth++;
+  }
+  return depth;
+}
+
+string get_type(int id) {
+  Node node = nodes[id];
+  if(node.parent == -1) {
+    return "root";
+  } else if(node.child == -1) {
+    return "leaf";
+  } else {
+    return "internal node";
+  }
+}
+
+void print_children(int id) {
+  Node node = nodes[id];
+  if(node.child == -1) { return; }
+  Node child_node = nodes[node.child];
+  while(true) {
+    if(child_node.right == -1) {
+      cout << child_node.id;
+      break;
+    }
+    cout << child_node.id << ", ";
+    child_node = nodes[child_node.right];
+  }
+}
+
+signed main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  int n;
+  cin >> n;
+
+  nodes.resize(n);
+  REP(i, n) { nodes[i] = Node{i}; }
+  REP(i, n) {
+    int id, child_count;
+    cin >> id >> child_count;
+    vector<int> child_ids(child_count);
+    REP(j, child_count) { cin >> child_ids[j]; }
+
+    REP(j, child_count) {
+      int child_id = child_ids[j];
+      nodes[child_id].parent = nodes[id].id;
+      if(j == 0) {
+        nodes[id].child = child_id;
+      } else {
+        nodes[child_ids[j - 1]].right = child_id;
+      }
+    }
+  }
+
+  REP(i, n) {
+    Node target_node = nodes[i];
+    cout << "node " << target_node.id << ":";
+    cout << "parent = " << target_node.parent << ", ";
+    cout << "depth = " << get_depth(target_node.id) << ", ";
+    cout << get_type(target_node.id) << ", ";
+    cout << "[";
+    print_children(target_node.id);
+    cout << "]" << endl;
+  }
+
+  return 0;
+}
+

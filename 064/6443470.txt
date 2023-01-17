@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int x = sc.nextInt();
+        int y = sc.nextInt();
+        
+        if(x < y){
+            int c = x;
+            x = y;
+            y = c;
+        }
+        
+        while(y > 0){
+            int r = x % y;
+            x = y;
+            y = r;
+        }
+        
+        System.out.println(x);
+    }
+}

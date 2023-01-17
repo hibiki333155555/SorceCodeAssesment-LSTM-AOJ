@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int ans=0, w, h, dx[8]={-1, -1, -1, 0, 0, 1, 1, 1}, dy[8]={-1, 0, 1, -1, 1, -1, 0, 1};
+bool flg=0;
+vector<vector<bool> > seen(60, vector<bool>(60, 0));
+vector<vector<int> > g(60, vector<int>(60, 0));
+
+void dfs(int x, int y){
+  if(seen[x][y]==1)return;
+  seen[x][y]=1;
+  flg=1;
+  for(int i=0;i<8;i++){
+    int nx=x+dx[i], ny=y+dy[i];
+    if(0<=nx && nx<h && 0<=ny && ny<w){
+      if(seen[nx][ny])continue;
+      if(g[nx][ny]==0)continue;
+      dfs(nx, ny);
+    }
+  }
+}
+
+int solve(){
+  
+}
+
+int main(){
+  cin >> w >> h;
+  while(w!=0 && h!=0){
+    for(int i=0;i<h;i++)for(int j=0;j<w;j++)cin >> g[i][j];
+  	for(int i=0;i<h;i++){
+      for(int j=0;j<w;j++){
+        if(g[i][j]==0)continue;
+        flg=0;
+        dfs(i, j);
+        if(flg==1)ans++;
+      }
+    }
+  	cout << ans << endl;
+    
+    ans=0;
+    for(int i=0;i<h;i++)for(int j=0;j<w;j++){
+      seen[i][j]=0;
+      g[i][j]=0;
+    }
+    cin >> w >> h;
+  }
+  return 0;
+}

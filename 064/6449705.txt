@@ -1,0 +1,13 @@
+A,B=map(int,input().split())
+C=bin(A)[2:]
+D=bin(B)[2:]
+if len(C)!=len(D):
+    print(0)
+    exit()
+k=0
+for x in range(len(C)):
+    if C[x]==D[x]:
+        k=k+1
+    else:
+        break
+print(k)

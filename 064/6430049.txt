@@ -1,0 +1,12 @@
+#include <iostream>
+#include <math.h>
+using namespace std;
+int main(){
+    int a,c=1;;
+    cin>>a;
+    for(int i=1;i<=log2(a);i++)c*=2;
+    cout<<c<<endl;
+    return(0);
+}
+    
+    

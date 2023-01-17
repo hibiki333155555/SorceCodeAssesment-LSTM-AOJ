@@ -1,0 +1,122 @@
+#[allow(unused_macros)]
+macro_rules ! debug { ( $ ( $ a : expr ) ,* ) => { eprintln ! ( concat ! ( $ ( stringify ! ( $ a ) , " = {:?}, " ) ,* ) , $ ( $ a ) ,* ) ; } }
+#[macro_export]
+macro_rules ! input { ( source = $ s : expr , $ ( $ r : tt ) * ) => { let mut parser = Parser :: from_str ( $ s ) ; input_inner ! { parser , $ ( $ r ) * } } ; ( parser = $ parser : ident , $ ( $ r : tt ) * ) => { input_inner ! { $ parser , $ ( $ r ) * } } ; ( new_stdin_parser = $ parser : ident , $ ( $ r : tt ) * ) => { let stdin = std :: io :: stdin ( ) ; let reader = std :: io :: BufReader :: new ( stdin . lock ( ) ) ; let mut $ parser = Parser :: new ( reader ) ; input_inner ! { $ parser , $ ( $ r ) * } } ; ( $ ( $ r : tt ) * ) => { input ! { new_stdin_parser = parser , $ ( $ r ) * } } ; }
+#[macro_export]
+macro_rules ! input_inner { ( $ parser : ident ) => { } ; ( $ parser : ident , ) => { } ; ( $ parser : ident , $ var : ident : $ t : tt $ ( $ r : tt ) * ) => { let $ var = read_value ! ( $ parser , $ t ) ; input_inner ! { $ parser $ ( $ r ) * } } ; }
+#[macro_export]
+macro_rules ! read_value { ( $ parser : ident , ( $ ( $ t : tt ) ,* ) ) => { ( $ ( read_value ! ( $ parser , $ t ) ) ,* ) } ; ( $ parser : ident , [ $ t : tt ; $ len : expr ] ) => { ( 0 ..$ len ) . map ( | _ | read_value ! ( $ parser , $ t ) ) . collect ::< Vec < _ >> ( ) } ; ( $ parser : ident , chars ) => { read_value ! ( $ parser , String ) . chars ( ) . collect ::< Vec < char >> ( ) } ; ( $ parser : ident , usize1 ) => { read_value ! ( $ parser , usize ) - 1 } ; ( $ parser : ident , $ t : ty ) => { $ parser . next ::<$ t > ( ) . expect ( "Parse error" ) } ; }
+use std::io;
+use std::io::BufRead;
+use std::str;
+pub struct Parser<R> {
+    reader: R,
+    buf: Vec<u8>,
+    pos: usize,
+}
+impl Parser<io::Empty> {
+    pub fn from_str(s: &str) -> Parser<io::Empty> {
+        Parser {
+            reader: io::empty(),
+            buf: s.as_bytes().to_vec(),
+            pos: 0,
+        }
+    }
+}
+impl<R: BufRead> Parser<R> {
+    pub fn new(reader: R) -> Parser<R> {
+        Parser {
+            reader: reader,
+            buf: vec![],
+            pos: 0,
+        }
+    }
+    pub fn update_buf(&mut self) {
+        self.buf.clear();
+        self.pos = 0;
+        loop {
+            let (len, complete) = {
+                let buf2 = self.reader.fill_buf().unwrap();
+                self.buf.extend_from_slice(buf2);
+                let len = buf2.len();
+                if len == 0 {
+                    break;
+                }
+                (len, buf2[len - 1] <= 0x20)
+            };
+            self.reader.consume(len);
+            if complete {
+                break;
+            }
+        }
+    }
+    pub fn next<T: str::FromStr>(&mut self) -> Result<T, T::Err> {
+        loop {
+            let mut begin = self.pos;
+            while begin < self.buf.len() && (self.buf[begin] <= 0x20) {
+                begin += 1;
+            }
+            let mut end = begin;
+            while end < self.buf.len() && (self.buf[end] > 0x20) {
+                end += 1;
+            }
+            if begin != self.buf.len() {
+                self.pos = end;
+                return str::from_utf8(&self.buf[begin..end]).unwrap().parse::<T>();
+            } else {
+                self.update_buf();
+            }
+        }
+    }
+}
+
+fn main() {
+    // println!("Hello, world!");
+    input! {
+        n:usize,
+        trees: [(usize, usize, usize); n - 1],
+    };
+
+    let mut g = vec![vec![]; n];
+    for e in trees {
+        g[e.0].push(Edge { to: e.1, cost: e.2 });
+        g[e.1].push(Edge { to: e.0, cost: e.2 });
+    }
+    println!("{}", tree_diameter(&g));
+}
+#[derive(Debug, Copy, Clone)]
+struct Edge {
+    to: usize,
+    cost: usize,
+}
+
+fn dfs(g: &Vec<Vec<Edge>>, start_idx: usize, cost: Option<usize>, used: &mut Vec<bool>) -> (usize, usize) {
+    let mut ret = (0, start_idx);
+    used[start_idx] = true;
+    let edges = g[start_idx].clone();
+    for ne in edges {
+        // for ne in g[start_idx] {        
+        if used[ne.to]{
+            continue;
+        }
+        if cost.is_some() && ne.to == start_idx {
+            continue;
+        }
+        let mut next = dfs(g, ne.to, Some(ne.cost), used);
+        next.0 += ne.cost;
+        ret = pair_max(ret, next);
+    }
+    return ret;
+}
+
+fn pair_max(ret1: (usize, usize), ret2: (usize, usize)) -> (usize, usize) {
+    // index of 0 is cost.
+    return if ret1.0 > ret2.0 { ret1 } else { ret2 };
+}
+
+fn tree_diameter(g: &Vec<Vec<Edge>>) -> usize {
+    let pair1 = dfs(g, 0, None, & mut vec![false; g.len()]);
+    let pair = dfs(g, pair1.1, None, &mut vec![false; g.len()]);
+    pair.0
+}
+

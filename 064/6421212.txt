@@ -1,0 +1,58 @@
+from collections import deque
+
+H, W = map(int, input().split())
+
+sentinels = ['#'] * (W + 2)
+
+cs = [sentinels]
+for _ in range(H):
+    cs.append(list('#' + input() + '#'))
+cs.append(sentinels)
+
+for i in range(H + 2):
+    for j in range(W + 2):
+        if cs[i][j] == 'S':
+            si, sj = i, j
+            cs[i][j] = '.'
+        elif cs[i][j] == 'G':
+            gi, gj = i, j
+            cs[i][j] = '.'
+
+INF = 1001001001
+
+dist = [[INF] * (W + 2) for _ in range(H + 2)]
+for i in range(H + 2):
+    for j in range(W + 2):
+        if cs[i][j] == '#':
+            dist[i][j] = -1
+
+dirs = "URDL"
+dis = [-1, 0, 1, 0]
+djs = [0, 1, 0, -1]
+
+dist[si][sj] = 0
+dq = deque([(si, sj)])
+while dq:
+    i, j = dq.popleft()
+    c = cs[i][j]
+    if c in dirs:
+        iterator = [dirs.index(c)]
+        cost = 0
+    else:
+        iterator = range(4)
+        cost = 1
+    for index in iterator:
+        di = dis[index]
+        dj = djs[index]
+        if dist[i + di][j + dj] > dist[i][j] + cost:
+            dist[i + di][j + dj] = dist[i][j] + cost
+            if cost:
+                dq.append((i + di, j + dj))
+            else:
+                dq.appendleft((i + di, j + dj))
+
+answer = dist[gi][gj]
+if answer == INF:
+    answer = -1
+print(answer)
+        

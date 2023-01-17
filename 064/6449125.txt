@@ -1,0 +1,4 @@
+const r = require('fs').readFileSync('/dev/stdin','utf8');
+const s = (r*r*Math.PI).toFixed(6);
+const l =  (r*2*Math.PI).toFixed(6);
+console.log(`${s} ${l}`);

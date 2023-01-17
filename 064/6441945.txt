@@ -1,0 +1,36 @@
+//#include<bits/stdc++.h>
+#include<iostream>
+#include<math.h>
+#include<string.h>
+#include<stdio.h>
+using namespace std;
+//
+int main()
+{	
+	
+	int a,b,re=5;
+	char op,op1,op2;
+	
+	cin>>a>>op>>b;
+	
+	while(op!='?')
+	{
+		if(op=='+')
+			re=a+b;
+		else if(op=='-')
+			re=a-b;
+		else if(op=='*')
+			re=a*b;
+		else if(op=='/')
+			re=a/b;
+	
+		cout<<re<<endl;
+		
+		cin>>a>>op>>b;
+	}
+	
+	 
+
+return 0;
+}
+

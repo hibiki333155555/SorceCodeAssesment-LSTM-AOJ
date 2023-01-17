@@ -1,0 +1,291 @@
+#pragma GCC ta g("avx2")
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("unroll-loops")
+#include <bits/stdc++.h>
+using namespace std;
+#define DEBUG
+#ifdef DEBUG
+template <class T, class U>
+ostream &operator<<(ostream &os, const pair<T, U> &p) {
+    os << '(' << p.first << ',' << p.second << ')';
+    return os;
+}
+template <class T> ostream &operator<<(ostream &os, const vector<T> &v) {
+    os << '{';
+    for(int i = 0; i < (int)v.size(); i++) {
+        if(i) { os << ','; }
+        os << v[i];
+    }
+    os << '}';
+    return os;
+}
+void debugg() { cerr << endl; }
+template <class T, class... Args>
+void debugg(const T &x, const Args &... args) {
+    cerr << " " << x;
+    debugg(args...);
+}
+#define debug(...)                                                             \
+    cerr << __LINE__ << " [" << #__VA_ARGS__ << "]: ", debugg(__VA_ARGS__)
+#define dump(x) cerr << __LINE__ << " " << #x << " = " << (x) << endl
+#else
+#define debug(...) (void(0))
+#define dump(x) (void(0))
+#endif
+using namespace std;
+typedef long long ll;
+typedef vector<ll> vl;
+typedef vector<vl> vvl;
+typedef vector<char> vc;
+typedef vector<string> vs;
+typedef vector<bool> vb;
+typedef vector<double> vd;
+typedef pair<ll,ll> P;
+typedef pair<int,int> pii;
+typedef vector<P> vpl;
+typedef tuple<ll,ll,ll> tapu;
+#define rep(i,n) for(int i=0; i<(n); i++)
+#define REP(i,a,b) for(int i=(a); i<(b); i++)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+template<typename T1,typename T2> inline bool chmin(T1 &a,T2 b){
+	if(a>b){
+		a = b; return true;
+	}
+	else return false;
+}
+template<typename T1,typename T2> inline bool chmax(T1 &a,T2 b){
+	if(a<b){
+		a = b; return true;
+	}
+	else return false;
+}
+template<typename T> inline void print(T &a){
+    int sz = a.size();
+    for(auto itr = a.begin(); itr != a.end(); itr++){
+		cout << *itr;
+        sz--;
+        if(sz) cout << " ";
+	}
+    cout << "\n";
+}
+template<typename T1,typename T2> inline void print2(T1 a, T2 b){
+	cout << a << " " << b << "\n";
+}
+template<typename T1,typename T2,typename T3> inline void print3(T1 a, T2 b, T3 c){
+	cout << a << " " << b << " " << c << "\n";
+}
+void mark() {cout << "#" << "\n";}
+ll pcount(ll x) {return __builtin_popcountll(x);}
+//#include <atcoder/convolution>
+//using namespace atcoder;
+const int inf = (1<<30)-1;
+const ll linf = 1LL<<61;
+const int MAX = 510000;
+int dy[8] = {0,1,0,-1,1,-1,-1,1};
+int dx[8] = {-1,0,1,0,1,-1,1,-1};
+const double pi = acos(-1);
+const double eps = 1e-9;
+//const int mod = 1e9 + 7;
+const int mod = 998244353;
+
+template <int mod> struct ModInt {
+    int x;
+
+    ModInt() : x(0) {}
+
+    ModInt(int64_t y) : x(y >= 0 ? y % mod : (mod - (-y) % mod) % mod) {}
+
+    ModInt &operator+=(const ModInt &p) {
+        if((x += p.x) >= mod) x -= mod;
+        return *this;
+    }
+
+    ModInt &operator-=(const ModInt &p) {
+        if((x += mod - p.x) >= mod) x -= mod;
+        return *this;
+    }
+
+    ModInt &operator*=(const ModInt &p) {
+        x = (int)(1LL * x * p.x % mod);
+        return *this;
+    }
+
+    ModInt &operator/=(const ModInt &p) {
+        *this *= p.inverse();
+        return *this;
+    }
+
+    ModInt operator-() const { return ModInt(-x); }
+
+    ModInt operator+(const ModInt &p) const { return ModInt(*this) += p; }
+
+    ModInt operator-(const ModInt &p) const { return ModInt(*this) -= p; }
+
+    ModInt operator*(const ModInt &p) const { return ModInt(*this) *= p; }
+
+    ModInt operator/(const ModInt &p) const { return ModInt(*this) /= p; }
+
+    bool operator==(const ModInt &p) const { return x == p.x; }
+
+    bool operator!=(const ModInt &p) const { return x != p.x; }
+
+    ModInt inverse() const {
+        int a = x, b = mod, u = 1, v = 0, t;
+        while(b > 0) {
+            t = a / b;
+            swap(a -= t * b, b);
+            swap(u -= t * v, v);
+        }
+        return ModInt(u);
+    }
+
+    ModInt pow(int64_t n) const {
+        ModInt ret(1), mul(x);
+        while(n > 0) {
+            if(n & 1) ret *= mul;
+            mul *= mul;
+            n >>= 1;
+        }
+        return ret;
+    }
+
+    friend ostream &operator<<(ostream &os, const ModInt &p) {
+        return os << p.x;
+    }
+
+    friend istream &operator>>(istream &is, ModInt &a) {
+        int64_t t;
+        is >> t;
+        a = ModInt<mod>(t);
+        return (is);
+    }
+
+    static int get_mod() { return mod; }
+};
+
+using mint = ModInt<mod>;
+
+vvl G(101010);
+
+struct LCA{
+    ll logv = 0;
+    ll root = 0;
+    vvl parent;
+    vl depth;
+
+    LCA(ll n, ll r){
+        root = r;
+        depth.resize(n,0);
+        while(1LL<<logv < n){
+            logv++;
+        }
+        parent.resize(logv+1);
+        rep(i,logv+1){
+            parent[i].resize(n,-1);
+        }
+        dfs(root,-1,0);
+        rep(i,logv){
+            rep(j,n){
+                if(parent[i][j] < 0) parent[i+1][j] = -1;
+                else parent[i+1][j] = parent[i][parent[i][j]];
+            }
+        }
+    }
+
+    void dfs(ll u, ll p, ll d){
+        parent[0][u] = p;
+        depth[u] = d;
+        for(auto v : G[u]){
+            if(v != p) dfs(v,u,d+1);
+        }
+    }
+
+    ll lca(ll u, ll v){
+        if(depth[u] > depth[v]) swap(u,v);
+        rep(i,logv){
+            if((depth[v] - depth[u]) >> i & 1) v = parent[i][v];
+        }
+        if(u == v) return u;
+        for(ll i=logv-1; i>=0; i--){
+            if(parent[i][u] != parent[i][v]){
+                u = parent[i][u];
+                v = parent[i][v];
+            }
+        }
+        return parent[0][u];
+    }
+};
+
+int main(){
+    int n; cin >> n;
+    rep(i,n-1){
+        int a,b; cin >> a >> b; a--; b--;
+        G[a].push_back(b);
+        G[b].push_back(a);
+    }
+    LCA lc(n,0);
+    int q; cin >> q;
+    vector<mint> ans(q);
+    vl d(q);
+    vl x(q),y(q);
+    rep(i,q){
+        cin >> x[i] >> y[i]; x[i]--; y[i]--;
+    }
+    vector<mint> val(n,1),res(n);
+    vl ch(n,1);
+    {
+        auto dfs = [&](auto &&dfs, int u, int p) -> void {
+            for(auto v : G[u]){
+                if(v == p) continue;
+                dfs(dfs,v,u);
+                val[u] += val[v] * 2;
+                ch[u] += ch[v];
+            }
+        };
+        dfs(dfs,0,-1);
+    }
+    {
+        res[0] = val[0];
+        auto dfs = [&](auto &&dfs, int u, int p) -> void {
+            if(u != 0){
+                res[u] = (res[p] - val[u] * 2) * 2 + val[u];
+            }
+            for(auto v : G[u]){
+                if(v == p) continue;
+                dfs(dfs,v,u);
+            }
+        };
+        dfs(dfs,0,-1);
+    }
+    //debug(res,val);
+    vector<vpl> qu(n);
+    rep(i,q){
+        int p = lc.lca(x[i],y[i]);
+        if(p == x[i]) qu[y[i]].emplace_back(x[i],i), d[i] = lc.depth[y[i]];
+        else if(p == y[i]) qu[x[i]].emplace_back(y[i],i), d[i] = lc.depth[x[i]];
+        else ans[i] = val[x[i]] * val[y[i]] * mint(2).pow(lc.depth[x[i]] + lc.depth[y[i]] - 2*lc.depth[p]);
+    }
+    vector<set<pii>> mt(n);
+    auto dfs = [&](auto &&dfs, int u, int p) -> void {
+        for(auto v : G[u]){
+            if(v == p) continue;
+            dfs(dfs,v,u);
+            auto itr = mt[v].lower_bound(P(u,-inf));
+            while(itr != mt[v].end() && (*itr).first == u){
+                P pa = *itr;
+                //debug(pa.first,u,d[pa.second],lc.depth[u]);
+                ans[pa.second] *= mint(2).pow(d[pa.second] - lc.depth[u]);
+                ans[pa.second] *= (res[u] - val[v] * 2);
+                itr = mt[v].erase(itr);
+            }
+            if(mt[u].size() < mt[v].size()) swap(mt[u],mt[v]);
+        }
+        for(auto x : qu[u]){
+            ans[x.second] = val[u];
+            mt[u].emplace(x);
+        }
+    };
+    dfs(dfs,0,-1);
+    rep(i,q) cout << ans[i] << "\n";
+}

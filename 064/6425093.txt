@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define ll long long
+#define fix(ans,x) fixed << setprecision(x)<<ans
+int main(){
+    int ans=0,d,l;
+    cin>>d>>l;
+    while(d!=0){
+        if(d>=l){
+            d-=l;
+            ans++;
+        }else{
+            d--;
+            ans++;
+        }
+    }
+    cout<<ans<<endl;
+    return 0;
+}
+

@@ -1,0 +1,4 @@
+H = int(input())
+heap = [int(x) for x in input()]
+
+print(heap)

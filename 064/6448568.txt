@@ -1,0 +1,32 @@
+#include<iostream>
+#include<algorithm>
+using namespace std
+
+int main() {
+    cin >> n;
+    vector<int> vec(n);
+    for (int i = 0; i < n; i++) {
+        cin >> vec.at(i);   
+    }
+    int min_val = 1000000000;
+    int max_val = 0;
+    int max_error = 0;
+    int flag = 1;
+    for (int i = 0; i < n; i++) {
+        if (vec.at(i) < min_val) {
+            min_val = vec.at(i);
+            flag = 0;
+        }
+        else {
+            flag = 1;
+        }
+        if (vec.at(i) > max_val) {
+            max_val = vec.at(i);
+        }
+        if (flag == 1) {
+        max_error = max_val - min_val;
+        }
+    }
+    cout << max_error << endl;
+    return 0;
+}

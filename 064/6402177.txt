@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+//#include<atcoder/all>
+//using namespace atcoder;
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+ll N;
+struct ED {
+	int to;
+	int ch;
+};
+
+vector<vector<ED>> G;
+unordered_map<int, ll> M;
+ll an = 0, STR = 0;
+vector<bool> seen;
+
+int main() {
+	cin >> N;
+	G.resize(N);
+	seen.resize(N, false);
+	rep(i, N - 1) {
+
+		int U, V;
+		char C;
+		cin >> U >> V >> C;
+		U--, V--;
+		G[U].push_back(ED{ V,C - 'a' });
+		G[V].push_back(ED{ U,C - 'a' });
+	}
+
+	queue<int> Q;
+	Q.push(0);
+	vector<int> D(N,0);
+	vll DP(N, 0);
+	while (!Q.empty()) {
+		ll p = Q.front();
+		if (seen[p])continue;
+		Q.pop();
+		seen[p] = true;
+		for (auto v : G[p]) {
+			if (seen[v.to])continue;
+			D[v.to] = D[p] ^(1 << v.ch);
+			Q.push(v.to);
+		}
+		an +=M[D[p]];
+		rep(c, 26) {
+			an +=M[(D[p] ^(1 << c))];
+		}
+		M[D[p]]++;
+	}
+
+	cout << an << endl;
+}
+

@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define fol(i,s,g) for(int i=(int)(s); i<(int)(g); i++)
+#define fix(ans,k) fixed << setprecision(k) << ans
+
+int main(){
+    int h,a,b;
+    cin>>h>>a>>b;
+    int ans=0;
+    fol(i,a,b+1){
+        if(h%i==0){
+            ans++;
+        }
+    }
+    cout<<ans<<'\n';
+    return 0;
+}

@@ -1,0 +1,28 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    int x[n]={},y[n]={};
+    for (int i=0;i<n;i++) {
+        cin >> x[i];
+    }
+    for (int i=0;i<n;i++) {
+        cin >> y[i];
+    }
+    double ans1=0,ans2=0,ans3=0;
+    int max = 0;
+    cout << fixed;
+    for (int i=0;i<n;i++) {
+       ans1 += abs(y[i]-x[i]);
+       ans2 += (y[i]-x[i])*(y[i]-x[i]);
+       ans3 += abs((y[i]-x[i])*(y[i]-x[i])*(y[i]-x[i]));
+       if (max < abs(y[i]-x[i])) {
+           max = abs(y[i]-x[i]);
+       }
+    }
+    cout << setprecision(6) << ans1 << endl << pow(ans2, 1/2) << endl << pow(ans3, 1.0/3.0) << endl << max << endl;
+}

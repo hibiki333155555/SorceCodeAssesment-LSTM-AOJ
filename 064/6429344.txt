@@ -1,0 +1,29 @@
+N = int(input())
+S = list(map(int, input().split()))
+q = int(input())
+T = list(map(int, input().split()))
+
+
+ans = 0
+for i in range(q):
+
+    left = 0
+    right = N
+    while left < right:
+
+        mid = (left + right) // 2
+        if S[mid] == T[i]:
+            ans += 1
+            break
+
+        elif T[i] < S[mid]:
+            right = mid
+        
+        else:
+            left = mid + 1
+
+print(ans)
+
+
+
+

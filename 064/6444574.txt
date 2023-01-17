@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+int root,n;
+
+struct pp{
+	int p,l,r;
+}i[30];
+
+void p(int a){
+	if(a==-1) return ;
+	cout<<" "<<a;
+	p(i[a].l);
+	p(i[a].r);
+}
+
+void i1(int a){
+	if(a==-1) return ;
+	i1(i[a].l);
+	cout<<" "<<a;
+	i1(i[a].r);
+	
+}
+
+void p1(int a){
+	if(a==-1) return ;
+	p1(i[a].l);
+	p1(i[a].r);
+	cout<<" "<<a;
+}
+int main()
+{
+	cin>>n;
+	
+	for(int c=0;c<n;c++) i[c].p=-1;
+	
+	for(int c=0;c<n;c++){
+		int id,l,r;
+		cin>>id>>l>>r;
+		i[id].l=l;
+		i[id].r=r;
+		if(l!=-1) i[l].p=id;
+		if(r!=-1) i[r].p=id;
+	}
+	
+	for(int c=0;c<n;c++) if(i[c].p==-1) root=c;
+	cout<<"Preorder"<<endl;
+	
+	p(root);
+	cout<<endl;
+	cout<<"Inorder"<<endl;
+	
+	i1(root);
+	cout<<endl;
+	cout<<"Postorder"<<endl;
+	
+	p1(root);
+	
+}

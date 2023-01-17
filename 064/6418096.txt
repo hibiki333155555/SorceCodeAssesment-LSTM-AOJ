@@ -1,0 +1,136 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 998244353
+
+FOR = list("for")
+PRINT = list("print")
+A = ord("a")
+Z = ord("z")
+
+
+def solve(n):
+    print_lis = []
+    for _ in range(n):
+        s = input().replace("<-","=")
+        i = 0
+        stack = []
+        for_count = 1
+        while i < len(s):
+            stack.append(s[i])
+            if stack == FOR:
+                exp = []
+                stack = []
+                for j in range(i+2,len(s)):
+                    sj = s[j]
+                    if sj == ")":
+                        i = j
+                        break
+                    exp.append(sj)
+                exp_num = eval("".join(exp))
+                for_count *= exp_num
+            elif stack == PRINT:
+                exp = []
+                stack = []
+                for j in range(i+2,len(s)):
+                    sj = s[j]
+                    if sj == ")":
+                        i = j
+                        break
+                    exp.append(sj)
+                if for_count:
+                    exp_num = eval("".join(exp))%mod
+                    print_lis.append((exp_num,for_count))
+            i += 1
+        if len(stack) == 1:
+            val = stack[0]
+            exec(f"{val}=0")
+        elif stack:
+            if not for_count:
+                continue
+            val = stack[0]
+            o = ord(val)
+            stack = stack[2:]
+            right = [0]*27
+            coef = [0]*27
+            exp_stack = []
+            sig = 1
+            for si in stack:
+                oi = ord(si)
+                if A <= oi <= Z:
+                    right[oi-A] += sig
+                elif si.isdecimal():
+                    exp_stack.append(si)
+                elif si == "+" or si == "-":
+                    if exp_stack:
+                        exp = eval("".join(exp_stack))%mod
+                        exp_stack = []
+                        right[26] += sig*exp%mod
+                    if si == "+":
+                        sig = 1
+                    else:
+                        sig = -1
+            if exp_stack:
+                exp = eval("".join(exp_stack))%mod
+                exp_stack = []
+                right[26] += sig*exp%mod
+            k = right[o-A]
+            if k == 0:
+                coef = [i%mod for i in right]
+                stack = [f"{val}=","("]
+                for i,ci in enumerate(coef):
+                    if not ci:
+                        continue
+                    stack.append(f"+{ci}")
+                    if i < 26:
+                        stack.append("*")
+                        stack.append(chr(i+A))
+                if stack[-1] == "(":
+                    stack.append("0")
+                stack.append(")%mod")
+            else:
+                c = (pow(k,for_count)-1)*pow(k-1,mod-2,mod)%mod if k != 1 else for_count
+                coef = [c*ci%mod if i+A != o else pow(k,for_count,mod) for i,ci in enumerate(right)]
+                stack = [f"{val}=","("]
+                for i,ci in enumerate(coef):
+                    if not ci:
+                        continue
+                    stack.append(f"+{ci}")
+                    if i < 26:
+                        stack.append("*")
+                        stack.append(chr(i+A))
+                if stack[-1] == "(":
+                    stack.append("0")
+                stack.append(")%mod")
+            exec("".join(stack))
+    return print_lis
+
+def main(n,m):
+    print_s = solve(n)
+    print_t = solve(m)
+    if print_s == print_t:
+        print("Yes")
+    else:
+        print("No")
+    return
+
+
+if __name__ == "__main__":
+    while 1:
+        n,m = LI()
+        if n == m == 0:
+            break
+        main(n,m)
+

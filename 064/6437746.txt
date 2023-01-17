@@ -1,0 +1,19 @@
+l = input().split()
+def draw(h,w):
+    for i in range(h):
+        for j in range(w):
+            if j == 0 or i == 0 or i == h-1 or j == w-1:
+                print("#",end="")
+            else:
+                print(".",end="")
+            if j == w-1:
+                print("")
+    if i == h-1:
+        print("")
+
+
+while not(l[0] == "0"):
+    H = int(l[0])
+    W = int(l[1])
+    draw(H,W)
+    l = input().split()

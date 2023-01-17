@@ -1,0 +1,60 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main(){
+    int N,A;
+    string S;
+    cin >> N >> A >> S;
+    S.insert(0, "X");
+    S.append("X");
+    bool dir=true;
+    unsigned long long int count=0;
+    while(true){
+        if(dir==true){
+            for(int i=A; i<N+2; i++){
+                count++;
+                if(S[i]=='#'){
+                    dir=false;
+                    A=i-1;
+                    S[i]='.';
+                    break;
+                }
+                if(S[i]=='X'){
+                    A=i-1;
+                    dir=false;
+                    break;
+                }
+            }
+        }
+        else if(dir==false){
+            for(int i=A; i>=0; i--){
+                count++;
+                if(S[i]=='#'){
+                    dir=true;
+                    A=i+1;
+                    S[i]='.';
+                    break;
+                }
+                if(S[i]=='X'){
+                    dir=true;
+                    A=i+1;
+                    break;
+                }
+            }
+        }
+
+        bool judge=true;
+        for(int i=1; i<N+1; i++){
+            if(S[i]!='.'){
+                judge=false;
+            }
+        }
+        if(judge==true){
+            break;
+        }
+    }
+    cout << count-1 << endl;
+}
+

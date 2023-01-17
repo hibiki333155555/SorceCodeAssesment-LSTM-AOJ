@@ -1,0 +1,42 @@
+class SegmentTree:
+	def __init__(self, n):
+		tmp = 0
+		while n != 0:
+			n >>= 1
+			tmp += 1
+		self.seglen = 1 << tmp
+		self.inf = (1 << 31) - 1
+		self.seg = [self.inf]*(self.seglen*2)
+	
+	def update(self, x, val):
+		# update x to val;
+		x += self.seglen
+		self.seg[x] = val
+		while x > 1:
+			x >>= 1
+			self.seg[x] = min(self.seg[2*x], self.seg[2*x+1])
+	
+	def query(self, l, r):
+		l = max(l, 0) + self.seglen
+		r = max(r, 0) + self.seglen
+		lres, rres = self.inf, self.inf
+		while l < r:
+			if l & 1:
+				lres = min(lres, self.seg[l])
+				l += 1
+			if r & 1:
+				r -= 1
+				rres = min(rres, self.seg[r])
+			l >>= 1
+			r >>= 1
+		return min(lres, rres)
+
+n, q = map(int,input().split())
+seg = SegmentTree(n)
+for _ in range(q):
+	c, x, y = map(int,input().split())
+	if c == 0:
+		seg.update(x, y)
+	else:
+		print(seg.query(x, y+1))
+

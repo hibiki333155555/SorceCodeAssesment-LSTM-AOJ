@@ -1,0 +1,12 @@
+#include<stdio.h>
+#include<math.h>
+
+int main(){
+    float r,PI=3.1416;
+    scanf("%f",&r);
+
+    printf("%f %f\n",PI*pow(r,2),2*PI*r);
+    
+    
+    return 0;
+}

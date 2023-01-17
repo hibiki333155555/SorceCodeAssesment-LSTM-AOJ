@@ -1,0 +1,91 @@
+#include "iostream"
+#include "climits"
+#include "list"
+#include "queue"
+#include "stack"
+#include "set"
+#include "functional"
+#include "algorithm"
+#include "string"
+#include "map"
+#include "unordered_map"
+#include "unordered_set"
+#include "iomanip"
+#include "cmath"
+#include "random"
+#include "bitset"
+#include "cstdio"
+#include "numeric"
+#include "cassert"
+#include "ctime"
+
+
+using namespace std;
+
+constexpr long long int MOD = 1000000007;
+//constexpr long long int MOD = 998244353;
+constexpr double EPS = 1e-8;
+
+//int N, M, K, T, H, W, L, R;
+long long int N, M, K, T, H, W, L, R;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	int sx, sy, sz, gx, gy, gz;
+	cin >> sx >> sy >> sz >> gx >> gy >> gz;
+	int dx = gx - sx;
+	int dy = gy - sy;
+	int dz = gz - sz;
+	if (dx < 0) {
+		dx *= -1;
+		dy *= -1;
+		dz *= -1;
+	}
+	while (dx) {
+		if (dx + dy + dz < 0) {
+			dy++;
+			dz++;
+		}
+		else {
+			if (dy > dz) {
+				dy--;
+				dz++;
+			}
+			else {
+				dy++;
+				dz--;
+			}
+		}
+		dx--;
+	}
+	if (dy < 0) {
+		dx *= -1;
+		dy *= -1;
+		dz *= -1;
+	}
+	while (dy) {
+		if (dx + dy + dz < 0) {
+			dx++;
+			dz++;
+		}
+		else {
+			if (dx > dz) {
+				dx--;
+				dz++;
+			}
+			else {
+				dx++;
+				dz--;
+			}
+		}
+		dy--;
+	}
+	if (dx == 0 && dy == 0 && dz == 0) {
+		cout << "Yes\n";
+	}
+	else {
+		cout << "No\n";
+	}
+}

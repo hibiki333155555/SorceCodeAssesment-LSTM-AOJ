@@ -1,0 +1,4 @@
+l = list(map(int,input().split()))
+
+print(l[0]*l[1])
+print(2*(l[0]+l[1]))

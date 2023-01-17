@@ -1,0 +1,29 @@
+#include<stdio.h>
+int main()
+{
+    int ara[3],minimum,i,ara1[3],index,j;
+    for(i=0;i<3;i++)
+    {
+        scanf("%d",&ara[i]);
+    }
+    for(i=0;i<3;i++)
+    {
+        minimum=10000;
+        for(j=0;j<3;j++)
+        {
+            if(ara[j]<minimum)
+            {
+                minimum=ara[j]; //minimum=3
+                index=j; //index=0
+            }
+        }
+        ara[index]=10000;
+        ara1[i]=minimum;
+        
+    }
+    for(i=0;i<3;i++)
+    {
+        printf("%d\n",ara1[i]);
+    }
+    return 0;
+}

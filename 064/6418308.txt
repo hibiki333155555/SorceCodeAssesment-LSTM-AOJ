@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int INF = 100000000;
+int main(){
+  int N;
+  cin >> N;
+  vector<int> a(N);
+  for (int i = 0; i < N; i++){
+    cin >> a[i];
+  }
+  vector<int> b(N);
+  for (int i = 0; i < N; i++){
+    cin >> b[i];
+  }
+  vector<vector<int>> E(N);
+  for (int i = 0; i < N - 1; i++){
+    int u, v;
+    cin >> u >> v;
+    u--;
+    v--;
+    E[u].push_back(v);
+    E[v].push_back(u);
+  }
+  vector<int> p(N, -1);
+  vector<vector<int>> c(N);
+  queue<int> Q;
+  Q.push(0);
+  vector<int> bfs;
+  while (!Q.empty()){
+    int v = Q.front();
+    Q.pop();
+    bfs.push_back(v);
+    for (int w : E[v]){
+      if (w != p[v]){
+        p[w] = v;
+        c[v].push_back(w);
+        Q.push(w);
+      }
+    }
+  }
+  reverse(bfs.begin(), bfs.end());
+  vector<vector<int>> dp(N);
+  for (int v : bfs){
+    vector<vector<int>> tmp(1, vector<int>(501, -INF));
+    for (int i = 0; i <= a[v]; i++){
+      tmp[0][i] = a[v];
+    }
+    for (int w : c[v]){
+      int s1 = tmp.size();
+      int s2 = dp[w].size();
+      vector<vector<int>> tmp2(s1 + s2 - 1, vector<int>(501, -INF));
+      for (int i = 0; i < s1; i++){
+        for (int j = 0; j < s2; j++){
+          for (int k = 0; k <= 500; k++){
+            if (tmp[i][k] != -INF && dp[w][j] != -INF){
+              int i2 = i + j;
+              int k2 = min(k + max(dp[w][j], 0), 500);
+              tmp2[i2][k2] = max(tmp2[i2][k2], tmp[i][k] + dp[w][j]);
+            }
+          }
+        }
+      }
+      swap(tmp, tmp2);
+    }
+    int sz = tmp.size();
+    dp[v] = vector<int>(sz + 1, -INF);
+    for (int i = 0; i < sz; i++){
+      for (int j = 0; j <= 500; j++){
+        if (tmp[i][j] != -INF){
+          dp[v][i] = max(dp[v][i], tmp[i][j]);
+          if (j >= b[v]){
+            dp[v][i + 1] = max(dp[v][i + 1], tmp[i][j]);
+          } else {
+            dp[v][i + 1] = max(dp[v][i + 1], j - b[v]);
+          }
+        }
+      }
+    }
+  }
+  int ans = 0;
+  for (int i = 0; i <= N; i++){
+    if (dp[0][i] >= 0){
+      ans = i;
+    }
+  }
+  cout << ans << endl;
+}

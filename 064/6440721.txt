@@ -1,0 +1,27 @@
+#![allow(dead_code)]
+fn input_line() -> String {
+    let mut buf = String::new();
+
+    std::io::stdin().read_line(&mut buf).unwrap();
+
+    buf = buf.trim().to_string();
+
+    return buf;
+}
+
+fn space_separated_string_to_int_vec(s: String) -> Vec<i32> {
+    let v: Vec<i32> = s.split(" ").map(|x| x.parse::<i32>().unwrap()).collect();
+    return v;
+}
+
+fn main() {
+    let s: String = input_line();
+    let v: Vec<i32> = space_separated_string_to_int_vec(s);
+
+    let int_div = v[0] / v[1];
+    let rem = v[0] % v[1];
+    let float_div = (v[0] as f32) / (v[1] as f32);
+
+    println!("{} {} {:.5}", int_div, rem, float_div);
+}
+

@@ -1,0 +1,25 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    string str,order,p,str_temp;
+    int q,a,b;
+    cin >> str >> q;
+    for (int i=0;i<q;i++) {
+        cin >> order;
+        str_temp = str;
+        if (order == "replace") {
+            cin >> a >> b >> p;
+            cout << str_temp.replace(a, b, p) << endl;;
+        } else if (order == "print") {
+            cin >> a >> b;
+            cout << str_temp.substr(a, b-a+1) << endl;
+        } else if (order == "reverse") {
+            cin >> a >> b;
+            reverse(str_temp.begin(), str_temp.end());
+            cout << str_temp << endl;
+        }
+    }
+}

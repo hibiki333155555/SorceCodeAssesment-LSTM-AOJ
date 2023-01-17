@@ -1,0 +1,29 @@
+#include <stdio.h>
+
+int main(void){
+	int a,b;
+	char op,dummy;
+	int ans;
+
+	while( 1 ){
+		scanf("%d", &a);
+		scanf("%c %c", &op, &dummy);
+		scanf("%d", &b);
+
+		ans = 9;
+		if( op == '?' ){
+			break;
+		}else if( op =='+' ){
+			ans = a+b;
+		}else if( op =='-' ){
+			ans = a-b;
+		}else if( op =='*' ){
+			ans = a*b;
+		}else if( op =='/' ){
+			ans = a/b;
+		}
+		printf("%d", ans);
+	}
+
+	return 0;
+}

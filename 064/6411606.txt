@@ -1,0 +1,51 @@
+#include <iostream>
+#define max 100000
+using namespace std;
+int n,a[max];
+
+int partition(int p, int r){
+   int x,k,t;
+   x = a[r];
+   k = p - 1;
+   for(int i = p; i < r; i++){
+       if(a[i] <= x){
+           k++;
+           t = a[k];
+           a[k] = a[i];
+           a[i] = t;
+       }
+   }
+   
+   t = a[k+1];
+   a[k+1] = a[r];
+   a[r] = t;
+   
+   return k+1;
+}
+
+int main(){
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
+    }
+    
+    int q = partition(0,n-1);
+    
+    for(int i = 0; i < n; i++){
+        if(i > 0){
+            cout << " ";
+        }
+        
+        if(i == q){
+            cout << "[";
+        }
+        
+        cout << a[i];
+        
+        if(i == q){
+            cout << "]";
+        }
+    }
+    
+    cout << endl;
+}

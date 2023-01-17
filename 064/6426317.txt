@@ -1,0 +1,2 @@
+n=int(input())
+print(f'{int(n/3600)}:{int(n/60)}:{n%3600}')

@@ -1,0 +1,152 @@
+#include <bits/stdc++.h>
+
+/*
+Mの要件
+
+T->T->Tの形の結合的な二項演算を持つこと
+T型の恒等元を.eとしてメンバに持つこと
+*/
+
+template <class T, class M>
+class segment_tree
+{
+private:
+    M op;
+    std::vector<std::pair<std::size_t, std::size_t>> range;
+    std::size_t LEAF;
+    std::vector<T> data;
+
+    void full_update(void)
+    {
+        for (std::size_t i = LEAF - 2; i != static_cast<std::size_t>(-1); --i)
+        {
+            data[i] = op(data[2 * (i + 1) - 1], data[2 * (i + 1)]);
+        }
+    }
+
+    void point_update(const std::size_t& p)
+    {
+        if (p != 0)
+        {
+            const std::size_t pp = (p + 1) / 2 - 1;
+            const std::size_t pn = 4 * (pp + 1) - 1 - p;
+            data[pp] = op(data[pn], data[p]);
+            point_update(pp);
+        }
+    }
+
+    T get_kernel(const std::size_t& i, const std::size_t& j, const std::size_t& p) const
+    {
+        if (i >= j)
+        {
+            return op.e;
+        }
+        else if (const auto& [pi, pj] = range[p]; pi == i && pj == j)
+        {
+            return data[p];
+        }
+        else
+        {
+            const std::size_t pc1 = 2 * (p + 1) - 1;
+            const std::size_t pc2 = 2 * (p + 1);
+            const std::size_t mid = range[pc1].second;
+            return op(get_kernel(i, std::min({ j, mid }), pc1), get_kernel(std::max({ i, mid }), j, pc2));
+        }
+    }
+
+public:
+    segment_tree(void) = default;
+    segment_tree(const segment_tree&) = default;
+    segment_tree(segment_tree&&) noexcept = default;
+    segment_tree& operator=(const segment_tree&) & = default;
+    segment_tree& operator=(segment_tree&&) & noexcept = default;
+
+    template <class... Args>
+    segment_tree(const std::size_t& n_elem, Args&&... args)
+        : op(std::forward<Args>(args)...)
+    {
+        assert(n_elem > 0);
+        const int k = CHAR_BIT * sizeof(n_elem)
+            - __builtin_clzll(static_cast<unsigned long long>(n_elem));
+        LEAF = 1LL << k;
+        if (LEAF < n_elem)
+        {
+            LEAF <<= 1;
+        }
+        data.resize(2 * LEAF - 1, op.e);
+        range.resize(2 * LEAF - 1);
+        for (std::size_t i = 0; i < LEAF; ++i)
+        {
+            range[LEAF + i - 1] = { i, i + 1 };
+        }
+        for (std::size_t i = LEAF - 2; i != static_cast<std::size_t>(-1); --i)
+        {
+            range[i] = { range[2 * (i + 1) - 1].first, range[2 * (i + 1)].second };
+        }
+    }
+
+    template <class... Args>
+    segment_tree(const std::vector<T>& init, Args&&... args)
+        : segment_tree(init.size(), args...)
+    {
+        std::copy(init.begin(), init.end(), data.begin() + LEAF - 1);
+        full_update();
+    }
+
+    T get(const std::size_t& i, const std::size_t& j) const
+    {
+        assert(i < j);
+        assert(j <= LEAF);
+        return get_kernel(i, j, 0);
+    }
+
+    void set(const std::size_t& i, const T& val)
+    {
+        assert(i < LEAF);
+        data[LEAF + i - 1] = val;
+        point_update(LEAF + i - 1);
+    }
+
+    const T& operator[](const std::size_t& i) const
+    {
+        assert(i < LEAF);
+        return data[LEAF + i - 1];
+    }
+};
+
+class min_object
+{
+public:
+    unsigned e;
+
+    min_object(void)
+        : e((1U << 31) - 1)
+    {
+    }
+
+    unsigned operator()(const unsigned& i, const unsigned& j) const
+    {
+        return std::min({ i, j });
+    }
+};
+
+int main(void)
+{
+    unsigned n, q;
+    std::cin >> n >> q;
+    segment_tree<unsigned, min_object> tree(n);
+    for (unsigned i = 0; i < q; ++i)
+    {
+        unsigned c, x, y;
+        std::cin >> c >> x >> y;
+        if (c == 0)
+        {
+            tree.set(x, y);
+        }
+        else
+        {
+            std::cout << tree.get(x, y + 1) << std::endl;
+        }
+    }
+    return 0;
+}

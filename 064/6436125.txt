@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int a, b, x;
+    cin >> a >> b >> x;
+    int ans = 20*a + 40*b;
+    for(int i = 0; i <= 20; i++){
+        for(int j = 0; j <= 40; j++){
+            if(i*1000 + j*500 < x){
+                continue;
+            }
+            if(a*i + b*j < ans){
+                ans = a*i + b*j;
+            }
+        }
+    }
+    cout << ans << endl;
+    return 0;
+}

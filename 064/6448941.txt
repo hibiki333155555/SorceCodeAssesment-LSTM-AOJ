@@ -1,0 +1,106 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Tools;
+
+internal class Program
+{
+    public static void Main()
+    {
+        if (new System.Diagnostics.StackFrame(1).GetMethod() == null)
+            Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false });
+
+        var n = Console.ReadLine().ParseInt();
+        var cards = new Card[n];
+        for (int i = 0; i < n; i++)
+        {
+            var input = Console.ReadLine().Split();
+            cards[i] = new Card(input[0], input[1].ParseInt());
+        }
+        var sortedCards = Sort.QuickSort(cards, (Card c) => c.Number);
+
+        Console.WriteLine(Sort.IsStable(cards, sortedCards, (Card c) => c.Number) ? "Stable" : "Not stable");
+        foreach (var card in sortedCards)
+        {
+            Console.WriteLine(card.ToString());
+        }
+
+        Console.Out.Flush();
+    }
+}
+
+struct Card : IEquatable<Card>
+{
+    public string Suit { get; }
+    public int Number { get; }
+    public Card(string suit, int number)
+    {
+        this.Suit = suit;
+        this.Number = number;
+    }
+    public bool Equals(Card other) => Suit == other.Suit && Number == other.Number;
+    public override string ToString() => $"{Suit} {Number}";
+}
+
+static class Sort
+{
+    public static bool IsStable<T, U>(T[] before, T[] after, Func<T, U> keyselector) where T : IEquatable<T> where U : IEquatable<U>
+    {
+        var ddic = before.GroupBy(keyselector).ToDictionary(g => g.Key, g => new Queue<T>(g));
+        for (int i = 0; i < after.Length - 1; i++)
+        {
+            if (keyselector(after[i]).Equals(keyselector(after[i + 1])))
+            {
+                if (!after[i].Equals(ddic[keyselector(after[i])].Dequeue()))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public static T[] QuickSort<T, U>(T[] array, Func<T, U> keyselector) where U : IComparable<U>
+    {
+        var A = (T[])array.Clone();
+        internalQuickSort(A, 0, A.Length - 1, keyselector);
+        return A;
+    }
+    static void internalQuickSort<T, U>(T[] A, int p, int r, Func<T, U> keyselector) where U : IComparable<U>
+    {
+        if (p < r)
+        {
+            var q = internalPartition(A, p, r, keyselector);
+            internalQuickSort(A, p, q - 1, keyselector);
+            internalQuickSort(A, q + 1, r, keyselector);
+        }
+    }
+    static int internalPartition<T, U>(T[] A, int p, int r, Func<T, U> keyselector) where U : IComparable<U>
+    {
+        var x = A[r];
+        var i = p;
+        for (int j = p; j < r; j++)
+        {
+            if (keyselector(A[j]).CompareTo(keyselector(x)) <= 0)
+            {
+                Swap(ref A[i++], ref A[j]);
+            }
+        }
+        Swap(ref A[i], ref A[r]);
+        return i;
+    }
+}
+
+internal class Tools
+{
+    public static void Swap<T>(ref T a, ref T b)
+    {
+        var t = a;
+        a = b;
+        b = t;
+    }
+}
+
+internal static class Extensions
+{
+    public static int ParseInt(this string s) => int.Parse(s);
+}

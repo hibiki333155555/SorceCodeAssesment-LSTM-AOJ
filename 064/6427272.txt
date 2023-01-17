@@ -1,0 +1,22 @@
+import java.util.Scanner;
+import java.util.Math;
+
+class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n= sc.nextInt();
+        int mi=-1000001;
+        int ma=1000001;
+        long sum=0;
+        for(int i=0;i<n;i++){
+            int a=sc.nextInt();
+            ma=Math.Max(ma,a);
+            mi=Math.Min(mi,a);
+            sum+=a;
+        }
+        System.out.println(mi+" "+ma+" "+sum);
+    }
+}
+
+
+

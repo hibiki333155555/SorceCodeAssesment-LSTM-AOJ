@@ -1,0 +1,18 @@
+#include <stdio.h>
+int main(void)
+{
+    int x[10000];
+    int input = -1;
+    int i = 0;
+    while (input != 0) {
+        scanf("%d", &input);
+        x[i++] = input;
+    }
+    int num = -1;
+    i = 0;
+    while (x[i] != 0) {
+        printf("Case %d: %d\n", i + 1, x[i]);
+        i++;
+    }
+    return 0;
+}

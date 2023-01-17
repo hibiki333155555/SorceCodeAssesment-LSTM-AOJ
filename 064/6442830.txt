@@ -1,0 +1,51 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<algorithm>
+#include<set>
+#include<string>
+#include<cstdlib>
+#include<climits>
+#include<map>
+#include<unordered_map>
+#include<unordered_set>
+#include<cstring>
+#include<cctype>
+#include<cstdio>
+#define ALL(x) x.begin(),x.end() 
+using namespace std;
+map<string,int> dp;
+int d[]={-1,1,-4,4};
+
+void bfs(){
+    dp["01234567"]=0;
+    queue<string> q;
+    q.push("01234567");
+    while(!q.empty()){
+        auto cur=q.front();
+        q.pop();
+        int pos=cur.find('0');
+        for(int i=0;i<4;i++){
+            int npos=pos+d[i];
+            if(npos>=0&&npos<8&&!(pos==4&&i==0)&&!(pos==3&&i==1)){
+                string net=cur;
+                swap(net[pos],net[npos]);
+                if(!dp.count(net)){
+                    dp[net]=dp[cur]+1;
+                    q.push(net);
+                }
+            }
+        }
+    }
+}
+
+int main(){
+    bfs();
+    string line;
+    while(getline(cin,line)){
+        line.erase(remove(ALL(line),' '),line.end());
+        printf("%d\n",dp[line]);
+    }
+    return 0;
+}
+

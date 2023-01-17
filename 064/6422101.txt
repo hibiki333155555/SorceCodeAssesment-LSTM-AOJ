@@ -1,0 +1,16 @@
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		
+		int rect1 = scanner.nextInt();
+		int rect2 = scanner.nextInt();
+		
+		System.out.printf("%d %d%n",rect1*rect2,rect1*2+rect2*2);
+
+	}
+
+}
+

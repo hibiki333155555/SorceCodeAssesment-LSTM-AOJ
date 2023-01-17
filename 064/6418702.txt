@@ -1,0 +1,168 @@
+#[allow(unused_macros)]
+macro_rules ! debug { ( $ ( $ a : expr ) ,* ) => { eprintln ! ( concat ! ( $ ( stringify ! ( $ a ) , " = {:?}, " ) ,* ) , $ ( $ a ) ,* ) ; } }
+#[macro_export]
+macro_rules ! input { ( source = $ s : expr , $ ( $ r : tt ) * ) => { let mut parser = Parser :: from_str ( $ s ) ; input_inner ! { parser , $ ( $ r ) * } } ; ( parser = $ parser : ident , $ ( $ r : tt ) * ) => { input_inner ! { $ parser , $ ( $ r ) * } } ; ( new_stdin_parser = $ parser : ident , $ ( $ r : tt ) * ) => { let stdin = std :: io :: stdin ( ) ; let reader = std :: io :: BufReader :: new ( stdin . lock ( ) ) ; let mut $ parser = Parser :: new ( reader ) ; input_inner ! { $ parser , $ ( $ r ) * } } ; ( $ ( $ r : tt ) * ) => { input ! { new_stdin_parser = parser , $ ( $ r ) * } } ; }
+#[macro_export]
+macro_rules ! input_inner { ( $ parser : ident ) => { } ; ( $ parser : ident , ) => { } ; ( $ parser : ident , $ var : ident : $ t : tt $ ( $ r : tt ) * ) => { let $ var = read_value ! ( $ parser , $ t ) ; input_inner ! { $ parser $ ( $ r ) * } } ; }
+#[macro_export]
+macro_rules ! read_value { ( $ parser : ident , ( $ ( $ t : tt ) ,* ) ) => { ( $ ( read_value ! ( $ parser , $ t ) ) ,* ) } ; ( $ parser : ident , [ $ t : tt ; $ len : expr ] ) => { ( 0 ..$ len ) . map ( | _ | read_value ! ( $ parser , $ t ) ) . collect ::< Vec < _ >> ( ) } ; ( $ parser : ident , chars ) => { read_value ! ( $ parser , String ) . chars ( ) . collect ::< Vec < char >> ( ) } ; ( $ parser : ident , usize1 ) => { read_value ! ( $ parser , usize ) - 1 } ; ( $ parser : ident , $ t : ty ) => { $ parser . next ::<$ t > ( ) . expect ( "Parse error" ) } ; }
+use std::io;
+use std::io::BufRead;
+use std::str;
+pub struct Parser<R> {
+    reader: R,
+    buf: Vec<u8>,
+    pos: usize,
+}
+impl Parser<io::Empty> {
+    pub fn from_str(s: &str) -> Parser<io::Empty> {
+        Parser {
+            reader: io::empty(),
+            buf: s.as_bytes().to_vec(),
+            pos: 0,
+        }
+    }
+}
+impl<R: BufRead> Parser<R> {
+    pub fn new(reader: R) -> Parser<R> {
+        Parser {
+            reader: reader,
+            buf: vec![],
+            pos: 0,
+        }
+    }
+    pub fn update_buf(&mut self) {
+        self.buf.clear();
+        self.pos = 0;
+        loop {
+            let (len, complete) = {
+                let buf2 = self.reader.fill_buf().unwrap();
+                self.buf.extend_from_slice(buf2);
+                let len = buf2.len();
+                if len == 0 {
+                    break;
+                }
+                (len, buf2[len - 1] <= 0x20)
+            };
+            self.reader.consume(len);
+            if complete {
+                break;
+            }
+        }
+    }
+    pub fn next<T: str::FromStr>(&mut self) -> Result<T, T::Err> {
+        loop {
+            let mut begin = self.pos;
+            while begin < self.buf.len() && (self.buf[begin] <= 0x20) {
+                begin += 1;
+            }
+            let mut end = begin;
+            while end < self.buf.len() && (self.buf[end] > 0x20) {
+                end += 1;
+            }
+            if begin != self.buf.len() {
+                self.pos = end;
+                return str::from_utf8(&self.buf[begin..end]).unwrap().parse::<T>();
+            } else {
+                self.update_buf();
+            }
+        }
+    }
+}
+
+fn main() {
+    input! {
+        v_num: usize,
+        e_num: usize,
+        edges: [(usize,usize); e_num],
+    };
+    let mut g = vec![vec![]; v_num];
+    for e in edges {
+        g[e.0].push(Edge { to: e.1 });
+        g[e.1].push(Edge { to: e.0 });
+    }
+    let mut ll = LowLink::new(g);
+    ll.main();
+
+    for i in ll.aps {
+        println!("{}", i);
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
+struct Edge {
+    to: usize,
+}
+
+struct LowLink {
+    g: Vec<Vec<Edge>>,
+    ord: Vec<Option<usize>>,
+    low: Vec<Option<usize>>,
+    aps: Vec<usize>, // articulation points
+}
+
+impl LowLink {
+    fn new(g: Vec<Vec<Edge>>) -> Self {
+        // let used = vec![false; g.len()];
+        let graph_size = g.len();
+        LowLink {
+            g,
+            ord: vec![None; graph_size],
+            low: vec![None; graph_size],
+            // 節を格納していくリスト
+            aps: vec![],
+        }
+    }
+
+    pub fn main(&mut self) {
+        // k:dfsで何番目に探索するか
+        let mut k = 0;
+        let v_num = self.g.len();
+        for i in 0..v_num {
+            // ここでスタートするのはrootのとき
+            // 森でも対応できるアルゴリズム
+            if self.ord[i].is_none() {
+                k = self.dfs(i, k, None);
+            }
+        }
+
+        self.aps.sort();
+    }
+
+    pub fn dfs(&mut self, id: usize, mut k: usize, parent_id: Option<usize>) -> usize {
+        self.ord[id] = Some(k);
+        self.low[id] = Some(k);
+        k = k + 1;
+        let edges = self.g[id].clone();
+        let mut child_num = 0;
+        let mut is_aps = false;
+        for ne in edges {
+            if self.ord[ne.to].is_none() {
+                child_num += 1;
+                k = self.dfs(ne.to, k, Some(id));
+                self.low[id] = Some(std::cmp::min(
+                    self.low[id].unwrap(),
+                    self.low[ne.to].unwrap(),
+                ));
+                if parent_id.is_some() && self.ord[id] <= self.low[ne.to] {
+                    is_aps = true;
+                }
+            } else {
+                // 探索済み
+                self.low[id] = Some(std::cmp::min(
+                    self.low[id].unwrap(),
+                    self.ord[ne.to].unwrap(),
+                ));
+            }
+        }
+
+        if parent_id.is_none() && child_num > 1 {
+            is_aps = true;
+        }
+        if is_aps {
+            self.aps.push(id);
+        }
+        k
+    }
+}
+

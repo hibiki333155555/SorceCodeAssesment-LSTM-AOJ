@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+/*#include <atcoder/dsu>
+#include <atcoder/all>
+using namespace atcoder;*/
+
+// loop
+#define rep(i,a,b) for(int i=(a);i<(b);i++)
+#define rrep(i,a,b) for(int i=(a);i>=(b);i--)
+
+// Type aliases
+using ull = unsigned long long;
+using ll = long long;
+using ld = long double;
+using pll = pair<ll, ll>;
+using pii = pair<int, int>;
+using vi = vector<int>;
+using vvi = vector<vi>;
+//vector<vector<int>> A(3, vector<int>(4))
+
+// x:コンテナ
+#define ALL(x) x.begin(),x.end() //sort(ALL(x))　昇順ソート
+#define RALL(x) x.rbegin(),x.rend() //sort(RALL(x)) 降順ソート
+#define SIZE(x) ll(x.size()) // 要素数
+
+// const
+const int MOD = 1000000007;
+
+/* function */
+template<class T>
+T GCD(T a, T b) {
+	if (b != 0) return GCD(b, a % b);
+	return a;
+}
+template<class T>
+T LCM(T a, T b) {
+	return a / GCD(a, b) * b;
+}
+
+const int dy[4] = { 0, 1, -1, 0 };
+const int dx[4] = { 1, 0, 0, -1 };
+
+int main(){
+	ll n,m,k,x,ma=0;
+	cin >> n >> m >> k >> x;
+	vector<ll> A(n);
+	rep(i,0,n) {
+		cin >> A[i];
+		ma=max(ma,A[i]);
+	}
+	if((double)(ma/m)>=(double)x/k){
+		cout << "Yes" << endl;
+	}else cout << "No" << endl;
+}

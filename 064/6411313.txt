@@ -1,0 +1,29 @@
+num = int(input())
+tmp1 = []
+tmp2 = []
+tmp1.append('abcbdab')
+tmp2.append('bdcaba')
+tmp1.append('abc')
+tmp2.append('abc')
+tmp1.append('abc')
+tmp2.append('bc')
+
+s = []
+t = []
+
+for i in range(num):
+    s.append(input())
+    t.append(input())
+    
+for i in range(num):
+   sn = s[i]
+   tn = t[i]
+   dp = [[0]*(len(tn)+1) for _ in range(len(sn)+1)]
+
+   for i in range(len(sn)):
+      for j in range(len(tn)):
+         if sn[i] == tn[j]:
+            dp[i+1][j+1] = dp[i][j] + 1
+         else:
+            dp[i+1][j+1] = max(dp[i+1][j], dp[i][j+1])
+   print(dp[len(sn)][len(tn)])

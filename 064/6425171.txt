@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define fol(i,s,g) for(int i=(int)(s); i<(int)(g); i++)
+#define fix(ans,k) fixed << setprecision(k) << ans
+
+int main(){
+    int m,f,b;
+    cin>>m>>f>>b;
+    if(m>=b) cout<<"0\n";
+    else if(m+f>=b) cout<<b-m<<'\n';
+    else cout<<"NA\n";
+    return 0;
+}

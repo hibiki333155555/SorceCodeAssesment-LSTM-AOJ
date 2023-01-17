@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int H;
+int W;
+
+int main(){
+  while(true){
+    cin >> H >> W;
+    if(H == 0 && W == 0) return 0;
+    for(int h = 0; h < H; h++){
+      for(int w = 0; w < W; w++){
+        cout << '#';
+      }
+      cout << endl;
+    }
+    cout << endl;
+  }
+}
+

@@ -1,0 +1,19 @@
+for( int i = 0 ; i < n ; i++ ){
+    cin >> name >> time;
+    q.push(make_pair(name,time));
+  }
+  while(!q.empty()){
+    pair<string, int> p = q.front();
+    if(p.second > 100){
+      count += 100;
+      q.push_back(make_pair(p.first, p.second-100));
+    }
+    else{
+      count += p.second;
+      cout << p.first << " " << p.second << endl;
+    }
+    q.pop();
+  }
+
+}
+

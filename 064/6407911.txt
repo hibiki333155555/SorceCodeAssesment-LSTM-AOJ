@@ -1,0 +1,7 @@
+while True:
+    i = input()
+    if i == "0":
+        break
+
+    print(sum([int(x) for x in i]))
+    

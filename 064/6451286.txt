@@ -1,0 +1,11 @@
+
+fn main() {
+    let x = read_int();
+    println!("{}", x * x * x);
+}
+
+fn read_int() -> i64{
+    let mut buf = String::new();
+    std::io::stdin().read_line(&mut buf);
+    buf.parse().unwrap()
+}

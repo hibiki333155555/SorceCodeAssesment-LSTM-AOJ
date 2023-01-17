@@ -1,0 +1,57 @@
+#include <iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+const int MAX=10000;
+vector<int> Graph[MAX];
+vector<int> Sort;
+int index[MAX],visit[MAX];
+
+void bfs(int i){
+    queue<int> q;
+    q.push(i);
+    visit[i]=1;
+    while(!q.empty()){
+        int top=q.front();
+        for(int j=0;j<Graph[top].size();j++){
+            int temp=Graph[top][j];
+            index[temp]--;
+            if(visit[temp]==0&&index[temp]==0){
+                q.push(temp);
+                Sort.push_back(temp);
+                visit[temp]=1;
+            }
+        }
+        q.pop();
+        visit[top]=2;
+    }
+}
+
+void Order(int n){
+    for(int i=0;i<n;i++){
+        if(visit[i]==0&&index[i]==0){
+                Sort.push_back(i);
+                bfs(i);
+        }
+    }
+}
+
+int main()
+{
+    int m,n,temp1,temp2;
+    cin>>n>>m;
+    for(int i=0;i<n;i++){
+        index[i]=0;
+        visit[i]=0;
+    }
+    for(int i=0;i<m;i++){
+        cin>>temp1>>temp2;
+        Graph[temp1].push_back(temp2);
+        index[temp2]++;
+    }
+    Order(n);
+    for(int i=0;i<n;i++){
+        cout<<Sort[i]<<endl;
+    }
+}
+

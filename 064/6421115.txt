@@ -1,0 +1,29 @@
+H = int(input())
+A = [int(x) for x in input().split()]
+
+def left(i):
+    return 2*i + 1
+def right(i):
+    return 2*i + 2
+def maxHeapify(i):
+    l = left(i)
+    r = right(i)
+
+    if l < H and A[l] > A[i]:
+        largest = l
+    else:
+        largest = i
+    if r < H and A[r] > A[largest]:
+        largest = r
+    if largest != i:
+        inter = A[i]
+        A[i] = A[largest]
+        A[largest] = inter
+        maxHeapify(largest)
+
+def buildMaxHeap():
+    for i in range(H//2 - 1,-1,-1):
+        maxHeapify(i)
+buildMaxHeap()
+print(' '+(' ').join([str(x) for x in A]))
+

@@ -1,0 +1,61 @@
+#include<iostream>
+using namespace std;
+const int MAX = 1e9 + 1;
+long long int merge(int* data, int low, int mid, int high);
+long long int mergeSort(int* data, int low, int high);
+
+int main()
+{
+	int n, i{ 0 };
+	cin >> n;
+	int* data = new int[n] {0};
+	while (n--)
+	{
+		cin >> data[i++];
+	}
+
+	long long int cnt = 0;
+	cnt = mergeSort(data, 0, i);
+	cout << cnt << endl;
+	delete[]data;
+	return 0;
+}
+long long int merge(int* data, int low, int mid, int high)
+{
+	int n1 = mid - low, n2 = high - mid;
+	int* left = new int[n1+1] {0}, * right = new int[n2+1] {0};
+	for (int i = 0; i < n1; ++i)
+		left[i] = data[low + i];
+	for (int i = 0; i < n2; ++i)
+		right[i] = data[mid + i];
+	left[n1] = right[n2] = MAX;
+	long long int cnt = 0;
+	for (int i = low, k = 0, j = 0; i < high; ++i)
+	{
+		if (left[k] <= right[j])
+		{	
+			data[i] = left[k++];
+		}
+		else
+		{
+			data[i] = right[j++];
+			cnt = cnt + n1 - k;
+		}
+	}
+	delete[]left;
+	delete[]right;
+	return cnt;
+}
+
+long long int mergeSort(int* data, int low, int high)
+{
+	long long int mid{ 0 }, cnt{ 0 };
+	if (low + 1 < high)
+	{
+		mid = (low + high) / 2;
+		cnt += mergeSort(data, low, mid);
+		cnt += mergeSort(data, mid, high);
+		cnt += merge(data, low, mid, high);
+	}
+	return cnt;
+}

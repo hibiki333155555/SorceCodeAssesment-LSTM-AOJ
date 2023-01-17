@@ -1,0 +1,4 @@
+x=int(input(2))
+print(x*3)
+x=int(input(3))
+print(x*3)

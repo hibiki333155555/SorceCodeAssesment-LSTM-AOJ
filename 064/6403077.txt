@@ -1,0 +1,17 @@
+l=input().split()
+
+a=int(l[0])
+b=int(l[2])
+op=str(l[1])
+r=0
+if op=="+":
+    r=a+b
+elif op=="-":
+    r=a-b
+elif op=="*":
+    r=a*b
+elif op=="/":
+    r=a//b
+elif op=="?":
+    end
+print(r)

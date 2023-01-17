@@ -1,0 +1,11 @@
+require('fs').readFileSync(0,'utf8').split`
+`.map(l=>{
+    [H,W]=l.split` `.map(n=>+n);
+    for(c='';H--;)
+        for(;W--;)
+            c += (H+W)%2?'?':'.';
+        
+        console.log(c+'\n')
+    
+    console.log('\n')
+});

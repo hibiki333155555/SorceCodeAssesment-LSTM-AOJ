@@ -1,0 +1,30 @@
+import sys
+from collections import defaultdict
+
+_ = input()
+d = defaultdict(lambda:0)
+
+cnt = 0
+for line in sys.stdin:
+    if line[0] == '3':
+        l, r = map(int, line[2:].split())
+        if r - l < len(d):
+            a = [i for i in range(l, r+1) if i in d]
+        else:
+            a = [i for i in d.keys() if l <= i <= r]
+        a.sort()
+        for i in a:
+            for j in range(d[i]): print(i)
+        continue
+    
+    x = int(line[2:])
+    if line[0] == '0':
+        d[x] += 1
+        cnt += 1
+        print(cnt)
+    elif line[0] == '1':
+        print(d[x])
+    else:
+        cnt -= d[x]
+        d[x] = 0
+

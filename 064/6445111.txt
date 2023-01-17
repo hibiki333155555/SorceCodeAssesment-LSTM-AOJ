@@ -1,0 +1,35 @@
+#include <iostream>
+#include <iomanip>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+   int n, x;
+
+   while(true) {
+      cin >> n >> x;
+      if(n >= x-3) n = x-3;
+
+      int count = 0;
+      for(int i=1; i<n; i++) 
+      {
+         for(int j=2; j<n; j++) 
+         {
+            if(i!=j && i+j <= x-1) 
+            {
+               for(int k=3; k<n; k++) {
+                  if(i!=k && j!=k)
+                  {
+                     int sum = i + j + k;
+                     if(sum == x) count++;
+                  }
+               }
+            }
+
+
+         }
+      }
+
+      cout << count << "\n";
+   }
+}

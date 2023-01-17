@@ -1,0 +1,14 @@
+#include<stdio.h>
+int main(){
+    int a,i;
+    scanf("%d",&a);
+    
+    int hai[a];
+    for(i=0;i<a;i++){
+        scanf("%d",&hai[i]);
+    }
+    for(i=5;i>0;i--){
+        printf("%d\n%",hai[i]);
+
+}
+

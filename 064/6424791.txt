@@ -1,0 +1,44 @@
+#include <iostream>
+
+#define N 105
+
+using namespace std;
+
+void display(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        if (i != 0) {
+            cout << " ";
+        }
+        cout << arr[i];
+    }
+
+}
+
+int main() {
+    int arr[N];
+    int n = 0;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    display(arr, n);
+    cout << endl;
+    // 插入排序
+    for (int i = 1; i < n; i++) {
+        int tmp = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > tmp) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = tmp;
+        display(arr, n);
+        if (i != n - 1) {
+            cout << endl;
+        }
+    }
+    return 0;
+}
+
+
+

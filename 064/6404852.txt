@@ -1,0 +1,23 @@
+N, M = map(int, input().split())
+graph = [[] for _ in range(N)]
+
+for _ in range(M):
+    s, t = map(int, input().split())
+    graph[s].append(t)
+
+def dfs(now):
+    seen[now] = True
+    for to in graph[now]:
+        if seen[to]: continue
+        dfs(to)
+    order.append(now)
+
+seen = [False] * N
+order = []
+for s in range(N):
+    if seen[s]: continue
+    dfs(s)
+
+for v in order[::-1]:
+    print(v)
+

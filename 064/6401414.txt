@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main()  {
+    int i, e;
+    static int n[26];
+    char st, al[53] = 'abcdefghijklmnopqrstuvwxyzABCDEGFGHUJKLMNOPQRSTUVWXYZ';
+    do {
+        e = scanf("%c", &st);
+        for (i=0;i<52;i++) {
+            if(a[i]==st) {
+                n[i%26]++;
+            }
+        } while(e!=EOF);
+        for (i=0;i<26;i++)
+        printf("%c %d\n", al[i], n[i]);
+        return 0;
+    }
+

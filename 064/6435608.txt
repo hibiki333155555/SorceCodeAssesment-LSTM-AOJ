@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int INF = 1001001001;
+const int MOD = 1000000007;
+
+int main(){
+    int n;cin>>n;
+    vector<int> s(n);
+    for(int i=0;i<n;i++) cin>>s.at(i);
+    int m;cin>>m;
+    vector<int> t(m);
+    for(int i=0;i<m;i++) cin>>t.at(i);
+    int cnt = 0;
+    for(int i=0;i<m;i++) {
+        int l = 0;
+        int r = n;
+        while(r-l>0) {
+            int mid = (l+r)/2;
+            if(s.at(mid)==t.at(i)) {
+                cnt++;
+                break;
+            } else if(s.at(mid) > t.at(i)) r=mid;
+            else l=mid+1;
+        }
+    }
+    cout << cnt << endl;
+}

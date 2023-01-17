@@ -1,0 +1,121 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+template< typename T >
+struct edge {
+  int src, to;
+  T cost;
+
+  edge(int to, T cost) : src(-1), to(to), cost(cost) {}
+
+  edge(int src, int to, T cost) : src(src), to(to), cost(cost) {}
+
+  edge &operator=(const int &x) {
+    to = x;
+    return *this;
+  }
+
+  operator int() const { return to; }
+};
+
+template< typename T >
+using Edges = vector< edge< T > >;
+template< typename T >
+using WeightedGraph = vector< Edges< T > >;
+using UnWeightedGraph = vector< vector< int > >;
+template< typename T >
+using Matrix = vector< vector< T > >;
+template< typename T >
+vector< T > dijkstra(WeightedGraph< T > &g, int s) {
+  const auto INF = numeric_limits< T >::max();
+  vector< T > dist(g.size(), INF);
+  using Pi = pair< T, int >;
+  priority_queue< Pi, vector< Pi >, greater< Pi > > que;
+  dist[s] = 0;
+  //exit(0);
+  que.emplace(dist[s], s);
+  //exit(0);
+  while(!que.empty()) {
+    T cost;
+    int idx;
+    tie(cost, idx) = que.top();
+    que.pop();
+    if(dist[idx] < cost) continue;
+    for(auto &e : g[idx]) {
+      auto next_cost = cost + e.cost;
+      if(dist[e.to] <= next_cost) continue;
+      dist[e.to] = next_cost;
+      que.emplace(dist[e.to], e.to);
+    }
+  }
+  return dist;
+}
+int main() {
+  ll h,w;
+  cin>>h>>w;
+  vector<string> v(h);
+  for(int i=0;i<h;i++){
+    cin>>v[i];
+  }
+  WeightedGraph< int > g(h*w);
+  /*for(int i = 0; i < E; i++) {
+    int a, b, c;
+    scanf("%d %d %d", &a, &b, &c);
+    g[a].emplace_back(b, c);
+  }*/
+  for(int i=0;i<h-1;i++){
+    for(int j=0;j<w;j++){
+      if((v[i][j]=='S'||v[i][j]=='.')&&v[i+1][j]!='#'){
+        g[w*i+j].emplace_back(w*(i+1)+j,1);
+      }
+      if((v[i][j]=='D')&&v[i+1][j]!='#'){
+        g[w*i+j].emplace_back(w*(i+1)+j,0);
+      }
+    }
+  }
+  for(int i=1;i<h;i++){
+    for(int j=0;j<w;j++){
+      if((v[i][j]=='S'||v[i][j]=='.')&&v[i-1][j]!='#'){
+        g[w*i+j].emplace_back(w*(i-1)+j,1);
+      }
+      if((v[i][j]=='U')&&v[i-1][j]!='#'){
+        g[w*i+j].emplace_back(w*(i-1)+j,0);
+      }
+    }
+  }
+  for(int i=0;i<h;i++){
+    for(int j=0;j<w-1;j++){
+      if((v[i][j]=='S'||v[i][j]=='.')&&v[i][j+1]!='#'){
+        g[w*i+j].emplace_back(w*i+j+1,1);
+      }
+      if((v[i][j]=='R')&&v[i][j+1]!='#'){
+        g[w*i+j].emplace_back(w*i+j+1,0);
+      }
+    }
+  }
+  for(int i=0;i<h;i++){
+    for(int j=1;j<w;j++){
+      if((v[i][j]=='S'||v[i][j]=='.')&&v[i][j-1]!='#'){
+        g[w*i+j].emplace_back(w*i+j-1,1);
+      }
+      if((v[i][j]=='L')&&v[i][j-1]!='#'){
+        g[w*i+j].emplace_back(w*i+j-1,0);
+      }
+    }
+  }
+  ll st,en;
+  for(int i=0;i<h;i++){
+    for(int j=0;j<w;j++){
+      if(v[i][j]=='S'){
+        st=w*i+j;
+      }
+      if(v[i][j]=='G'){
+        en=w*i+j;
+      }
+    }
+  }
+  //cout<<st<<endl;
+ // return 0;
+  if(dijkstra(g, st)[en]!=2147483647) cout<<dijkstra(g, st)[en]<<endl;
+  else cout<<-1<<endl;
+}

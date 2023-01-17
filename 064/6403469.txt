@@ -1,0 +1,84 @@
+#include<iostream>
+
+using namespace std;
+
+static const int N = 100;
+/*此运算会取到四字节整数最大正值*/
+static const int INFTY = (1LL<<32);
+static const int NTL = -1;
+
+/*路径矩阵，用来记录两个点的中间点是谁*/
+int P[N][N];
+
+/*用来记录两个结点之间的最短路径*/
+long long int dis[N][N];
+
+void Floyd(int n)
+{
+	for(int k=0;k<n;k++)
+	{
+		for(int i=0;i<n;i++)
+		{
+			if(dis[i][k]==INFTY)continue;
+			for (int j = 0; j < n; j++)
+			{
+				if (dis[i][k] + dis[k][j] < dis[i][j])
+				{
+					dis[i][j] = dis[i][k] + dis[k][j];
+					P[i][j] = k;
+				}
+			}
+		}
+	}
+}
+
+int main()
+{
+	int n = 0, e = 0;
+	cin >> n >> e;
+	/*初始化各个矩阵*/
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+		{
+			dis[i][j] = INFTY;
+			P[i][j] = NTL;
+			if(i==j)
+				dis[i][j]=0; 
+		}
+	for (int i = 0; i < e; i++)
+	{
+		int start, end, p;
+		cin >> start >> end >> p;
+		dis[start][end]=p;
+	}
+
+	Floyd(n);
+
+	/*检查图中是否存在负回路*/
+	for (int i = 0; i < n; i++)
+	{
+		if (dis[i][i] < 0)
+		{
+			cout << "NEGATIVE CYCLE" << endl;
+			return 0;
+		}
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		int iffirst = 1;
+		for (int j = 0; j < n; j++)
+		{
+			if (iffirst)
+				iffirst = 0;
+			else
+				cout << " ";
+			if (dis[i][j] == INFTY)
+				cout << "INF";
+			else
+				cout<<dis[i][j];
+		}
+		cout << endl;
+	}
+	return 0;
+}

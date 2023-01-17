@@ -1,0 +1,16 @@
+n = int(input())
+list_ = [[[0 for i in range(10)] for j in range(3)] for k in range(4)]
+for i in range(n):
+     b, f, r, v = map(int, input().split())
+     list_[b-1][f-1][r-1] += v
+for num, i in enumerate(list_):
+    for j in i:
+        for num_, k in enumerate(j):
+            print(' ', end='')
+            print(k, end='')
+        print()
+    if num < 3:
+        for l in range(20):
+            print('#', end='')
+        print()
+            

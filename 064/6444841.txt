@@ -1,0 +1,13 @@
+#include<iostream>
+#include<math.h>
+#include<iomanip>
+
+using namespace std;
+
+int main() {
+    float x1, x2, y1, y2, d;
+    cin >> x1 >> y1 >> x2 >> y2;
+    d = sqrt((x2-x1)*(x2-x1) +(y2-y1)*(y2-y1));
+    cout << setprecision(8) << fixed << d << endl;
+    return 0;
+}

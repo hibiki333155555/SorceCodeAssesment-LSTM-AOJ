@@ -1,0 +1,69 @@
+import sys
+sys.setrecursionlimit(10**6)
+import queue
+N =  int(input())
+G=[{} for i in range(N)]
+dp = [{} for i in range(N)]
+for i in range(N-1):
+    s,t,w=map(int,input().split())
+    G[s][t]=w
+    G[t][s]=w
+    dp[s][t]=0
+    dp[t][s]=0
+#普通の木dp
+def dfs(v):
+    check[v]=1
+    for i in G[v]:
+        if check[i]==0:
+            dfs(i)
+            #dp処理
+            bottom[v] = max(bottom[v],bottom[i] + G[v][i])
+            dp[v][i]=bottom[i]
+
+def bfs(v):
+    check=[0 for i in range(N)]
+    q = queue.Queue()
+    check[v]=1
+    q.put(v)
+    while not q.empty():
+        v = q.get()
+        temp = []
+        ind = []
+        top = -1
+        for i in G[v]:
+            if check[i]==0:
+                check[i]=1
+                q.put(i)
+                temp.append(dp[v][i]+G[v][i])
+                ind.append(i)
+            else:
+                top = i
+        len_temp = len(temp)
+        temp_forward = [0]
+        temp_backward = [0]
+        for i in range(len_temp-1):
+            #両端からの累積！
+            temp_forward.append(max(temp_forward[-1],temp[i]))
+            temp_backward.append(max(temp_backward[-1],temp[len_temp-1-i]))
+        for i in range(len_temp):
+            #マージ！
+            dp[ind[i]][v] = max(temp_forward[i],temp_backward[len_temp-1-i])
+            if top>=0:
+                dp[ind[i]][v] = max(dp[ind[i]][v],dp[v][top]+G[v][top])
+
+
+check=[0 for i in range(N)]
+check[0]=1
+bottom = [0 for i in range(N)]#最も深い底までの距離
+dfs(0)
+#print(dp)
+check[0]=1
+bfs(0)
+#print(dp)
+for i in range(N):
+    ans = 0
+    for j in G[i]:
+        ans = max(G[i][j]+dp[i][j],ans)
+    print(ans)
+
+

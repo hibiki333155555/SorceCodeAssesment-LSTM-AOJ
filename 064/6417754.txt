@@ -1,0 +1,104 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll,ll> PP;
+//#define MOD 1000000007
+#define MOD 998244353
+#define INF 2305843009213693951
+//#define INF 810114514
+#define PI 3.141592653589
+#define setdouble setprecision
+#define REP(i,n) for(ll i=0;i<(n);++i)
+#define OREP(i,n) for(ll i=1;i<=(n);++i)
+#define RREP(i,n) for(ll i=(n)-1;i>=0;--i)
+#define ALL(v) (v).begin(), (v).end()
+#define GOODBYE do { cout << "-1" << endl; return 0; } while (false)
+#define MM <<" "<<
+#define Endl endl
+#define debug true
+#define debug2 false
+
+
+
+int main(void){
+    
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+
+    ll H,W,N;
+    cin >> H >> W >> N;
+    
+    //xがH、yがWなのが嫌なのでswapする
+    swap(H,W);
+    
+    ll sx,sy,gx,gy;
+    cin >> sx >> sy >> gx >> gy;
+    sx--;sy--;gx--;gy--;
+    vector<ll> X(N),Y(N),K(N);
+    REP(i,N){
+        cin >> X[i] >> Y[i] >> K[i];
+        X[i]--;Y[i]--;
+    }
+
+    vector<vector<bool>> wall(H,vector<bool>(W,false));
+    REP(i,N){
+
+        //y- x-
+        for(ll y=Y[i],x=X[i]-K[i];y>=Y[i]-K[i];y--,x++){
+            wall[y][x] = true;
+        }
+
+        //y+ x-
+        for(ll y=Y[i],x=X[i]-K[i];y<=Y[i]+K[i];y++,x++){
+            wall[y][x] = true;
+        }
+
+        //y- x+
+        for(ll y=Y[i],x=X[i]+K[i];y>=Y[i]-K[i];y--,x--){
+            wall[y][x] = true;
+        }
+
+        //y+ x+
+        for(ll y=Y[i],x=X[i]+K[i];y<=Y[i]+K[i];y++,x--){
+            wall[y][x] = true;
+        }
+    }
+
+    queue<pair<ll,ll>> Que;
+    vector<vector<bool>> queued(H,vector<bool>(W,false));
+
+    Que.push({sy,sx});
+    queued[sy][sx] = true;
+
+    ll dx[4] = {1,0,-1,0};
+    ll dy[4] = {0,1,0,-1};
+
+    while(!Que.empty()){
+
+        ll ty = Que.front().first, tx = Que.front().second;
+        Que.pop();
+
+        REP(k,4){
+            ll y = ty+dy[k],x = tx+dx[k];
+            if(!(0<=y && y<H))continue;
+            if(!(0<=x && x<W))continue;
+            if(wall[y][x])continue;
+
+            if(!queued[y][x]){
+                Que.push({y,x});
+                queued[y][x] = true;
+            }
+
+        }
+
+
+    }
+
+    if(queued[gy][gx]){
+        cout << "Yes" << endl;
+    }else{
+        cout << "No" << endl;
+    }
+
+    return 0;
+}

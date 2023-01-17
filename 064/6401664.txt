@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+const double eps=1e-10;
+struct V{
+	double x,y;
+	V(double a=0.0,double b=0.0){x=a;y=b;}
+};
+double operator * (const V&u,const V&v){return u.x*v.x+u.y*v.y;}
+double operator ^ (const V&u,const V&v){return u.x*v.y-u.y*v.x;}//u x v 
+V operator +(const V&u,const V&v){return V(u.x+v.x,u.y+v.y);}
+V operator -(const V&u,const V&v){return V(u.x-v.x,u.y-v.y);}
+V operator *(const double&k,const V&v){return V(k*v.x,k*v.y);}
+V operator *(const V&v,const double&k){return V(k*v.x,k*v.y);}
+V operator /(const V&v,const double&k){return V(v.x/k,v.y/k);}
+V operator /(const double&k,const V&v){return V(v.x/k,v.y/k);}
+double norm(const V&v){return sqrt(v.x*v.x+v.y*v.y);}
+struct line{
+	V a,b,dir;
+	line(){}
+	line(V u, V v){a=u;b=v;dir=(v-u)/norm(v-u);}
+};
+V Get_Projection_Point(line l,V x){
+	return l.a+(((x-l.a)*l.dir)*l.dir);
+} 
+V Get_Reflection_Point(line l,V x){
+	return Get_Projection_Point(l,x)*2.0-x;
+} 
+bool On_Line(line l,V x){
+	return abs(l.dir^(x-l.a))<eps;
+}
+int Relative_Pos(line l,V x){
+	if(On_Line(l,x)){
+		if(((x-l.a)*l.dir)<-eps) return 3;//on back
+		else if(((x-l.a)*(x-l.b))<eps) return 5;//on seg
+		else return 4;//on front
+	}
+	else{
+		if((l.dir^(x-l.a))>eps) return 1;//counter clock wise
+		else return 2;//clock wise
+	}
+}
+bool Is_Parallel(line l1,line l2){
+	return abs(l1.dir^l2.dir)<eps;
+}
+bool Is_Orthogonal(line l1,line l2){
+	return abs(l1.dir*l2.dir)<eps;
+}
+bool Is_Intersect(line l1,line l2){
+	if(min(l1.a.x,l1.b.x)>max(l2.a.x,l2.b.x)+eps||min(l2.a.x,l2.b.x)>max(l1.a.x,l1.b.x)+eps
+	||min(l1.a.y,l1.b.y)>max(l2.a.y,l2.b.y)+eps||min(l2.a.y,l2.b.y)>max(l1.a.y,l1.b.y)+eps) return false;
+	return  ((l1.a-l2.a)^l2.dir)*((l1.b-l2.a)^l2.dir)<eps&&((l2.a-l1.a)^l1.dir)*((l2.b-l1.a)^l1.dir)<eps;
+} 
+V Cross_Point(line l1,line l2){
+	return l1.a+((((l2.a-l1.a)^l2.dir)/(l1.dir^l2.dir))*l1.dir);
+}
+int main(void){
+	ios::sync_with_stdio(false);cin.tie(0);
+	int T;cin>>T;cout<<fixed<<setprecision(12);
+	V a,b,c,d,res;
+	while(T--){
+		cin>>a.x>>a.y>>b.x>>b.y>>c.x>>c.y>>d.x>>d.y;
+		res=Cross_Point(line(a,b),line(c,d));
+		cout<<res.x<<" "<<res.y<<"\n";
+	}
+	return 0;
+}

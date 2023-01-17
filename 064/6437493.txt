@@ -1,0 +1,12 @@
+include Math
+
+a,b,c = gets.split.map(&:to_f)
+theta = c / 180 * PI
+
+S = a*b*sin(theta)/2
+L = a + b + sqrt(a**2 + b**2 - 2*a*b*cos(theta))
+h = b*sin(theta)
+
+printf("%.5f\n", S)
+printf("%.5f\n", L)
+printf("%.5f\n", h)

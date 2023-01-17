@@ -1,0 +1,3 @@
+main = getLine >>=
+  (\[a,b] -> (show a*b) ++ " " ++ (show 2*(a+b)))
+  . map read . words

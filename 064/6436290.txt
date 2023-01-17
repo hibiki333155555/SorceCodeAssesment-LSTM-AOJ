@@ -1,0 +1,28 @@
+
+def resolve(arr)
+  max_val = -Float::INFINITY
+  min_val = arr[0]
+
+  arr[1..(arr.size)].each do |val|
+    if val - min_val > max_val
+      max_val = val - min_val
+    end
+
+    if val < min_val
+      min_val = val
+    end
+  end
+  p max_val
+  max_val - min_val
+end
+
+n = gets.to_i
+
+arr = []
+n.times do
+  arr << gets.to_i
+end
+
+result = resolve(arr)
+puts result
+

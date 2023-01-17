@@ -1,0 +1,41 @@
+#include <iostream>
+
+struct Point {
+  int x, y;
+};
+
+bool check(
+  const Point& p0, const Point& p1,
+  const Point& p2, const Point& p3
+) {
+  int s01_2 = (p2.y-p0.y)*(p1.x-p0.x) - (p1.y-p0.y)*(p2.x-p0.x);
+  int s01_3 = (p3.y-p0.y)*(p1.x-p0.x) - (p1.y-p0.y)*(p3.x-p0.x);
+  if (s01_2 * s01_3 > 0) return false;
+  int s23_0 = (p0.y-p2.y)*(p3.x-p2.x) - (p3.y-p2.y)*(p0.x-p2.x);
+  int s23_1 = (p1.y-p2.y)*(p3.x-p2.x) - (p3.y-p2.y)*(p1.x-p2.x);
+  if (s23_0 * s23_1 > 0) return false;
+  int d_01_23 = (p1.y-p0.y)*(p3.x-p2.x) - (p1.x-p0.x)*(p3.y-p2.y);
+  if (d_01_23 != 0) return true;
+  int z0 = (p0.y-p0.y)*(p1.y-p0.y) + (p1.x-p0.x)*(p0.x-p0.x);
+  int z1 = (p1.y-p0.y)*(p1.y-p0.y) + (p1.x-p0.x)*(p1.x-p0.x);
+  int z2 = (p2.y-p0.y)*(p1.y-p0.y) + (p1.x-p0.x)*(p2.x-p0.x);
+  int z3 = (p3.y-p0.y)*(p1.y-p0.y) + (p1.x-p0.x)*(p3.x-p0.x);
+  int min0 = z0 < z1 ? z0 : z1;
+  int max0 = z0 > z1 ? z0 : z1;
+  int min1 = z2 < z3 ? z2 : z3;
+  int max1 = z2 > z3 ? z2 : z3;
+  if (max1 < min0) return false;
+  if (max0 < min1) return false;
+  return true;
+}
+
+int main() {
+  int q; std::cin >> q;
+  for (int i=0; i<q; i++) {
+    Point p0, p1, p2, p3;
+    std::cin >> p0.x >> p0.y >> p1.x >> p1.y;
+    std::cin >> p2.x >> p2.y >> p3.x >> p3.y;
+    std::cout << check(p0, p1, p2, p3) << std::endl;
+  }
+}
+

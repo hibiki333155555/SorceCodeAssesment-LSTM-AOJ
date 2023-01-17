@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    vector<int>a(3),b(3);
+    cin>>a[0]>>a[1]>>a[2]>>b[0]>>b[1]>>b[2];
+    if(a<b)swap(a,b);
+    if(make_pair(a[1],a[2])<=make_pair(b[1],b[2])){
+        cout<<a[0]-b[0]<<endl;
+    }else{
+        cout<<a[0]-b[0]+1<<endl;
+    }
+}
+

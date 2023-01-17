@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+using LL = long long;
+using P = pair<int, int>;
+template <typename T = int>
+using VV = vector<vector<T>>;
+
+#include "scc_graph.cpp";
+
+int main() {
+  int n, m;
+  cin >> n >> m;
+
+  SCC_Graph scc_g(n);
+  for (int i = 0; i < m; ++i) {
+    int s, t;
+    cin >> s >> t;
+    scc_g.add_edge(s, t);
+  }
+
+  scc_g.scc();
+
+  int q;
+  cin >> q;
+
+  for (int i = 0; i < q; ++i) {
+    int u, v;
+    cin >> u >> v;
+    cout << scc_g.is_same(u, v) << "\n";
+  }
+  
+  // cout << ans << endl;
+  // cout << (ok ? "Yes" : "No") << endl;
+}

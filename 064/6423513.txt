@@ -1,0 +1,23 @@
+def calc(n, w):
+    dp = [[0 for j in range(n)] for i in range(n)]
+    for l in range(1, n):
+        if l % 2 == 1:
+            for i in range(n - l):
+                if dp[i + 1][l - 2] == l - 1 and abs(w[i] - w[i + l]) <= 1:
+                    dp[i][l] = l + 1
+                    continue
+        for i in range(n - l):
+            for k in range(l):
+                if dp[i][l] < dp[i][k] + dp[i + k + 1][l - k - 1]:
+                    dp[i][l] = dp[i][k] + dp[i + k + 1][l - k - 1]
+    return dp[0][n - 1]
+    
+
+
+while True:
+    N = int(input())
+    if N == 0:
+        break
+    l = list(map(int, input().split()))
+    ans = calc(N, l)
+    print(ans)

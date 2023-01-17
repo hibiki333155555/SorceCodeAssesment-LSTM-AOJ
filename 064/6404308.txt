@@ -1,0 +1,6 @@
+import math 
+r = float(input())
+a = math.pi * r*r
+b = math.pi*2*r
+print(f"{a:.f6} {b:.f6}")
+

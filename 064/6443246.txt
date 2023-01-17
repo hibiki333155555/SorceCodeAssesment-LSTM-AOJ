@@ -1,0 +1,11 @@
+r,c = gets.split.map(&:to_i)
+matrix = []
+last_line = Array.new(c+1, 0)
+r.times do
+    array = gets.split(' ').map(&:to_i)
+    array << array.inject(:+)
+    matrix.push(array)
+    (c+1).times {|i| last_line[i] += array[i]}
+end
+matrix.push(last_line)
+matrix.each {|m| puts m.join(' ')}

@@ -1,0 +1,17 @@
+x, y = map(int, input().split())
+
+if x > y:
+    greatest = 0
+    for i in range(1, y+1):
+        if x % i == 0 and y % i == 0: 
+            greatest = i
+
+if y > x: 
+    greatest = 0
+    for i in range(1, x+1):
+        if x % i == 0 and y % i == 0: 
+            greatest = i
+
+if y == x: 
+    greatest = x
+print(greatest)

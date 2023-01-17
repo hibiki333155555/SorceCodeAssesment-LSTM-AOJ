@@ -1,0 +1,6 @@
+N =int(input())
+A = list(map(int, input().split()))
+B = A.reverse()
+#for i in range(N):
+#print(" ".join(map(str,B)))
+print(B, sep=" ", end="")

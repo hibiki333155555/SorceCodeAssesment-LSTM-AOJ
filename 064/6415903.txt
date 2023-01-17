@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(ll i=0;i<n;i++)
+#define repl(i,l,r) for(ll i=(l);i<(r);i++)
+#define per(i,n) for(ll i=(n)-1;i>=0;i--)
+#define perl(i,r,l) for(ll i=r-1;i>=l;i--)
+#define fi first
+#define se second
+#define pb push_back
+#define ins insert
+#define pqueue(x) priority_queue<x,vector<x>,greater<x>>
+#define all(x) (x).begin(),(x).end()
+#define CST(x) cout<<fixed<<setprecision(x)
+#define vtpl(x,y,z) vector<tuple<x,y,z>>
+#define rev(x) reverse(x);
+using ll=long long;
+using vl=vector<ll>;
+using vvl=vector<vector<ll>>;
+using pl=pair<ll,ll>;
+using vpl=vector<pl>;
+using vvpl=vector<vpl>;
+const ll MOD=1000000007;
+const ll MOD9=998244353;
+const int inf=1e9+10;
+const ll INF=4e18;
+const ll dy[9]={0,1,-1,0,1,1,-1,-1,0};
+const ll dx[9]={1,0,0,-1,1,-1,1,-1,0};
+template<class T> inline bool chmin(T& a, T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+ll det(pl a,pl b,pl c){//a->bとb->cの周り方、正なら時計回り
+    ll ax=b.first-a.first,ay=b.second-a.second;
+    ll bx=c.first-b.first,by=c.second-b.second;
+    return ax*by-ay*bx;
+}
+int main(){
+    ll n;cin >> n;
+    vl v(n);rep(i,n)cin >> v[i];
+    vpl st;
+    rep(i,n){
+        pl now={i,v[i]};
+        if(st.size()<2){
+            st.push_back(now);
+            continue;
+        }
+        ll len=st.size();
+        while(len>=2&&det(st[len-2],st[len-1],now)>=0){
+            st.pop_back();len--;
+        }
+        st.push_back(now);
+    }
+    ll ans=0;
+    rep(i,st.size()-1){
+        chmax(ans,st[i+1].first-st[i].first);
+    }
+    cout << ans << endl;
+}   
+

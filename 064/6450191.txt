@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<string.h>
+
+int main(void){
+    int i,num,m,count,counter,number;
+    char str[201],sub[201];
+    
+    scanf("%s",str);
+    
+    counter = strlen(str);
+    
+    while(str[0] != '-'){
+        scanf("%d",&m);
+        
+        for(i = 0;i < m;i++){
+            scanf("%d",&num);
+            
+            number = 0;
+            
+            //シャッフルして変わらない場所をsubに入れる
+            for(count = num;count < counter;count++){
+                sub[number] = str[count];
+                
+                number++;
+            }
+            
+            //変わる場所をsubに入れる
+            for(count = 0;count < num;count++){
+                sub[number] = str[count];
+                
+                number++;
+            }
+            
+            //subの中身をstrに入れる
+            for(count = 0;count < counter;count++){
+                str[count] = sub[count];
+            }
+        }
+        
+        printf("%s\n",str);
+        
+        scanf("%s",str);
+    }
+    
+    return 0;
+}

@@ -1,0 +1,100 @@
+'use strict'
+
+class Dice{
+    /**
+     *    +--+
+     *    |0T |
+     * +--+--+--+--+
+     * |3W |1S |2E |4N|
+     * +--+--+--+--+
+     *    |5B |
+     *    +--+
+     */
+    constructor(T, S, E, W, N, B){
+        this.T = T;
+        this.S = S;
+        this.E = E;
+        this.W = W;
+        this.N = N;
+        this.B = B;
+    }
+    //roll(){
+    //const that =Object.assing({}, this);
+    //}
+    West(){
+       let t= this.W;
+       this.W = this.T; this.T=this.E; this.E=this.B; this.B=t;
+    }
+    East(){   
+       let t=this.E;
+       this.E=this.T; this.T=this.W; this.W=this.B; this.B=t;
+    }
+    North(){
+        let t=this.N;
+        this.N=this.T; this.T=this.S; this.S=this.B; this.B=t;
+    }
+    South(){
+        let  t=this.S;
+        this.S=this.T; this.T=this.N; this.N=this.B; this.B=t;
+    }
+}
+
+function main(lins) {
+    //let [a, b, c] = lins[0].split(' ').map(Number);
+    //let a = [...Array(n)].map(_ => Array(m).fill(0));
+    //for(let i=0; i<n; i++){a[i] = lins[i+1].split(' ').map(Number);}
+    //let al = "abcdefghijklmnopqrstuvwxyz".split('');
+    //let dc = {}; for(let i=0; i < al.length; i++) dc[al[i]] = 0;
+    const n = Number(lins[0]);
+    let d = new Array(n);
+    for(let i=0; i<n; i++){
+        d[i] = new Array(6);
+        d[i] = lins[i+1].split(' ').map(Number);
+    }
+    let flg = false;
+    for(let i=0 ; i<n-1; i++){
+        let ds = new Dice(d[i][0], d[i][1], d[i][2], d[i][3], d[i][4], d[i][5]);
+        //console.log(d[i]);
+        for(let j=i+1; j<n; j++){
+                if(d[j][1] ==ds.W || d[j][1] ==ds.E){
+                    ds.West();
+                }
+            for(let k=0; k<3; k++){
+                if(d[j][1] == ds.S){ break; }
+                ds.South();
+            }
+            for(let k=0; k<3; k++){
+                if(d[j][0] == ds.T){ break; }
+                ds.West();
+            }
+            if(d[j][0] == ds.T && d[j][1] == ds.S && d[j][2] == ds.E && d[j][3] == ds.W && d[j][4] == ds.N && d[j][5] == ds.B) {
+                flg = true;
+                break;
+            } 
+        }
+        //console.log(ds);
+        //console.log(d[i+1]); console.log("\n")
+        if(flg) break;
+    }
+    if(flg) console.log("No");
+    else  console.log("Yes");
+
+    // console.log(n.toFixed(12))
+    //s =  s.substring(h) + s.slice(0, h);
+    //cnt = lins.join('\n').split(/ |\n/).filter(e => e.toLowerCase() === w).length
+    //ss.includes(p)
+    //ln.replace(/[a-z]/gi, c => dc[c.toLowerCase()]++)
+    //ln.split('').map(c => c.match(/[a-z]/gi) ? dc[c.toLowerCase()]++ : c)
+    //al.forEach( a => console.log( a + " : " + dc[a] ) )
+    //s.reduce((ac, v) => ac + v,0);
+    //console.table(p);
+    //process.stdout.write(n);
+}
+const lines = []
+const readline = require('readline').createInterface({
+   input: process.stdin,
+   output: process.stdout
+})
+readline.on('line', line => lines.push(line))
+readline.on('close', () => main(lines))
+

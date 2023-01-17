@@ -1,0 +1,11 @@
+#include <stdio.h>
+int main()
+{
+//tanvir
+    float r;
+    //double r
+    double pi=3.1415927;
+    scanf("%f",&r);
+    printf("%f %f\n",pi*r*r,2*pi*r);
+    return 0;
+}

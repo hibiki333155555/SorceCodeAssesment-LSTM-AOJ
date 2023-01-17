@@ -1,0 +1,35 @@
+import java.util.*;
+
+class Solve{
+    private Scanner sc = new Scanner(System.in);
+    private int cnt = 0;
+    private void Finish(){
+        this.sc.close();
+    }
+    private int[] Div(int a,int b,int c){
+        int[] ded = new int[c];
+        int k=0;
+        for(int i=1;i<=c;i++){
+            if(c % i == 0) ded[k++]=i;
+        }
+        return ded;
+    }
+    public void Do(){
+        int a = sc.nextInt();
+        int b = sc.nextInt();
+        int c = sc.nextInt();
+        int[] d = this.Div(a,b,c);
+        for(int i=0, l=d.length ; i<l ; i++){
+            int v = d[i];
+            if( v == 0 ) break;
+            if( a <= v && v <= b ) this.cnt++;
+        }
+        System.out.println(this.cnt);
+        Finish();
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

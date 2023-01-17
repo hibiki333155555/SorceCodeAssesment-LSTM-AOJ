@@ -1,0 +1,46 @@
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// void f(int sum, int vec[],int n){
+//     if(sum>=80)cout<<"A"<<endl;
+//     else if(65<=sum) cout<<"B"<<endl;
+//     else if(50<=sum) cout<<"C"<<endl;
+//     else if(30<=sum && vec[2]>=50) cout<<"C"<<endl;
+//     else if(30<=sum && vec[2]<50) cout<<"D"<<endl;
+//     else if(sum<30) cout<<"F"<<endl;
+// }
+// int main(){
+//     int vec[3];   
+//     while(1){
+//         for(int i=0; i<3; i++){
+//             cin>>vec[i];
+//         }
+//         if(vec[0]==-1 && vec[1]==-1 && vec[2]==-1) break;
+//         else if(vec[0]==-1 || vec[1]==-1 && vec[2] !=-1) cout<<"F"<<endl;
+//         else if(vec[0] !=-1 && vec[1] !=-1 && vec[2] !=-1){
+//             int sum=vec[0]+vec[1]+vec[2];
+//             f(sum, vec,3);
+//         }
+//         else if(vec[0] !=-1 && vec[1] !=-1 && vec[2] ==-1){
+//             int sum=vec[0]+vec[1];
+//             f(sum, vec,3);
+//         }
+//     }
+// }
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    int m,f,r;
+    while(1){
+        cin>> m>>f>>r;
+        if(m==-1 && f==-1 && r==-1) break;
+        else if(m==-1 || f==-1) cout<< "F"<<endl;
+        else if(m+f>=80) cout<< "A"<<endl;
+        else if(m+f>=65) cout<< "B"<<endl;
+        else if(m+f>=50) cout<< "C"<<endl;
+        else if(m+f>=30 && r>=50) cout<< "C"<<endl;
+        else if(m+f>=30 && r<50) cout<< "D"<<endl;
+        else cout<< "F"<<endl;
+    }
+
+}

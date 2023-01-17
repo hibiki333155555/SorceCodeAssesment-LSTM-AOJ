@@ -1,0 +1,19 @@
+
+while True:
+    a, op, b = input().split()
+    if op != "?":
+        a = int(a)
+        b = int(b)
+
+        if op == "+":
+            value = a+b
+        elif op == "-":
+            value = a-b
+        elif op == "*":
+            value = a*b
+        elif op == "/":
+            value = int(a/b)
+        print(value)
+    else:
+        break
+

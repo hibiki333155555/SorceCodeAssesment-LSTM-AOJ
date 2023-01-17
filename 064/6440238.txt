@@ -1,0 +1,55 @@
+#define _GLIBCXX_DEBUG
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+
+int n,cnt=0,S[500000] = {};
+
+void merge(int l, int m, int r){
+    int n1=m-l, n2=r-m;
+    
+    vector<int> A(n1,INT_MAX);
+    vector<int> B(n2,INT_MAX);
+    
+    for(int i=0;i<n1;i++)
+        A[i] = S[i+l];
+    
+    for(int i=0;i<n2;i++)
+        B[i] = S[i+m];
+    
+    for(int i=0,j=0,k=0;k<r-l;k++){
+        if(A[i] < B[j])
+            S[k] = A[i++];
+        else
+            S[k] = B[j++];
+    }
+    
+    cnt+=r-l;
+    
+}
+
+void mergeSort(int l,int r){
+    if(l+1 < r){
+        int m=(l+r)/2;
+        
+        mergeSort(l,m);
+        mergeSort(m,r);
+        
+        merge(l,m,r);
+    }    
+}
+
+int main(){
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+        scanf("%d",&S[i]);
+    
+    mergeSort(0,n);
+    
+    for(int i=0;i<n;i++)
+        printf("%d\n",S[i]);
+    
+    printf("%d\n",cnt);
+    
+    return S;
+}

@@ -1,0 +1,25 @@
+IsPrime = [True for _ in range(25001)]
+IsPrime[0] = IsPrime[1] = False
+for i in range(4, 25001, 2):
+    IsPrime[i] = False
+for i in range(3, 25001, 2):
+    if IsPrime[i]:
+        for j in range(i + i, 25001, i):
+            IsPrime[j] = False
+
+while True:
+    n = int(input())
+    if n == 0:
+        break
+    if n % 2 == 1:
+        if IsPrime[n - 2]:
+            print(1)
+        else:
+            print(0)
+    else:
+        ans = 0
+        for i in range(3, n // 2 + 1, 2):
+            if IsPrime[i] and IsPrime[n - i]:
+                ans += 1
+        print(ans)
+

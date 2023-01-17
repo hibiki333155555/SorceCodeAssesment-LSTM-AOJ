@@ -1,0 +1,57 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def is_ok(n, w_list, k, p):
+    counter = 1
+    c_w = 0
+    for i in range(n):
+        w = w_list[i]
+
+        if w > p:
+            return False
+
+        if c_w + w <= p:
+            c_w += w
+        else:
+            c_w = w
+            counter += 1
+            if counter > k:
+                return False
+
+    return True
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n, k = map(int, f.readline().split())
+    w_list = []
+    for _ in range(n):
+        w_list.append(int(f.readline()))
+
+    left = max(w_list) - 1
+    right = sum(w_list)
+
+    while left < right:
+        p = (left + right) // 2
+        if is_ok(n, w_list, k, p):
+            right = p
+        else:
+            left = p + 1
+
+    print(right)
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

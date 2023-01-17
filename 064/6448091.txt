@@ -1,0 +1,17 @@
+str = input()
+
+list = [0]*26
+
+for ch in str:
+    ch = ch.lower()
+    if ch != " " and ch != ".":
+        num = ord(ch)-ord("a")
+        list[num] += 1
+
+alph = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
+        "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+
+for i, name in enumerate(alph):
+    print(name+" :", end=" ")
+    print(list[i])
+

@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int s;
+    cin>>s;
+    int a,b;
+    b=s%60;
+    a=s/3600;
+    s-=b;
+    s=(s%3600)/60;
+    cout<<a<<":"<<s<<":"<<b<<endl;
+
+}

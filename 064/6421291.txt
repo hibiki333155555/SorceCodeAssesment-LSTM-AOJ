@@ -1,0 +1,198 @@
+#include<bits/stdc++.h>
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#define FOR(i,n) for(int i = 0; i < (n); i++)
+#define sz(c) ((int)(c).size())
+#define ten(x) ((int)1e##x)
+#define all(v) (v).begin(), (v).end()
+using namespace std;
+using ll=long long;
+using FLOW=int;
+using P = pair<ll,ll>;
+const long double PI=acos(-1);
+const ll INF=1e18;
+const int inf=1e9;
+struct Edge {
+    ll to;
+    ll cost;
+};
+using Graph=vector<vector<Edge>>;
+template<int MOD> struct Fp{
+  ll val;
+  constexpr Fp(long long v = 0) noexcept : val(v % MOD) {
+    if (val < 0) val += MOD;
+  }
+  static constexpr int getmod() { return MOD; }
+  constexpr Fp operator - () const noexcept {
+    return val ? MOD - val : 0;
+  }
+  constexpr Fp operator + (const Fp& r) const noexcept { return Fp(*this) += r; }
+  constexpr Fp operator - (const Fp& r) const noexcept { return Fp(*this) -= r; }
+  constexpr Fp operator * (const Fp& r) const noexcept { return Fp(*this) *= r; }
+  constexpr Fp operator / (const Fp& r) const noexcept { return Fp(*this) /= r; }
+  constexpr Fp& operator += (const Fp& r) noexcept {
+    val += r.val;
+    if (val >= MOD) val -= MOD;
+    return *this;
+  }
+  constexpr Fp& operator -= (const Fp& r) noexcept {
+    val -= r.val;
+    if (val < 0) val += MOD;
+    return *this;
+  }
+  constexpr Fp& operator *= (const Fp& r) noexcept {
+    val = val * r.val % MOD;
+    return *this;
+  }
+  constexpr Fp& operator /= (const Fp& r) noexcept {
+    ll a = r.val, b = MOD, u = 1, v = 0;
+    while (b) {
+      ll t = a / b;
+      a -= t * b, swap(a, b);
+      u -= t * v, swap(u, v);
+    }
+    val = val * u % MOD;
+    if (val < 0) val += MOD;
+    return *this;
+  }
+  constexpr bool operator == (const Fp& r) const noexcept {
+    return this->val == r.val;
+  }
+  constexpr bool operator != (const Fp& r) const noexcept {
+    return this->val != r.val;
+  }
+  constexpr bool operator < (const Fp& r) const noexcept {
+    return this->val < r.val;
+  }
+  friend constexpr istream& operator >> (istream& is, Fp<MOD>& x) noexcept {
+    is >> x.val;
+    x.val %= MOD;
+    if (x.val < 0) x.val += MOD;
+    return is;
+  }
+  friend constexpr ostream& operator << (ostream& os, const Fp<MOD>& x) noexcept {
+    return os << x.val;
+  }
+  friend constexpr Fp<MOD> modpow(const Fp<MOD>& a, long long n) noexcept {
+    Fp<MOD> res=1,r=a;
+    while(n){
+      if(n&1) res*=r;
+      r*=r;
+      n>>=1;
+    }
+    return res;
+  }
+  friend constexpr Fp<MOD> modinv(const Fp<MOD>& r) noexcept {
+        long long a = r.val, b = MOD, u = 1, v = 0;
+        while (b) {
+            long long t = a / b;
+            a -= t * b, swap(a, b);
+            u -= t * v, swap(u, v);
+        }
+        return Fp<MOD>(u);
+  }
+};
+template<typename T>
+void dijkstra(const Graph &G,int s,vector<ll> &dist,vector<T> &cnt){
+  int N = G.size();
+  dist.assign(N, INF);
+  cnt.assign(N,0);
+  priority_queue<P, vector<P>, greater<P>> pq;
+  dist[s] = 0;
+  cnt[s] = 1;
+  pq.emplace(dist[s], s);
+  while (!pq.empty()){
+    P p = pq.top();
+    pq.pop();
+    int v = p.second;
+    if (dist[v] < p.first){
+      continue;
+    }
+    for (auto e : G[v]){
+      if (dist[e.to] > dist[v] + e.cost){
+        dist[e.to] = dist[v] + e.cost;
+        pq.emplace(dist[e.to], e.to);
+        cnt[e.to]=cnt[v];
+      }else if (dist[e.to] == dist[v] + e.cost){
+        cnt[e.to]+=cnt[v];
+      }
+    }
+  }
+}
+void bfs(const vector<vector<int>> &G,int s,vector<int> &dist){
+  int N=G.size();
+  dist.assign(N,-1);
+  dist[s]=0;
+  deque<int> dq;
+  dq.push_back(s);
+  while(dq.size()){
+    int v=dq[0];
+    dq.pop_front();
+    for(auto nv : G[v]){
+      if(dist[nv]!=-1) continue;
+      dist[nv]=dist[v]+1;
+      dq.push_back(nv);
+    }
+  }
+}
+vector<ll> enum_divisors(ll N){
+  vector<ll> res;
+  for (ll i = 1; i * i <= N; ++i){
+    if (N % i == 0){
+       res.push_back(i);
+       // 重複しないならば i の相方である N/i も push
+       if (N/i != i) res.push_back(N/i);
+    }
+  }
+  // 小さい順に並び替える
+  sort(res.begin(), res.end());
+  return res;
+}
+//dist must be initialized with INF
+void warshall_floyd(vector<vector<ll>> &dist,int n){
+  for(int i=0;i<n;i++) dist[i][i]=0;
+  for (int k = 0; k < n; k++){
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+      }
+    }
+  }
+}
+using mint=Fp<998244353>;
+int main(){
+    int h,w;
+    cin>>h>>w;
+    Graph G(h*w);
+    int s,g;
+    vector<string> S(h);
+    for(int i=0;i<h;i++) cin>>S[i];
+    for(int i=0;i<h;i++){
+        for(int j=0;j<w;j++){
+            int v=i*w+j;
+            if(S[i][j]=='#') continue;
+            if(S[i][j]=='U'&&i>0){
+                if(S[i-1][j]!='#') G[v].push_back({v-w,0});
+            }else if(S[i][j]=='R'&&j<w-1){
+                if(S[i][j+1]!='#') G[v].push_back({v+1,0});
+            }else if(S[i][j]=='D'&&i<h-1){
+                if(S[i+1][j]!='#') G[v].push_back({v+w,0});
+            }else if(S[i][j]=='L'&&j>0){
+                if(S[i][j-1]!='#') G[v].push_back({v-1,0});
+            }else{
+                if(i>0) if(S[i-1][j]!='#') G[v].push_back({v-w,1});
+                if(j>0) if(S[i][j-1]!='#') G[v].push_back({v-1,1});
+                if(i<h-1) if(S[i+1][j]!='#') G[v].push_back({v+w,1});
+                if(j<w-1) if(S[i][j+1]!='#') G[v].push_back({v+1,1});
+            }
+            if(S[i][j]=='S') s=v;
+            if(S[i][j]=='G') g=v;
+        }
+    }
+    vector<ll> dist;
+    vector<mint> cnt;
+    dijkstra(G,s,dist,cnt);
+    if(dist[g]==INF) cout<<-1<<endl;
+    else cout<<dist[g]<<endl;
+}

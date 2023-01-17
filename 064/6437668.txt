@@ -1,0 +1,29 @@
+def print_list(lst):
+    print(" ".join([str(i) for i in lst]))
+
+def swap_element(lst, i, j):
+    tmp = lst[i]
+    lst[i] = lst[j]
+    lst[j] = tmp
+
+def selection_sort(lst):
+    swap_count = 0
+    for i in range(len(lst) - 1):
+        minj = i
+        for j in range(i + 1, len(lst)):
+            if lst[j] < lst[minj]:
+                minj = j
+        if minj != i:
+            swap_element(lst, i, minj)
+            swap_count += 1
+    return lst, swap_count
+
+
+if __name__ == "__main__":
+    # selection sort
+    _ = int(input())
+    lst = list(map(int, input().split()))
+    sorted_lst, swap_count = selection_sort(lst)
+    print_list(sorted_lst)
+    print(swap_count)
+

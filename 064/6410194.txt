@@ -1,0 +1,81 @@
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <string>
+#include <vector>
+using namespace std;
+
+class Dice
+{
+public:
+    Dice(int t, int s, int e, int w, int n, int b) : T(t), S(s), E(e), W(w), N(n), B(b){};
+    void goS()
+    {
+        tmp = B;
+        B = S;
+        S = T;
+        T = N;
+        N = tmp;
+    }
+    void goN()
+    {
+        tmp = B;
+        B = N;
+        N = T;
+        T = S;
+        S = tmp;
+    }
+    void goE()
+    {
+        tmp = B;
+        B = E;
+        E = T;
+        T = W;
+        W = tmp;
+    }
+    void goW()
+    {
+        tmp = B;
+        B = W;
+        W = T;
+        T = E;
+        E = tmp;
+    }
+    int getT() { return T; }
+
+private:
+    int T, S, E, W, N, B, tmp;
+};
+
+int main()
+{
+    int a, b, c, d, e, f;
+    cin >> a >> b >> c >> d >> e >> f;
+    Dice dice(a, b, c, d, e, f);
+    auto fun = [&dice](char ch)
+    {
+        switch (ch)
+        {
+        case 'S':
+            dice.goS();
+            break;
+        case 'N':
+            dice.goN();
+            break;
+        case 'E':
+            dice.goE();
+            break;
+        case 'W':
+            dice.goW();
+            break;
+        }
+    };
+
+    istream_iterator<char> isi(cin), eof;
+    for_each(isi, eof, fun);
+    cout << dice.getT() << endl;
+    return 0;
+}

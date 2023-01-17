@@ -1,0 +1,14 @@
+#include<cstdio>
+
+int main(){
+    int N, X;
+    scanf("%d %d", &N, &X);
+    int answer = 0;
+    for (int i = 0; i < N; i++)
+    {
+        int M;
+        scanf("%d", &M);
+        if(M >= X) answer++;
+    }
+    printf("%d\n", answer);
+}

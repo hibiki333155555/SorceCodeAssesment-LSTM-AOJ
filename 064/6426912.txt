@@ -1,0 +1,11 @@
+a=0
+while True:
+    n,x=map(int,input().split())
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                if(i+j+k==x):
+                    a=a+1
+print(a)                    
+                    
+

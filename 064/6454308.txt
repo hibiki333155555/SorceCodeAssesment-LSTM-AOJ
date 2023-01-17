@@ -1,0 +1,12 @@
+a, b = map(int, input().split())
+a = bin(a)[2:]
+b = bin(b)[2:]
+L = max(len(a), len(b))
+a = a.rjust(L, '0')
+b = b.rjust(L, '0')
+
+for i in range(L):
+    if a[i] != b[i]:
+        print(i)
+        exit()
+print(L)

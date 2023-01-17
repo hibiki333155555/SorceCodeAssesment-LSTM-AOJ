@@ -1,0 +1,12 @@
+num = int(input())
+n=1
+a=1
+list = [" "]
+while n<=num:
+    if(n%3==0):
+        list.insert(a,n)
+        n=n+1
+        a=a+1
+    else :
+        n=n+1
+print(list)        

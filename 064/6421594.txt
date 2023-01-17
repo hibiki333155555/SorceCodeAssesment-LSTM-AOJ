@@ -1,0 +1,46 @@
+#include <iostream>
+#include <deque>
+
+using namespace std;
+int a[1010],b[1010],c[1010][40],ord[1010];
+void solve(int n,int k,deque<pair<int,int>> deq){
+    int i,j,q = deq.size();
+    for(i=0;i<n;i++) ord[i] = i;
+    for(i=0;i<q;i++){
+        int x = deq[i].first,y = deq[i].second;
+        swap(ord[x],ord[y]);
+    }
+    for(i=0;i<n;i++) c[i][0] = ord[i];
+    for(j=1;j<30;j++){
+        for(i=0;i<n;i++) c[i][j] = c[c[i][j - 1]][j - 1];
+    }
+    for(j=29;j>=0;j--){
+        if(k>>j&1){
+            for(i=0;i<n;i++) b[i] = a[c[i][j]];
+            for(i=0;i<n;i++) a[i] = b[i];
+        }
+    }
+}
+
+int main(){
+    int i,n; cin >> n;
+    for(i=0;i<n;i++) cin >> a[i];
+    int q; cin >> q;
+    deque<pair<int,int>> deq;
+    for(i=0;i<q;i++){
+        int t; cin >> t;
+        if(t==1){
+            int x,y; cin >> x >> y; x--; y--;
+            deq.push_back({x,y});
+        }
+        if(t==2){
+            deq.pop_back();
+        }
+        if(t==3){
+            int k; cin >> k;
+            solve(n,k,deq);    
+        }
+    }
+    for(i=0;i<n;i++) cout << a[i] << " ";
+    cout << endl;
+}

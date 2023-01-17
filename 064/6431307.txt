@@ -1,0 +1,12 @@
+first = input()
+count = 0
+while True:
+    char = input()
+    if (char != "END_OF_TEXT"):
+        char = char.split(" ")
+        for i in range(len(char)):
+            if char[i].lower() == first.lower():
+                count += 1
+    else:
+        break
+print(count)

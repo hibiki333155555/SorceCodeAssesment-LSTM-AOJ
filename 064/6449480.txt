@@ -1,0 +1,93 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+//#include<stdlib.h>
+//#include<string.h>
+//#include<ctype.h>
+//#include<stdio.h>
+using namespace std;
+//分析见书《挑战程序设计竞赛2》上P73 
+
+struct Node{
+	int key;
+	Node *next,*prev;
+};
+struct Node *null; 
+void init()
+{
+	null=(Node*)malloc(sizeof(Node));
+	null->next=null;
+	null->prev=null;
+}
+void insert(int k)
+{
+	struct Node *t;
+	t=(Node*)malloc(sizeof(Node));
+	t->key=k;
+	t->next=null->next;
+	null->next->prev=t;
+	null->next=t;
+	t->prev=null;
+}
+void deleteNode(struct Node *t)
+{
+	if(t==null)
+		return;
+	t->prev->next=t->next;
+	t->next->prev=t->prev;
+	free(t);
+}
+struct Node* insearch(int k)
+{
+	struct Node *cur;
+	cur=null->next;
+	while(cur!=null&&cur->key!=k)
+		cur=cur->next;
+	return cur;   //?没搜到怎么办	
+}
+
+int main()
+{	
+	int n,i;
+	int num;
+	string op;
+	cin>>n;
+	
+	init();//一定记得初始化 
+	for(i=0;i<n;i++)
+	{
+		cin>>op;
+		if(op[0]=='i')
+		{
+			cin>>num;
+			insert(num);
+		}
+		else if(op[6]=='F')
+			deleteNode(null->next);
+		else if(op[6]=='L')
+			deleteNode(null->prev);
+		else
+		{
+			cin>>num;
+			deleteNode(insearch(num)); 
+		}
+	}
+	
+	//遍历输出 
+	struct Node *t;
+	t=null->next;
+	while(t!=null)
+	{
+		if(t!=null->prev) 
+			cout<<t->key<<" ";
+		else
+			cout<<t->key<<endl;
+		t=t->next;	
+	} 
+
+return 0;
+}
+

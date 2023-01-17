@@ -1,0 +1,43 @@
+//これはギャグ。色iをBi個使うとして、対応する順列の数を数えると、常にN!。
+#include <iostream>
+#include <algorithm>
+#define int long long
+#define rep(i, n) for(i = 0; i < n; i++)
+using namespace std;
+
+int mod = 998244353;
+int n, m;
+int a[2000];
+int dp[2001][2001];
+
+signed main() {
+	int i, j;
+	
+	cin >> n >> m;
+	rep(i, m) cin >> a[i];
+	
+	dp[0][0] = 1;
+	rep(i, m) {
+		rep(j, n + 1) {
+			dp[i + 1][j] += dp[i][j];
+			dp[i + 1][j] %= mod;
+			if (j + a[i] + 1 <= n) {
+				dp[i + 1][j + a[i] + 1] += mod - dp[i][j];
+				dp[i + 1][j + a[i] + 1] %= mod;
+			}
+		}
+		rep(j, n) {
+			dp[i + 1][j + 1] += dp[i + 1][j];
+			dp[i + 1][j + 1] %= mod;
+		}
+	}
+	
+	int fact[2001];
+	fact[0] = 1;
+	for (i = 1; i <= n; i++) {
+		fact[i] = i * fact[i - 1] % mod;
+	}
+	
+	cout << dp[m][n] * fact[n] << endl;
+	return 0;
+}

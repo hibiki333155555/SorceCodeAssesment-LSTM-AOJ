@@ -1,0 +1,11 @@
+while True:
+    numbers=input().split()
+    H=int(numbers[0])
+    W=int(numbers[1])
+    i=0
+    if H==0 and W==0:
+        break
+    else:
+        while i<W:
+            print("#"*H)
+            i=i+1

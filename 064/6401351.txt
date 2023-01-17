@@ -1,0 +1,17 @@
+#include <stdio.h>
+int main() {
+//roll9277
+	int h,m,s,a;
+	scanf("%d", &a);
+	double x,y;
+	
+	    x=a/3600.00;
+	    h=(int)x;
+	    y=(x-h)*60.00;
+	    m=(int)y;
+	    s=(y-m)*60.00;
+	    
+printf("%d :%d :%d", h, m, s);
+
+	return 0;
+}

@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+static const int maxn=1010;
+int dp[maxn][maxn];
+char f1[maxn];
+char f2[maxn];
+int n,m,ans,t;
+int main(){
+    cin>>t;
+    while(t--){
+    memset(f1,'\0',sizeof(f1));
+    memset(f2,'\0',sizeof(f2));
+    memset(dp,0,sizeof(dp));
+    scanf("%s",&f1);
+    scanf("%s",&f2);
+    n=strlen(f1);
+    m=strlen(f2);
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(f1[i-1]==f2[j-1]){
+                dp[i][j]=1+dp[i-1][j-1];
+            }
+            else{
+                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+    }
+    cout<<dp[n][m]<<endl;
+    }
+}

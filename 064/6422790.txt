@@ -1,0 +1,18 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ITP1_8_B
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            string input;
+            while ((input = Console.ReadLine()) != "0")
+            {
+                Console.WriteLine(input.Select(c => c - '0').Sum());
+            }
+        }
+    }
+}
+

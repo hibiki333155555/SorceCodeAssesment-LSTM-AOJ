@@ -1,0 +1,168 @@
+#define READ_FROM_FILE 0
+
+#if READ_FROM_FILE
+#include <fstream>
+#endif
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+
+const int dim = 2;
+
+template <class T>
+class PointInfo {
+public:
+	T coord[dim];
+	int idx;
+
+public:
+	PointInfo() : coord{}, idx(-1) {
+		return;
+	}
+
+	~PointInfo() {
+		return;
+	}
+};
+
+template <class T>
+class KdTree {
+private:
+	class Node {
+	public:
+		int p_idx;
+		int l_idx;
+		int r_idx;
+
+	public:
+		Node() : p_idx(-1), l_idx(-1), r_idx(-1) {
+			return;
+		}
+
+		~Node() {
+			return;
+		}
+	};
+
+private:
+	int root_;
+	PointInfo<T>* points_;
+	Node* nodes_;
+	int num_nodes_;
+
+private:
+	int make_kd_tree(int l_idx, int r_idx, int depth) {
+		if (l_idx >= r_idx) {
+			return -1;
+		}
+
+		int m_idx = (l_idx + r_idx) / 2;
+		int axis = depth % dim;
+		int n_depth = depth + 1;
+		int node_idx = num_nodes_++;
+		Node& cn = nodes_[node_idx];
+
+		sort(points_ + l_idx, points_ + r_idx, [&axis](const PointInfo<T>& lh, const PointInfo<T>& rh) { return lh.coord[axis] < rh.coord[axis]; });
+		cn.p_idx = m_idx;
+		cn.l_idx = make_kd_tree(l_idx, m_idx, n_depth);
+		cn.r_idx = make_kd_tree(m_idx + 1, r_idx, n_depth);
+
+		return node_idx;
+	}
+
+	bool is_contained(const T cp[], const T s_coord[], const T t_coord[]) {
+		for (int i = 0; i < dim; i++) {
+			if (!(s_coord[i] <= cp[i] && cp[i] <= t_coord[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	void search_kd_tree_sub(int node_idx, const T s_coord[], const T t_coord[], int depth, vector<int>& idx_vec) {
+		const Node& cn = nodes_[node_idx];
+		const PointInfo<T>& cp = points_[cn.p_idx];
+		int axis = depth % dim;
+		int n_depth = depth + 1;
+
+		if (is_contained(cp.coord, s_coord, t_coord)) {
+			idx_vec.push_back(cp.idx);
+		}
+		if (cn.l_idx >= 0 && s_coord[axis] <= cp.coord[axis]) {
+			search_kd_tree_sub(cn.l_idx, s_coord, t_coord, n_depth, idx_vec);
+		}
+		if (cn.r_idx >= 0 && cp.coord[axis] <= t_coord[axis]) {
+			search_kd_tree_sub(cn.r_idx, s_coord, t_coord, n_depth, idx_vec);
+		}
+		return;
+	}
+
+public:
+	KdTree(int n, PointInfo<T>* points) : root_(0), points_(points), nodes_(nullptr), num_nodes_(0) {
+		nodes_ = new Node[n];
+		root_ = make_kd_tree(0, n, 0);
+		return;
+	}
+
+	~KdTree() {
+		if (nodes_ != nullptr) {
+			delete[] nodes_;
+		}
+		return;
+	}
+
+	vector<int> search_kd_tree(const T s_coord[], const T t_coord[]) {
+		vector<int> idx_vec;
+		search_kd_tree_sub(root_, s_coord, t_coord, 0, idx_vec);
+		return idx_vec;
+	}
+};
+
+const int max_num_points = 500000;
+PointInfo<int> points[max_num_points];
+
+int main(int argc, char** argv) {
+#if READ_FROM_FILE
+	ifstream ifs("test0.txt");
+	cin.rdbuf(ifs.rdbuf());
+#endif
+	int n = -1;
+	int q = -1;
+	int s_coord[dim];
+	int t_coord[dim];
+	KdTree<int>* kd_tree = nullptr;
+
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < dim; j++) {
+			cin >> points[i].coord[j];
+		}
+		points[i].idx = i;
+	}
+
+	kd_tree = new KdTree<int>(n, points);
+
+	cin >> q;
+	for (int i = 0; i < q; i++) {
+		vector<int> idx_vec;
+
+		for (int j = 0; j < dim; j++) {
+			cin >> s_coord[j] >> t_coord[j];
+		}
+
+		idx_vec = kd_tree->search_kd_tree(s_coord, t_coord);
+		sort(idx_vec.begin(), idx_vec.end());
+
+		for (const int& idx : idx_vec) {
+			cout << idx << endl;
+		}
+		cout << endl;
+	}
+
+	delete kd_tree;
+	return 0;
+}
+

@@ -1,0 +1,9 @@
+#include<stdio.h>
+int main()
+\\ This is my first c program in my university life. I never forget this intersting work..
+{
+    int a;
+    printf("Hello World\n");
+    return 0;
+
+}

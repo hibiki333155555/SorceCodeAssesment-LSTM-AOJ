@@ -1,0 +1,22 @@
+import math
+n = int(input())
+count = 0
+for i in range(n):
+    num = int(input())
+    if 1<num<=3:
+        count += 1
+        continue
+    if num%2 == 0 or num%3 == 0:
+        continue
+    lim = math.sqrt(num)
+    s = 3
+    is_prime = True
+    while s < lim:
+        if num%s == 0:
+            is_prime = True
+            break
+        s += 1
+    if is_prime:
+        count += 1
+print(count)
+        

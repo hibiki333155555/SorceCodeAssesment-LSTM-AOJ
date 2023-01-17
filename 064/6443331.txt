@@ -1,0 +1,15 @@
+/*-- 入力 --*/
+//main("3 5")
+main(require("fs").readFileSync("/dev/stdin", "utf8"));
+
+/*-- 入力処理&出力 --*/
+function main(raw) {
+    // 入力処理
+    const args = raw.split("\n");
+    const input = args[0].split(' ').map(Number);
+    // 計算
+    const s = input[0]*input[1];
+    const l = 2*(input[0]+input[1]);
+    // 表示
+    console.log(`${s} ${l}`);
+}

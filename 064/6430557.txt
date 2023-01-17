@@ -1,0 +1,28 @@
+
+
+
+N=int(input())
+G = [[] for _ in range(N+1)]
+for _ in range(N):
+    u,k,*v=map(int,input().split())
+    G[u]=v
+
+d=[0]*(N+1)
+f=[0]*(N+1)
+t=0
+def dfs(now):#now=現在地，pre=前にいた場所
+    global t
+    t+=1
+    d[now]=t
+    for nxt in G[now]:
+        if d[nxt]==0:
+            dfs(nxt)
+    t+=1
+    f[now]=t
+
+dfs(1)
+for i in range(1,N+1):
+    print(i,d[i],f[i])
+
+
+

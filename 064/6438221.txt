@@ -1,0 +1,30 @@
+#include <iostream>
+
+using namespace std;
+int main(){
+    
+    
+    while (true){
+        int N, x;
+      int Out = 0;//whileのスコープ内で初期化
+        cin >> N >> x;
+        if(N == x && N == 0) break;
+
+        for(int i = 1; i <= N; i++){
+        for(int j = i + 1; j <= N; j++){
+            for(int k = j + 1; k <= N; k++){
+                
+                if (i + j + k == x) Out++;
+            }
+        }
+        
+    }
+        cout << Out << endl;
+
+    }
+return 0;
+
+}
+
+  
+ 

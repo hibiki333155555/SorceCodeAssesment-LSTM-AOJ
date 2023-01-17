@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+using Pair = pair<int, int>;
+using Status = vector<pair<Pair, Pair>>;
+
+int sum(Status& S, int k, int rl)
+{
+	if (k > 1) sum(S, k / 2, rl * 2);
+	if (S[k / 2].second.second < S[k].second.second) S[k].second = S[k / 2].second;
+	if (S[k].first.second > S[k].second.second) {
+		S[k].first = {S[k].second.first * rl, S[k].second.second};
+	}
+	return S[k].first.first;
+}
+
+void update(Status& S, int k, int rl, Pair x)
+{
+	sum(S, k, rl);
+	S[k].second = x;
+	auto d = x.first * rl - S[k].first.first;
+	for (int i = k; i > 0; i /= 2, rl *= 2) {
+		S[i].first = {S[i].first.first + d, x.second};
+	}
+}
+
+void update(Status& S, int k, int l, int r, int s, int t, Pair x)
+{
+	if (l >= r || r <= s || t <= l) return;
+	if (s <= l && r <= t) {
+		update(S, k, r - l, x);
+		return;
+	}
+	update(S, 2 * k, l, (l + r) / 2, s, t, x);
+	update(S, 2 * k + 1, (l + r) / 2, r, s, t, x);
+}
+
+int sum(Status& S, int k, int l, int r, int s, int t)
+{
+	if (l >= r || r <= s || t <= l) return 0;
+	if (s <= l && r <= t) return sum(S, k, r - l);
+	return sum(S, 2 * k, l, (l + r) / 2, s, t) + sum(S, 2 * k + 1, (l + r) / 2, r, s, t);
+}
+
+int main()
+{
+	int n, nn, q, c, s, t, x; cin >> n >> q;
+	for (nn = 1; nn < n; nn *= 2) ;
+	Status S(nn * 2);
+	for (auto& [p, v] : S) p.second = v.second = q;
+	for (cin >> c >> s >> t; --q >= 0; cin >> c >> s >> t) switch (c) {
+	case 0: cin >> x; update(S, 1, 0, nn, s, t + 1, {x, q}); break;
+	case 1: cout << sum(S, 1, 0, nn, s, t + 1) << endl; break;
+	}
+	return 0;
+}
+

@@ -1,0 +1,117 @@
+#pragma GCC target("avx")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<ll, ll> P;
+typedef vector<ll> V;
+typedef unordered_map<ll, ll> U_MAP;
+typedef priority_queue<ll> pq;
+typedef priority_queue<ll, vector<ll>, greater<ll>> rpq;
+constexpr ll INF = 1e9, MOD = 1e9 + 7, ohara = 1e6 + 10;
+constexpr ll LINF = 1e18;
+
+#define rep(i, n) for (ll i = 0LL; (i) < (ll)(n); (i)++)
+#define rrep(i, a, b) for (ll i = (ll)(a); i < (ll)(b); i++)
+#define rrrep(i, a, b) for (ll i = (ll)(a); i >= (ll)(b); i--)
+#define all(v) (v).begin(), (v).end()
+#define Size(n) (n).size()
+#define Cout(x) cout << (x) << endl
+#define doublecout(a) cout << fixed << setprecision(15) << a << endl;
+#define fi first
+#define se second
+#define m_p make_pair
+#define p_b push_back
+
+//------ Believe yourself as a genius!!!!!! ------
+
+int dy[] = {1, 0, -1, 0};
+int dx[] = {0, 1, 0, -1};
+// int dy[]={-1,0,1,-1,1,-1,0,1};int dx[]={-1,-1,-1,0,0,1,1,1};
+string alph("abcdefghijklmnopqrstuvwxyz"), s;
+ll n, cnt, ans, a[ohara], b[ohara], c[ohara], d[ohara], tmp, m, h, w, x, y, sum,
+    k, q;
+
+struct edge {
+  ll to, cost;
+};
+vector<edge> g[1000000];
+
+ll lcm(ll aaa, ll bbb) {
+  ll g = __gcd(aaa, bbb);
+  return aaa / g * bbb;
+}
+
+map<pair<ll, ll>, ll> kazo, kazo2;
+
+int main(void) {
+  cin.tie(0);
+  cout.tie(0);
+  ios::sync_with_stdio(false);
+
+  cin >> n >> m;
+  rep(i, m) {
+    cin >> a[i] >> b[i] >> c[i];
+    a[i]--, b[i]--;
+    g[a[i]].push_back({b[i], c[i]});
+  }
+
+  rep(i, n + 10) d[i] = LINF;
+  queue<P> que;
+  que.push({0LL, 1LL});  //スタート地点を入れる
+  d[0] = 1;
+  kazo[{0LL, 1LL}]++;
+
+  while (!que.empty()) {
+    P moto = que.front();
+    que.pop();
+    // kazo[{moto.fi, moto.se}]--;
+    // cout << moto.fi << " " << moto.se << "\n";
+    rep(i, Size(g[moto.fi])) {
+      edge e = g[moto.fi][i];
+      ll cost = lcm(moto.se, e.cost);
+      d[e.to] = min(cost, d[e.to]);
+      if (kazo[{e.to, cost}] == 0) {
+        que.push({e.to, cost});
+        kazo[{e.to, cost}]++;
+      }
+    }
+  }
+
+  if (d[n - 1] == LINF) {
+    Cout("IMPOSSIBLE");
+    return 0;
+  } else
+    cout << d[n - 1] << " ";
+
+  rep(i, n + 10) d[i] = -LINF;
+  queue<P> que2;
+  que2.push({0LL, 1LL});  //スタート地点を入れる
+  d[0] = 1;
+  kazo2[{0LL, 1LL}]++;
+
+  while (!que2.empty()) {
+    P moto = que2.front();
+    que2.pop();
+    // kazo2[{moto.fi, moto.se}]--;
+    rep(i, Size(g[moto.fi])) {
+      edge e = g[moto.fi][i];
+      ll cost = lcm(moto.se, e.cost);
+      d[e.to] = max(cost, d[e.to]);
+      if (kazo2[{e.to, cost}] == 0) {
+        que2.push({e.to, cost});
+        kazo2[{e.to, cost}]++;
+      }
+    }
+  }
+  // rep(i, n) Cout(d[i]);
+  cout << d[n - 1] << "\n";
+
+  // Cout(lcm(3, 0));
+
+  return 0;
+}

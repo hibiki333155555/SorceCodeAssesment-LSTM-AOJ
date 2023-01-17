@@ -1,0 +1,17 @@
+#include <stdio.h>
+int main(void)
+{
+    int i,N;
+    int a[100];
+    scanf("%d",&N);
+    for (int i=0;i<100;i++)
+    {
+        if(a[i]>a[i+1])
+        {
+            a[i]=a[i+1];
+        }else
+        a[i];
+    }
+retutn 0;
+}
+

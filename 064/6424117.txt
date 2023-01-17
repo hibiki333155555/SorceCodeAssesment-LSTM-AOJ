@@ -1,0 +1,21 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ITP1_10_B
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var val = Console.ReadLine().Split().Select(v => double.Parse(v)).ToArray();
+            var (a, b, C) = (val[0], val[1], val[2] / 180 * Math.PI);
+            var h = b * Math.Sin(C);
+            var S = a * h / 2;
+            var L = a + b + Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2) - 2 * a * b * Math.Cos(C));
+            Console.WriteLine(S);
+            Console.WriteLine(L);
+            Console.WriteLine(h);
+
+        }
+    }
+}

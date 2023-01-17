@@ -1,0 +1,39 @@
+m,n = map(int,input().split())
+G = []
+for i in range(m):
+    G.append(list(input()))
+
+ans = 10**9
+for i in range(1,m):
+    o1,x1,o2,x2 = 0,0,0,0
+    for k in range(i):
+        for l in range(n):
+            if(G[k][l]=="o"):
+                o1 += 1
+            else:
+                x1 += 1
+    for k in range(i,m):
+        for l in range(n):
+            if(G[k][l]=="o"):
+                o2 += 1
+            else:
+                x2 += 1
+    ans = min(ans,o1+x2,o2+x1)
+
+for i in range(1,n):
+    o1,x1,o2,x2 = 0,0,0,0
+    for k in range(i):
+        for l in range(m):
+            if(G[l][k]=="o"):
+                o1 += 1
+            else:
+                x1 += 1
+    for k in range(i,n):
+        for l in range(m):
+            if(G[l][k]=="o"):
+                o2 += 1
+            else:
+                x2 += 1
+    ans = min(ans,o1+x2,o2+x1)
+
+print(ans)

@@ -1,0 +1,25 @@
+while True:
+    try:
+        S = list(input())
+    except:
+        break
+    flag = False
+    for i in range(0, 9, 3):
+        if S[i] == S[i + 1] == S[i + 2]:
+            print(S[i])
+            flag = True
+            break
+    if flag:
+        continue
+    for i in range(3):
+        if S[i] == S[i + 3] == S[i + 6]:
+            print(S[i])
+            flag = True
+            break
+    if flag:
+        continue
+    if S[0] == S[4] == S[8] or S[2] == S[4] == S[6]:
+        print(S[4])
+        continue
+    print('d')
+

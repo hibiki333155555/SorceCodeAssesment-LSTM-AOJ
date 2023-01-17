@@ -1,0 +1,3 @@
+n = input().split()
+l = sorted(n)
+print(l[0],l[1],l[2])

@@ -1,0 +1,22 @@
+l = input().split()
+n = int(input())
+def checkKey(k):
+    if k in "12431":
+        return 0
+    if k in "52035":
+        return 1
+    if k in "01540":
+        return 2
+    if k in "10451":
+        return 3
+    if k in "02530":
+        return 4
+    if k in "21342":
+        return 5
+
+
+for i in range(n):
+    q = input().split()
+    key = str(l.index(q[0])) + str(l.index(q[1]))
+    anskey = checkKey(key)
+    print(l[anskey])

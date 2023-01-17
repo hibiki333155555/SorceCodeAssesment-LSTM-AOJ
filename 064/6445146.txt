@@ -1,0 +1,4 @@
+ans = []
+for i, x in enumerate(open(0).readlines()):
+    ans.append("Case %d: %s" % (i+1, x))
+open(1,'w').writelines(ans[:-1])

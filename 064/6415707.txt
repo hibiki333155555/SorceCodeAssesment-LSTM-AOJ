@@ -1,0 +1,20 @@
+def selectionSort(A,N):
+    cnt = 0
+    for i in range(N):
+        minj = i
+        for j in range(i,N):
+            if A[j]<A[minj]:
+                minj = j
+        A[i],A[minj] = A[minj],A[i]
+        if i != minj:
+            cnt += 1
+    return A,cnt
+
+n = int(input())
+A = list(map(int,input().split()))
+A,cnt = selectionSort(A,n)
+for i in range(n-1):
+    print(A[i],end=' ')
+print(A[n-1])
+print(cnt)
+

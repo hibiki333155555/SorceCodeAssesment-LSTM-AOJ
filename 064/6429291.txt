@@ -1,0 +1,20 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+int main(){
+    
+   double a, b;
+
+cin >> a >> b;
+int d = 0;
+int r = 0;
+double f = 0;
+int aa = (int)a, bb = (int)b;
+f = a / b;
+d = aa/ bb;
+r = aa % bb;
+
+
+cout << d << " " << r << " " << fixed << setprecision(8) << f << endl;
+
+}

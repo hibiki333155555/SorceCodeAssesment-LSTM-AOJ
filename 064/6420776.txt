@@ -1,0 +1,9 @@
+N, M, K, X = map(int, input().split())
+X *= M
+A = list(map(int, input().split()))
+a = max(A)
+if X < a * K:
+    print("Yes")
+else:
+    print("No")
+

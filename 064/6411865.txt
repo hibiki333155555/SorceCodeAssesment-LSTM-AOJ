@@ -1,0 +1,23 @@
+n=int(input())
+S=list(map(int,input().split()))
+q=int(input())
+T=list(map(int,input().split()))
+cnt=0
+for t in T:
+    ok=-1
+    ng=n
+
+    while ng-ok>1:
+        mid=(ng+ok)//2
+
+        if S[mid]<t:
+            ok=mid
+
+        else:
+            ng=mid
+
+        if S[mid]==t:
+            cnt+=1
+            break
+
+print(cnt)

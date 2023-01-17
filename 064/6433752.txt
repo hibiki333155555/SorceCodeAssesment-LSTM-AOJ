@@ -1,0 +1,3 @@
+d,l=map(int, raw_input().split())
+print d//l+d%l
+

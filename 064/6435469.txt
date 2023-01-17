@@ -1,0 +1,196 @@
+#include <bits/stdc++.h>
+
+/*
+適宜Haskellの記法を借用する
+
+Mの要件
+reduceの対象になるfunction object
+(T,opM,eM)がmonoidでなくてはならない
+
+eMは自動付加される
+opM::T->T->Tは結合的な二項演算であり、operator()で呼び出せる
+更新は1点でしか行わないのでupdate演算はいらない(operator[]で直接値を読み出して使う)
+*/
+
+template <class T, class M>
+class aug_op
+{
+public:
+    M INS_M;
+
+    aug_op(const M& func)
+        : INS_M(func)
+    {
+    }
+
+    std::optional<T> operator()(const std::optional<T>& lhs, const std::optional<T>& rhs) const
+    {
+        const bool pl = lhs.has_value();
+        const bool pr = rhs.has_value();
+        if (pl && pr)
+        {
+            return INS_M(lhs.value(), rhs.value());
+        }
+        else if (pl)
+        {
+            return lhs.value();
+        }
+        else if (pr)
+        {
+            return rhs.value();
+        }
+        else
+        {
+            return std::nullopt;
+        }
+    }
+};
+
+template <class T, class M>
+class segment_tree
+{
+private:
+    aug_op<T, M> INS_M;
+    std::vector<std::pair<std::size_t, std::size_t>> range;
+    std::size_t LEAF;
+    std::vector<std::optional<T>> data;
+
+    std::size_t pindex(const std::size_t& i) const
+    {
+        return (i + 1) / 2 - 1;
+    }
+
+    std::size_t cindex(const std::size_t& i) const
+    {
+        return (i + 1) * 2 - 1;
+    }
+
+    void full_update(void)
+    {
+        for (std::size_t i = LEAF - 2; i != static_cast<std::size_t>(-1); --i)
+        {
+            const std::size_t ic = cindex(i);
+            data[i] = INS_M(data[ic], data[ic + 1]);
+        }
+    }
+
+    void point_update(const std::size_t& i)
+    {
+        if (i != 0)
+        {
+            const std::size_t ip = pindex(i);
+            const std::size_t in = 2 * cindex(ip) + 1 - i;
+            data[ip] = INS_M(data[std::min({ in, i })], data[std::max({ in, i })]);
+            point_update(ip);
+        }
+    }
+
+    std::optional<T> get_kernel(const std::size_t& ii, const std::size_t& jj, const std::size_t& inow) const
+    {
+        if (ii >= jj)
+        {
+            return std::nullopt;
+        }
+        else if (range[inow] == std::make_pair(ii, jj))
+        {
+            return data[inow];
+        }
+        else
+        {
+            const std::size_t ic = cindex(inow);
+            const std::size_t mid = range[ic].second;
+            return INS_M(get_kernel(ii, std::min({ jj, mid }), ic), get_kernel(std::max({ ii, mid }), jj, ic + 1));
+        }
+    }
+
+public:
+    segment_tree(void) = default;
+    segment_tree(const segment_tree&) = default;
+    segment_tree(segment_tree&&) noexcept = default;
+    segment_tree& operator=(const segment_tree&) & = default;
+    segment_tree& operator=(segment_tree&&) & noexcept = default;
+
+    segment_tree(const std::size_t& n_elem, const M& func)
+        : INS_M(func)
+    {
+        assert(n_elem > 0);
+        const int k = CHAR_BIT * sizeof(n_elem)
+            - __builtin_clzll(static_cast<unsigned long long>(n_elem));
+        LEAF = static_cast<std::size_t>(1) << k;
+        if (LEAF < n_elem)
+        {
+            LEAF <<= 1;
+        }
+        range.resize(2 * LEAF - 1);
+        data.resize(2 * LEAF - 1, std::nullopt);
+        for (std::size_t ii = 0; ii < LEAF; ++ii)
+        {
+            range[LEAF + ii - 1] = { ii, ii + 1 };
+        }
+        for (std::size_t i = LEAF - 2; i != static_cast<std::size_t>(-1); --i)
+        {
+            const std::size_t ic = cindex(i);
+            range[i] = { range[ic].first, range[ic + 1].second };
+        }
+    }
+
+    explicit segment_tree(const std::size_t& n_elem)
+        : segment_tree(M())
+    {
+    }
+
+    segment_tree(const std::size_t& n_elem, const T& init, const M& func)
+        : segment_tree(n_elem, func)
+    {
+        std::fill_n(data.begin() + LEAF - 1, n_elem, std::optional<T>(init));
+        full_update();
+    }
+
+    segment_tree(const std::size_t& n_elem, const T& init)
+        : segment_tree(n_elem, init, M())
+    {
+    }
+
+    T get(const std::size_t& ii, const std::size_t& jj) const
+    {
+        assert(ii < jj);
+        assert(jj <= LEAF);
+        return get_kernel(ii, jj, 0).value();
+    }
+
+    void set(const std::size_t& ii, const T& val)
+    {
+        assert(ii < LEAF);
+        data[LEAF + ii - 1] = val;
+        point_update(LEAF + ii - 1);
+    }
+
+    T operator[](const std::size_t& ii) const
+    {
+        assert(ii < LEAF);
+        return data[LEAF + ii - 1].value();
+    }
+};
+
+int main(void)
+{
+    unsigned n, q;
+    std::cin >> n >> q;
+    auto min_object = [](unsigned i, unsigned j)
+    { return std::min({ i, j }); };
+    segment_tree<unsigned, decltype(min_object)> tree(n, (1U << 31) - 1, min_object);
+    for (unsigned i = 0; i < q; ++i)
+    {
+        unsigned c, x, y;
+        std::cin >> c >> x >> y;
+        if (c == 0)
+        {
+            tree.set(x, y);
+        }
+        else
+        {
+            std::cout << tree.get(x, y + 1) << std::endl;
+        }
+    }
+    return 0;
+}

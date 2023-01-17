@@ -1,0 +1,27 @@
+import scala.io.StdIn
+
+object Main {
+  def main(args: Array[String]): Unit = {
+    def rotate(c: Char, n: Int): Char = {
+      ((c.toInt - 'a'.toInt + n) % 26 + 'a'.toInt).toChar
+    }
+
+    def rec(lst: List[Char], n: Int): (List[Char], List[Char]) = {
+      lst match {
+        case c :: '(' :: rest if '0' <= c && c <= '9' => {
+          val (l1, r1) = rec(rest, (c.toInt - '0'.toInt) + n)
+          val (l2, r2) = rec(r1, n)
+          (l1 ++ l2, r2)
+        }
+        case ')' :: rest => (List(), rest)
+        case c :: rest => {
+          val (l, r) = rec(rest, n)
+          (rotate(c, n) :: l, r)
+        }
+        case Nil => (Nil, Nil)
+      }
+    }
+    println(rec(StdIn.readLine().toList, 0)._1.mkString(""))
+  }
+}
+

@@ -1,0 +1,20 @@
+#include <stdio.h>
+int main(){
+  char moji[1200];
+  int i=0,j;
+	
+  while(1){
+    scanf("%c",&moji[i]);
+    if(moji[i]=='\n') break;
+    i++;
+  }
+	
+  for(j=0;j<i;j++){
+    if(moji[j]>='A'&&moji[j]<='Z') moji[j]+=32;
+    else if (moji[j]>='a'&&moji[j]<='z') moji[j]-=32;
+    printf("%c",moji[j]);
+    if(j==i-1) printf("\n");
+  }
+  return 0;
+}
+

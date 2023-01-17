@@ -1,0 +1,26 @@
+#include <cstdio>
+#include <iostream>
+
+const int INF = 1000000;
+const int MINF = -1000000;
+const int MAX_n = 10000;
+int a[MAX_n];
+
+int main(){
+	int n;	scanf("%d",&n);
+	for (int i = 0; i < n; ++i)
+		scanf("%d",a+i);
+
+	int least = INF, great = MINF;
+	long long sum = 0;
+
+	for (int i = 0; i < n; ++i){
+		least = std::min(least,a[i]);
+		great = std::max(great,a[i]);
+		sum += a[i];
+	}
+
+	//%I64d
+	printf("%d %d %lld\n",least,great,sum);
+}
+

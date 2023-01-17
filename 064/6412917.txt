@@ -1,0 +1,31 @@
+import java.util.*;
+
+public class Main{
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        String str = scan.nextLine();
+        str = str.toLowerCase();
+        int[] counter = new int[26];
+        char[] charArray = str.toCharArray();
+
+        char[] letters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+
+        for (int x = 0; x < str.length(); x++) {
+            int i = 0;
+            for (int y = 0; y < letters.length; y++) {
+                if (letters[y] == charArray[x]) {
+                    counter[i]++;
+                }
+                i++;
+            }
+        }
+
+        for (int i = 0; i < 26; i++) {
+            System.out.println(letters[i] + " : " + counter[i]);
+        }
+
+        scan.close();
+    }
+}
+

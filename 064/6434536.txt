@@ -1,0 +1,7 @@
+a,b,c = map(int,input().split())
+ans=[]
+for i in range(b-a):
+    if c%i==0:
+        ans.append(i)
+        
+print(map(str,ans))

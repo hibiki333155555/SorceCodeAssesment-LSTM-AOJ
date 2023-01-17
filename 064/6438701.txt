@@ -1,0 +1,21 @@
+l = input().split()
+while not(l[0]=="-1") or not(l[1]=="-1") or not(l[2]=="-1"): 
+    m = int(l[0])
+    f = int(l[1])
+    r = int(l[2])
+    if m >= 0 and f >= 0:
+        if(m+f >= 80):
+            print("A")
+        elif(m+f >= 65):
+            print("B")
+        elif(m+f >= 50):
+            print("C")
+        elif(m+f >= 30 and r >=50):
+            print("C")
+        elif(m+f >= 30):
+            print("D")
+        else:
+            print("F")
+    else:
+        print("F")
+    l = input().split()

@@ -1,0 +1,23 @@
+/*-- 入力 --*/
+//main("3 2\n5 3\n11 4\n0 0\n4 4\n4 6")
+main(require("fs").readFileSync("/dev/stdin", "utf8"));
+
+/*-- 計算&出力 --*/
+function main(raw) {
+    // 入力処理
+    const args = raw.split("\n");
+    //console.log(args);
+    args.forEach( (val,idx) => {
+        args[idx] = val.split(' ').map(Number);
+    });
+    // 計算
+    for(let i=0; i<args.length; i++){
+        args[i] = args[i].sort(function(a,b){
+            return a-b;
+        });
+        if(args[i][0]==0){break;}
+        console.log(`Case ${i+1}: ${args[i]}`);
+    };
+    // 表示
+    //console.log(`${output}`);
+}

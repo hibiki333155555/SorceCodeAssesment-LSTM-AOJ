@@ -1,0 +1,21 @@
+inf=10**18
+def main():
+    N, M = map(int, input().split())
+    G = [[] for _ in range(N)]
+    for _ in range(M):
+        s,t,d = map(int,input().split())
+        G[s].append((t,d))
+    
+    dp = [[inf]*N for _ in range(1<<N)]
+    for i in range(N): dp[0][i] = 0
+    x = 0
+    #does not matter where to start
+    for i in range(1<<N):
+        for f in range(N):
+            for t,c in G[f]:
+                #visited or there is no edge or not visited u
+                if i>>t&1 or (not i>>f&1 and i!=0): continue
+                dp[1<<t|i][t]=min(dp[1<<t|i][t], dp[i][f]+c)
+    #print(dp)
+    print(-1 if dp[-1][0]==inf else dp[-1][0])
+main()

@@ -1,0 +1,7 @@
+S = input()
+a = input()
+St = S + S
+if a in St:
+    print('Yes')
+else:
+    print('No')

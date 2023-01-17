@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef double dl;
+#define endl "\n"
+#define all(a) (a).begin(),(a).end()
+#define sz(x) (int)x.size()
+const double PI = acos(-1);
+const double eps = 1e-9;
+#define MOD 1000000007
+#define mem(a,val) memset(a,val,sizeof(a))
+#define optimize() ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+
+#define mx 1000
+
+std::vector<int> g[mx];
+int match[mx];
+bool used[mx];
+int l;
+
+
+bool dfs(int v)
+{
+	used[v] = true;
+  for(int i=0; i<g[v].size();i++)
+  {
+    int u = g[v][i];
+    int w = match[u];
+
+    if(w < 0 || !used[w] and dfs(w)){
+      match[v] = u;
+      match[u] = v;
+      return true;
+    }
+  }
+  return false;
+}
+
+int matching(){
+  int res=0;
+  memset(match,-1,sizeof(match));
+  for(int v=0;v<l;v++){
+    if(match[v]<0){
+      memset(used,0,sizeof(used));
+      if(dfs(v)) res++;
+    }
+  }
+  return res;
+}
+
+int main(int argc, char const *argv[])
+{
+   optimize();
+   int x,y,e,a,b;
+   cin>>x>>y>>e;
+
+   for (int i = 0; i < e ; i++) {
+     cin>> a >> b;
+
+     g[a].push_back(b+x);
+     g[b+x].push_back(a);
+
+   }
+   l = x+y;
+   cout<< matching() << endl;
+   return 0;
+}
+

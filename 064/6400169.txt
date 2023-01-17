@@ -1,0 +1,64 @@
+#include <stdio.h>
+
+
+int main()
+{
+	long input_t, input_h, input_s;
+	long output_t, output_h, output_s;
+	long output_t3, output_h3, output_s3;
+
+	while (EOF!= scanf("%d %d %d", &input_t, &input_h, &input_s))
+	{
+		if ((input_t == -1) && (input_h == -1) && (input_s == -1))
+		{
+			break;
+		}
+
+		output_t3 = 0;
+		output_h3 = 0;
+		output_s3 = 0;
+
+		output_t = (7200-(input_t * 3600 + input_h * 60 + input_s))/3600;
+		output_h = (7200 - (input_t * 3600 + input_h * 60 + input_s) - output_t * 3600) / 60;
+		output_s = (7200 - (input_t * 3600 + input_h * 60 + input_s) - output_t * 3600 - output_h * 60);
+
+
+		output_s3 = output_s * 3;/* second*3 */
+		if (output_s3 >= 120)
+		{
+			output_h3 =+2;
+			output_s3 -=120;
+		}
+		else if (output_s3 >= 60)
+		{
+			output_h3 +=1;
+			output_s3 -=60;
+		}
+
+		output_h3 = output_h * 3 + output_h3;/* minutes*3 */
+		if (output_h3 >= 120)
+		{
+			output_t3 +=2;
+			output_h3 -=120;
+		}
+		else if (output_h3 >= 60)
+		{
+			output_t3 += 1;
+			output_h3 -= 60;
+		}
+
+		output_t3 = output_t * 3 + output_t3;/* hours*3 */
+
+
+		/*
+		output_t3= (7200*3 - (input_t * 3600 + input_h * 60 + input_s)) / 3600;
+		output_h3 = (7200*3 - (input_t * 3600 + input_h * 60 + input_s) - output_t3 * 3600) / 60;
+		output_s3 = (7200*3 - (input_t * 3600 + input_h * 60 + input_s) - output_t3 * 3600 - output_h3 * 60);
+		*/
+
+		printf("%02d:%02d:%02d\n", output_t, output_h, output_s);
+		printf("%02d:%02d:%02d\n", output_t3, output_h3, output_s3);
+
+	}
+}
+

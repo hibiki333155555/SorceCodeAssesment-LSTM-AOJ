@@ -1,0 +1,4 @@
+a, b = map(int, input().split())
+f = '{:.10f}'.format(a / b)
+print(f"{a // b} {a % b} {f}")
+

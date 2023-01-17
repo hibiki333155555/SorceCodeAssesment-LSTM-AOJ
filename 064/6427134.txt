@@ -1,0 +1,15 @@
+from sys import stdin 
+input = stdin.readline
+
+dna = set()
+n = int(input())
+
+for _ in range(n):
+    command, d = input().split()
+    if command[0] == 'i':
+        dna.add(d)
+    else:
+        if d in dna:
+            print('yes')
+        else:
+            print('no')

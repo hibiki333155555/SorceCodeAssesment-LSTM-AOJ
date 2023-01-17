@@ -1,0 +1,12 @@
+package パソコン甲子園;
+import java.util.Scanner;
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int d = sc.nextInt();
+		if(d%4==0) {
+		int s = d * 1/4;
+		System.out.println(s);
+		}
+	}
+}

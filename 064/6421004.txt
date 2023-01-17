@@ -1,0 +1,87 @@
+// #pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+// #pragma GCC optimize("unroll-loops")
+#include<bits/stdc++.h>
+using namespace std;
+
+using P = pair<int, int>;
+const int M = 1000000007;
+
+int dd[] = { 0, 1, 0, -1 };
+
+int main() {
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    int h, w;
+    cin >> h >> w;
+    vector<string> s(h);
+    int si, sj, gi, gj;
+    for (int i = 0; i < h; ++i) {
+        cin >> s[i];
+        for (int j = 0; j < w; ++j) {
+            if (s[i][j] == 'S') {
+                si = i;
+                sj = j;
+            }
+            if (s[i][j] == 'G') {
+                gi = i;
+                gj = j;
+            }
+        }
+    }
+    vector<vector<int>> dist(h, vector<int>(w, M));
+    deque<P> q;
+    dist[si][sj] = 0;
+    q.emplace_back(si, sj);
+    while (!q.empty()) {
+        P p = q.front();
+        q.pop_front();
+        int pi = p.first;
+        int pj = p.second;
+        if (s[pi][pj] == 'U') {
+            --pi;
+            if (0 <= pi && pi < h && 0 <= pj && pj < w && s[pi][pj] != '#' && dist[pi][pj] > dist[p.first][p.second]) {
+                dist[pi][pj] = dist[p.first][p.second];
+                q.emplace_front(pi, pj);
+            }
+            continue;
+        }
+        if (s[pi][pj] == 'D') {
+            ++pi;
+            if (0 <= pi && pi < h && 0 <= pj && pj < w && s[pi][pj] != '#' && dist[pi][pj] > dist[p.first][p.second]) {
+                dist[pi][pj] = dist[p.first][p.second];
+                q.emplace_front(pi, pj);
+            }
+            continue;
+        }
+        if (s[pi][pj] == 'L') {
+            --pj;
+            if (0 <= pi && pi < h && 0 <= pj && pj < w && s[pi][pj] != '#' && dist[pi][pj] > dist[p.first][p.second]) {
+                dist[pi][pj] = dist[p.first][p.second];
+                q.emplace_front(pi, pj);
+            }
+            continue;
+        }
+        if (s[pi][pj] == 'R') {
+            ++pj;
+            if (0 <= pi && pi < h && 0 <= pj && pj < w && s[pi][pj] != '#' && dist[pi][pj] > dist[p.first][p.second]) {
+                dist[pi][pj] = dist[p.first][p.second];
+                q.emplace_front(pi, pj);
+            }
+            continue;
+        }
+        for (int k = 0; k < 4; ++k) {
+            int ti = pi + dd[k];
+            int tj = pj + dd[k ^ 1];
+            if (0 <= ti && ti < h && 0 <= tj && tj < w && s[ti][tj] != '#' && dist[ti][tj] > dist[p.first][p.second] + 1) {
+                dist[ti][tj] = dist[p.first][p.second] + 1;
+                q.emplace_back(ti, tj);
+            }
+        }
+    }
+    cout << (dist[gi][gj] == M ? -1 : dist[gi][gj]) << '\n';
+
+
+    return 0;
+}
+

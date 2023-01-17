@@ -1,0 +1,130 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+int N,M;
+string S[10];
+int sx,sy,gx,gy;
+vector<pair<int,int> >P;
+bool vis[10][10][4][5];
+int dx[4]={1,0,-1,0};
+int dy[4]={0,-1,0,1};
+queue<pair<pair<int,int>,pair<int,int> > >Q;
+bool check()
+{
+	for(int i=0;i<N;i++)for(int j=0;j<M;j++)for(int r=0;r<4;r++)for(int k=0;k<P.size();k++)
+	{
+		vis[i][j][r][k]=false;
+	}
+	while(!Q.empty())Q.pop();
+	Q.push(make_pair(make_pair(sx,sy),make_pair(0,0)));
+	vis[sx][sy][0][0]=true;
+	while(!Q.empty())
+	{
+		int x=Q.front().first.first,y=Q.front().first.second;
+		int dir=Q.front().second.first,pc=Q.front().second.second;
+		Q.pop();
+		if(x==gx&&y==gy)return true;
+		int op=P[pc].first;
+		int tx,ty;
+		switch(op)
+		{
+			case 0:
+				pc=P[pc].second;
+				break;
+			case 1:
+				tx=x+dx[dir],ty=y+dy[dir];
+				if(0<=tx&&tx<N&&0<=ty&&ty<M&&S[tx][ty]!='#')pc=P[pc].second;
+				else pc=(pc+1)%P.size();
+				break;
+			case 2:
+				tx=x+dx[dir],ty=y+dy[dir];
+				if(0<=tx&&tx<N&&0<=ty&&ty<M&&S[tx][ty]!='#')x=tx,y=ty;
+				pc=(pc+1)%P.size();
+				break;
+			case 3:
+				dir=(dir+3)%4;
+				pc=(pc+1)%P.size();
+				break;
+			case 4:
+				dir=(dir+1)%4;
+				pc=(pc+1)%P.size();
+				break;
+		}
+		if(!vis[x][y][dir][pc])
+		{
+			vis[x][y][dir][pc]=true;
+			Q.push(make_pair(make_pair(x,y),make_pair(dir,pc)));
+		}
+	}
+	return false;
+}
+bool dfs(int id,int len)
+{
+	if(id==len)
+	{
+		if(check())
+		{
+			cout<<len<<endl;
+			for(int i=0;i<len;i++)
+			{
+				int op=P[i].first;
+				switch(op)
+				{
+					case 0:
+						cout<<"GOTO "<<P[i].second+1<<endl;
+						break;
+					case 1:
+						cout<<"IF-OPEN "<<P[i].second+1<<endl;
+						break;
+					case 2:
+						cout<<"FORWARD"<<endl;
+						break;
+					case 3:
+						cout<<"LEFT"<<endl;
+						break;
+					case 4:
+						cout<<"RIGHT"<<endl;
+						break;
+				}
+			}
+			return true;
+		}
+	}
+	else
+	{
+		for(int op=0;op<5;op++)
+		{
+			P[id].first=op;
+			if(op<=1)
+			{
+				for(int i=0;i<len;i++)
+				{
+					P[id].second=i;
+					if(dfs(id+1,len))return true;
+				}
+			}
+			else if(dfs(id+1,len))return true;
+		}
+	}
+	return false;
+}
+int main()
+{
+	cin>>N>>M;
+	for(int i=0;i<N;i++)
+	{
+		cin>>S[i];
+		for(int j=0;j<M;j++)
+		{
+			if(S[i][j]=='S')sx=i,sy=j;
+			if(S[i][j]=='G')gx=i,gy=j;
+		}
+	}
+	for(int len=1;len<=1;len++)
+	{
+		P.resize(len);
+		if(dfs(0,len))return 0;
+	}
+}
+

@@ -1,0 +1,4 @@
+r = gets.to_f
+area = Math::PI * (2 **2)
+circumference = 2 * Math::PI * r
+puts "#{area.round(6)} #{circumference.round(6)}"

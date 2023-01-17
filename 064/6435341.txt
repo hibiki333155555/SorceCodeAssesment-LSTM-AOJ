@@ -1,0 +1,22 @@
+import sys
+readline = sys.stdin.readline
+write = sys.stdout.write
+def solve():
+    N, M, Q = map(int, readline().split())
+    *A, = map(int, readline().split())
+    cur = 0
+    *S, = range(N)
+    for a in A:
+        if a % 2 == 0:
+            cur += a
+        else:
+            cur -= a
+        cur %= N
+        S.pop(cur)
+        N -= 1
+    T = set(S)
+    *qs, = map(int, readline().split())
+    for q in qs:
+        write("%d\n" % (q in T))
+solve()
+

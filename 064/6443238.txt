@@ -1,0 +1,14 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+   double PI=3.14159;
+
+   double S, L, r;
+   cin >> r;
+
+   S = PI * r * r;
+   L = 2 * PI * r;
+
+   cout << S << " " << L << "\n";
+}

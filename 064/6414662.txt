@@ -1,0 +1,56 @@
+MOD = 998244353
+table_len = 2 * 10 ** 5 + 10
+
+fac = [1, 1]
+for i in range(2, table_len):
+    fac.append(fac[-1] * i % MOD)
+
+finv = [0] * table_len
+finv[-1] = pow(fac[-1], MOD - 2, MOD)
+for i in range(table_len-1, 0, -1):
+    finv[i-1] = finv[i] * i % MOD
+
+def comb(n, k):
+    if k < 0 or n < 0 or n - k < 0:
+        return 0
+    return fac[n] * finv[k] % MOD * finv[n - k] % MOD
+
+
+N = int(input())
+As = list(map(int, input().split()))
+
+from collections import  Counter
+
+cnter = Counter(As)
+
+rem = N
+
+c2 = 0
+c3 = 0
+answer =  1
+for A in As:
+    if A % 6 == 0:
+        answer *= comb(c2 + c3, c2)
+        answer %= MOD
+        c2 = 0
+        c3 = 0
+    elif A % 2 == 0:
+        c2 += 1
+    elif A % 3 == 0:
+        c3 += 1
+    else:
+        rem -= 1
+
+answer *= comb(c2 + c3, c2)
+answer %= MOD
+c2 = 0
+c3 = 0
+
+
+for t in range(10):
+    if t % 2 and t % 3:
+        answer *= comb(rem + cnter[t], cnter[t])
+        answer %= MOD
+        rem += cnter[t]
+
+print(answer)

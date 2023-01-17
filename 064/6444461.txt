@@ -1,0 +1,22 @@
+import java.util.*;
+
+class Solve {
+    final Scanner sc = new Scanner(System.in);
+    private String revrese(String target){
+        int len = target.length();
+        String res = "";
+        for(int i = 0; i < len; i++){
+            res = target.charAt(i) + res;
+        }
+        return res;
+    }
+    public void Do(){
+        String str = sc.nextLine();
+        System.out.println( this.reverse(str) );
+    }
+}
+class Main {
+    public static void main(){
+        new Solve().Do();
+    }
+}

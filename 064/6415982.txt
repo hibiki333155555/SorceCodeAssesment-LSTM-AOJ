@@ -1,0 +1,6 @@
+a = int(input())
+b = int(input())
+#print(f"a = {a} b = {b}")
+area = a * b
+perimeter = 2 * (a + b)
+print(f"{area} {perimeter}")

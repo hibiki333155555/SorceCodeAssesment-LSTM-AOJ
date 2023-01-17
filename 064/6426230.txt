@@ -1,0 +1,7 @@
+n=int(input())
+l=list(map(int,input().split()))
+for i in range(n):
+    if i==n-1:
+        print(l[n-i-1])
+    else:
+        print(l[n-i-1],end=" ")

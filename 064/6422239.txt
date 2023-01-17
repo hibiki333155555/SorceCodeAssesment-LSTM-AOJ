@@ -1,0 +1,50 @@
+class Element:
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+        
+        
+class Stack:
+    def __init__(self):
+        self.top = None 
+        
+        
+    def is_empty(self):
+        if self.top is None:
+            return True 
+        else:
+            return False 
+        
+        
+    def push(self, element):
+        if self.top is not None:
+            element.next = self.top 
+        self.top = element 
+        
+    
+    def pop(self):
+        if self.is_empty():
+            return 
+        
+        e = self.top 
+        self.top = e.next 
+        
+        return e.val 
+    
+    
+que = Stack()
+
+operator = {'+': lambda x, y: x + y, 
+            '-': lambda x, y: x - y, 
+            '*': lambda x, y: x*y}
+for s in input().split():
+    if s in operator:
+        b = que.pop()
+        a = que.pop()
+        c = operator[s](a, b)
+        que.push(Element(c))
+    else:
+        que.push(Element(int(s)))
+        
+ans = que.top.val
+print(ans)

@@ -1,0 +1,5 @@
+N =int(input())
+A = list(map(int, input().split()))
+B = A.reverse()
+#for i in range(N):
+print(" ".join(map(str,B)))

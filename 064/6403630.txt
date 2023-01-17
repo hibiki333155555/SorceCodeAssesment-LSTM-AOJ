@@ -1,0 +1,184 @@
+
+#if 1
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <stack>
+#include <array>
+#include <deque>
+#include <algorithm>
+#include <utility>
+#include <cstdint>
+#include <functional>
+#include <iomanip>
+#include <numeric>
+#include <assert.h>
+#include <bitset>
+#include <list>
+#include <cmath>
+#include <cstdint>
+
+auto& in = std::cin;
+auto& out = std::cout;
+#define all_range(C) std::begin(C), std::end(C)
+const double PI = 3.141592653589793238462643383279502884197169399375105820974944;
+
+int32_t N;
+std::vector<std::pair<int, int>> mount;
+std::vector<int> query;
+using namespace std;
+#define INF 200000000200000000
+#define P pair<int64_t,int64_t>
+#define prique(T) priority_queue<T,vector<T>,greater<T>>
+#define all(V) V.begin(),V.end()
+class ConvexHullTrick {
+    bool minOrMax, lineMonotone;
+    class Line {
+    public:
+        int64_t a, b;
+        bool isquery;
+        mutable std::function<const Line* ()> getSuc;
+        bool operator<(const Line& x) const {
+            if (isquery) {
+                const Line* suc = next(this);
+                if (suc == nullptr) return true;
+                return (suc->a - x.a) * a + suc->b - x.b > 0;
+            }
+            if (x.isquery) {
+                const Line* suc = next(this);
+                if (suc == nullptr) return false;
+                return (suc->a - a) * x.a + suc->b - b < 0;
+            }
+            return a < x.a;
+        }
+    };
+    bool isbad(const std::set<Line>::iterator x) {
+        if (x == st.begin() || next(x) == st.end())return false;
+        auto pre = prev(x), nex = next(x);
+        if (((*x).b - (*pre).b) * ((*nex).a - (*x).a) >= ((*nex).b - (*x).b) * ((*x).a - (*pre).a))return true;
+        return false;
+    }
+    bool isbad(const std::vector<Line>::iterator x) {
+        if (x == vec.begin() || next(x) == vec.end())return false;
+        auto pre = prev(x), nex = next(x);
+        if (((*x).b - (*pre).b) * ((*nex).a - (*x).a) >= ((*nex).b - (*x).b) * ((*x).a - (*pre).a))return true;
+        return false;
+    }
+    std::set<Line> st;
+    std::vector<Line> vec;
+public:
+    ConvexHullTrick(bool minormax = false, bool lineMonotone = false) :minOrMax(minormax), lineMonotone(lineMonotone) {}
+    void addLine(int64_t a, int64_t b) {
+        if (minOrMax) {
+            a = -a; b = -b;
+        }
+        if (!lineMonotone) {
+            auto pos = st.lower_bound({ a,-INF,false });
+            if (pos != st.end()) {
+                if ((*pos).a == a) {
+                    if ((*pos).b <= b)return;
+                    st.erase(pos);
+                }
+            }
+            auto ite = st.insert({ a,b,false }).first;
+            ite->getSuc = [=] {return next(ite) == st.end() ? nullptr : &*next(ite); };
+            if (isbad(ite)) {
+                st.erase(ite);
+                return;
+            }
+            while (next(ite) != st.end() && isbad(next(ite)))st.erase(next(ite));
+            while (ite != st.begin() && isbad(prev(ite)))st.erase(prev(ite));
+        }
+        else {
+            if (!vec.empty()) {
+                if (vec.back().a > a) {
+                    cerr << "Line additions are not monotone" << endl;
+                    exit(1);
+                }
+                if (vec.back().a == a) {
+                    if (vec.back().b <= b)return;
+                    vec.pop_back();
+                }
+            }
+            vec.push_back({ a,b,false });
+            auto ite = --vec.end();
+            int index = vec.size() - 1;
+            ite->getSuc = [this, index] {std::cout << vec.size() << endl; return index == vec.size() - 1 ? nullptr : &*(vec.begin() + index + 1); };
+            while (ite != vec.begin() && isbad(prev(ite))) {
+                *prev(ite) = vec.back();
+                vec.pop_back();
+                ite = --vec.end();
+            }
+        }
+    }
+    int64_t query(int64_t x) {
+        if (!lineMonotone) {
+            auto l = *st.lower_bound(Line{ x, 0,true });
+            if (!minOrMax)return l.a * x + l.b;
+            else return -l.a * x - l.b;
+        }
+        else {
+            auto l = *std::lower_bound(vec.begin(), vec.end() - 1, Line({ x,0,true }));
+            if (!minOrMax)return l.a * x + l.b;
+            else return -l.a * x - l.b;
+        }
+    }
+};
+
+
+std::vector<double> result();
+int main()
+{
+    using std::endl;
+    in.sync_with_stdio(false);
+    out.sync_with_stdio(false);
+    in.tie(nullptr);
+    out.tie(nullptr);
+
+    in >> N;
+    for (int i = 0; i < N; i++)
+    {
+        int c, r;
+        in >> c >> r;
+        mount.push_back({ c, r });
+    }
+    int q;
+    in >> q;
+    for (int i = 0; i < q; i++){
+        int x;
+        in >> x;
+        query.push_back(x);
+    }
+    std::sort(mount.begin(), mount.end(), std::greater<>{});
+
+    ConvexHullTrick lines(true, true);
+    for (size_t i = 0; i < mount.size(); i++)
+    {
+        if (i > 0) {
+            if (mount[i].first == mount[i - 1].first) { continue; }
+        }
+        int64_t r = mount[i].second;
+        int64_t c = mount[i].first;
+        lines.addLine(2 * c, r * r - c * c);
+    }
+
+    for (size_t i = 0; i < q; i++)
+    {
+        int64_t npos = query[i];
+        long double me = std::sqrt((long double)std::max<int64_t>(0, lines.query(npos) - npos * npos));
+        out
+            << std::fixed << std::setprecision(29)
+            << me << '\n';
+
+    }
+
+    return 0;
+}
+#endif
+

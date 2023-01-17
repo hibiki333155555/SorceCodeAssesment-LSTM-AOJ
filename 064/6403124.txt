@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+	int h, w, n;
+	cin >> h >> w >> n;
+	vector<vector<char>>Field(h, vector<char>(w));
+	pair<int, int>s_hw;
+	vector<pair<int, int>>Factories(n);
+	for (int a = 0; a < h; a++)
+	{
+		for (int b = 0; b < w; b++)
+		{
+			char x;
+			cin >> x;
+			if (x == 'S')
+				s_hw = make_pair(a, b);
+			else if (x != '.' && x != 'X')
+			{
+				int num = (int)(x - '0');
+				Factories.at(num - 1) = make_pair(a, b);
+			}
+			Field.at(a).at(b) = x;
+		}
+	}
+	int ans = 0;
+	const vector<pair<int, int>>ways =
+	{
+		make_pair(1,0),make_pair(-1,0),make_pair(0,1),make_pair(0,-1)
+	};
+	for (int a = 0; a < n; a++)
+	{
+		queue<pair<int, int>>que;
+		que.push(s_hw);
+		vector<vector<int>>dist(h, vector<int>(w, -1));
+		dist.at(s_hw.first).at(s_hw.second) = 0;
+		bool reachedFlag = false;
+		while (!que.empty())
+		{
+			pair<int, int>now = que.front();
+			que.pop();
+			for (int b = 0; b < 4; b++)
+			{
+				int ch = now.first + ways.at(b).first;
+				int cw = now.second + ways.at(b).second;
+				if (ch < 0 || ch >= h || cw < 0 || cw >= w)
+					continue;
+				if (Field.at(ch).at(cw) == 'X')
+					continue;
+				if (dist.at(ch).at(cw) != -1)
+					continue;
+				dist.at(ch).at(cw) = dist.at(now.first).at(now.second) + 1;
+				int cur = dist.at(Factories.at(a).first).at(Factories.at(a).second);
+				if (cur != -1)
+				{
+					ans += cur;
+					reachedFlag = true;
+					break;
+				}
+				que.push(make_pair(ch, cw));
+			}
+			if (reachedFlag)
+			{
+				s_hw = make_pair(Factories.at(a).first, Factories.at(a).second);
+				break;
+			}
+		}
+	}
+	cout << ans << endl;
+}

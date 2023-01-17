@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+#include <string>
+using namespace std;
+
+int main() {
+
+    double r;
+    cin>>r;
+    double pi=3.141592653589;
+
+    double len=2*pi*r;
+    double are=pi*r*r;
+
+    cout<<fixed<< setprecision(10)<<len<<" "<<are<<endl;
+
+    return 0;
+}
+

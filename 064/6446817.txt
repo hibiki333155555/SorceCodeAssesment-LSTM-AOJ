@@ -1,0 +1,28 @@
+#include<stdio.h>
+int main()
+{
+    int arr[3];
+    for(int i=0;i<3;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    for(int i=0;i<3-1;i++)
+    {
+        for(int j=i+1;j<3;j++)
+        {
+            if(arr[j]<arr[i])
+            {
+                int min=arr[j];
+                arr[j]=arr[i];
+                arr[i]=min;
+            }
+        }
+    }
+    for(int i=0;i<3;i++)
+    {
+        printf("%d",arr[i]);
+        if(i<2) printf(" ");
+        if(i==2) printf("\n");
+    }
+    return 0;
+}

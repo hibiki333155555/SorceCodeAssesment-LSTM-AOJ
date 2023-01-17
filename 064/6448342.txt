@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+
+int main(){
+  ll n;
+  while(cin>>n,n){
+    vector<ll> e,o;
+    for(ll i=0,x;i<n*(n+1)/2;i++){
+      cin>>x;
+      if(x%2)o.push_back(x);
+      else e.push_back(x);
+    }
+    sort(e.begin(),e.end());
+    sort(o.begin(),o.end());
+    ll x=e[0],y=e[1],z=o[0];
+    ll tp=__gcd(x,z);
+    x/=tp,z/=tp,y/=z;
+    ll an=sqrt(x*y+0.1);
+    cout<<an<<endl;
+    for(ll i=0;i<e.size();i++){
+      if(i)cout<<' ';
+      cout<<e[i]/an;
+    }
+    cout<<endl;
+  }
+  return 0;
+}
+

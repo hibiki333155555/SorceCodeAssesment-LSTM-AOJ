@@ -1,0 +1,8 @@
+N=int(input())
+for _ in range(N):
+    three = list(map(int,input().split()))
+    three.sort()
+    if three[0]**2 + three[1]**2 == three[2]**2:
+        print("YES")
+    else:
+        print("NO")

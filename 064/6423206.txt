@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+int main(void)
+{
+    int a[10]={0};
+    int i,b=0,n=0;
+    
+    while(scanf("%d",&b)!=EOF)
+    {
+        if(b!=0){
+            a[n]=b;
+            n++;
+        }
+        else if(b==0){
+            printf("%d\n",a[n-1]);
+            a[n-1]=0;
+            n--;
+        }
+    }
+}

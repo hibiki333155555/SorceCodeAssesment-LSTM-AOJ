@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(){
+    int i,j,n,out=0,max,cnt=0,prime[10001];
+    
+    scanf("%d",&n);
+    
+    for(i=0;i<n;i++){
+        scanf("%d",&prime[i]);
+    }
+    
+    for(j=0;j<n;j++){
+        
+        out=0;
+        
+        if(prime[j]==2)cnt++;
+
+        max=sqrt(prime[j])+1;
+        //printf("%d",max);
+        for(i=2;i<=max;i=i+2){
+            if(prime[j]%i==0){
+                out=1;
+                //printf("a");
+            }
+            //printf("%d",prime[j]);
+        }
+        for(i=3;i<=max;i=i+2){
+            if(prime[j]%i==0){
+                out=1;
+                //printf("a");
+                //printf("%d",i);
+            }
+            //printf("%d",prime[j]);
+        }
+        if(out==0)cnt++;
+    }
+    
+    printf("%d\n",cnt);
+}

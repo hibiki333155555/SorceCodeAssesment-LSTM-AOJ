@@ -1,0 +1,146 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll,ll> PP;
+//#define MOD 1000000007
+#define MOD 998244353
+#define INF 2305843009213693951
+//#define INF 810114514
+#define PI 3.141592653589
+#define setdouble setprecision
+#define REP(i,n) for(ll i=0;i<(n);++i)
+#define OREP(i,n) for(ll i=1;i<=(n);++i)
+#define RREP(i,n) for(ll i=(n)-1;i>=0;--i)
+#define ALL(v) (v).begin(), (v).end()
+#define GOODBYE do { cout << "-1" << endl; return 0; } while (false)
+#define MM <<" "<<
+#define Endl endl
+#define debug true
+#define debug2 false
+
+
+
+int main(void){
+    
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+
+    ll H,W;
+    cin >> H >> W;
+    vector<string> G(H);
+    REP(i,H){cin >> G[i];}
+
+    ll sy,sx,gy,gx;
+    REP(i,H){
+        REP(j,W){
+            if(G[i][j]=='S'){
+                sy=i;sx=j;
+            }
+            if(G[i][j]=='V'){
+                gy=i;gx=j;
+            }
+        }
+    }
+
+    ll M;
+    cin >> M;
+    vector<vector<ll>> timeline(H,vector<ll>(W,-INF));
+    REP(i,M){
+        ll a,b,t;
+        cin >> a >> b >> t;
+        a--;b--;
+        timeline[a][b] = t;
+    }
+
+    ll dx[4] = {1,0,-1,0};
+    ll dy[4] = {0,1,0,-1};
+
+    queue<pair<ll,ll>> que;
+    vector<vector<ll>> cost1(H,vector<ll>(W,INF));
+
+    que.push({sy,sx});
+    cost1[sy][sx] = 0;
+
+    while(!que.empty()){
+        ll ty = que.front().first, tx = que.front().second;
+        que.pop();
+
+        REP(k,4){
+            ll y = ty+dy[k], x = tx+dx[k];
+
+            if(!(0<=y && y<H))continue;
+            if(!(0<=x && x<W))continue;
+            if(G[y][x]=='#')continue;
+            if(cost1[y][x]!=INF)continue;
+
+            if(timeline[y][x]!=-INF && timeline[y][x] <= cost1[ty][tx]+1){
+                continue;
+            }
+
+            cost1[y][x] = cost1[ty][tx]+1;
+            que.push({y,x});
+
+        }
+
+    }
+
+    
+    vector<vector<ll>> cost2(H,vector<ll>(W,INF));
+
+    que.push({gy,gx});
+    cost2[gy][gx] = cost1[gy][gx];
+
+    while(!que.empty()){
+        ll ty = que.front().first, tx = que.front().second;
+        que.pop();
+
+        REP(k,4){
+            ll y = ty+dy[k], x = tx+dx[k];
+
+            if(!(0<=y && y<H))continue;
+            if(!(0<=x && x<W))continue;
+            if(G[y][x]=='#')continue;
+            if(cost2[y][x]!=INF)continue;
+
+            if(timeline[y][x]!=-INF && timeline[y][x] <= cost2[ty][tx]+1){
+                continue;
+            }
+
+            cost2[y][x] = cost2[ty][tx]+1;
+            que.push({y,x});
+
+        }
+
+    }
+
+    if(cost2[sy][sx]!=INF){
+        cout << "Yes" << endl;
+    }else{
+        cout << "No" << endl;
+    }
+
+    /*REP(i,H){
+        REP(j,W){
+            if(cost1[i][j]==INF){
+                cout << "I ";
+            }else{
+                cout << cost1[i][j] << " ";
+            }
+        }
+        cout << endl;
+    }cout << Endl;
+
+    REP(i,H){
+        REP(j,W){
+            if(cost2[i][j]==INF){
+                cout << "I ";
+            }else{
+                cout << cost2[i][j] << " ";
+            }
+        }
+        cout << endl;
+    }*/
+
+    return 0;
+}
+

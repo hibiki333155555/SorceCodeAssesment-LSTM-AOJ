@@ -1,0 +1,18 @@
+import math
+N=[]
+A=[]
+while True:
+    n=input()
+    if n==0:
+        break
+    a=list(map(int,raw_input().split()))
+    N.append(n)
+    A.append(a)
+for i in range(len(N)):
+    H=sum(A[i])/len(A[i])
+    for j in range(N[i]):
+        m=(A[i][j]-H)**2
+        M.append(m)
+    print math.sqrt(sum(M)/N[i])
+    
+

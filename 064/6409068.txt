@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    string str;
+    getline(cin,str);
+    int count=0;
+    for(int i='a'; i<'z'+1;i++){
+        for(auto &s:str){
+            if('a'<=s && s<='z'){
+                if(s==i) count++;
+            }
+            else if('A'<=s && s<='Z'){
+                s+=32;
+                if(s==i) count++;
+            }
+        }
+        printf("%c : %d\n", i,count);
+        count=0;
+    }
+}

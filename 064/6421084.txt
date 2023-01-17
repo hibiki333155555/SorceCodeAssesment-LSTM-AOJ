@@ -1,0 +1,87 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include<bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+const int INF = 1e9;
+const ll inf = 1LL<<62;
+
+template<typename T>
+bool chmin(T& x, const T& y){
+  if(x <= y) return false;
+  x = y;
+  return true;
+}
+template<typename T>
+bool chmax(T& x, const T& y){
+  if(x >= y) return false;
+  x = y;
+  return true;
+}
+void Dijkstra(int s, vector<vector<pair<ll, ll>>> &G, vector<ll> &d) {
+  priority_queue<pair<ll, ll>, vector<pair<ll, ll>>, greater<pair<ll, ll>>> q;
+  d[s] = 0;
+  q.push({0, s});
+  while (!q.empty()) {
+    auto k = q.top();
+    q.pop();
+    if (d[k.second] != k.first) continue;
+    for (auto p : G[k.second]) {
+      auto next = k.first + p.second;
+      if (chmin(d[p.first], next)) q.push({next, p.first});
+    }
+  }
+}
+
+
+void solve() {
+  int h, w; cin >> h >> w;
+  vector<string> c(h);
+  int sx, sy, gx, gy;
+  for (int i=0; i<h; i++) {
+    cin >> c[i];
+    for (int j=0; j<w; j++) {
+      if (c[i][j] == 'S') {
+        sx = i;
+        sy = j;
+      }
+      if (c[i][j] == 'G') {
+        gx = i;
+        gy = j;
+      }
+    }
+  }
+  vector<vector<pair<ll, ll>>> G(h*w);
+  vector<int> dx = {1, 0, -1, 0}, dy = {0, 1, 0, -1};
+  for (int i=0; i<h; i++) for (int j=0; j<w; j++) if (c[i][j] != '#') {
+    if (c[i][j] == 'U') {
+      if (i > 0) G[i*w+j].emplace_back((i-1)*w+j, 0);
+    } else if (c[i][j] == 'D') {
+      if (i < h-1) G[i*w+j].emplace_back((i+1)*w+j, 0);
+    } else if (c[i][j] == 'L') {
+      if (j > 0) G[i*w+j].emplace_back(i*w+j-1, 0);
+    } else if (c[i][j] == 'R') {
+      if (j < w-1) G[i*w+j].emplace_back(i*w+j+1, 0);
+    } else {
+      for (int k=0; k<4; k++) {
+        int nx = i + dx[k], ny = j + dy[k];
+        if (0 <= nx && nx < h && 0 <= ny && ny < w && c[nx][ny] != '#') {
+          G[i*w+j].emplace_back(nx*w+ny, 1);
+        }
+      }
+    }
+  }
+  vector<ll> d(h*w, inf);
+  Dijkstra(sx*w+sy, G, d);
+  cout << (d[gx*w+gy] < inf ? d[gx*w+gy] : -1) << '\n';
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  // int t; cin >> t;
+  /*while (t--)*/ solve();
+}
+

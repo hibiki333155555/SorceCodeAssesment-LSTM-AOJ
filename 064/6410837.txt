@@ -1,0 +1,33 @@
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <cstring>
+#include <set>
+#include <cmath>
+#include <map>
+typedef long long ll;
+using namespace std;
+const int MN = 65005;
+const int MAXN = 1000005;
+const int INF = 0x3f3f3f3f;
+
+
+ll gcd(ll x, ll y) {
+	if (y == 0) {
+		return x;
+	}
+	return gcd(y, x % y);
+}
+
+int main() {
+	ll a, b;
+	while (scanf("%lld %lld", &a, &b)!=EOF) {
+		ll tmp = gcd(a, b);
+		printf("%lld %lld\n", tmp, (a*b) / tmp);
+	}
+	return 0;
+}

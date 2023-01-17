@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+int k[1001][1001];
+
+int main(void)
+{
+    int H, W, N;
+    int x, y, t;
+    int X, Y, D;
+    int dir[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    
+    scanf("%d%d%d", &H, &W, &N);
+    for (y = 1; y <= H; y++){
+        for (x = 1; x <= W; x++){
+            k[y][x] = 1;
+        }
+    }
+    
+    X = Y = 1;
+    D = 0;
+    
+    for (t = 0; t < N; t++){
+        k[Y][X] = -1;
+        if (k[Y + dir[D][1]][X + dir[D][0]] != 1){
+            D = (D + 1) % 4;
+        }
+        if (k[Y + dir[D][1]][X + dir[D][0]] != 0){
+            X += dir[D][0];
+            Y += dir[D][1];
+        }
+    }
+    
+    for (y = 1; y <= H; y++){
+        for (x = 1; x <= W; x++){
+            if (k[y][x] == 1){
+                printf("#");
+            }
+            else {
+                printf("X");
+            }
+        }
+        printf("\n");
+    }
+    
+    return (0);
+}
+

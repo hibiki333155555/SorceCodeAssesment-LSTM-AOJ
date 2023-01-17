@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+#include<atcoder/all>
+using namespace std;
+using namespace atcoder;
+#define ll long long
+#define rep(i, n) for(int i = 0; i < (n); i++)
+#define coutf(f) cout << fixed << setprecision(f)
+#define all(v) (v).begin(), (v).end()
+#define pb push_back
+using Graph = vector<pair<int, int>>;
+const int mod = 1000000007;
+
+struct UnionFind {
+    vector<int> par;
+    stack<pair<int,int>> history;
+    
+    UnionFind() {}
+    UnionFind(int n) : par(n, -1) { }
+    void init(int n) { par.assign(n, -1); }
+    
+    int root(int x) {
+        if (par[x] < 0) return x;
+        else return root(par[x]);
+    }
+    
+    bool issame(int x, int y) {
+        return root(x) == root(y);
+    }
+    
+    bool merge(int x, int y) {
+        x = root(x); y = root(y);
+        history.emplace(x, par[x]);
+        history.emplace(y, par[y]);
+        if (x == y) return false;
+        if (par[x] > par[y]) swap(x, y);
+        par[x] += par[y];
+        par[y] = x;
+        return true;
+    }
+    int size(int x) {
+        return -par[root(x)];
+    }
+    void undo() {
+        for (int iter = 0; iter < 2; ++iter) {
+            par[history.top().first] = history.top().second;
+            history.pop();
+        }
+    }
+    void snapshot() {
+        while (!history.empty()) history.pop();
+    }
+    void rollback() {
+        while (!history.empty()) undo();
+    }
+};
+
+int main(){
+    //1.Input
+    int n, q;
+    cin >> n >> q;
+    UnionFind uf(n);
+    //2.Process
+    rep(i,q){
+        int com, x, y;
+        cin >> com >> x >> y;
+        if(com == 0) uf.merge(x,y);
+        else{
+            if(uf.issame(x,y)) cout << 1 << endl;
+            else cout << 0 << endl;
+        }
+    }
+    //3.Output
+}

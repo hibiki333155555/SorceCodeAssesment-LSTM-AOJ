@@ -1,0 +1,13 @@
+import math
+
+PI = math.pi
+r = float(input())
+# print(r)
+area = r * r * PI
+cir = 2 * PI * r
+s_area = '{:.6f}'.format(area)
+s_cir = '{:.6f}'.format(cir)
+s = s_area + " " + s_cir
+print(s)
+#桁数 format
+

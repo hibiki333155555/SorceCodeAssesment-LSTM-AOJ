@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int
+
+int main()
+{
+   int n,i,b;
+    string str,c;
+      cin>>n;
+      map<string,int>mp;
+      while(n--)
+      {
+          cin>>b>>str;
+          if(b==0)
+          {
+              cin>>i;
+              mp[str] = i;
+          }
+          else if(b==1)
+          {
+              cout<<mp[str]<<endl;
+          }
+          else if(b==2)
+          {
+              mp[str]=0;
+          }
+          else
+          {
+              cin>>c;
+              map<string,int>::iterator itr,itr2,itr3;
+              itr2 = mp.lower_bound(str);
+              itr3 = mp.upper_bound(c);
+              for(itr = itr2; itr!=itr3; itr++)
+              {
+                 if(itr->second){cout<<itr->first<<" "<<itr->second<<endl;}
+              }
+
+          }
+      }
+
+}
+

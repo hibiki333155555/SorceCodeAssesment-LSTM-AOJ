@@ -1,0 +1,27 @@
+using System;
+using System.Linq;
+
+class Program
+{
+static void Main(string[] args)
+{
+Console.ReadLine();
+var Line = Console.ReadLine();
+var Ret = "";
+for (; ; )
+{
+if (Line.Length == 0) break;
+if (Line.StartsWith("joi"))
+{
+Ret += "JOI";
+Line = Line.Substring(3);
+}
+else
+{
+Ret += Line[0];
+Line = Line.Substring(1);
+}
+}
+Console.WriteLine(Ret);
+}
+}

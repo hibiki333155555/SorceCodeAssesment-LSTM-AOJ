@@ -1,0 +1,91 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+ll cnt1[10000];
+ll cnt2[100];
+int under_2[10000];
+
+const ll F = 300000;
+const ll S = 4000;
+const ll T = 500;
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    int n; cin >> n;
+    vector<string> s(n);
+    for(int i=0;i<10000;i++){
+        under_2[i] = i%100;
+    }
+    for(int i=0;i<n;i++){
+        cin >> s[i];
+        int v = (s[i][4]-'0')*10+(s[i][5]-'0');
+        cnt2[v]++;
+        int vv = (s[i][2]-'0')*1000+(s[i][3]-'0')*100+v;
+        cnt1[vv]++;
+    }
+    vector<pair<int,int>> v(100);
+    for(int i=0;i<100;i++){
+        v[i] = {cnt2[i],i};
+    }
+    sort(v.rbegin(), v.rend());
+    ll res = 0;
+    for(int i=0;i<10000;i++){
+        for(int j=0;j<100;j++){
+            if(under_2[i] == j)continue;
+            for(int k=j+1;k<100;k++){
+                if(under_2[i] == k)continue;
+                bool f = false;
+                for(int l=0;l<100;l++){
+                    int kk = v[l].second;
+                    if(kk == j or kk == k)continue;
+                    if(kk == under_2[i])continue;
+                    int sum = cnt2[under_2[i]]+cnt2[j]+cnt2[k]+cnt2[kk];
+                    ll score = S*cnt1[i]+T*(cnt2[j]+cnt2[k]+cnt2[kk]);
+                    if(sum < n) score += F;
+                    res = max(res, score);
+                    if(f)break;
+                    f = true;                    
+                }
+                // int sum = cnt2[under_2[i]]+cnt2[j]+cnt2[k];
+                // ll score = S*cnt1[i]+T*(cnt2[j]+cnt2[k]);
+                // if(sum < n) score += F;
+                // res = max(res, score);
+            }
+        }
+    }
+    cout << res << endl;
+}
+

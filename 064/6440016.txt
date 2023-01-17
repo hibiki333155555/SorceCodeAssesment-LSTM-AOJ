@@ -1,0 +1,8 @@
+input = input()
+ab = input.split()
+if int(ab[0]) > int(ab[1]):
+    print("a > b")
+elif int(ab[0]) < int(ab[1]):
+    print("a < b")
+else:
+    print("a == b")

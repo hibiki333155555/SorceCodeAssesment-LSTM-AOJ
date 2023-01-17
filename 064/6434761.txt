@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int INF = 1001001001;
+const int MOD = 1000000007;
+
+vector<string> babble(int n, vector<string> a) {
+    for(int i=0;i<n;i++) {
+        for(int j=n-1;j>=i+1;j--) {
+            if(a.at(j).at(1)<a.at(j-1).at(1)) swap(a.at(j),a.at(j-1));
+        }
+    }
+    return a;
+}
+
+vector<string> selection(int n, vector<string> a) {
+    for(int i=0;i<n;i++) {
+        int minj = i;
+        for(int j=i;j<n;j++) {
+            if(a.at(j).at(1)<a.at(minj).at(1)) minj = j;
+        }
+        swap(a.at(i),a.at(minj));
+    }
+    return a;
+}
+
+int main(){
+    int n;cin>>n;
+    vector<string> a(n);
+    for(int i=0;i<n;i++) cin>>a.at(i);
+    vector<string> b = babble(n,a);
+    vector<string> c = selection(n,a);
+    for(int i=0;i<n;i++) {
+        cout << b.at(i);
+        if(i==n-1) cout << endl;
+        else cout << " ";
+    }
+    cout << "Stable" << endl;
+    for(int i=0;i<n;i++) {
+        cout << c.at(i);
+        if(i==n-1) cout << endl;
+        else cout << " ";
+    }
+    bool flg = true;
+    for(int i=0;i<n;i++) {
+        if(b.at(i) != c.at(i)) flg = false;
+    }
+    if(flg) cout << "Stable" << endl;
+    else cout << "Not stable" << endl;
+}

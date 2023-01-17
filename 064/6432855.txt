@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define rep(i,n) for(int i=0; i<n; ++i)
+
+int w, h;
+vector<vector<int>> c;
+
+void dfs(int y, int x){
+    c[y][x] = 0;
+
+    for(int dy = -1; dy <= 1; ++dy){
+        for(int dx = -1; dx <= 1; ++dx){
+            int ny = y + dy, nx = x + dx;
+
+            if(!c[ny][nx]) continue;
+            if(ny < 0 || ny >= h || nx < 0 || nx >= w) continue;
+
+            dfs(ny, nx);
+        }
+    }
+}
+
+int main(){
+    while(true){
+        cin >> w >> h;
+
+        if(!w && !h) return 0;
+
+        c.assign(h, vector<int>(w));
+        rep(i,h) rep(j,w) cin >> c[i][j];
+
+        int cnt = 0;
+        rep(sy,h) rep(sx,w){
+            if(!c[sy][sx]) continue;
+            dfs(sy, sx);
+            cnt++;
+        }
+
+        cout << cnt << endl;
+    }
+}

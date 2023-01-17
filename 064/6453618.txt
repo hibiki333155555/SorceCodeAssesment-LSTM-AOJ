@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n; cin>>n;
+    int taro=0,hanako=0;
+    while(n--) {
+        string t,h; cin>>t>>h;
+        if(t==h) {
+            taro++;
+            hanako++;
+        }else if(t>h) {
+            taro += 3;
+        }else {
+            hanako += 3;
+        }
+    }
+    cout<<taro<<' '<<hanako<<endl;
+    return 0;
+}

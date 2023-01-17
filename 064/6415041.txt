@@ -1,0 +1,9 @@
+#include<stdio.h>
+int main(){
+int x,y , area , per;
+scanf("%d %d",&x ,&y);
+area = x*y;
+per=2*(x+y);
+   printf("%d %d\n",area , per);
+    return 0;
+}

@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+ll INF = 1LL<<62;
+const ll mod = 1000000007;
+
+ll V, E, r;
+vector<vector<pair<ll, ll> > > g(500010);
+vector<ll> dist(100010, INF);
+
+int main(){
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  cin >> V >> E >> r;
+  ll s, t, d;
+  for(ll i=0;i<E;i++){
+    cin >> s >> t >> d;
+    g[s].push_back({t, d});
+  }
+  dist[r] = 0;
+
+  priority_queue<pair<ll, ll>, vector<pair<ll, ll> >, greater<pair<ll, ll> > > que;
+  que.push({0, r});
+
+  while(!que.empty()){
+    pair<ll, ll> p = que.top();
+    que.pop();
+    ll v = p.second;
+
+    if(dist[v] < p.first) continue;
+    
+    for(ll i=0;i<g[v].size();i++){
+      pair<int, int> e = g[v][i];
+      if(dist[e.first] > dist[v] + e.second){
+        dist[e.first] = dist[v] + e.second;
+        que.push({dist[e.first], e.first});
+      }
+    }
+  }
+  
+  for(ll i=0;i<V;i++){
+    if(dist[i] == INF){
+      cout << "INF" << endl;
+    }else{
+      cout << dist[i] << endl;
+    }
+  }
+
+  return 0;
+
+}

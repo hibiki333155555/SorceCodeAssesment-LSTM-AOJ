@@ -1,0 +1,15 @@
+#include <stdio.h>
+
+int x;
+
+int main(){
+
+ scanf("%d",&x);
+
+ x = x*x*x;
+
+ printf("%d\n",x);
+
+return 0;
+
+}

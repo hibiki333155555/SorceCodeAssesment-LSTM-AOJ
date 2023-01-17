@@ -1,0 +1,21 @@
+m, f, r =0, 0, 0
+list = []
+while m !=-1 or f != -1 or r !=-1:
+    m, f, r = map(int, input().split())
+    if m ==-1 or f ==-1:
+        list.append('F')
+    if m+f >=80:
+        list.append('A')
+    if 65<= m+f <80:
+        list.append('B')
+    if 50 <=m+f<65:
+        list.append('C')
+    if 30 <= m+f <50:
+        if r >=50:
+            list.append('C')
+        else:
+            list.append('D')
+    if m+f <30:
+        list.append('F')
+for i in list:
+    print(i)

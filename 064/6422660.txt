@@ -1,0 +1,27 @@
+p1,p2 = 0,0
+n = int(input())
+while n:
+    j1,j2 = input().split()
+    l1 =  [ord(i) for i in j1]
+    l2 =  [ord(i) for i in j2]
+    if len(l2) >= len(l1):
+        for i in range(len(l1)):
+            if sum(l2[:len(i+1)]) > sum(l1[:len(i+1)]): p2+=3
+            elif sum(l2[:len(i+1)]) < sum(l1[:len(i+1)]): p1+=3
+        else: 
+            p1+=1
+            p2+=1
+            
+    elif len(l2) <= len(l1): 
+        for i in range(len(l2)):
+            if sum(l2[:len(i+1)]) > sum(l1[:len(i+1)]): p2+=3
+            elif sum(l2[:len(i+1)]) < sum(l1[:len(i+1)]): p1+=3 
+        else: 
+            p1+=1
+            p2+=1
+    else:
+        p1+=1
+        p2+=1
+        
+    print(p1,p2)
+    n-=1

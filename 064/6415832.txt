@@ -1,0 +1,13 @@
+N = int(input())
+A = list(map(int, input().split()))
+
+B = [i+A[i] for i in range(N)]
+B.sort()
+
+ans = 1
+M = 998244353
+for i in range(N):
+  ans *= B[i]-i
+  ans %= M
+print(ans)
+

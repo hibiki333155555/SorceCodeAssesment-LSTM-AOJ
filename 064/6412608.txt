@@ -1,0 +1,62 @@
+#include <iostream>
+#include <stack>
+#include <vector>
+using namespace std;
+const int NIL = -1;
+const int MAX = 41;
+int pos = 0;
+struct Node
+{
+    int left, right;
+    Node() : left(NIL), right(NIL) {}
+};
+using Node = struct Node;
+vector<int> ans;
+int Find(vector<int> &, int);
+void constructTree(vector<int> &, vector<int> &, int, int);
+
+int main()
+{
+    int n = 0;
+    cin >> n;
+    vector<int> pre, inor;
+    for (int i = 0, tem = 0; i < n; ++i)
+    {
+        cin >> tem;
+        pre.push_back(tem);
+    }
+    for (int i = 0, tem = 0; i < n; ++i)
+    {
+        cin >> tem;
+        inor.push_back(tem);
+    }
+    constructTree(pre, inor, 0, n);
+    for (auto i = ans.begin(); i < ans.end(); ++i)
+    {
+        cout << *i;
+        if(i < ans.end() - 1)
+            cout << " ";
+    }
+    cout << endl;
+    return 0;
+}
+int Find(vector<int> &a, int key)
+{
+    vector<int>::iterator i;
+    for (i = a.begin(); i < a.end(); i++)
+    {
+        if (key == *i)
+            break;
+    }
+    return distance(a.begin(), i);
+}
+void constructTree(vector<int> &pre, vector<int> &inor, int l, int r)
+{
+    if (l >= r)
+        return;
+    int root = pre[pos++];
+    int m = Find(inor, root);
+    constructTree(pre, inor, l, m);
+    constructTree(pre, inor, m + 1, r);
+    ans.push_back(root);
+}

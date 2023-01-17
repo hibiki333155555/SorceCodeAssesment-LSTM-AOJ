@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+template <typename T>
+struct LazySegmentTree {
+    int n;
+    vector<T> dat;
+    vector<T>lazy;
+    LazySegmentTree() {};
+    LazySegmentTree(int N) {
+        n = 1;
+        while(n < N) {
+            n *= 2;
+        }
+        dat.resize(n*2-1,0);
+        lazy.resize(n*2-1,0);
+    }
+    void eval(int k,int l,int r) {
+        if(lazy[k] == 0) return;
+        if(k < n-1) {
+            lazy[k*2+1] += lazy[k];
+            lazy[k*2+2] += lazy[k];
+        }
+        dat[k] += lazy[k]*(r-l);
+        lazy[k] = 0;
+    }
+    void update(int a, int b, T x, int k, int l, int r) {
+        eval(k,l,r);
+        if(a <= l && r <= b) {
+            lazy[k] += x;
+            eval(k,l,r);
+        }
+        else if(a < r && l < b) {
+            update(a, b, x, k*2+1, l, (l+r)/2);
+            update(a, b, x, k*2+2, (l+r)/2, r);
+            dat[k] = dat[k*2+1]+dat[k*2+2];
+        }
+    }
+    void update(int a, int b, T x) {//[a,b)
+        update(a, b, x, 0, 0, n);
+    }
+    T query_sub(int a, int b, int k, int l, int r) {
+        eval(k,l,r);
+        if (r <= a || b <= l) {
+            return 0;
+        }
+        else if (a <= l && r <= b) {
+            return dat[k];
+        }
+        else {
+            T vl = query_sub(a, b, k*2+1, l, (l+r)/2);
+            T vr = query_sub(a, b, k*2+2, (l+r)/2, r);
+            return vl+vr;
+        }
+    }
+    T query(int a, int b) {//[a,b)
+        return query_sub(a, b, 0, 0, n);
+    }
+};
+
+int main() {
+    int N,M;
+    cin >> N >> M;
+    vector<int>A(N),B(N),C(N);
+    vector<int>nxt(M,-1);
+    LazySegmentTree<long long>Seg(M);
+    for(int i = 0; i < N; i++) {
+        cin >> A[i] >> B[i] >> C[i];
+        B[i]--;
+        C[i]--;
+        Seg.update(B[i],C[i]+1,A[i]);
+        nxt[B[i]] = max(nxt[B[i]],C[i]);
+    }
+    int Q;
+    cin >> Q;
+    while (Q--) {
+        int D,E;
+        cin >> D >> E;
+        E--;
+        Seg.update(E,E+1,-D);
+    }
+    int mx = -1;
+    long long ans = 0;
+    for(int i = 0; i < M; i++) {
+        mx = max(mx,nxt[i]);
+        long long ret = 0-Seg.query(i,i+1);
+        if(ret > 0 && mx < i) {
+            cout << -1 << endl;
+            return 0;
+        }
+        else if(ret > 0) {
+            ans += ret;
+            Seg.update(i,mx+1,ret);
+        }
+    }
+    cout << ans << endl;
+}
+

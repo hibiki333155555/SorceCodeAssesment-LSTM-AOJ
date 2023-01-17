@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+//#define lson (rt<<1)
+//#define rson ((rt<<1)+1)
+//#define mid ((l+r)>>1)
+#define mst(a) memset(a,0,sizeof(a))
+#define cf int Tcodeforces, Tcodeforce;cin>>Tcodeforces;for(Tcodeforce = 1; Tcodeforce <= Tcodeforces; Tcodeforce++)
+typedef long long ll;
+typedef double db;
+const ll maxn = 2e3 +7;
+const ll maxm = 2e5 +7;
+const ll inf = 0x3f3f3f3f;
+const ll mod = 1e9 +7;
+
+int n;
+vector< pair<int, int> > e[maxn];
+int dis[maxn], cnt[maxn], vis[maxn];
+queue<int> q;
+bool solve() {
+    memset(dis, 0x3f, sizeof(dis));
+    dis[0] = 0;
+    vis[0] = 1;
+    q.push(0);
+    while(q.size()) {
+        int u = q.front();
+        q.pop();
+        vis[u] = 0;
+        for(auto ed : e[u]) {
+            int v = ed.first, w = ed.second;
+            if(dis[v] > dis[u] + w) {
+                dis[v] = dis[u] + w;
+                cnt[v] = cnt[u] + 1;
+                if(cnt[v] >= n) return false;
+                if(!vis[v]) q.push(v), vis[v] = 1;
+            }
+        }
+    }
+    return true;
+}
+
+signed main() {
+    #ifdef moyi_qwq
+        freopen("D:/source file/intxt/in.txt","r",stdin);
+    #endif
+    
+    cin>>n;
+    for(int i = 1; i <= n; i++) {
+        int u, k; cin>>u>>k;
+        for(int j = 1; j <= k; j++) {
+            int v, w; cin>>v>>w;
+            e[u].push_back(make_pair(v,w));
+        }
+    }
+    solve();
+    for(int i = 0; i < n; i++) {
+        cout<<i<<" "<<dis[i]<<endl;
+    }
+    
+    //cerr<<"Time : "<<1000*((double)clock())/(double)CLOCKS_PER_SEC<<"ms";
+    return (0);
+}
+

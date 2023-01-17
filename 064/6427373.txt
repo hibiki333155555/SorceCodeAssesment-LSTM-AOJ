@@ -1,0 +1,70 @@
+#include<stdio.h>
+#include<stdbool.h>
+#define MAX 100
+#define INF -1
+
+int to[MAX][MAX], distance[MAX];
+int time = 0, n;
+bool visited[MAX];
+
+int Q[MAX], Qr = 0, Qf = 0;
+
+void enqueue(int k){
+  Q[Qr] = k;
+  Qr = (Qr + 1) % MAX;
+}
+
+int dequeue(){
+  int d = Q[Qf];
+  Qf = (Qf + 1) % MAX;
+  return d;
+}
+
+bool empty(){
+  return Qr == Qf;
+}
+
+void bfs(){
+
+  for(int i = 0; i < n; i++ ){
+    distance[i] = INF;
+  }
+  enqueue(0);
+  distance[0] = 0;
+  while(!empty()){
+    int u = dequeue();
+    for(int v = 0; v < n; v++ ){
+      if(to[u][v] && distance[v] == INF){
+        enqueue(v);
+        distance[v] = distance[u] + 1;
+      }
+    }
+  }
+}
+
+int main(){
+  int u, k, v;
+  scanf("%d", &n);
+
+  for(int i = 0; i < MAX; i++ ){
+    for(int j = 0; j < MAX; j++ ){
+      to[i][j] = 0;
+    }
+  }
+
+  for(int i = 0; i < n; i++ ){
+    scanf("%d %d", &u, &k);
+    for(int j = 0; j < k; j++ ){
+      scanf("%d", &v);
+      to[u - 1][v - 1] = 1;
+    }
+  }
+
+  bfs();
+
+  for(int i = 0; i < n; i++ ){
+    printf("%d %d\n", i + 1, distance[i]);
+  }
+
+  return 0;
+}

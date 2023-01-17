@@ -1,0 +1,6 @@
+r = float(input())
+pi = 3.141593
+area = pi * r ** 2
+circumference = 2 * pi * r
+print(f'{area:.6f}', f'{circumference:.6f}')
+

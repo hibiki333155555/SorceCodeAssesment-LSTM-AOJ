@@ -1,0 +1,32 @@
+n = int(input())
+g = [[] for _ in range(n)]
+
+for i in range(n):
+    u, k, *a = map(int, input().split())
+    g[u - 1] = a
+
+IN = [0 for _ in range(n)]
+OUT = [0 for _ in range(n)]
+
+global t
+def dfs(u):
+    global t
+    t += 1
+    IN[u] = t
+    visited[u] = True
+    for e in g[u]:
+        if visited[e - 1] == False:
+            dfs(e - 1)
+    t += 1
+    OUT[u] = t
+
+visited = [0 for _ in range(n)]
+t = 0
+for i in range(n):
+    if visited[i] == True:
+        continue
+    dfs(i)
+
+for i in range(n):
+    print(i + 1, IN[i], OUT[i])
+

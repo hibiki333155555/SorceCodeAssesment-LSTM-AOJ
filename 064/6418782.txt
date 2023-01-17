@@ -1,0 +1,58 @@
+#include <iostream>
+#include<vector>
+using namespace std;
+const int MAX=100001;
+vector<int> Graph[MAX];
+int color[MAX],visit[MAX];
+
+void DFS(int start,int colorpoint){
+    if(visit[start]!=0){
+        return;
+    }
+    visit[start]=1;
+    color[start]=colorpoint;
+    for(int i=0;i<Graph[start].size();i++){
+        int temp=Graph[start][i];
+        if(visit[temp]==0){
+            DFS(temp,colorpoint);
+        }
+    }
+    visit[start]=2;
+}
+void DepthFirstSearch(int n){
+    for(int i=0;i<n;i++){
+        DFS(i,i);
+    }
+}
+
+bool isConnected(int target1,int target2){
+    if(color[target1]==color[target2]){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+int main()
+{
+    int n,m,temp1,temp2,q,target1,target2;
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        cin>>temp1>>temp2;
+        Graph[temp1].push_back(temp2);
+        Graph[temp2].push_back(temp1);
+    }
+    DepthFirstSearch(n);
+    cin>>q;
+    for(int i=0;i<q;i++){
+        cin>>target1>>target2;
+        bool judge=isConnected(target1,target2);
+        if(judge==true){
+            cout<<"yes"<<endl;
+        }
+        else{
+            cout<<"no"<<endl;
+        }
+    }
+}
+

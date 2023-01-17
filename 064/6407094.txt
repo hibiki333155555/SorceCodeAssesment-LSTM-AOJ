@@ -1,0 +1,10 @@
+import math
+
+n = int(input())
+list_ = map(int, input().split())
+var = 0
+ave = sum(list_)/len(list_)
+for i in list_:
+    var += (i-ave)**2/n
+
+print(math.sqrt(var))

@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+#include <string>
+#include <queue>
+#include <vector>
+#include <stack>
+#include <map>
+#include <set>
+#include <utility>
+#define cs cout << "Wish You AC!" << endl;
+#define js ios::sync_with_stdio(false); cin.tie(0);
+#define MEM(a,x) memset(a,x,sizeof(a))
+#define lowbit(x) (x&-x)
+#define lson(x) x*2
+#define rson(x) x*2 + 1
+#define ll long long
+#define ull unsigned long long
+#define debug(x) std::cout << #x << " is " << (x) << '\n'
+#define INF 1e8
+#define pb push_back
+#define pii pair<ll, ll>
+using namespace std;
+inline void read(ll &x){
+    char c; int flag=0;
+    while(!isdigit(c=getchar()))
+        if(c=='-') flag=1;
+    x=c-'0';
+    while(isdigit(c=getchar()))
+        x=x*10+c-'0';
+    if(flag) x=-x;
+}
+const int N = 2e6 + 10;
+ll a[N];
+ll b[N];
+int main()
+{
+    ll n;
+    while(cin >> n)
+    {
+        if(!n) break;
+        double t = 1;
+        ll nn = n*(n+1)/2 - 1;
+        for(ll i = 0; i <= nn; i++){
+            cin >> b[i];
+            if(b[i] % 2 == 0){
+                t *= pow((double)b[i], 1.0/n);
+            }
+            else t *= pow((double)b[i], -1.0/n/(n-1));
+        }
+        ll aa = (ll)(t+0.5);
+        ll cnt = 0;
+        for(ll i = 0; i <= nn; i++){
+            if(b[i] % 2 == 0){
+                a[++cnt] = b[i] / aa;
+            }
+        }
+        sort(a+1, a+cnt+1);
+        cout << aa << endl;
+        for(ll i = 1; i <= cnt; i++){
+            if(i > 1) cout << ' ';
+            cout << a[i];
+        }
+        cout << endl;
+    }
+    return 0;
+}
+

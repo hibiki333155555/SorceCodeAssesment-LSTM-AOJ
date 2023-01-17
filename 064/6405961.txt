@@ -1,0 +1,308 @@
+#include<iostream>
+#include<vector>
+#include<array>
+
+#include <algorithm>
+#include <cassert>
+#include <vector>
+
+
+#ifdef _MSC_VER
+#include <intrin.h>
+#endif
+
+namespace atcoder {
+
+namespace internal {
+
+int ceil_pow2(int n) {
+    int x = 0;
+    while ((1U << x) < (unsigned int)(n)) x++;
+    return x;
+}
+
+constexpr int bsf_constexpr(unsigned int n) {
+    int x = 0;
+    while (!(n & (1 << x))) x++;
+    return x;
+}
+
+int bsf(unsigned int n) {
+#ifdef _MSC_VER
+    unsigned long index;
+    _BitScanForward(&index, n);
+    return index;
+#else
+    return __builtin_ctz(n);
+#endif
+}
+
+}  // namespace internal
+
+}  // namespace atcoder
+
+
+namespace atcoder {
+
+template <class S, S (*op)(S, S), S (*e)()> struct segtree {
+  public:
+    segtree() : segtree(0) {}
+    explicit segtree(int n) : segtree(std::vector<S>(n, e())) {}
+    explicit segtree(const std::vector<S>& v) : _n(int(v.size())) {
+        log = internal::ceil_pow2(_n);
+        size = 1 << log;
+        d = std::vector<S>(2 * size, e());
+        for (int i = 0; i < _n; i++) d[size + i] = v[i];
+        for (int i = size - 1; i >= 1; i--) {
+            update(i);
+        }
+    }
+
+    void set(int p, S x) {
+        assert(0 <= p && p < _n);
+        p += size;
+        d[p] = x;
+        for (int i = 1; i <= log; i++) update(p >> i);
+    }
+
+    S get(int p) const {
+        assert(0 <= p && p < _n);
+        return d[p + size];
+    }
+
+    S prod(int l, int r) const {
+        assert(0 <= l && l <= r && r <= _n);
+        S sml = e(), smr = e();
+        l += size;
+        r += size;
+
+        while (l < r) {
+            if (l & 1) sml = op(sml, d[l++]);
+            if (r & 1) smr = op(d[--r], smr);
+            l >>= 1;
+            r >>= 1;
+        }
+        return op(sml, smr);
+    }
+
+    S all_prod() const { return d[1]; }
+
+    template <bool (*f)(S)> int max_right(int l) const {
+        return max_right(l, [](S x) { return f(x); });
+    }
+    template <class F> int max_right(int l, F f) const {
+        assert(0 <= l && l <= _n);
+        assert(f(e()));
+        if (l == _n) return _n;
+        l += size;
+        S sm = e();
+        do {
+            while (l % 2 == 0) l >>= 1;
+            if (!f(op(sm, d[l]))) {
+                while (l < size) {
+                    l = (2 * l);
+                    if (f(op(sm, d[l]))) {
+                        sm = op(sm, d[l]);
+                        l++;
+                    }
+                }
+                return l - size;
+            }
+            sm = op(sm, d[l]);
+            l++;
+        } while ((l & -l) != l);
+        return _n;
+    }
+
+    template <bool (*f)(S)> int min_left(int r) const {
+        return min_left(r, [](S x) { return f(x); });
+    }
+    template <class F> int min_left(int r, F f) const {
+        assert(0 <= r && r <= _n);
+        assert(f(e()));
+        if (r == 0) return 0;
+        r += size;
+        S sm = e();
+        do {
+            r--;
+            while (r > 1 && (r % 2)) r >>= 1;
+            if (!f(op(d[r], sm))) {
+                while (r < size) {
+                    r = (2 * r + 1);
+                    if (f(op(d[r], sm))) {
+                        sm = op(d[r], sm);
+                        r--;
+                    }
+                }
+                return r + 1 - size;
+            }
+            sm = op(d[r], sm);
+        } while ((r & -r) != r);
+        return 0;
+    }
+
+  private:
+    int _n, size, log;
+    std::vector<S> d;
+
+    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+};
+
+}  // namespace atcoder
+
+using namespace std;
+using min3=array<int,3>;
+min3 op_min3(min3 l,min3 r)
+{
+	min3 ret;
+	int li=0,ri=0;
+	for(int i=0;i<3;i++)
+	{
+		if(l[li]<=r[ri])
+		{
+			ret[i]=l[li++];
+		}
+		else
+		{
+			ret[i]=r[ri++];
+		}
+	}
+	return ret;
+}
+min3 e_min3(){return min3{(int)1e9,(int)1e9,(int)1e9};}
+struct max3{
+	pair<int,int>A[3];
+	max3()
+	{
+		A[0]=A[1]=A[2]=make_pair(0,0);
+	}
+	max3(int p)
+	{
+		A[0]=make_pair(p,1);
+		A[1]=A[2]=make_pair(0,0);
+	}
+};
+max3 op_max3(max3 l,max3 r)
+{
+	for(int i=0;i<3;i++)if(r.A[i].second>0)
+	{
+		int j=0;
+		for(;j<3;j++)if(l.A[j].first==r.A[i].first)break;
+		if(j<3)l.A[j].second+=r.A[i].second,r.A[i].second=0;
+	}
+	if(l.A[0].second<l.A[1].second)swap(l.A[0],l.A[1]);
+	if(l.A[1].second<l.A[2].second)swap(l.A[1],l.A[2]);
+	if(l.A[0].second<l.A[1].second)swap(l.A[0],l.A[1]);
+	for(int i=0;i<3;i++)if(r.A[i].second>0)
+	{
+		int j=0;
+		for(;j<3;j++)if(l.A[j].second<r.A[i].second)break;
+		if(j<3)
+		{
+			if(l.A[j].second==0)l.A[j]=r.A[i];
+			else if(j==2)l.A[2]=r.A[i];
+			else if(j==1)
+			{
+				l.A[2]=l.A[1];
+				l.A[1]=r.A[i];
+			}
+			else
+			{
+				l.A[2]=l.A[1];
+				l.A[1]=l.A[0];
+				l.A[0]=r.A[i];
+			}
+		}
+	}
+	return l;
+}
+max3 e_max3(){return max3();}
+vector<int>ps;
+int ip[1000001];
+int inv[1000001];
+int N,Q;
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	for(int i=2;i<=1000000;i++)if(ip[i]==0)
+	{
+		inv[i]=ps.size();
+		ps.push_back(i);
+		for(int j=i;j<=1000000;j+=i)ip[j]=i;
+	}
+	cin>>N>>Q;
+	vector<min3>init_low[168];
+	for(int i=0;i<168;i++)init_low[i].assign(N,e_min3());
+	vector<max3>init_high(N,e_max3());
+	for(int i=0;i<N;i++)
+	{
+		int A;cin>>A;
+		if(ip[A]>1000)
+		{
+			int p=ip[A];
+			A/=p;
+			init_high[i]=max3(p);
+		}
+		for(int j=0;j<168;j++)
+		{
+			int p=ps[j];
+			int c=1;
+			while(A%p==0)
+			{
+				A/=p;
+				c*=p;
+			}
+			init_low[j][i][0]=c;
+		}
+	}
+	vector<atcoder::segtree<min3,op_min3,e_min3> >low(168);
+	for(int i=0;i<168;i++)low[i]=atcoder::segtree<min3,op_min3,e_min3>(init_low[i]);
+	atcoder::segtree<max3,op_max3,e_max3>high(init_high);
+	auto update=[&low,&high](int id,int A)
+	{
+		if(ip[A]>1000)
+		{
+			int p=ip[A];
+			A/=p;
+			high.set(id,max3(p));
+		}
+		else
+		{
+			high.set(id,max3());
+		}
+		for(int i=0;i<168;i++)
+		{
+			int p=ps[i];
+			int c=1;
+			while(A%p==0)
+			{
+				A/=p;
+				c*=p;
+			}
+			low[i].set(id,min3{c,(int)1e9,(int)1e9});
+		}
+	};
+	for(int q=0;q<Q;q++)
+	{
+		char op;cin>>op;
+		if(op=='U')
+		{
+			int id,x;cin>>id>>x;
+			update(id-1,x);
+		}
+		else
+		{
+			int l,r,k;cin>>l>>r>>k;
+			l--;
+			long long ans=1;
+			for(int i=0;i<168;i++)
+			{
+				ans*=low[i].prod(l,r)[k];
+			}
+			max3 now=high.prod(l,r);
+			for(int i=0;i<=k;i++)if(now.A[i].second>=r-l-k)ans*=now.A[i].first;
+			cout<<ans<<"\n";
+		}
+	}
+}

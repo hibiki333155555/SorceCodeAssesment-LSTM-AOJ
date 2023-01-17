@@ -1,0 +1,20 @@
+n = int(input())
+INF = 10**18
+D = [[INF for _ in range(n)] for _ in range(n)]
+m = int(input())
+for _ in range(m):
+    a, b, c, d = map(int, input().split(','))
+    a -= 1
+    b -= 1
+    D[a][b] = c
+    D[b][a] = d
+s, g, v, p = map(int, input().split(','))
+s -= 1
+g -= 1
+v -= p
+for k in range(n):
+    for i in range(n):
+        for j in range(n):
+            D[i][j] = min(D[i][j], D[i][k] + D[k][j])
+print(v - D[s][g] - D[g][s])
+

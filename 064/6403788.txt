@@ -1,0 +1,37 @@
+#include <iostream>
+
+using namespace std;
+
+/*
+int gcm(int p0, int p1)
+{
+    while (true) {
+	int p2 = p0 % p1;
+        if (p2 == 0)
+            break;
+        p0 = p1;
+        p1 = p2;
+    }
+
+    return p1;
+}
+*/
+
+int gcm(int p0, int p1)
+{
+    if (p1 == 0)
+	return p0;
+    else
+	p0 %= p1;
+    return gcm(p1, p0);   // p1, p0 の順番に注意
+}   
+
+int main()
+{
+    int x, y;
+    cin >> x >> y;
+
+    cout << gcm(x, y) << endl;
+    return 0;
+}
+

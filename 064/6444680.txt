@@ -1,0 +1,30 @@
+#include<iostream>
+#include<string>
+using namespace std;
+string Transform(string a)
+{
+	for (int i = 0; i < a.size(); i++)
+	{
+		if (isupper(a[i])) { a[i] = tolower(a[i]); }
+		else if(islower(a[i])) { a[i] = toupper(a[i]); }
+	}
+	return a;
+}
+int Sort(string a, string b)
+{
+	int flag;
+	a >= b ? flag = 0 : flag = 1;
+	return flag;
+}
+int main()
+{
+	int m, n;
+	char x, y;
+	string a, b;
+	cin >> m;
+	for (int i = 0; i < m; i++) { cin >> x; a.push_back(x); }
+	cin >> n;
+	for (int i = 0; i < n; i++) { cin >> y; b.push_back(y); }
+	cout << (b>a) << endl;
+	return 0;
+}

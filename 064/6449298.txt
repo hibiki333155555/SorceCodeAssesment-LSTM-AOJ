@@ -1,0 +1,32 @@
+from heapq import * 
+V,E = input().split()
+V,E = int(V),int(E)
+matrix = [[] for i in range(V)]
+for i in range(E):
+    edge = [int(x) for x in input().split()]
+    matrix[edge[0]].append((edge[1],edge[2]))
+    matrix[edge[1]].append((edge[0],edge[2]))
+
+distance = []
+discovered = [0 for i in range(V)]
+def prim():
+    discovered[0] = 1
+    weight = 0
+    for i in matrix[0]:
+        heappush(distance,(i[1],i[0]))
+    count = 1
+    while(count < V):
+        while(1):
+            a = heappop(distance)
+            if discovered[a[1]] == 0:
+                count = count + 1
+                discovered[a[1]] = 1
+                break 
+        weight = weight + a[0]
+
+        for i in matrix[a[1]]:
+            if discovered[i[0]]  == 0:
+                heappush(distance,(i[1],i[0])) 
+    return weight
+print(prim())
+

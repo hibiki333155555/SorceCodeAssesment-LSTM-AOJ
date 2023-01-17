@@ -1,0 +1,29 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main()
+{
+	int n, t; cin >> n >> t;
+	int mask = 0;
+	for (int i = 0; i < t; i++)
+	{
+		int a; cin >> a;
+		mask += (1 << a);
+	}
+	int k = mask;
+	while (k < (1 << n))
+	{
+		if (k & mask == mask)
+		{
+			cout << k << ":";
+			for (int i = 0; i < n; i++)
+			{
+				if (k & (1 << i))
+					cout << " " << i;
+			}
+			cout << '\n';
+		}
+		k++;
+	}
+}

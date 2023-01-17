@@ -1,0 +1,8 @@
+# mon9_B
+while True:
+  word=str(input())
+  m=int(input())
+  for i in range(m):
+    h=int(input())
+    word=word[h:]+word[:h]
+  print(word)

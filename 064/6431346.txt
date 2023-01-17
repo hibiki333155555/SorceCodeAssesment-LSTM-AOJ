@@ -1,0 +1,9 @@
+W = int(input())
+H = int(input())
+x = int(input())
+y = int(input())
+r = int(input())
+if x - r > 0 and x + r < W and y - r > 0 and y + r < H:
+    print("Yes")
+else:
+    print("No")

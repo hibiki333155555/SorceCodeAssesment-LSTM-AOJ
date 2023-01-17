@@ -1,0 +1,37 @@
+import random
+
+
+def dice(a, b, c, d, e, f, l):
+    if l == "S":
+        return [e, a, c, d, f, b]
+    if l == "N":
+        return [b, f, c, d, a, e]
+    if l == "E":
+        return [d, b, a, f, e, c]
+    if l == "W":
+        return [c, b, f, a, e, d]
+n = int(input())
+L = [None]*n
+lis1 =[[0 for j in range(n)] for i in range(n)]
+for i in range(n):
+    L[i] = list(map(int, input().split()))
+for i in range(n):
+    for j in range(i+1, n):
+        if sorted(L[i]) == sorted(L[j]):
+            di = ["S", "N", "E", "W"]
+            a, b, c, d, e, f = L[j][0], L[j][1], L[j][2], L[j][3], L[j][4], L[j][5]
+            k = 0
+            while k <= 10000:
+                k = random.randrange(4)
+                D = dice(L[i][0], L[i][1], L[i][2], L[i][3], L[i][4], L[i][5], di[k])
+                if D[0] == a and D[1] == b and D[2] == c and D[3] == d and D[4] == e and D[5] == f:
+                    lis1[i][j] = 1
+                    break
+                if k == 10000:
+                    break
+                k += 1
+if 1 in lis1:
+    print("No")
+else:
+    print("Yes")
+

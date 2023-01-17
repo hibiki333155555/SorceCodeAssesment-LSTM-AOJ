@@ -1,0 +1,76 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+
+        solve();
+
+    }
+
+    
+
+// seg木
+    static int size;
+    static int[] array;
+    
+    static void solve() {
+        Scanner sc = new Scanner(System.in); // 文字の入力
+        int n = sc.nextInt();
+        int q = sc.nextInt();
+
+        makeSegTree(n);
+        for (int i = 0; i < q; i++) {
+            int c = sc.nextInt();
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+
+            if (c == 0) {
+                update(x, y);
+            } else {
+                System.out.println(query(x, y + 1, 0, 0, size));
+            }
+        }
+        sc.close();
+    }
+
+    static void makeSegTree(int s) {
+        size = 1;
+        array = new int[2* (1 << 17) - 1];
+        while (size < s) {
+            // 2の冪乗となるようにかさまし
+            size *= 2;
+        }
+        for (int i = 0; i < 2 *size - 1; i++) {
+            array[i] = 0;
+        }
+    }
+
+    static void update(int index, int val) {
+        // 元々の配列の値は最深部にある
+        index += size - 1;
+        array[index] += val;
+
+        // 登っていく。
+        while (index > 0) {
+            index = (index - 1) / 2;
+            // RMQ, RSQ, RUQ, RAQによって変更
+            int left =  array[index * 2 + 1];
+            int right =  array[index * 2 + 2];
+            array[index] = left + right;
+        }
+    }
+
+    static long query(int a, int b, int k, int l, int r) {
+        if (r <= a || b <= l)
+            return 0;
+        if (a <= l && r <= b)
+            return array[k];
+        else {
+            long left = query(a, b, 2 * k + 1, l, (l + r) / 2);
+            long right = query(a, b, 2 * k + 2, (l + r) / 2, r);
+            return (long)left + right;
+        }
+    }
+    
+}
+

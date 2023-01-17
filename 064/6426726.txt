@@ -1,0 +1,43 @@
+import heapq
+
+V, E, S = map(int, input().split())
+
+tmp = []
+tmp.append('0 1 1')
+tmp.append('0 2 4')
+tmp.append('1 2 2')
+tmp.append('2 3 1')
+tmp.append('1 3 5')
+
+g = {i:[] for i in range(V)}
+for i in range(E):
+    v1,v2,weight = map(int,input().split())
+    g[v1].append([v2,weight])
+
+inf = 1000000000000 
+costs = [inf]*V
+costs[S] = 0
+isused = []
+
+que = [] 
+heapq.heappush(que,(0,S))
+isused = set() 
+isused.add(S)
+
+
+while(que):
+    costnow, v = heapq.heappop(que)
+    isused.add(v)
+    for nextv, cost  in g[v]:
+        if nextv in isused:
+            continue
+        if costnow + cost < costs[nextv]:
+            costs[nextv] = costnow + cost
+            heapq.heappush(que, (costs[nextv], nextv))
+
+
+for i in costs:
+    if i == inf:
+        print('inf')
+    else:
+        print(i)

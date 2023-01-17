@@ -1,0 +1,119 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node{
+	int key, p;
+	struct Node *left;
+	struct Node *right;
+}node;
+
+node *root;
+
+node *rightRotate(node *t){
+	node *s = t->left;
+	t->left = s->right;
+	s->right = t;
+	return s;
+}
+
+node *leftRotate(node *t){
+	node *s = t->right;
+	t->right = s->left;
+	s->left = t;
+	return s;
+}
+
+node *insert(node *t, int k, int p){
+	static int init = 1;
+	node *n = (node*)calloc(1,sizeof(node));
+	//n->left = NULL; n->right = NULL;
+	if(n == NULL) perror("test docment");
+	if((t == NULL) || (init)){
+		t = n;
+		n->key = k;
+		n->p = p;
+		if(init) init--;
+		return n;
+	}
+	if(t->key == k)	return t;
+	if(k < t->key){
+		t->left = insert(t->left, k, p);
+		if(t->p < t->left->p) t = rightRotate(t);
+	}else{
+		t->right = insert(t->right, k, p);
+		if(t->p < t->right->p) t = leftRotate(t);
+	}
+	return t;
+}
+
+void find(node *t, int k){
+	while(t != NULL){
+		if(t->key == k){
+			printf("yes\n");
+			break;
+		}
+		t = (t->key < k)? t->right : t->left;
+	}
+	if(t == NULL)printf("no\n");
+}
+node *_delete(node *, int);
+node *delete(node *t, int k){
+	if(t == NULL) return NULL;
+	if(k < t->key){
+		t->left = delete(t->left, k);
+	}else if(t->key < k){
+		t->right = delete(t->right, k);
+	}else{
+		return _delete(t, k);
+	}
+	return t;
+}
+
+node *_delete(node *t, int k){
+	if((t->left == NULL) && (t->right == NULL)) return NULL;
+	else if(t->left ==NULL) t = leftRotate(t);
+	else if(t->right == NULL) t = rightRotate(t);
+	else{
+		if(t->left->p < t->right->p) t = leftRotate(t);
+		else t = rightRotate(t);
+	}
+	return delete(t, k);
+}
+
+//Inorder
+void print_in(node* t){
+	if(t->left != NULL) print_in(t->left);
+	printf(" %d", t->key);
+	if(t->right != NULL) print_in(t->right);
+}
+//Preorder
+void print_pre(node* t){
+	printf(" %d", t->key);
+	if(t->left != NULL)print_pre(t->left);
+	if(t->right != NULL)print_pre(t->right);
+}
+
+int main(){
+	int m, k, p;
+	char inst[10];
+	node *root;
+
+	scanf("%d", &m);
+	for(int i = 0; i < m; i++){
+		scanf("%s", inst);
+		if(inst[0] == 'i'){
+			scanf("%d %d", &k, &p);
+			root = insert(root, k, p);
+		}else if(inst[0] == 'd'){
+			scanf("%d", &k);
+			root = delete(root, k);
+		}else if(inst[0] == 'p'){
+			print_in(root);puts("");
+			print_pre(root);puts("");
+		}else{
+			scanf("%d", &k);
+			find(root, k);
+		}
+	}
+}
+

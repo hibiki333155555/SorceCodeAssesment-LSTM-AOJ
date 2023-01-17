@@ -1,0 +1,145 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define NIL (NULL)
+//#define lson (rt<<1)
+//#define rson ((rt<<1)+1)
+//#define mid ((l+r)>>1)
+#define mst(a) memset(a,0,sizeof(a))
+#define cf int Tcodeforces, Tcodeforce;cin>>Tcodeforces;for(Tcodeforce = 1; Tcodeforce <= Tcodeforces; Tcodeforce++)
+typedef long long ll;
+typedef unsigned long long ull;
+const ll maxn = 2e5 +7;
+const ll maxm = 2e5 +7;
+const ll inf = 0x3f3f3f3f;
+const ll mod = 1e9 +7;
+
+struct node{
+    int key, priority;
+    node *left, *right;
+};
+typedef node* Node;
+
+Node _delete(Node &t, int key);
+
+Node rt = NIL;
+
+Node rightRotate(Node &t) {
+    Node s = t->left;
+    t->left = s->right;
+    s->right = t;
+    return s; // the new root of subtree
+}
+Node leftRotate(Node &t) {
+    Node s = t->right;
+    t->right = s->left;
+    s->left = t;
+    return s; // the new root of subtree
+}
+Node insert(Node &t, int key, int priority){            // search the corresponding place recursively
+    if (t == NIL) {
+        t = new node;
+        Node &newnd = t;
+        newnd->key = key;
+        newnd->priority = priority;                // create a new node when you reach a leaf
+        newnd->left = NIL;
+        newnd->right = NIL;
+        return newnd;
+    }
+    if (key == t->key) {
+        return t;                                 // ignore duplicated keys
+    }
+        
+
+    if(key < t->key){                               // move to the left child
+        t->left = insert(t->left, key, priority);   // update the pointer to the left child
+        if(t->priority < t->left->priority)          // rotate right if the left child has higher priority
+            t = rightRotate(t);
+    }
+    else {                                         // move to the right child
+        t->right = insert(t->right, key, priority); // update the pointer to the right child
+        if(t->priority < t->right->priority) {        // rotate left if the right child has higher priority
+            t = leftRotate(t);
+        }
+    }
+    return t;
+}
+Node delete1(Node &t, int key) {                        // seach the target recursively
+    if(t == NIL)
+        return NIL;
+    if(key < t->key) {                             // search the target recursively
+        t->left = delete1(t->left, key);
+    }
+    else if (key > t->key)
+        t->right = delete1(t->right, key);
+    else
+        return _delete(t, key);
+    return t;
+}
+Node _delete(Node &t, int key) {                      // if t is the target node
+    if(t->left == NIL && t->right == NIL)         // if t is a leaf
+        return NIL;
+    else if (t->left == NIL)                      // if t has only the right child, then perform left rotate
+        t = leftRotate(t);
+    else if (t->right == NIL)                     // if t has only the left child, then perform right rotate
+        t = rightRotate(t);
+    else {                                      // if t has both the left and right child
+        if (t->left->priority > t->right->priority)  // pull up the child with higher priority
+            t = rightRotate(t);
+        else
+            t = leftRotate(t);
+    }
+    return delete1(t, key);
+}
+void Print(Node rt, int f) {
+    if(rt == NIL) return ;
+    if(f == 1) cout<<" "<<rt->key;
+    Print(rt->left,f);
+    if(f == 2) cout<<" "<<rt->key;
+    Print(rt->right,f);
+}
+bool Find(Node rt, int x) {
+    if(rt == NIL) return false;
+    if(x == rt->key) return true;
+    else if(x < rt->key) return Find(rt->left,x);
+    else return Find(rt->right, x);
+    return false;
+}
+
+int n;
+
+signed main() {
+    #ifdef moyi_qwq
+        freopen("D:/source file/intxt/in.txt","r",stdin);
+    #endif
+    
+    cin>>n;
+    string s;
+    for(int i = 1; i <= n; i++) {
+        cin>>s;
+        if(s == "insert") {
+            int k, p;
+            cin>>k>>p;
+            insert(rt,k,p);
+        }
+        else if(s == "print") {
+            Print(rt,2); cout<<endl;
+            Print(rt,1); cout<<endl;
+        }
+        else if(s == "find") {
+            int x; cin>>x;
+            if(Find(rt, x)) cout<<"yes"<<endl;
+            else cout<<"no"<<endl;
+        }
+        else if(s == "delete") {
+            int x; cin>>x;
+            delete1(rt,x);
+        }
+    }
+    
+    
+    //cerr<<"Time : "<<1000*((double)clock())/(double)CLOCKS_PER_SEC<<"ms";
+    return (0);
+}
+

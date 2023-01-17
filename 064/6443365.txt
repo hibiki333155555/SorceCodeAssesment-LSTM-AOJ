@@ -1,0 +1,7 @@
+n = input()
+s = list(map(int, input().split()))
+s.reverse()
+separator = " "
+
+print(separator.join(map(str, s)))
+

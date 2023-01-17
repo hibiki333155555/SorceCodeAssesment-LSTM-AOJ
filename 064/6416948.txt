@@ -1,0 +1,157 @@
+#include <bits/stdc++.h>
+
+// clang-format off
+
+using namespace std;
+#define all(a) a.begin(), a.end()
+#define int long long
+#define over_load_(_1, _2, _3, _4, NAME, ...) NAME
+#define rep(...) over_load_(__VA_ARGS__, rep4, rep3, rep2)(__VA_ARGS__)
+#define rep2(i, r) for (int i = 0; i < static_cast<int>(r); (i) += 1)
+#define rep3(i, l, r) for (int i = static_cast<int>(l); i < static_cast<int>(r); (i) += 1)
+#define rep4(i, l, r, stride) for (int i = static_cast<int>(l); i < static_cast<int>(r); (i) += (stride))
+#define rrep(...) over_load_(__VA_ARGS__, rrep4, rrep3, rrep2)(__VA_ARGS__)
+#define rrep2(i, r) for (int i = static_cast<int>(r) - 1; i >= 0; (i) -= 1)
+#define rrep3(i, l, r) for (int i = static_cast<int>(r) - 1; i >= static_cast<int>(l); (i) -= 1)
+#define rrep4(i, l, r, stride) for (int i = static_cast<int>(r) - 1; i >= static_cast<int>(l); (i) -= (stride))
+#define fore(i, a) for (auto &i : a)
+template <typename T1, typename T2>
+inline bool chmax(T1 &a, T2 b)
+{
+    return a < b && (a = b, true);
+}
+template <typename T1, typename T2>
+inline bool chmin(T1 &a, T2 b)
+{
+    return a > b and (a = b, true);
+}
+constexpr char newl = '\n';
+
+using ll = long long;
+using vi = vector<int>;
+using vll = vector<ll>;
+using vvi = vector<vi>;
+using vvll = vector<vll>;
+using vp = vector<pair<int, int>>;
+using vs = vector<string>;
+
+class UF
+{
+private:
+    vector<long long> parent;
+    vector<long long> rank;
+
+public:
+    UF(int n)
+    {
+        parent.resize(n);
+        rank.resize(n);
+        for (int i = 0; i < n; i++)
+        {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+
+    int find(int x)
+    {
+        if (x != parent[x])
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    bool same(int x, int y)
+    {
+        return find(x) == find(y);
+    }
+
+    void link(int x, int y)
+    {
+        x = find(x);
+        y = find(y);
+        if (x == y)
+            return;
+
+        if (rank[x] > rank[y])
+            parent[y] = x;
+        else
+        {
+            parent[x] = y;
+            if (rank[x] == rank[y])
+                rank[y]++;
+        }
+    }
+};
+
+
+struct time {
+    int d;
+    int f;
+};
+
+vvi G;
+vvi revG;
+vector<struct time> stamp;
+
+int now = 0;
+
+vi order;
+
+void dfs(int v) {
+    if (stamp[v].d == 0) {
+        stamp[v].d = ++now;
+        fore(x, G[v]) dfs(x);
+        stamp[v].f = ++now;
+        order.push_back(v);
+    }
+    return;
+}
+
+vi ans;
+
+void revdfs(int v, int prev, UF& unionfind) {
+    if (stamp[v].d == 0) {
+        if (prev != -1) unionfind.link(v, prev);
+        stamp[v].d = ++now;
+        ans.push_back(v);
+        fore(x, revG[v]) revdfs(x, v, unionfind);
+        stamp[v].f = ++now;
+        ans.push_back(v);
+    }
+}
+signed main() {
+    int v, e; cin >> v >> e;
+    G.resize(v);
+    stamp.resize(v);
+    fore(x, stamp) x.d = x.f = 0;
+    rep(i ,e) {
+        int s, t; cin >> s >> t;
+        G[s].push_back(t);
+    }
+
+    rep(i, v) dfs(i);
+
+    reverse(all(order));
+
+    // 転置
+    revG.resize(v);
+    rep(i, v) fore(x, G[i]) revG[x].push_back(i);
+
+    // rep(i, v) {
+    //     cout << i << " :";
+    //     fore(x, revG[i]) cout << " " << x;
+    //     cout << newl;
+    // }
+
+    now = 0;
+    fore(x, stamp) x.d = x.f = 0;
+    UF unionfind(v);
+    fore(x, order) revdfs(x, -1, unionfind);
+
+    int q; cin >> q;
+    rep(_, q) {
+        int a, b; cin >> a >> b;
+        cout << (unionfind.same(a, b) ? 1 : 0) << newl;
+    }
+    
+}

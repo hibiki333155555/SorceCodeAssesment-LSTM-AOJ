@@ -1,0 +1,45 @@
+#include <stdio.h>
+
+int p(int a){
+    if(a>=0) return a;
+    else return 3;
+}
+
+int main(void){
+    double x[4],y[4],n,kX,kC,a,b,c,d;
+    int pre,main,next,nex2,i,flg;
+    
+    while(1){
+        flg=0;
+        for(i=0;i<4;i++){
+            if(scanf("%lf,%lf,",&x[i],&y[i])==EOF) goto finish;
+        }
+        
+        for(i=0;i<4;i++){
+            pre=p(i-1);
+            main=i;
+            next=(i+1)%4;
+            nex2=(i+2)%4;
+            
+            //printf("%d %d %d %d\n",pre,main,next,nex2);
+            
+            a=x[pre];
+            b=y[pre];
+            c=x[next];
+            d=y[next];
+            
+            kX=(d-b)/(c-a);
+            kC=b-a*(d-b)/(c-a);
+            
+            if((kX*x[main]-y[main]+kC)*(kX*x[nex2]-y[nex2]+kC)>=0){
+                flg=1;
+            }
+        }
+        if(flg==1) puts("NO");
+        else if(flg==0) puts("YES");
+    }
+    
+    finish:
+    
+    return 0;
+}

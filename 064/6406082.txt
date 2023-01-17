@@ -1,0 +1,8 @@
+# coding: utf-8
+
+import sys
+input = sys.stdin.readline
+
+A = list(map(int, input().split()))
+
+print(min(A), max(A))

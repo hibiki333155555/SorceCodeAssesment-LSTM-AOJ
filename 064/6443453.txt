@@ -1,0 +1,36 @@
+#include <iostream>
+#include <iomanip>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+   int n;
+   cin >> n;
+   char kinds[n];
+   int numbers[n];
+   char kind;
+
+   for(int i=0; i<n; i++) {
+      cin >> kinds[i];
+      cin >> numbers[i];
+   }
+
+   for(int i=0; i<4; i++) {
+      if(i==0) kind = 'S';
+      else if(i==1) kind = 'H';
+      else if(i==2) kind = 'C';
+      else kind = 'D';
+
+      for(int j=1; j<14; j++) {
+         int count = 0;
+         for(int k=0; k<n; k++) {
+            if(kinds[k]==kind && numbers[k]==j) {
+               count++;
+            }
+         }
+         if(count == 0) cout << kind << " " << j << "\n";
+      }
+   }
+}
+              
+

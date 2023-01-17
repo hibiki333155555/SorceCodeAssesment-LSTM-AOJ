@@ -1,0 +1,27 @@
+#include <iostream>
+#include <utility>
+#include <cmath>
+using namespace std;
+int main()
+{
+	int a, b;
+	cin >> a >> b;
+	if (a < b)
+	{
+		swap(a, b);
+	}
+	int maxdigit = 0;
+	if (a > 0)
+	{
+		maxdigit = (int)log2(a);
+	}
+	int xordigit = 0;
+	if ((a ^ b) > 0)
+	{
+		xordigit = (int)log2(a ^ b);
+	}
+	cout << maxdigit - xordigit << endl;
+	return 0;
+}
+
+

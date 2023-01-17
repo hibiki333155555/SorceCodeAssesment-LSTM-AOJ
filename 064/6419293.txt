@@ -1,0 +1,108 @@
+#[allow(unused_macros)]
+macro_rules ! debug { ( $ ( $ a : expr ) ,* ) => { eprintln ! ( concat ! ( $ ( stringify ! ( $ a ) , " = {:?}, " ) ,* ) , $ ( $ a ) ,* ) ; } }
+#[macro_export]
+macro_rules ! input { ( source = $ s : expr , $ ( $ r : tt ) * ) => { let mut parser = Parser :: from_str ( $ s ) ; input_inner ! { parser , $ ( $ r ) * } } ; ( parser = $ parser : ident , $ ( $ r : tt ) * ) => { input_inner ! { $ parser , $ ( $ r ) * } } ; ( new_stdin_parser = $ parser : ident , $ ( $ r : tt ) * ) => { let stdin = std :: io :: stdin ( ) ; let reader = std :: io :: BufReader :: new ( stdin . lock ( ) ) ; let mut $ parser = Parser :: new ( reader ) ; input_inner ! { $ parser , $ ( $ r ) * } } ; ( $ ( $ r : tt ) * ) => { input ! { new_stdin_parser = parser , $ ( $ r ) * } } ; }
+#[macro_export]
+macro_rules ! input_inner { ( $ parser : ident ) => { } ; ( $ parser : ident , ) => { } ; ( $ parser : ident , $ var : ident : $ t : tt $ ( $ r : tt ) * ) => { let $ var = read_value ! ( $ parser , $ t ) ; input_inner ! { $ parser $ ( $ r ) * } } ; }
+#[macro_export]
+macro_rules ! read_value { ( $ parser : ident , ( $ ( $ t : tt ) ,* ) ) => { ( $ ( read_value ! ( $ parser , $ t ) ) ,* ) } ; ( $ parser : ident , [ $ t : tt ; $ len : expr ] ) => { ( 0 ..$ len ) . map ( | _ | read_value ! ( $ parser , $ t ) ) . collect ::< Vec < _ >> ( ) } ; ( $ parser : ident , chars ) => { read_value ! ( $ parser , String ) . chars ( ) . collect ::< Vec < char >> ( ) } ; ( $ parser : ident , usize1 ) => { read_value ! ( $ parser , usize ) - 1 } ; ( $ parser : ident , $ t : ty ) => { $ parser . next ::<$ t > ( ) . expect ( "Parse error" ) } ; }
+use std::io;
+use std::io::BufRead;
+use std::str;
+pub struct Parser<R> {
+    reader: R,
+    buf: Vec<u8>,
+    pos: usize,
+}
+impl Parser<io::Empty> {
+    pub fn from_str(s: &str) -> Parser<io::Empty> {
+        Parser {
+            reader: io::empty(),
+            buf: s.as_bytes().to_vec(),
+            pos: 0,
+        }
+    }
+}
+impl<R: BufRead> Parser<R> {
+    pub fn new(reader: R) -> Parser<R> {
+        Parser {
+            reader: reader,
+            buf: vec![],
+            pos: 0,
+        }
+    }
+    pub fn update_buf(&mut self) {
+        self.buf.clear();
+        self.pos = 0;
+        loop {
+            let (len, complete) = {
+                let buf2 = self.reader.fill_buf().unwrap();
+                self.buf.extend_from_slice(buf2);
+                let len = buf2.len();
+                if len == 0 {
+                    break;
+                }
+                (len, buf2[len - 1] <= 0x20)
+            };
+            self.reader.consume(len);
+            if complete {
+                break;
+            }
+        }
+    }
+    pub fn next<T: str::FromStr>(&mut self) -> Result<T, T::Err> {
+        loop {
+            let mut begin = self.pos;
+            while begin < self.buf.len() && (self.buf[begin] <= 0x20) {
+                begin += 1;
+            }
+            let mut end = begin;
+            while end < self.buf.len() && (self.buf[end] > 0x20) {
+                end += 1;
+            }
+            if begin != self.buf.len() {
+                self.pos = end;
+                return str::from_utf8(&self.buf[begin..end]).unwrap().parse::<T>();
+            } else {
+                self.update_buf();
+            }
+        }
+    }
+}
+
+fn main() {
+    input! {
+        num_v:usize,
+        num_e:usize,
+        edges: [(usize, usize);num_e],
+    }
+    let mut g = vec![vec![]; num_v];
+    for e in edges {
+        g[e.0].push(e.1);
+    }
+    let mut used = vec![false; num_v];
+    let mut ans = vec![];
+    for v in 0..num_v {
+        if !used[v] {
+            dfs(&mut g, &mut used, &mut ans, v);
+        }
+    }
+    for v in ans {
+        println!("{}", v);
+    }
+}
+
+fn dfs(g: &mut Vec<Vec<usize>>, used: &mut Vec<bool>, ans: &mut Vec<usize>, id: usize) {
+    if used[id] {
+        return;
+    }
+    used[id] = true;
+    let edges = g[id].clone();
+    for v in edges {
+        if !used[v] {
+            dfs(g, used, ans, v);
+        }
+    }
+    ans.push(id);
+}
+

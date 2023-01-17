@@ -1,0 +1,5 @@
+H, W = map(int, input().split())
+while H==0 and W==0:
+    for i in range(H):
+        for i in range(W):
+            print("#")

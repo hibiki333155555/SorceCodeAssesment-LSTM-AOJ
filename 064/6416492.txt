@@ -1,0 +1,11 @@
+n = int(input())
+a = list(map(int, input().split()))
+q = int(input())
+m = list(map(int, input().split()))
+for i in a:
+    for j in m:
+        s = m[j] + m[j+1]
+        if a == s:
+            print('yes')
+        else:
+            print('no')

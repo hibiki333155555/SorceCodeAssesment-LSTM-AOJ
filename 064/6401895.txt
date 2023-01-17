@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main()
+{
+    double r, a,c;
+    scanf("%lf", &r);
+    #define p 3.141592654
+    a=p*r*r; c=2*p*r;
+    if(0<=r<=10000){
+    printf("%lf %lf\n", a, c);
+    }
+    return 0;
+}
+

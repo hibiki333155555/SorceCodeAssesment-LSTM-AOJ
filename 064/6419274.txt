@@ -1,0 +1,14 @@
+W = input()
+counter = 0
+
+while True:
+  T = input().split()
+  if "END_OF_TEXT" in T :
+    break
+  
+  for word in T:
+    word = word.lower()
+    if word == W:
+      counter += 1
+    
+print(counter)

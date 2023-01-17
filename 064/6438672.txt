@@ -1,0 +1,15 @@
+s=input()
+n=int(input())
+for i in range(n):
+    cmd=input().split()
+    if cmd[0]=="print":
+        a,b=int(cmd[1]),int(cmd[2])
+        print(s[a,b+1])
+    elif cmd[0]=="reverse":
+        a,b=int(cmd[1]),int(cmd[2])
+        print(s[b,a-1])
+    else:
+        a,b=int(cmd[1]),int(cmd[2])
+        s[a,b+1]=cmd[4]
+
+    

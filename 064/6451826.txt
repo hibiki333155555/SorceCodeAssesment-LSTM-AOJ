@@ -1,0 +1,33 @@
+/*-- 入力 --*/
+//main("1 + 2\n1 * 2\n1 - 2\n1 / 2\n0 ? 0");
+main(require("fs").readFileSync("/dev/stdin", "utf8"));
+
+/*-- 計算&出力 --*/
+function main(raw) {
+    // 入力処理
+    const args = raw.split("\n");
+    //const input = args[0].split(' ').map(Number);
+    // 計算
+    //console.log(args);
+    for(val of args){
+        val = val.split(' ');
+        //console.log(val);
+        const a = Number(val[0]);
+        const op = val[1];
+        const b = Number(val[2]);
+        switch(op){
+            case "+": output=a+b; break;
+            case "-": output=a-b; break;
+            case "*": output=a*b; break;
+            case "/": output=Math.floor(a/b); break;
+            case "?": output="end"; break;
+            default: output="Error"; break;
+        }
+        if(output=="end"){break;}
+        console.log(output);
+    };
+    
+    // 表示
+    //console.log(`${sq.toFixed(5)} ${len.toFixed(5)}`);
+}
+

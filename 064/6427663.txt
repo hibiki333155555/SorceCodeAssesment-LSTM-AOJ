@@ -1,0 +1,49 @@
+#include<iostream>
+#include <vector>
+//４つの整数b, f, r, vが与えられます。これは、b棟f階のr番目の部屋にv人が追加で入居したことを示します。vが負の値の場合、-v人退去したことを示します。
+using namespace std;
+void show(vector<vector<int>>& room) {
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            cout << room.at(i).at(j) << " ";
+        }
+        cout << endl;
+    }
+    cout << "####################" << endl;
+}
+
+int main() {
+    int n, b, f, r, v;
+    cin >> n;
+    vector<vector<int>>room1(4, vector<int>(10, 0));
+    vector<vector<int>>room2(4, vector<int>(10, 0));
+    vector<vector<int>>room3(4, vector<int>(10, 0));
+    vector<vector<int>>room4(4, vector<int>(10, 0));
+    for (int i = 0; i < n; ++i) {
+        cin >> b >> f >> r >> v;
+        switch (b) {
+        case 1:
+            room1.at(f-1).at(r-1) += v;
+            break;
+        case 2:
+            room2.at(f-1).at(r-1) += v;
+            break;
+        case 3:
+            room3.at(f-1).at(r-1) += v;
+            break;
+        case 4:
+            room4.at(f-1).at(r-1) += v;
+            break;
+
+        }
+    }
+    show(room1);
+    show(room2);
+    show(room3);
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            cout << room4.at(i).at(j) << " ";
+        }
+        cout << endl;
+    }
+}

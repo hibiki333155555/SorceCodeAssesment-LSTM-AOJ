@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(int)(n);i++)
+
+int isChar(vector<char> C,char str){
+    int a;
+    return 1;
+}
+
+int main(){
+    int x;
+    stack<int> S;
+    vector<char> C{'+','-','*'};
+    char s[256];
+    int a,b;
+    while(scanf("%s",s)!=EOF){
+        if(s[0]==C[0]){
+            a = S.top();S.pop();
+            b = S.top();S.pop();
+            S.push(a+b);
+        }else if(s[0]==C[1]){
+            a = S.top();S.pop();
+            b = S.top();S.pop();
+            S.push(b-a);
+        }else if(s[0]==C[2]){
+            a = S.top();S.pop();
+            b = S.top();S.pop();
+            S.push(a*b);
+        }else{
+            S.push(atoi(s));
+        }
+    }
+
+    cout<<S.top()<<endl;
+    
+    return 0;
+}

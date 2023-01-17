@@ -1,0 +1,251 @@
+#pragma GCC optimize("Ofast") 
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long int ;
+using ld = long double ;
+using P = pair<ll,ll>;
+using Graph= vector<vector<ll>>;
+struct edge{ll to ; ll cost ;} ;
+using graph =vector<vector<edge>> ;
+#define rep(i,n) for (ll i=0; i < (n); ++i)
+#define rep2(i,n,m) for(ll i=n;i<=m;i++)
+#define rep3(i,n,m) for(ll i=n;i>=m;i--)
+#define pb push_back 
+#define eb emplace_back 
+#define ppb pop_back 
+#define mpa make_pair 
+#define fi first  
+#define se second  
+#define set20 cout<<fixed<<setprecision(20)  ;
+const ll INF=1e18 ;   
+inline void chmax(ll& a,ll b){a=max(a,b);}  
+inline void chmin(ll& a,ll b){a=min(a,b);} 
+long double pi=acos(-1) ;  
+ll gcd(ll a, ll b) { return b?gcd(b,a%b):a;}  
+ll lcm(ll a, ll b) { return a/gcd(a,b)*b;} 
+ll dx[4] {1,0,-1,0} ;
+ll dy[4] {0,1,0,-1} ;
+#define debug cout<<888<<endl ;
+
+// ミント
+//int mod ;  //任意modではconst外す
+
+const int mod =1e9+7 ;//924844033;  
+  //998244353;
+
+struct mint {
+  ll x; // typedef long long ll;
+  mint(ll x=0):x((x%mod+mod)%mod){}
+  mint operator-() const { return mint(-x);}
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) { (x *= a.x) %= mod; return *this;}
+  mint operator+(const mint a) const { return mint(*this) += a;}
+  mint operator-(const mint a) const { return mint(*this) -= a;}
+  mint operator*(const mint a) const { return mint(*this) *= a;}
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+ 
+  // for prime mod
+  mint inv() const { return pow(mod-2);}
+  mint& operator/=(const mint a) { return *this *= a.inv();}
+  mint operator/(const mint a) const { return mint(*this) /= a;}
+};
+istream& operator>>(istream& is, const mint& a) { return is >> a.x;}
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
+//昆布
+
+struct combination {
+  vector<mint> fact, ifact;
+  combination(int n):fact(n+1),ifact(n+1) {
+    assert(n < mod); //任意modではここ消すcombmain内に
+    fact[0] = 1;
+    for (int i = 1; i <= n; ++i) fact[i] = fact[i-1]*i;
+    ifact[n] = fact[n].inv();
+    for (int i = n; i >= 1; --i) ifact[i-1] = ifact[i]*i;
+  }
+  mint operator()(int n, int k) {
+    if (k < 0 || k > n) return 0;
+    return fact[n]*ifact[k]*ifact[n-k];
+  }
+  mint p(int n,int k){
+    return fact[n]*ifact[n-k] ; //kは個数
+  }
+  }  c(6005)
+  ;
+
+
+mint modpow(ll a,ll b){
+ if(b==0) return 1 ;
+ mint c= modpow(a,b/2) ;
+ if(b%2==1) return c*c*a ;
+ else return c*c ;
+}
+
+mint mmodpow(mint a,ll b){
+  if(b==0) return 1ll ;
+  mint c=mmodpow(a,(b/2)) ;
+  if(b%2==1) return c*c*a ;
+  else return c*c ;
+}
+mint komb(ll n,ll m){
+  mint x=1 ;mint y=1 ;
+  rep(i,m){
+    x*= n-i ;
+    y*= i+1 ;
+  }
+  return x/y ;
+}
+ 
+ map<ll,ll> factor(ll n){  //素因数とオーダーをマップで管理
+  map <ll,ll> ord ;  
+  for(ll i=2;i*i<=n;i++){
+        if(n%i==0){
+            int res=0;
+            while(n%i==0){
+                n/=i;
+                res++;
+            }
+            ord[i]=res;
+        }
+    }
+    if(n!=1) ord[n]++;
+    return ord ;
+ }
+
+struct UnionFind {
+  vector<int> d;
+  UnionFind(int n=0): d(n,-1) {}
+  int find(int x) {
+    if (d[x] < 0) return x;
+    return d[x] = find(d[x]);
+  }
+  bool unite(int x, int y) {
+    x = find(x); y = find(y);
+    if (x == y) return false;
+    if (d[x] > d[y]) swap(x,y);
+    d[x] += d[y];
+    d[y] = x;
+    return true;
+  }
+  bool same(int x, int y) { return find(x) == find(y);}
+  int size(int x) { return -d[find(x)];}
+};
+
+// sum(x) x以下の和
+// sum(a,b) a以上b以下の和
+template<typename T>
+struct BIT {
+  int n;
+  vector<T> d;
+  BIT(int n=0):n(n),d(n+1) {}
+  void add(int i, T x=1) {  //x=1ならsumは個数のカウント
+    for (i++; i <= n; i += i&-i) {
+      d[i] += x;
+    }
+  }
+  T sum(int i) {
+    T x = 0;
+    for (i++; i; i -= i&-i) {
+      x += d[i];
+    }
+    return x;
+  }
+  T sum(int i,int j) {
+    if(i>0) return sum(j)-sum(i-1);
+    else return sum(j) ; } 
+};
+
+void dfs(ll s,ll t,Graph &g,vector<ll> &d){
+  for(auto u:g[t]){
+    if(u==s) continue;
+    d[u]=d[t]+1;
+  }
+}
+
+ll dp[10005][5005];
+
+
+int main(){
+  ios::sync_with_stdio(false) ;
+  cin.tie(nullptr) ;
+  
+  ll n; cin>>n;
+  ll m=1e9+7;
+
+  vector<pair<char,ll>> A(2*n);
+
+  vector<ll> cnt(n+1);
+
+  rep(i,2*n){
+    cin>>A[i].fi>>A[i].se;
+    cnt[A[i].se]++;
+  }
+  
+
+  dp[0][0]=1ll; //番号つき
+  ll now=0ll;
+  
+  rep(i,2*n){
+    if(cnt[A[i].se]==2){
+      rep(j,5005) dp[i+1][j]=dp[i][j];
+      continue;
+    }
+
+    if(A[i].fi=='I'){
+      if(A[i].se>0) rep(j,5004) dp[i+1][j+1]=dp[i][j];
+      else rep(j,5005) dp[i+1][j]=dp[i][j];
+      now++;
+    }
+    else{
+      if(A[i].se>0){
+        rep(j,5005){
+          dp[i+1][j]+=(dp[i][j]*(now-j))%m;
+          dp[i+1][j]%=m;
+        }
+      }
+      else{
+        rep(j,5005){
+          if(j>0){
+            dp[i+1][j-1]+=(dp[i][j]*j)%m;
+            dp[i+1][j-1]%=m;
+          }
+          dp[i+1][j]+=(dp[i][j]*(now-j))%m;
+          dp[i+1][j]%=m;
+        }
+      }
+      now--;
+    }
+
+    //rep2(j,now+1,5004) dp[i+1][j]=0ll;
+  }
+  
+  ll sum=0ll;
+
+  rep2(i,1,n){
+    if(cnt[i]==0) sum++;
+  }
+  
+  mint ans=dp[2*n][0]; 
+
+  rep2(i,1,sum) ans*=i;
+
+  cout<<ans<<endl;
+
+  return 0 ;
+}
+
+
+
+

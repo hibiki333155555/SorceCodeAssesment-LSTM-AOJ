@@ -1,0 +1,19 @@
+N=int(input())
+r=[input() for i in range(N)]
+l=len(r[0])
+ans=[False for i in range(N)]
+for i in range(N):
+    if ans[i]:
+        continue
+    for j in range(N):
+        if i==j:
+            continue
+        c=0
+        for k in range(l):
+            if r[i][k]!=r[j][k]:
+                c+=1
+        if c<=1:
+            ans[i]=True
+            ans[j]=True
+            break
+print(sum(ans))

@@ -1,0 +1,32 @@
+def InsertionSort(A, n, g):
+    # 間隔gだけ離れた要素を対象に挿入ソート
+    cnt = 0
+    for i in range(g, n):
+        tmp = A[i]
+        j = i - g
+        while j >= 0 and A[j] > tmp:
+            A[j + g] = A[j]
+            j = j - g
+            cnt += 1
+        A[j + g] = tmp
+    return cnt
+
+def ShellSort(A, n):
+    cnt = 0
+    # G = [i for i in range(n)]
+    G = [n, 1]
+    for g in G:
+        cnt += InsertionSort(A, n, g)
+    return cnt
+
+n = int(input())
+A = [0] * n
+for i in range(n):
+    A[i] = int(input())
+
+print(2)
+print(n, 1)
+print(ShellSort(A, n))
+for a in A:
+    print(a)
+

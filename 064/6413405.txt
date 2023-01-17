@@ -1,0 +1,13 @@
+rt = []
+i = 1
+n = int(input())
+x = input().splitlines
+while i < n:
+    rt.append(int(x[i]))
+    i += 1
+rm = rt[0]
+while 0 < i:
+    if rm < rt[i]:
+        rm = rt[i]
+    i -= 1
+print(rm)

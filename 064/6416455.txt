@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+#include<cmath>
+#include<numeric>
+using namespace std;
+
+int main(){
+
+    int n;
+    int a[1000],b[1000];
+    cin>>n;
+
+    double dis_one=0.0,dis_two=0.0,dis_three=0.0,dis_inf=0.0;
+
+
+    for(int i=0;i<n;++i){
+        cin>>a[i];
+    }
+    
+    for(int i=0;i<n;++i){
+        cin>>b[i];
+    }
+
+    for(int i=0;i<n;++i){
+        double d=abs(a[i]-b[i]);
+        dis_one+=d;
+        dis_two+=d*d;
+        dis_three+=d*d*d;
+        if(dis_inf<d)dis_inf=d;
+    }
+
+    cout<<fixed<<setprecision(10);
+    cout<<dis_one<<endl;
+    cout<<pow(dis_two,1.0/2.0)<<endl;
+    cout<<pow(dis_three,double(1.0/3.0))<<endl;
+    cout<<dis_inf<<endl;
+
+    return 0;
+}
+

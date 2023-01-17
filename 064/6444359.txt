@@ -1,0 +1,17 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+int main() {
+    string W, S;
+    int cnt = 0;
+    cin >> W;
+    while (true) {
+        cin >> S;
+        if (S == "END_OF_TEXT") break;
+        if (S == W) cnt++;
+    }
+    cout << cnt << endl;
+    return 0;
+}

@@ -1,0 +1,12 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+    int a, t, r;
+    cin >> a >> t >> r;
+    double d = (double)t / (double)a;
+
+    cout << r * d << endl;
+
+    return 0;
+}

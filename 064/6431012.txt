@@ -1,0 +1,87 @@
+#include<iostream>
+#include<algorithm>
+#include<stdio.h>
+using namespace std;
+const int N=35;
+//int st[N];
+//a,b分别表示2个儿子，x表示兄弟 
+//f表示父节点，deg表示儿子个数， 
+//dep 表示深度，hei表示高度 
+struct node{
+	int c,a,b,f,deg,dep,hei,x;
+}tree[N];
+
+int dfs(int root)
+{
+	int l=-1,r=-1;
+	if(tree[root].a!=-1)
+	l=dfs(tree[root].a);
+	if(tree[root].b!=-1)
+	r=dfs(tree[root].b);
+	return max(l,r)+1;
+}
+int ll=0;
+int dfs1(int root)
+{
+	if(tree[root].f!=-1)
+	{
+		dfs1(tree[root].f);
+		ll+=1;
+	}
+	return ll;
+}
+int n;
+int main()
+{
+	cin>>n;
+	//scanf("%d",&n);
+	//儿子数量deg不为0，且父亲不为-1时 为中间节点
+	//st为0时是根节点 
+	//儿子数量为0时是叶子节点 
+	for(int i=0;i<n;i++)
+	{
+		tree[i].f=-1;
+		tree[i].x=-1;
+	}
+	
+	for(int i=0;i<n;i++)
+	{
+		int a,b,c;
+		cin>>c>>a>>b;
+		//if(tree[i]!=-1)
+		//tree[i].f=-1;
+		tree[i].deg =0;
+		//tree[i].x=-1;
+		tree[i].a=a,tree[i].b=b,tree[i].c=c;
+		if(a!=-1)
+		{
+			tree[a].x =b;
+			tree[i].deg+=1;
+			tree[a].f=c;
+			//st[a]=1;
+		}
+		if(b!=-1)
+		{
+			tree[b].x =a;
+			tree[i].deg+=1;
+			tree[b].f=c;
+			//st[b]=1;
+		}	
+	}
+	for(int i=0;i<n;i++)
+	{
+		ll=0;
+		tree[i].hei=dfs(tree[i].c);
+		tree[i].dep=dfs1(tree[i].c);
+	}
+	for(int i=0;i<n;i++)
+	{
+		if(tree[i].f!=-1&&tree[i].deg!=0)
+		printf("node %d: parent = %d, sibling = %d, degree = %d, depth = %d, height = %d, internal node\n",tree[i].c,tree[i].f ,tree[i].x ,tree[i].deg ,tree[i].dep ,tree[i].hei );
+		if(tree[i].f!=-1&&tree[i].deg==0)
+		printf("node %d: parent = %d, sibling = %d, degree = %d, depth = %d, height = %d, leaf\n",tree[i].c,tree[i].f ,tree[i].x ,tree[i].deg ,tree[i].dep ,tree[i].hei );
+		if(tree[i].f==-1)
+		printf("node %d: parent = %d, sibling = %d, degree = %d, depth = %d, height = %d, root\n",tree[i].c,tree[i].f ,tree[i].x ,tree[i].deg ,tree[i].dep ,tree[i].hei );
+	}
+	return 0;
+ } 

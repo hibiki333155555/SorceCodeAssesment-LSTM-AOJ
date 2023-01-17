@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    list<int>A;
+    list<int>:: iterator it;
+    it=A.begin();
+    long long int x,q,t,a,p,d;
+    cin>>q;
+    for(int i=1; i<=q; i++)
+    {
+
+        cin>>a;
+        if(a==0)
+        {
+            cin>>x;
+            A.insert(it,x);
+            it=find(A.begin(),A.end(),x);
+        }
+        else if(a==1)
+        {
+            cin>>d;
+            if(!A.empty() && d>0)
+            {
+                it =A.begin();
+                for(int i=1; i<=d; i++)
+                {
+                    it++;
+                }
+            }
+            else if(!A.empty() && d<0)
+            {
+                it=A.end();
+
+                for(int i=d; i>=1; i--)
+                {
+                    it--;
+                }
+            }
+        }
+        else if (a==2)
+        {
+            if(!A.empty())
+            {
+                A.erase(it);
+            }
+            list<int>:: iterator it;
+
+        }
+    }
+    for(auto it=A.begin(); it!=A.end(); it++)
+    {
+        cout<<*it<<endl;
+    }
+
+}
+
+

@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+int h, w;
+  cin >> h >> w;
+void dfs(int x, int y,vector<vector<int>> &field) {
+    field.at(x).at(y) = 0;
+for(int dx=-1;dx<=1;dx++) {
+for(int dy=-1;dy<=1;dy++) {
+  int nx = x + dx;
+  int ny = y + dy;
+  if(nx < 0 || ny < 0 || nx >= w || ny >= h) {
+    continue;
+  }
+  if(field.at(nx).at(ny) == 0) {
+    continue;
+  }
+  dfs(nx, ny);
+}
+}
+}
+
+int main() {
+  vector<vector<int>> field(w, vector<int>(h));
+  for(int i=0;i<w;i++) {
+for(int j=0;j<h;j++) {
+    cin >> field.at(i).at(j);
+}
+}
+  int count = 0;
+  for(int i=0;i<w;i++) {
+  for(int j=0;j<h;j++) {
+  if(field.at(i).at(j) == 1) {
+  dfs(i, j);
+  count++;
+}
+}
+}
+cout << count << endl;
+}
+
+  
+ 
+
+ 
+

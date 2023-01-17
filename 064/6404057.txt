@@ -1,0 +1,43 @@
+while True:
+    w,h = map(int,input().split())
+
+    if w == 0 and h == 0:
+        break
+
+    c = [list(map(int,input().split())) for _ in range(h)]
+    visited = [[0 for i in range(w)]for j in range(h)] # 訪問したか確認
+
+    island = 0 # 島の個数
+    xy_move = []
+    
+    # 8方向のパターン
+    for i in range(-1,2):
+        for j in range(-1,2):
+            if not(i == 0 and j == 0):
+                xy_move.append([i,j])
+
+    # 全てのマスに関して探索　
+    for i in range(w):
+        for j in range(h):
+            # 海or探索済みだった場合打ち切り
+            if visited[j][i] == 1 or c[j][i] == 0:
+                continue
+
+            stack = [[i,j]]
+            island += 1
+
+            while stack:
+                x,y = stack.pop()
+                c[y][x] = 0 # 自身は塗りつぶす
+
+                for k in xy_move:
+                    x_move,y_move = k
+                    nx = x+x_move
+                    ny = y+y_move
+
+                    if 0 <= nx < w and 0 <= ny < h and c[ny][nx] == 1 and visited[ny][nx] == 0:
+                        visited[ny][nx] = 1
+                        c[ny][nx] = 0 # 自身は塗りつぶす
+                        stack.append([nx,ny])
+
+    print(island)

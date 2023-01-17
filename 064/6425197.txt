@@ -1,0 +1,20 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define ll long long
+#define fix(ans,x) fixed << setprecision(x)<<ans
+int main(){
+    int m,f,b;
+    cin>>m>>f>>b;
+    int ans=b-m;
+    if(ans<0){
+        ans=0;
+    }
+    if(m+f<b){
+        cout<<"NA"<<endl;
+    }else{
+        cout<<ans<<endl;
+    }
+    return 0;
+}
+

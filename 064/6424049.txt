@@ -1,0 +1,14 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+   int a, b;
+   cin >> a >> b;
+   int p = a + b;
+   int m = a - b;
+   cout << max(p, m) << endl;
+   cout << min(p, m) << endl;
+   return 0;
+}

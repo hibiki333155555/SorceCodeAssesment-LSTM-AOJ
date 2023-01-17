@@ -1,0 +1,21 @@
+#include<stdio.h>
+
+int main (void)
+{
+    char c;
+    while(1)
+    {
+        scanf("%c",&c);
+        if('a'<=c&&c<='z')
+        {
+            c-=32;
+        }
+        else if('A'<=c&&c<='Z')
+        {
+            c+=32;
+        }
+        printf("%c",c);
+        if(c=='\n')break;
+    }
+    return 0;
+}

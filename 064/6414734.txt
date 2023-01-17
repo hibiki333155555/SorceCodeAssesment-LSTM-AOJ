@@ -1,0 +1,148 @@
+#include <algorithm>
+#include <bitset>
+#include <complex>
+#include <deque>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iosfwd>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <new>
+#include <numeric>
+#include <ostream>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <stdexcept>
+#include <streambuf>
+#include <string>
+#include <typeinfo>
+#include <utility>
+#include <valarray>
+#include <vector>
+#if __cplusplus >= 201103L
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <forward_list>
+#include <future>
+#include <initializer_list>
+#include <mutex>
+#include <random>
+#include <ratio>
+#include <regex>
+#include <scoped_allocator>
+#include <system_error>
+#include <thread>
+#include <tuple>
+#include <typeindex>
+#include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+#endif
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+typedef unsigned int ui;
+typedef pair<int, int> pii;
+typedef pair<pii, int> ppii;
+typedef pair<int, pii> pipi;
+typedef pair<ll, ll> pll;
+typedef pair<pll, ll> ppll;
+typedef pair<ll, pll> plpl;
+typedef pair<pii, pii> pippi;
+typedef tuple<ll, ll, ll> tl;
+typedef pair<double, double> pdd;
+typedef vector<vector<ll>> mat;
+const ll mod=1000000007;
+const ll mod2=998244353;
+ll inf =numeric_limits<ll>::max() / 2;
+int iinf=numeric_limits<int>::max() / 2;
+double pi=3.14159265358979323846;
+double eps=1e-10;
+#define rep(i,m,n) for(ll i=m;i<n;i++)
+#define rrep(i,n,m) for(ll i=n;i>=m;i--)
+#define srep(itr,st) for(auto itr=st.begin();itr!=st.end();itr++)
+#define mrep(itr,mp) for(auto& itr:mp)
+#define Max(a,b) a=max(a,b)
+#define Min(a,b) a=min(a,b)
+int dh[4] = {1,0,-1,0};
+int dw[4] = {0,1,0,-1};
+int ddh[8] = {-1,-1,-1,0,0,1,1,1 };
+int ddw[8] = {-1,0,1,-1,1,-1,0,1 };
+ll gcd(ll a,ll b) {
+    if (a<0)a=-a;if(b<0)b=-b;if(a<b)swap(a,b);if(b==0)return a; if (a % b == 0)return b; return gcd(b, a % b);
+}
+ll lcm(ll a,ll b){ll c=gcd(a,b);return a*b/c;}
+ll Pow(ll n,ll k) {
+    if (k<0)return 0;ll ret=1;ll now=n;while(k>0){if(k&1)ret *= now; now *= now; k /= 2; }return ret;
+}
+ll beki(ll n,ll k,ll md) {
+    ll ret =1;ll now=n;now%=md;
+    while (k>0) {
+        if (k%2==1){ret*=now;ret%=md;}
+        now *= now; now %= md; k /= 2;
+    }return ret;
+}
+ll gyaku(ll n,ll md){return beki(n,md-2,md);}
+ll popcount(ll n) { ll ret = 0; ll u = n; while (u > 0) { ret += u % 2; u /= 2; }return ret; }
+
+
+using namespace atcoder;
+//#define endl "\n"
+using mint = static_modint<mod>;
+
+int main(){
+    ios::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+    int h,w;cin>>h>>w;
+    string s[h];
+    rep(i,0,h)cin>>s[i];
+    int ans=iinf;
+    rep(i,1,h){
+        int c0=0,c1=0;
+        rep(j,0,i){
+            rep(k,0,w){
+                if(s[j][k]=='o')c0++;
+                else c1++;
+            }
+        }
+        int cc0=0,cc1=0;
+        rep(j,i,h){
+            rep(k,0,w){
+                if(s[j][k]=='o')cc0++;
+                else cc1++;
+            }
+        }
+        Min(ans,min(c0+cc1,c1+cc0));
+    }
+    rep(i,1,w){
+        int c0=0,c1=0;
+        rep(j,0,i){
+            rep(k,0,h){
+                if(s[k][j]=='o')c0++;
+                else c1++;
+            }
+        }
+        int cc0=0,cc1=0;
+        rep(j,i,w){
+            rep(k,0,h){
+                if(s[k][j]=='o')cc0++;
+                else cc1++;
+            }
+        }
+        Min(ans,min(c0+cc1,c1+cc0));
+    }
+    cout<<ans<<endl;
+}
+

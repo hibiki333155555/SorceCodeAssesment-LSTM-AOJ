@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int n,m;
+  cin >> n >> m;
+  vector<int> c(m), dp(n+1,-1);
+  dp.at(0) = 0;
+  for(int i=0; i<m; i++) cin >> c.at(i);
+  
+  for(int i=0; i<m; i++){
+    for(int j=0; j<=n; j++){
+      if(j >= c.at(i)){
+        if(dp.at(j-c.at(i)) == -1) continue;
+        if(dp.at(j) == -1){
+          dp.at(j) = dp.at(j-c.at(i)) + 1;
+        }else{
+          dp.at(j) = min(dp.at(j), dp.at(j-c.at(i)) + 1);
+        }
+      }
+    }
+  }
+  
+  cout << dp.at(n) << endl;
+  return 0;
+}

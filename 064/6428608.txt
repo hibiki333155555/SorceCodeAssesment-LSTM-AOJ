@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main()
+{
+    int a,b, c;
+    scanf("%d %d %d", &a, &b, &c);
+    for(a=a; a<=b; a++)
+    {
+        if(c%a==0)
+        printf("%d ",a);
+    }
+    printf("\n");
+    return 0;
+}

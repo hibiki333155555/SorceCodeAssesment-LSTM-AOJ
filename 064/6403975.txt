@@ -1,0 +1,22 @@
+#include <iostream>
+#include <math.h>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    int N, X;
+    while (cin >> N >> X, N) {
+        int res = 0;
+        for (int i = 1; i <= N; ++i) {
+            for (int j = i+1; j <= N; ++j) {
+                for (int k = j+1; k <= N; ++k) {
+                    if (i + j + k == X) ++res;
+                }
+            }
+        }
+        cout << res << endl;
+    }
+}

@@ -1,0 +1,96 @@
+import java.util.*;
+
+public class Main{
+    public static void main(String []args){
+        Scanner in = new Scanner(System.in);
+
+        int V = in.nextInt();
+        int E = in.nextInt();
+
+        FordFulkson g = new FordFulkson(V);
+
+        for(int i = 0; i < E; i++){
+            int u = in.nextInt();
+            int v = in.nextInt();
+            int c = in.nextInt();
+
+            g.add(u, v, c);
+        }
+
+        System.out.println(g.maxFlow(0, V - 1));
+
+        in.close();
+    }
+}
+
+class Edge{
+    int to, cap, rev;
+
+    Edge(int to, int cap, int rev){
+        this.to = to;
+        this.cap = cap;
+        this.rev = rev;
+    }
+}
+
+class FordFulkson{
+    ArrayList<ArrayList<Edge>> G = new ArrayList<ArrayList<Edge>>();
+    boolean used[];
+    int n;
+
+    int inf = (int)(1e9 + 7);
+
+    FordFulkson(int n){
+        this.n = n;
+        for(int i = 0; i < n; i++){
+            G.add(new ArrayList<Edge>());
+        }
+
+        used = new boolean[n];
+    }
+
+    public void add(int from, int to, int cap){
+        G.get(from).add(new Edge(to, cap, G.get(to).size()));
+        G.get(to).add(new Edge(from, 0, G.get(from).size() - 1));
+    }
+
+    public int dfs(int v, int t, int f){
+        if(v == t){
+            return f;
+        }
+
+        used[v] = true;
+        for(int i = 0; i < G.get(v).size(); i++){
+            Edge e = G.get(v).get(i);
+
+            if(!used[e.to] && e.cap > 0){
+                int d = dfs(e.to, t, Math.min(f, e.cap));
+
+                if(d > 0){
+                    e.cap -= d;
+                    G.get(e.to).get(e.rev).cap += d;
+
+                    return d;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    public int maxFlow(int s, int t){
+        int flow = 0;
+
+        while(true){
+            Arrays.fill(used, false);
+
+            int f = dfs(s, t, inf);
+
+            if(f == 0){
+                return flow;
+            }
+
+            flow += f;
+        }
+    }
+}

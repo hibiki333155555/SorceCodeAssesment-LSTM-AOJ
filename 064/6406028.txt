@@ -1,0 +1,9 @@
+require('fs').readFileSync(0,'utf8').split('\n').some(l=>{
+    if(l === '0 0') return true;
+    [H,W]=l.split(` `).map(n=>+n);
+    // for(i=0,a=[];i<H;)a[i]=(i++%2?'.#':'#.').repeat(W).substr(0,W);
+    a=Array(W).map((_,i)=>(i++%2?'.#':'#.').repeat(W).substr(0,W));
+    console.log(a.join`
+`+`
+`);
+})

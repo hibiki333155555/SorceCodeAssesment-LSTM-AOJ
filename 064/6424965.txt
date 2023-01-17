@@ -1,0 +1,47 @@
+`use strict`;
+let [n, ...arr] = require(`fs`).readFileSync(`/dev/stdin`, `utf8`).split(`\n`);
+
+let cnt = 0;
+
+function insertionSort(arr, n, g) {
+    for (let i=g; i<n; i++) {
+        let v = arr[i];
+        let j = i - g;
+        while (j >= 0 && +arr[j] > v) {
+            arr[j + g] = arr[j];
+            j -= g;
+            cnt++;
+        }
+        arr[j + g] = v;
+    }
+}
+
+function knuth(k) {
+    return 0.5 * (Math.pow(3, k) - 1);
+}
+
+function shellSort(arr, n) {
+    let g = [];
+    let k = 1;
+    while (1) {
+        if (knuth(k) > n) {
+            break;
+        } else {
+            shellSort.g.push(knuth(k));
+        }
+        k++;
+    }
+    shellSort.g.reverse();
+    let m = g.length
+    for (let i=0; i<m; i++) {
+        insertionSort(arr, n, g[i]);
+    }
+    console.log(m);
+    console.log(g.join(` `));
+    console.log(cnt);
+    console.log(arr.join(`\n`));
+}
+
+shellSort(arr, n);
+
+

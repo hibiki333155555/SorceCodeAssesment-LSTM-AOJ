@@ -1,0 +1,9 @@
+while True:
+    i = input()
+    if i == "0":
+        break
+    a = 0
+    for s in i:
+        a += int(s)
+    print(a)
+    

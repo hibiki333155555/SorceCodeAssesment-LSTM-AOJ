@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 1000000005
+
+typedef struct node {
+    int x;
+    int y;
+} Node;
+
+void Marge(Node * A, int left, int mid, int right, int * p){
+    int n1 = mid - left;
+    int n2 = right - mid;
+    int com_i = 0, com_j = 0;
+    Node * L = (Node *)malloc(sizeof(Node) * (n1 + 1));
+    Node * R = (Node *)malloc(sizeof(Node) * (n2 + 1));
+    for (int i = 0; i < n1; i++){
+        L[i] = A[left + i];
+    }
+    for (int i = 0; i < n2; i++){
+        R[i] = A[mid + i];
+    }
+    L[n1].x = L[n1].y = R[n2].x = R[n2].y = MAX;
+    for (int i = left; i < right; i++){
+        (*p)++;
+        if (L[com_i].x == R[com_j].x){
+            if (L[com_i].y <= R[com_j].y){
+                A[i] = L[com_i];
+                com_i++;
+            } else {
+                A[i] = R[com_j];
+                com_j++;
+            }
+        } else { 
+            if (L[com_i].x < R[com_j].x){
+                A[i] = L[com_i];
+                com_i++;
+            } else {
+                A[i] = R[com_j];
+                com_j++;
+            }
+        }
+    }
+    return;
+}
+
+void MargeSort(Node * A, int left, int right, int * p){
+    if (left+1 < right){
+        int mid = (left+right)/2;
+        MargeSort(A, left, mid, p);
+        MargeSort(A, mid, right, p);
+        Marge(A, left, mid, right, p);
+    }
+}
+
+int main(void){
+    // Your code here!
+    int n, x, y, cnt = 0;
+    scanf(" %d", &n);
+    
+    Node * A = (Node *)malloc(sizeof(Node) * (n+1));
+    
+    for (int i = 0; i < n; i++){
+        scanf(" %d %d", &x, &y);
+        A[i].x = x;
+        A[i].y = y;
+        //printf(" %d %d\n", A[i].x, A[i].y);
+    }
+    
+    MargeSort(A, 0, n, &cnt);
+    
+    for (int i = 0; i < n; i++){
+        printf("%d %d\n", A[i].x, A[i].y);
+    }
+    
+    return 0;
+}

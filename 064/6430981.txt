@@ -1,0 +1,16 @@
+import java.util.* ;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        for (int i =0;i < 2) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            String op = sc.next();
+            if (op.equals("?")) {
+                break;
+            }
+                System.out.println(a + op + b);
+        }
+    }
+}

@@ -1,0 +1,28 @@
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+#include <cmath>
+#include <string>
+using namespace std;
+
+int main()
+{
+	int a;
+	string astring;
+	int total = 0;
+	while (true)
+	{
+		cin >> a;
+		astring = to_string(a);
+		if (a != 0)
+		{
+			for (size_t i = 0; i <= astring.length() - 1; i++)
+			{
+				total += astring[i] - '0';
+			}
+			cout << total << endl;
+			total = 0;
+		}
+		else if (a == 0) break;
+	}
+}

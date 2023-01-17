@@ -1,0 +1,22 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int N, T; cin >> N >> T;
+	vector<int> C(T, 0);
+	for (int n = 0, l, r; n < N; ++n) {
+		cin >> l >> r;
+		++C[l]; --C[r];
+	}
+	int m = C[0];
+	for (int n = 1; n < T; ++n) {
+		C[n] += C[n - 1];
+		if (m < C[n]) m = C[n];
+	}
+	cout << m << endl;
+	return 0;
+}
+

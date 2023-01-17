@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+//#define int long long
+//#define lson (rt<<1)
+//#define rson ((rt<<1)+1)
+//#define mid ((l+r)>>1)
+#define mst(a) memset(a,0,sizeof(a))
+#define cf int Tcodeforces, Tcodeforce;cin>>Tcodeforces;for(Tcodeforce = 1; Tcodeforce <= Tcodeforces; Tcodeforce++)
+typedef long long ll;
+typedef double db;
+const ll maxn = 2e5 +7;
+const ll maxm = 2e5 +7;
+const ll inf = 0x3f3f3f3f;
+const ll mod = 1e9 +7;
+
+int n;
+int mp[4][4];
+int dr[]={-1,0,1,0};
+int dc[]={0,1,0,-1};
+
+int Heuristic() {
+    int res = 0;
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            if(mp[i][j] == 0) continue;
+            int t = mp[i][j] - 1;
+            res += abs(t/4-i) + abs(t%4-j);
+        }
+    }
+    return res;
+}
+
+bool check(int dep, int lim, int fre, int cp, int rp) {
+    int h = Heuristic();
+    //printf("h=%d\n",h);
+    if(h == 0) return true;
+    if(h + dep > lim) return false;
+    for(int i = 0; i < 4; i++) {
+        if(abs(i-fre) == 2) continue;
+        int tr = rp + dr[i], tc = cp + dc[i];
+        if(tr < 0 || tc < 0 || tr >= 4 || tc >= 4) continue;
+        swap(mp[rp][cp],mp[tr][tc]);
+        int f = check(dep+1,lim,i,tc,tr);
+        swap(mp[rp][cp],mp[tr][tc]);
+        if(f) return true;
+    }
+    return false;
+}
+
+signed main() {
+    #ifdef moyi_qwq
+        freopen("D:/source file/intxt/in.txt","r",stdin);
+    #endif
+    int rp, cp;
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            cin>>mp[i][j];
+            if(mp[i][j] == 0) {
+                rp = i;
+                cp = j;
+            }
+        }
+    }
+    //cout<<cp<<" "<<rp<<endl;
+    int l = 0, r = 45;
+    //cout<<check(0,7,114514,cp,rp)<<endl;
+    //return 0;
+    while(l != r - 1) {
+        int mid = (l+r)/2;
+        if(check(0,mid,114514,cp,rp)) {
+            r = mid;
+        }
+        else {
+            l = mid;
+        }
+    }
+    cout<<r<<endl;
+    
+    //cerr<<"Time : "<<1000*((double)clock())/(double)CLOCKS_PER_SEC<<"ms";
+    return (0);
+}
+

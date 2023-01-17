@@ -1,0 +1,23 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+
+int main() {
+  int q; std::cin >> q;
+  for (int i=0; i<q; i++) {
+    int x0, y0, x1, y1; std::cin >> x0 >> y0 >> x1 >> y1;
+    int vec1_x = x1 - x0;
+    int vec1_y = y1 - y0;
+    std::cin >> x0 >> y0 >> x1 >> y1;
+    int vec2_x = x1 - x0;
+    int vec2_y = y1 - y0;
+    if (vec1_x * vec2_y == vec1_y * vec2_x) {
+      std::cout << 2 << std::endl;
+    } else if (vec1_x * vec2_x + vec1_y * vec2_y == 0) {
+      std::cout << 1 << std::endl;
+    } else {
+      std::cout << 0 << std::endl;
+    }
+  }
+}
+

@@ -1,0 +1,20 @@
+def solve(i, m, A):
+    if m == 0:
+        return True
+    if i >= len(A):
+        return False
+    res = solve(i + 1, m, A) or solve(i + 1, m - A[i], A)
+    return res
+
+num = int(input())
+A = [int(e) for e in input().split()]
+q = int(input())
+m = [int(e) for e in input().split()]
+
+for i in m:
+    if solve(0, i, A):
+        print("yes")
+    else:
+        print("no")
+
+

@@ -1,0 +1,68 @@
+//
+// Created by TangQihui on 2022/3/29.
+//
+#include "iostream"
+#include "string"
+#include "cstdlib"
+using namespace std;
+typedef struct node{
+    int key;
+    struct node* parent,*left,*right;
+}node;
+typedef node* Tree;
+Tree insert(Tree root,Tree x){
+    Tree pre = NULL;
+    Tree p = root;
+    while (p!=NULL){
+        pre = p;
+        if ((x->key)<(p->key)){
+            p = p->left;
+        } else p = p->right;
+    }
+    if (pre==NULL)root = x;
+    else if(pre->key<x->key){
+        pre->right = x;
+    }else{
+        pre->left = x;
+    }
+    return root;
+}
+void inOrder(Tree x){
+    if(x!=NULL){
+        inOrder(x->left);
+        cout<<' '<<x->key;
+        inOrder(x->right);
+    }
+}
+void preOrder(Tree x){
+    if (x!=NULL){
+        cout<<' '<<x->key;
+        preOrder(x->left);
+        preOrder(x->right);
+
+    }
+}
+int main(){
+    int m,x;
+    Tree root = NULL;
+    char cm[10];
+    cin>>m;
+    for (int i = 0; i < m; ++i) {
+        cin>>cm;
+        if (cm[0]=='i'){
+            cin>>x;
+            Tree q = (Tree) malloc(sizeof (node));
+            q->key = x;
+            q->right = NULL;
+            q->left = NULL;
+            root = insert(root,q);
+        }else{
+            inOrder(root);
+            cout<<endl;
+            preOrder(root);
+            cout<<endl;
+        }
+    }
+    return 0;
+}
+

@@ -1,0 +1,19 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String line = sc.nextLine();  // 元の文章
+        String newline = "";          // 変換後の文章
+        
+
+        for(int i=0;i<line.length();i++){
+            char ch = line.charAt(i);  // 1文字ずつ読み込み
+            if(Character.isLowerCase(ch)) newline += Character.toUpperCase(ch);        // 小文字は大文字に変換
+            else if(Character.isUpperCase(ch)) newline += Character.toLowerCase(ch);   // 大文字は小文字に変換
+            else newline += ch;                                                        // その他はそのまま
+        }
+        
+        System.out.println(newline);
+    }
+}

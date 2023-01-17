@@ -1,0 +1,180 @@
+/**
+ *   @FileName	a.cpp
+ *   @Author	kanpurin
+ *   @Created	2022.03.19 19:07:24
+**/
+
+#include "bits/stdc++.h" 
+using namespace std; 
+typedef long long ll;
+
+
+template< int MOD >
+struct mint {
+public:
+    unsigned int x;
+    mint() : x(0) {}
+    mint(long long v) {
+        long long w = (long long)(v % (long long)(MOD));
+        if (w < 0) w += MOD;
+        x = (unsigned int)(w);
+    }
+    mint(std::string &s) {
+        unsigned int z = 0;
+        for (int i = 0; i < s.size(); i++) {
+            z *= 10;
+            z += s[i] - '0';
+            z %= MOD;
+        }
+        x = z;
+    }
+    mint operator+() const { return *this; }
+    mint operator-() const { return mint() - *this; }
+    mint& operator+=(const mint &a) {
+        if ((x += a.x) >= MOD) x -= MOD;
+        return *this;
+    }
+    mint& operator-=(const mint &a) {
+        if ((x -= a.x) >= MOD) x += MOD;
+        return *this;
+    }
+    mint& operator*=(const mint &a) {
+        unsigned long long z = x;
+        z *= a.x;
+        x = (unsigned int)(z % MOD);
+        return *this;
+    }
+    mint& operator/=(const mint &a) {return *this = *this * a.inv(); }
+    friend mint operator+(const mint& lhs, const mint& rhs) {
+        return mint(lhs) += rhs;
+    }
+    friend mint operator-(const mint& lhs, const mint& rhs) {
+        return mint(lhs) -= rhs;
+    }
+    friend mint operator*(const mint& lhs, const mint& rhs) {
+        return mint(lhs) *= rhs;
+    }
+    friend mint operator/(const mint& lhs, const mint& rhs) {
+        return mint(lhs) /= rhs;
+    }
+    friend bool operator==(const mint& lhs, const mint& rhs) {
+        return lhs.x == rhs.x;
+    }
+    friend bool operator!=(const mint& lhs, const mint& rhs) {
+        return lhs.x != rhs.x;
+    }
+    friend std::ostream& operator<<(std::ostream &os, const mint &n) {
+        return os << n.x;
+    }
+    friend std::istream &operator>>(std::istream &is, mint &n) {
+        unsigned int x;
+        is >> x;
+        n = mint(x);
+        return is;
+    }
+    mint inv() const {
+        assert(x);
+        return pow(MOD-2);
+    }
+    mint pow(long long n) const {        
+        assert(0 <= n);
+        mint p = *this, r = 1;
+        while (n) {
+            if (n & 1) r *= p;
+            p *= p;
+            n >>= 1;
+        }
+        return r;
+    }
+    
+    mint sqrt() const {
+        if (this->x < 2) return *this;
+        if (this->pow((MOD-1)>>1).x != 1) return mint(0);
+        mint b = 1, one = 1;
+        while (b.pow((MOD-1) >> 1) == 1) b += one;
+        long long m = MOD-1, e = 0;
+        while (m % 2 == 0) m >>= 1, e += 1;
+        mint x = this->pow((m - 1) >> 1);
+        mint y = (*this) * x * x;
+        x *= (*this);
+        mint z = b.pow(m);
+        while (y.x != 1) {
+            int j = 0;
+            mint t = y;
+            while (t != one) j += 1, t *= t;
+            z = z.pow(1LL << (e-j-1));
+            x *= z; z *= z; y *= z; e = j;
+        }
+        return x;
+    }
+};
+
+constexpr int MOD = 998244353;
+
+template<typename T>
+struct Combination {
+private:
+    int N;
+
+public:
+    vector< T > FACT, IFACT;
+    Combination(int n) : N(n) {
+        FACT.resize(n + 1);
+        IFACT.resize(n + 1);
+        FACT[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            FACT[i] = FACT[i - 1] * i;
+        }
+        IFACT[n] = T(1) / FACT[n];
+        for (int i = n-1; i >= 0; i--) {
+            IFACT[i] = IFACT[i+1] * (i+1);
+        }
+    }
+
+    T comb(int n, int r) {
+        if (n < 0 || r < 0 || r > n) return 0;
+        if (r > n / 2) r = n - r;
+        return FACT[n] * IFACT[n - r] * IFACT[r];
+    }
+};
+
+int main() {
+    int n;cin >> n;
+    Combination<mint<MOD>> cb(n);
+    vector<int> a(n);
+    int p1 = 0, p2 = 0, c1 = 0, c23 = 0, c5 = 0, c7 = 0;
+    mint<MOD> ans = 1;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        if (a[i] == 2 || a[i] == 4 || a[i] == 8) {
+            p1++;
+            c23++;
+        }
+        else if (a[i] == 3 || a[i] == 9) {
+            p2++;
+            c23++;
+        }
+        else if (a[i] == 6) {
+            ans *= cb.comb(p1+p2,p1);
+            p1 = 0;
+            p2 = 0;
+            c23++;
+        }
+        else if (a[i] == 1) {
+            c1++;
+        }
+        else if (a[i] == 5) {
+            c5++;
+        }
+        else if (a[i] == 7) {
+            c7++;
+        }
+        if (i==n-1) {
+            ans *= cb.comb(p1+p2,p1);
+            ans *= cb.FACT[n]*cb.IFACT[c1]*cb.IFACT[c23]*cb.IFACT[c5]*cb.IFACT[c7];
+        }
+    }
+    cout << ans << endl;
+    return 0;
+}
+

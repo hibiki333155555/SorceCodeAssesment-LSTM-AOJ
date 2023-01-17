@@ -1,0 +1,20 @@
+n = int(input())
+x0 = int(input())
+d_flag = False
+u_flag = False
+recarr = []
+maxd = -999999999
+minr = x0
+for j in range(n-1):
+    recarr.append(x0)
+    x1 = int(input())
+    if j == 0:
+        maxd = x1-x0
+    # print("{}回目スタート、x0は{}、X1は{}、".format(j+1,x0,x1),end="")
+    if x1 < minr:#下がったら
+        minr = x1
+    elif x1 >= x0:#上がったら
+        if x1 - minr > maxd:
+            maxd = x1 - minr
+    x0 = x1
+print(maxd)

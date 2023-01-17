@@ -1,0 +1,48 @@
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+
+void printArray(int *nums, int size)
+{
+  for (int i = 0; i < size; i++)
+  {
+    if (i != size - 1) printf("%d ", nums[i]);
+    else printf("%d\n", nums[i]);
+  }
+}
+
+void insertionSort(int *nums, int size)
+{
+  for (int i = 0; i < size; i++)
+  {
+    int num = nums[i];
+    int j = i - 1;
+    while (j >= 0 && nums[j] > num)
+    {
+      nums[j+1] = nums[j];
+      j--;
+    }
+    nums[j+1] = num;
+    printArray(nums, size);
+  }
+  
+}
+
+int main(int argc, char const *argv[])
+{
+  int n;
+
+  cin >> n;
+  int *nums = new int[n];
+
+  for (int i = 0; i < n; i++)
+  {
+    cin >> nums[i];
+  }
+
+  insertionSort(nums, n);
+
+  return 0;
+}
+

@@ -1,0 +1,16 @@
+S = input().split()
+A = []
+n = len(S)
+for i in range(n):
+    if S[i]=='+':
+        A[-2] = A[-2] + A[-1]
+        A.pop()
+    elif S[i]=='-':
+        A[-2] = A[-2] - A[-1]
+        A.pop()
+    elif S[i]=='*':
+        A[-2] = A[-2] * A[-1]
+        A.pop()
+    else:
+        A.append(int(S[i]))
+print(A[0])

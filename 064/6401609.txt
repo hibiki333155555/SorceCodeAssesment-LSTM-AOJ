@@ -1,0 +1,10 @@
+from sys import stdin
+
+q = int(input())
+M = dict()
+for i in stdin:
+    op = i.split()
+    if op[0] == "0":
+        M[op[1]] = int(op[2])
+    elif op[0] == "1":
+        print(M[op[1]])

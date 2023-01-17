@@ -1,0 +1,12 @@
+n = int(input())
+a = list(map(int, input().split()))
+r = a[-1]
+i = 0
+for j in range(1, n-1):
+    if a[j] <= r:
+        i += 1
+        a[i-1], a[j] = a[j], a[i-1]  
+    else:
+        continue
+a[i], a[r] = a[r], a[i]
+print(*a[:i], f"[{a[i]}]", *a[i+1:])

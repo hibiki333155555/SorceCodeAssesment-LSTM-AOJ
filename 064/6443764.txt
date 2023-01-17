@@ -1,0 +1,42 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class Main {
+    static int[] a=new int[11];
+    static int[] l=new int[11];
+    static int[] r=new int[11];
+    public static void main(String[] args) throws IOException {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        while(n>0){
+            for(int i=1;i<=10;i++){
+                a[i]=sc.nextInt();
+            }
+            if(dfs(1,1,1))
+                System.out.println("YES");
+            else
+                System.out.println("NO");
+            n--;
+        }
+    }
+
+    private static boolean dfs(int left,int right,int depth) {
+        if(depth>10){
+            return true;
+        }
+        int left1=left;
+        int right1=right;
+        if(a[depth]>l[left-1]){
+            l[left++]=a[depth];
+            if(dfs(left,right1,depth+1))
+                return true;
+        }
+        if(a[depth]>r[right-1]){
+
+            r[right++]=a[depth];
+            if(dfs(left1,right,depth+1))
+                return true;
+        }
+        return false;
+    }
+}

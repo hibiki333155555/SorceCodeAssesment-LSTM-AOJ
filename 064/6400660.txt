@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int main(void){
+    int a, b;
+    scanf("%d%d", &a, &b);
+
+    int d = a / b, r = a % b;
+    double f = a / b;
+
+    printf("%d %d %lf\n", d, r, f);
+
+    return 0;
+}

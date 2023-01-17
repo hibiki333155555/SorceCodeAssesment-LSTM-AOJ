@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+
+    int R[n];
+    for (int i = 0; i < n; ++i)
+	cin >> R[i];
+
+    int min_val =  R[0];
+    int max_profit = -R[0];
+
+    for (int i = 1; i < n; ++i) {
+	// R[i] が新たに加わることで、最大利益が増大するとしたら、
+        // 新たな最大利益は、R[i] - min{R[0], ..., R[i-1]}
+	max_profit = max(max_profit, R[i] - min_val);
+	min_val = min(min_val, R[i]);
+    }
+
+    cout << max_profit << endl;
+    
+    return 0;
+}
+

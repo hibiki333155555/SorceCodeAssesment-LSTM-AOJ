@@ -1,0 +1,18 @@
+//#include<bits/stdc++.h>
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+int main()
+{
+	
+	int n,m;
+	cin>>n;
+	m=pow(n,3);
+	
+	cout<<m<<endl;
+
+
+return 0;
+}
+

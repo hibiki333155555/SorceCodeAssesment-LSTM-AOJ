@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+#define FOR(i, a, b) for(ll i = (a); i < (b); ++i)
+#define FORR(i, a, b) for(ll i = (a); i > (b); --i)
+#define REP(i, n) for(ll i = 0; i < (n); ++i)
+#define REPR(i, n) for(ll i = n; i >= 0; i--)
+#define FOREACH(x, a) for(auto &(x) : (a))
+#define dump(x) cout << #x << " = " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define SP << " " <<
+using namespace std;
+using ll = long long;
+using P = pair<ll, ll>;
+
+#define int long long
+
+vector<vector<int>> matrix;
+vector<int> d;
+
+queue<int> q;
+
+void bfs() {
+  d[0] = 0;
+  q.push(0);
+  int p = 0;
+  while(!q.empty()) {
+    int v = q.front();
+    q.pop();
+    REP(i, matrix[v].size()) {
+      if(d[matrix[v][i]] == -1) {
+        d[matrix[v][i]] = d[v] + 1;
+        q.push(matrix[v][i]);
+      }
+    }
+  }
+}
+
+signed main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  int n;
+  cin >> n;
+
+  matrix.assign(n, vector<int>());
+  d.assign(n, -1);
+
+  REP(i, n) {
+    int u, k;
+    cin >> u >> k;
+    REP(j, k) {
+      int v;
+      cin >> v;
+      matrix[u - 1].push_back(v - 1);
+    }
+    sort(all(matrix[u - 1]));
+  }
+
+  bfs();
+
+  REP(i, n) {
+    int id = i + 1;
+    cout << id << " " << d[i] << endl;
+  }
+
+  return 0;
+}
+

@@ -1,0 +1,11 @@
+w = input()
+while True:
+    t = input().split()
+    if t == "END_OF_TEXT":
+        bleak
+    cnt = 0
+    for i in t:
+        if w in i:
+            cnt += 1
+    print(cnt)
+            

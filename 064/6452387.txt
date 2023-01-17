@@ -1,0 +1,21 @@
+#include <iostream>
+#include <iomanip>
+#include <complex>
+
+using namespace std;
+
+complex<double> in() {double x, y; cin >> x >> y; return {x, y};}
+
+int main()
+{
+	complex<double> p1 = in(), p2 = in() - p1, p3 = in() - p1;
+	if ((p3 / p2).imag() < 0) swap(p2, p3);
+	p3 /= p2;
+	auto dp1 = polar(1.0, arg(p3) / 2), dp2 = polar(1.0, arg(1.0 - p3) / 2);
+	dp1 *= dp2.imag() / (dp1.real() * dp2.imag() - dp2.real() * dp1.imag());
+	auto r = dp1.imag() * abs(p2);
+	auto cp = dp1 * p2 + p1;
+	cout << fixed << setprecision(20) << cp.real() << ' ' << cp.imag() << ' ' << r << endl;
+	return 0;
+}
+

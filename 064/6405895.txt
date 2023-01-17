@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+
+
+
+int main() {
+    ll N, M;
+    cin >> N >> M;
+    vll A(N);
+    rep(i, N)cin >> A[i];
+    vll B(M);
+    rep(i, M)cin >> B[i];
+    vll mA(N), MA(N), mB(M), MB(M);
+    rep(i, N) {
+        if (A[i] != 0) {
+            mA[i] = MA[i] = A[i];
+        }
+        else if (i == 0) {
+            mA[i] = 1;
+        }
+        else {
+            mA[i] = mA[i - 1] + 1;
+        }
+    }
+    rep(i, M) {
+        if (B[i] != 0) {
+            mB[i] = MB[i] = B[i];
+        }
+        else if (i == 0) {
+            mB[i] = 1;
+        }
+        else {
+            mB[i] = mB[i - 1] + 1;
+        }
+    }
+
+    for (ll i = N - 1; i >= 0; i--) {
+        if (A[i] != 0) {
+            mA[i] = MA[i] = A[i];
+        }
+        else if (i == N - 1) {
+            MA[i] = N + M;
+        }
+        else {
+            MA[i] = MA[i + 1] - 1;
+        }
+    }
+    for (ll i = M - 1; i >= 0; i--) {
+        if (B[i] != 0) {
+            mB[i] = MB[i] = B[i];
+        }
+        else if (i == N - 1) {
+            MB[i] = N + M;
+        }
+        else {
+            MB[i] = MB[i + 1] - 1;
+        }
+    }
+    vll ANSA(N), ANSB(M);
+    ll a = 0, b = 0;
+    for (ll i = 1; i <= N + M; i++) {
+        if (a >= N || i < mA[a] || MA[a] < i) {
+            ANSB[b] = i;
+            b++;
+        }
+        else if (MB[b] == i) {
+            ANSB[b] = i;
+            b++;
+        }
+        else {
+            ANSA[a] = i;
+            a++;
+        }
+    }
+    rep(i, N) {
+        cout << ANSA[i] << (i == N - 1 ? "\n" : " ");
+    }
+    rep(i, M) {
+        cout << ANSB[i] << (i == M - 1 ? "\n" : " ");
+    }
+
+}
+

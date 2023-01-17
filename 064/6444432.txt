@@ -1,0 +1,12 @@
+#include<stdio.h>
+int main(){
+    long int a,b,c,d;
+    double e;
+    scanf("%d %d",&a,&b);
+    c=a/b;
+    d=a%b;
+    e=a/(double)b;
+    printf("%ld %ld %.6lf\n",c,d,e);
+    
+    return 0;
+}

@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+int head[100100],num[100100],pre[100100],maxx,maxp,cnt;
+struct E{
+    int w,to,next;
+}edge[100100];
+void add(int a,int b,int w){
+    edge[cnt].to=b;
+    edge[cnt].w=w;
+    edge[cnt].next=head[a];
+    head[a]=cnt++;
+}
+queue<int>q;
+void bfs(){
+    int len=q.size();
+    for(int i=0;i<len;i++){
+        int now=q.front();
+        //cout<<"now="<<now<<endl;
+        q.pop();
+        for(int j=head[now];j>=0;j=edge[j].next){
+            if(edge[j].to!=pre[now]){
+                //cout<<edge[j].to<<endl;
+                if(num[edge[j].to]<num[now]+edge[j].w){
+                    q.push(edge[j].to);
+                    num[edge[j].to]=num[now]+edge[j].w;
+                    pre[edge[j].to]=now;
+                }if(maxx<num[edge[j].to])
+                    maxx=num[edge[j].to],maxp=edge[j].to;
+            }
+        }
+    }if(q.size()>0)bfs();
+}
+int main(){
+    cnt=0;
+    memset(head,-1,sizeof(head));
+    memset(num,0,sizeof(num));
+    maxx=0;
+    int n;
+    cin>>n;
+    for(int i=1;i<n;i++){
+        int a,b,w;
+        cin>>a>>b>>w;
+        add(a,b,w);
+        add(b,a,w);
+    }
+    q.push(1);
+    pre[1]=-1;
+    bfs();
+    memset(num,0,sizeof(num));
+    memset(pre,-1,sizeof(pre));
+    q.push(maxp);
+    pre[maxp]=-1;
+    maxx=0,maxp=-1;
+    bfs();
+    cout<<maxx;
+    return 0;
+}

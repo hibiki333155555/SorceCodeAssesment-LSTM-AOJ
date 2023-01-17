@@ -1,0 +1,12 @@
+w = input()
+
+while True:
+    if input() == "END_OF_TEXT":
+        break
+    
+    line = input().lower().split(" ")
+    a = 0
+    if w in line:
+        a += 1
+
+print(a)

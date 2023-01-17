@@ -1,0 +1,8 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int d,l; cin>>d>>l;
+    cout<<d/l+d%l<<endl;
+    return 0;
+}
+

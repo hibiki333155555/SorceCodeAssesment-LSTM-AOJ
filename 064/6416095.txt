@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct Node{
+  int data;
+  struct Node *left;
+  struct Node *right;
+}Node;
+
+void insert(Node *root, int data)
+{
+  Node *p = (Node *)malloc(sizeof(Node));
+  p->data = data;
+  if(root->right != NULL) root->right->left = p;
+  p->right = root->right;
+  root->right = p;
+  p->left = root;
+}
+
+void deleteFirst(Node *ptr)
+{
+  if(ptr->right == NULL) return;
+  ptr->right->right->left = ptr;
+  ptr->right = ptr->right->right;
+}
+
+void deleteLast(Node *ptr)
+{
+  if(ptr->right->right == NULL) ptr->right = NULL;
+  else deleteLast(ptr->right);
+}
+
+void delete(Node *ptr, int data)
+{
+  if(ptr->right == NULL) return;
+  
+  if(ptr->right->data == data){
+    if(ptr->right->right != NULL) ptr->right->right->left = ptr;
+    ptr->right = ptr->right->right;
+  }else{
+    delete(ptr->right, data);
+  }
+}
+
+int main()
+{
+  int n;
+  char com[20];
+  int data;
+  scanf("%d", &n);
+
+  Node *root = (Node *)malloc(sizeof(Node));
+  root->right = NULL;
+  root->left = NULL;
+
+  while(n--){
+    scanf("%s", com);
+    if(com[0] == 'i'){
+      scanf("%d", &data);
+      insert(root, data);
+    }else if(com[6] == 'F'){
+      deleteFirst(root);
+    }else if(com[6] == 'L'){
+      deleteLast(root);
+    }else{
+      scanf("%d", &data);
+      delete(root, data);
+    }
+  }
+
+  Node *cur = root -> right;
+  while(cur != NULL){
+    printf("%d ", cur->data);
+    cur = cur->right;
+  }
+
+  return 0;
+}

@@ -1,0 +1,58 @@
+#line 1 "test.cpp"
+#include <bits/stdc++.h>
+using namespace std;
+using LL = long long;
+using P = pair<int, int>;
+template <typename T = int>
+using VV = vector<vector<T>>;
+
+#line 2 "/Library/kyopro-lib/topological_sort.cpp"
+
+#line 5 "/Library/kyopro-lib/topological_sort.cpp"
+
+std::vector<int> topological_sort(std::vector<std::vector<int>> g) {
+  int n = g.size();
+  std::vector<int> in_degree(n, 0);
+
+  for (int i = 0; i < n; ++i) {
+    for (int v : g[i]) {
+      ++in_degree[v];
+    }
+  }
+
+  std::queue<int> q;
+  for (int i = 0; i < n; ++i) {
+    if (in_degree[i] == 0) q.push(i);
+  }
+
+  std::vector<int> ret;
+
+  while (!q.empty()) {
+    int f = q.front();
+    q.pop();
+
+    ret.push_back(f);
+    for (int v : g[f]) {
+      if (--in_degree[v] == 0) q.push(v);
+    }
+  }
+
+  return ret;
+}
+#line 11 "test.cpp"
+
+int main() {
+  int n, m;
+  cin >> n >> m;
+  VV<int> g(n);
+  for (int i = 0; i < m; ++i) {
+    int s, t;
+    cin >> s >> t;
+    g[s].push_back(t);
+  }
+
+  auto ans = topological_sort(g);
+
+  for (int i : ans) cout << i << "\n";
+}
+

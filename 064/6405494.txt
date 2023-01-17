@@ -1,0 +1,14 @@
+
+#include <stdio.h>
+
+int main() {
+    int W,H,x,y,r,p,q;
+    scanf("%d %d %d %d %d\n",&W,&H,&x,&y,&r);
+    p=W-r;
+    q=H-r;
+    if(x>=r && x<=p && y>=r && y<=q){
+        printf("Yes\n");
+    }else{printf("No\n");}
+      
+    return 0;
+}

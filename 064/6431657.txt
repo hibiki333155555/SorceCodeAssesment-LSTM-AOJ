@@ -1,0 +1,39 @@
+V,E = input().split()
+V,E = int(V),int(E)
+
+depth = [0 for x in range(V)]
+visited = [0 for x in range(V)]
+edge = [[] for x in range(V)]
+lowpoint = [0 for x in range(V)]
+parent = [x for x in range(V)]
+cut = [0 for x in range(V)]
+for i in range(E):
+    X,Y = input().split()
+    X,Y = int(X), int(Y)
+    edge[X].append(Y)
+
+def dfs(u,d):
+    depth[u] = d
+    lowpoint[u] = d
+    visited[u] = 1
+    child = 0
+    for i in edge[u]:
+        if visited[i] == 0:
+            parent[i] = u
+            child = child + 1
+            dfs(i,d+1)
+            lowpoint[u] = min(lowpoint[u],lowpoint[i])
+            if lowpoint[i] >= depth[u]:
+                cut[u] = 1
+        elif visited[i] == 1 and parent[u] != i:
+            lowpoint[u] = min(lowpoint[u],depth[i])
+    if d == 0 and child > 1:
+        cut[u] = 1
+for i in range(V):
+    if visited[i] == 0:
+        dfs(i,0)
+
+for index,i in enumerate(cut):
+    if i == 1:
+        print(index)
+

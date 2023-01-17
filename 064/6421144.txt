@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define F first
+#define S second
+#define R cin>>
+#define ll long long
+#define ln cout<<'\n'
+#define in(a) insert(a)
+#define pb(a) push_back(a)
+#define pd(a) printf("%.10f\n",a)
+#define mem(a) memset(a,0,sizeof(a))
+#define all(c) (c).begin(),(c).end()
+#define iter(c) __typeof((c).begin())
+#define rrep(i,n) for(ll i=(ll)(n)-1;i>=0;i--)
+#define REP(i,m,n) for(ll i=(ll)(m);i<(ll)(n);i++)
+#define rep(i,n) REP(i,0,n)
+#define tr(it,c) for(iter(c) it=(c).begin();it!=(c).end();it++)
+ll check(ll n,ll m,ll x,ll y){return x>=0&&x<n&&y>=0&&y<m;}void pr(){ln;}
+template<class A,class...B>void pr(const A &a,const B&...b){cout<<a<<(sizeof...(b)?" ":"");pr(b...);}
+template<class A>void PR(A a,ll n){rep(i,n)cout<<(i?" ":"")<<a[i];ln;}
+const ll MAX=1e9+7,MAXL=1LL<<61,dx[8]={-1,0,1,0,-1,-1,1,1},dy[8]={0,1,0,-1,-1,1,1,-1};
+typedef pair<ll,ll> P;
+typedef pair<ll,P> PP;
+
+void Main() {
+  ll n,m;
+  cin >> n >> m;
+  string s[n];
+  rep(i,n) R s[i];
+  ll T;
+  R T;
+  vector<PP> a;
+  rep(i,T) {
+    ll x,y,z;
+    cin >> x >> y >> z;
+    a.pb(PP(z,P(x-1,y-1)));
+  }
+  sort(all(a));
+  ll d[2][n][m];
+  rep(k,2)rep(i,n)rep(j,m)d[k][i][j]=MAX;
+  queue<PP> que;
+  rep(i,n) {
+    rep(j,m) {
+      if(s[i][j]=='S') {
+        que.push(PP(0,P(i,j)));
+        d[0][i][j]=0;
+      }
+    }
+  }
+  ll l=0;
+  while(!que.empty()) {
+    PP p=que.front();que.pop();
+    ll x=p.S.F,y=p.S.S,k=p.F;
+    ll t=d[k][x][y];
+    while(l<a.size()&&a[l].F<=t) {
+      s[a[l].S.F][a[l].S.S]='#';
+      l++;
+    }
+    if(s[x][y]=='#') continue;
+    if(k>=1&&s[x][y]=='S') {
+      pr("Yes");
+      return;
+    } else if(!k&&s[x][y]=='V') {
+      k++;
+      ll xx=x,yy=y;
+      if(!check(n,m,xx,yy)||d[k][xx][yy]!=MAX||s[xx][yy]=='#') continue;
+      d[k][xx][yy]=d[k-1][x][y];
+      que.push(PP(k,P(xx,yy)));
+      continue;
+    }
+    rep(i,4) {
+      ll xx=x+dx[i],yy=y+dy[i];
+      if(!check(n,m,xx,yy)||d[k][xx][yy]!=MAX||s[xx][yy]=='#') continue;
+      d[k][xx][yy]=d[k][x][y]+1;
+      que.push(PP(k,P(xx,yy)));
+    }
+  }
+  pr("No");
+}
+
+int main(){ios::sync_with_stdio(0);cin.tie(0);Main();return 0;}
+

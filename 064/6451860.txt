@@ -1,0 +1,18 @@
+import copy
+
+def insertion(A, n):
+    tmpA = copy.copy(A)
+    for i in range(n):
+        v = A[i]
+        j = i - 1
+        while j >= 0 and tmpA[j] > v:
+            tmpA[j+1] = tmpA[j]
+            j -= 1
+        tmpA[j+1] = v
+        outA = [str(a) for a in tmpA]
+        outA = ' '.join(outA)
+        print(outA)
+
+n = int(input())
+A = list(map(int, input().split()))
+insertion(A, n)

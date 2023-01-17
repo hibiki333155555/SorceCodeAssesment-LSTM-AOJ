@@ -1,0 +1,74 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+int cost[10] = {0, 4, 1, 1, 2, 1, 1, 3, 0, 1};
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    int h,m,hh,mm; cin >> h >> m >> hh >> mm;
+    int res = 0;
+    while(h*60+m < hh*60+mm){
+        if(m%10 != 9){
+            res += cost[m%10];
+            m++;
+        }
+        else{
+            res += cost[9];
+            if(m == 59){
+                res += 2;
+                if(h < 9){
+                    res += cost[h];
+                    h++;
+                }
+                else if(h == 9){
+                    res += 1;
+                    h++;
+                }
+                else{
+                    res += cost[h%10];
+                    h++;
+                }
+            }
+            else{
+                res += cost[m/10];
+                m++;
+            }
+        }
+    }
+    cout << res << endl;
+}
+
+

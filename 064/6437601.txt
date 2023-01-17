@@ -1,0 +1,45 @@
+#include<stdio.h>
+#define MAX 10000
+
+int n;
+int par[MAX];
+
+void init(){
+  for(int i = 0; i < n; i++ ) par[i] = i;
+}
+
+int parent(int u){
+  if(par[u] == u) return u;
+  else return par[u]= parent(par[u]);
+}
+
+void unite(int x, int y){
+  int x_p = parent(x);
+  int y_p = parent(y);
+
+  if(x_p == y_p) return;
+  par[y_p] = x_p;
+}
+
+int same(int x, int y){
+  return parent(x) == parent(y);
+}
+
+int main()
+{  
+  int q, x, y, com;
+  scanf("%d %d", &n, &q);
+  init();
+  for(int i = 0; i < q; i++ ){
+    scanf("%d %d %d", &com, &x, &y);
+    //unite
+    if(com == 0){
+      unite(x, y);
+    }else{
+      if(same(x, y)) printf("1\n");
+      else printf("0\n");
+    }
+  }
+  
+  return 0;
+}

@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <stack>
+#include <set>
+#include <numeric>
+using namespace std;
+typedef long long Int;
+typedef long long ll;
+const int Inf = 1e9 + 7;
+const Int INF = (Int)1e18 + 7;
+const double EPS = 1e-10;
+
+void solve() {
+  string S, T;
+  cin >> S >> T;
+  int N = (int)S.size();
+  int M = (int)T.size();
+  vector<vector<int>> dp(N+1, vector<int>(M+1, 0));
+  for (int i = 0; i < N; i++)
+    for (int j = 0; j < M; j++) {
+      dp[i+1][j+1] = max(dp[i][j+1], dp[i+1][j]);
+      if (S[i] == T[j])
+        dp[i+1][j+1] = max(dp[i+1][j+1], dp[i][j] + 1);
+    }
+  //for (int i = 0; i <= N; i++) {
+  //  for (int j = 0; j <= M; j++)
+  //    printf("%4d", dp[i][j]);
+  //  printf("\n");
+  //}
+  cout << max(N-dp[N][M], M-dp[N][M]) << endl;
+}
+
+int main() {
+  solve();
+  return 0;
+}

@@ -1,0 +1,5 @@
+quantity=input()
+sequence=input()
+rev_seq=sequence[::-1]
+print(rev_seq)
+

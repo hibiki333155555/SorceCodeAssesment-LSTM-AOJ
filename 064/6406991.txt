@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main()
+{
+int n,m, x,y,z;
+scanf("%d %d", &n,&m);
+    x=n-1;
+    y=m-1;
+    z=x*y;
+    printf("%d",z);
+
+    return 0;
+}
+

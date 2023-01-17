@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <tuple>
+
+using namespace std;
+
+const int_fast64_t HUGE = (int_fast64_t) ((1ULL << 63) - 1);
+
+int main()
+{
+	int V, E, r; cin >> V >> E >> r;
+	vector<vector<pair<int, int>>> C(V);
+	vector<int_fast64_t> U(V, HUGE);
+	for (int i = 0, s, t, d; i < E; ++i) {
+		cin >> s >> t >> d;
+		C[s].push_back({t, d});
+	}
+	priority_queue<tuple<int_fast64_t, int, int>> Q;
+	Q.push({0, r, 0});
+	while (!Q.empty()) {
+		auto [c, v, n] = Q.top(); Q.pop();
+		if (n > V) {
+			cout << "NEGATIVE CYCLE" << endl;
+			return 0;
+		}
+		if (U[v] < -c) continue;
+		U[v] = -c;
+		for (auto [to, d] : C[v]) Q.push({c - d, to, n + 1});
+	}
+	for (auto u : U) if (u >= HUGE) cout << "INF" << endl; else cout << u << endl;
+	return 0;
+}
+

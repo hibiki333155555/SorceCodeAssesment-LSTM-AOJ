@@ -1,0 +1,4 @@
+def calc(x):
+    return(x**3)
+    
+

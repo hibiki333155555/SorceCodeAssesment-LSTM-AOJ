@@ -1,0 +1,34 @@
+#include<iostream>
+#include<algorithm>
+#include<cstdio>
+#include<string>
+#include<climits>
+#include<vector>
+#define check cout<<"check"<<endl
+#define rep(a,b,c)   for(int a = b ; a < c ;a++)
+using namespace std;
+#define INF 500000 + 1
+using REF = vector< vector<int> > ;
+int main(void)
+{
+    int n,m;
+    cin>>n>>m;
+    vector< int > c(m);
+    rep(i,0,m)cin>>c[i];
+    REF dp(m + 1,vector< int > (n + 1,INF));
+    rep(i,0,m + 1)dp[i][0] = 0;
+    rep(i,0,m)
+    {
+        
+        rep(j,1,n + 1)
+        {
+            dp[i + 1][j] = dp[i][j];
+            int a = dp[i][j - c[i]] + 1;
+            if(a < dp[i + 1][j]) dp[i + 1][j] = a;
+        }
+    }
+    cout<<dp[m][n]<<endl;
+
+
+    return 0;
+}

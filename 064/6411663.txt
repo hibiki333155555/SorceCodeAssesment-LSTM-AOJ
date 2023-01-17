@@ -1,0 +1,16 @@
+#include <iostream>
+#include <bits/stdc++.h>
+#include <math.h>
+
+using namespace std;
+
+int main()
+{
+    double r;
+    cin>>r;
+    double pi=acos(-1.0);
+    double area=pi*r*r;
+    double cir=2*pi*r;
+    cout << fixed << setprecision(7) << area << " " << cir << endl;
+    return 0;
+}

@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+#include <complex>
+#include <random>
+#include <functional>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+using vvvll = vector<vvll>;
+using vvvvll = vector<vvvll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+vvll G;
+
+
+
+int main() {
+    ll N,M,K,X;
+    cin>>N>>M>>K>>X;
+    vll A(N);
+    rep(i,N)cin>>A[i];
+    sort(all(A));
+    reverse(all(A));
+    if(X*M<=A[0]*K)cout<<"Yes"<<endl;
+    else cout<<"No"<<endl;
+}
+
+

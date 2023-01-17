@@ -1,0 +1,25 @@
+
+#include<stdio.h>
+#include<math.h>
+
+int main(){
+
+int x,y,h,w;
+ scanf("%d %d",&h,&w);
+
+if(w==0 || h==0){
+   printf("");
+} else{
+  for(y=1;y<=h;y++){
+
+  for(x=1;x<=w;x++){
+printf("#");
+
+  }
+
+  printf("\n");
+
+  }
+}
+   return 0;
+}

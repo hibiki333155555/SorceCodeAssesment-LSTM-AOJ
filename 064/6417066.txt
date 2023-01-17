@@ -1,0 +1,51 @@
+#include <iostream>
+using namespace std;
+struct Card {char suit; value;};
+void selectionSort(struct Card A[], int N){
+    int minj;
+    for(int i = 0; i < N - 1; i++){
+        minj = i;
+        for(int j = i; j < N; j++){
+            if(A[j].value < A[minj].value) minj = j;
+        }
+        if(minj != i) swap(A[minj], A[i]);
+    }
+}
+void bubbleSort(struct Card A[], int N){
+    for(int i = 0; i < N - 1; i++){
+        for(int j = N - 1; j >= i + 1; j--){
+            if(A[j].value < A[j - 1].value) swap(A[j], A[j - 1]);
+        }
+    }
+}
+bool isStable(Card a[], Card b[] , int N){
+    for(int i = 0; i < N; i++){
+        if(a[i].suit != b[i].suit) return false;
+    }
+    return true;
+}
+int main(){
+    int N; 
+    Card A[100], B[100];
+    char x;
+    
+    cin >> N;
+    for(int i = 0; i < N; i++) cin >> A[i].suit >> A[i].value;
+    for(int i = 0; i < N; i++) B[i] = A[i];
+    bubbleSort(A, N);
+    selectionSort(B, N);
+    for(int i = 0; i < N; i++){
+        if(i > 0) cout << " ";
+        cout << A[i].suit << A[i].value;
+    }
+    cout << endl;
+    cout << "Stable" << endl;
+    for(int i = 0; i < N; i++){
+        if(i > 0) cout << " ";
+        cout << B[i].suit << B[i].value;
+    }
+    cout << endl;
+    if(isStable(A, B, N)) cout << "Stable" << endl;
+    else cout << "Not Stable" << endl;
+    
+}

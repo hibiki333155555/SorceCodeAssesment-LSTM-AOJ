@@ -1,0 +1,21 @@
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        while(true){
+            String a = sc.nextLine();
+            if(a.equals("-")) break ;      //a.equals("-")比较a he “-”是不是相等
+            int n = sc.nextInt();
+            sc.nextLine();
+            for(int i=0;i<n;i++){
+                int h = sc.nextInt();
+                String str1 = a.substring(0,h);//分割string
+                String str2 = a.substring(h,a.length());
+                a = str2 + str1;
+            }
+            System.out.println(a);
+        }
+        sc.close();
+    }
+}
+

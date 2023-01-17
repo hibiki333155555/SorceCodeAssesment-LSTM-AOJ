@@ -1,0 +1,120 @@
+#include <iostream>
+#include <stack>
+
+using namespace std;
+
+const int N = 1000;
+const int WHITE = 0;
+const int GRAY = 1;// 通過
+const int BLACK = 2;// 完了
+
+int color[N];
+int M[N][N];
+
+int d[N];
+int f[N];
+int tt;
+int n;
+int nt[N];
+// uに隣接するvを番号順に取得
+int next( int u)
+{
+    // すべてのノードを検索し、まだ出力していない隣接ノードを返す
+    for( int v = nt[u]; v < n; v++)
+    {
+        nt[u] = v+1;
+        // 検索したノードが隣接ノードならば、ノード番号を返す
+        if( M[u][v]) return v;
+    }
+    // 隣接ノード出力終了
+    return -1;
+}
+
+// スタックを用いた深さ通線探索
+void dfs_visit( int r)
+{
+    //初期化
+    for( int i = 0; i < n; i++) nt[i] = 0;
+    
+    stack<int> S;// スタックを生成
+    S.push(r);// 最初に訪問するノードをスタックに格納
+    color[r] =GRAY;// 訪問したのでGRAY
+    d[r] = ++tt;// 訪問時間を格納
+    
+    // スタックが空になるまでやる
+    while( !S.empty())
+    {
+        int u = S.top();// スタックの最後尾を取得
+        int v = next(u);// 取得したノードの隣接ノードを取得
+        
+        if( v != -1)
+        {// 隣接ノードがない
+            if( color[v] == WHITE)
+            {
+                color[v] = GRAY;
+                d[v] = ++tt;
+                S.push(v);
+            }
+        }
+        else
+        {
+            S.pop();
+            color[u] = BLACK;
+            f[u] = ++tt;
+        }
+    }
+}
+
+void dfs()
+{
+    // 初期化
+    for( int i = 0; i < n; i++)
+    {
+        color[i] = WHITE;
+        nt[i] = 0;
+    }
+    tt = 0;
+    
+    // 未訪問のuを始点として深さ優先探索
+    for( int u = 0; u < n; u++)
+    {
+        // 未訪問なら訪問する
+        if( color[u] == WHITE) dfs_visit(u);
+    }
+    // すべての訪問が終わったので、結果出力
+    for( int i = 0; i < n; i++)
+    {
+        cout << i + 1 << " " << d[i] << " " << f[i] << endl;
+    }
+}
+    
+
+int main()
+{
+    int u, v, k;// ノード番号、隣接ノード番号、隣接ノード数
+    cin >> n;
+    // 行列を初期化
+    for( int i = 0; i < n; i++)
+    {
+        for( int j = 0; j < n; j++) M[i][j] = 0;
+    }
+    // ノードを格納
+    for( int i = 0; i < n; i++)
+    {
+        // 隣接ノードを格納
+        cin >> u >> k;
+        u--;
+        for( int j = 0; j < k; j++)
+        {
+            cin >> v;
+            v--;
+            M[u][v] = 1;
+        }
+    }
+    
+    // 結果出力　ノード番号　訪問時間　完了時間（隣接ノードをすべて訪問し終わった時間）
+    dfs();
+    
+    return 0;
+}
+

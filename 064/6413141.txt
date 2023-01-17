@@ -1,0 +1,136 @@
+#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <vector>
+#include <numeric>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <random>
+#include <array>
+#include <climits>
+#include <map>
+#include <cassert>
+#include <stack>
+#include <iomanip>
+#include <cfloat>
+#include <bitset>
+#include <fstream>
+#include <chrono>
+
+class UnionFind {
+	std::vector<int> vec;
+public:
+	UnionFind(const int size) : vec(size, -1) {};
+	int find(const int a) {
+		if (vec[a] < 0) {
+			return a;
+		}
+		return vec[a] = find(vec[a]);
+	}
+	void unite(int a, int b) {
+		a = find(a);
+		b = find(b);
+		if (a == b) return;
+		if (vec[a] > vec[b]) std::swap(a, b);
+		vec[a] += vec[b];
+		vec[b] = a;
+	}
+	bool same(const int a, const int b) {
+		return find(a) == find(b);
+	}
+};
+long long int solve(const int subway_size, const std::vector<std::tuple<int, int, int>> subway_edges, const std::vector<std::pair<int, int>> cities, const std::vector<int> bullet);
+int main() {
+	int n, m; std::cin >> n >> m;
+	std::vector<std::tuple<int, int, int>> subway_edges(m);
+	for (auto& [u, v, d] : subway_edges) {
+		std::cin >> u >> v >> d;
+	}
+	std::sort(subway_edges.begin(), subway_edges.end(), [](const auto a, const auto b) {return std::get<2>(a) < std::get<2>(b); });
+	int l; std::cin >> l;
+	std::vector<std::pair<int, int>> cities(l);
+	for (auto& [a, b] : cities) {
+		std::cin >> a >> b;
+	}
+	int r; std::cin >> r;
+	std::vector<int> bullet(r);
+	for (auto& s : bullet) {
+		std::cin >> s;
+	}
+	std::vector<std::tuple<int, int, int>> subway_tree_edges;
+	UnionFind uft(n);
+	for (const auto [u, v, d] : subway_edges) {
+		if (uft.same(u, v)) continue;
+		uft.unite(u, v);
+		subway_tree_edges.emplace_back(u, v, d);
+	}
+	const auto result = solve(n, subway_tree_edges, cities, bullet);
+	std::cout << result << '\n';
+}
+std::vector<long long int> merge_timming(const int subway_size, const std::vector<std::tuple<int, int, int>> &edges, const std::vector<int> &bullet) {
+	std::vector<long long int> result;
+	std::vector<bool> has_bullet_station(subway_size, 0);
+	for (const auto b : bullet) {
+		has_bullet_station[b] = true;
+	}
+	UnionFind uft(subway_size);
+	for (const auto [u, v, d] : edges) {
+		const auto a = uft.find(u);
+		const auto b = uft.find(v);
+		if (has_bullet_station[a] && has_bullet_station[b]) {
+			result.push_back(d);
+		}
+		uft.unite(a, b);
+		const auto c = uft.find(a);
+		has_bullet_station[c] = has_bullet_station[a] || has_bullet_station[b];
+	}
+	return result;
+}
+long long int all_need(const int subway_size, const std::vector<std::tuple<int, int, int>>& edges, const std::vector<int>& bullet) {
+	UnionFind uft(subway_size);
+	long long int result{ 0 };
+	for (const auto b : bullet) {
+		uft.unite(bullet.front(), b);
+	}
+	for (const auto [u, v, d] : edges) {
+		if (uft.same(u, v)) continue;
+		uft.unite(u, v);
+		result += d;
+	}
+	return result;
+}
+long long int solve(const int subway_size, const std::vector<std::tuple<int, int, int>> subway_tree_edges, const std::vector<std::pair<int, int>> cities, const std::vector<int> bullet) {
+
+	std::vector<int> min_city_base; std::transform(cities.begin(), cities.end(), std::back_inserter(min_city_base), [](const auto a) {return a.second; });
+	UnionFind uft(cities.size());
+	std::vector<int> sorted_by_bullet_cost(cities.size()); std::iota(sorted_by_bullet_cost.begin(), sorted_by_bullet_cost.end(), 0);
+	std::sort(sorted_by_bullet_cost.begin(), sorted_by_bullet_cost.end(), [&cities](const int i, const int j) {return cities[i].first < cities[j].first; });
+	sorted_by_bullet_cost.pop_back();
+	const auto merge = merge_timming(subway_size, subway_tree_edges, bullet);
+	std::vector<long long int> merge_sum{ 0 }; std::partial_sum(merge.begin(), merge.end(), std::back_inserter(merge_sum));
+	long long int result{ 0 };
+	for (const auto i : sorted_by_bullet_cost) {
+		const auto j = (i + 1) % cities.size();
+		auto less_city = uft.find(i);
+		auto greater_city = uft.find(j);
+		if (min_city_base[less_city] > min_city_base[greater_city]) {
+			std::swap(less_city, greater_city);
+		}
+		const auto max = min_city_base[greater_city];
+		const auto bullet_cost = cities[i].first;
+		const auto merged = std::distance(merge.begin(), std::upper_bound(merge.begin(), merge.end(), bullet_cost - max));
+		result += bullet_cost * (bullet.size() - merged) + merge_sum[merged] + merged * (long long int)max;
+		uft.unite(i, j);
+		min_city_base[uft.find(i)] = min_city_base[less_city];
+	}
+	const auto need = all_need(subway_size, subway_tree_edges, bullet);
+	const auto min_base = std::distance(cities.begin(), std::min_element(cities.begin(), cities.end(), [](const auto a, const auto b) {return a.second < b.second; }));
+	for (auto i = 0; i < cities.size(); ++i) {
+		if (min_base == i) continue;
+		result += (long long int)cities[i].second * (subway_size - bullet.size()) + need;
+	}
+	result += std::accumulate(subway_tree_edges.begin(), subway_tree_edges.end(), 0LL, [](const auto acc, const auto e) {return acc + std::get<2>(e); }) + (long long int)cities[min_base].second * (subway_size - 1LL);
+	return result;
+}

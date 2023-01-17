@@ -1,0 +1,5 @@
+x,y = map(int,input().split())
+c =  x//y
+d=x%y
+p = round(x/y,5)
+print(c,d,p)

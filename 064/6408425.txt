@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+#define rep(i, f, n) for (int i = f; i < (int)(n); i++)
+using namespace std;
+
+int main()
+{
+    while (true)
+    {
+        int n, x;
+        cin >> n >> x;
+        if (n == 0 && x == 0)
+            return 0;
+        else
+        {
+            int count = 0;
+            rep(i, 1, n - 1)
+            {
+                rep(j, i + 1, n)
+                {
+                    rep(k, j + 1, n + 1)
+                    {
+                        int val = i + j + k;
+                        if (val == x)
+                            count++;
+                    }
+                }
+            }
+            cout << count << endl;
+        }
+    }
+}

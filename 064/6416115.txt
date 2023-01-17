@@ -1,0 +1,375 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<iomanip>
+#include<deque>
+#include<algorithm>
+#include<cmath>
+#include<map>
+#include<stdio.h>
+#include<cstring>
+#include<stack>
+#include<queue>
+#include<set>
+using namespace std;
+
+#define rep(i,N) for(int i = 0; i < N; i++)
+#define ll long long
+#define EPS (1e-10)
+ll INF (1LL<<32);
+
+class Vector{
+    public:
+        double x, y;
+        Vector(double x = 0, double y = 0): x(x), y(y){}
+        Vector operator + (Vector v){return Vector(x + v.x, y + v.y);}
+        Vector operator - (Vector v){return Vector(x - v.x, y - v.y);}
+        bool operator == (const Vector &v) const{
+            return fabs(x - v.x) < EPS && fabs(y - v.y) < EPS;
+        }
+
+        double norm(){
+            return x * x + y * y;
+        }
+};
+
+class Edge_for_cross{
+    //交差点カウント用の線分構造体
+    public:
+        Vector p;
+        int kind;
+        double ep;
+        Edge_for_cross(Vector p = {0, 0}, int kind = -1, double ep = -1.0): p(p), kind(kind), ep(ep){}
+};
+
+double dot(Vector v1, Vector v2){
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
+double cross(Vector v1, Vector v2){
+    return v1.x * v2.y - v1.y * v2.x;
+}
+
+Vector root(Vector p, Vector sp1, Vector sp2){
+    Vector s1 = sp2 - sp1;
+    Vector s2 = p - sp1;
+    double r = dot(s2, s1) / s1.norm();
+    Vector root = {sp1.x + s1.x * r, sp1.y + s1.y * r};
+    return root;
+}
+
+int judge_cwccw(Vector p0, Vector p1, Vector p2){
+    Vector sb = p1 - p0;
+    Vector sj = p2 - p0;
+    if(cross(sb, sj) > 1e-10){
+        return -1;
+    }else if(cross(sb, sj) < -1e-10){
+        return 1;
+    }else if(dot(sb, sj) < -1e-10){
+        return 2;
+    }else if(sb.norm() < sj.norm()){
+        return 0;
+    }else{
+        return 0;
+    }
+}
+
+bool judge_cross(Vector s1p1, Vector s1p2, Vector s2p1, Vector s2p2){
+    int temp = judge_cwccw(s1p1, s1p2, s2p1) * judge_cwccw(s1p1, s1p2, s2p2);
+    if(abs(temp) < 2 && temp <= 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+double calc_distance_ps(Vector p, Vector sp1, Vector sp2){
+    Vector s1 = sp2 - sp1;
+    Vector s2 = p - sp1;
+    double r = dot(s2, s1) / s1.norm();
+    if(r < 1e-10){
+        return sqrt((sp1 - p).norm());
+    }else if(r > 1.0){
+        return sqrt((p - sp2).norm());
+    }else{
+        return sqrt((root(p, sp1, sp2) - p).norm());
+    }    
+}
+
+double calc_distance(Vector s1p1, Vector s1p2, Vector s2p1, Vector s2p2){
+    if(judge_cross(s1p1, s1p2, s2p1, s2p2) && judge_cross(s2p1, s2p2, s1p1, s1p2)){
+        return 0.0;
+    }else{
+        double res = calc_distance_ps(s1p1, s2p1, s2p2);
+        double temp = calc_distance_ps(s1p2, s2p1, s2p2);
+        if(temp < res)res = temp;       
+        temp = calc_distance_ps(s2p1, s1p1, s1p2);
+        if(temp < res)res = temp;       
+        temp = calc_distance_ps(s2p2, s1p1, s1p2);
+        if(temp < res)res = temp;       
+        return res;
+    }
+}
+
+Vector cross_point(Vector s1p1, Vector s1p2, Vector s2p1, Vector s2p2){
+    double r1_norm = sqrt((root(s2p1, s1p1, s1p2) - s2p1).norm());
+    double r2_norm = sqrt((root(s2p2, s1p1, s1p2) - s2p2).norm());
+    double ratio = r1_norm / (r1_norm + r2_norm);
+    Vector s2 = s2p2 - s2p1;
+    Vector s2r = {ratio * s2.x, ratio * s2.y};
+    Vector res = s2p1 + s2r;
+    return res;
+}
+
+pair<Vector, Vector> cross_circle_segment(Vector c, Vector p1, Vector p2, double r){
+    Vector root_seg = root(c, p1, p2);
+    Vector seg = p2 - p1;
+
+    double len = sqrt(r * r - (root_seg - c).norm());
+    Vector e = {len * seg.x/sqrt(seg.norm()), len * seg.y/sqrt(seg.norm())};
+    Vector res1, res2;
+    if(abs(e.x) < 1e-10){
+        if(e.y < 0.0){
+            res1 = root_seg + e;
+            res2 = root_seg - e;
+        }else{
+            res2 = root_seg + e;
+            res1 = root_seg - e;            
+        }
+    }else if(e.x < 0.0){
+        res1 = root_seg + e;
+        res2 = root_seg - e;
+    }else{
+        res2 = root_seg + e;
+        res1 = root_seg - e;            
+    }
+    if(abs(res1.x) < 1e-10)res1.x = 0.0;
+    if(abs(res1.y) < 1e-10)res1.y = 0.0;
+    if(abs(res2.x) < 1e-10)res2.x = 0.0;
+    if(abs(res2.y) < 1e-10)res2.y = 0.0;
+    return {res1, res2};
+}
+
+pair<Vector, Vector> cross_circle_circle(Vector c1, double r1, Vector c2, double r2){
+    Vector seg = c2 - c1;
+    double edge1 = atan2(seg.y, seg.x);
+    double edge2 = acos((r1 * r1 + seg.norm() - r2 * r2) / 2.0 / r1 / sqrt(seg.norm()));
+    Vector e1 = {r1 * cos(edge1 + edge2), r1 * sin(edge1 + edge2)};
+    Vector e2 = {r1 * cos(edge1 - edge2), r1 * sin(edge1 - edge2)};
+    Vector res1 = c1 + e1, res2 = c1 + e2;
+    if(abs(res1.x) < 1e-10)res1.x = 0.0;
+    if(abs(res1.y) < 1e-10)res1.y = 0.0;
+    if(abs(res2.x) < 1e-10)res2.x = 0.0;
+    if(abs(res2.y) < 1e-10)res2.y = 0.0;
+
+    pair<Vector, Vector> res_tot;
+    if(abs(res1.x - res2.x) < 1e-10){
+        if(res1.y < res2.y){
+            res_tot = {res1, res2};
+        }else{
+            res_tot = {res2, res1};
+        }
+    }else{
+        if(res1.x < res2.x){
+            res_tot = {res1, res2};
+        }else{
+            res_tot = {res2, res1};
+        }
+    }
+    return res_tot;
+}
+
+int judge_cross_edge(Vector& p, Vector& e1, Vector& e2){
+    //点pからx+方向に伸ばした直線と線分との交差判定
+    //出力
+    // -1: 線の上（端点との一致含む）
+    //  1: 線分との交差あり
+    //  0: 線分との交差なし
+    Vector a, b;
+    int ans = -1;
+    if((abs(p.x - e1.x) < 1e-10 && abs(p.y - e1.y) < 1e-10) || (abs(p.x - e2.x) < 1e-10 && abs(p.y - e2.y) < 1e-10)){
+        return ans;
+    }else{
+        // if(abs(p.y - e1.y) < 1e-10 && abs(p.y - e2.y) < 1e-10){
+        //     a = e1 - p;
+        //     b = e2 - p;            
+        // }else
+        if(e1.y > e2.y){
+            a = e2 - p;
+            b = e1 - p;
+        }else{
+            a = e1 - p;
+            b = e2 - p;
+        }
+        if(abs(cross(a, b)) < 1e-10 && dot(a, b) < 1e-10){
+            //cout << "ont the line\n";
+            return -1;
+            //on the line;
+        }else if(a.y >= EPS || b.y <= EPS){
+            return 0;        
+        }else{
+            if(cross(a, b) > 1e-10){
+                return 1;
+            }else{
+                return 0;
+            }
+        }    
+    }
+}
+
+int judge_inpolygon(Vector& p, vector<Vector>& poly){
+    //出力: 
+    // 2: 閉域の中
+    // 1: 線の上
+    // 0: 外側
+    int n = poly.size();
+    Vector e1, e2;
+    int cnt = 0, cnt_e = 0;
+    rep(i, n){
+        if(i == n - 1){
+            e1 = poly[i];
+            e2 = poly[0];
+        }else{
+            e1 = poly[i];
+            e2 = poly[i+1];
+        }
+
+        int j = judge_cross_edge(p, e1, e2);
+        if(j == -1){
+            return 1;
+            cnt = j;
+            break;
+        }else{
+            cnt += j;
+        }
+        cout << j << " " << "\n";
+    }
+    //cout << "\n";
+    cnt -= cnt_e/2;
+    if(cnt%2 == 0){
+        return 0;
+    }else{
+        return 2;
+    }
+
+
+}
+
+vector<Vector> convex_hull(vector<Vector>& ps){
+    //比較構造体を宣言
+    auto mycompare = [](Vector a, Vector b){
+        if(abs(a.x - b.x) < EPS){
+            return a.y < b.y;
+        }else{
+            return a.x < b.x;
+        }
+    };
+
+    sort(ps.begin(), ps.end(), mycompare);
+    // rep(i,ps.size()){
+    //     cout << ps[i].x << " " << ps[i].y << "\n";
+    // }
+    vector<Vector> res_l, res_u, res;
+    //上突
+    res_u.push_back(ps[0]);
+    res_u.push_back(ps[1]);
+    for(int i = 2; i < ps.size(); i++){
+        while(res_u.size() > 1 && judge_cwccw(res_u[res_u.size()-2], res_u[res_u.size()-1], ps[i]) == -1){
+            res_u.pop_back();
+        }
+        res_u.push_back(ps[i]);
+    }
+
+    //下突
+    res_l.push_back(ps[ps.size()-1]);
+    res_l.push_back(ps[ps.size()-2]);
+    for(int i = ps.size() - 3; i >= 0; i--){
+        while(res_l.size() > 1 && judge_cwccw(res_l[res_l.size()-2], res_l[res_l.size()-1], ps[i]) == -1){
+            res_l.pop_back();
+        }
+        res_l.push_back(ps[i]);
+    }
+
+    //合体
+    reverse(res_l.begin(), res_l.end());
+    for(int i = res_u.size()-2; i > 0; i--){
+        //端っこは入れずに
+        res_l.push_back(res_u[i]);
+    }
+
+    //スタートを一番下に
+    int start_indx = 0;
+    rep(i,res_l.size()){
+        if(abs(res_l[i].y - res_l[start_indx].y) < EPS){
+            if(res_l[i].x < res_l[start_indx].x)start_indx = i;
+        }else{
+            if(res_l[i].y < res_l[start_indx].y)start_indx = i;
+        }
+    }
+    int res_size = res_l.size();
+    rep(i, res_size){
+        int indx = (start_indx + i)%res_size;
+        res.push_back(res_l[indx]);
+    }
+    return res;
+}
+
+
+
+int main(){
+
+    int n;
+    cin >> n;
+    vector<Edge_for_cross> EP;
+    rep(i,n){
+        double x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        if(abs(x1-x2) < EPS){
+            //xが一緒
+            if(y1 < y2){
+                EP.push_back({{x1, y1}, 1, y2});
+            }else{
+                EP.push_back({{x2, y2}, 1, y1});
+            }
+        }else{
+            //格子に平行しかないので一致判定はしない。
+            //elseで抜けてきた時点でy1 = y2
+            if(x1 < x2){
+                EP.push_back({{x1, y1}, 0, -1.0});
+                EP.push_back({{x2, y2}, 3, -1.0});
+            }else{
+                EP.push_back({{x2, y2}, 0, -1.0});
+                EP.push_back({{x1, y1}, 3, -1.0});
+            }            
+        }
+    }
+
+    //比較構造体を宣言
+    auto mycompare = [](Edge_for_cross a, Edge_for_cross b){
+        if(abs(a.p.x - b.p.x) < EPS){
+            return a.kind < b.kind;
+        }else{
+            return (a.p.x < b.p.x);//昇順
+        }
+    };
+    
+    sort(EP.begin(), EP.end(), mycompare);
+    int count = 0;
+    set<int> ope;
+
+    rep(i,EP.size()){
+        if(EP[i].kind == 0){
+            ope.insert(int(round(EP[i].p.y)));
+        }else if(EP[i].kind == 1){
+            set<int>::iterator a = ope.lower_bound(int(round(EP[i].p.y)));
+            set<int>::iterator b = ope.upper_bound(int(round(EP[i].ep)));
+            count += distance(a, b);
+        }else if(EP[i].kind == 3){
+            ope.erase(int(round(EP[i].p.y)));
+        }
+        //cout << EP[i].p.x << " " << EP[i].p.y << "\n";
+    }
+
+    cout << count << "\n";
+
+}

@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+
+int main()
+{
+	long input_t, input_h, input_s;
+	long total;
+
+	while (1)
+	{
+		scanf("%d %d %d", &input_t, &input_h, &input_s);
+
+		if ((input_t == -1) && (input_h == -1) && (input_s == -1))
+		{
+			break;
+		}
+
+		total = 7200-(input_t * 3600 + input_h * 60 + input_s);
+
+		printf("%02d:%02d:%02d\n", total/3600, (total%3600)/60, total%60);
+
+		total *= 3;
+		printf("%02d:%02d:%02d\n", total / 3600, (total % 3600) / 60, total % 60);
+
+
+
+	}
+	
+	return 0;
+}
+

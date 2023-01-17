@@ -1,0 +1,25 @@
+n=int(input())
+l=[]
+for i in range(n):
+    mark,no=input().split()
+    if mark=='S':
+        l.append([1,int(no)])
+    elif mark=='H':
+        l.append([2,int(no)])
+    elif mark=='C':
+        l.append([3,int(no)])
+    else:
+        l.append([4,int(no)])
+l.sort()
+for i in range(4):
+    if i==1:
+        m='S'
+    elif i==2:
+        m='H'
+    elif i==3:
+        m='C'
+    else:
+        m='D'
+    for j in range(13):
+        if [i,j] not in l:
+            print(m,j)

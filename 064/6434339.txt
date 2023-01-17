@@ -1,0 +1,9 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(void){
+    int w,h,x,y,r;
+    cin>>w>>h>>x>>y>>r;
+    if((w-r)>=x&&(h-r)>=y&&x>=r&&y>=r)cout<<"Yes"<<endl;
+    else cout<<"No"<<endl;
+    
+}

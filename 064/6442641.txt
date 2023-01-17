@@ -1,0 +1,15 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+   int a, b, c;
+   cin >> a >> b >> c;
+
+   int index=0;
+   while(a != b) {
+      if(c % a == 0) index++;
+      a++;
+   }
+
+   cout << index << "\n";
+}

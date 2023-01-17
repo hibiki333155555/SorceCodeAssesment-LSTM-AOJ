@@ -1,0 +1,18 @@
+n, m = map(int, input().split())
+
+A = []
+B = []
+
+for i in range(n):
+    input_list = list(map(int, input().split()))
+    A.append(input_list)
+
+for j in range(m):
+    B.append(int(input()))
+
+for k in range(n):
+    out = 0
+    for l in range(m):
+        out += A[k][l]*B[l]
+    print(out)
+

@@ -1,0 +1,13 @@
+import math
+
+a, b, c = map(int, input().split())
+
+ret = 0
+d = math.sqrt(c)
+for i in range(a, b):
+    if c % i == 0:
+        if a <= i <= b:
+            ret += 1
+        else:
+            break
+print(ret)

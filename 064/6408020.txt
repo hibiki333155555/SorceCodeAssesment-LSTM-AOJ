@@ -1,0 +1,22 @@
+# mon7_C
+r,c=map(int,input().split())
+HYO=[]
+MAIN=[[0]*(c+1)for i in range(r+1)]
+
+for y in range(r):
+  memo=list(map(int,input().split()))
+  for x in range(c):
+    MAIN[y][x]=memo[x]
+
+for i in range(r+1):
+  for j in range(c):
+    MAIN[i][c]+=MAIN[i][j]
+
+for x in range(c+1):
+  for y in range(r):
+    MAIN[r][x]+=MAIN[y][x]
+
+for i in range(r+1):
+  for j in range(c):
+    print(MAIN[i][j], end=' ')
+  print(MAIN[i][c])

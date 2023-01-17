@@ -1,0 +1,32 @@
+#include<stdio.h>
+#define MAX 100
+
+int to[MAX][MAX];
+
+int main()
+{
+  int n, k, u, v;
+  scanf("%d", &n);
+
+  for(int i = 0; i < n; i++ ){
+    for(int j = 0; j < n; j++ ){
+      to[i][j] = 0;
+    }
+  }
+
+  for(int i = 0; i < n; i++ ){
+    scanf("%d", &u);
+    scanf("%d", &k);
+    for(int j = 0; j < k; j++ ){
+      scanf("%d", &v);
+      to[u - 1][v - 1] = 1;
+    }
+  }
+
+  for(int i = 0; i < n; i++ ){
+    for(int j = 0; j < n; j++ ){
+      printf("%d ", to[i][j]);
+    }
+    printf("\n");
+  }
+}

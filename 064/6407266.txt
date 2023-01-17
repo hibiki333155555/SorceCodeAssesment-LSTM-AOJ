@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll=long long;
+int main(){
+  ll n,t;
+  cin>>n>>t;
+  ll k=sqrtl(n);
+  ll q=(n+k-1)/k;
+  vector<ll> a(n,0);
+  vector<ll> b(q,0);
+  while(t--){
+    ll s;
+    cin>>s;
+    if(s==0){
+      ll x,y;
+      cin>>x>>y;
+      x--;
+      a[x]+=y;
+      b[x/k]+=y;
+    }
+    if(s==1){
+      ll x,y;
+      cin>>x>>y;
+      x--;
+      y--;
+      ll ans=0;
+      if((ll)x/k==(ll)y/k){
+        for(ll i=x;i<=y;i++){
+          ans+=a[i];
+        }
+        cout<<ans<<endl;
+        continue;
+      }
+      for(ll i=x;i%k;i++){
+        ans+=a[i];
+        x=i;
+      }
+      for(ll i=y;i%k!=k-1;i--){
+        ans+=a[i];
+   //     cout<<i<<endl;
+        y=i;
+      }
+   //   cout<<x<<y<<endl;
+     // cout<<b[0]<<b[1]<<b[2]<<endl;
+      for(ll i=x/k;i<=y/k;i++){
+        ans+=b[i];
+      }
+      cout<<ans<<endl;
+    }
+  }
+}

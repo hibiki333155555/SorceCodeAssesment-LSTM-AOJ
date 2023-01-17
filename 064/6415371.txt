@@ -1,0 +1,94 @@
+#include<bits/stdc++.h>
+using namespace std;
+#include <unordered_set>
+#include <random>
+//#define int long long
+#define REP(i,m,n) for(int i=(m);i<(n);i++)
+#define rep(i,n) REP(i,0,n)
+#define pb push_back
+#define all(a) a.begin(),a.end()
+#define rall(c) (c).rbegin(),(c).rend()
+#define mp make_pair
+#define endl '\n'
+//#define vec vector<ll>
+//#define mat vector<vector<ll> >
+#define fi first
+#define se second
+#define double long double
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair<ll,ll> pll;
+//typedef long double ld;
+typedef complex<double> Complex;
+const ll INF=1e9+7;
+const ll MOD=998244353;
+const ll inf=INF*INF;
+const ll mod=MOD;
+const ll MAX=100010;
+const double PI=acos(-1.0);
+typedef vector<vector<ll> > mat;
+typedef vector<ll> vec;
+double pi=M_PI;
+
+
+
+void solve(){
+    ll n;cin>>n;
+    vector<ll>h(n);
+    rep(i,n)cin>>h[i];
+    stack<pll>st;
+    ll ma=0;
+    ma=h[0];
+    st.push(mp(0,ma));
+    ll ans=0;
+    REP(i,1,n){
+        if(ma>h[i])continue;
+        pll nxt=st.top();
+        st.pop();
+        ans=max(ans,i-nxt.fi);
+        while(!st.empty()){
+            pll k=st.top();
+            st.pop();
+            if((i-nxt.fi)*(h[i]-k.se)<=(i-k.fi)*(h[i]-nxt.se)){
+                ans=max(ans,i-k.fi);
+                nxt=k;
+            }else{
+                st.push(k);
+                break;
+            }
+        }
+        st.push(nxt);
+        st.push(mp(i,h[i]));
+        ma=h[i];
+    }
+    reverse(all(h));
+    while(!st.empty())st.pop();
+    ma=h[0];
+    st.push(mp(0,ma));
+    REP(i,1,n){
+        if(ma>h[i])continue;
+        pll nxt=st.top();
+        st.pop();
+        ans=max(ans,i-nxt.fi);
+        while(!st.empty()){
+            pll k=st.top();
+            st.pop();
+            if((i-nxt.fi)*(h[i]-k.se)<=(i-k.fi)*(h[i]-nxt.se)){
+                ans=max(ans,i-k.fi);
+                nxt=k;
+            }else{
+                st.push(k);
+                break;
+            }
+        }
+        st.push(nxt);
+        st.push(mp(i,h[i]));
+        ma=h[i];
+    }
+    cout<<ans<<endl;
+}
+signed main(){
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    solve();
+}

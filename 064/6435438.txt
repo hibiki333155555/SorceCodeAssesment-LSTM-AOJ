@@ -1,0 +1,45 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ALDS1_2_A
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            Console.ReadLine();
+            var seq = Console.ReadLine().Split().Select(n => int.Parse(n)).ToArray();
+            var count = BubbleSort(seq);
+            Console.WriteLine(string.Join(" ", seq));
+            Console.WriteLine(count);
+        }
+
+        static int BubbleSort(int[] seq)
+        {
+            var flag = true;
+            var counter = 0;
+            while (flag)
+            {
+                flag = false;
+                for (int i = seq.Length - 1; i > 0; i--)
+                {
+                    if (seq[i] < seq[i - 1])
+                    {
+                        Swap(ref seq[i], ref seq[i - 1]);
+                        flag = true;
+                        counter++;
+                    }
+                }
+            }
+            return counter;
+        }
+        static void Swap<T>(ref T a, ref T b)
+        {
+            var t = a;
+            a = b;
+            b = t;
+        }
+
+    }
+
+}

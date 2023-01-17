@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int N;
+    int k[10000],sum;
+    bool flag;
+    vector<int> ans;
+    while(1){
+        cin>>N;
+        flag=false;
+        if(N==0){
+            break;
+        }
+        for(int i=0;i<N;i++){
+            cin>>k[i];
+        }
+        if(N==1&&k[0]>=2){
+            sum=2;
+            flag=true;
+        }else{
+            sum=0;
+            for(int i=0;i<N;i++){
+                if(k[i]>=2){
+                    flag=true;
+                }
+                if(k[i]!=0){
+                    sum++;
+                }
+            }
+            sum++;
+        }
+        if(flag){
+            ans.push_back(sum);
+        }else{
+            ans.push_back(0);
+        }
+    }
+    for(int i=0;i<ans.size();i++){
+        if(ans[i]==0){
+            cout<<"NA"<<"\n";
+        }else{
+            cout<<ans[i]<<"\n";
+        }
+    }
+    return(0);
+}

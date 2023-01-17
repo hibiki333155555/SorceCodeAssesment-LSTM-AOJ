@@ -1,0 +1,12 @@
+a,op,b=map(input().split())
+if op == "+":
+    print(a+b)
+elif op == "-":
+    print(a-b)
+elif op == "*":
+    print(a*b)
+elif op == "/":
+    print(a/b)
+else:
+    exit()
+   

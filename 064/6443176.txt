@@ -1,0 +1,64 @@
+using System;
+
+internal class Program
+{
+    public static void Main()
+    {
+        if (new System.Diagnostics.StackFrame(1).GetMethod() == null)
+            Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false });
+
+        var n = Console.ReadLine().ParseInt();
+        var dic = new SimpleDictionary();
+        for (int i = 0; i < n; i++)
+        {
+            var command = Console.ReadLine().Split();
+            if (command[0] == "insert")
+            {
+                dic.Insert(command[1]);
+            }
+            else
+            {
+                Console.WriteLine(dic.Find(command[1]) ? "yes" : "no");
+            }
+        }
+
+        Console.Out.Flush();
+    }
+}
+
+class SimpleDictionary
+{
+    bool[] dic = new bool[16777216];
+    int[] chars = new int[char.MaxValue];
+    public SimpleDictionary()
+    {
+        chars['A'] = 1;
+        chars['C'] = 2;
+        chars['G'] = 3;
+        chars['T'] = 4;
+    }
+    public void Insert(string str)
+    {
+        dic[GetSimpleHash(str)] = true;
+    }
+
+    public bool Find(string str)
+    {
+        return dic[GetSimpleHash(str)];
+    }
+
+    int GetSimpleHash(string str)
+    {
+        var hash = 0;
+        foreach (var c in str)
+        {
+            hash = hash * 4 + chars[c];
+        }
+        return hash - 1;
+    }
+}
+
+internal static class Extensions
+{
+    public static int ParseInt(this string s) => int.Parse(s);
+}

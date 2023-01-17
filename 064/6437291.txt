@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main () {
+    int  q;
+    cin>> q;
+    set <int > s;
+
+    while(q--) {
+        int  k, t;
+        cin>> k>> t;
+        if(k==0) {
+            s.insert(t);
+            cout<< s.size()<< endl;
+        }
+
+        else if(k == 1) {
+
+            auto pos = s.find(t);
+            if(pos != s.end())
+                cout<< "1"<< endl;
+            else
+                cout<<"0"<< endl;
+        }
+        else if(k== 2) {
+            s.erase(t);
+        }
+        else {
+            int t2;
+            cin>> t2;
+            for(auto it= s.lower_bound(t) ; it!= s.end(); it++) {
+                if(*it >= t && *it <= t2) 
+                    cout<< *it<< endl;
+                else
+                    break;
+            }
+        }
+
+    }
+
+    return 0;
+}

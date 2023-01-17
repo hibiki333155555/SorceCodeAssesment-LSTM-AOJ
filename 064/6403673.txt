@@ -1,0 +1,132 @@
+import java.util.Scanner;
+
+// 行列クラスを定義
+// 二次元配列とする
+class Matrix {
+    private int rows;
+    private int cols;
+    private long[][] matrix;
+
+    public Matrix(int rows, int cols, long[][] matrix) {
+        this.rows = rows;
+        this.cols = cols;
+        this.matrix = matrix;
+    }
+
+    public Matrix(long[][] matrix) {
+        this.rows = matrix.length;
+        this.cols = matrix[0].length;
+        this.matrix = matrix;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public void setCols(int cols) {
+        this.cols = cols;
+    }
+
+    public long[][] getMatrix() {
+        return matrix;
+    }
+
+    public void setMatrix(long[][] matrix) {
+        this.matrix = matrix;
+    }
+
+    public void setMatrix(int rows, int cols, long[][] matrix) {
+        this.rows = rows;
+        this.cols = cols;
+        this.matrix = matrix;
+    }
+
+    // 行列の掛け算をする
+    public Matrix product(Matrix y) {
+        long[][] ans = new long[100 + 1][100 + 1];
+        Matrix ansmatrix = new Matrix(ans);
+
+        // 共通部分が等しくないと行列の積が計算できない
+        if (this.getCols() != y.getRows()) {
+            return ansmatrix;
+        }
+
+        // 行列の積を計算する
+        int rows = this.getRows();
+        int cols = y.getCols();
+
+        // 共通部分
+        int common = this.getCols();
+
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= cols; j++) {
+                for (int k = 1; k <= common; k++) {
+                    ans[i][j] += matrix[i][k] * y.matrix[k][j];
+                }
+            }
+        }
+        ansmatrix.setMatrix(rows, cols, ans);
+        return ansmatrix;
+    }
+
+    // 結果を表示する
+    public void showMatrix() {
+        int rows = this.getRows();
+        int cols = this.getCols();
+
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= cols; j++) {
+                // 初めの要素以外は空白で区切る
+                if (j != 1) {
+                    System.out.print(" ");
+                }
+                System.out.print(this.matrix[i][j]);
+            }
+            // 改行
+            System.out.println("");
+        }
+    }
+
+}
+
+public class Main {
+    public static void main(String[] args) {
+        long[][] arya = new long[100 + 1][100 + 1];
+        long[][] aryb = new long[100 + 1][100 + 1];
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int l = sc.nextInt();
+
+        // 行列A
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                arya[i][j] = sc.nextInt();
+            }
+        }
+
+        // 行列B
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= l; j++) {
+                aryb[i][j] = sc.nextInt();
+            }
+        }
+
+        Matrix mata = new Matrix(n, m, arya);
+        Matrix matb = new Matrix(m, l, aryb);
+
+        Matrix ansmatrix = mata.product(matb);
+        ansmatrix.showMatrix();
+    }
+}
+

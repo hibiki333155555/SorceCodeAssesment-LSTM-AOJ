@@ -1,0 +1,15 @@
+nums = []
+group = []
+num = 1
+while num=1:
+    nums.clear()
+    group.clear()
+    nums = map(int,input().split())
+    if nums[0] == 0 and nums[1] == 0:
+        num = 0
+        continue
+    group = [x+1 for x in range(nums[0])]
+    ans = nums[1]
+    count = nums[0] * (nums[0]-1) * (nums[0]-2)
+    for i in range(count):
+        group[i]

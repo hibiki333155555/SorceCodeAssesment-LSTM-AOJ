@@ -1,0 +1,48 @@
+#include <iostream>
+#include <complex>
+#include <map>
+#include <set>
+#include <stack>
+#include <vector>
+
+using namespace std;
+
+void f(stack<pair<int, int>>& R, const vector<pair<int, int>>& P)
+{
+	for (int i = 0, j = i + 1; j < (int) P.size(); i = j, j = i + 1) {
+		double x = P[i].first, y = P[i].second, G = (P[j].second - y) / (P[j].first - x);
+		for (int k = i + 2; k < (int) P.size(); ++k) {
+			double g = (P[k].second - y) / (P[k].first - x);
+			if (G <= g) continue;
+			G = g;
+			j = k;
+		}
+		R.push(P[j]);
+	}
+}
+
+int main()
+{
+	int n, x, y;
+	map<int, set<int>> YX;
+	for (cin >> n >> x >> y; n > 0; --n, cin >> x >> y) YX[y].insert(x);
+	vector<pair<int, int>> P;
+	stack<pair<int, int>> R, S;
+	for (const auto& [y, X] : YX) {
+		P.emplace_back(*X.begin(), y);
+		S.emplace(*X.rbegin(), y);
+	}
+	f(R, P);
+	for (P.clear(); !S.empty(); S.pop()) P.push_back(S.top());
+	y = P[0].second;
+	R.pop();
+	for (auto x : YX[y]) R.emplace(x, y);
+	f(R, P);
+	y = R.top().second;
+	R.pop();
+	for (auto p = YX[y].crbegin(); p != YX[y].crend(); ++p) R.emplace(*p, y);
+	cout << R.size() << endl;
+	for (; !R.empty(); R.pop()) cout << R.top().first << ' ' << R.top().second << endl;
+	return 0;
+}
+

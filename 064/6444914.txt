@@ -1,0 +1,17 @@
+BIG_NUM = 2000000000
+
+while True:
+    H, W = map(int, input().split())
+    if H == 0 and W == 0:
+        break
+    
+    for i in range(H-1):
+        for k in range(W):
+            if i == 0 or i == H-1 or k == 0 or k == W-1:
+                print("#")
+                
+            if k == W:
+                print("\n")
+                
+            else:
+                print(".")

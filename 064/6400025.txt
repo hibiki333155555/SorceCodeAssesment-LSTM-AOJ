@@ -1,0 +1,1 @@
+require('fs').readFileSync(0).split('\n').some(l=>l=='0 0'||console.log([x,y].sort().join(' ')));

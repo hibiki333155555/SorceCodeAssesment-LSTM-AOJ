@@ -1,0 +1,47 @@
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <queue>
+using namespace std;
+
+typedef pair<int, int> PII;
+int n, ans[110];
+vector<int> ls[110];
+
+void bfs()
+{
+	queue<PII> q;
+	q.push({1, 0});
+	while(!q.empty())
+	{
+		PII x = q.front(); q.pop();
+		int x1 = x.first, x2 = x.second;
+		if(ans[x1] == -1) ans[x1] = x2;
+		else continue;
+		for(int i = 0; i < ls[x1].size(); i++) q.push({ls[x1][i], x2+1});
+	}
+	return ;
+}
+
+int main()
+{
+	memset(ans, -1, sizeof(ans));
+	cin >> n;
+	for(int i = 0; i < n; i++)
+	{
+		int u, k;
+		cin >> u >> k;
+		for(int j = 0; j < k; j++)
+		{
+			int v;
+			cin >> v;
+			ls[u].push_back(v);
+		}
+	}
+	bfs();
+	for(int i = 1; i <= n; i++)
+	{
+		cout << i << " " << ans[i] << endl;
+	}
+	return 0;
+}

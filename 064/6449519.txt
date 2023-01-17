@@ -1,0 +1,16 @@
+
+a,b = map(int,input().split())
+if a > b:
+    a,b = b,a
+
+A = bin(a)[2:]
+B = bin(b)[2:]
+A = "0"*(len(B)-len(A))+A
+
+ans = 0
+for a,b in zip(A,B):
+    if a == b:
+        ans += 1
+    else:
+        break
+print(ans)

@@ -1,0 +1,117 @@
+//
+// Created by TangQihui on 2022/3/29.
+//
+#include "iostream"
+#include "string"
+#include "cstdlib"
+using namespace std;
+typedef struct node{
+    int key;
+    struct node* parent,*left,*right;
+}node;
+typedef node* Tree;
+Tree insert(Tree root,Tree x){
+    Tree pre = NULL;
+    Tree p = root;
+    while (p!=NULL){
+        pre = p;
+        if ((x->key)<(p->key)){
+            p = p->left;
+        } else p = p->right;
+    }
+    x->parent = pre;
+    if (pre==NULL)root = x;
+    else if(pre->key<x->key){
+        pre->right = x;
+    }else{
+        pre->left = x;
+    }
+    return root;
+}
+void inOrder(Tree x){
+    if(x!=NULL){
+        inOrder(x->left);
+        cout<<' '<<x->key;
+        inOrder(x->right);
+    }
+}
+void preOrder(Tree x){
+    if (x!=NULL){
+        cout<<' '<<x->key;
+        preOrder(x->left);
+        preOrder(x->right);
+
+    }
+}
+Tree find(Tree root,int x){
+    Tree p = root;
+    while(p!=NULL){
+        if (p->key==x)return p;
+        else if (p->key<x)p = p->right;
+        else p = p->left;
+    }
+    return p;
+}
+Tree getNext(Tree x){
+    Tree pre = x;
+    Tree p = x->right;
+    while (p!=NULL){
+        p = p->left;
+    }
+    return pre;
+}
+Tree delet(Tree root,Tree z){
+    Tree y = z;
+    if (z->left==NULL||z->right==NULL){
+        y = z;
+    }else{
+        y = getNext(z);
+    }
+    Tree x;
+    if (y->left!=NULL)x = z->left;
+    else x = z->right;
+    if (x!=NULL)x->parent = z->parent;
+    if (y->parent==NULL){
+        root = x;
+    }else if (y->parent->left==y){
+        y->parent->left = x;
+    }else if (y->parent->right==y){
+        y->parent->right = x;
+    }
+    if (y!=z){
+        z->key = y->key;
+    }
+    free(y);
+    return root;
+}
+int main(){
+    int m,x;
+    Tree root = NULL;
+    char cm[10];
+    cin>>m;
+    for (int i = 0; i < m; ++i) {
+        cin>>cm;
+        if (cm[0]=='i'){
+            cin>>x;
+            Tree q = (Tree) malloc(sizeof (node));
+            q->key = x;
+            q->right = NULL;
+            q->left = NULL;
+            root = insert(root,q);
+        }else if (cm[0]=='p'){
+            inOrder(root);
+            cout<<endl;
+            preOrder(root);
+            cout<<endl;
+        }else if (cm[0]=='f'){
+            cin>>x;
+            if (find(root,x)!=NULL)cout<<"yes"<<endl;
+            else cout<<"no"<<endl;
+        }else {
+            cin>>x;
+            root = delet(root,find(root,x));
+        }
+    }
+    return 0;
+}
+

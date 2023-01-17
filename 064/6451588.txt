@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+void swap(int *arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+void prinArray(int *arr, int size) {
+    for (int i=0; i < size; i++) {
+        printf("%d", arr[i]);
+        if (i < size-1) printf(" ");
+    }
+    printf("\n");
+}
+
+int main() {
+    int arr[3];
+    scanf("%d %d %d", &arr[0], &arr[1], &arr[2]);
+
+    // Bubble sort
+    if (arr[0] > arr[1]) swap(arr, 0, 1);
+    if (arr[1] > arr[2]) swap(arr, 1, 2);
+    if (arr[0] > arr[1]) swap(arr, 0, 1);
+
+    prinArray(arr, 3);
+    return 0;
+}

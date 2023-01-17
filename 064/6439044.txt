@@ -1,0 +1,53 @@
+def count_invnum(seq):
+    class QuasiMultiSet: #フェニック木(Binary Indexed Tree(BIT))ベースでC++のstd::multisetみたいなことをする。 事前に座標圧縮する場合、1-indexedで圧縮すること。
+        def __init__(self, n, dup=True):
+            self.size = n
+            self.tree = [0]*(n+1) #1-indexedで実装する。index-0にはアクセスしない。管理できる数字は1~n
+            self.depth = n.bit_length()
+            self.dup = dup #要素の重複を許すか
+        
+        
+        def cumsum(self, i): #第1項から第i項の和(1-indexedで区間[1, i]の閉区間)を求める
+            s = 0
+            while i > 0:
+                s += self.tree[i]
+                i -= i & -i
+            return s
+        
+        
+        def rangesum(self, lft, rgt): #第lft項から第rgt項の和(1-indexedで区間[lft, rgt]の閉区間)を求める. lft = rgtなら集合にlftが何個あるかと等しい。
+            return self.cumsum(rgt) - self.cumsum(lft - 1)
+        
+        
+        def add(self, x, j): #第x項にjを足す
+            while x <= self.size:
+                self.tree[x] += j
+                x += x & -x
+                
+                
+        def insert(self, x): #xを集合に追加
+            if self.dup or self.tree[x] == 0:
+                self.add(x, 1)
+                
+        
+        def erase(self, x) : #集合からxを削除
+            if self.tree[x] > 0:
+                self.add(x, -1)
+                
+    
+    S = {n: i for i, n in enumerate(sorted(set(seq)), 1)}
+    tree = QuasiMultiSet(len(S))
+    for s in seq:
+        tree.add(S[s], 1)
+    
+    res = []
+    for i, s in enumerate(seq):
+        res.append(tree.cumsum(S[s] - 1))
+        tree.erase(S[s])
+    return sum(res)
+
+
+n = int(input())
+A = list(map(int, input().split()))
+ans = count_invnum(A)
+print(ans)

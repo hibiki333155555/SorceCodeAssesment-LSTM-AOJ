@@ -1,0 +1,11 @@
+#include<stdio.h>
+int main()
+{
+    int a,b,x,p;
+    scanf("%d %d",&a,&b);
+    x=a*b;
+    p=2*(a+b);
+    printf("%d %d\n",x,p);
+    return 0;
+}
+

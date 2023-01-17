@@ -1,0 +1,113 @@
+import sys
+import bisect
+sys.setrecursionlimit(10**6)
+MOD=998244353
+class RangeMinQuery():
+    def __init__(self,n,o=float('inf')):
+        self.o=o
+        t=1
+        while t<n:
+            t*=2
+        self.n=t
+        self.arr=[o for i in range(2*t-1)]
+    def update(self):
+        for x in reversed(range(self.n-1)):
+            self.arr[x]=min(self.arr[2*x+1],self.arr[2*x+2])
+    def query(self,a,b,k=0,l=0,r=None):
+        if r is None:
+            r=self.n
+        if r<=a or b<=l:
+            return self.o
+        if a<=l<r<=b:
+            return self.arr[k]
+        return min(self.query(a,b,2*k+1,l,(l+r)//2),self.query(a,b,2*k+2,(l+r)//2,r))
+    def __getitem__(self,x):
+        return self.arr[self.n-1+x]
+    def __setitem__(self,x,z):
+        self.arr[self.n-1+x]=z
+    def __iter__(self):
+        return iter(self.arr[self.n-1:])
+    def __str__(self):
+        return str(list(self))
+class Tree:
+    def __init__(self,n):
+        self.n=n
+        self.g=[[] for i in range(n)]
+    def merge(self,a,b,t=0):
+        self.g[a-t].append(b-t)
+        self.g[b-t].append(a-t)
+    def update(self,root=0):
+        for i in range(self.n):
+            self.g[i].sort()
+        self.gd=[{} for i in range(self.n)]
+        self.per=[-1 for i in range(self.n)]
+        self.deep=[-1 for i in range(self.n)]
+        self.note=[[] for i in range(self.n)]
+        self.euler_tour=[]
+        self.euler_index=[None for i in range(self.n)]
+        self.root=root
+        def dfs(u,p=-1,d=0):
+            self.euler_index[u]=len(self.euler_tour)
+            self.euler_tour.append(u)
+            self.deep[u]=d
+            self.per[u]=p
+            k=0
+            for v in self.g[u]:
+                if v==p:
+                    continue
+                k+=dfs(v,u,d+1)
+                self.note[u].append(self.euler_index[v])
+                self.euler_tour.append(u)
+            if p==-1:
+                return
+            else:
+                k=2*k+1
+                self.gd[p][u]=k
+                return k
+        dfs(root)
+        for i in range(N):
+            if i==root:
+                continue
+            self.g[i].remove(self.per[i])
+        s={root}
+        while s:
+            t=set()
+            for u in s:
+                k=0
+                for v in self.g[u]:
+                    k+=self.gd[u][v]
+                    t.add(v)
+                if u!=root:
+                    k+=self.gd[u][self.per[u]]
+                for v in self.g[u]:
+                    self.gd[v][u]=2*(k-self.gd[u][v])+1
+            s=t
+        self.rmq=RangeMinQuery(len(self.euler_tour),10**10)
+        for i,j in enumerate(self.euler_tour):
+            self.rmq[i]=self.deep[j]
+        self.rmq.update()
+    def query(self,a,b,t=0):
+        a,b=a-t,b-t
+        da,db,dc=self.deep[a],self.deep[b],self.rmq.query(self.euler_index[a],self.euler_index[b])
+        #print(a,b,da,db,dc)
+        if da+db-2*dc<0:
+            raise Exception(a,b,da,db,dc,len(self.euler_tour),list(self.rmq)[self.euler_index[a]:b+10:5000])
+        ans=pow(2,da+db-2*dc,MOD)
+        if da==dc:
+            a,b=b,a
+            da,db=db,da
+        ans*=self.gd[self.per[a]][a]
+        if db==dc:
+            ans*=self.gd[self.euler_tour[self.note[b][bisect.bisect_right(self.note[b],self.euler_index[a])-1]]][b]
+        else:
+            ans*=self.gd[self.per[b]][b]
+        ans%=MOD
+        return ans
+N=int(input())
+tree=Tree(N)
+for i in range(N-1): tree.merge(*map(int,input().split()),1)
+tree.update()
+#print(tree.euler_tour)
+#print(tree.rmq)
+#print(tree.euler_index)
+for i in range(int(input())): print(tree.query(*map(int,input().split()),1))

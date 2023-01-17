@@ -1,0 +1,59 @@
+#include <iomanip>
+#include <iostream>
+#include <set>
+#include <vector>
+using namespace std;
+
+#include <boost/multiprecision/cpp_int.hpp>
+typedef boost::multiprecision::cpp_int cint;
+
+
+// {{{ Templates
+
+// clang-format off
+
+const char newl = '\n';
+
+// clang-format on
+
+// }}} Templates
+
+
+void solve() {
+  cint n, m, v, a, b;
+  cin >> n >> m >> v >> a >> b;
+
+  if (n > m + 10) {
+    cout << "Yes" << newl;
+    return;
+  }
+
+  set<cint> v_set;
+  v_set.insert(v);
+  cint vi = v;
+  bool found = false;
+
+  for (int i = 0; i < n - 1; i++) {
+    vi = a * v + b;
+    v = vi % m;
+    if (v_set.count(v) >= 1) {
+      found = true;
+      break;
+    }
+    v_set.insert(v);
+  }
+
+  cout << (found ? "Yes" : "No") << newl;
+
+  return;
+}
+
+
+int main() {
+  int t;
+  cin >> t;
+
+  while (t--) {
+    solve();
+  }
+}

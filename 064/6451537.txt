@@ -1,0 +1,16 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main(){
+    int n,cnt = 1;
+   while(cin>>n){
+    if(n == 0){
+      break;
+    }
+    cout<<"Case "<<cnt<<": "<<n<<"\n";
+    cnt++;
+   }
+  return 0;
+}
+

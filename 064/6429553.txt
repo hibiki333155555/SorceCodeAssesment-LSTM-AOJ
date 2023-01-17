@@ -1,0 +1,10 @@
+n=int(input())
+num=list(input().split())
+
+newlist=[]
+
+for i in range(n):
+    newlist.append(num[-i-1])
+
+for k,out in enumerate(newlist):
+    print(out,end=" ")

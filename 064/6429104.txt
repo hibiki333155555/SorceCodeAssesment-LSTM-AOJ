@@ -1,0 +1,98 @@
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+#include<vector>
+using namespace std;
+#define EPS (1e-10)
+#define equal(a,b) (fabs(a-b)<EPS)
+
+static const int COUNTER_CLOCKWISE = 1;
+static const int CLOCKWISE = -1;
+static const int ON_SEGMENT = 0;
+static const int ONLINE_FRONT = 2;
+static const int ONLINE_BACK = -2;
+class Point {
+public:
+	double x, y;
+	/*构造函数*/
+	Point() {}
+	Point(double x, double y) :x(x), y(y) {}
+	/*针对加法的重载*/
+	Point operator + (Point& p) { return Point(x + p.x, y + p.y); }
+	Point operator - (Point& p) { return Point(x - p.x, y - p.y); }
+	Point operator * (double a) { return Point(a * x, a * y); }
+	Point operator / (double a) { return Point(x / a, y / a); }
+
+	/*返回向量的模*/
+	double abs() { return(sqrt(x * x + y * y)); }
+};
+
+/*写成大写防止和vector冲突*/
+typedef Point Vector;
+
+/*这里用Line表示线段*/
+class Line {
+public:
+	Point p1, p2;
+	Line() {}
+	Line(Point p1, Point p2) :p1(p1), p2(p2) {}
+	/*获取直线的方向向量*/
+	Vector GetVector() { return Point(p2.x - p1.x, p2.y - p1.y); }
+};
+
+/*用来表示多边形的动态数组*/
+vector<Point> Po;
+
+/*计算两个向量的内积*/
+double dot(Vector v1, Vector v2)
+{
+	return v1.x * v2.x + v1.y * v2.y;
+}
+
+/*计算两个向量的外积 v1积v2*/
+double cross(Vector v1, Vector v2)
+{
+	return v1.x * v2.y - v1.y * v2.x;
+}
+
+void swap(Point& a, Point& b)
+{
+	Point temp = a;
+	a = b;
+	b = temp;
+}
+/*判断要断定的点是否内包*/
+int contain(vector<Point> Po, Point p)
+{
+	/*用来统计点p向x轴正方向引出的射线与多边形边的交点*/
+	int count = 0;
+	int n = Po.size();
+	for (int i = 0; i < n; i++)
+	{
+		Vector a = Po[i] - p; Vector b = Po[(i + 1) % n] - p;
+		if (cross(a, b) == 0 && dot(a, b) <= 0) return 1;
+		if (a.y > b.y) swap(a, b);
+		if (a.y<=0 && b.y>0 && cross(a, b) > 0) count++;
+	}
+	return count % 2 == 0 ? 0 : 2;
+}
+
+int main()
+{
+	int n = 0;
+	Point temp;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> temp.x >> temp.y;
+		Po.push_back(temp);
+	}
+	int q = 0; cin >> q;
+	for (int i = 0; i < q; i++)
+	{
+		cin >> temp.x >> temp.y;
+		cout << contain(Po, temp) << endl;
+	}
+	return 0;
+}
+

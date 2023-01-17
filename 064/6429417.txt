@@ -1,0 +1,13 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    int a,b,c,d,e;
+    cin >> a >> b >> c >> d >> e;
+    
+    int ans;
+    if(a<0) ans+=c*abs(a)+d;
+    ans+=e*b;
+    cout << ans << end;
+    return 0;
+}    

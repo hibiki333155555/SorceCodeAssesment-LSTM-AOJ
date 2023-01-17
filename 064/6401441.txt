@@ -1,0 +1,6 @@
+/*
+require('fs').readFileSync(0,'utf8').split`
+`.some(l=>/\?/.test(l)||console.log(~~eval(l)));
+*/
+require('fs').readFileSync(0,'utf8').split`
+`.some(l=>/\?/.test(l)||console.log(~~Function.call({},'return '+l)());

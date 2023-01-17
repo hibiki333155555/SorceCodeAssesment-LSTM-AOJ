@@ -1,0 +1,89 @@
+#include <bits/stdc++.h>
+#define FOR(i, a, b) for(ll i = (a); i < (b); ++i)
+#define FORR(i, a, b) for(ll i = (a); i > (b); --i)
+#define REP(i, n) for(ll i = 0; i < (n); ++i)
+#define REPR(i, n) for(ll i = n; i >= 0; i--)
+#define FOREACH(x, a) for(auto &(x) : (a))
+#define dump(x) cout << #x << " = " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define SP << " " <<
+using namespace std;
+using ll = long long;
+using P = pair<ll, ll>;
+
+#define int long long
+
+vector<int> nodes;
+
+int parent(int i) { return i / 2; }
+int left(int i) { return 2 * i; }
+int right(int i) { return 2 * i + 1; }
+
+void trace(vector<int> A) {
+  for(int i = 0; i < A.size(); i++) {
+    cout << " " << A[i];
+  }
+  cout << endl;
+}
+
+void max_heapify(int i) {
+  int l = left(i);
+  int r = right(i);
+  // 左の子、自分、右の子で値が最大のノードを選ぶ
+  int largest;
+  if(l < nodes.size() && nodes[l] > nodes[i]) {
+    largest = l;
+  } else {
+    largest = i;
+  }
+  if(r < nodes.size() && nodes[r] > nodes[largest]) { largest = r; }
+
+  if(largest == i) { return; }
+
+  swap(nodes[i], nodes[largest]);
+  max_heapify(largest);
+}
+
+void max_heapify() {
+  for(int i = nodes.size() / 2; i > 0; i--) {
+    max_heapify(i);
+  }
+}
+
+void insert(int k) {
+  nodes.push_back(k);
+  max_heapify();
+}
+
+int extract_max() {
+  int max = nodes[1];
+  nodes[1] = nodes.back();
+  nodes.pop_back();
+  max_heapify(1);
+  return max;
+}
+
+signed main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  nodes.push_back(-1);
+
+  string inst;
+  while(inst != "end") {
+    cin >> inst;
+    if(inst == "insert") {
+      int k;
+      cin >> k;
+      insert(k);
+    } else if(inst == "extract") {
+      cout << extract_max() << endl;
+    }
+    dump(nodes.size());
+    trace(nodes);
+  }
+
+  return 0;
+}
+

@@ -1,0 +1,33 @@
+n = int(input())
+
+matrix = [[] for i in range(n)]
+
+for i in range(n):
+    matrix[i] = map(int, input().split())
+distance = [float('inf') for i in range(n)]
+discovered = [0 for i in range(n)]
+map(int, input().split())
+def prim():
+    discovered[0] = 1
+    weight = 0
+    for i in range(n):
+        if discovered[i] == 0 and matrix[0][i] != -1:
+            distance[i] = min(distance[i],matrix[0][i])    
+    while(1):
+        u = -1
+        du = float('inf')
+        for i in range(n):
+            if discovered[i] == 0 and distance[i] < du:
+                u = i
+                du = distance[i]
+        if u == -1:
+            break
+        discovered[u] = 1
+        weight = weight + du
+
+        for i in range(n):
+            if discovered[i]  == 0 and matrix[u][i] != -1:
+                distance[i] = min(distance[i],matrix[u][i])    
+    return weight
+print(prim())
+

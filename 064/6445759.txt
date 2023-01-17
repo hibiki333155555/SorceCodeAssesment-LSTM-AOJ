@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+internal class Program
+{
+    public static void Main()
+    {
+        if (new System.Diagnostics.StackFrame(1).GetMethod() == null)
+            Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false });
+
+        Console.ReadLine();
+        var S = Console.ReadLine().Split().Select(x => x.ParseInt()).ToArray();
+        var MS = new Sort(S);
+        Console.WriteLine(MS.MergeSort().StringJoin(" "));
+        Console.WriteLine(MS.counter);
+
+        Console.Out.Flush();
+    }
+}
+
+class Sort
+{
+    public int counter = 0;
+    int[] A; 
+    int[] L = new int[250001];
+    int[] R = new int[250001];
+    public Sort(int[] array)
+    {
+        this.A = array;
+    }
+
+    public int[] MergeSort()
+    {
+        internalMergeSort(0, A.Length);
+        return A;
+    }
+
+    void internalMergeSort(int left, int right)
+    {
+        if (left + 1 < right)
+        {
+            var mid = (left + right) / 2;
+            internalMergeSort(left, mid);
+            internalMergeSort(mid, right);
+            internalMerge(left, mid, right);
+        }
+    }
+
+    void internalMerge(int left, int mid, int right)
+    {
+        var n1 = mid - left;
+        var n2 = right - mid;
+        if (n1 > 100)
+        {
+            Array.Copy(A, left, L, 0, n1);
+            Array.Copy(A, mid, R, 0, n2);
+        }
+        else
+        {
+            for (int i = 0; i < n1; i++)
+            {
+                L[i] = A[left + i];
+            }
+            for (int i = 0; i < n2; i++)
+            {
+                R[i] = A[mid + i];
+            }
+        }
+        L[n1] = int.MaxValue;
+        R[n2] = int.MaxValue;
+        var li = 0;
+        var ri = 0;
+        for (int i = left; i < right; i++)
+        {
+            if (L[li] <= R[ri])
+                A[i] = L[li++];
+            else
+                A[i] = R[ri++];
+            counter++;
+        }
+    }
+}
+
+
+internal static class Extensions
+{
+    public static int ParseInt(this string s) => int.Parse(s);
+    public static string StringJoin<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+}

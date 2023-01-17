@@ -1,0 +1,117 @@
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <stack>
+#include <cstring>
+
+using namespace std;
+//#define int long long
+using ll = long long;
+int const INF = 0x3f3f3f3f;
+int const MOD = 1e9 + 7;
+
+inline int read() {
+    int x(0), sgn(1);
+    char ch(getchar());
+    for (; !isdigit(ch); ch = getchar()) if (ch == '-') sgn = -1;
+    for (; isdigit(ch); ch = getchar()) x = (x * 10) + (ch ^ 48);
+    return x * sgn;
+}
+
+
+int f[][2] = {
+        {0, 1},
+        {0, -1},
+        {1, 0},
+        {-1, 0},
+};
+
+int goal[16][2] = {{3, 3},
+                   {0, 0},
+                   {0, 1},
+                   {0, 2},//0 1 2 3
+                   {0, 3},
+                   {1, 0},
+                   {1, 1},
+                   {1, 2},//4 5 6 7
+                   {1, 3},
+                   {2, 0},
+                   {2, 1},
+                   {2, 2},//8 9 10 11
+                   {2, 3},
+                   {3, 0},
+                   {3, 1},
+                   {3, 2}
+};
+
+int mp[5][5];
+int mx;
+
+int mx_step() {
+    int sum = 0;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (mp[i][j] != 0) {
+                sum += abs(i - goal[mp[i][j]][0]) + abs(j - goal[mp[i][j]][1]);
+            }
+        }
+    }
+    return sum;
+}
+
+int ans = 0, result;
+bool it = false;
+
+void dfs(int x, int y, int last) {
+    bool flag = true;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (mp[i][j] != i * 4 + j) {
+                flag = false;
+                break;
+            }
+        }
+        if (!flag) break;
+    }
+    if (flag) {
+        result = min(result, ans);
+        it = true;
+        return;
+    }
+    for (int i = 0; i < 4; i++) {
+        if ((i ^ 1) == last) continue;
+        int a = x + f[i][0], b = y + f[i][1];
+        if (a >= 0 && a < 4 && b >= 0 && b < 4) {
+            swap(mp[a][b], mp[x][y]);
+            ans += 1;
+            if (mx_step() + ans <= mx) dfs(a, b, i);
+            swap(mp[a][b], mp[x][y]);
+            ans -= 1;
+        }
+    }
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    int x, y;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            cin >> mp[i][j];
+            if (mp[i][j] == 0) x = i, y = j;
+        }
+    }
+    mx = mx_step();
+    result = mx;
+    it = false;
+    while (!it) {
+        dfs(x, y, 4);
+        mx += 1;
+    }
+    cout << result << endl;
+    return 0;
+}

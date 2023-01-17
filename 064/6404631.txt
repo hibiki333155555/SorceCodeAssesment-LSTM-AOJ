@@ -1,0 +1,15 @@
+n,m,l=map(int,input().split())
+a=[list(map(int,input().split())) for i in range(n)]
+b=[list(map(int,input().split())) for i in range(m)]
+c=[[0]*l for i in range(n)]
+for i in range(n):
+    for j in range(l):
+        for k in range(m):
+            c[i][j]+=a[i][k]*b[k][j];
+for i in range(n):
+    for j in range(l):
+        if j>0:print(" ",end='')
+        print(c[i][j],end='')
+    print()
+
+#コピペ　　あとでじしんでさいげん

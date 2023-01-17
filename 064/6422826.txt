@@ -1,0 +1,24 @@
+#include<iostream>
+#include<string> 
+
+using namespace std;
+
+int main() {
+    string cards, cardsLast;
+    int m, h;
+    while(true) {
+        cin >> cards;
+        if(cards == "-") {
+            break;
+        }
+        cin >> m;
+        cardsLast = cards;
+        while(m > 0) {
+            cin >> h;
+            cardsLast = cardsLast.substr(h) + cardsLast.substr(0, h - 1);
+            m--;
+        }
+        cout << cardsLast << endl;
+    }
+    return 0;
+}

@@ -1,0 +1,37 @@
+using System;
+class program
+{
+    static void Main(string[] args)
+    {
+       for( ; ; )
+       {
+            string[] s = Console.ReadLine().Split();
+            var a = int.Parse(s[0]);
+            var b = int.Parse(s[2]);
+            if(s[1] == "?") break;
+            switch(s[1])
+            {
+                case "+":
+                {
+                    Console.WriteLine(a + b);
+                    break;
+                }
+                case "-":
+                {
+                    Console.WriteLine(a - b);
+                    break;
+                }
+                case "*":
+                {
+                    Console.WriteLine(a * b);
+                    break;
+                }
+                case "/":
+                {
+                    Console.WriteLine(a / b);
+                    break;
+                }
+            }
+       }
+    }
+}

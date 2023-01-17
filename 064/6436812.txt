@@ -1,0 +1,27 @@
+def resolve(s, t)
+  count = 0
+  t.each do |val|
+    if contain?(s, val)
+      count += 1
+    end
+  end
+  puts count
+end
+
+def contain?(arr, target)
+  arr.each do |val|
+    return true if val == target
+  end
+
+  false
+end
+
+
+n = gets.to_i
+s = gets.split(' ').map(&:to_i)
+
+q = gets.to_i
+t = gets.split(' ').map(&:to_i)
+
+resolve(s, t)
+

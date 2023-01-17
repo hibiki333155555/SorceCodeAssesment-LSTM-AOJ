@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+#include <unordered_set>
+#include <random>
+//#define int long long
+#define REP(i,m,n) for(int i=(m);i<(n);i++)
+#define rep(i,n) REP(i,0,n)
+#define pb push_back
+#define all(a) a.begin(),a.end()
+#define rall(c) (c).rbegin(),(c).rend()
+#define mp make_pair
+#define endl '\n'
+//#define vec vector<ll>
+//#define mat vector<vector<ll> >
+#define fi first
+#define se second
+#define double long double
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair<ll,ll> pll;
+//typedef long double ld;
+typedef complex<double> Complex;
+const ll INF=1e9+7;
+const ll MOD=998244353;
+const ll inf=INF*INF;
+const ll mod=MOD;
+const ll MAX=200010;
+const double PI=acos(-1.0);
+typedef vector<vector<ll> > mat;
+typedef vector<ll> vec;
+
+
+
+void solve(){
+    while(1){
+        ll n;cin>>n;
+        if(n==0){
+            break;
+        }
+        vector<double>x(n),y(n);
+        rep(i,n)cin>>x[i]>>y[i];
+        ll ma=0;
+        rep(i,n){
+            REP(j,i+1,n){
+                double a=x[i]-x[j],b=y[i]-y[j];
+                double p,q;
+                if(a!=0){
+                    q=a*sqrt((4.0-a*a-b*b)/(a*a+b*b))/2.0;
+                    p=-q*b/a;
+                }else{
+                    q=0;
+                    p=sqrt(4.0-b*b)/2.0;
+                }
+                p=p+a/2.0+x[j],q=q+b/2.0+y[j];
+                ll cnt=2;
+                rep(k,n){
+                    if(k==i||k==j)continue;
+                    if((p-x[k])*(p-x[k])+(q-y[k])*(q-y[k])<=1.0)cnt++;
+                }
+                ma=max(ma,cnt);
+            }
+        }
+        cout<<ma<<endl;
+    }
+}
+
+signed main(){
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    solve();
+}

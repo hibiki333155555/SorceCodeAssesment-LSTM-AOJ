@@ -1,0 +1,19 @@
+#include<iostream>
+#include<stdio.h>
+#include<math.h>
+
+using namespace std;
+int main()
+{
+    double r;
+    double a,c;
+    double PI;
+    PI=acos(-1);
+    cin>>r;
+    a=PI*r*r;
+    c=2*PI*r;
+
+
+    printf("%.6lf %.6lf\n",a,c);
+    return 0;
+}

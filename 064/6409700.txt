@@ -1,0 +1,15 @@
+a =[0]*26
+while True:
+    try:
+        str=input().lower()
+    except:
+        break
+    for c in str:
+        if 'a'<=c and c<='z':
+            a[ord(c)-ord("a")]+=1
+
+for i in range(26):
+    print(chr(ord("a")+i),":",a[i])
+    
+    
+    #コピペ　さん紅葉

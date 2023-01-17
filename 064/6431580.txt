@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  int n;
+  cin >> n;
+  
+  vector<int> S(13); // スぺ―ドの配列
+  vector<int> H(13); // ハートの配列
+  vector<int> C(13); // クラブの配列
+  vector<int> D(13); // ダイヤの配列
+  
+  //入力を受け取る
+  string Egara;
+  int num;
+  
+  for (int i=0; i<n; i++){
+    cin >> Egara >> num;
+    
+    if (Egara == "S"){
+      S.at(num-1) = num;
+    }
+    
+    else if (Egara == "H"){
+      H.at(num-1) = num;
+    }
+    
+    else if (Egara == "C"){
+      C.at(num-1) = num;
+    }
+    
+    else if (Egara == "D"){
+      D.at(num-1) = num;
+    }
+    
+  }
+  
+  //出力する
+  for (int i = 0; i<13; i++){
+    if (S.at(i) == 0){
+      cout << "S" << " " << i + 1 << endl;
+    }
+  }
+  
+  for (int i = 0; i<13; i++){
+    if (H.at(i) == 0){
+      cout << "H" << " " << i + 1 << endl;
+    }
+  }
+  
+  for (int i = 0; i<13; i++){
+    if (C.at(i) == 0){
+      cout << "C" << " " << i + 1 << endl;
+    }
+  }
+  
+  for (int i = 0; i<13; i++){
+    if (D.at(i) == 0){
+      cout << "D" << " " << i + 1 << endl;
+    }
+  }
+  
+}

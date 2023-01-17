@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  string s;
+  vector<int> cnt(26);
+  while(cin >> s){
+    for(int i=0; i<s.size(); i++){
+      if('a' <= s.at(i) && s.at(i) <= 'z'){
+        cnt.at(s.at(i)-'a')++;
+      }else if('A' <= s.at(i) && s.at(i) <= 'Z'){
+        cnt.at(s.at(i)-'A')++;
+      }
+    }
+  }
+  
+  for(int i=0; i<26; i++){
+    char x='a';
+    cout << (char)(x+i) << " : " << cnt.at(i) << endl;
+  }
+  return 0;
+    
+}

@@ -1,0 +1,21 @@
+// KoDer :P
+
+#include<iostream>
+
+
+int main() {
+    int a, b;
+    while (true) {
+        std::cin >> a >> b;
+        if (a != 0 && b != 0) {
+            for (int i{0}; i < a; i++) {
+                for (int j{0}; j < b; j++) {
+                    std::cout << "#";
+                }
+                std::cout << "\n";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+

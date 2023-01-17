@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main(){
+    int H, W, h, w;
+    
+    for(;;){
+        scanf("%d %d", &H, &W);
+        if(H == 0 && W == 0)break;
+        for(h = 1; h <= H; h++){
+            for(w = 1; w <= W; w++){
+                if(h == 1 || h == H || w == 1 || w == W)printf("#");
+                else printf(".");
+            }
+            printf("\n");
+        }
+    }
+    return 0;
+}

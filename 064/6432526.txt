@@ -1,0 +1,30 @@
+#include <iostream>
+
+using namespace std;
+
+int buf[100];
+
+int main()
+{
+	int n, cnt = 0;
+	cin >> n;
+	for (int i = 0; i < n; ++i) {
+		cin >> buf[i];
+	}
+
+	for (int i = 0; i < n; ++i) {
+		for (int j = n - 1; j >= i + 1; --j) {
+			if (buf[j] < buf[j-1]) {
+				swap(buf[j], buf[j-1]);
+				++cnt;
+			}
+		}
+	}
+	for (int i = 0; i < n - 1; ++i) {
+		cout << buf[i] << " ";
+	}
+	cout << buf[n-1] << endl;
+	cout << cnt << endl;
+	return 0;
+}
+

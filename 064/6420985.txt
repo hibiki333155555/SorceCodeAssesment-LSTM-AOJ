@@ -1,0 +1,90 @@
+#include <stdio.h>
+
+int dist[1002][1002], q[2000001][3];
+
+int main()
+{
+	int i, H, W;
+	char c[1002][1002] = {};
+	scanf("%d %d", &H, &W);
+	for (i = 1; i <= H; i++) scanf("%s", &(c[i][1]));
+	
+	const int sup = 1 << 20;
+	int j, d, head = 1000000, tail = 1000000;
+	for (i = 1; i <= H; i++) for (j = 1; j <= W; j++) dist[i][j] = sup;
+	for (i = 1; i <= H; i++) {
+		for (j = 1; j <= W; j++) if (c[i][j] == 'S') break;
+		if (j <= W) break;
+	}
+	dist[i][j] = 0;
+	q[tail][0] = i;
+	q[tail][1] = j;
+	q[tail++][2] = 0;
+	for (; head < tail; head++) {
+		i = q[head][0];
+		j = q[head][1];
+		d = q[head][2];
+		if (dist[i][j] != d) continue;
+		if (c[i][j] == 'G') {
+			printf("%d\n", d);
+			fflush(stdout);
+			return 0;
+		} else if (c[i][j] == 'U') {
+			if (c[i-1][j] != 0 && c[i-1][j] != '#' && dist[i-1][j] > d) {
+				dist[i-1][j] = d;
+				q[head][0] = i - 1;
+				q[head][1] = j;
+				q[head--][2] = d;
+			}
+		} else if (c[i][j] == 'D') {
+			if (c[i+1][j] != 0 && c[i+1][j] != '#' && dist[i+1][j] > d) {
+				dist[i+1][j] = d;
+				q[head][0] = i + 1;
+				q[head][1] = j;
+				q[head--][2] = d;
+			}
+		} else if (c[i][j] == 'L') {
+			if (c[i][j-1] != 0 && c[i][j-1] != '#' && dist[i][j-1] > d) {
+				dist[i][j-1] = d;
+				q[head][0] = i;
+				q[head][1] = j - 1;
+				q[head--][2] = d;
+			}
+		} else if (c[i][j] == 'R') {
+			if (c[i][j+1] != 0 && c[i][j+1] != '#' && dist[i][j+1] > d) {
+				dist[i][j+1] = d;
+				q[head][0] = i;
+				q[head][1] = j + 1;
+				q[head--][2] = d;
+			}
+		} else {
+			if (c[i-1][j] != 0 && c[i-1][j] != '#' && dist[i-1][j] > d + 1) {
+				dist[i-1][j] = d + 1;
+				q[tail][0] = i - 1;
+				q[tail][1] = j;
+				q[tail++][2] = d + 1;
+			}
+			if (c[i+1][j] != 0 && c[i+1][j] != '#' && dist[i+1][j] > d + 1) {
+				dist[i+1][j] = d + 1;
+				q[tail][0] = i + 1;
+				q[tail][1] = j;
+				q[tail++][2] = d + 1;
+			}
+			if (c[i][j-1] != 0 && c[i][j-1] != '#' && dist[i][j-1] > d + 1) {
+				dist[i][j-1] = d + 1;
+				q[tail][0] = i;
+				q[tail][1] = j - 1;
+				q[tail++][2] = d + 1;
+			}
+			if (c[i][j+1] != 0 && c[i][j+1] != '#' && dist[i][j+1] > d + 1) {
+				dist[i][j+1] = d + 1;
+				q[tail][0] = i;
+				q[tail][1] = j + 1;
+				q[tail++][2] = d + 1;
+			}
+		}
+	}
+	printf("-1\n");
+	fflush(stdout);
+	return 0;
+}

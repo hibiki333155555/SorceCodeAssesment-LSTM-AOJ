@@ -1,0 +1,10 @@
+a,b =map(int, input().split())
+
+if a > b:
+    num = '>'
+elif a < b:
+    num = '<'
+else:
+    num = '=='
+    
+print("a %s b" %num)

@@ -1,0 +1,63 @@
+#include<iostream>
+#include<string>
+#include<iomanip>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+#include<utility>
+
+using namespace std;
+
+#define int long long
+#define endl "\n"
+
+constexpr long long INF = 1e18;
+constexpr long long MOD = 998244353; 
+
+struct fast_io {
+  fast_io(){
+    std::cin.tie(nullptr);
+    std::ios::sync_with_stdio(false);
+    cout<<fixed<<setprecision(10);
+  };
+} fio;
+
+signed main(){
+  constexpr int MAX = 2001;
+  int N, K;
+  int ans = 0;
+  vector<int> a, p;
+  vector<vector<int>> dp;
+  
+  cin>>N>>K;
+  
+  a.resize(N);
+  p.resize(N);
+  dp.resize(N, vector<int>(MAX));
+  
+  for(int i = 0; i < N; i++){
+    cin>>a[i];
+  }
+  
+  for(int i = 1; i < N; i++){
+    cin>>p[i];
+    p[i]--;
+  }
+  
+  dp[0][a[0]] = 1;
+  
+  for(int i = 1; i < N; i++){
+    for(int k = 0; k + a[i] <= K; k++){
+      dp[i][k+a[i]] += dp[p[i]][k];
+      dp[i][k+a[i]] %= MOD;
+    }
+  }
+  
+  for(int i = 0; i < N; i++){
+    ans += dp[i][K];
+  }
+  
+  cout<<ans<<endl;
+  
+  return 0;
+}

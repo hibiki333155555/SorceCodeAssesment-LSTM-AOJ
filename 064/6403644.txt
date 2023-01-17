@@ -1,0 +1,70 @@
+class WeightedUnionFindTree:
+    def __init__(self, n):
+        self.parents = [-1] * n
+        # 親への相対的な重み
+        self.weight = [0] * n
+    
+    def find(self, x):
+        """
+        x の root頂点を返す
+        """
+        if self.parents[x] < 0:
+            return x
+        else:
+            # 繋ぎ変えてしまうので, 親の重みをweight[x]に追加する必要がある
+            self.weight[x] += self.weight[self.parents[x]]
+            # 繋ぎ変え
+            self.parents[x] = self.find(self.parents[x])
+            return self.find(self.parents[x])
+
+    def union(self, x, y, w):
+        """
+        y の x に対する相対的な重みがwになるようにunionする
+        つまり, diff(x, y) = w となる
+        xとyがすでに同じグループの場合はFalseを返す
+        """
+        w += self.weight[x]  # xが基準となるので, weight[x]を加える
+        w -= self.weight[y]  # xが基準となるので, yの重み分減らす
+        
+        x = self.find(x)
+        y = self.find(y)
+        if x == y:
+            return False
+        
+        # サイズが 小さい方 を 大きい方 へつなげる
+        if (self.parents[x] > self.parents[y]):
+            x, y = y, x
+            w *= -1
+        
+        # y を x の下にくっつける
+        self.parents[x] += self.parents[y]  # サイズの更新
+        self.parents[y] = x
+        self.weight[y] = w
+        return True
+        
+    def same_check(self, x, y):
+        return self.find(x) == self.find(y)
+
+    def size(self, x):
+        return -1 * self.parents[self.find(x)]
+
+    def diff(self, x, y):
+        """
+        y の x に対する相対的な重みを取得
+        """
+        return self.weight[y] - self.weight[x]
+
+
+n, q = map(int, input().split())
+uf = WeightedUnionFindTree(n+10)
+for _ in range(q):
+    query = list(map(int, input().split()))
+    if query[0] == 0:
+        x, y, w = query[1], query[2], query[3]
+        uf.union(x, y, w)
+    else:
+        x, y = query[1], query[2]
+        if not (uf.same_check(x, y)):
+            print("?")
+        else:
+            print(uf.diff(x, y))

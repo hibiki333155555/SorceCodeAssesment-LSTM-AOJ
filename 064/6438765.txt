@@ -1,0 +1,13 @@
+from heapq import heappop, heappush
+
+heap = []
+#データを入力する
+while True:
+    tmp = input()
+    if tmp.startswith('end'):
+        break
+    elif tmp.startswith('insert'):
+        k = int(tmp.split()[1])
+        heappush(heap, -k)
+    elif tmp.startswith('extract'):
+        print(-heappop(heap))

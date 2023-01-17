@@ -1,0 +1,50 @@
+#include <iostream>
+#include <map>
+#include <vector>
+#include <queue>
+using namespace std;
+
+typedef pair<int, int> PII;
+int n, m, q, id = 0;
+vector<int> ls[100010];
+int vis[100010];
+map<PII, int> way;
+
+bool bfs(int u, int v)
+{
+	id++;
+	queue<int> q;
+	q.push(u);
+	while(!q.empty())
+	{
+		int x = q.front(); q.pop();
+		if(x == v) return true;
+		if(vis[x] == id) continue;
+		vis[x] = id;
+		if(way[{x, v}] == 2) return true;
+		for(int i = 0; i < ls[x].size(); i++) q.push(ls[x][i]);
+	}
+	return false;
+}
+
+int main()
+{
+	cin >> n >> m;
+	for(int i = 0; i < m; i++)
+	{
+		int u, v;
+		cin >> u >> v;
+		ls[u].push_back(v);
+		ls[v].push_back(u);
+	}
+	cin >> q;
+	for(int i = 0; i < q; i++)
+	{
+		int u, v;
+		cin >> u >> v;
+		if(way[{u, v}] == 0) way[{u, v}] = bfs(u, v) + 1;
+		if(way[{u, v}] == 2) cout << "yes" << endl;
+		else cout << "no" << endl;
+	}
+	return 0;
+}

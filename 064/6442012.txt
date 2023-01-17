@@ -1,0 +1,3 @@
+const x = require('fs').readFileSync('/dev/stdin', 'utf8');
+x = split(' ')
+console.log(x)

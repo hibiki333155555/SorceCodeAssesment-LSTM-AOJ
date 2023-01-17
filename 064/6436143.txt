@@ -1,0 +1,37 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+using namespace std;
+
+const int N = 105;
+vector<int> G[N];
+int d[N],f[N];
+int t=1;
+
+void dfs(int now) {
+	if(d[now])
+		return;
+	d[now] = t++;
+	for(int i=0;i<G[now].size();i++) {
+		dfs(G[now][i]);
+	}
+	f[now] = t++;
+}
+
+int main() {
+	int n;
+	cin>>n;
+	for(int i=0;i<n;i++) {
+		int u,k,v;
+		cin>>u>>k;
+		for(int j=0;j<k;j++) {
+			cin>>v;
+			G[u].push_back(v);
+		}
+	}
+	dfs(1);
+	for(int i=1;i<=n;i++)
+		cout<<i<<" "<<d[i]<<" "<<f[i]<<endl;
+
+}

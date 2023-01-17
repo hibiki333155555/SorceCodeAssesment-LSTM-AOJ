@@ -1,0 +1,14 @@
+lis = [chr(ord("A")+i) for i in range(26)]
+li = []
+for i in range(26):
+    for j in range(26):
+        li.append(lis[i]+lis[j])
+li.sort()
+lis = lis + li
+num = [str(i) for i in range(1, 10)]
+for i in range(1, 10):
+    for j in range(10):
+        num.append(str(i)+str(j))
+c1, r1, c2, r2 = map(str, input().split())
+print((lis.index(c2)-lis.index(c1)+1) * (num.index(r2)-num.index(r1)+1))
+

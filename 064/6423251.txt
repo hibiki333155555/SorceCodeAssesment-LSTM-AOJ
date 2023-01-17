@@ -1,0 +1,241 @@
+#line 1 "main.cpp"
+
+#define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_5_C"
+
+#line 2 "lib/prelude.hpp"
+#ifndef LOCAL
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2")
+#endif
+#include <bits/stdc++.h>
+using namespace std;
+using uint = unsigned int;
+using ll = long long;
+using ull = unsigned long long;
+#define rep2(i, m, n) for (auto i = (m); i < (n); i++)
+#define rep(i, n) rep2(i, 0, n)
+#define repr2(i, m, n) for (auto i = (n); i-- > (m);)
+#define repr(i, n) repr2(i, 0, n)
+#define all(x) begin(x), end(x)
+#line 3 "lib/graph.hpp"
+
+struct unit_edge {
+  int v;
+  int to() const { return v; }
+  operator int() const { return to(); }
+  int w() const { return 1; }
+};
+
+template <class Weight>
+struct weighted_edge {
+  int v;
+  Weight weight;
+  int to() const { return v; }
+  operator int() const { return to(); }
+  Weight w() const { return weight; }
+};
+
+template <class Inner>
+struct basic_graph {
+  using weight_type = int;
+  const Inner& inner;
+  basic_graph(const Inner& g) : inner(g) {}
+  template <class F>
+  void adj(int v, F&& f) const {
+    for (auto u : inner[v]) f(unit_edge{u});
+  }
+};
+
+template <class Inner, class Weight>
+struct basic_weighted_graph {
+  using weight_type = Weight;
+  const Inner& inner;
+  basic_weighted_graph(const Inner& g) : inner(g) {}
+  template <class F>
+  void adj(int v, F&& f) const {
+    for (auto [u, w] : inner[v]) f(weighted_edge<weight_type>{u, w});
+  }
+};
+
+template <class T>
+struct graph_trait : public T {
+  graph_trait(T t) : T(move(t)) {}
+};
+
+template <class T>
+using W = typename graph_trait<T>::weight_type;
+
+template <size_t N>
+struct graph_trait<vector<int>[N]> : basic_graph<vector<int>[N]> {
+  using basic_graph<vector<int>[N]>::basic_graph;
+  int size() const { return N; }
+};
+
+template <>
+struct graph_trait<vector<vector<int>>> : basic_graph<vector<vector<int>>> {
+  using basic_graph<vector<vector<int>>>::basic_graph;
+  int size() const { return basic_graph<vector<vector<int>>>::inner.size(); }
+};
+
+template <size_t N, class Weight>
+struct graph_trait<vector<pair<int, Weight>>[N]>
+    : basic_weighted_graph<vector<pair<int, Weight>>[N], Weight> {
+  using basic_weighted_graph<vector<pair<int, Weight>>[N],
+                             Weight>::basic_weighted_graph;
+  int size() const { return N; }
+};
+
+template <class Weight>
+struct graph_trait<vector<vector<pair<int, Weight>>>>
+    : basic_weighted_graph<vector<vector<pair<int, Weight>>>, Weight> {
+  using basic_weighted_graph<vector<vector<pair<int, Weight>>>,
+                             Weight>::basic_weighted_graph;
+  int size() const { return basic_graph<vector<vector<int>>>::inner.size(); }
+};
+#line 3 "lib/graph/dfs.hpp"
+
+template <class G, class Fin, class Fout>
+void dfs(const G& graph, int s, Fin&& fin, Fout&& fout) {
+  graph_trait<G> g(graph);
+  vector<char> visited(g.size(), false);
+  visited[s] = true;
+  auto dfs_fn = [&](auto&& f, int v) {
+    g.adj(v, [&](auto&& e) {
+      if (!visited[e.to()])
+        visited[e.to()] = true, fin(e, v), f(f, e.to()), fout(e, v);
+    });
+  };
+  dfs_fn(dfs_fn, s);
+}
+
+template <class G, class F>
+void dfs(const G& graph, int s, F&& f) {
+  dfs(graph, s, f, [](auto&&, auto&&) {});
+}
+
+template <class G, class F>
+void dfs_bottom_up(const G& graph, int s, F&& f) {
+  dfs(graph, s, [](auto&&, auto&&) {}, f);
+}
+
+template <class G, class F>
+void dfs_ord(const G& graph, int s, F&& f) {
+  f(s, -1);
+  dfs(graph, s, [&](int v, int p) { f(v, p); });
+}
+
+template <class G, class F>
+void dfs_rev_ord(const G& graph, int s, F&& f) {
+  dfs_bottom_up(graph, s, [&](int v, int p) { f(v, p); });
+  f(s, -1);
+}
+#line 3 "lib/bit/clz.hpp"
+
+template <class T>
+__attribute__ ((target ("lzcnt"))) int clz(T x) {
+    if (!x) return sizeof(T) * 8;
+    if constexpr (sizeof(T) <= sizeof(int)) {
+        return __builtin_clz((int)x);
+    } else if constexpr (sizeof(T) <= sizeof(ll)) {
+        return __builtin_clzll((ll)x);
+    } else if constexpr (sizeof(T) <= sizeof(ll) * 2) {
+        int l = clz((ll)(x >> sizeof(ll) * 8));
+        return l != sizeof(ll) * 8 ? l : l + clz((ll)x);
+    }
+}
+#line 4 "lib/bit/ilog2.hpp"
+
+template <class T>
+int ilog2(T x) { assert(x != 0); return sizeof(T) * 8 - 1 - clz(x); }
+
+template <class T>
+int ilog2_ceil(T x) { return x == 0 || x == 1 ? 1 : ilog2(x - 1) + 1; }
+
+template <class T>
+T bit_floor(T x) { return T(1) << ilog2(x); }
+
+template <class T>
+T bit_ceil(T x) { return T(1) << ilog2_ceil(x); }
+#line 3 "lib/bit/ctz.hpp"
+
+template <class T>
+__attribute__ ((target ("bmi"))) int ctz(T x) {
+    using uint = unsigned int;
+    using ull = unsigned long long;
+    if (!x) return sizeof(T) * 8;
+    if constexpr (sizeof(T) <= sizeof(uint)) {
+        return __builtin_ctz((uint)x);
+    } else if constexpr (sizeof(T) <= sizeof(ull)) {
+        return __builtin_ctzll((ull)x);
+    } else if constexpr (sizeof(T) <= sizeof(ull) * 2) {
+        int l = ctz((ull)x);
+        return l != sizeof(ull) * 8 ? l : l + ctz((ull)(x >> sizeof(ull) * 8));
+    }
+}
+#line 5 "lib/graph/tree/lca.hpp"
+
+class lca {
+ public:
+  template <class G>
+  lca(const G& graph, int r = 0)
+      : size(graph_trait<G>(graph).size()),
+        height(ilog2(size) + 1),
+        data(height, vector<int>(size)),
+        depth(size) {
+    data[0][r] = r;
+    depth[r] = 0;
+    dfs(graph, r, [&](auto&& e, int p) {
+      data[0][e.to()] = p;
+      depth[e.to()] = depth[p] + 1;
+    });
+    rep(h, height - 1) rep(x, size) data[h + 1][x] = data[h][data[h][x]];
+  }
+
+  int ascend(int v, int d) const {
+    while (d) {
+      int h = ctz(d);
+      v = data[h][v];
+      d ^= 1 << h;
+    }
+    return v;
+  }
+  int find_lca(int u, int v) const {
+    if (depth[u] < depth[v])
+      v = ascend(v, depth[v] - depth[u]);
+    else if (depth[u] > depth[v])
+      u = ascend(u, depth[u] - depth[v]);
+    repr(h, height) {
+      if (data[h][u] != data[h][v]) u = data[h][u], v = data[h][v];
+    }
+    return u == v ? u : data[0][u];
+  }
+  int operator()(int u, int v) const { return find_lca(u, v); }
+
+ private:
+  int size, height;
+  vector<vector<int>> data;
+  vector<int> depth;
+};
+#line 5 "main.cpp"
+
+int n, q;
+vector<int> G[100000];
+
+int main() {
+  scanf("%d", &n);
+  rep(i, n) {
+    int k; scanf("%d", &k);
+    rep(_, k) {
+      int c; scanf("%d", &c);
+      G[i].push_back(c);
+    }
+  }
+  lca lca(G);
+
+  scanf("%d", &q);
+  while (q--) {
+    int u, v; scanf("%d%d", &u, &v);
+    printf("%d\n", lca(u, v));
+  }
+}
+

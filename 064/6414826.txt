@@ -1,0 +1,40 @@
+from collections import deque
+
+n,k = map(int,input().split())
+A = list(map(int,input().split()))
+P = list(map(int,input().split()))
+mod = 998244353
+e = [[] for i in range(n)]
+
+for i,p in enumerate(P,1):
+
+    e[p-1].append(i)
+
+
+dp = [0]*(k+1)
+dp[A[0]] = 1
+q = deque([0])
+vis = [0]*n
+vis[0] = 1
+
+while q:
+
+    now = q.pop()
+
+    if now != 0:
+        na = A[now]
+        for i in range(k+1)[::-1]:
+            if dp[i] == 0:
+                continue
+            if i+na <= k:
+                dp[i+na] += dp[i]
+                dp[i+na] %= mod
+
+    for nex in e[now]:
+        if vis[nex]:
+            continue
+        q.append(nex)
+        vis[nex] = 1
+        
+print(dp[k])
+

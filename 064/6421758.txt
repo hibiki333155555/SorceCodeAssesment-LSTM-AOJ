@@ -1,0 +1,3 @@
+class Main{
+    system.out.println("Hello World");
+}

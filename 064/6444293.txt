@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+/*
+    素因数分解
+*/
+template <typename T>
+std::vector<std::pair<T, int>> prime_factorize(T n) {
+    std::vector<std::pair<T, int>> result;
+    for (T i = 2; i*i <= n; i++) {
+        if (n % i != 0) continue;
+        int exp = 0;
+        while (n % i == 0) {
+            exp++;
+            n /= i;
+        }
+        result.push_back(std::make_pair(i, exp));
+    }
+    if (n != 1) result.push_back(std::make_pair(n, 1));
+    return result;
+}
+
+int main() {
+    long long n; std::cin >> n;
+
+    auto factors = prime_factorize(n);
+    printf("%lld: ", n);
+    for (int i = 0; i < factors.size(); i++) {
+        auto [prime, exp] = factors[i];
+        if (i != 0) std::cout << " ";
+        for (int j = 0; j < exp; j++) {
+            if (j != 0) {
+                std::cout << " ";
+            }
+            std::cout << prime;
+        }
+    }
+    std::cout << std::endl;
+}

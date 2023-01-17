@@ -1,0 +1,13 @@
+#include <stdio.h>
+int main (void)
+{
+    int a;
+    int b;
+    
+    a==3;
+    b==5;
+    
+    printf("%d, %d", a*b, 2*(a+b));
+    
+    return 0;
+}

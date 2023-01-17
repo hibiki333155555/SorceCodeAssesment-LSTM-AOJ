@@ -1,0 +1,12 @@
+while True:
+    w = int(input())
+    if w == -1:
+        break
+    res = 1150
+    if w >= 10:
+        res += min(w - 10, 10) * 125
+    if w >= 20:
+        res += min(w - 20, 10) * 140
+    if w >= 30:
+        res += (w - 30) * 160
+    print(4280 - res)

@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+#define dou double
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define gi greater<int>
+#define int2 int,int
+#define pb push_back
+#define mp make_pare
+#define emp emplace
+#define rep(i,a,n) for(int i=(int)(a);i<(int)(n);i++)
+#define p_rep(i,a,n) for(int i=(int)(a);i<=(int)(n);i++)
+#define r_rep(i,a,n) for(int i=(int)(a);i>(int)(n);i--)
+#define rp_rep(i,a,n) for(int i=(int)(a);i>=(int)(n);i--)
+#define fir first
+#define sec second
+#define uns unsigned
+#define INF 1e9
+#define fix(x,k) fixed<<setprecision(k)<<x
+using namespace std;
+int main(){
+    int x; cin>>x;
+    if(x%7==0) cout<<"thu\n";
+    else if(x%7==1) cout<<"fri\n";
+    else if(x%7==2) cout<<"sat\n";
+    else if(x%7==3) cout<<"sun\n";
+    else if(x%7==4) cout<<"mon\n";
+    else if(x%7==5) cout<<"tue\n";
+    else if(x%7==6) cout<<"wed\n";
+    return 0;
+}

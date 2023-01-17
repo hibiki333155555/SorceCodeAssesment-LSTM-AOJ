@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long LL;
+typedef long double LD;
+
+#define rep(i,n) for(LL i=0;i<(n);i++)
+
+
+int main(){
+    LL n, m, t;
+    LL prev = 0;
+    LL ans = 0;
+    bool pos = true;
+
+    cin >> n >> m >> t;
+
+    vector<LL> data;
+    bool check = true;;
+
+    rep(i,n){
+        LL a; cin >> a;
+
+        if(a == t){
+            check = false;
+        }
+
+        data.push_back(a);
+    }
+
+    if(check){
+        data.push_back(t);
+    }
+
+    LL current = 0;
+
+    rep(i,data.size()){
+        LL a = data.at(i);
+
+        a -= current;
+        //cout << "a:" << a << endl;
+
+        if(pos){
+            a -= m;
+            ans += a;
+            pos = false;
+        }
+        else{
+            LL need = 2 * m;
+
+            if(data.at(i) == t){
+                need = m;
+            }
+
+            a -= need;
+
+            if(a > 0){
+                ans += a;
+            }
+
+        }
+
+        current = data.at(i);
+        //cout << i << ":" << ans << endl;
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}

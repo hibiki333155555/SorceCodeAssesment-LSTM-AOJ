@@ -1,0 +1,219 @@
+// -*- coding:utf-8-unix -*-
+// #![feature(map_first_last)]
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_macros)]
+use std::any::Any;
+use std::cmp::Ordering::*;
+use std::collections::*;
+use std::convert::*;
+use std::convert::{From, Into};
+use std::error::Error;
+use std::f64::consts::PI;
+use std::fmt::Debug;
+use std::fmt::Display;
+use std::fs::File;
+use std::hash::Hash;
+use std::io::prelude::*;
+use std::io::*;
+use std::iter::Filter;
+use std::marker::Copy;
+use std::mem::*;
+use std::ops::Bound::*;
+use std::ops::RangeBounds;
+use std::ops::{Add, Mul, Neg, Sub};
+use std::process;
+use std::slice::from_raw_parts;
+use std::str;
+use std::vec;
+
+const INF: i64 = 1223372036854775807;
+const UINF: usize = INF as usize;
+// const FINF: f64 = 122337203685.0;
+const LINF: i64 = 2147483647;
+const FINF: f64 = LINF as f64;
+const INF128: i128 = 1223372036854775807000000000000;
+const MOD: i64 = 1000000007;
+// const MOD: i64 = 998244353;
+
+const MPI: f64 = 3.14159265358979323846264338327950288f64;
+// const MOD: i64 = INF;
+
+const UMOD: usize = MOD as usize;
+use std::cmp::*;
+use std::collections::*;
+use std::io::stdin;
+use std::io::stdout;
+use std::io::Write;
+
+macro_rules! p {
+    ($x:expr) => {
+        println!("{}", $x);
+    };
+}
+macro_rules! d {
+    ($x:expr) => {
+        println!("{:?}", $x);
+    };
+}
+
+// use str::Chars;
+
+fn main() {
+    solve();
+}
+
+// use str::Chars;
+#[allow(dead_code)]
+fn read<T: std::str::FromStr>() -> T {
+    let mut s = String::new();
+    std::io::stdin().read_line(&mut s).ok();
+    s.trim().parse().ok().unwrap()
+}
+
+#[allow(dead_code)]
+fn readi() -> (i64) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    iter.next().unwrap().parse::<i64>().unwrap()
+}
+
+#[allow(dead_code)]
+fn read_vec<T: std::str::FromStr>() -> Vec<T> {
+    read::<String>()
+        .split_whitespace()
+        .map(|e| e.parse().ok().unwrap())
+        .collect()
+}
+#[allow(dead_code)]
+fn read_mat<T: std::str::FromStr>(n: u32) -> Vec<Vec<T>> {
+    (0..n).map(|_| read_vec()).collect()
+}
+
+#[allow(dead_code)]
+fn readii() -> (i64, i64) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    (
+        iter.next().unwrap().parse::<i64>().unwrap(),
+        iter.next().unwrap().parse::<i64>().unwrap(),
+    )
+}
+
+fn readff() -> (f64, f64) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    (
+        iter.next().unwrap().parse::<f64>().unwrap(),
+        iter.next().unwrap().parse::<f64>().unwrap(),
+    )
+}
+
+#[allow(dead_code)]
+fn readiii() -> (i64, i64, i64) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    (
+        iter.next().unwrap().parse::<i64>().unwrap(),
+        iter.next().unwrap().parse::<i64>().unwrap(),
+        iter.next().unwrap().parse::<i64>().unwrap(),
+    )
+}
+#[allow(dead_code)]
+fn readuu() -> (usize, usize) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    (
+        iter.next().unwrap().parse::<usize>().unwrap(),
+        iter.next().unwrap().parse::<usize>().unwrap(),
+    )
+}
+
+fn readcc() -> (char, char) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    (
+        iter.next().unwrap().parse::<char>().unwrap(),
+        iter.next().unwrap().parse::<char>().unwrap(),
+    )
+}
+
+fn readuuu() -> (usize, usize, usize) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    (
+        iter.next().unwrap().parse::<usize>().unwrap(),
+        iter.next().unwrap().parse::<usize>().unwrap(),
+        iter.next().unwrap().parse::<usize>().unwrap(),
+    )
+}
+#[allow(dead_code)]
+fn readiiii() -> (i64, i64, i64, i64) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    (
+        iter.next().unwrap().parse::<i64>().unwrap(),
+        iter.next().unwrap().parse::<i64>().unwrap(),
+        iter.next().unwrap().parse::<i64>().unwrap(),
+        iter.next().unwrap().parse::<i64>().unwrap(),
+    )
+}
+
+#[allow(dead_code)]
+fn readuuuu() -> (usize, usize, usize, usize) {
+    let mut str = String::new();
+    let _ = stdin().read_line(&mut str).unwrap();
+    let mut iter = str.split_whitespace();
+    (
+        iter.next().unwrap().parse::<usize>().unwrap(),
+        iter.next().unwrap().parse::<usize>().unwrap(),
+        iter.next().unwrap().parse::<usize>().unwrap(),
+        iter.next().unwrap().parse::<usize>().unwrap(),
+    )
+}
+
+fn solve_part() {
+    let mut s = String::new();
+    std::io::stdin().read_line(&mut s).unwrap();
+    let mut s = s.split_whitespace();
+    let mut n: usize = s.next().unwrap().parse().unwrap();
+    let mut m: usize = s.next().unwrap().parse().unwrap();
+    let mut v: usize = s.next().unwrap().parse().unwrap();
+    let mut a: usize = s.next().unwrap().parse().unwrap();
+    let mut b: usize = s.next().unwrap().parse().unwrap();
+    let mut flg = false;
+    let mut val = v;
+    let mut data = vec![0; 500];
+    for i in 0..min(n, 505) {
+        let mv = val % m;
+        if data[mv] > 0 {
+            flg = true;
+            break;
+        }
+        data[mv] = 1;
+
+        val = val * a + b
+    }
+    if flg {
+        println!("{}", "Yes");
+    } else {
+        println!("{}", "No");
+    }
+    return;
+}
+fn solve() {
+    let n: usize = read();
+    for i in 0..n {
+        solve_part();
+    }
+    return;
+}
+

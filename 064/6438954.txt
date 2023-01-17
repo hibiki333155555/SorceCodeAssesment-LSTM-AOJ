@@ -1,0 +1,46 @@
+#include <iostream>
+
+int main() {
+  int q; std::cin >> q;
+  for (int i=0; i<q; i++) {
+    int x0, y0, x1, y1, x2, y2, x3, y3;
+    std::cin >> x0 >> y0 >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+    int denom = (x0-x1)*(y3-y2) - (x3-x2)*(y0-y1);
+    if (denom == 0) {
+      int max_val_x = 0;
+      if (x0 - x1 > 0) max_val_x += x0 - x1;
+      if (x3 - x2 > 0) max_val_x += x3 - x2;
+      int min_val_x = 0;
+      if (x0 - x1 < 0) min_val_x += x0 - x1;
+      if (x3 - x2 < 0) min_val_x += x3 - x2;
+      int max_val_y = 0;
+      if (y0 - y1 > 0) max_val_y += y0 - y1;
+      if (y3 - y2 > 0) max_val_y += y3 - y2;
+      int min_val_y = 0;
+      if (y0 - y1 < 0) min_val_y += y0 - y1;
+      if (y3 - y2 < 0) min_val_y += y3 - y2;
+      if (min_val_x <= x3-x1 && x3-x1 <= max_val_x &&
+          min_val_y <= y3-y1 && y3-y1 <= max_val_y) {
+        std::cout << 1 << std::endl;
+      } else {
+        std::cout << 0 << std::endl;
+      }
+    } else {
+      int t_denom = (y3-y2)*(x3-x1) + (x2-x3)*(y3-y1);
+      int s_denom = (y1-y0)*(x3-x1) + (x0-x1)*(y3-y1);
+      if (denom > 0) {
+        if (0 <= t_denom && t_denom <= denom && 0 <= s_denom && s_denom <= denom) {
+          std::cout << 1 << std::endl;
+        } else {
+          std::cout << 0 << std::endl;
+        }
+      } else {
+        if (denom <= t_denom && t_denom <= 0 && denom <= s_denom && s_denom <= 0) {
+          std::cout << 1 << std::endl;
+        } else {
+          std::cout << 0 << std::endl;
+        }
+      }
+    }
+  }
+}

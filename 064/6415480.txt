@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define rep(i,a,b) for(int i=a;i<b;i++)
+#define fore(i,a) for(auto &i:a)
+
+int main() {
+  int N;
+  cin >> N;
+  
+  rep(loop,0,N) {
+    string str1, str2;
+    cin >> str1 >> str2;
+    
+    vector<vector<int> > dp(str1.size()+1, vector<int>(str2.size()+1, 0));
+    
+    rep(i,1,str1.size()+1) {
+      rep(j,1,str2.size()+1) {
+        dp.at(i).at(j) = max(dp.at(i).at(j), dp.at(i-1).at(j));
+        dp.at(i).at(j) = max(dp.at(i).at(j), dp.at(i).at(j-1));
+        if (str1.at(i-1) == str2.at(j-1)) dp.at(i).at(j) = max(dp.at(i).at(j), dp.at(i-1).at(j-1)+1);
+        else dp.at(i).at(j) = max(dp.at(i).at(j), dp.at(i-1).at(j-1));
+      }
+    }
+    
+    cout << dp.at(str1.size()).at(str2.size()) << endl;
+  }
+}
+

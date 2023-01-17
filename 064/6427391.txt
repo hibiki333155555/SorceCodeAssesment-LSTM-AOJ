@@ -1,0 +1,107 @@
+#include <bits/stdc++.h>
+
+template <class T>
+class weighted_union
+{
+private:
+    long long N;
+    std::vector<long long> root;
+    std::vector<long long> clsize;
+    std::vector<T> weight;
+
+public:
+    weighted_union(void) = default;
+    weighted_union(const weighted_union&) = default;
+    weighted_union(weighted_union&&) noexcept = default;
+    weighted_union& operator=(const weighted_union&) & = default;
+    weighted_union& operator=(weighted_union&&) & noexcept = default;
+
+    explicit weighted_union(const long long& n_elem)
+        : N(n_elem)
+        , root(n_elem)
+        , clsize(n_elem, 1)
+        , weight(n_elem)
+    {
+        std::iota(root.begin(), root.end(), 0);
+    }
+
+    std::pair<long long, T> getroot(const long long& i)
+    {
+        assert(0 <= i && i < N);
+        if (i == root[i])
+        {
+            return { i, 0 };
+        }
+        else
+        {
+            const auto [ri, cumi] = getroot(root[i]);
+            root[i] = ri;
+            weight[i] += cumi;
+            return { ri, weight[i] };
+        }
+    }
+
+    std::pair<bool, T> check(const long long& i, const long long& j)
+    {
+        assert(0 <= i && i < N);
+        assert(0 <= j && j < N);
+        const auto [ri, cumi] = getroot(i);
+        const auto [rj, cumj] = getroot(j);
+        return { ri == rj, cumi - cumj };
+    }
+
+    void unite(const long long& i, const long long& j, const T& wjmi)
+    {
+        assert(0 <= i && i < N);
+        assert(0 <= j && j < N);
+        const auto [ri, cumi] = getroot(i);
+        const auto [rj, cumj] = getroot(j);
+        if (ri != rj)
+        {
+            if (clsize[ri] > clsize[rj])
+            {
+                root[rj] = ri;
+                weight[rj] = -wjmi + cumi - cumj;
+                clsize[ri] += clsize[rj];
+                clsize[rj] = 0;
+            }
+            else
+            {
+                root[ri] = rj;
+                weight[ri] = wjmi - cumi + cumj;
+                clsize[rj] += clsize[ri];
+                clsize[ri] = 0;
+            }
+        }
+    }
+};
+
+int main(void)
+{
+    int n, q;
+    std::cin >> n >> q;
+    weighted_union<long long> tree(n);
+    for (int iq = 0; iq < q; ++iq)
+    {
+        int c, x, y, z;
+        std::cin >> c >> x >> y;
+        if (c == 0)
+        {
+            std::cin >> z;
+            tree.unite(x, y, z);
+        }
+        else
+        {
+            auto [pred, d] = tree.check(x, y);
+            if (pred)
+            {
+                std::cout << d << std::endl;
+            }
+            else
+            {
+                std::cout << "?" << std::endl;
+            }
+        }
+    }
+    return 0;
+}

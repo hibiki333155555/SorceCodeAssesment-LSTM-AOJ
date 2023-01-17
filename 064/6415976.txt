@@ -1,0 +1,32 @@
+def insertsort(a,n,g,cnt):
+  for i in range(g,n):
+    v = a[i]
+    j = i - g
+    while j >= 0 and a[j] > v:
+      a[j+g] = a[j]
+      j -= g
+      cnt += 1
+    a[j+g] = v
+  return cnt
+
+def shellsort(a,n):
+  cnt = 0
+  g = [1]
+  for _ in range(99):
+    v = 1 + 3*g[-1]
+    if v > n:
+      break
+    g.append(v)
+  g.reverse()
+  for i in g:
+    cnt = insertsort(a,n,i,cnt)
+  return g, cnt
+
+n = int(input().strip())
+a = [int(input().strip()) for _ in range(n)]
+g,cnt = shellsort(a,n)
+print(len(g))
+print(' '.join(map(str, g)))
+print(cnt)
+for v in a:
+  print(v)

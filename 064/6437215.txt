@@ -1,0 +1,9 @@
+#include <stdio.h>
+
+int main(){
+    int x, b;
+    cin>>x;
+    b = x*x*x;
+    prontf("/d/n",b);
+    return 0;
+}

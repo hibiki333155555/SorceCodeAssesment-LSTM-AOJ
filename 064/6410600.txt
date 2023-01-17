@@ -1,0 +1,111 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+using ld=long double;
+const long long LINF=1e18;
+#define REP(i,n) for(int i=0;i<(n);i++)
+
+template<typename T>
+bool chmax(T &a,T b){
+  return (a<b&&(a=b,true));
+}
+
+using Line=pair<ll,ll>;
+
+struct CHT{
+  deque<Line> lines;
+
+  void push_front(ll a,ll b){
+    while(lines.size()>=2){
+      const auto&[a1,b1]=lines[0];
+      const auto&[a2,b2]=lines[1];
+      if((b1-b)*(a-a2)>(b2-b)*(a-a1))lines.pop_front();
+      else break;
+    }
+    lines.push_front({a,b});
+  }
+
+  void push_back(ll a,ll b){
+    while(lines.size()>=2){
+      int S=lines.size();
+      const auto&[a1,b1]=lines[S-2];
+      const auto&[a2,b2]=lines[S-1];
+      if((b1-b)*(a-a2)>(b2-b)*(a-a1))lines.pop_back();
+      else break;
+    }
+    lines.push_back({a,b});
+  }
+
+  void pop_back(){
+    lines.pop_back();
+  }
+
+  inline ll val(int id,int x){
+    return lines[id].first*x+lines[id].second;
+  }
+  ll query(int x){
+    int l=-1,r=lines.size()-1;
+    while(r-l>1){
+      int mid=(l+r)>>1;
+      if(val(mid,x)<val(mid+1,x))r=mid;
+      else l=mid;
+    }
+    return val(r,x);
+  }
+};
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int n,K;cin>>n>>K;
+  vector<ll> v(n);
+  REP(i,n)cin>>v[i];
+
+  vector<ll> dp(n+1,LINF);//dp[i]:[0,i)をk個に区切った時の最小値
+  dp[0]=0;
+  REP(k,K){
+    vector<ll> dp2(n+1,LINF);//dp2[i]:[0,i)をk+1個に区切った時の最小値
+
+    CHT A;//Mx+minを入れる
+    map<int,CHT*> B;//B[m]:最大値がmの区間のやつ
+    for(int i=k;i<n;i++){
+      if(dp[i]==LINF)continue;
+      if(!B.size()||(B.begin()->first)>v[i]){
+        CHT *cht=new CHT();
+        (*cht).push_back(-i,dp[i]);
+        B[v[i]]=cht;
+      }
+      else{
+        int sz=-1,m;
+        for(auto it=B.begin();it!=B.end()&&(it->first)<=v[i];it++)
+          if(chmax(sz,(int)(it->second->lines.size())))m=it->first;
+        for(auto it=B.begin();it!=B.end()&&(it->first)<=v[i];){
+          const auto&key=it->first;
+          if(key==m){
+            ++it;
+            continue;
+          }
+          for(const auto&[a,b]:it->second->lines)
+            if(key<m)B[m]->push_front(a,b);
+            else B[m]->push_back(a,b);
+          delete (it->second);
+          it=B.erase(it);
+        }
+        B[m]->push_back(-i,dp[i]);
+        if(m!=v[i]){
+          B[v[i]]=B[m];
+          B.erase(m);
+        }
+      }
+      while(A.lines.size() and A.lines.back().first<v[i])A.pop_back();
+      A.push_back(v[i],B[v[i]]->query(v[i]));
+      dp2[i+1]=A.query(i+1);      
+    }
+    dp=dp2;
+  }
+  cout<<dp[n]<<endl;
+}
+
+

@@ -1,0 +1,44 @@
+import heapq
+import math
+while(1):
+    N = int(input())
+    if N == 0:
+        break
+    tmp = []
+    tmp.append('10.000 10.000 50.000 10.000')
+    tmp.append('40.000 10.000 50.000 10.000')
+    tmp.append('40.000 40.000 50.000 10.000')
+    
+    cells = []
+    for i in range(N):
+        x,y,z,r = map(float,input().split())
+        cells.append((x,y,z,r))
+    
+    g = {i:[] for i in range(N)} 
+    for i in range(N):
+        for j in range(i+1, N):
+            if i == j:
+                continue
+            x1,y1,z1,r1 = cells[i]
+            x2,y2,z2,r2 = cells[j]
+            dist = max(0,math.sqrt((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2) - (r1+r2))
+            g[i].append((dist,j))
+            g[j].append((dist,i))
+    
+    isseen = []        
+    isseen.append(0)
+    queue = []
+    for dist, i in g[0]:
+        heapq.heappush(queue, (dist,i))
+    
+    ans = 0
+    while(queue):
+        dist, nextv = heapq.heappop(queue) 
+        if nextv in isseen:
+            continue
+        isseen.append(nextv)
+        ans += dist
+        for dist, next_nextv in g[nextv]:
+            heapq.heappush(queue, (dist, next_nextv))
+    
+    print(f"{ans:.3f}")

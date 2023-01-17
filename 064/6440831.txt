@@ -1,0 +1,79 @@
+import sys
+readline = sys.stdin.readline
+write = sys.stdout.write
+def solve():
+    W, H = map(int, readline().split())
+    if W == H == 0:
+        return False
+    f, m, o = map(int, readline().split())
+    C = [list(map(int, readline().split())) for i in range(H)]
+    INF = 10**18
+    X = [[[INF]*(m+1) for i in range(W)] for j in range(H)]
+    X0 = X[0]
+    for j in range(W):
+        X0[j][o] = 0
+    for i in range(H-1):
+        X0 = X[i]
+        X1 = X[i+1]
+        Ci = C[i]
+        for j in range(W):
+            for k in range(1, m+1):
+                if X0[j][k] == INF:
+                    continue
+
+                if Ci[j] < 0:
+                    c0 = X0[j][k] - Ci[j]
+                    e0 = k-1
+                else:
+                    c0 = X0[j][k]
+                    e0 = min(k-1 + Ci[j], m)
+                if e0 <= 0 or c0 > f:
+                    continue
+                X1[j][e0] = min(X1[j][e0], c0)
+                c = c0; e = e0
+                p = j-1
+                while p >= 0:
+                    if Ci[p] < 0:
+                        c -= Ci[p]
+                        e -= 1
+                    else:
+                        e = min(e-1 + Ci[p], m)
+                    if e <= 0 or c > f:
+                        break
+                    X1[p][e] = min(X1[p][e], c)
+                    p -= 1
+                c = c0; e = e0
+                p = j+1
+                while p < W:
+                    if Ci[p] < 0:
+                        c -= Ci[p]
+                        e -= 1
+                    else:
+                        e = min(e-1 + Ci[p], m)
+                    if e <= 0 or c > f:
+                        break
+                    X1[p][e] = min(X1[p][e], c)
+                    p += 1
+    ans = INF
+    XH = X[H-1]
+    Ci = C[H-1]
+    for j in range(W):
+        for k in range(1, m+1):
+            if XH[j][k] == INF:
+                continue
+            if Ci[j] < 0:
+                c = XH[j][k] - Ci[j]
+                e = k-1
+            else:
+                c = XH[j][k]
+                e = min(k-1 + Ci[j], m)
+            if e <= 0 or c > f:
+                continue
+            ans = min(ans, c)
+    if ans < INF:
+        write("%d\n" % ans)
+    else:
+        write("NA\n")
+    return True
+while solve():
+    ...

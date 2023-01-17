@@ -1,0 +1,6 @@
+l = input().split()
+l=map(int,l)
+a=min(lst)
+b=max(lst)
+c=sum(lst)
+print(a,b,c)

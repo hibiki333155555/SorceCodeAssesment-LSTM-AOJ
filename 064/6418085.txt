@@ -1,0 +1,49 @@
+#include<stdio.h>
+#include<math.h>
+
+typedef struct point{
+  double x, y;
+}Point;
+
+void koch(int d, Point p1, Point p2){
+
+  Point s, t, u; 
+  double th = M_PI / 3;
+
+  if(d == 0) return; 
+
+  s.x = (p1.x * 2 + p2.x) / 3.0;
+  s.y = (p1.y * 2 + p2.y) / 3.0;
+  t.x = (p1.x + p2.x * 2) / 3.0;
+  t.y = (p1.y + p2.y * 2) / 3.0;
+
+  u.x = (t.x - s.x) * cos(th) - (t.y - s.y) * sin(th) + s.x;
+  u.y = (t.x - s.x) * sin(th) + (t.y - s.y) * cos(th) + s.y;
+
+  koch(d - 1, p1, s);
+  printf("%f %f\n", s.x, s.y);
+  koch(d - 1, s, u);
+  printf("%f %f\n", u.x, u.y);
+  koch(d - 1, u, t);
+  printf("%f %f\n", t.x, t.y);
+  koch(d - 1, t, p2);
+}
+
+int main()
+{
+  int N;
+  scanf("%d", &N);
+
+  Point p1, p2;
+
+  p1.x = 0.0;
+  p1.y = 0.0;
+  p2.x = 100.0;
+  p2.y = 0.0;
+
+  printf("%f %f\n", p1.x, p1.y);
+  koch(N, p1, p2);
+  printf("%f %f\n", p2.x, p2.y);
+
+  return 0;
+}

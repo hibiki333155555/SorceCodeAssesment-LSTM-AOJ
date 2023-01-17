@@ -1,0 +1,41 @@
+import sys
+sys.setrecursionlimit(10 ** 6)
+
+INF = 10 ** 18
+
+def main():
+    V, E = map(int, input().split())
+    G = [[INF] * V for _ in range(V)]
+    for _ in range(E):
+        s, t, d = map(int, input().split())
+        G[s][t] = d
+
+    dp = [[INF] * V for _ in range(1 << V)]
+    dp[0][0] = 0
+
+    def rec(S, v):
+        if S == 0:
+            return dp[S][v]
+
+        if not (S & (1 << v)):
+            return INF
+        
+        if dp[S][v] != INF:
+            return dp[S][v]
+        
+        res = INF
+        for u in range(V):
+            res = min(res, rec(S ^ (1 << v), u) + G[u][v])
+        dp[S][v] = res
+        return res
+
+    ans = rec((1 << V) - 1, 0)
+
+    if ans == INF:
+        print(-1)
+    else:
+        print(ans)
+
+
+if __name__ == "__main__":
+    main()

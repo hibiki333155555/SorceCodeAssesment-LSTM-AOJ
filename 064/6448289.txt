@@ -1,0 +1,116 @@
+/***
+ * https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_6_B&lang=ja
+ ***/
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <string>
+#include <cstring>
+#include <iomanip>
+#include <cmath>
+#include <stack>
+// #include "comp.h"
+using namespace std;
+using ll = long long;
+
+// #define DEBUG
+#define FOR(i, a, b) for (int i = (int)(a); i < (int)(b); ++i)
+#define rep(i, n) for (int i = 0; i < (int)(n); ++i)
+#define MAX 1024
+
+class Stack
+{
+private:
+    int *a;
+    int top;
+
+public:
+    Stack(int stack_size) : top(0)
+    {
+        a = new int[stack_size];
+    };
+    ~Stack()
+    {
+        delete[] a;
+    };
+
+    void push(int x)
+    {
+        a[top++] = x;
+    }
+
+    int pop()
+    {
+        return a[--top];
+    }
+
+    bool isEmpty()
+    {
+        return top == 0;
+    }
+};
+
+int main()
+{
+#ifndef DEBUG
+    char buf[MAX];
+
+    rep(i, MAX) buf[i] = 'e';
+    fgets(buf, MAX, stdin);
+
+    Stack stack(MAX);
+
+    bool flag = false;
+    int S = 0, op1 = 0, op2 = 0;
+
+    for (int i = 0; buf[i] != 'e'; i++)
+    {
+        if (buf[i] >= '0' && buf[i] <= '9')
+        {
+            flag = true;
+            S = 10 * S + (buf[i] - '0');
+        }
+        else
+        {
+            if (flag)
+            {
+                stack.push(S);
+                S = 0;
+                flag = false;
+            }
+            switch (buf[i])
+            {
+            case '+':
+                op1 = stack.pop();
+                op2 = stack.pop();
+                stack.push(op1 + op2);
+                break;
+            case '-':
+                op1 = stack.pop();
+                op2 = stack.pop();
+                stack.push(op1 - op2);
+                break;
+            case '*':
+                op1 = stack.pop();
+                op2 = stack.pop();
+                stack.push(op1 * op2);
+                break;
+            }
+        }
+    }
+
+    cout << stack.pop() << endl;
+
+#else
+    int j;
+    rep(i, 52)
+    {
+        j = i % 13 + 1;
+        cout << j;
+        if (j == 13)
+            cout << endl;
+    }
+#endif
+}
+

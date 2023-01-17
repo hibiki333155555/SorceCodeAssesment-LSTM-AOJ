@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+typedef long long ll;
+using namespace std;
+
+void solve(int N) {
+    vector<int> B(N);
+    rep(i, N) cin >> B[i];
+
+    int M = 50 * N;
+    int sum = accumulate(B.begin(), B.end(), 0);
+
+    vector dp(M + 1, vector<bool>(M + 1));
+    dp[0][0] = true;
+
+    rep(i, N) {
+        vector next = dp;
+        rep(j, M) rep(k, M) {
+            if (!dp[j][k]) continue;
+
+            if (j + B[i] <= M) next[j + B[i]][k] = true;
+            if (k + B[i] <= M) next[j][k + B[i]] = true;
+        }
+        dp = next;
+    }
+
+    int ans = 0;
+    for (int i = 0; i <= M; ++i) {
+        for (int j = 0; j <= M; ++j) {
+            if (!dp[i][j]) continue;
+            if (i == 0 || j == 0 || sum - i - j == 0) continue;
+
+            int mi = min({i, j, sum - i - j});
+            ans = max(ans, mi);
+        }
+    }
+    cout << ans << "\n";
+}
+
+int main() {
+    cin.tie(0);
+    ios_base::sync_with_stdio(false);
+
+    int N;
+    while (cin >> N, N)
+        solve(N);
+
+    return 0;
+}
+

@@ -1,0 +1,13 @@
+list = list()
+while True:
+    x = str(input())
+    if x == "0":
+        break
+    sum = 0
+    for i in x:
+        sum += int(i)
+    list.append(sum)
+
+for j in range(len(list)):
+    print(list[j])
+

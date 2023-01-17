@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+vector<long long int>ym[100];
+long long int sw[10010];
+int main(){
+    long long int n,x,k,q;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>k;
+        for(int j=0;j<k;j++)cin>>x,ym[i].push_back(x);
+    }cin>>q;
+    long long int op,num;
+    for(int i=0;i<q;i++){
+        cin>>op>>num;
+        if(op==0)cout<<sw[num]<<endl;
+        else if(op==1){
+            int len=ym[num].size();
+            for(int j=0;j<len;j++){
+                sw[ym[num][j]]=1;
+            }
+        }else if(op==2){
+            int len=ym[num].size();
+            for(int j=0;j<len;j++){
+                sw[ym[num][j]]=0;
+            }
+        }else if(op==3){
+            int len=ym[num].size();
+            for(int j=0;j<len;j++){
+                sw[ym[num][j]]^=1;
+            }
+        }else if(op==4){
+            int len=ym[num].size();
+            int judge=0;
+            for(int j=0;j<len;j++){
+                if(sw[ym[num][j]]==0)judge=1;
+            }if(judge==0)cout<<"1"<<endl;
+            else cout<<"0"<<endl;
+        }else if(op==5){
+            int len=ym[num].size();
+            int judge=0;
+            for(int j=0;j<len;j++){
+                if(sw[ym[num][j]]==1)judge=1;
+            }if(judge==1)cout<<"1"<<endl;
+            else cout<<"0"<<endl;
+        }else if(op==6){
+            int len=ym[num].size();
+            int judge=0;
+            for(int j=0;j<len;j++){
+                if(sw[ym[num][j]]==1)judge=1;
+            }if(judge==0)cout<<"1"<<endl;
+            else cout<<"0"<<endl;
+        }else if(op==7){
+            int len=ym[num].size();
+            long long int judge=0;
+            for(int j=0;j<len;j++){
+                if(sw[ym[num][j]]==1)judge++;
+            }cout<<judge<<endl;
+        }else{
+            int len=ym[num].size();
+            long long int judge=0;
+            for(int j=0;j<len;j++){
+                judge+=(1<<ym[num][j])*sw[ym[num][j]];
+            }cout<<judge<<endl;
+        }
+    }
+    return 0;
+}

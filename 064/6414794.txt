@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+const int Mod = 998244353;
+
+long long pow_mod(int n, long long k)
+{
+	long long N, ans = 1;
+	for (N = n; k > 0; k >>= 1, N = N * N % Mod) if (k & 1) ans = ans * N % Mod;
+	return ans;
+}
+
+int main()
+{
+	int N, K;
+	scanf("%d %d", &N, &K);
+	if (K == 1) printf("1\n");
+	else if (K == 2) printf("%d\n", N + 1);
+	else printf("%lld\n", pow_mod(2, N));
+	fflush(stdout);
+	return 0;
+}

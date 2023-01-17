@@ -1,0 +1,81 @@
+#include <iostream>
+#include <vector>
+#include <array>
+#include <algorithm>
+#include <math.h>
+#include <iomanip>
+#include <map>
+#include <queue>
+#include <climits>
+
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+typedef unsigned int ui;
+
+ull gcd (ull a, ull b) {
+  if(b == 0) return a;
+
+  return gcd(b, a % b);
+}
+
+ull lcm (ull a, ull b){
+  // バッファ溢れを抑えるために順番大事！！！
+  return a / gcd(a, b) * b;
+}
+
+ull calcDigitLength(ull n, int count) {
+  if(n < 10) return count + 1;
+
+  return calcDigitLength(n/10, count+1);
+}
+
+vector<int> vec;
+
+int getParent (int a) {
+  if (vec[a] != a) return getParent(vec[a]);
+  else return a;
+}
+
+void unite (int a, int b) {
+  int a_parent = getParent(a);
+  int b_parent = getParent(b);
+  if(a_parent < b_parent) vec[b_parent] = a_parent;
+  else vec[a_parent] = b_parent;
+}
+
+bool isSame (int a, int b) {
+  int a_parent = getParent(a);
+  int b_parent = getParent(b);
+  // cout << "a: " << a << " a_parent: " << a_parent << endl;
+  // cout << "b: " << b << " b_parent: " << b_parent << endl;
+  if(vec[a] != a_parent) vec[a] = a_parent;
+  if(vec[b] != b_parent) vec[b] = b_parent;
+
+  return a_parent == b_parent;
+}
+
+int main () {
+  int n;
+  cin >> n;
+
+  for(int i=0; i<n; i++) vec.push_back(i);
+
+  int q;
+  cin >> q;
+
+  for(int i=0; i < q; i++) {
+    //   cout << "i: " << i << endl;
+    // for(int j=0; j<n; j++) {
+    //   cout << vec[j] << endl;
+    // }
+    int com, x, y;
+    cin >> com >> x >> y;
+    if(com == 0) unite(x, y);
+    else {
+      if(isSame(x, y)) cout << 1 << endl;
+      else cout << 0 << endl;
+    }
+  }
+}
+

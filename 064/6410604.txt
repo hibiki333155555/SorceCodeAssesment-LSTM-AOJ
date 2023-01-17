@@ -1,0 +1,13 @@
+str1 = input()
+leng = len(str1)
+n = int(input())
+for i in range(n):
+    ord = input().split()
+    a = int(ord[1])
+    b = int(ord[2])
+    if ord[0]=='print':
+        print(str1[a:b+1])
+    elif ord[0]=='reverse':
+        str1 = str1[0:a]+str1[-(leng-b):-2-(leng-a):-1]+str1[b+1:leng+1]
+    elif ord[0]=='replace':
+        str1 = str1[0:a]+ord[3]+str1[b+1:leng+1]

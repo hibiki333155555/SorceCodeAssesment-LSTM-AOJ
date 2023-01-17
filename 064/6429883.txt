@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int main(){
+	int n;
+	cin >> n;
+	int a=0,b=0;
+	string sA,sB;
+	for(int i=0;i<n;i++){
+		cin >> sA >> sB;
+		if(sA < sB){
+			b+=3;
+		}else if(sA == sB){
+			a++;b++;
+		}else{
+			a+=3;
+		}
+	}
+	cout << a << " " << b << endl;
+	return(0);
+}

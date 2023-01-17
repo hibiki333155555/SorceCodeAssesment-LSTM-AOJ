@@ -1,0 +1,24 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (scanner.hasNext()){
+            String str = scanner.next();
+            if (str.equals("-")){
+                break;
+            }else {
+                int m = scanner.nextInt();
+                int[] count = new int[m];
+                for (int i = 0; i < count.length; i++) {
+                    count[i] = scanner.nextInt();
+                    String temp = str.substring(0,count[i]);
+                    str = str.substring(count[i]);
+                    str += temp;
+                }
+                System.out.println(str);
+            }
+        }
+    }
+}

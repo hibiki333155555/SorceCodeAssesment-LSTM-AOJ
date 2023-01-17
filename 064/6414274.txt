@@ -1,0 +1,22 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main() {
+    string cards = "";
+    while(1) {
+        cin >> cards;
+        if(cards == "-") {
+            break;
+        }
+        int m;
+        cin >> m;
+        string cards2;
+        for (int n = 0; n < m; n++) {
+            int h;
+            cin >> h;
+            string card = cards.substr(0, h);
+            cards = cards.erase(0, h) + card;
+        }
+        cout << cards << endl;
+    }
+}

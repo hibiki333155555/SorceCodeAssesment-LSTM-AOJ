@@ -1,0 +1,36 @@
+/*
+とりあえず完成
+*/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int SarchGreatestCommonDivisor(int x, int y)
+{
+    int remainder = x % y;
+    if (remainder == 0)
+    {
+        return y;
+    }
+    return SarchGreatestCommonDivisor(y, remainder);
+}
+
+int main(void)
+{
+    // x >= y
+    int x;
+    std::cin >> x;
+    int y;
+    std::cin >> y;
+    if (x < y)
+    {
+        int tmp = x;
+        x = y;
+        y = tmp;
+    }
+    int greatest_common_divisor = SarchGreatestCommonDivisor(x, y);
+    std::cout << greatest_common_divisor << std::endl;
+    return 0;
+}

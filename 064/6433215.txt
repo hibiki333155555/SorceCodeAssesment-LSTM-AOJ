@@ -1,0 +1,8 @@
+#include<stdio.h>
+int main(){
+    int a, t, r;
+    double elapse;  /* 実数型の経過時間 */
+    elapse = (1.0 * t / a) * r;
+    printf("%.8lf\n", elapse);
+    return 0;
+}

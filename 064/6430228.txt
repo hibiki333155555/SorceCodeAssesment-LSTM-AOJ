@@ -1,0 +1,14 @@
+import java.util.*;
+
+class Solve{
+    public void do(){
+        final Scanner sc = new Scanner(System.in);
+        int x = sc.nextInt();
+        System.out.println(Math.pow(x,3));
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().do();
+    }
+}

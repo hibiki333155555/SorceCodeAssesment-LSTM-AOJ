@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   int N, W;
+   cin >> N >> W;
+
+   vector<int> v_list, w_list;
+   v_list.emplace_back(0);
+   w_list.emplace_back(0);
+
+   for (int i = 0; i < N; i++) {
+      int v, w;
+      cin >> v >> w;
+
+      v_list.emplace_back(v);
+      w_list.emplace_back(w);
+   }
+
+   vector<vector<int>> dp(N + 1, vector<int>(W + 1, 0));
+
+   for (int w = 0; w <= W; w++) {
+      if (w >= w_list[1]) {
+         dp[1][w] = v_list[1];
+      }
+   }
+
+   for (int i = 2; i <= N; i++) {
+      for (int w = 0; w <= W; w++) {
+         dp[i][w] = dp[i - 1][w];
+
+         if (w >= w_list[i]) {
+            dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - w_list[i]] + v_list[i]);
+         }
+      }
+   }
+
+   cout << dp[N][W] << endl;
+
+   return 0;
+}
+

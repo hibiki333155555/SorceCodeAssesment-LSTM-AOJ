@@ -1,0 +1,16 @@
+while True:
+    n, m = map(int, input().split())
+    if n == m == 0:
+        break
+    c = [int(input()) for _ in range(m)]
+    x = [int(input()) for _ in range(n)]
+    dp = [[float("inf")] * 256 for _ in range(n + 1)]
+    dp[0][128] = 0
+    for i in range(n):
+        for j in range(m):
+            for k in range(256):
+                s = min(255, max(0, k + c[j]))
+                dp[i+1][s] = min(dp[i+1][s], dp[i][k] + (s - x[i]) ** 2)
+    
+    print(min(dp[n]))
+

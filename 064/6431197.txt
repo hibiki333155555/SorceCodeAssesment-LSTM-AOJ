@@ -1,0 +1,37 @@
+#include<stdio.h>
+void trace(int A[],int N)
+{
+    int i;
+    for(i=0;i<N;++i){
+        if(i>0) printf(" ");  //在相邻元素之间输出1个空格
+        printf("%d",A[i]);
+    }
+    printf("\n");
+}
+
+void insert_sort(int A[],int n)
+{
+    int j,i,v;
+    for(i=0;i<n;++i){
+        v=A[i];
+        j=i-1;
+        while(j>=0&&A[j]>v){
+            A[j+1]=A[j];
+            j--;
+            A[j+1]=v;
+        }
+        trace(A,n);
+    }
+}
+
+int main()
+{
+    int N,i;
+    int A[100];
+    scanf("%d",&N);
+    for(i=0;i<N;++i)
+        scanf("%d",&A[i]);
+    trace(A,N);
+    insert_sort(A, N);
+    return 0;
+}

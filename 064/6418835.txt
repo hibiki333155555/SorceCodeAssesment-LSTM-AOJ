@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+  set<int> s;
+  int q;
+  cin>>q;
+  while(q--){
+    int opt;
+    cin>>opt;
+    if(opt==0){
+      int x;
+      cin>>x;
+      s.insert(x);
+      cout<<s.size()<<endl;
+      
+    }
+    if(opt==1){
+      int x;
+      cin>>x;
+      if(s.find(x)==s.end())cout<<0<<endl;
+      else cout<<1<<endl; 
+    }
+    if(opt==2){
+      int x;
+      cin>>x;
+      s.erase(x);
+    }
+    if(opt==3){
+      int l,r;
+      cin>>l>>r;
+      set<int>::iterator  pos1,pos2,it;
+      pos1=s.lower_bound(l);
+      pos2=s.upper_bound(r);
+      for(it=pos1;it!=pos2;it++){
+        cout<<*it<<endl;
+      }
+        }
+
+  }
+  return 0;
+}

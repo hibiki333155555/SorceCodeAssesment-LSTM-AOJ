@@ -1,0 +1,157 @@
+#pragma GCC optimize("O3")
+#include<bits/stdc++.h> 
+using namespace std;
+using ll=long long;
+using P=pair<ll,ll>;
+template<class T> using V=vector<T>; 
+#define fi first
+#define se second
+#define all(v) (v).begin(),(v).end()
+const ll inf=(1e18);
+const ll mod=998244353;
+// const ll mod=1000000007;
+const vector<int> dy={-1,0,1,0},dx={0,-1,0,1};
+struct __INIT{__INIT(){cin.tie(0);ios::sync_with_stdio(false);cout<<fixed<<setprecision(15);}} __init;
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+template<class T>void debag(const vector<T> &a){cerr<<"debag :";for(auto v:a)cerr<<v<<" ";cerr<<"\n";}
+template<class T>void print(const vector<T> &a){for(auto v:a)cout<<v<<" ";cout<<"\n";}
+//reference:https://drken1215.hatenablog.com/entry/2019/03/20/202800
+// 逆元計算
+long long modinv(long long a, long long mod) {
+    long long b = mod, u = 1, v = 0;
+    while (b) {
+        long long t = a/b;
+        a -= t*b; swap(a, b);
+        u -= t*v; swap(u, v);
+    }
+    u %= mod;
+    if (u < 0) u += mod;
+    return u;
+}
+
+// matrix
+template<int MOD> struct Matrix {
+    vector<vector<long long> > val;
+    Matrix(int n, int m, long long x = 0) : val(n, vector<long long>(m, x)) {}
+    void init(int n, int m, long long x = 0) {val.assign(n, vector<long long>(m, x));}
+    size_t size() const {return val.size();}
+    inline vector<long long>& operator [] (int i) {return val[i];}
+};
+
+template<int MOD> int GaussJordan(Matrix<MOD> &A, bool is_extended = false) {
+    int m = A.size(), n = A[0].size();
+    for (int row = 0; row < m; ++row)
+        for (int col = 0; col < n; ++col)
+            A[row][col] = (A[row][col] % MOD + MOD) % MOD;
+    
+    int rank = 0;
+    for (int col = 0; col < n; ++col) {
+        if (is_extended && col == n-1) break;
+        int pivot = -1;
+        for (int row = rank; row < m; ++row) {
+            if (A[row][col] != 0) {
+                pivot = row;
+                break;
+            }
+        }
+        if (pivot == -1) continue;
+        swap(A[pivot], A[rank]);
+        auto inv = modinv(A[rank][col], MOD);
+        for (int col2 = 0; col2 < n; ++col2)
+            A[rank][col2] = A[rank][col2] * inv % MOD;
+        for (int row = 0; row < m; ++row) {
+            if (row != rank && A[row][col]) {
+                auto fac = A[row][col];
+                for (int col2 = 0; col2 < n; ++col2) {
+                    A[row][col2] -= A[rank][col2] * fac % MOD;
+                    if (A[row][col2] < 0) A[row][col2] += MOD;
+                }
+            }
+        }
+        ++rank;
+    }
+    return rank;
+}
+
+template<int MOD> int linear_equation(Matrix<MOD> A, vector<long long> b, vector<long long> &res) {
+    int m = A.size(), n = A[0].size();
+    Matrix<MOD> M(m, n + 1);
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) M[i][j] = A[i][j];
+        M[i][n] = b[i];
+    }
+    int rank = GaussJordan(M, true);
+    // check if it has no solution
+    for (int row = rank; row < m; ++row) if (M[row][n]) return -1;
+    // answer
+    res.assign(n, 0);
+    for (int i = 0; i < rank; ++i) res[i] = M[i][n];
+    return rank;
+}
+int main(){
+    ll n;
+    cin>>n;
+    map<V<ll>,int> mp;
+    mp[{n,0,0}]=0;
+    queue<V<ll>> q;
+    q.emplace(V<ll>({n,0,0}));
+    auto make_id=[&](V<ll> &v)->bool{
+        if(!mp.count(v)){
+            mp[v]=mp.size();
+            return true;
+        }
+        return false;
+    };
+    ll ALL=n*(n-1)/2;
+    ALL%=mod;
+    ALL=modinv(ALL,mod);
+    while(q.size()){
+        auto cp=q.front();
+        q.pop();
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(i==j&&cp[i]<2)continue;
+                if(cp[i]<1||cp[j]<1)continue;
+                V<ll> nxt=cp;
+                nxt[i]--;nxt[j]--;
+                nxt[(i+1)%3]++;nxt[(j+1)%3]++;
+                if(make_id(nxt)){
+                    q.emplace(nxt);
+                }
+            }
+        }
+    }
+    int sz=mp.size();
+    Matrix<mod> A(sz,sz);
+    for(auto p:mp){
+        V<ll> cp=p.fi;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(i==j&&cp[i]<2)continue;
+                if(cp[i]<1||cp[j]<1)continue;
+                V<ll> nxt=cp;
+                nxt[i]--;nxt[j]--;
+                nxt[(i+1)%3]++;nxt[(j+1)%3]++;
+                ll v=1;
+                if(i==j){
+                    v=cp[i]*(cp[i]-1)/2;
+                }else{
+                    v=cp[i]*cp[j];
+                }
+                v*=ALL;
+                v%=mod;
+               if(cp[2]!=n)A[mp[cp]][mp[nxt]]=(mod-v)%mod;//0,0,nになったら終了するからcp[2]==nのときには遷移がない。
+            }
+        }
+    }
+    V<ll> b(sz,0);
+    int las=mp[{0,0,n}];
+    for(int i=0;i<sz;i++){
+        A[i][i]=1;
+        b[i]=(i!=las);
+    }
+    V<ll> res;
+    linear_equation(A,b,res);
+    cout<<res[0]<<"\n";
+}

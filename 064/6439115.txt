@@ -1,0 +1,15 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+  int n;
+  cin>>n;
+  vector<int> s(n);
+  for(int i=0;i<n;i++)cin>>s[i];
+  int q;
+  cin>>q;
+  vector<int> t(q);
+  for(int i=0;i<q;i++)cin>>t[i];
+  int ans=0;
+  for(int x:t)ans+=upper_bound(s.begin(),s.end(),x)-lower_bound(s.begin(),s.end(),x);
+  cout<<ans<<endl;
+}

@@ -1,0 +1,61 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    int n; cin >> n;
+    map<int,pair<int,int>> mp;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            int x; cin >> x;
+            if(mp.find(x) == mp.end()){
+                mp[x] = {i,j};
+            }
+        }
+    }
+    int q; cin >> q;
+    while(q--){
+        int x; cin >> x;
+        if(mp.find(x) == mp.end()){
+            cout << -1 << "\n";
+        }
+        else{
+            cout << mp[x].first << " " << mp[x].second << "\n";
+        }
+    }
+}
+
+

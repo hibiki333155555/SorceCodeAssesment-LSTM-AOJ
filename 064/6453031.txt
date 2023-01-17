@@ -1,0 +1,19 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> c(26,0);
+    while(!cin.eof()) {
+        string s; getline(cin,s);
+        for(char t : s) {
+            if('a'<=t&&t<='z') c[t-'a']++;
+            else if('A'<=t&&t<='Z') c[t-'A']++;
+        }
+    }
+    for(int i=0;i<26;i++) {
+        char l = 'a' + i;
+        cout<<l<<" : "<<c[i]<<endl;
+    }
+    return 0;
+}

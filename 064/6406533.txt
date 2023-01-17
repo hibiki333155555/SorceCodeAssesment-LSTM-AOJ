@@ -1,0 +1,31 @@
+import bisect
+
+def showList(A):
+    for i in range(len(A)):
+        if i != len(A)-1:
+            print("{} ".format(A[i]), end='')
+        else:
+            print(A[i])
+
+num = int(input())
+A = [int(e) for e in input().split()]
+q = int(input())
+m = [int(e) for e in input().split()]
+
+A.sort()
+for i in m:
+    tmp = bisect.bisect(A, i)
+    if tmp > len(A)-1:
+        tmp -= 1
+
+    while(i > 0):
+        if tmp < 0:
+            break
+        if i >= A[tmp]:
+            i -= A[tmp]
+        tmp -= 1
+    if i == 0:
+        print("yes")
+    else:
+        print("no")
+

@@ -1,0 +1,21 @@
+import io, os
+input = io.BytesIO(os.read(0,os.fstat(0).st_size)).readline
+
+T=int(input())
+for tests in range(T):
+    N,M,v,a,b=map(int,input().split())
+
+    LIST=[v%M]
+    for i in range(N):
+        if LIST[0]==(LIST[-1]*a+b)%M:
+            break
+        else:
+            LIST.append((LIST[-1]*a+b)%M)
+
+    #print(LIST)
+
+    if len(LIST)==N:
+        print("No")
+    else:
+        print("Yes")
+

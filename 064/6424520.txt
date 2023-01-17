@@ -1,0 +1,15 @@
+def gcd(a,b):
+    if b == 0:
+        return a
+    else:
+        return gcd(b,a%b)
+
+
+while True:
+    try:
+        a,b= map(int,input().split())
+    except:
+        break
+    g = gcd(a,b)
+    l = (a*b)//g
+    print(g,l)

@@ -1,0 +1,22 @@
+N=int(input())
+A=list(map(int,input().split()))
+
+mod=998244353
+
+LIST=[0]*N
+
+for i in range(N):
+    LIST[i+A[i]-1]+=1
+
+ANS=1
+minus=0
+
+for i in range(N):
+    while LIST[i]>0:
+        LIST[i]-=1
+        ANS*=max(0,i+1-minus)
+        ANS%=mod
+        minus+=1
+
+print(ANS)
+

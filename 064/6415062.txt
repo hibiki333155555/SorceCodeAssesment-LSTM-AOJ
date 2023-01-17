@@ -1,0 +1,116 @@
+#include<bits/stdc++.h>
+using namespace std;
+#include <unordered_set>
+#include <random>
+//#define int long long
+#define REP(i,m,n) for(int i=(m);i<(n);i++)
+#define rep(i,n) REP(i,0,n)
+#define pb push_back
+#define all(a) a.begin(),a.end()
+#define rall(c) (c).rbegin(),(c).rend()
+#define mp make_pair
+#define endl '\n'
+//#define vec vector<ll>
+//#define mat vector<vector<ll> >
+#define fi first
+#define se second
+#define double long double
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair<ll,ll> pll;
+//typedef long double ld;
+typedef complex<double> Complex;
+const ll INF=1e9+7;
+const ll MOD=998244353;
+const ll inf=INF*INF;
+const ll mod=MOD;
+const ll MAX=100010;
+const double PI=acos(-1.0);
+typedef vector<vector<ll> > mat;
+typedef vector<ll> vec;
+double pi=M_PI;
+
+long long extGCD(long long a,long long mod,long long &x,long long &y){
+    if(mod==0){
+        x=1;
+        y=0;
+        return a;
+    }
+    long long d=extGCD(mod,a%mod,y,x);
+    y-=(a/mod)*x;
+    return d;
+}
+long long invmod(long long a,long long mod){
+    long long x,y;
+    extGCD(a,mod,x,y);
+    x%=mod;
+    if(x<0)x+=mod;
+    return x;
+}
+ll fac[MAX],finv[MAX],inv[MAX];
+void combinit(){
+    fac[0]=fac[1]=1;
+    finv[0]=finv[1]=1;
+    inv[1]=1;
+    REP(i,2,MAX){
+        fac[i]=fac[i-1]*i%mod;
+        inv[i]=invmod(i,mod);
+        finv[i]=finv[i-1]*inv[i]%mod;
+    }
+}
+ll comb(ll n,ll k){
+    if(n<k)return 0;
+    if(n<0||k<0)return 0;
+    return fac[n]*(finv[k]*finv[n-k]%mod)%mod;
+}
+
+void solve(){
+    combinit();
+    ll n;cin>>n;
+    vector<ll>a(n);
+    rep(i,n)cin>>a[i];
+    vector<ll>kai(n+1);
+    kai[0]=1;
+    REP(i,1,n+1){
+        kai[i]=kai[i-1]*i%mod;
+    }
+    ll cnt2=0,cnt3=0;
+    ll sum=0;
+    ll cnt1=0,cnt5=0,cnt7=0;
+    ll ans=1;
+    rep(i,n){
+        if(a[i]==1)cnt1++;
+        else if(a[i]==5)cnt5++;
+        else if(a[i]==7)cnt7++;
+        else if(a[i]==2||a[i]==4||a[i]==8){
+            cnt2++;sum++;
+        }
+        else if(a[i]==3||a[i]==9){
+            cnt3++;
+            sum++;
+        }
+        else{
+            ans=ans*kai[cnt2+cnt3]%mod;
+            ans=ans*invmod(kai[cnt2],mod)%mod;
+            ans=ans*invmod(kai[cnt3],mod)%mod;
+            cnt2=0,cnt3=0;
+            sum++;
+        }
+    }
+    ans=ans*kai[cnt2+cnt3]%mod;
+    ans=ans*invmod(kai[cnt2],mod)%mod;
+    ans=ans*invmod(kai[cnt3],mod)%mod;
+    ans=ans*comb(sum+cnt1,sum)%mod;
+    sum+=cnt1;
+    ans=ans*comb(sum+cnt5,sum)%mod;
+    sum+=cnt5;
+    ans=ans*comb(sum+cnt7,sum)%mod;
+    sum+=cnt7;
+    cout<<ans<<endl;
+}
+
+signed main(){
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    solve();
+}

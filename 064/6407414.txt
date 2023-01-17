@@ -1,0 +1,595 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+
+
+struct SplayNode{
+    SplayNode *parent;
+    SplayNode *left;
+    SplayNode *right;
+
+    long long Value;//値(普通、頂点には値や重みが割り当てられることが多い)
+    long long Min,Max,Sum;//部分木のうち、値の最大、最小、和
+
+    int SubTeeSize = 1;//1は初期化値(自分自身)
+
+
+    SplayNode(){
+        parent = nullptr;
+        left = nullptr;
+        right = nullptr;
+        
+    }
+
+
+    bool isExist(SplayNode *Nd){
+        if(Nd!=nullptr)return true;
+        else return false;
+    } 
+
+
+
+    /*
+        ある地点を回転させる
+    */
+    void rotate(){
+
+        SplayNode *Parent , *GrandParent , *Child;
+        Parent = this->parent;
+        GrandParent = Parent->parent;
+
+        if(isExist(Parent) == false){
+            return;
+        }
+
+
+
+        //元の親に対する位置で場合分け
+        if(Parent->left == this){
+            Child = this->right;//Childはnullptrかもしれない
+            this->right = Parent;
+            Parent->left = Child;
+
+        }else if(Parent->right == this){
+            Child = this->left;
+            this->left = Parent;
+            Parent->right = Child;
+
+        }
+
+        if(isExist(GrandParent)){
+            //GrandParentのどちらの辺なのかで場合分け
+            if(Parent == GrandParent->left){
+                GrandParent->left = this;
+
+            }else if(Parent == GrandParent->right){
+                GrandParent->right = this;
+                
+            }
+        }
+
+        //GrandParentがnullptrの場合でも代入OK
+        this->parent = GrandParent;
+
+
+        //親と位置を入れ替えるので
+        Parent->parent = this;
+
+
+
+        //Childは移動するので。
+        if(isExist(Child))Child->parent = Parent;
+
+
+        /*
+            Nodeの持つ情報をupdateしないといけないが、順番に注意！！
+            ChildはChild以下の部分木が変化してないので何もしなくてOK
+            GrandParentは、部分木の中の順番が変わったけど、集合としては変わってないので何もしなくてOK
+            Parentと自分自身(this)は順番が変わって、部分木の内容も変わったので、
+            下から　Parent　⇨  this の順番でupdateする
+        */
+        Parent->update();
+        this->update();
+
+        
+
+        return;
+
+    }
+
+
+
+
+
+
+
+    /*
+        自分の親から見た自分の位置
+        0 -> 親がそもそもいない or 例外の場合
+        1 -> 親から見て左の子の場合
+        2 -> 親から見て右の子の場合 
+    */
+    int state(){
+        if(isExist(this->parent)== false){
+            return 0;
+        }else{
+            if(this->parent->left == this){
+                return 1;
+            }else if(this->parent->right == this){
+                return 2;
+            }else {
+                return 0;
+            }
+        }
+    }
+
+
+
+
+
+
+
+    /*
+        あるNodeを回転を駆使し一番上まで持っていく
+        この時、回転する順番に注意
+    */
+    void splay(){
+        while(isExist(this->parent)){
+            if(isExist(this->parent->parent)==false){
+                //(自分のGrandParentがいない場合、rotateは一回のみ)
+                this->rotate();
+                return;
+
+
+            //それ以外の場合、(自分、親、親の親)の位置関係が大事
+            }else if(this->state() == this->parent->state()){
+                //GrandParentからの道が(右、右)or (左、左)の場合
+                //GrandParentを一つ下に下ろして、自分を上げる
+                this->parent->rotate();
+                this->rotate();
+
+            }else{
+                //それ以外の場合、単純に自分を2回上に上げれば良い
+                this->rotate();
+                this->rotate();
+            }
+        }
+
+
+
+        return;
+    }   
+
+
+
+
+
+
+    /*
+        サイズなど、Nodeの持っている情報をupdateする(順番大事)
+    */
+    void update(){
+        this->SubTeeSize = 1;
+        this->Min = this->Value;
+
+
+        if(isExist(this->left)){
+            this->SubTeeSize += this->left->SubTeeSize;
+            if(this->left->Min < this->Min)this->Min = this->left->Min;
+        }
+
+        if(isExist(this->right)){
+            this->SubTeeSize += this->right->SubTeeSize;
+            if(this->right->Min < this->Min)this->Min = this->right->Min;
+
+        }
+
+        return;
+    }
+
+
+
+
+
+};
+
+
+
+
+/*
+    splitした後はmergeを忘れずに！！
+    頂点にアクセスしたら、その頂点をRootにするのを忘れずに!!
+
+    関数の引数:rootに何も入れなかった場合、全体の根であるRootが自動で代入される
+
+    split(l,(root)) := lで分割
+
+    merge(l_root , r_root) := 頂点がl_root ,r_rootであるような部分木を連結
+
+    insert(ind,NODE,(root)) := ind番目にNODEが挿入される
+
+    Delete(ind ,(root)) := ind番目を削除
+*/
+class SplayTree{
+    public:
+    int Size;
+    SplayNode *Root;
+
+
+    std::vector<SplayNode> Node;
+
+    SplayTree(){
+
+    }
+
+    SplayTree(int size_){
+        Size = size_+10;
+        std::vector<SplayNode>(Size).swap(Node);
+        for(int i = 0 ; i < Size-1;i++){
+            Node[i].parent = &Node[i+1];
+            Node[i+1].left = &Node[i];
+            Node[i+1].update();
+        }
+    }
+
+    bool isExist(SplayNode *Nd){
+        if(Nd==nullptr){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    void build(){
+        /*
+            全体のRoot
+            各操作で、引数がroot　== nullptrなら、このRootを使う
+        */
+        Root = &Node[Size-1];
+        Root->update();
+    }
+
+
+
+    /*
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ここからは、クラス内で動かす関数たちです。俗にいうブラックボックスです。
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+
+
+
+
+
+
+
+
+    /*
+        rootを根とする部分木において、
+        indexを左からの0-indexとすると、
+
+        求めたいindexになるまで降りていく
+
+    */
+    SplayNode *getNode(int index , SplayNode *root){
+
+        SplayNode *now = root;
+
+        while(1){
+
+            int left_size = 0;
+            if(isExist(now->left)){
+                left_size = now->left->SubTeeSize;
+            } 
+
+            if(index < left_size){
+                now = now->left;
+            }else if(index == left_size){
+                now->splay();
+                break;
+            }else if(index > left_size){
+                now = now->right;
+                index = index - left_size-1;
+            }
+
+        }
+
+        return now;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+        それぞれ、leftrootとrightrootが根であるような部分木をくっつける
+
+        splitした後、これをしてまたsplitしたものをくっつける
+        splitしたまま放置すると分割された木のrootが行方不明になりそう
+    */
+    SplayNode *merge(SplayNode *leftRoot , SplayNode *rightRoot){
+
+       
+        if(isExist(leftRoot) == false)return rightRoot;//右のみあり
+        if(isExist(rightRoot) == false )return leftRoot;//左のみあり
+
+
+        leftRoot = getNode(leftRoot->SubTeeSize-1 , leftRoot);
+        leftRoot->right = rightRoot;
+        rightRoot->parent = leftRoot;
+        leftRoot->update();
+        
+        return leftRoot;
+    }
+
+
+
+
+
+
+
+
+
+    /*
+         rootを根とする部分木において、
+        左からleftnum番目の頂点で左右にsplit。
+        splitした後はmergeしないと,splitした木の頂点が行方不明になりそう
+    */
+    std::pair<SplayNode*,SplayNode*> split(int leftnum, SplayNode *root){
+
+        if(leftnum==0)return std::make_pair(nullptr , root);
+
+        if(leftnum == root->SubTeeSize)return std::make_pair(root, nullptr);
+
+
+
+        root = getNode(leftnum , root);
+        
+        SplayNode *leftRoot , *rightRoot;
+
+        leftRoot = root->left; 
+        
+        rightRoot = root; 
+
+        
+        if(isExist(rightRoot))rightRoot->left = nullptr;
+        
+        if(isExist(leftRoot))leftRoot->parent = nullptr; 
+        
+        rightRoot->update();
+
+
+        return std::make_pair(leftRoot,rightRoot);
+
+    }
+
+
+
+
+
+    /*
+         rootを根とする部分木において、
+        indexの場所を切り離して、NODEを追加して元に戻す(merge)
+    */
+    SplayNode  *insert(int index , SplayNode *NODE , SplayNode *root){
+
+        std::pair<SplayNode*,SplayNode*> Trees = split(index,root);
+
+        SplayNode *leftRoot = Trees.first;
+        SplayNode *rightRoot = Trees.second;
+
+        return merge(merge(leftRoot , NODE),rightRoot);
+    }
+
+
+
+
+
+
+
+
+    /*  
+        rootを根とする部分木において、
+        左からindexの場所を削除して、両端をくっつける
+    */
+    std::pair<SplayNode*,SplayNode*> Delete(int index , SplayNode *root){
+
+        root = getNode(index,root);
+
+        SplayNode *leftRoot = root->left;
+        SplayNode *rightRoot = root->right;
+
+        if(isExist(leftRoot))leftRoot->parent = nullptr;
+        if(isExist(rightRoot))rightRoot->parent = nullptr;
+        root->left = nullptr;
+        root->right = nullptr;
+
+        root->update();
+
+        return std::make_pair(merge(leftRoot,rightRoot) , root );
+    }
+
+
+
+
+
+
+
+
+
+
+    /*
+        rootを根とする部分きにおいて、
+        0-indexの区間[l,r]を右シフト(右端は左端へ)する
+    */
+    SplayNode *shift_sub(int l , int r , SplayNode *root ){
+        std::pair<SplayNode*,SplayNode*> tmp = Delete(r,root);
+        root = tmp.first;
+        SplayNode *N = tmp.second;
+
+        return insert(l,N,root);
+    }
+
+
+
+
+
+
+
+
+
+    /*
+        rootを根とする部分木の[l,r]のRMQ
+    */
+    std::pair<SplayNode*,long long> RangeMinQuery_sub(int l , int r , SplayNode *root){
+
+        SplayNode *leftRoot , *centerRoot , *rightRoot;
+
+        std::pair<SplayNode*,SplayNode*>  tmp = split(r+1,root);
+        rightRoot = tmp.second;
+        
+        tmp = split(l,tmp.first);
+        leftRoot = tmp.first;
+        centerRoot = tmp.second;
+
+        int ans = centerRoot->Min;
+
+        return std::make_pair(merge(merge(leftRoot,centerRoot),rightRoot),ans);
+    }
+
+
+
+
+
+
+
+
+
+    /*
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ここからは、クラスの外で動かす関数たちです。
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+
+
+    /*
+        rootを根とする部分木で、index番目のNode(値渡し)を取得
+    */
+    SplayNode get(int index , SplayNode *root){
+        
+        root = getNode(index,root);
+        root->update();
+        return *(root);
+    }
+
+
+
+    /*
+        rootを根とする部分木の[l,r]のRMQ
+    */
+    int RangeMinQuery(int l , int r, SplayNode *root){
+
+        std::pair<SplayNode*,long long> tmp = RangeMinQuery_sub(l,r,root);
+        root = tmp.first;
+        return tmp.second;
+    }
+
+
+    /*
+        rootを根とする部分木で、[l,r]を右シフト(右端は左端へ)
+    */
+    void shift(int l , int r , SplayNode *root){
+
+        root = shift_sub(l,r,root);
+        root->update();
+        return;
+    }
+
+
+
+    /*
+        rootを根とする部分木のx番目のvalueをyにする
+    */
+    void update_val(int x , long long y , SplayNode *root){
+    
+        root = getNode(x,root);
+        root->Value = y;
+        root->update();
+
+        return;
+    }
+
+
+
+
+
+
+
+
+};
+
+int main(){
+
+    int n , q;cin >> n >> q;
+    int vsize = 0;
+
+
+    SplayTree st(n+10);
+
+    for( int i = 0 ; i< n ; i++){
+        cin >> st.Node[i].Value;
+        st.Node[i].Min = st.Node[i].Value;
+        st.Node[i].update();
+
+    }
+    st.build();
+
+
+    for(int i = 0; i < q ; i++){
+        int o , l,r,x , y;
+        cin >> o;
+        if(o == 0){
+            cin >> l >> r;
+            st.Root = st.shift_sub(l,r,st.Root);  
+            st.Root->update();
+            
+
+        }else if(o == 1 ){
+            cin >> l >> r;
+            std::pair<SplayNode*,int> tmp = st.RangeMinQuery_sub(l,r,st.Root);
+            
+            st.Root = tmp.first;
+
+            st.Root->update();
+            cout << tmp.second << endl;      
+
+          
+        }else{
+            cin >> x >> y;
+            st.Root = st.getNode(x,st.Root);
+            st.Root->Value = y;
+            st.Root->update();
+        }             
+
+          
+
+          
+    }
+
+    return 0;
+}   

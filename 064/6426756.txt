@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    int a,b,c,d,e
+    cin >> a >> b >> c >> d >> e;
+    
+    if(a=-100<a<0; a=0; ++a){
+        int f = a*c
+        cout << f << endl;
+    } else if(0>b>100) {
+        int g = b*e;
+        cout << g << endl;
+        
+        cout << f+g+d << endl;
+        return 0;
+    }
+}

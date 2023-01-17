@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+  int is, js, ks;
+  cin >> is >> js >> ks;
+  int ig, jg, kg;
+  cin >> ig >> jg >> kg;
+  int di = abs(ig - is);
+  int dj = abs(jg - js);
+  int dk = abs(kg - ks);
+  if (di % 2 == dj % 2 && dj % 2 == dk % 2){
+    cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
+  }
+}

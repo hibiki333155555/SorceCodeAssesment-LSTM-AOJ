@@ -1,0 +1,121 @@
+#include <cmath>
+#include <cstdio>
+#include <algorithm>
+using namespace std;
+
+namespace geo_2d{
+const double eps=1e-9;
+struct V{  //向量及其运算才是几何基础，点也可以用向量表示
+    double x, y;
+    V():x(0),y(0){}
+    V(const V &a){ *this=a; }
+    V(const double &a, const double &b):x(a),y(b){}
+    void read(){ scanf("%lf%lf", &x, &y); }
+    void print(){ printf("%.9lf %.9lf\n", x, y); }  //位数多精度高
+};  //三个vector参数abc表示以a为顶点的角bac/cab
+inline bool zero(const double &x){ return abs(x)<eps; }
+inline bool less(const double &a, const double &b){ return a<b-eps; }
+inline bool greater(const double &a, const double &b){ return a>b+eps; }
+inline V operator+(const V &a, const V &b){ return V(a.x+b.x, a.y+b.y); }
+inline V operator-(const V &a, const V &b){ return V(a.x-b.x, a.y-b.y); }
+inline V operator*(const double &x, const V &a){ return V(a.x*x, a.y*x); }
+inline V operator*(const V &a, const double &x){ return V(a.x*x, a.y*x); }
+inline V operator/(const V &a, const double &x){ return V(a.x/x, a.y/x); }
+inline bool operator==(const V &a, const V &b){ return zero(a.x-b.x)&&zero(a.y-b.y);}
+inline bool operator!=(const V &a, const V &b){ return !(a==b); }
+inline double operator*(const V &a, const V &b){ return a.x*b.x+a.y*b.y; }
+inline double operator^(const V &a, const V &b){ return a.x*b.y-a.y*b.x; }
+inline double len(const V &a){ return sqrt(a.x*a.x+a.y*a.y); }
+inline V mid(const V &a, const V &b){ return V((a.x+b.x)/2, (a.y+b.y)/2); }
+inline V c_wise(const V &a){ return V(a.y, -a.x); }
+inline V unit(const V &a){ return a/len(a); }
+inline double S_tri(const V &a, const V &b, const V &c){ return abs((b-a)^(c-a))/2; }
+inline bool operator<(const V &a, const V&b){  //二元组排序
+    return less(a.x, b.x)||(zero(a.x-b.x)&&less(a.y, b.y));
+}
+inline double angle(const V &a, const V &b){ return acos(a*b/len(a)/len(b)); }  //0~pi
+inline bool obtuse(const V &a, const V &b, const V &c){ return less((b-a)*(c-a), 0); }
+inline bool acute(const V &a, const V &b, const V &c){ return greater((b-a)*(c-a), 0); }
+inline bool right(const V &a, const V &b, const V &c){ return zero((b-a)*(c-a)); }
+inline V rotate(const V &a, double theta){
+    double s=sin(theta), c=cos(theta);
+    return V(a.x*c-a.y*s, a.x*s+a.y*c);
+}
+struct L{  //记录单位方向向量+两点，也可以用来表示线段
+    V d, a, b;
+    L(){}
+    L(const V &x1, const V &x2, const V &x3):d(x1),a(x2),b(x3){}
+    L(const V &x, const V &y){ *this=L(unit(y-x), x, y); }
+};
+inline V project(const V &p, const L &l){
+    return l.a+((p-l.a)*l.d)*l.d;
+}
+inline V reflect(const V &p, const L &l){
+    return 2*project(p, l)-p;
+}
+inline bool on_line(const V &p, const L &l){
+    return zero(l.d^(p-l.a));
+}
+inline bool on_seg(const V &p, const L &l){
+    return zero(len(p-l.a)+len(p-l.b)-len(l.a-l.b));
+}
+inline double dis(const V &p, const L &l){
+    return abs((p-l.a)^(p-l.b))/len(l.a-l.b);
+}
+inline bool collinear(const V &a, const V &b){ return zero(a^b); }
+inline bool orthogonal(const V &a, const V &b){ return zero(a*b); }
+inline bool parallel(const L &l1, const L &l2){ return zero(l1.d^l2.d); }
+inline bool orthogonal(const L &l1, const L &l2){ return zero(l1.d*l2.d); }
+inline bool is_intersect(const L &l1, const L &l2){
+    if (greater(min(l1.a.x, l1.b.x), max(l2.a.x, l2.b.x))||
+        less(max(l1.a.x, l1.b.x), min(l2.a.x, l2.b.x))||
+        greater(min(l1.a.y, l1.b.y), max(l2.a.y, l2.b.y))||
+        less(max(l1.a.y, l1.b.y), min(l2.a.y, l2.b.y)))
+            return false;
+    //以上是快速排斥
+    double f1=(l1.a-l2.a)^l2.d;
+    double f2=(l1.b-l2.a)^l2.d;
+    double f3=(l2.a-l1.a)^l1.d;
+    double f4=(l2.b-l1.a)^l1.d;
+    if (less(f1*f2, 0)&&less(f3*f4, 0)) return true;
+    else return false;
+}  //先考虑l1跨立在l2上，再考虑l2跨立在l1上
+inline V intersection(const L &l1, const L &l2){
+    double k=((l2.a-l1.a)^l2.d)/(l1.d^l2.d);
+    return l1.a+k*l1.d;
+}
+inline L bisector(const V &a, const V &b, const V &c){  //angleBAC
+    V d1=(b-a)/len(b-a), d2=(c-a)/len(c-a);
+    V d=(d1+d2)/len(d1+d2);
+    return L(d, a, a+d);
+}
+inline L perpendicular(const V &a, const V &b){
+    V x=mid(a, b), d=unit(c_wise(b-a));
+    return L(d, x, x+d);
+}
+//为方便操作直接传数组，以O为原点
+inline double S(const V *a, const int n){
+    double res=0;
+    for (int i=0; i<n; ++i) res+=(a[i]^a[(i+1)%n]);
+    return res/2;
+}
+}
+
+using namespace geo_2d;
+int q;
+V p1, p2;
+L l1, l2;
+
+int main(){
+    scanf("%d", &q);
+    while (q--){
+        p1.read(); p2.read();
+        l1=L(p1, p2);
+        p1.read(); p2.read();
+        l2=L(p1, p2);
+        if (parallel(l1, l2)){ puts("2"); }
+        else if (orthogonal(l1, l2)){ puts("1"); }
+        else puts("0");
+    }
+    return 0;
+}

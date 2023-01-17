@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+
+using i64 = long long;
+
+int main() {
+
+	int n, q; std::cin >> n >> q;
+
+	std::vector<i64> nodes(4 * n, std::numeric_limits<int>::max()), lazy(4 * n, -1);
+
+	auto pull = [&](int id) -> void {
+		nodes[id] = nodes[2 * id] + nodes[2 * id + 1];
+	};
+
+	auto pull_lazy = [&](int id, int l, int r) -> void {
+		if (lazy[id] != -1) {
+			nodes[id] = lazy[id];
+
+			if (l != (r - 1)) {
+				nodes[2 * id] = lazy[id];
+				nodes[2 * id + 1] = lazy[id];
+			}
+
+			lazy[id] = -1;
+		}
+	};
+
+	auto modify = [&](auto self, int p, int l, int r, int lhs, int rhs, i64 val) -> void {
+		pull_lazy(p, l, r);
+
+		if (l >= rhs || r <= lhs) {
+			return;
+		}
+
+		if (lhs <= l && r <= rhs) {
+			lazy[p] = val;
+			pull_lazy(p, l, r);
+			return;
+		}
+
+		int m = (l + r) / 2;
+
+		self(self, 2 * p, l, m, lhs, rhs, val);
+		self(self, 2 * p + 1, m, r, lhs, rhs, val);
+
+		pull(p);
+	};
+
+	auto set_range = [&](int l, int r, i64 val) -> void {
+		modify(modify, 1, 0, n, l, r, val);
+	};
+
+	auto sum = [&](auto self, int p, int l, int r, int lhs, int rhs) -> i64 {
+		if (l >= rhs || r <= lhs) {
+			return 0;
+		}
+
+		if (lhs <= l && r <= rhs) {
+			return nodes[p];
+		}
+
+		int m = (l + r) / 2;
+
+		return self(self, 2 * p, l, m, lhs, rhs) + self(self, 2 * p + 1, m, r, lhs, rhs);
+	};
+
+	auto sum_range = [&](int l, int r) -> i64 {
+		return sum(sum, 1, 0, n, l, r);
+	};
+
+	while (q--) {
+		int op; std::cin >> op;
+
+		if (!op) {
+			i64 x;
+			int s, t; std::cin >> s >> t >> x;
+
+			set_range(s, t + 1, x);
+		} else {
+			int s; std::cin >> s;
+
+			std::cout << sum_range(s, s + 1) << "\n";
+		}
+	}
+
+	return 0;
+}

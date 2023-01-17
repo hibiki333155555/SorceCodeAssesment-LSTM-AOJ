@@ -1,0 +1,13 @@
+op = 'a'
+ans = 0
+while op == '?':
+    a, op, b = input().split()
+    if op == '+':
+        ans = int(a) + int(b)
+    elif op == '-':
+        ans = int(a) - int(b)
+    elif op == '*':
+        ans = int(a) * int(b)
+    else:
+        ans =int(int(a) / int(b))
+    print(ans)

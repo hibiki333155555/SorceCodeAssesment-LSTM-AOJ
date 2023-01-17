@@ -1,0 +1,93 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define PI 3.14159265358979323846264338327950288
+const double EXP = 1e-12;
+const double INF = 1e15;
+
+class Point {
+public:
+	double x, y;
+
+	Point() {
+		this->x = INF;
+		this->y = INF;
+	}
+
+	Point(double x, double y) {
+		this->x = x;
+		this->y = y;
+	}
+};
+
+double R1, R2;
+Point CircleInfo1, CircleInfo2;
+
+
+double getAddOfTwo(const double& v1, const double& v2) {
+	return pow(v1, 2) + pow(v2, 2);
+}
+
+int getNumberOfCommonTangentLine() {
+	double dist2, sumR2, subR2;
+
+	dist2 = getAddOfTwo(CircleInfo1.x - CircleInfo2.x, CircleInfo1.y - CircleInfo2.y);
+	sumR2 = pow(R1 + R2, 2);
+	subR2 = pow(R1 - R2, 2);
+
+	if (dist2 > sumR2) {
+		return 4;
+	}
+
+	if (fabs(dist2 - sumR2) <= EXP) {
+		return 3;
+	}
+
+	if (dist2 < sumR2 && dist2 > subR2) {
+		return 2;
+	}
+
+	if (fabs(dist2 - subR2) <= EXP) {
+		return 1;
+	}
+
+	return 0;
+}
+
+double solve() {
+	int cnt;
+	double theta1, theta2, d2, d;
+
+	cnt = getNumberOfCommonTangentLine();
+	//cout << "Point Count = " << cnt << endl;
+
+	if (cnt >= 3) {
+		return 0;
+	}
+	if (cnt <= 1) {
+		double r = min(R1, R2);
+		return PI * r * r;
+	}
+
+	d2 = getAddOfTwo(CircleInfo1.x - CircleInfo2.x, CircleInfo1.y - CircleInfo2.y);
+	d = sqrt(d2);
+	theta1 = acos( (R1 * R1 + d2 - R2 * R2) / (2 * R1 * d) );
+	theta2 = acos( (R2 * R2 + d2 - R1 * R1) / (2 * R2 * d) );
+
+	return (theta1 * R1 * R1 + theta2 * R2 * R2 - fabs(R1 * d * sin(theta1)));
+}
+
+int main(void) {
+
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> CircleInfo1.x >> CircleInfo1.y >> R1;
+	cin >> CircleInfo2.x >> CircleInfo2.y >> R2;
+	cout << fixed << setprecision(12) << solve() << endl;
+
+	return 0;
+}
+

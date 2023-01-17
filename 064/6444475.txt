@@ -1,0 +1,36 @@
+#include<stdio.h>
+
+int main(){
+    
+    int a,b,c,x,y;
+    
+    
+    scanf("%d %d",&a,&b);
+    
+    if(a>b){
+        
+        x=a,a=b,b=x;
+        
+    }
+    
+    scanf("%d",&c);
+    
+    if(c<a);{
+        
+        x=a,y=b,a=c,b=x,c=y;
+        
+    }
+    
+    else if(a<c && c<b){
+        
+        y=b,b=c,c=y;
+        
+    }
+    
+    printf("%d %d %d",a,b,c);
+    
+    
+    return 0;
+    
+}
+

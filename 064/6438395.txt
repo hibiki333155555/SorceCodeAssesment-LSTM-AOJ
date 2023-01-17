@@ -1,0 +1,8 @@
+l = list(map(str, input().split(',')))
+# print(l)
+for i in range(len(l)):
+    # print(l[i])
+    l[i] = l[i].swapcase()
+    # print(l[i])
+print(l)
+

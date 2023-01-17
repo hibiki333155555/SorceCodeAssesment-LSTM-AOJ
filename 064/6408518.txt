@@ -1,0 +1,10 @@
+while True:
+    i = input()
+    if i == "-":
+        break
+    n = int(input())
+    for x in range(n):
+        h = int(input())
+        i = i[h:] + i[:h]
+    print(i)
+

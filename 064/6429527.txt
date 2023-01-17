@@ -1,0 +1,19 @@
+N = int(input())
+
+# 辞書
+D = dict()
+
+for i in range(N):
+    key, ACGT = list(map(str, input().split()))
+
+    if key == 'insert':
+        D[ACGT] = 1
+    else:
+        if ACGT in D:
+            print('yes')
+        else:
+            print('no')
+
+
+
+

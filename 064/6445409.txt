@@ -1,0 +1,27 @@
+inf=10**18
+def warshall_floyd(G,N):
+    if N==None: N=len(G)
+    dist = [[inf]*N for _ in range(N)]
+    for f,to,c in G:
+        dist[f][to] = c
+    for i in range(N):
+        dist[i][i] = 0
+    for k in range(N):
+        for i in range(N):
+            for j in range(N):
+                dist[i][j] = min(dist[i][j], dist[i][k]+dist[k][j])
+    return dist
+
+N, M = map(int, input().split())
+G=[]
+for _ in range(M):
+    s,t,d = map(int, input().split())
+    G.append([s,t,d])
+    #G.append([t,s,d])
+D = warshall_floyd(G, N)
+for i in range(N):
+    if D[i][i]<0:
+        print("NEGATIVE CYCLE")
+        exit()
+for i in D:
+    print(*["INF" if j>=inf//2 else j for j in i])

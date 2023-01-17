@@ -1,0 +1,24 @@
+#include<iostream>
+#include<cstdio>
+#include<queue>
+
+using namespace std;
+
+int main(){
+	char s[10];
+	priority_queue<int> q;
+	while(1){
+		scanf("%s",s);
+		if(s[0] == 'e' && s[1] == 'n')	break;
+		if(s[0] == 'i'){
+			int key;
+			scanf("%d", &key);
+			q.push(key);
+		}
+		else{
+			printf("%d\n", q.top());
+			q.pop();
+		}
+	}
+	return 0;
+}

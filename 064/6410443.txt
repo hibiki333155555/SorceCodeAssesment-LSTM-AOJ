@@ -1,0 +1,2 @@
+X = INT(input())
+X = output(X**3)

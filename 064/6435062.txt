@@ -1,0 +1,4 @@
+n = int(input())
+table = list(map(int, input().split()))
+table =table.reverse()
+print(table)

@@ -1,0 +1,35 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        // アルファベット
+        String alphabet = " abcdefghijklmnopqrstuvwxyz";
+        int[] number = new int[26 + 1];
+
+        Scanner sc = new Scanner(System.in);
+        String str = sc.nextLine();
+
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+
+            // アルファベットか
+            if (Character.isAlphabetic(ch)) {
+                // 小文字に変換する
+                ch = Character.toLowerCase(ch);
+                for (int j = 1; j < alphabet.length(); j++) {
+                    // アルファベットをカウントする
+                    if (alphabet.charAt(j) == ch) {
+                        number[j]++;
+                    }
+                }
+            }
+        }
+
+        // 結果を表示する
+        for (int i = 1; i < alphabet.length(); i++) {
+            char ch = alphabet.charAt(i);
+            System.out.println(ch + " : " + number[i]);
+        }
+    }
+}
+

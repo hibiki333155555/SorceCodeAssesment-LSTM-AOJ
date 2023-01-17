@@ -1,0 +1,14 @@
+r, c= map(int, input().split())
+for i in range (r):
+    a = list(map(int, input().split()))
+    b = sum(a)
+    a.append(b)
+    print(a)
+
+for i in range(r):
+    for j in range(c):
+        c =[]
+        d = 0
+        d += a[i][j]
+        c.append(d)
+        print(c)

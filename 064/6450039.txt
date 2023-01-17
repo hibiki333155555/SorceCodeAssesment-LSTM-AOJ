@@ -1,0 +1,115 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using Int = long long;
+const char newl = '\n';
+
+template<typename T1,typename T2> inline void chmin(T1 &a,T2 b){if(a>b) a=b;}
+template<typename T1,typename T2> inline void chmax(T1 &a,T2 b){if(a<b) a=b;}
+template<typename T> void drop(const T &x){cout<<x<<endl;exit(0);}
+template<typename T=Int>
+vector<T> read(size_t n){
+  vector<T> ts(n);
+  for(size_t i=0;i<n;i++) cin>>ts[i];
+  return ts;
+}
+
+
+template <typename E>
+struct SegmentTree{
+  using H = function<E(E,E)>;
+  Int n,height;
+  H h;
+  E ei;
+  vector<E> laz;
+
+  SegmentTree(H h,E ei):h(h),ei(ei){}
+
+  void init(Int n_){
+    n=1;height=0;
+    while(n<n_) n<<=1,height++;
+    laz.assign(2*n,ei);
+  }
+
+  inline void propagate(Int k){
+    if(laz[k]==ei) return;
+    laz[(k<<1)|0]=h(laz[(k<<1)|0],laz[k]);
+    laz[(k<<1)|1]=h(laz[(k<<1)|1],laz[k]);
+    laz[k]=ei;
+  }
+
+  inline void thrust(Int k){
+    for(Int i=height;i;i--) propagate(k>>i);
+  }
+
+  void update(Int a,Int b,E x){
+    if(a>=b) return;
+    thrust(a+=n);
+    thrust(b+=n-1);
+    for(Int l=a,r=b+1;l<r;l>>=1,r>>=1){
+      if(l&1) laz[l]=h(laz[l],x),l++;
+      if(r&1) --r,laz[r]=h(laz[r],x);
+    }
+  }
+
+  E get_val(Int a){
+    thrust(a+=n);
+    return laz[a];
+  }
+
+  void set_val(Int a,E x){
+    thrust(a+=n);
+    laz[a]=x;
+  }
+};
+
+//INSERT ABOVE HERE
+signed main(){
+  cin.tie(0);
+  ios::sync_with_stdio(0);
+
+  Int n,m;
+  cin>>n>>m;
+  vector<Int> as(n),bs(n),cs(n);
+  for(Int i=0;i<n;i++){
+    cin>>as[i]>>bs[i]>>cs[i];
+    bs[i]--;
+  }
+
+  Int q;
+  cin>>q;
+  vector<Int> ds(q),es(q);
+  for(Int j=0;j<q;j++){
+    cin>>ds[j]>>es[j];
+    es[j]--;
+  }
+
+  auto h_add=[&](Int a,Int b){return a+b;};
+  auto h_max=[&](Int a,Int b){return max(a,b);};
+
+  SegmentTree<Int> seg_add(h_add,0);
+  SegmentTree<Int> seg_max(h_max,-1);
+  seg_add.init(m);
+  seg_max.init(m);
+
+  for(Int i=0;i<n;i++){
+    seg_add.update(bs[i],cs[i],as[i]);
+    seg_max.update(bs[i],cs[i],cs[i]);
+  }
+  for(Int j=0;j<q;j++){
+    seg_add.update(es[j],es[j]+1,-ds[j]);
+  }
+
+  Int ans=0;
+  for(Int l=0;l<m;l++){
+    Int cur=seg_add.get_val(l);
+    if(cur>=0) continue;
+    Int r=seg_max.get_val(l);
+    if(r<0) drop(-1);
+    seg_add.update(l,r,-cur);
+    ans+=-cur;
+  }
+  cout<<ans<<newl;
+  return 0;
+}
+

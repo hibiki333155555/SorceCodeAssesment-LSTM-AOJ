@@ -1,0 +1,162 @@
+#include <algorithm>
+#include <cassert>
+#include <climits>
+#include <cmath>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <random>
+#include <complex>
+#include <bitset>
+#include <iomanip>
+#include <memory>
+#include <functional>
+
+#define rep(i, n, s) for (int i = (s); i < int(n); i++)
+#define per(i, n, s) for (int i = (n) - 1; i >= int(s); i--)
+#define MM << " " <<
+#define all(x) begin(x), end(x)
+#define rall(x) rbegin(x), rend(x)
+
+template <class T>
+using MinHeap = std::priority_queue<T, std::vector<T>, std::greater<T>>;
+template <class T>
+using MaxHeap = std::priority_queue<T>;
+
+using ll = long long;
+using Pii = std::pair<int, int>;
+using Pll = std::pair<ll, ll>;
+using Pdd = std::pair<double, double>;
+
+template <class T>
+bool chmin(T &a, const T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+bool chmax(T &a, const T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+void vdeb(const std::vector<T> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) {
+        if (i == n - 1)
+            std::cout << da[i];
+        else
+            std::cout << da[i] << " ";
+    }
+    std::cout << std::endl;
+}
+template<class T>
+void vdeb(const std::vector<std::vector<T>> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) {
+        std::cout << i << " : ";
+        vdeb(da[i]);
+    }
+    std::cout << std::endl;
+}
+
+template <>
+void vdeb(const std::vector<std::string> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) { std::cout << da[i] << std::endl; }
+}
+
+using namespace std;
+
+int h, w;
+Pii direct[22][22][4];
+int dx[] = {0, 1, 0, -1};
+int dy[] = {1, 0, -1, 0};
+const Pii PROB = {-1, -1};
+
+int solve() {
+    vector<vector<int>> da(h, vector<int>(w));
+    rep(i,h,0) rep(j,w,0) cin >> da[i][j];
+    int sx = -1, sy = -1;
+    rep(i,h,0) rep(j,w,0) {
+        if(da[i][j] == 2) {
+            sx = i, sy = j;
+            da[i][j] = 0;
+        }
+        rep(k,4,0) {
+            int nx = i, ny = j;
+            while(1) {
+                nx += dx[k];
+                ny += dy[k];
+                if(nx < 0 || h <= nx || ny < 0 || w <= ny) {
+                    direct[i][j][k] = PROB;
+                    break;
+                } else if(da[nx][ny] == 3) {
+                    direct[i][j][k] = {nx, ny};
+                    break;
+                } else if(da[nx][ny] == 1) {
+                    direct[i][j][k] = {nx, ny};
+                    break;
+                }
+            }
+        }
+    }
+
+    auto dfs = [&](auto &&f, int nx, int ny, int depth = 1) -> int {
+        // cerr << nx MM ny << endl;
+        if(depth > 10) return -1;
+        int ret = -1;
+        // vdeb(da);
+        rep(i,4,0) {
+            if(direct[nx][ny][i] == PROB) continue;
+            if(da[nx+dx[i]][ny+dy[i]] == 1) continue;
+            int x = direct[nx][ny][i].first, y = direct[nx][ny][i].second;
+            bool flg = false;
+            while(da[x][y] != 3 && da[x][y] != 1) {
+                if(direct[x][y][i] == PROB) {
+                    flg = true;
+                    break;
+                }
+                x = direct[x][y][i].first;
+                y = direct[x][y][i].second;
+            }
+            // cerr << x MM y MM da[x][y] << endl;
+            if(flg) continue;
+            if(da[x][y] == 3) return depth;
+            da[x][y] = 0;
+            int tmp = f(f, x-dx[i], y-dy[i], depth+1);
+            da[x][y] = 1;
+            if(tmp > 0) {
+                if(ret != -1) ret = min(ret, tmp);
+                else ret = tmp;
+            }
+        }
+        return ret;
+    };
+    return dfs(dfs, sx, sy);
+}
+
+int main() {
+    vector<int> ans;
+    while(1) {
+        cin >> w >> h;
+        if(h == 0 && w == 0) break;
+        ans.emplace_back(solve());
+    }
+    for(auto &i : ans) cout << i << endl;
+}

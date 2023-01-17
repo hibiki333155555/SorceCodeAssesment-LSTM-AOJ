@@ -1,0 +1,30 @@
+import bisect
+import sys
+
+input = sys.stdin.readline
+
+M = {}
+q = int(input())
+insert_check = True
+for _ in range(q):
+    com, *data = input().split()
+    if com == '0':
+        insert_check = True
+        M[data[0]] = M.get(data[0], []) + [data[1]] 
+    elif com == '1':
+        if data[0] in M:
+            for v in M[data[0]]:
+                print(v)
+    elif com == '2':
+        if data[0] in M:
+            del M[data[0]]
+    elif com == '3':
+        if insert_check:
+            dict_keys = sorted(list(M.keys()))
+            insert_check = False
+        left = bisect.bisect_left(dict_keys, data[0])
+        right = bisect.bisect_right(dict_keys, data[1])
+        for key in dict_keys[left: right]:
+            if key in M:
+                for v in M[key]:
+                    print(key, v)

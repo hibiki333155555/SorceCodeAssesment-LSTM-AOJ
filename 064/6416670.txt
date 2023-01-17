@@ -1,0 +1,46 @@
+from sys import stdin
+input = stdin.readline
+
+N = 100
+WHITE = 0
+GRAY = 1
+BLACK = 2
+
+M = [[0]*N for _ in range(N)]
+color = [WHITE]*N  
+d = [0]*N
+f = [0]*N
+
+def dfs_visit(u):
+    global tt
+    color[u] = GRAY
+    tt += 1
+    d[u] = tt 
+    for v in range(n):
+        if M[u][v] == 0:
+            continue
+        if color[v] == WHITE:
+            dfs_visit(v)
+    color[u] = BLACK
+    tt += 1
+    f[u] = tt 
+
+def dfs():
+    global tt
+    tt = 0
+
+    for u in range(n):
+        if color[u] == WHITE:
+            dfs_visit(u)
+    for u in range(n):
+        print(str(u+1) + ' ' + str(d[u]) + ' ' + str(f[u]))
+
+n = int(input())
+for _ in range(n):
+    u, k, *vv = input().split()
+    u = int(u)-1  # 0オリジンにする
+    k = int(k)    # kは使わない
+    for v in vv:
+        v = int(v)-1
+        M[u][v] = 1
+dfs()

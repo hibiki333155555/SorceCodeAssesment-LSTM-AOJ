@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+bool bfs(vector<vector<int>>& list, int& name1, int& name2)
+{
+    queue<int> help;
+    bool* pd = new bool[list.size()];
+    for (int i = 0;i < list.size();++i)
+        pd[i] = 0;
+    int temp;
+    help.push(name1);
+    while (!help.empty())
+    {
+        temp = help.front();
+        help.pop();
+        if (pd[temp])
+            continue;
+        else
+            pd[temp] = 1;
+        for (int i = 0;i < list[temp].size();++i)
+        {
+            if (list[temp][i] == name2)
+                return true;
+            if (pd[list[temp][i]])
+                continue;
+            help.push(list[temp][i]);
+        }
+    }
+    return false;
+}
+
+int main()
+{
+    int n, m, name, fri;
+    cin >> n >> m;
+    vector<vector<int>> user(n);
+    while (m--)
+    {
+        cin >> name >> fri;
+        user[name].push_back(fri);
+        user[fri].push_back(name);
+    }
+    cin >> m;
+    while (m--)
+    {
+        cin >> name >> fri;
+        if (name == fri)
+            cout << "yes\n";
+        else if (bfs(user, name, fri))
+            cout << "yes\n";
+        else
+            cout << "no\n";
+    }
+    return 0;
+}

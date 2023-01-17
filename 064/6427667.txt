@@ -1,0 +1,21 @@
+import cmath
+
+def koch(n, p1, p2):
+  if not n:
+    return None
+  s = (2*p1 + p2) / 3  #与えられた線分を三等分する点の算出。
+  t = (p1 + 2*p2) / 3
+  u = s + cmath.rect(1, cmath.pi/3) * (t - s)  #s,tを頂点とする正三角形の作成。
+  koch(n-1, p1, s) #ここからは再帰的に同じ操作をする。
+  print(s.real, s.imag)
+  koch(n-1, s, u)
+  print(u.real, u.imag)
+  koch(n-1, u, t)
+  print(t.real, t.imag)
+  koch(n-1, t, p2)
+
+#各頂点の座標の出力
+p1, p2 = 0j, 100+0j
+print(p1.real, p1.imag)    
+koch(int(input()), p1, p2)
+print(p2.real, p2.imag)

@@ -1,0 +1,64 @@
+#include<iostream>
+#include<algorithm>
+#include<stdio.h>
+#define len 100005
+using namespace std;
+int top; int s[1000];
+typedef struct pp {
+    char name[100];
+    int t;
+
+
+}p;
+p q[len];
+int n; int head; int tail;
+void enqueue(p x) {
+
+    q[tail] = x;
+    tail = (tail + 1) % len;
+
+}
+p dequeue() {
+    p x = q[head];
+    head = (head + 1) % len;
+    return x;
+
+
+}
+
+int main() {
+    int elsea = 0, c;
+    int i, m;
+    p u;
+    scanf("%d %d", &n, &m);
+    for (i = 0; i < n; i++) {
+        scanf("%s %d", q[i].name, q[i].t);
+    
+    }
+    head = 1; tail = n + 1;
+    while (head != tail) {
+        c = min(c, u.t);
+        u.t -= c;
+        elsea += c;
+        if (u.t > 0) {
+            enqueue(u);
+        }
+        else {
+        
+            cout << u.name << elsea << endl;
+        }
+    
+    
+    }
+
+
+
+
+   
+}
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+q = int(input())
+S = set()
+
+for i in range(q):
+    op, x = map(int, input().split())
+    if op == 0:
+        S.add(x)
+        print(len(S))
+    elif op ==1:
+        print(int(x in S)) # countの仕方
+    else:
+        if x in S:
+            S.remove(x)

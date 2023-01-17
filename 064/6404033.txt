@@ -1,0 +1,31 @@
+def judge(m, f, r):
+    if m == -1 or f == -1:
+        return 'F'
+    elif (m + f) >= 80:
+        return 'A'
+    elif 65 <= (m + f) < 79:
+        return 'B'
+    elif 50 <= (m + f) < 65:
+        return 'C'
+    elif 30 <= (m + f) < 50:
+        if r >= 50:
+            return 'C'
+        else:
+            return 'D'
+    else:
+        return 'F'
+
+
+def main():
+
+    while True:
+        m, f, r = map(int, input().split())
+
+        if m == -1 and f == -1 and r == -1:
+            break
+
+        print(judge(m, f, r))
+    
+
+if __name__ == "__main__":
+    main()

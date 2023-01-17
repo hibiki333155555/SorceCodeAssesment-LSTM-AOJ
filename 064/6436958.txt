@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+#define MYTUL ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+using namespace std;
+
+int main()
+{
+    MYTUL
+    int t; cin>>t;
+    int x;
+    multimap<string, int>mp;
+    for(int i=0; i<t; i++)
+    {
+         cin>>x;
+        if(x==0)
+        {
+            string key;
+            int val;
+            cin>>key>>val;
+            mp.insert(make_pair(key,val));
+        }
+        else if(x==1)
+        {
+            string s;
+            cin>>s;
+            multimap<string, int>::iterator llo, uup, itrr;
+            llo = mp.lower_bound(s);
+            uup = mp.upper_bound(s);
+            for( itrr = llo; itrr!=uup; itrr++)
+                cout<<itrr->second<<"\n";
+        }
+        else if(x==2)
+        {
+            string s;
+            cin>>s;
+            mp.erase(s);
+        }
+        else if(x==3)
+        {
+            string p,y;
+            cin>>p>>y;
+
+                multimap<string,int>::iterator lo,up,itr;
+                lo = mp.lower_bound(p);
+                up = mp.upper_bound(y);
+                for( itr = lo; itr!=up; itr++)
+                {
+                    if(itr->second!=0)
+                        {
+                cout<<itr->first<<" "<<itr->second<<"\n";}
+                }
+        }
+    }
+}
+

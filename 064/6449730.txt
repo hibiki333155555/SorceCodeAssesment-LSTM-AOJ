@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include<iostream>
+using namespace std;
+
+int main(){
+    int a, b;
+    int c, d;
+    double e;
+    cin >> a >> b >> c >> d >> e;
+    
+    c = a / b;
+    d = a % b;
+    e = 1.0 * a / b;
+    
+    cout << c << " " << d << " " << e << endl;
+    printf("%d %d %.8lf", c, d, e);
+    
+
+    return 0;
+}
+
+

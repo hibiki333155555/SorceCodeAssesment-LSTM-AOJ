@@ -1,0 +1,20 @@
+a,b = map(int,input().split())
+
+bin_a = str(bin(a))[2:]
+bin_b = str(bin(b))[2:]
+
+maxi = max(len(bin_a),len(bin_b))
+
+bin_a = '0'*(maxi-len(bin_a)) + bin_a
+bin_b = '0'*(maxi-len(bin_b)) + bin_b
+
+
+ans = 0
+for i in range(maxi):
+  if bin_a[i] == bin_b[i]:
+    ans += 1
+  else:
+    print(ans)
+    exit()
+
+print(ans)

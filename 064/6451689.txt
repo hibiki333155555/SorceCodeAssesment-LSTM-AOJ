@@ -1,0 +1,14 @@
+# https://onlinejudge.u-aizu.ac.jp/courses/lesson/1/ALDS1/1/ALDS1_1_A
+N = int(input())
+vs = list(map(int, input().split()))
+print(' '.join([str(v) for v in vs]))
+
+for i in range(1, len(vs)):
+    v = vs[i]
+    j = i - 1
+    while j >= 0 and vs[j] > v:
+        vs[j+1] = vs[j]
+        j -= 1
+    vs[j+1] = v
+    print(' '.join([str(v) for v in vs]))
+

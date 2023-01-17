@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+// 	int W,H,x,y,r;
+// 	cin >> W >> H >> x >> y >> r;
+	
+// 	if (0<=x-r && x+r<=W && 0<=y-r && y+r<=H) {
+	        
+// 	} else {
+// 	    cout << "No" << endl;    
+// 	}
+    for ( int i = 0; i < 10001; i++ ){
+        cout << "Hello World" << endl;    
+    }
+	
+	return 0;
+}
+

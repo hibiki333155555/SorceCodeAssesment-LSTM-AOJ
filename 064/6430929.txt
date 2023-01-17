@@ -1,0 +1,6 @@
+s_num =int(input())
+hour = 60 * 60
+h = s_num // hour
+m = (s_num - hour * h) // 60
+s = s_num - hour * h - m * 60
+print(str(h) + ':' + str(m) + ':' + str(s))

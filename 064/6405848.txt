@@ -1,0 +1,8 @@
+require('fs').readFileSync(0,'utf8').split`
+`.some(l=>{
+    [H,W]=l.split` `.map(n=>+n);
+    if(H === 0) return true;
+	a=[];
+    for(i=0;i<H;) a[i]=(i++%2? '.#' : '#.').repeat(W).substr(0,W);
+    console.log(s+'\n')
+})

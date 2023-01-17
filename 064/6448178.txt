@@ -1,0 +1,15 @@
+s = input()
+p = input()
+
+t = s+s
+l = len(p)
+count = 0
+for i in range(len(t)-l):
+    if t[i: i+l] == p:
+        count += 1
+
+if count == 1:
+    print("Yes")
+else:
+    print("No")
+

@@ -1,0 +1,217 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+
+#include <bits/stdc++.h>
+#include <unistd.h>
+#include <cctype>
+#include <cstdio>
+#include <cstring>
+#include <stdexcept>
+
+using namespace std;
+#define rep(i,n) for(long long i=0;i<n;++i)
+#define rep1(i,n) for(long long i=1;i<=n;++i)
+#define rrep(i,n) for(long long i=n-1;i>=0;--i)
+#define debug(output) if(debugFlag)cout<<#output<<"= "<<output<<endl
+using lint = long long;
+typedef pair<int,int> P;
+const bool debugFlag=true;
+const lint linf=1.1e18;const lint inf=1.01e9;
+constexpr int MOD=1000000007;
+template<class T>bool chmax(T &a, const T &b) { if(a < b){ a = b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if(a > b){ a = b; return 1; } return 0; }
+
+class SegTree{
+    private:
+    int n;
+    vector<int> node;
+    public:
+    int process(int left,int right){
+        if(left==inf)return right;
+        if(right==inf)return left;
+        int ans=left;
+        if(left>right)ans=right;
+        return ans;
+    }
+    void build(vector<int> v){
+        int num=1;
+        int size=v.size();
+        while(num<size){
+            num*=2;
+        }
+        n=num;
+        node.resize(2*num-1,0);
+        for(int i=0;i<size;i++)node[i+num-1]=v[i];
+        for(int i=n-2;i>=0;i--)node[i]=process(node[i*2+1],node[i*2+2]);
+    }
+    int get(int x){
+        x+=(n-1);
+        int res=node[x];
+        while(x>0){
+            x=(x-1)/2;
+            res+=node[x];
+        }
+        res+=node[0];
+        return res;
+    }
+    void add(int a,int b,int value,int k=0,int l=0,int r=-1){
+        if(r<0)r=n;
+        if(a>=r||b<=l)goto FINE;
+        if(a<=l&&b>=r){
+            node[k]+=value;
+            goto FINE;
+        }
+        add(a,b,value,k*2+1,l,(l+r)/2);
+        add(a,b,value,k*2+2,(l+r)/2,r);
+        //return process(vl,vr);
+        FINE:;
+    }
+};
+
+using E=int;
+
+struct DualSegmentTree {
+  int sz, height;
+  vector<int> lazy;
+  const int ei=0;
+
+  void build(int n){
+    sz = 1;
+    height = 0;
+    while(sz < n) sz <<= 1, height++;
+    lazy.assign(2 * sz, ei);
+  }
+
+  inline void propagate(int k) {
+    if(lazy[k] != ei) {
+      lazy[2 * k + 0] = lazy[2 * k + 0]+lazy[k];
+      lazy[2 * k + 1] =lazy[2 * k + 1]+lazy[k];
+      lazy[k] = ei;
+    }
+  }
+
+  inline void thrust(int k) {
+    for(int i = height; i > 0; i--) propagate(k >> i);
+  }
+
+  void update(int a, int b, const E &x) {
+    thrust(a += sz);
+    thrust(b += sz - 1);
+    for(int l = a, r = b + 1; l < r; l >>= 1, r >>= 1) {
+      if(l & 1) lazy[l] = lazy[l]+ x, ++l;
+      if(r & 1) --r, lazy[r] = lazy[r]+ x;
+    }
+  }
+
+  E operator[](int k) {
+    thrust(k += sz);
+    return lazy[k];
+  }
+};
+
+class Scanner {
+    vector<char> buffer;
+    ssize_t n_written;
+    ssize_t n_read;
+
+public:
+    Scanner(): buffer(1024*1024) { do_read(); }
+
+    int64_t read_int() {
+        int64_t ret = 0, sgn = 1;
+        int ch = current_char();
+        while (isspace(ch)) { ch = next_char(); }
+        if (ch == '-') { sgn = -1; ch = next_char(); }
+        for (; isdigit(ch); ch = next_char())
+            ret = (ret * 10) + (ch - '0');
+        return sgn * ret;
+    }
+
+private:
+    void do_read() {
+        ssize_t r = read(0, &buffer[0], buffer.size());
+        if (r < 0) {
+            throw runtime_error(strerror(errno));
+        }
+        n_written = r;
+        n_read = 0;
+    }
+
+    inline int next_char() {
+        ++n_read;
+        if (n_read == n_written) { do_read(); }
+        return current_char();
+    }
+
+    inline int current_char() {
+        return (n_read == n_written) ? EOF : buffer[n_read];
+    }
+};
+
+signed main(){
+  Scanner scanner;
+  int h,w,n;//cin>>h>>w>>n;
+  h=scanner.read_int();
+  w=scanner.read_int();
+  n=scanner.read_int();
+  bool hw=h>w;
+  P s,g;//cin>>s.first>>s.second>>g.first>>g.second;
+  s.first=scanner.read_int();
+  s.second=scanner.read_int();
+  g.first=scanner.read_int();
+  g.second=scanner.read_int();
+  if(hw){
+    swap(h,w);
+    swap(s.first,s.second);
+    swap(g.first,g.second);
+  }
+  vector<int> x(n),y(n),k(n);
+  rep(i,n){
+    x[i]=scanner.read_int();
+    y[i]=scanner.read_int();
+    k[i]=scanner.read_int();
+    if(hw)swap(x[i],y[i]);
+  }
+  vector<DualSegmentTree> tree(h+10);
+  rep1(i,h){
+    tree[i].build(w+10);
+  }
+  rep(i,n){
+    rep1(j,h){
+      int l=y[i]-(k[i]-abs(j-x[i]));
+      int r=y[i]+(k[i]-abs(j-x[i]));
+      tree[j].update(l,r+1,1);
+    }
+  }
+  vector<vector<bool>> dp(h+1,vector<bool>(w+1,0));
+  vector<vector<bool>> ng(h+1,vector<bool>(w+1,0));
+  queue<P> que;
+  que.push(s);
+  int dx[]={1,0,-1,0};
+  int dy[]={0,1,0,-1};
+  while(!que.empty()){
+    auto [yy,xx]=que.front();que.pop();
+    if(dp[yy][xx])continue;
+    dp[yy][xx]=1;
+    if(yy==g.first&&xx==g.second)break;
+    rep(i,4){
+      int xxx=xx+dx[i];
+      int yyy=yy+dy[i];
+      if(xxx<1||xxx>w)continue;
+      if(yyy<1||yyy>h)continue;
+      if(dp[yyy][xxx])continue;
+      if(ng[yyy][xxx])continue;
+      if(tree[yyy][xxx]>0){
+        ng[yyy][xxx]=1;
+        continue;
+      }
+      que.push({yyy,xxx});
+    }
+  }
+  if(dp[g.first][g.second]==1){
+    cout<<"Yes"<<"\n";
+  }
+  else cout<<"No"<<"\n";
+  return 0;
+}

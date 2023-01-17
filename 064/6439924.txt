@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+#define REP(i, n) for(int i = 0; i < (int)(n); i++)
+using namespace std;
+using ll = long long;
+
+int main(void) {
+    int n; cin >> n;
+    vector<string> report(n);
+    REP(i, n) cin >> report[i];
+    constexpr ll mod[] = {998244353, 1000000007};
+    int m = report[0].length();
+    vector<vector<ll>> pow26(2, vector<ll>(m+1));
+    pow26[0][0] = pow26[1][0] = 1;
+    REP(i, 2) REP(j, m) {
+        pow26[i][j+1] = pow26[i][j] * 26 % mod[i];
+    }
+    vector<vector<vector<ll>>> hash(2, vector<vector<ll>>(n, vector<ll>(m+1)));
+    REP(i, 2) REP(j, n) REP(k, m) {
+        hash[i][j][k+1] = (hash[i][j][k] + pow26[i][k] * (report[j][k] - 'a')) % mod[i];
+    }
+    vector<map<pair<ll, ll>, int>> hash_cnt(m);
+    REP(i, n) REP(j, m) {
+        ll hash0 = hash[0][i][j] * mod[0] + (hash[0][i][m] - hash[0][i][j+1] + mod[0]) % mod[0];
+        ll hash1 = hash[1][i][j] * mod[1] + (hash[1][i][m] - hash[1][i][j+1] + mod[1]) % mod[1];
+        hash_cnt[j][{hash0, hash1}]++;
+    }
+    vector<int> cheating(n);
+    REP(i, n) REP(j, m) {
+        ll hash0 = hash[0][i][j] * mod[0] + (hash[0][i][m] - hash[0][i][j+1] + mod[0]) % mod[0];
+        ll hash1 = hash[1][i][j] * mod[1] + (hash[1][i][m] - hash[1][i][j+1] + mod[1]) % mod[1];
+        if(hash_cnt[j][{hash0, hash1}] >= 2) cheating[i] = 1;
+    }
+    int ans = 0;
+    REP(i, n) ans += cheating[i];
+    cout << ans << '\n';
+}

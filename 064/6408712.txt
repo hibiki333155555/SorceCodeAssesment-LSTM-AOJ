@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include<stdlib.h>
+int *A,*G,n,count = 0;
+
+void insertionSort(int g){
+  int i,j,v;
+  for(i=g ;i<n ;i++){
+    v = *(A+i);
+    j = i - g;
+    while(j>=0 && *(A+j) > v){
+      *(A+j+g) = *(A+j);
+      j-=g;
+      count++;
+    }
+    *(A+j+g) = v;
+  }
+
+}
+
+void shellSort(int n){
+  int *G;
+  int i,k = 1,m = 0;
+
+  while(k<n){
+    k = 3*k + 1;
+    m++;
+  }
+
+  G = malloc(sizeof(int)*m);
+
+  *G = 1;
+
+  printf("%d",m);
+  
+  for(i=1 ;i<m ;i++) *(G+i) = *(G+i-1) * 3 + 1;
+
+  printf("\n");
+  
+  for(i=m-1 ;i>=0 ;i--) printf("%d ",*(G+i));
+
+  for(i=m-1 ;i>=0 ;i--) insertionSort(*(G+i));
+}
+
+int main(){
+  int i;
+  
+  scanf("%d",&n);
+
+  A = malloc(sizeof(int)*n);
+  
+  for(i=0 ;i<n ;i++) scanf("%d",A+i);
+  
+  shellSort(n);
+  
+  printf("\n");
+    
+  printf("%d\n",count);
+  
+  for(i=0 ;i<n ;i++){
+    printf("%d\n",*(A+i));
+  }
+  
+  return 0;
+}
+    
+  
+
+    
+    
+    
+

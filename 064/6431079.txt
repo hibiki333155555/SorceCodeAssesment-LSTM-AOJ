@@ -1,0 +1,28 @@
+import java.util.*;
+
+class Solve{
+    public Scanner sc = new Scanner(System.in);
+    private void Finish(){
+        this.sc.close();
+    }
+    public void Do(){
+        int w = sc.nextInt();
+        int h = sc.nextInt();
+        int x = sc.nextInt();
+        int y = sc.nextInt();
+        int r = sc.nextInt();
+        if( (r+x <= w && 0 <= x-r) && (r+y <= h && 0 <= y-r) ){
+            System.out.println("Yes");
+        }
+        else{
+            System.out.println("No");
+        }
+        this.Finish();
+    }
+    
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

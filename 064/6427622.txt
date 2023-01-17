@@ -1,0 +1,6 @@
+a,b,C=map(int,raw_input().split())
+import math
+print a*B*0.5*math.sin(math.radians(C))
+print a+b+math.sqrt(a**2+b**2-2*a*b*math.cos(math.radians(C)))
+print b*math.sin(math.radians(C))
+

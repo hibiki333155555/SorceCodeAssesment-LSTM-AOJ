@@ -1,0 +1,11 @@
+import math
+a, b, c = map(int, input().split())
+rc = math.radians(c)
+h = b * math.sin(rc)
+S = a * h * 0.5
+c = math.sqrt(a**2 + b**2 - 2 * a * b * math.cos(rc))
+L = a + b + c
+print(f'{S:.08f}')
+print(f'{L:.08f}')
+print(f'{h:.08f}')
+

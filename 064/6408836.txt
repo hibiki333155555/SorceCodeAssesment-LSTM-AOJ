@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef complex<double> P;
+#define pi acos(-1.0)
+typedef vector<complex<double> > vep;
+double cross(P x,P y){ return imag(y*conj(x));}
+double dot(P x,P y) {return real(y*conj(x));}
+P project(P x,P y){return x+(y-x)*real((-x)/(y-x));}
+double r,ans;
+int n;
+vep a;
+bool check(P x){
+	if (norm(x)>r*r) return 1; 
+	return 0;
+}
+int main()
+{    
+	cin>>n>>r;
+	for(int i=1;i<=n;i++){
+		double x,y;
+		cin>>x>>y;
+		a.push_back(P(x,y));
+	}
+	for(int i=0;i<n;i++){
+		int j=(i+1)%n;
+		bool f1=check(a[i]),f2=check(a[j]);
+		double d=abs(cross(a[j]-a[i],-a[i])/abs(a[i]-a[j]));
+		P p=project(a[i],a[j]);
+		double k=sqrt(r*r-d*d);
+		P ii,jj;
+		ii=p-k*(a[j]-a[i])/abs(a[j]-a[i]);
+		jj=p+k*(a[j]-a[i])/abs(a[j]-a[i]);
+		bool f=(arg((a[i]-ii)/(a[i]-jj)) == arg(P(-1,0)) )? 1:0;
+
+		if(!f1 && !f2){
+			ans+=cross(a[i],a[j])/2;		
+		}
+		if(f1 && f2 && (d>=r || !f)){
+			ans+=arg(a[j]/a[i])*r*r/2;
+	//		cout<<i<<' '<<arg(a[j]/a[i])<<endl;
+		}
+		if(f1 && f2 && d<r && f){
+			ans+=cross(ii,jj)/2+r*r/2*arg(a[j]/jj)+r*r/2*arg(ii/a[i]);
+		}
+		if(f1^f2){
+			if(f1){
+				ans+=cross(ii,a[j])/2+r*r/2*arg(ii/a[i]);
+			}else{
+				ans+=cross(a[i],jj)/2+r*r/2*arg(a[j]/jj);
+			}
+		}
+//	cout<<i<<' '<<ans<<' '<<d<<endl;
+	}
+	cout<<fixed<<setprecision(12)<<ans<<endl;
+	return 0;
+}
+
+

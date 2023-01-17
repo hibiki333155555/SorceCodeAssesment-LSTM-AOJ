@@ -1,0 +1,14 @@
+while True:
+    H,W=map(int,input().split())
+    if H==0 and W==0:
+        break
+    else:
+        for j in range(H):
+            for i in range(W):
+                n=i+j
+                if n%2==0:
+                    print("#", end="")
+                else:
+                    print(".", end="")
+            print()
+        print()

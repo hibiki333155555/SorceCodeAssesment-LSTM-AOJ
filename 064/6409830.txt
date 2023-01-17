@@ -1,0 +1,3 @@
+ns=list(map(int,input().split()))
+ns.sort()
+print(ns[0],ns[1],ns[2])

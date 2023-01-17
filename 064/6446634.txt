@@ -1,0 +1,3 @@
+while (x = gets)
+    x.split.map(&:to_i).sort.join(" ")
+end

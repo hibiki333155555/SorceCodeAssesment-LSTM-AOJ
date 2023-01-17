@@ -1,0 +1,3 @@
+import Text.Printf
+main = interact $ f . map read . words
+f [a,b] = printf "%d %d %.8f\n" ((a `div` b)::Int) (a `mod` b) ((fromIntegral a / fromIntegral b) :: Double)

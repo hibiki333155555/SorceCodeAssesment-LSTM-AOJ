@@ -1,0 +1,12 @@
+for i in range(100):
+  H, W = map(int, input().split())
+  if H == 0 and W == 0:
+    break
+  
+  for h in range(1, H+1):
+    if h==1 or h==H:
+      print('#'*W)
+    else:
+      print('#','.'*(W-2),'#', sep='')
+      
+  print('')

@@ -1,0 +1,7 @@
+n, q = map(int, input().split())
+for _ in range(n):
+    name, time = map(str, input().split())
+for i in range(n):
+    
+
+

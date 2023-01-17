@@ -1,0 +1,30 @@
+#include <cstdio>
+
+int main(void){
+    int a, b, answer;
+    char op;
+    
+    while(1){
+        scanf("%d %c %d", a, op, b);
+        
+        if(op=='?''){
+            break;
+        }
+        
+        if(op=='+''){
+            answer = a+b;
+        }
+        if(op=='-'){
+            answer = a-b;
+        }
+        if(op=='*'){
+            answer = a*b;
+        }
+        if(op=='/'){
+            answer = a/b;
+        }
+        printf("%d\n", answer);
+    }
+    
+    return 0;
+}

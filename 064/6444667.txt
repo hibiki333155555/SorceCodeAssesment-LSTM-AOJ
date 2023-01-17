@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+
+int main(){
+    int i,label[8],t;
+    char str[101];
+    
+    for(i=1;i<=6;i++){
+        scanf("%d",&label[i]);
+    }
+    
+    scanf("%s",str);
+    
+    for(i=0;i<strlen(str);i++){
+        t=label[1];
+        switch(str[i]){
+            case 'S':
+                label[1] = label[5];
+                label[5] = label[6];
+                label[6] = label[2];
+                label[2] = t;
+                break;
+            case 'E':
+                label[1] = label[4];
+                label[4] = label[6];
+                label[6] = label[3];
+                label[3] = t;
+                break;
+            case 'W':
+                label[1] = label[3];
+                label[3] = label[6];
+                label[6] = label[4];
+                label[4] = t;
+                break;
+            case 'N':
+                label[1] = label[2];
+                label[2] = label[6];
+                label[6] = label[5];
+                label[5] = t;
+                break;
+        }
+    }
+    printf("%d\n",label[1]);
+    
+}

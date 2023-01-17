@@ -1,0 +1,7 @@
+n=int(input())
+array = list(map(int,input().split()))
+for i in range((n//2)):
+    tmp=array[i]
+    array[i]=array[n-i]
+    array[n-i]=tmp
+print(*array)

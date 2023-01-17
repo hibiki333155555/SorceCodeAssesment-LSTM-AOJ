@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        for(int i;;I++){
+            if(op==?){
+                break;
+            }
+            else{
+                int a = sc.nextInt();
+                char op = sc.next().charAt(0);
+                int b = sc.nextInt();
+                System.out.println(a'op'b);
+                int r =a'op'b;
+                System.out.pritnln(r);
+            }
+        
+    }
+}
+

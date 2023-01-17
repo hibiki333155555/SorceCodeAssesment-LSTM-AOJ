@@ -1,0 +1,21 @@
+n=int(input())
+cards=[[0 for i in range(13)]for j in range(4)]
+soot=["S","H","C","D"]
+for k in range(n):
+    a,b=input().split()
+    number=int(b)
+    if a=="S":
+        cards[0][number]=1
+    elif a=="H":
+        cards[1][number]=1
+    elif a=="C":
+        cards[2][number]=1
+    elif a=="D":
+        cards[3][number]=1
+
+for i in range(4):
+    for j in range(13):
+        if card[i][j]==0:
+            print(f"{soot[i]} {j}")
+        
+     

@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main(void){
+    
+    int N;
+    cin >> N;
+
+    vector<int> a(N), b(N);
+    for(int i = 0; i < N; i++) cin >> a[i];
+    
+    // ソート済と比べる
+    b = a;
+    sort(b.begin(), b.end());
+
+    // 異なる数列の個数
+    int cnt = 0;
+    for(int i = 0; i < N; i++){
+        if(a[i] != b[i]) cnt++;
+    }
+
+    int Q;
+    cin >> Q;
+
+    // クエリの処理（交換処理）
+    vector<int> x(Q), y(Q);
+    for(int i = 0; i < Q; i++) {
+
+        // ソート済の状態か確認
+        if(cnt == 0) {
+            cout << i << endl;
+            return 0;
+        }
+
+        int xi, yi;
+        cin >> xi >> yi;
+        xi--; yi--;
+
+        swap(a[xi], a[yi]);
+        
+        if(a[xi] == b[xi]) cnt--;
+        if(a[yi] == b[yi]) cnt--;
+        if(cnt >= N) continue;
+        if(a[xi] != b[xi]) cnt++;
+        if(a[yi] != b[yi]) cnt++;
+    }
+    
+    // ソート済の状態か確認
+    if(cnt == 0){
+        cout << Q << endl;
+    }
+    else{
+        cout << -1 << endl;
+    }
+    
+
+    
+}
+
+

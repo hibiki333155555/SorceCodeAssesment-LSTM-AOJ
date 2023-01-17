@@ -1,0 +1,15 @@
+N = int(input())
+vs = [int(v) for v in input().split()]
+
+cnt = 0
+for i in range(0, N):
+    min_idx = i
+    for j in range(i+1, N):
+        if vs[j] < vs[min_idx]:
+            min_idx = j
+    if vs[min_idx] != vs[i]:
+        vs[min_idx], vs[i] = vs[i], vs[min_idx]
+        cnt += 1
+
+print(' '.join([str(v) for v in vs]))
+print(cnt)

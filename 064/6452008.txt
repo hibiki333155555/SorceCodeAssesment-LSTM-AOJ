@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+internal class Program
+{
+    public static void Main()
+    {
+        if (new System.Diagnostics.StackFrame(1).GetMethod() == null)
+            Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false });
+
+        Console.ReadLine();
+        var loads = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        var sorted = loads.OrderBy(i => i).ToArray();
+        var unsorted = new Dictionary<int, int>();
+        for (int i = 0; i < loads.Length; i++)
+        {
+            if (loads[i] != sorted[i])
+            {
+                unsorted.Add(loads[i], i);
+            }
+        }
+        var counter = unsorted.Count;
+        var total = 0;
+        while (counter != 0)
+        {
+            var t = new List<int>();
+            var f = unsorted.First();
+            var next = unsorted[sorted[f.Value]];
+            while (next != f.Value)
+            {
+                t.Add(loads[next]);
+                next = unsorted[sorted[next]];
+                counter--;
+            }
+            t.Add(f.Key);
+            counter--;
+
+            total += Math.Min(sorted[0] * (t.Count + 1) + t.Sum() + t[0]
+                , t[0] * (t.Count - 1) + t.Skip(1).Sum());
+        }
+
+        Console.WriteLine(total);
+
+        Console.Out.Flush();
+    }
+}
+

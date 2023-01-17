@@ -1,0 +1,266 @@
+#!/usr/bin/env python
+
+import sys
+readline=sys.stdin.readline
+
+class Segment_Tree:
+    def __init__(self,N,f,e,lst=None):
+        self.f=f
+        self.e=e
+        self.N=N
+        if lst==None:
+            self.segment_tree=[self.e]*2*self.N
+        else:
+            assert len(lst)<=self.N
+            self.segment_tree=[self.e]*self.N+[x for x in lst]+[self.e]*(N-len(lst))
+            for i in range(self.N-1,0,-1):
+                self.segment_tree[i]=self.f(self.segment_tree[i<<1],self.segment_tree[i<<1|1])
+
+    def __getitem__(self,i):
+        if type(i)==int:
+            if -self.N<=i<0:
+                return self.segment_tree[i+self.N*2]
+            elif 0<=i<self.N:
+                return self.segment_tree[i+self.N]
+            else:
+                raise IndexError('list index out of range')
+        else:
+            a,b,c=i.start,i.stop,i.step
+            if a==None:
+                a=self.N
+            else:
+                a+=self.N
+            if b==None:
+                b=self.N*2
+            else:
+                b+=self.N
+            return self.segment_tree[slice(a,b,c)]
+
+    def __setitem__(self,i,x):
+        if -self.N<=i<0:
+            i+=self.N*2
+        elif 0<=i<self.N:
+            i+=self.N
+        else:
+            raise IndexError('list index out of range')
+        self.segment_tree[i]=x
+        while i>1:
+            i>>= 1
+            self.segment_tree[i]=self.f(self.segment_tree[i<<1],self.segment_tree[i<<1|1])
+
+    def Build(self,lst):
+        for i,x in enumerate(lst,self.N):
+            self.segment_tree[i]=x
+        for i in range(self.N-1,0,-1):
+            self.segment_tree[i]=self.f(self.segment_tree[i<<1],self.segment_tree[i<<1|1])
+
+    def Fold(self,L=None,R=None):
+        if L==None:
+            L=self.N
+        else:
+            L+=self.N
+        if R==None:
+            R=self.N*2
+        else:
+            R+=self.N
+        vL=self.e
+        vR=self.e
+        while L<R:
+            if L&1:
+                vL=self.f(vL,self.segment_tree[L])
+                L+=1
+            if R&1:
+                R-=1
+                vR=self.f(self.segment_tree[R],vR)
+            L>>=1
+            R>>=1
+        return self.f(vL,vR)
+
+    def Fold_Index(self,L=None,R=None):
+        if L==None:
+            L=self.N
+        else:
+            L+=self.N
+        if R==None:
+            R=self.N*2
+        else:
+            R+=self.N
+        if L==R:
+            return None
+        x=self.Fold(L-self.N,R-self.N)
+        while L<R:
+            if L&1:
+                if self.segment_tree[L]==x:
+                    i=L
+                    break
+                L+=1
+            if R&1:
+                R-=1
+                if self.segment_tree[R]==x:
+                    i=R
+                    break
+            L>>=1
+            R>>=1
+        while i<self.N:
+            if self.segment_tree[i]==self.segment_tree[i<<1]:
+                i<<=1
+            else:
+                i<<=1
+                i|=1
+        i-=self.N
+        return i
+
+    def __str__(self):
+        return '['+', '.join(map(str,self.segment_tree[self.N:]))+']'
+
+class Graph:
+    def __init__(self,V,graph=False,inf=float("inf")):
+        self.V=V
+        self.inf=inf
+        self.graph=graph
+
+    def DFS(self,s):
+        seen=[False]*self.V
+        finished=[False]*self.V
+        euler_tour=[]
+        parents=[None]*self.V
+        postorder=[]
+        preorder=[]
+        depth=[self.inf]*self.V
+        depth[s]=0
+        stack=[s]
+        while stack:
+            x=stack.pop()
+            if not seen[x]:
+                seen[x]=True
+                stack.append(x)
+                euler_tour.append(x)
+                preorder.append(x)
+                for y in self.graph[x]:
+                    if not seen[y]:
+                        stack.append(y)
+                        parents[y]=x
+                        depth[y]=depth[x]+1
+            elif not finished[x]:
+                finished[x]=True
+                euler_tour.append(~x)
+                postorder.append(x)
+        return euler_tour,parents,postorder,preorder,depth
+
+    def Build_LCA(self,s):
+        self.lca_parents=parents
+        self.lca_euler_tour=euler_tour
+        self.lca_dfs_in_index=[None]*self.V
+        self.lca_dfs_out_index=[None]*self.V
+        for i,x in enumerate(self.lca_euler_tour):
+            if x>=0:
+                self.lca_dfs_in_index[x]=i
+            else:
+                self.lca_dfs_out_index[~x]=i
+        self.ST=Segment_Tree(2*self.V,lambda x,y:min(x,y),self.V)
+        lst=[None]*(2*self.V)
+        for i in range(2*self.V-1):
+            if self.lca_euler_tour[i]>=0:
+                lst[i]=depth[self.lca_euler_tour[i]]
+            else:
+                lst[i]=depth[self.lca_parents[~self.lca_euler_tour[i]]]
+        lst[2*self.V-1]=-1
+        self.ST.Build(lst)
+
+    def LCA(self,a,b):
+        m=min(self.lca_dfs_in_index[a],self.lca_dfs_in_index[b])
+        M=max(self.lca_dfs_in_index[a],self.lca_dfs_in_index[b])
+        x=self.lca_euler_tour[self.ST.Fold_Index(m,M+1)]
+        if x>=0:
+            return x
+        else:
+            return self.lca_parents[~x]
+
+class Path_Doubling:
+    def __init__(self,N,permutation,lst=None,f=None,e=None):
+        self.N=N
+        self.permutation=permutation
+        self.lst=lst
+        self.f=f
+        self.e=e
+
+    def Build_Next(self,K=None):
+        if K==None:
+            K=self.N
+        self.k=K.bit_length()
+        self.permutation_doubling=[[self.permutation[n]] for n in range(self.N)]
+        if self.lst!=None:
+            self.doubling=[[self.lst[n]] for n in range(self.N)]
+        for i in range(1,self.k):
+            for n in range(self.N):
+                self.permutation_doubling[n].append(self.permutation_doubling[self.permutation_doubling[n][i-1]][i-1])
+                if self.f!=None:
+                    self.doubling[n].append(self.f(self.doubling[n][i-1],self.doubling[self.permutation_doubling[n][i-1]][i-1]))
+
+    def Permutation_Doubling(self,N,K):
+        if K<0:
+            return N
+        for i in range(self.k):
+            if K>>i&1:
+                N=self.permutation_doubling[N][i]
+        return N
+
+    def Doubling(self,N,K):
+        if K<0:
+            return self.e
+        retu=self.e
+        for i in range(self.k):
+            if K>>i&1:
+                retu=self.f(retu,self.doubling[N][i])
+                N=self.permutation_doubling[N][i]
+        return retu
+
+mod=998244353
+N=int(readline())
+graph=[[] for x in range(N)]
+for _ in range(N-1):
+    a,b=map(int,readline().split())
+    a-=1;b-=1
+    graph[a].append(b)
+    graph[b].append(a)
+G=Graph(N,graph=graph)
+euler_tour,parents,postorder,preorder,depth=G.DFS(0)
+G.Build_LCA(0)
+PD=Path_Doubling(N,permutation=parents)
+PD.permutation[0]=0
+PD.Build_Next()
+dp_down=[0]*N
+dp_up=[0]*N
+dp_up[0]=1
+for x in postorder:
+    for y in G.graph[x]:
+        if y==parents[x]:
+            continue
+        dp_down[x]+=dp_down[y]
+    dp_down[x]*=2
+    dp_down[x]+=1
+    dp_down[x]%=mod
+for x in preorder:
+    s=sum(dp_down[y] for y in graph[x] if y!=parents[x])
+    for y in graph[x]:
+        if y==parents[x]:
+            continue
+        dp_up[y]=dp_up[x]+(s-dp_down[y])*2
+        dp_up[y]*=2
+        dp_up[y]+=1
+        dp_up[y]%=mod
+
+Q=int(readline())
+for _ in range(Q):
+    x,y=map(int,readline().split())
+    x-=1;y-=1
+    lca=G.LCA(x,y)
+    if lca in (x,y):
+        if lca==y:
+            x,y=y,x
+        d=depth[y]-depth[x]
+        xx=PD.Permutation_Doubling(y,d-1)
+        ans=pow(2,depth[y]-depth[x],mod)*(dp_down[y])%mod*(dp_up[x]+dp_down[x]-dp_down[xx]*2-1)%mod
+    else:
+        ans=pow(2,depth[x]+depth[y]-2*depth[lca],mod)*dp_down[x]%mod*dp_down[y]%mod
+    print(ans)

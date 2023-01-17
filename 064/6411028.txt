@@ -1,0 +1,13 @@
+str = list(input())
+q = int(input())
+for  i in range(q):
+    cmd,a, b, *c = input().split()
+    a = int(a)
+    b = int(b)
+    if cmd =="replace":
+        str[a:b+1] = c
+    if cmd == "print":
+        print(*str[a:b])
+    if cmd == "reverse":
+        srr[a:b+1] = reversed(s[a:b+1])
+        

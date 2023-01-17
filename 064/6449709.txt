@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+const int INF = 1e9;
+const ll inf = 1LL<<62;
+
+void solve() {
+  ll n, m; cin >> n >> m;
+  vector<vector<pair<ll, ll>>> e(m+1);
+  for (int i=0; i<n; i++) {
+    ll a, b, c; cin >> a >> b >> c;
+    b--;
+    e[b].emplace_back(a, c);
+    e[c].emplace_back(-a, -1);
+  }
+  int q; cin >> q;
+  vector<ll> query(m+1);
+  for (int i=0; i<q; i++) {
+    ll d, e; cin >> d >> e;
+    e--;
+    query[e] += d;
+  }
+  multiset<ll> s;
+  ll p = 0;
+  ll ans = 0;
+  for (int i=0; i<m; i++) {
+    for (auto r : e[i]) {
+      if (r.second >= 0) s.insert(r.second);
+      else if (r.second == -1) s.erase(s.find(i));
+      p += r.first;
+    }
+    ll r = query[i];
+    if (p >= r) continue;
+    if (s.size() == 0) {
+      cout << -1 << '\n';
+      return;
+    }
+    ll val = r - p;
+    ans += val;
+    p += val;
+    e[*s.rbegin()].emplace_back(-val, -2);
+  }
+  cout << ans << '\n';
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  // int t; cin >> t;
+  /*while (t--)*/ solve();
+}
+

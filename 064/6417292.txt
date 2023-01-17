@@ -1,0 +1,43 @@
+#include<stdio.h>
+#include<stdbool.h>
+#define MAX 20
+
+int main()
+{
+  int n;    
+  int A[MAX];
+  int q;
+  int m;
+  int sum;
+  bool flag;
+
+  scanf("%d", &n);
+  for(int i = 0; i < n; i++ ){
+    scanf("%d", &A[i]);
+  }
+
+  scanf("%d", &q);
+  for(int i = 0; i < q; i++ ){
+    scanf("%d", &m);
+    
+
+    flag = false;
+
+    for(int bit = 1; bit < (1 << n); bit++ ){
+      sum = 0;
+      for(int i = 0; i < n; i++ ){
+        if((bit >> i) & 1){
+          sum += A[i];
+        }
+      }
+      if(m == sum) {
+        flag = true;
+        break;
+      }
+    }
+
+    if(flag) printf("yes\n");
+    else printf("no\n");
+  }
+  return 0;
+}

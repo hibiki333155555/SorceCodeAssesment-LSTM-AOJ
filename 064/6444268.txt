@@ -1,0 +1,23 @@
+s=input()
+n=int(input())
+for i in range(n):
+    cmd=input().split()
+    if cmd[0]=="print":
+        a=int(cmd[1])
+        b=int(cmd[2])
+        print(s[a:b+1])
+    elif cmd[0]=="reverse":
+        a=int(cmd[1])
+        b=int(cmd[2])
+        le=s[:a]
+        mid=s[a:b+1]
+        ri=s[b+1:]
+        mid=mid[::-1]
+        s=le+mid+ri
+    elif cmd[0]=="replace":
+        a=int(cmd[1])
+        b=int(cmd[2])
+        s[a:b+1]=cmd[3]
+
+        
+

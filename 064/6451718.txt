@@ -1,0 +1,34 @@
+/*-- 入力 --*/
+main("3 2 7\n5 3 7 7 7 7 100\n11 4\n0 0\n4 4\n4 6")
+//main(require("fs").readFileSync("/dev/stdin", "utf8"));
+
+/*-- 計算&出力 --*/
+function main(raw) {
+    // 入力処理
+    const args = raw.split("\n");
+    //console.log(args);
+    args.forEach( (val,i) => {
+        args[i] = val.split(' ').map(Number);
+    });
+    // 計算
+    for(let i=0; i<args.length; i++){
+        //配列1つの要素を全て足す
+        sum = args[i].reduce( (accu, curr) => {
+            return accu+curr;
+        });
+        //全部0だったら終わり（マイナスにも対応しようと思ったらどうしよう？）
+        if(sum==0){
+            break;
+        }else{
+        //それ以外はソートして出力
+            args[i] = args[i].sort(function(a,b){
+                return a-b;
+            });
+            console.log(args[i].reduce( (accu, curr) => {
+                return `${accu} ${curr}`;
+            }));
+        }
+    };
+    // 表示
+    //console.log(`${output}`);
+}

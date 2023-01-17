@@ -1,0 +1,126 @@
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <string>
+#include <vector>
+using namespace std;
+
+class Dice
+{
+public:
+    Dice(int t, int s, int e, int w, int n, int b) : T(t), S(s), E(e), W(w), N(n), B(b){};
+    void goS()
+    {
+        tmp = B;
+        B = S;
+        S = T;
+        T = N;
+        N = tmp;
+    }
+    void goN()
+    {
+        tmp = B;
+        B = N;
+        N = T;
+        T = S;
+        S = tmp;
+    }
+    void goE()
+    {
+        tmp = B;
+        B = E;
+        E = T;
+        T = W;
+        W = tmp;
+    }
+    void goW()
+    {
+        tmp = B;
+        B = W;
+        W = T;
+        T = E;
+        E = tmp;
+    }
+
+    int getT() { return T; }
+    int getE() {return E;}
+    int getB() {return B;}
+    int getW() {return W;}
+    int getN() {return N;}
+    int getS() {return S;}
+    int getMin()
+    {
+        return min({T,B,W,E,N,S});
+    }
+    int getMax()
+    {
+        return max({T,B,W,E,N,S});
+    }
+
+    void setT(int a) 
+    {
+        if(a == T) return;
+        else if(a == B) {goE();goE();}
+        else if(a == N) goS();
+        else if(a == S) goN();
+        else if(a == E) goW();
+        else goE();
+    }
+
+    void rotate()
+    {
+        tmp = E;
+        E = S;
+        S = W;
+        W = N;
+        N = tmp;
+    }
+
+    void setS(int a){   //CALL setT before setS
+        while(S != a)
+            rotate();
+    }
+
+    bool check(int a)
+    {
+        if(a == T || a == S || a == E || a == W || a == N || a == B)
+            return true;
+        return false;
+    }
+
+    bool operator==(Dice& dice)
+    {
+        setT(getMax());
+        setS(getMin());
+        dice.setT(dice.getMax());
+        dice.setS(dice.getMin());
+
+        if(T == dice.T && B == dice.B && S == dice.S && N == dice.N && W == dice.W && E == dice.E)
+            return true;
+        else
+            return false;
+    }
+
+private:
+    int T, S, E, W, N, B, tmp;
+};
+
+int main()
+{
+    int a, b, c, d, e, f;
+    cin >> a >> b >> c >> d >> e >> f;
+    Dice dice1(a, b, c, d, e, f);
+    
+    cin >> a >> b >> c >> d >> e >> f;
+    Dice dice2(a, b, c, d, e, f);
+
+    
+    if(dice1 == dice2)
+        cout << "Yes" << endl;
+    else
+        cout << "No" << endl;
+    return 0;
+}

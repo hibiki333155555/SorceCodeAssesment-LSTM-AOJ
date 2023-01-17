@@ -1,0 +1,12 @@
+#include<stdio.h>
+int main(){
+    double r,p;
+    p=3.141592653589793;
+
+    scanf("%lf",&r);
+    
+    printf("%lf %lf\n",r*r*p,2*r*p);
+    
+  return 0;
+}
+

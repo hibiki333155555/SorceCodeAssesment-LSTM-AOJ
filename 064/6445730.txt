@@ -1,0 +1,42 @@
+#include <iostream>
+#include <iomanip>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+   int r, c, allsum=0;
+   cin >> r >> c;
+
+   int n[r][c];
+   for(int i=0; i<r; i++) {
+      for(int j=0; j<c; j++) {
+         cin >> n[i][j];
+         allsum += n[i][j];
+      }
+   }
+
+   int rsum[r];
+   for(int i=0; i<r; i++) {
+      rsum[i] = 0;
+      for(int j=0; j<c; j++) {
+         rsum[i] += n[i][j];
+      }
+   }
+
+   int csum[c];
+   for(int i=0; i<c; i++) {
+      csum[i] = 0;
+      for(int j=0; j<r; j++) {
+         csum[i] += n[j][i];
+      }
+   }
+
+   for(int i=0; i<r+1; i++) {
+      for(int j=0; j<c+1; j++) {
+         if(i == r && j == c) cout << allsum;
+         else if(i == r) cout << csum[j] << " ";
+         else if(j == c) cout << rsum[i] << "\n";
+         else cout << n[i][j] << " ";
+      }
+   }
+}

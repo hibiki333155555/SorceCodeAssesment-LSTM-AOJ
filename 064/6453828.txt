@@ -1,0 +1,18 @@
+#include<stdio.h>
+int main()
+{
+    int x,i;
+    for(i=1;i<=1000;i++)
+    {
+        scanf("%d",&x);
+    }
+    for ( i = 1; i < 1000; i++)
+    {
+         if (x%10!=0)
+        {
+            printf("Case %d: %d\n",i,x);
+        }
+    }
+    
+    return 0;
+}

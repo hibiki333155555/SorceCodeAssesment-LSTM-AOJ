@@ -1,0 +1,37 @@
+#include<iostream>
+#include<algorithm>
+#include<string>
+#include<math.h>
+#include <queue>
+#include<bitset>
+#include <iomanip>
+#include <map>
+#include <set>
+#include <stack>
+#include <climits>
+using namespace std;
+int main() {
+    int N;
+    cin >> N;
+    long long A[2002020];
+    for (int i = 0; i <=N-1; i++)cin >> A[i];
+    int Q;
+    cin >> Q;
+    map<long long, long long>Map;
+    for (int bit = 0; bit < (1 << N); bit++) {
+        long long sum = 0;
+        for (int i = 0; i <= N; i++)if (bit & (1 << i))sum = sum + A[i];
+        Map[sum]++;
+      
+
+    }
+    for (int i = 1; i <= Q; i++) {
+        long long X;
+        cin >> X;
+        if (Map[X] > 0)cout << "yes" << endl;
+        else cout << "no" << endl;
+    }
+    
+
+}
+

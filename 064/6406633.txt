@@ -1,0 +1,10 @@
+#include <studio>
+
+int main(void)
+{
+    int x;
+    0<x<101
+    printf("%d\n x*x*x");
+    return 0;
+}
+

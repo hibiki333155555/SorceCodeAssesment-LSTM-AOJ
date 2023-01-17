@@ -1,0 +1,60 @@
+    #include<bits/stdc++.h>
+
+using namespace std;
+
+int n;
+
+int i;
+
+int x;
+
+int flg = 0;
+
+void call(void);
+void CHECK_NUM(void);
+void INCLUDE3(void);
+void END_CHECK_NUM(void);
+int end(void);
+
+int main(){
+	cin >> n;
+	call();
+	return(0);
+}
+
+void call(void){
+	i = 1;
+	CHECK_NUM();
+	cout << endl;
+}
+
+void CHECK_NUM(void){
+	if(!flg){
+		x = i;
+		if(x % 3 == 0){
+			cout << " " << i;
+			END_CHECK_NUM();
+		}
+		INCLUDE3();
+	}
+	return;
+}
+
+void INCLUDE3(void){
+	if(!flg){
+		if(x % 10 == 3){
+			cout << " " << i;
+			END_CHECK_NUM();
+		}
+		x /= 10;
+		if(x) INCLUDE3();
+		END_CHECK_NUM();
+	}
+	return;
+}
+
+void END_CHECK_NUM(void){
+	if(++i <= n)CHECK_NUM();
+	flg=1;
+	return;
+}

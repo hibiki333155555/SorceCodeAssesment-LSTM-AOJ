@@ -1,0 +1,14 @@
+n = int(input())
+t = 0
+h = 0
+for i in range(n):
+    words = list(map(str, input().split()))
+    if words[0] > words[1]:
+        t += 3
+    elif words[0] < words[1]:
+        h += 3
+    else:
+        t += 1
+        h += 1
+print(t, h)
+

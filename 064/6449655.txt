@@ -1,0 +1,57 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<map>
+#include<stdio.h>
+#include<vector>
+#include<queue>
+#include<math.h>
+#include<deque>
+#include<set>
+#include<tuple>
+#include<string>
+using namespace std;
+#define ll long long
+#define int long long
+#define double long double
+#define rep(s,i,n) for(int i=s;i<n;i++)
+#define rrep(s,i,n) for(int i=n;i>=s;i-=1)
+#define c(n) cout<<n<<endl;
+#define ic(n) int n;cin>>n;
+#define sc(s) string s;cin>>s;
+#define mod 1000000007
+#define inf 100000000000000007
+#define f first
+#define s second
+#define mini(c,a,b) *min_element(c+a,c+b)
+#define maxi(c,a,b) *max_element(c+a,c+b)
+#define pi 3.141592653589793238462643383279
+#define e_ 2.718281828459045235360287471352
+#define P pair<int,int>
+#define upp(a,n,x) upper_bound(a,a+n,x)-a;
+#define low(a,n,x) lower_bound(a,a+n,x)-a;
+#define UF UnionFind 
+#define pb push_back
+#define ep emplace_back
+//printf("%.12Lf\n",);
+string s[500];
+bool ok[500];
+signed main(){
+	ic(n)
+	rep(0,i,n)cin>>s[i];
+	rep(0,i,n){
+		int sum=0;
+		rep(i+1,j,n){
+			rep(0,l,s[i].size()){
+				if(s[i][l]!=s[j][l])sum++;
+			}
+			if(sum<=1){
+				ok[i]=true;
+				ok[j]=true;
+			}
+		}
+	}
+	int ans=0;
+	rep(0,i,n)ans+=ok[i];
+	c(ans)
+}

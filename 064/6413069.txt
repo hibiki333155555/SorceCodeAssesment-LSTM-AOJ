@@ -1,0 +1,29 @@
+#include<stdio.h>
+#include<string.h>
+
+int main(){
+    
+    char W[10],T[1000];
+    int i,n;
+    
+    scanf("%s",&W);
+    
+    n=0;
+    
+    scanf("%s",&T);
+    while(1){
+        if(strcmp(T,"END_OF_TEXT")==0)break;
+        for(i=0;T[i]!='\0';i++){
+            if(T[i] >= 'A' && T[i] <= 'Z')T[i]=T[i]+32;
+        }
+    }
+    
+    while(1){
+        if(strcmp(T,"END_OF_TEXT") == 0)break;
+        if(strcmp(W,T)==0)n++;
+    }
+    
+    printf("%d\n", n);
+    
+    return 0;
+}

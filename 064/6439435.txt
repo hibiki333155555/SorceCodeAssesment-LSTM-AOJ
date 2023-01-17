@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+
+    int D, L;
+    cin >> D >> L;
+
+    int excess = D % L;
+
+    if(excess == 0){
+        cout << D / L << endl;
+    }
+    else{
+        cout << (D / L) + (D % L) << endl;
+    }
+
+
+}

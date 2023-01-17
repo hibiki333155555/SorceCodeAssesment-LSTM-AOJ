@@ -1,0 +1,38 @@
+import sys
+import copy
+from collections import defaultdict
+
+input = sys.stdin.readline
+
+
+def main():
+    while True:
+        n = int(input())
+        if n == 0:
+            break
+        b = list(map(int, input().split()))
+
+        cur_dp = defaultdict(bool)
+        cur_dp[0, 0] = True
+
+        for i in range(n):
+            last_dp = cur_dp.copy()
+            v = b[i]
+            for x, y in last_dp:
+                if last_dp[x, y]:
+                    cur_dp[x+v, y] = True
+                    cur_dp[x, y+v] = True
+
+        s = sum(b)
+        ans = 0
+        for k, v in cur_dp.items():
+            if v:
+                x, y = k
+                ans = max(ans, min(x, y, s-x-y))
+
+        print(ans)
+
+
+if __name__ == "__main__":
+    main()
+

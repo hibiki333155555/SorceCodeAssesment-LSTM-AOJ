@@ -1,0 +1,6 @@
+import math
+
+r = int(input())
+S = r * r * math.pi
+R = 2 * r * math.pi
+print("{:.6f}".format(S), "{:.6f}".format(R), sep=" ")

@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+vector<pair<int, int>> f(const vector<vector<int>>& G)
+{
+	vector<pair<int, int>> D(G.size(), {1 << 30, 0});
+	queue<pair<int, int>> Q;
+	for (Q.push({0, 0}); !Q.empty(); Q.pop()) {
+		auto [j, d] = Q.front();
+		for (int k = 0; k < (int) G[j].size(); ++k) if (G[j][k] > 0) {
+			if (D[k].first <= d + 1) continue;
+			D[k] = {d + 1, j};
+			Q.push({k, d + 1});
+		}
+	}
+	D[0].second = -1;
+	return D;
+}
+
+int f(vector<vector<int>>& G, const vector<pair<int, int>>& D, int k, int m)
+{
+	int j = D[k].second;
+	if (j < 0) return m;
+	m = f(G, D, j, min(m, G[j][k]));
+	G[j][k] -= m;
+	G[k][j] += m;
+	return m;
+}
+
+int main()
+{
+	int nV, nE; cin >> nV >> nE;
+	vector<vector<int>> G(nV, vector<int>(nV, 0));
+	int r = 0;
+	for (int n = 0, u, v, c; n < nE; ++n, G[u][v] = c) cin >> u >> v >> c;
+	for (;;) {
+		vector<pair<int, int>> D(f(G));
+		if (D.back().first >= 1 << 30) break;
+		r += f(G, D, nV - 1, 1 << 30);
+	}
+	cout << r << endl;
+	return 0;
+}
+

@@ -1,0 +1,7 @@
+import sys
+sample_lines=sys.stdin.readlines()
+sample="".join(map(str,sample_lines))
+sample=sample.lower()
+letter="abcdefghijklmnopqrstuvwxyz"
+for cap in range(len(letter)):
+    print(f"{letter[cap]} : {sample.count(letter[cap])}")

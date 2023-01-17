@@ -1,0 +1,21 @@
+
+#include <stdio.h>
+
+int main()
+{
+    int e,a,b,c;
+    scanf("%d",&e);
+    while(e){
+         scanf("%d%d%d",&a,&b,&c);
+    if((a*a)+(b*b)==(c*c))
+    {
+        printf("YES");
+    }
+    else
+    {
+        printf("NO");
+    }
+}
+
+    return 0;
+}

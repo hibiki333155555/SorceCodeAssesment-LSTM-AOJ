@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+
+#define ll long long
+#define ld long double
+#define rep(i,a,b) for (int i = a; i < b; i++)
+
+using namespace std;
+
+int main(){
+    int n ;
+    cin >> n;
+    rep(i,1,n+1){
+        if (i%3 == 0) cout <<" "<<i;
+        else{
+            int x = i;
+            while (x){
+                if (x%10 == 3){
+                    cout << " "<<i;
+                    break;
+                } 
+                x /= 10;
+            }
+        }
+    }
+    cout << endl;
+    //system("pause");
+    return 0;
+}

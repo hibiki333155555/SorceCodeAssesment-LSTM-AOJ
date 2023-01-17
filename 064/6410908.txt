@@ -1,0 +1,3 @@
+x = input()
+printf('x**3')
+

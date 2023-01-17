@@ -1,0 +1,135 @@
+#pragma GCC ta g("avx2")
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("unroll-loops")
+#include <bits/stdc++.h>
+using namespace std;
+#define DEBUG
+#ifdef DEBUG
+template <class T, class U>
+ostream &operator<<(ostream &os, const pair<T, U> &p) {
+    os << '(' << p.first << ',' << p.second << ')';
+    return os;
+}
+template <class T> ostream &operator<<(ostream &os, const vector<T> &v) {
+    os << '{';
+    for(int i = 0; i < (int)v.size(); i++) {
+        if(i) { os << ','; }
+        os << v[i];
+    }
+    os << '}';
+    return os;
+}
+void debugg() { cerr << endl; }
+template <class T, class... Args>
+void debugg(const T &x, const Args &... args) {
+    cerr << " " << x;
+    debugg(args...);
+}
+#define debug(...)                                                             \
+    cerr << __LINE__ << " [" << #__VA_ARGS__ << "]: ", debugg(__VA_ARGS__)
+#define dump(x) cerr << __LINE__ << " " << #x << " = " << (x) << endl
+#else
+#define debug(...) (void(0))
+#define dump(x) (void(0))
+#endif
+using namespace std;
+typedef long long ll;
+typedef vector<ll> vl;
+typedef vector<vl> vvl;
+typedef vector<char> vc;
+typedef vector<string> vs;
+typedef vector<bool> vb;
+typedef vector<double> vd;
+typedef pair<ll,ll> P;
+typedef pair<int,int> pii;
+typedef vector<P> vpl;
+typedef tuple<ll,ll,ll> tapu;
+#define rep(i,n) for(int i=0; i<(n); i++)
+#define REP(i,a,b) for(int i=(a); i<(b); i++)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+template<typename T1,typename T2> inline bool chmin(T1 &a,T2 b){
+	if(a>b){
+		a = b; return true;
+	}
+	else return false;
+}
+template<typename T1,typename T2> inline bool chmax(T1 &a,T2 b){
+	if(a<b){
+		a = b; return true;
+	}
+	else return false;
+}
+template<typename T> inline void print(T &a){
+    int sz = a.size();
+    for(auto itr = a.begin(); itr != a.end(); itr++){
+		cout << *itr;
+        sz--;
+        if(sz) cout << " ";
+	}
+    cout << "\n";
+}
+template<typename T1,typename T2> inline void print2(T1 a, T2 b){
+	cout << a << " " << b << "\n";
+}
+template<typename T1,typename T2,typename T3> inline void print3(T1 a, T2 b, T3 c){
+	cout << a << " " << b << " " << c << "\n";
+}
+void mark() {cout << "#" << "\n";}
+ll pcount(ll x) {return __builtin_popcountll(x);}
+//#include <atcoder/convolution>
+//using namespace atcoder;
+const int inf = (1<<30)-1;
+const ll linf = 1LL<<61;
+const int MAX = 510000;
+int dy[8] = {0,1,0,-1,1,-1,-1,1};
+int dx[8] = {-1,0,1,0,1,-1,1,-1};
+const double pi = acos(-1);
+const double eps = 1e-9;
+//const int mod = 1e9 + 7;
+const int mod = 998244353;
+
+int main(){
+    int n,m; cin >> n >> m;
+    vector<tapu> v(n);
+    vl imo(m+1,0), pl(m+1,0);
+    rep(i,n){
+        int a,b,c; cin >> a >> b >> c; b--;
+        v[i] = tie(b,c,a);
+        imo[b] += a;
+        imo[c] -= a;
+    }
+    rep(i,m) imo[i+1] += imo[i];
+    int q; cin >> q;
+    while(q--){
+        int d,e; cin >> d >> e; e--;
+        imo[e] -= d;
+    }
+    sort(all(v));
+    int now = 0;
+    ll ans = 0;
+    int mx = -1;
+    rep(i,m){
+        if(i > 0) pl[i] += pl[i-1];
+        imo[i] += pl[i];
+        if(imo[i] < 0){
+            while(now < n){
+                if(get<0>(v[now]) <= i){
+                    chmax(mx, get<1>(v[now]));
+                    now++;
+                }else{
+                    break;
+                }
+            }
+            if(mx < i){
+                cout << -1 << endl;
+                return 0;
+            }
+            ll val = -imo[i];
+            ans += val;
+            pl[i] += val;
+            pl[mx] -= val;
+        }
+    }
+    cout << ans << endl;
+}

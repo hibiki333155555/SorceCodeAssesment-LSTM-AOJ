@@ -1,0 +1,37 @@
+n = int(input())
+temparr = input().split()
+arr1 = []
+arr2 = []
+for i in temparr:
+    arr1.append(i)
+    arr2.append(i)
+# ['H4', 'C9', 'S4', 'D2', 'C3']
+def bub(list):
+    t = len(list)
+    for j in range(t-1):#0123
+        for i in range(t-j-1):#34
+            # print("t-i-1は{}、list[t-i-1]は{}".format(t-i-1,list[t-i-1]))
+            if int(list[t-i-1][1]) < int(list[t-i-2][1]):
+                list[t-i-1],list[t-i-2] = list[t-i-2] ,list[t-i-1]
+    return list
+
+
+def sel(list):
+    t = len(list)
+    for i in range(t):
+        mina = i
+        for j in range(i,t):
+            if int(list[j][1]) < int(list[mina][1]):
+                mina = j
+        list[mina],list[i] = list[i],list[mina]
+    return list
+stable = False
+if arr1 == arr2:
+    stable = True
+print(*bub(arr1))
+print("Stable")
+print(*sel(arr2))
+if arr1 == arr2:
+    print("Stable")
+else:
+    print("Not stable")

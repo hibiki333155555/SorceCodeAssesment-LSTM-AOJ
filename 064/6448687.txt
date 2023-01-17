@@ -1,0 +1,18 @@
+N, Q = map(int, input().split())
+A = list(map(int, input().split()))
+x = list(map(int, input().split()))
+
+for q in range(Q):
+    r = 0
+    ans = 0
+    tmp = 0
+    for l in range(N):
+        while r < N and tmp + A[r] <= x[q]:
+            tmp += A[r]
+            r += 1
+        ans += (r - l)
+        if r == l:
+            r += 1
+        else:
+            tmp -= A[l]
+    print(ans)

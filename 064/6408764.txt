@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+using namespace std;
+const int SIZE = 200000;
+
+struct Element {
+    string name;
+    int time;
+};
+
+class Queue {
+    int head, tail;
+    Element elem[SIZE];
+public:
+    Queue() {
+        head = tail = 0;
+    }
+    bool isEmpty() {
+        return head == tail;
+    }
+    bool isFull() {
+        return head == (tail + 1) % SIZE;
+    }
+    void enqueue(Element e) {
+        if (isFull()) {
+            cerr << "Buffer overflow!!" << endl;
+            return;
+        }
+        elem[tail] = e;
+        tail = (tail+1)%SIZE;
+    }
+    Element dequeue() {
+        if (isEmpty()) {
+            cerr << "Buffer underflow!!" << endl;
+            Element err = {"Error", -1};
+            return err;
+        }
+        return elem[head];
+        head = (head+1)%SIZE;
+    }
+};
+
+int main() {
+    Queue queue;
+    int n, q;
+    cin >> n >> q;
+
+    for (int i = 0; i < n; i++) {
+        string str;
+        int time;
+        cin >> str >> time;
+        Element elem = {str, time};
+        queue.enqueue(elem);
+    }
+
+    int now = 0;
+    while (!queue.isEmpty()) {
+        Element elem = queue.dequeue();
+        if (elem.time <= q) {
+            now += elem.time;
+            cout << elem.name << " " << now << endl;
+        } else {
+            now += q;
+            elem.time = elem.time - q;
+            queue.enqueue(elem);
+        }
+    }
+
+    return 0;
+}

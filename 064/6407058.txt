@@ -1,0 +1,15 @@
+str = input()
+q = int(input())
+for i in range(q):
+    in_list = input().split()
+    a = int(in_list[1])
+    b = int(in_list[2])
+    if len(in_list) == 4:
+        for num, j in enumerate(range(a, b+1)):
+            str[j] = in_list[3][num]
+        # str = str.replace(str[a:b+1], in_list[3])
+    elif in_list[0] == 'print':
+        print(str[a:b+1])
+    else:
+        p = str[a:b+1]
+        str = str[:a] + p[::-1] + str[b+1:]

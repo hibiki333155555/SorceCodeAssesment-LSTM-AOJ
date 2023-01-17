@@ -1,0 +1,38 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main() {
+    string letter;
+    int num;
+    cin >> letter >> num;
+    for(int count = 0; count < num; count++) {
+        string def;
+        cin >> def;
+        if(def == "reverse") {
+            int a, b;
+            cin >> a >> b;
+            string letter2 = letter;
+            int c = a + b;
+            for(int m = a; m <= b; m++) {
+                letter[m] = letter2[c];
+                c--;
+            }
+        } else if(def == "replace") {
+            int a, b;
+            string letter2;
+            cin >> a >> b >> letter2;
+            int n = 0;
+            for(int m = a; m <= b; m++) {
+                letter[m] = letter2[n];
+                n++;
+            }
+        } else if(def == "print") {
+            int a, b;
+            cin >> a >> b;
+            for(int m = a; m <= b; m++) {
+                cout << letter[m];
+            }
+        }
+    }
+    cout << endl;
+}

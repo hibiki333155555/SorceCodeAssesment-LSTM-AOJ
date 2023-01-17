@@ -1,0 +1,16 @@
+n, m = map(int, input().split())
+mat = []
+for i in range(n):
+    mat.append(list(map(int, input().split())))
+vec = []
+for i in range(m):
+    vec.append(int(input()))
+ans = []
+for i in range(n):
+    x = 0
+    for j in range(m):
+        x += mat[i][j]*vec[j]
+    ans.append(x)
+for ele in ans:
+    print(ele)
+

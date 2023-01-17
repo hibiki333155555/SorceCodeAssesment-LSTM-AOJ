@@ -1,0 +1,84 @@
+h, w = map(int, input().split())
+mp = [input() for _ in range(h)]
+
+points = {}
+for y in range(h):
+  for x in range(w):
+    c = mp[y][x]
+    if c != ".":
+      if c not in points:
+        points[c] = [(x, y)]
+      else:
+        points[c].append((x, y))
+
+keys = []
+preventer = {}
+for c, ps in points.items():
+  keys.append(c)
+  p1, p2 = ps
+  x1, y1 = p1
+  x2, y2 = p2
+  if x1 == x2:
+    s = set()
+    for y in range(y1 + 1, y2):
+      s.add(mp[y][x1])
+    preventer[c] = [s]
+    continue
+
+  if y1 == y2:
+    s = set()
+    for x in range(x1 + 1, x2):
+      s.add(mp[y1][x])
+    preventer[c] = [s]
+    continue
+
+  s1 = set()
+  s2 = set()
+  if x1 < x2:
+    for x in range(x1 + 1, x2):
+      s1.add(mp[y1][x])
+    for y in range(y1, y2):
+      s1.add(mp[y][x2])
+    for x in range(x1, x2):
+      s2.add(mp[y2][x])
+    for y in range(y1 + 1, y2):
+      s2.add(mp[y][x1])
+
+  else:
+    for x in range(x2, x1):
+      s1.add(mp[y1][x])
+    for y in range(y1 + 1, y2):
+      s1.add(mp[y][x2])
+    for x in range(x2 + 1, x1):
+      s2.add(mp[y2][x])
+    for y in range(y1 + 1, y2 + 1):
+      s2.add(mp[y][x1])
+  preventer[c] = [s1, s2]
+
+removal = {".":True}
+for key in keys:
+  removal[key] = False
+ans = 0
+while True:
+  remove_lst = []
+  for key in keys:
+    for s in preventer[key]:
+      if not s:
+        break
+      
+      for c in s:
+        if not removal[c]:
+          break
+      else:
+        removal[key] = True
+        remove_lst.append(key)
+        ans += 2
+        break
+  
+  if not remove_lst:
+    break
+
+  for rem in remove_lst:
+    keys.remove(rem)
+
+print(ans)

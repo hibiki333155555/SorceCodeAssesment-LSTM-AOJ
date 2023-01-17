@@ -1,0 +1,154 @@
+#define MOD_TYPE 2
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#if 0
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#endif
+
+#if 0
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tag_and_trait.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/rope>
+using namespace __gnu_pbds;
+using namespace __gnu_cxx;
+template <typename T>
+using extset =
+    tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+#endif
+
+#if 0
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
+using Int = boost::multiprecision::cpp_int;
+using lld = boost::multiprecision::cpp_dec_float_100;
+#endif
+
+#pragma region Macros
+
+using ll = long long int;
+using ld = long double;
+using pii = pair<int, int>;
+using pll = pair<ll, ll>;
+using pld = pair<ld, ld>;
+template <typename T>
+using smaller_queue = priority_queue<T, vector<T>, greater<T>>;
+
+constexpr ll MOD = (MOD_TYPE == 1 ? (ll)(1e9 + 7) : 998244353);
+constexpr int INF = (int)1e9 + 10;
+constexpr ll LINF = (ll)4e18;
+constexpr ld PI = acos(-1.0);
+constexpr ld EPS = 1e-7;
+constexpr int Dx[] = {0, 0, -1, 1, -1, 1, -1, 1, 0};
+constexpr int Dy[] = {1, -1, 0, 0, -1, -1, 1, 1, 0};
+
+#define REP(i, m, n) for (ll i = m; i < (ll)(n); ++i)
+#define rep(i, n) REP(i, 0, n)
+#define REPI(i, m, n) for (int i = m; i < (int)(n); ++i)
+#define repi(i, n) REPI(i, 0, n)
+#define MP make_pair
+#define MT make_tuple
+#define YES(n) cout << ((n) ? "YES" : "NO") << "\n"
+#define Yes(n) cout << ((n) ? "Yes" : "No") << "\n"
+#define possible(n) cout << ((n) ? "possible" : "impossible") << "\n"
+#define Possible(n) cout << ((n) ? "Possible" : "Impossible") << "\n"
+#define all(v) v.begin(), v.end()
+#define NP(v) next_permutation(all(v))
+#define dbg(x) cerr << #x << ":" << x << "\n";
+#define UNIQUE(v) v.erase(unique(all(v)), v.end())
+
+struct io_init {
+  io_init() {
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    cout << setprecision(30) << setiosflags(ios::fixed);
+  };
+} io_init;
+template <typename T>
+inline bool chmin(T &a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template <typename T>
+inline bool chmax(T &a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+inline ll CEIL(ll a, ll b) { return (a + b - 1) / b; }
+template <typename A, size_t N, typename T>
+inline void Fill(A (&array)[N], const T &val) {
+  fill((T *)array, (T *)(array + N), val);
+}
+template <typename T>
+vector<T> compress(vector<T> &v) {
+  vector<T> val = v;
+  sort(all(val)), val.erase(unique(all(val)), val.end());
+  for (auto &&vi : v) vi = lower_bound(all(val), vi) - val.begin();
+  return val;
+}
+template <typename T, typename U>
+constexpr istream &operator>>(istream &is, pair<T, U> &p) noexcept {
+  is >> p.first >> p.second;
+  return is;
+}
+template <typename T, typename U>
+constexpr ostream &operator<<(ostream &os, pair<T, U> &p) noexcept {
+  os << p.first << " " << p.second;
+  return os;
+}
+template <typename T>
+constexpr istream &operator>>(istream &is, vector<T> &v) noexcept {
+  for (int i = 0; i < v.size(); i++) is >> v[i];
+  return is;
+}
+template <typename T>
+constexpr ostream &operator<<(ostream &os, vector<T> &v) noexcept {
+  for (int i = 0; i < v.size(); i++)
+    os << v[i] << (i + 1 == v.size() ? "" : " ");
+  return os;
+}
+template <typename T>
+constexpr void operator--(vector<T> &v, int) noexcept {
+  for (int i = 0; i < v.size(); i++) v[i]--;
+}
+random_device seed_gen;
+mt19937_64 engine(seed_gen());
+
+#pragma endregion
+
+// --------------------------------------
+
+void solve() {
+  string c1, c2;
+  int r1, r2;
+  cin >> c1 >> r1 >> c2 >> r2;
+  vector<string> v;
+  rep(i, 26) {
+    string t;
+    t.push_back('A' + i);
+    v.push_back(t);
+  }
+  rep(i, 26) {
+    rep(j, 26) {
+      string t;
+      t.push_back('A' + i);
+      t.push_back('A' + j);
+      v.push_back(t);
+    }
+  }
+  map<string, int> mp;
+  rep(i, v.size()) mp[v[i]] = i;
+  cout << (mp[c2] - mp[c1] + 1) * (r2 - r1 + 1) << "\n";
+}
+
+int main() { solve(); }

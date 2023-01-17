@@ -1,0 +1,6 @@
+H, W = map(int, input().split())
+while True:
+    if W==H==0:
+        break
+    for i in range(H):
+        print("#"*W)

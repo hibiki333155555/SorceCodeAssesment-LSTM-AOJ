@@ -1,0 +1,17 @@
+#include <iostream>
+using namespace std;
+
+int main(void) {
+    double S;
+    double h, m, s;
+
+    cin >> S;
+    
+    h = (int)S/60/60;
+    m = (int)(S-h*60*60)/60;
+    s = (int)(S-h*60*60-m*60);
+
+    cout << h << "," << m << "," << s << endl;
+
+    return 0;
+}

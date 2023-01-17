@@ -1,0 +1,86 @@
+#include "bits/stdc++.h"
+using namespace std;
+
+#define REP(i, n) for (ll i = 0; i < n; i++)
+#define REPR(i, n) for (ll i = n; i >= 0; i--)
+#define FOR(i, m, n) for (ll i = m; i < n; i++)
+#define FORR(i, m, n) for (ll i = m; i >= n; i--)
+#define REPO(i, n) for (ll i = 1; i <= n; i++)
+#define ll long long
+#define INF (ll)1 << 60
+#define MINF (-1 * INF)
+#define ALL(n) n.begin(), n.end()
+#define MOD 1000000007
+#define P pair<ll, ll>
+
+struct LazySeg{
+    ll sz;
+    vector<ll> node, lazy;
+    vector<bool> flag;
+    LazySeg(ll n){
+        sz = 1;
+        while(sz < n){
+            sz *= 2;
+        }
+        node.resize(sz * 2);
+        lazy.resize(sz * 2);
+        flag.resize(sz * 2);
+    }
+    void eval(ll x, ll l, ll r){
+        if(flag[x]){
+            node[x] += lazy[x];
+            if(r - l > 1){
+                lazy[x * 2 + 1] += lazy[x] / 2;
+                lazy[x * 2 + 2] += lazy[x] / 2;
+                flag[x * 2 + 1] = flag[x * 2 + 2] = true;
+            }
+            flag[x] = false;
+            lazy[x] = 0;
+        }
+    }
+    void update(ll a, ll b, ll x, ll k = 0, ll l = 0, ll r = -1){
+        if(r == -1)r = sz;
+        eval(k, l, r);
+        if (r <= a or b <= l) return;
+        if(a <= l and r <= b){
+            flag[k] = true;
+            lazy[k] += (r - l) * x;
+            eval(k, l, r);
+            return;
+        }
+        update(a, b, x, 2 * k + 1, l, (l + r) / 2);
+        update(a, b, x, 2 * k + 2, (l + r) / 2, r);
+        node[k] = node[2 * k + 1] + node[2 * k + 2];
+    }
+    ll query(ll a, ll b, ll k = 0, ll l = 0, ll r = -1){
+        if(r == -1)r = sz;
+        eval(k, l, r);
+        if (r <= a or b <= l) return 0;
+        if (a <= l and r <= b) return node[k];
+        ll q1 = query(a, b, 2 * k + 1, l, (l + r) / 2);
+        ll q2 = query(a, b, 2 * k + 2, (l + r) / 2, r);
+        return q1 + q2;
+    }
+};
+LazySeg seg(110000);
+int main() {
+    ll n, q;
+    cin >> n >> q;
+    
+    REP(i, q){
+        ll t;
+        cin >> t;
+        if(t == 0){
+            ll a, b, c;
+            cin >> a >> b >> c;
+            a--;
+            seg.update(a, b, c);
+        }
+        if(t == 1){
+            ll  a, b;
+            cin >> a >> b;
+            a--;
+            cout << seg.query(a, b) << endl;
+        }
+    }
+}

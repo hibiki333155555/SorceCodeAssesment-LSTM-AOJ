@@ -1,0 +1,2 @@
+input()
+print('Yes' if len(list(map(input().split()))) >= 3 else 'No')

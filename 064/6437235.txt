@@ -1,0 +1,30 @@
+"""
+単一始点最短経路(負の重みを持つ辺を含む)
+BellmanFord
+"""
+def BellmanFord(s,G):
+    C=[10**15]*n
+    C[s]=0
+    for i in range(n):
+        update=False
+        for u,v,c in G:
+            if C[v]>C[u]+c:
+                C[v]=C[u]+c
+                update=True
+        if not update:
+            break
+        if i==n-1:
+            return -1
+    return C
+
+n,m,start=map(int,input().split())
+G=[]
+for _ in range(m):
+    u,v,c=map(int,input().split())
+    G.append([u,v,c])
+ans=BellmanFord(start,G)
+if ans==-1:
+    print('NEGATIVE CYCLE')
+else:
+    for a in ans:
+        print('INF' if a==10**15 else a)

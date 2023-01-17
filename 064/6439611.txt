@@ -1,0 +1,13 @@
+n = int(input())
+list = list(map(int, input().split()))
+list.sort()
+
+sum = 0
+
+for i in range(len(list)):
+    sum += list[i]
+
+print(list[0], end=" ")
+print(list[n-1], end=" ")
+print(sum)
+

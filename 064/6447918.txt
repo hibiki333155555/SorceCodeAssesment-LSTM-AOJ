@@ -1,0 +1,27 @@
+#include <iostream>
+#include <set>
+using namespace std;
+
+int main(){
+    int n, q;
+    cin >> n;
+    set<int> s,t;
+    while(n--){
+        int x;
+        cin >> x;
+        s.insert(x);
+    }
+    cin >> q;
+    while(q--){
+        int x;
+        cin >> x;
+        t.insert(x);
+    }
+    int cnt=0;
+    for(int x:t){
+        // cout << x << endl;
+        if(s.count(x)) cnt++;
+    }
+    cout << cnt;
+    return 0;
+}

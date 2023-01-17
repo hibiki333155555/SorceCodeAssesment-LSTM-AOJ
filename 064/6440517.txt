@@ -1,0 +1,19 @@
+n,k=map(int,input().split())
+import queue
+l=[]
+for i in range(n):
+	Q = queue.Queue()
+	l.append(Q)
+for i in range(k):
+	s=list(map(int,input().split()))
+	if s[0]==0:
+		c=s[1]
+		l[c].put(s[2])
+	elif s[0]==1:
+		d=s[1]
+		if not l[d].empty():
+			print(l[d].queue[0])
+	else:
+		d=s[1]
+		if not l[d].empty():
+			l[d].get()

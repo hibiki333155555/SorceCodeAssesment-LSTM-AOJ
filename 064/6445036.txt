@@ -1,0 +1,77 @@
+#define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_A"
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct UnionFind {
+    vector<int> par, siz;
+
+    UnionFind() = default;
+
+    UnionFind(int n) { init(n); }
+
+    void init(int n) {
+        par.resize(n);
+        siz.resize(n);
+        iota(par.begin(), par.end(), 0);
+        fill(siz.begin(), siz.end(), 1);
+    }
+
+    int find(int u) {
+        if (u == par[u])
+            return u;
+        return par[u] = find(par[u]);
+    }
+
+    bool merge(int u, int v) {
+        u = find(u), v = find(v);
+        if (u == v)
+            return false;
+        if (siz[u] > siz[v]) {
+            par[v] = u;
+            siz[u] += siz[v];
+        } else {
+            par[u] = v;
+            siz[v] += siz[u];
+        }
+        return true;
+    }
+
+    int size(int u) { return siz[find(u)]; }
+};
+
+
+struct UnionFind2d {
+	int n, m;
+	UnionFind dsu;
+
+	UnionFind2d() = default;
+
+	UnionFind2d(int _n, int _m) { init(_n, _m); }
+
+	void init(int _n, int _m) { 
+		n = _n, m = _m;
+		dsu.init(n * m); 
+	}
+
+	int find(int ui, int uj) { return dsu.find(ui * m + uj); }
+
+	bool merge(int ui, int uj, int vi, int vj) { return dsu.merge(ui * m + uj, vi * m + vj); }
+};
+
+
+
+int main() {
+	int N, Q;
+  	cin >> N >> Q;
+	UnionFind2d dsu(1, N);
+  	while (Q--) {
+    	int t, u, v;
+    	cin >> t >> u >> v;
+		if (t == 0)
+	      	dsu.merge(0, u, 0, v);
+    	else
+      		cout << (dsu.find(0, u) == dsu.find(0, v) ? 1 : 0) << '\n';
+  	}
+}
+

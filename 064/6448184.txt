@@ -1,0 +1,63 @@
+/***
+ * https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_6_B&lang=ja
+ ***/
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <string>
+#include <cstring>
+#include <iomanip>
+#include <cmath>
+// #include "comp.h"
+using namespace std;
+using ll = long long;
+
+// #define DEBUG
+#define FOR(i, a, b) for (int i = (int)(a); i < (int)(b); ++i)
+#define rep(i, n) for (int i = 0; i < (int)(n); ++i)
+
+int main()
+{
+#ifndef DEBUG
+    int n;
+    int a[100];
+
+    cin >> n;
+    rep(i, n)
+    {
+        cin >> a[i];
+    }
+
+
+    int flag = 1;
+    int c = 0;
+
+    while(flag){
+        flag = 0;
+        for(int i = n - 1; i > 0; --i){
+            if(a[i] < a[i-1]){
+                swap(a[i], a[i-1]);
+                ++c;
+                flag = 1;
+            }
+        }
+    }
+
+    rep(i, n - 1) cout << a[i] << " ";
+    cout << a[n - 1] << endl;
+
+    cout << c << endl;
+
+#else
+    int j;
+    rep(i, 52)
+    {
+        j = i % 13 + 1;
+        cout << j;
+        if (j == 13)
+            cout << endl;
+    }
+#endif
+}
+

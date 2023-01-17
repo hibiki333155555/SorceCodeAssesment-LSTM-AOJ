@@ -1,0 +1,17 @@
+X=[]
+Y=[]
+while True:
+    a,b=map(int,raw_input().split())
+    if a ==0 and b==0:
+        break
+    X.append(a)
+    Y.append(b)
+    
+for i in range(len(X)):
+    a=X[i]
+    b=Y[i]
+    if a>b:
+        print(b,a)
+    else:
+        print(a,b)
+

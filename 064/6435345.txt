@@ -1,0 +1,41 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    f.readline()
+    a_list = list(map(int, f.readline().split()))
+    k = 10_002
+    c_list = [0] * k
+
+    for a in a_list:
+        c_list[a] += 1
+
+    is_first = True
+    for i, c in enumerate(c_list):
+        if c > 0 and not is_first:
+            print(' ', end='')
+
+        for j in range(c_list[i]):
+            if j > 0:
+                print(' ', end='')
+            print(i, end='')
+            is_first = False
+    print('')
+
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

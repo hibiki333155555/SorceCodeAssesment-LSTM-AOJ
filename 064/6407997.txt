@@ -1,0 +1,38 @@
+#include<stdio.h>
+int main(){
+    
+    int m,f,r;
+    char x;
+    
+    while(1){
+        scanf("%d %d %d",&m,&f,&r);
+    }
+}
+
+
+  for(;;){
+    scanf("%d%d%d",&m,&f,&r);
+    if(m+f+r == -3) break;
+
+    if(m == -1 || f == -1)
+      s = 'F';
+    else if(m+f >= 80)
+      s = 'A';
+    else if(m+f >= 65)
+      s = 'B';
+    else if(m+f >= 50)
+      s = 'C';
+    else if(m+f >= 30)
+      if(r >= 50)
+        s = 'C';
+      else
+        s = 'D';
+    else
+      s = 'F';
+
+    printf("%c\n", s);
+  }
+  
+  return 0;
+}
+

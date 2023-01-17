@@ -1,0 +1,26 @@
+using System;
+class program
+{
+    static void Main(string[] args)
+    {
+        var s = int.Parse(Console.ReadLine().Trim());
+        var arr = new long[s];
+        var min = arr[1];
+        var max = arr[1];
+        var sum = 0;
+        for(int i = 0; i < arr[0]; i++)
+        {
+            if(min > arr[i])
+            {
+                min = arr[i];
+            }
+            if(max < arr[i])
+            {
+                max = arr[i];
+            }
+            var f = int.Parse(s[i]);
+            sum = sum + f;
+        }
+        Console.WriteLine(min + " " + max + " " + sum);
+    }
+}

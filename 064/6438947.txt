@@ -1,0 +1,10 @@
+from operator import mul
+n,m=map(int,input().split())
+A=[]
+b=[]
+for i in range(n):
+    A.append(list(map(int,input().split())))
+for j in range(m):
+    b.append(int(input()))
+for k in range(n):
+    print(sum(list(map(mul,A[k],b))))

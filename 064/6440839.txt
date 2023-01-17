@@ -1,0 +1,25 @@
+using System;
+
+internal class Program
+{
+    public static void Main()
+    {
+        var C = 0;
+        Console.ReadLine();
+        var S = Console.ReadLine().Split();
+        Console.ReadLine();
+        var T = Console.ReadLine().Split();
+        foreach (var t in T)
+        {
+            foreach (var s in S)
+            {
+                if (s == t)
+                {
+                    C++;
+                    break;
+                }
+            }
+        }
+        Console.WriteLine(C);
+    }
+}

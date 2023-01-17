@@ -1,0 +1,27 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+    int a,b,c,z=1;
+while (z<=3000)
+{
+    scanf("%d %d",&a ,&b);
+   c=a;
+   a=b;
+   b=c;
+   if (a==0 && b==0)
+   {
+       break;
+   }
+   printf("%d %d\n",a,b);
+   z++;
+}
+
+
+
+
+
+
+    return 0;
+}
+
+

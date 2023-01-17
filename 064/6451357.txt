@@ -1,0 +1,160 @@
+#include "bits/stdc++.h"
+using namespace std;
+
+#define YES		0
+#define	NO		1
+#define MAX		500000
+#define NIL		-1
+
+#define	INSERT	0
+#define	PRINT	1
+#define	FIND	2
+
+#define YES		0
+#define	NO		1
+
+typedef struct node{
+	int data;
+	node *left;
+	node *right;
+}NODE;
+
+int N;
+
+void com_check(int);
+void init();
+void insert_node(int);
+void Preorder(NODE*);
+void Inorder(NODE*);
+int comcheck(char*);
+int find_key(int);
+
+NODE *root;
+
+int main(){
+
+	if(scanf("%d",&N)){
+	}
+	init();
+	com_check(N);
+}
+
+int find_key(int key){
+	NODE *p = root;
+	int ans = NO;
+
+	while(p != NULL){
+		if(key == p->data){
+			ans = YES;
+			break;
+		}
+		else if(key > p->data){
+			p = p->right;
+		}
+		else if(key < p->data){
+			p = p->left;
+		}
+	}
+	return ans;
+}
+
+int comcheck(char* str){
+	int ans = 0;
+	//printf("comcheck c = %c\n",str[0]);
+	if(str[0] == 'i'){
+		ans = INSERT;
+	}
+	else if(str[0] == 'p'){
+		ans = PRINT;
+	}
+	else if(str[0] == 'f'){
+		ans = FIND;
+	}
+	return ans;
+}
+
+void Inorder(NODE* p){
+	if(p == NULL)return;
+
+	if(p->left != NULL){
+		Inorder(p->left);
+	}
+	printf(" %d",p->data);
+	if(p->right != NULL){
+		Inorder(p->right);
+	}
+}
+
+void Preorder(NODE* p){
+	if(p == NULL)return;
+
+	printf(" %d",p->data);
+	if(p->left != NULL){
+		Preorder(p->left);
+	}
+	if(p->right != NULL){
+		Preorder(p->right);
+	}
+}
+
+void insert_node(int x){
+
+	NODE **cp = &root;
+	NODE *p;
+
+	p = (NODE*)malloc(sizeof(NODE));
+	p->data = x;
+	p->left = NULL;
+	p->right = NULL;
+
+	while(*cp != NULL){
+		if(p->data < (*cp)->data){
+			cp = &((*cp)->left);
+		}
+		else{
+			cp = &((*cp)->right);
+		}
+	}
+
+	(*cp) = p;
+}
+
+void init(){
+	root = NULL;
+}
+
+void com_check(int n){
+
+	char com[10];
+	int data,command,result;
+
+	for(int i = 0;i < n;i++){
+		if(scanf("%s",com)){
+		}
+
+		command = comcheck(com);
+		if(command == INSERT){
+			if(scanf("%d",&data)){
+			}
+			insert_node(data);
+		}
+		else if(command == PRINT){
+			Inorder(root);
+			printf("\n");
+			Preorder(root);
+			printf("\n");
+		}
+		else if(command == FIND){
+			if(scanf("%d",&data)){
+			}
+			result = find_key(data);
+			if(result == YES){
+				printf("Yes\n");
+			}
+			else{
+				printf("No\n");
+			}
+		}
+	}
+}
+

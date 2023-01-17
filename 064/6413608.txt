@@ -1,0 +1,118 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+template <size_t n>
+class BitMatrix{
+    public:
+
+    array<bitset<n>, n> A;
+    array<bitset<n>, 2> all;
+
+    BitMatrix(){
+        all[0].reset();
+        all[1].set();
+    }
+
+    BitMatrix e(){
+        BitMatrix E;
+        for (int i = 0; i < n; i++)
+            E.A[i][i] = true;
+        return E;
+    }
+
+    constexpr BitMatrix operator|(const BitMatrix rhs) const noexcept {
+        return BitMatrix(*this) |= rhs;
+    }
+    constexpr BitMatrix operator&(const BitMatrix rhs) const noexcept {
+        return BitMatrix(*this) &= rhs;
+    }
+    constexpr BitMatrix operator*(const BitMatrix rhs) const noexcept {
+        return BitMatrix(*this) *= rhs;
+    }
+    constexpr BitMatrix operator^(const BitMatrix rhs) const noexcept {
+        return BitMatrix(*this) ^= rhs;
+    }
+    constexpr BitMatrix &operator|=(const BitMatrix rhs) noexcept {
+        for (int i = 0; i < n; i++)
+            A[i] |= rhs.A[i];
+        return *this;
+    }
+    constexpr BitMatrix &operator&=(const BitMatrix rhs) noexcept {
+        for (int i = 0; i < n; i++)
+            A[i] &= rhs.A[i];
+        return *this;
+    }
+    constexpr BitMatrix &operator*=(const BitMatrix rhs) noexcept {
+        for (int i = 0; i < n; i++){
+            bitset<n> s;
+            for (int j = 0; j < n; j++)
+                s |= all[A[i][j]] & rhs.A[j];
+            this->A[i] = s;
+        }
+        return *this;
+    }
+    constexpr BitMatrix &operator^=(int64_t k) noexcept {
+        BitMatrix<n> B(*this);
+        *this = e();
+        while (k) {
+            if (k & 1) 
+                *this *= B;
+        B *= B;
+        k >>= 1;
+        }
+        return *this;
+    }
+};
+
+int main(){
+    int64_t n, d;
+    cin >> n >> d;
+    vector<vector<array<int, 2>>> E(n);
+    vector<int> max_d(n);
+    for (int i = 0; i < n; i++){
+        int k;
+        cin >> k;
+        for (int j = 0; j < k; j++){
+            int v, d;
+            cin >> v >> d;
+            v--;
+            E[i].push_back({v, d});
+            max_d[i] = max(max_d[i], d);
+        }
+    }
+
+    vector<int> sum_max_d(n + 1);
+    for (int i = 0; i < n; i++)
+        sum_max_d[i + 1] += sum_max_d[i] + max_d[i];
+
+    auto get_id = [&](int v, int d){
+        return sum_max_d[v] + d + v;
+    };
+
+    BitMatrix<1100> A;
+    for (int i = 0; i < n; i++){
+        for (const auto &[to, d]: E[i])
+            A.A[get_id(i, d - 1)][get_id(to, 0)] = true;
+    }
+
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < max_d[i] - 1; j++)
+            A.A[get_id(i, j)][get_id(i, j + 1)] = true;
+    }
+
+    A ^= d;
+
+    vector<int> ans;
+    for (int i = 0; i < n; i++){
+        bool is_ok = true;
+        for (int j = 0; j < n; j++)
+            is_ok &= A.A[get_id(j, 0)][get_id(i, 0)];
+        if (is_ok)
+            ans.push_back(i);
+    }
+
+    cout << ans.size() << endl;
+    for (int i = 0; i < ans.size(); i++)
+        cout << ans[i] + 1 << (i + 1 < ans.size() ? " " : "\n");
+}

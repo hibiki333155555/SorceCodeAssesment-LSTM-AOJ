@@ -1,0 +1,39 @@
+#include <iostream>
+using namespace std;
+
+struct Item {
+    int value, weight;
+};
+
+int main() {
+    int N, W;
+    cin >> N >> W;
+
+    Item Items[N+1];
+    int C[N+1][W+1];
+
+    for (int i = 1; i <= N; ++i) {
+        cin >> Items[i].value >> Items[i].weight;
+    }
+
+    // 初期化
+    for (int i = 1; i <= N; ++i) C[i][0] = 0;
+    for (int w = 0; w <= W; ++w) C[0][w] = 0;
+
+    for (int i = 1; i <= N; ++i) {
+        for (int w = 1; w <= W; ++w) {
+            C[i][w] = C[i - 1][w];
+
+            if (Items[i].weight > w) continue;
+
+            // Items[i]を選択した方が価値が上がるなら選択する
+            if (Items[i].value + C[i - 1][w - Items[i].weight] > C[i - 1][w]) {
+                C[i][w] = Items[i].value + C[i - 1][w - Items[i].weight];
+            }
+        }
+    }
+
+    int maxWeight = C[N][W];
+
+    cout << maxWeight << endl;
+}

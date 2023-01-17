@@ -1,0 +1,67 @@
+#include<stdio.h>
+#include<iostream>
+#include<vector>
+using namespace std;
+int vertices_total;
+int* visited;
+//DFS搜索
+void DFS(vector< vector<int> >& adj,int index,int& count,vector< vector<int> >& time) {
+	int number;
+	count = count + 1;
+	time[index-1][1] = count;
+	visited[index] = 1;
+	for (int i = 0; i < adj[index - 1].size(); i++) {
+		number = adj[index - 1][i];
+		if (visited[number] == 0) {
+			DFS(adj, number, count,time);
+		}
+	}
+	visited[index] = 2;
+	count = count + 1;
+	time[index - 1][2] = count;
+}
+int main() {
+	vector<vector<int> > adj;
+	vector<int> ver;
+	int num,row,degree;
+	cin >> vertices_total;
+	for (int i = 0; i<vertices_total; i++) {
+		cin >> row>>degree;
+		for (int j = 0; j < degree; j++) {
+			cin >> num;
+			ver.push_back(num);
+		}
+		adj.push_back(ver);
+		ver.clear();
+	}
+	ver.clear();
+	//创建并初始化访问数组visited[]
+	visited = new int[vertices_total + 1];
+	for (int i = 1; i <= vertices_total; i++)
+		visited[i] = 0;
+	//初始化储存节点遍历进入/离开时间的vector
+	vector<vector<int> > time;
+	for (int i = 0; i < vertices_total; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (j==0) 
+				ver.push_back(i+1);
+			else
+			ver.push_back(0);
+		}
+		time.push_back(ver);
+		ver.clear();
+	}
+	//计数器
+	int count = 0;
+	//深度优先遍历
+	DFS(adj, 1, count，time);
+	//输出记录进入/离开时间的vector
+	for (int i = 0; i < time.size(); i++) {
+		for (int j = 0; j < time[i].size(); j++) {
+			cout <<time[i][j] << " ";
+		}
+		cout << endl;
+	}
+	
+	return 0;
+}

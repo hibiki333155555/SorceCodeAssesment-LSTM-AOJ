@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  while(true){
+    int n;
+    double ave=0;
+    cin >> n;
+    if(n==0) break;
+    vector<double> d(n);
+    for(int i=0; i<n; i++){
+      cin >> d.at(i);
+      ave += d.at(i);
+    }
+    ave /= (double)n;
+  
+    double var=0;
+    for(int i=0; i<n; i++){
+      var += (d.at(i)-ave)*(d.at(i)-ave);
+    }
+    var /= (double)n;
+  
+    cout << fixed << setprecision(15) << sqrt(var) << endl;
+  }
+  return 0;
+}

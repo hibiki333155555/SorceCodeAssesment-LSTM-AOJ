@@ -1,0 +1,17 @@
+import java.util.Scanner;
+
+public class Main{
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        int S = scanner.nextInt();
+
+        int M = S/60;
+        S = S%60;
+        int H = M/60;
+        M = M%60;
+        
+        System.out.println(H + ":" + M + ":" + S);
+    }
+}
+
+

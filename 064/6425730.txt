@@ -1,0 +1,6 @@
+line = input()
+ret = []
+for c in line:
+  if c.islower(): ret.append(c.upper())
+  else: ret.append(c.lower())
+print(''.join(ret))

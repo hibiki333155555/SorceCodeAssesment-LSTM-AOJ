@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int r0, w0, c, r;
+    int ans = 0;
+    while(true){
+        cin >> r0 >> w0 >> c >> r;
+        if (r0 == 0 && w0 == 0 && c == 0 && r == 0){
+            return 0;
+        }
+        ans = 0;
+        while ((r0 + ans * r) < c * w0){
+            ans+= 1;
+        }
+        cout << ans << endl;
+    }
+    return 0;
+}

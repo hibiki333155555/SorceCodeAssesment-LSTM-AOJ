@@ -1,0 +1,51 @@
+import sys,random,bisect
+from collections import deque,defaultdict
+from heapq import heapify,heappop,heappush
+from itertools import permutations
+from math import gcd
+from fractions import Fraction
+
+input = lambda :sys.stdin.readline().rstrip()
+mi = lambda :map(int,input().split())
+li = lambda :list(mi())
+
+N,M = mi()
+need = [0] * (M+1)
+r_max = [-1] * (M+1)
+for i in range(N):
+    a,b,c = mi()
+    b,c = b-1,c-1
+    need[b] -= a
+    need[c+1] += a
+    r_max[b] = max(r_max[b],c)
+for i in range(1,M):
+    r_max[i] = max(r_max[i],r_max[i-1])
+    if r_max[i] < i:
+        r_max[i] = -1
+    need[i] += need[i-1]
+
+Q = int(input())
+for i in range(Q):
+    d,e = mi()
+    need[e-1] += d
+
+
+dope = 0
+d = [0] * (M+1)
+for i in range(M):
+    if i!=0:
+        d[i] += d[i-1]
+    tmp_need = need[i] - d[i]
+    if tmp_need <= 0:
+        continue
+    if r_max[i]==-1:
+        exit(print(-1))
+    r = r_max[i]
+    d[i] += tmp_need
+    d[r+1] -= tmp_need
+    dope += tmp_need
+
+print(dope)
+        
+
+

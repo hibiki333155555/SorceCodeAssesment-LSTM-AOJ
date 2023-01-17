@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long LL;
+typedef long double LD;
+
+#define rep(i,n) for(LL i=0;i<(n);i++)
+
+int main(){
+    LL l, n;
+    LL ans = -1;
+
+    cin >> l >> n;
+
+    rep(i,n){
+        LL a; cin >> a;
+
+        if(ans == -1){
+            l -= a;
+
+            if(l < 0){
+                ans = i + 1;
+            }
+
+        }
+
+    }
+
+    if(ans == -1){
+        cout << "No" << endl;
+    }
+    else{
+        cout << ans << endl;
+    }
+
+    return 0;
+}

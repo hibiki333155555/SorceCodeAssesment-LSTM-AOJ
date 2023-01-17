@@ -1,0 +1,16 @@
+def solve():
+    n,m,v,a,b = map(int,input().split())
+    s = set([v])
+    for i in range(n-1):
+        v = v*a + b
+        v %= m
+        if v in s:
+            print('Yes')
+            return
+        s.add(v)
+    print('No')
+    return
+
+t = int(input())
+for i in range(t):
+    solve()

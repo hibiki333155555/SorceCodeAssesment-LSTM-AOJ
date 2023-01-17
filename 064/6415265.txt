@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct UnionFind {
+
+    vector<int> par;
+
+    UnionFind(int N) : par(N){
+        for(int i=0;i<N;i++)par[i]=i;
+    }
+
+    int root(int x){
+        if(par[x]==x)return x;
+        else return par[x] = root(par[x]);
+    }
+
+    void unite(int x, int y){
+        int rx = root(x);
+        int ry = root(y);
+        if(rx==ry)return;
+        par[rx] = ry;
+    }
+
+    bool same(int x, int y){
+        return root(x)==root(y);
+    }
+
+};
+
+int main(){
+    int n, q;
+    cin >> n >> q;
+    UnionFind tree(n);
+    vector<bool> ans;
+    for(int i=0;i<q;i++){
+        int com, x, y;
+        cin >> com >> x >> y;
+        x--;
+        y--;
+        if(com){
+            ans.push_back(tree.same(x, y));
+        }else{
+            tree.unite(x, y);
+        }
+    }
+
+    for(int i=0;i<ans.size();i++)cout << ans[i] << endl;
+
+    return 0;
+}

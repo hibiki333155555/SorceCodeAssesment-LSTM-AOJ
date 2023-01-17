@@ -1,0 +1,30 @@
+#include <iostream>
+#include <cassert>
+using namespace std;
+
+int main(){
+  string s;
+  cin >> s;
+  int i = 0;
+  auto rec = [&](auto&& rec, int d) -> void {
+    if(i == s.length()) return;
+    while(islower(s[i])){
+      char c = ((s[i]-'a')+d)%26 + 'a';
+      ++i;
+      cout << c;
+    }
+    if(i == s.length() or s[i] == ')')
+      return;
+    assert(isdigit(s[i]));
+    int dd = s[i]-'0';
+    d += dd;
+    i += 2;
+    rec(rec,d);
+    ++i;
+    d -= dd;
+    rec(rec,d);
+  };
+  rec(rec,0);
+  cout << endl;
+}
+

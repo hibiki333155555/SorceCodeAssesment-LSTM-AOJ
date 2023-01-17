@@ -1,0 +1,72 @@
+#include <cstdio>
+#include <vector>
+#include <functional>
+#include <algorithm>
+using namespace std;
+
+const int m0 = 1e9 + 7;
+const int m1 = 1e9 + 9;
+
+struct hv {
+  int v0, v1;
+  hv operator + (const hv& other) const {
+    return hv{(v0 + other.v0)%m0, (v1 + other.v1)%m1};
+  }
+  hv operator - (const hv& other) const {
+    return hv{(v0 - other.v0 + m0)%m0, (v1 - other.v1 + m1)%m1};
+  }
+  hv operator * (const hv& other) const {
+    return hv{(int)(v0 * 1ll * other.v0)%m0, (int)(v1 * 1ll * other.v1)%m1};
+  }
+  bool operator == (const hv& other) const {
+    return v0 == other.v0 && v1 == other.v1; 
+  }
+};
+
+int main() {
+  int n;
+  scanf("%d", &n);
+  vector<vector<int>> g(n + 1);
+  for (int i = 0; i < n - 1; i++) {
+    int u, v;
+    scanf("%d%d", &u, &v);
+    g[u].push_back(v);
+  }
+  vector<hv> pw(n + 1);
+  pw[0] = hv{1, 1};
+  hv c = {171, 171};
+  for (int i = 1; i <= n; i++) pw[i] = pw[i - 1] * c;
+  vector<hv> val(n + 1);
+  
+  function<void(int)> dfs = [&](int u) {
+    int find = 0;
+    val[u] = hv{1, 1} * pw[0];
+    for (int v: g[u]) {
+      dfs(v);
+      auto add = val[v] * c;
+      val[u] = val[u] + val[v];
+    }
+    //printf("val[%d] = %d, %d\n", u, val[u].v0, val[u].v1);
+  };
+  
+  dfs(1);
+  vector<hv> all;
+  for (int i = 1; i <= n; i++) {
+    all.push_back(val[i]); 
+  }
+  sort(all.begin(), all.end(), [](auto u, auto v) {
+    if (u.v0 != v.v0) return u.v0 < v.v0;
+    return u.v1 < v.v1; 
+  });
+  long long ans = 0;
+  int p = 0;
+  while (p < n) {
+    int np = p;
+    while (np + 1 < n && all[np + 1] == all[p]) np++;
+    int cnt = np - p + 1;
+    ans += cnt * 1ll * (cnt - 1) / 2;
+    p = np + 1;
+  } 
+  printf("%lld\n", ans);
+  return 0; 
+}

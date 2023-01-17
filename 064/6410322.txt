@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+#include <utility>
+#include <algorithm>
+
+using namespace std;
+
+int main(){
+    int n, x, y;
+    
+    cin>>n;
+    vector<pair<int, int>> v;
+    while(n--){
+        cin>>x>>y;
+        v.push_back({x, y});
+    }
+    sort(v.begin(), v.end(), [](pair<int, int>a, pair<int, int>b){
+        if(a.first == b.first){
+            a.second < b.second;
+        }
+        return a.first < b.first;
+    });
+    for(int i = 0; i < v.size(); i++){
+        cout << v.at(i).first << " " << v.at(i).second << endl;
+    }
+    return 0;
+}

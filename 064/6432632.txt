@@ -1,0 +1,55 @@
+#include <iostream>
+#include<cstdio>
+#include<cstdlib>
+using namespace std;
+
+struct Node{
+    int key;
+    Node *parent,*left,*right;
+};
+Node *root,*NIL;
+void insert(Node *z){
+    Node *y=NIL;
+    Node *x=root;
+    while(x!=NIL){
+        y=x;
+        if(z->key<x->key) x=x->left;
+        else x=x->right;
+    }
+    z->parent=y;
+    if(y==NIL) root=z;
+    else if (z->key<y->key) y->left=z;
+    else y->right=z;
+}
+
+void Inorder(struct Node *u){
+    if(u==NIL) return;
+    Inorder(u->left);
+    cout<<" "<<u->key;
+    Inorder(u->right);
+}
+void Preorder(Node *u){
+    if(u==NIL) return;
+    cout<<" "<<u->key;
+    Preorder(u->left);
+    Preorder(u->right);
+}
+void print_Tree(struct Node *root){
+    Inorder(root);
+    cout<<endl;
+    Preorder(root);
+    cout<<endl;
+}
+
+int main(){
+    int n,key;
+    char com[10];
+    cin>>n;
+    for (int i=0;i<n;i++){
+        cin>>com>>key;
+        Node *z=(Node*)malloc(sizeof(Node));
+        z->key=key;z->left=NIL;z->right=NIL;z->parent=NIL;
+        if(com[0]=='i') insert(z);
+        else print_Tree(root);
+    }
+}

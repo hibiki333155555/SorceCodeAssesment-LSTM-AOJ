@@ -1,0 +1,6 @@
+S = int(input())
+m = int(S/60)
+S = S % 60
+h = int(m/60)
+m = m % 60
+print(str(h)+":"+str(m)+":"+str(S))

@@ -1,0 +1,26 @@
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <numeric>
+#include <string>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+inline double square(double num)
+{
+    return num*num;
+}
+
+int main()
+{
+    double a, b, ang;
+    cin >> a >> b >> ang;
+    double c = sqrt(a*a+b*b-2*a*b*cos(ang*2*M_PI/360)), p = (a+b+c)/2;
+    double S = sqrt(p*(p-a)*(p-b)*(p-c));
+    double h = S*2/a;
+    cout << S << endl << p*2 << endl << h << endl;
+
+    return 0;
+}   

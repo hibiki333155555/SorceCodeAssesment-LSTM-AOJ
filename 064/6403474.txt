@@ -1,0 +1,62 @@
+import java.util.Scanner;
+
+public class Main {
+
+    // 行の合計を計算する
+    public static int sumRows(int[][] matrix, int rows, int cols) {
+        int sum = 0;
+
+        for (int i = 0; i < cols; i++) {
+            sum += matrix[rows][i];
+        }
+
+        return sum;
+    }
+
+    public static int sumCols(int[][] matrix, int rows, int cols) {
+        int sum = 0;
+
+        for (int i = 0; i < rows; i++) {
+            sum += matrix[i][cols];
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int rows = sc.nextInt();    // 行
+        int cols = sc.nextInt();    // 列
+
+        // 行列を作成する
+        int[][] matrix = new int[100 + 1][100 + 1];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = sc.nextInt();
+            }
+        }
+
+        // 各行列の合計を求める
+        // 行の合計を求める
+        for (int i = 0; i < rows; i++) {
+            matrix[i][cols] = sumRows(matrix, i, cols);
+        }
+
+        // 列の合計を求める
+        for (int i = 0; i <= cols; i++) {
+            matrix[rows][i] = sumCols(matrix, rows, i);
+        }
+
+        for (int i = 0; i <= rows; i++) {
+            for (int j = 0; j <= cols; j++) {
+                // 最初の要素以外は空白で区切る
+                if (j != 0) {
+                    System.out.print(" ");
+                }
+                System.out.print(matrix[i][j]);
+            }
+            // 改行
+            System.out.println("");
+        }
+    }
+}
+

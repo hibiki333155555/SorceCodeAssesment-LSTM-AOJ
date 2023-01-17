@@ -1,0 +1,42 @@
+#include<stdio.h>
+    typedef struct{
+        int mid;
+        int last;
+        int retry;
+    }mem;
+    
+int inspection(const mem x[]){
+    int sum;        sum=*x->mid+*x->last;
+        if(sum>80)
+        return 'A';
+        else if(65<=sum)
+        return 'B';
+        else if(50<=sum)
+        return 'C';
+        else if(30<=sum){
+        if(50<=*x->last){
+        return 'C';
+        }else{
+        return 'D';
+        }}else
+        return 'F';
+}
+int main(void){
+    mem *x;
+    int nx=0;
+    char se;
+    for(int i=0;i<50;i++){
+    scanf("%d",&x->mid);
+    scanf("%d",&x->last);
+    scanf("%d",&x->retry);
+    if(-1==x->mid==x->last->retry){
+        break;
+    }
+    x++;
+    nx++;
+    }
+    for(int j=0;j<nx);
+    se=intspection(x);
+    printf("%c",se);
+    return 0;
+}

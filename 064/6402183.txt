@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+const double PI =acos(-1);
+const long double EPS = 1e-14;
+
+int main(){
+  long n;
+  cin >> n;
+  long ans = -1e18, mn = 1e18;
+  for(long i = 0; i < n; i++){
+    long R;
+    cin >> R;
+    ans = max(ans, R - mn);
+    mn = min(mn, R);
+  }
+  cout << ans << endl;
+}

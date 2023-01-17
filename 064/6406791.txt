@@ -1,0 +1,118 @@
+#define _USE_MATH_DEFIMES
+#include <algorithm>
+#include <array>
+#include <bitset>
+#include <cassert>
+#include <cctype>
+#include <climits>
+#include <clocale>
+#include <cmath>
+#include <complex>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <random>
+#include <regex>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <string>
+#include <tuple>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+const int MOD = 1'000'000'007;
+const int MOD2 = 998'244'353;
+const int INF = 1'000'000'000; //1e9
+const int NIL = -1;
+const long long LINF = 1'000'000'000'000'000'000; // 1e18
+const long double EPS = 1E-10L;
+
+template<class T, class S> inline bool chmax(T &a, const S &b){
+    if(a < b){a = b; return true;}
+    return false;
+}
+template<class T, class S> inline bool chmin(T &a, const S &b){
+    if(b < a){a = b; return true;}
+    return false;
+}
+template<class T, class Container> inline bool exist(Container &s, const T &e){
+    return (s.find(e) != std::end(s));
+}
+template<class T> inline bool inside(T x, T lx, T rx){ //semi-open
+    return (std::clamp(x, lx, rx-1) == x);
+}
+template<class T> inline bool inside(T x, T y, T lx, T rx, T ly, T ry){
+    return inside(x, lx, rx) && inside(y, ly, ry);
+}
+
+
+
+
+
+
+
+
+struct point{
+    long double x, y;
+    bool operator<(const point &rhs) const{
+        if(x == rhs.x) return y < rhs.y;
+        return x < rhs.x;
+    }
+};
+
+std::pair<long double, std::vector<point>> cp_rec(std::vector<point> &ps, int lt, int sz){
+    if(sz <= 1) return {1.L * INF, std::vector<point>{ps[lt]}};
+    int m{sz / 2};
+    long double x{ps[lt+m].x};
+    auto [d1, qs1]{cp_rec(ps, lt, m)};
+    auto [d2, qs2]{cp_rec(ps, lt+m, sz-m)};
+    long double d{std::min(d1, d2)};
+    int s{}, t{};
+    std::vector<point> qs;
+    while(s < m && t < sz-m){
+        if(qs1[s].y < qs2[t].y) qs.push_back(qs1[s++]);
+        else qs.push_back(qs2[t++]);
+    }
+    while(s < m) qs.push_back(qs1[s++]);
+    while(t < sz-m) qs.push_back(qs2[t++]);
+    std::vector<point> b;
+    for(int i{0}; i < sz; ++i){
+        auto [ax, ay]{qs[i]};
+        if(std::abs(x - ax) >= d) continue;
+        for(int j{int(b.size()) - 1}; j >= 0; --j){
+            long double dx{ax - b[j].x}, dy{ay - b[j].y};
+            if(dy >= d) break;
+            chmin(d, std::sqrt(dx*dx + dy*dy));
+        }
+        b.push_back(qs[i]);
+    }
+    return {d, qs};
+}
+
+long double closet_pair_distance(std::vector<point> &ps){
+    std::sort(std::begin(ps), std::end(ps));
+    return cp_rec(ps, 0, int(ps.size())).first;
+}
+
+int main(){
+    int N; std::cin >> N;
+    std::vector<point> ps(N);
+    for(auto &e: ps) std::cin >> e.x >> e.y;
+    std::cout << std::fixed << std::setprecision(15) << closet_pair_distance(ps) << std::endl;
+    return 0;
+}
+

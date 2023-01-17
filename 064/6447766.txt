@@ -1,0 +1,8 @@
+quantity=int(input())
+numbers=input().split()
+integer_numbers=map(int,numbers)
+list=sorted(integer_numbers)
+max=list[quantity-1]
+min=list[0]
+sum=sum(list)
+print("%d %d %d"%(min,max,sum))

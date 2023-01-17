@@ -1,0 +1,90 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+//#define lson (rt<<1)
+//#define rson ((rt<<1)+1)
+//#define mid ((l+r)>>1)
+#define mst(a) memset(a,0,sizeof(a))
+#define cf int Tcodeforces, Tcodeforce;cin>>Tcodeforces;for(Tcodeforce = 1; Tcodeforce <= Tcodeforces; Tcodeforce++)
+typedef long long ll;
+typedef double db;
+const ll maxn = 3e2 +7;
+const ll maxm = 3e3 +7;
+const ll inf = 0x3f3f3f3f;
+const ll mod = 1e9 +7;
+
+int n;
+char s[maxn];
+int cnt[maxm], newp = 27; // 1-26
+int val[maxn], fa[maxn], vis[maxn];
+
+int pc(char c) {
+    return c - 'a' + 1;
+}
+int howok() {
+    int res = 0;
+    for(int i = 1; i < newp; i++) {
+        if(vis[i]) res++;
+    }
+    return res;
+}
+int dep(int x) {
+    int t = x;
+    int res = 0;
+    while(fa[t] > 0) {
+        res++;
+        t = fa[t];
+    }
+    return res;
+}
+signed main() {
+    #ifdef moyi_qwq
+        freopen("D:/source file/intxt/in.txt","r",stdin);
+    #endif
+    
+    cin.getline(s, maxn); int len = strlen(s);
+    for(int i = 0; i < len; i++) {cnt[pc(s[i])]++; vis[pc(s[i])] = 1;}
+    if(howok() == 1) { // only one kind of char
+        cout<<len<<endl;
+        return 0;
+    }
+    while(howok() > 1) {
+        int mn1 = inf, p1 = -1;
+        int mn2 = inf, p2 = -1;
+        for(int i = 1; i < newp; i++) {
+            if(!vis[i]) continue;
+            if(cnt[i] < mn1) {
+                mn1 = cnt[i];
+                p1 = i;
+            }
+            else if(cnt[i] < mn2) {
+                mn2 = cnt[i];
+                p2 = i;
+            }
+        }
+        cnt[newp] = mn1 + mn2;
+        vis[newp] = 1;
+        fa[p1] = newp;
+        fa[p2] = newp;
+        vis[p1] = 0;
+        vis[p2] = 0;
+        newp++;
+    }
+    int ans = 0;
+    //for(int i = 1; i <= 26; i++) {
+    //    if(cnt[i]) {
+    //        cout<<1<<endl;
+    //        char c = i + 'a' - 1;
+    //        cout<<c<<" "<<dep(i)<<endl;
+    //    }
+    //}
+    for(int i = 1; i <= 26; i++) {
+        ans += cnt[i] * dep(i);
+    }
+    cout<<ans<<endl;
+    
+    //cerr<<"Time : "<<1000*((double)clock())/(double)CLOCKS_PER_SEC<<"ms";
+    return (0);
+}
+

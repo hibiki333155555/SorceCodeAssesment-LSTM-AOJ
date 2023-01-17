@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int N,X,Y,Z;
+    cin>>N;
+    cin>>X;
+    int a[X];
+    for(int i=0;i<X;i++){
+        cin>>a[i];
+    }
+    cin>>Y;
+    int b[Y];
+    for(int i=0;i<Y;i++){
+        cin>>b[i];
+    }
+    cin>>Z;
+    int c[Z];
+    for(int i=0;i<Z;i++){
+        cin>>c[i];
+    }
+    int ans=0;
+    bool flag;
+    for(int i=0;i<Z;i++){
+        flag=true;
+        for(int j=0;j<X;j++){
+            if(c[i]==a[j]){
+                flag=false;
+                break;
+            }
+        }
+        if(!flag){
+            for(int j=0;j<Y;j++){
+                if(c[i]==b[j]){
+                    flag=true;
+                    break;
+                }
+            }
+        }
+        if(flag){
+            ans++;
+        }
+    }
+    cout<<ans<<"\n";
+    return(0);
+}

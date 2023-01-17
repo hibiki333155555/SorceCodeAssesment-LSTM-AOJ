@@ -1,0 +1,18 @@
+while True:
+    n,m=map(int,input().split(' '))
+    if n==0 and m==0:
+        break
+    a=list(map(int,input().split(' ')))
+    b=list(map(int,input().split(' ')))
+    res=[0 for i in range(10)]
+
+    for i in range(n):
+        for j in range(m):
+            c=a[i]*b[j]
+            while(c>0):
+                c,r=divmod(c,10)
+                res[r]+=1
+    res=[str(a) for a in res]
+    ret=' '.join(res)
+    print(ret)
+

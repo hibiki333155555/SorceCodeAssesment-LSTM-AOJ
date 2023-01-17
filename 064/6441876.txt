@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+void swap4(int &a, int &b, int &c, int &d) {
+	int t = a;
+	a = b;
+	b = c;
+	c = d;
+	d = t;
+}
+void f(vector<int> &a, char c) {
+	switch(c) {
+		case 'W': swap4(a[0],a[2],a[5],a[3]); break;
+		case 'S': swap4(a[0],a[4],a[5],a[1]); break;
+		case 'N': swap4(a[0],a[1],a[5],a[4]); break;
+		case 'E': swap4(a[0],a[3],a[5],a[2]); break;
+	}
+}
+bool isequ(vector<int>&a, vector<int>&b) {
+	string ord = "NNNNNENNNNNENNNNENNNENNNENNNENN";
+	for (int i = 0; i < ord.size(); i++) {
+		if (a == b) return true;
+		f(a, ord[i]);
+	}
+	return false;
+}
+int main() {
+	vector<vector<int> > a(110);
+	int n, k, j, x;
+	cin>>n;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < 6; j++) {
+			cin>>x;
+			a[i].push_back(x);
+		} 
+	}
+	for (k = 0; k < n-1; k++) {
+		for (j = k+1; j < n; j++) {
+			if (isequ(a[k], a[j])) break;
+		}
+		if (j < n) break;
+	}
+	if (k == n-1) {
+		cout<<"Yes"<<endl;
+	} else {
+		cout<<"No"<<endl;
+	}
+	
+	
+	return 0;
+} 

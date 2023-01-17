@@ -1,0 +1,73 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+#define MAX 10000
+
+int n, ran[MAX], T[MAX];
+
+int find(int x) {
+	/*int r = ran[x], m, a = x;
+	while (r > 1) {
+		m = T[a];
+		a = m;
+		r--;
+	}*/
+	return T[x];
+}
+
+void sett(int x, int y) {
+	for (int i = 0; i < n; i++) {
+		if (T[i] == x)
+			T[i] = y;
+	}
+}
+
+void setran(int x) {
+	int le = ran[x] + 1;
+	for (int i = 0; i < n; i++) {
+		if (T[i] == x)
+			ran[i] = le;
+	}
+}
+
+void unite(int x, int y) {
+	if (ran[x] == ran[y]) {
+		int a = find(y), b = find(x);
+		T[a] = b;
+		sett(a, b);
+		setran(b);
+	}
+	else {
+		int rs = min(ran[x], ran[y]), ts;
+		ts = (rs == ran[x] )? x : y;
+		int rl = max(ran[x], ran[y]), tl;
+		tl = (rl == ran[x] )? x : y;
+		int a = find(ts), b = find(tl);
+		T[a] = b;
+		sett(a, b);
+		setran(b);
+	}
+}
+
+void same(int x, int y) {
+	if (find(x) == find(y)) cout << 1 << endl;
+	else cout << 0 << endl;
+}
+
+int main() {
+	int q, i, cmd, x, y;
+	cin >> n >> q;
+	for (i = 0; i < n; i++) {
+		ran[i] = 1;
+		T[i] = i;
+	}
+	for (i = 0; i < q; i++) {
+		cin >> cmd >> x >> y;
+		if (!cmd)
+			unite(x, y);
+		else
+			same(x, y);
+	}
+	return 0;
+}

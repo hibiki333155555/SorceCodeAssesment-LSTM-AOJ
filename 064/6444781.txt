@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int n;
+  cin >> n;
+  int mina, ans = -2000000000;
+
+  cin >> mina;
+  int r;
+  for(int i = 1; i < n; i++){
+    cin >> r;
+    ans = max(ans, r - mina);
+    mina = min(mina, r);
+  }
+  cout << ans << endl;
+}

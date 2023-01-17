@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  string str, unit;
+  cin >> str;
+  
+  int count=0;
+  
+  while(true){
+    cin >> unit;
+    
+    //ループ抜ける条件
+    if (unit == "END_OF_TEXT"){
+      break;
+    }
+    
+    //unitの文字を小文字に変換
+    for (int i=0; i<unit.size(); i++){
+      unit[i] = tolower(unit[i]);
+    }
+    
+    //比較
+    if (str == unit){
+      count++;
+    }
+  }
+  
+  cout << count << endl;
+  
+}
+

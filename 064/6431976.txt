@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Solve{
+    private Scanner sc = new Scanner(System.in);
+    private void Finish(){
+        this.sc.close();
+    }
+    private long min(long[] arr){
+        int minInd=0;
+        for(int i=0,l=arr.length;i<l;i++){
+            if( arr[i] < arr[minInd] ){
+                minInd = i;
+            }
+        }
+        return arr[minInd];
+    }
+    private long max(long[] arr){
+        int maxInd=0;
+        for(int i=0,l=arr.length;i<l;i++){
+            if( arr[maxInd] < arr[i] ){
+                maxInd = i;
+            }
+        }
+        return arr[maxInd];
+    }
+    private long sum(long[] arr){
+        long res = 0;
+        for(int i=0,l=arr.length;i<l;i++){
+            res += arr[i];
+        }
+        return res;
+    }
+    public void Do(){
+        int n = sc.nextInt();
+        long[] a = new long[n];
+        for(int i=0;i<n;i++){
+            a[i] = sc.nextLong();
+        }
+        System.out.println( this.min(a) +" "+ this.max(a) +" "+ this.sum(a) );
+        Finish();
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

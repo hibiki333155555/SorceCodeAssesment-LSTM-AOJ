@@ -1,0 +1,49 @@
+import sys
+
+sys.setrecursionlimit(200005)
+int1 = lambda x: int(x)-1
+pDB = lambda *x: print(*x, end="\n", file=sys.stderr)
+p2D = lambda x: print(*x, sep="\n", end="\n\n", file=sys.stderr)
+def II(): return int(sys.stdin.readline())
+def LI(): return list(map(int, sys.stdin.readline().split()))
+def LLI(rows_number): return [LI() for _ in range(rows_number)]
+def LI1(): return list(map(int1, sys.stdin.readline().split()))
+def LLI1(rows_number): return [LI1() for _ in range(rows_number)]
+def SI(): return sys.stdin.readline().rstrip()
+dij = [(0, 1), (-1, 0), (0, -1), (1, 0)]
+# dij = [(0, 1), (-1, 0), (0, -1), (1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+inf = (1 << 63)-1
+# inf = (1 << 31)-1
+# md = 10**9+7
+md = 998244353
+
+from collections import Counter
+
+n = II()
+to = [[] for _ in range(n)]
+for _ in range(n-1):
+    u, v, c = SI().split()
+    u, v, c = int1(u), int1(v), 1 << ord(c)-97
+    to[u].append((v, c))
+    to[v].append((u, c))
+
+cnt = Counter()
+par = [-1]*n
+stack = [(0, 0)]
+while stack:
+    u, x = stack.pop()
+    cnt[x] += 1
+    for v, c in to[u]:
+        if v == par[u]: continue
+        par[v] = u
+        stack.append((v, x ^ c))
+
+ans = 0
+for s in cnt:
+    c = cnt[s]
+    ans += c*(c-1)
+    for i in range(26):
+        ans += cnt[s ^ 1 << i]*c
+
+print(ans//2)
+

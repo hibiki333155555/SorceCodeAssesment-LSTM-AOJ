@@ -1,0 +1,27 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CsharpforAizeOnlineJudge
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string str = Console.ReadLine();
+            string[] s = str.Split(' ');
+            int data1 = Int32.Parse(s[0]);
+            int data2 = Int32.Parse(s[1]);
+            int data3 = Int32.Parse(s[2]);
+            if (data1 < data2)
+            {
+                if (data2 < data3) Console.WriteLine(data1 < data3 ? "Yes" : "No");
+                else Console.WriteLine("No");
+            }
+            else Console.WriteLine("No");
+        }
+    }
+}
+

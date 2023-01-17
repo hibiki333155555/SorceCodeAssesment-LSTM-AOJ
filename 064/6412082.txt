@@ -1,0 +1,52 @@
+#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <vector>
+#include <numeric>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <random>
+#include <array>
+#include <climits>
+#include <map>
+#include <cassert>
+#include <stack>
+#include <iomanip>
+#include <cfloat>
+#include <bitset>
+#include <fstream>
+#include <chrono>
+
+
+struct Coordinate {
+	double x, y, z;
+	double distance(const Coordinate& other) const {
+		const auto dx = x - other.x;
+		const auto dy = y - other.y;
+		const auto dz = z - other.z;
+		return std::sqrt(dx * dx + dy * dy + dz * dz);
+	}
+};
+constexpr double PI = 3.1415926535897932384626433;
+
+int main() {
+	int n, r; std::cin >> n >> r;
+	std::vector<Coordinate> points(n);
+	for (auto& [x, y, z] : points) {
+		std::cin >> x >> y >> z;
+	}
+	const auto volume = 4 * PI * r * r * r / 3.0;
+	double intersection = 0.0;
+	for (auto i = 0; i < n; ++i) {
+		for (auto j = 0; j < i; ++j) {
+			const auto distance = points[i].distance(points[j]);
+			if (distance < 2 * r) {
+				intersection += 2.0 / 3 * PI * (r - distance / 2) * (r - distance / 2) * (2 * r + distance / 2);
+			}
+		}
+	}
+	const auto result = volume * n - intersection;
+	std::cout << std::setprecision(15) << std::fixed << result << '\n';
+}

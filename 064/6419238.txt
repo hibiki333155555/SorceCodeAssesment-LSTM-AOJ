@@ -1,0 +1,119 @@
+#include<bits/stdc++.h>
+using namespace std;
+// aとa+1番で置き換え
+void replace(vector<vector<int>>& state, int a)
+{
+	if (state.at(a).size() == 0)
+	{
+		state.at(a).push_back(state.at(a + 1).back());
+		state.at(a + 1).pop_back();
+	}
+	else if (state.at(a + 1).size() == 0)
+	{
+		state.at(a + 1).push_back(state.at(a).back());
+		state.at(a).pop_back();
+	}
+	else if (state.at(a).back() < state.at(a + 1).back())
+	{
+		state.at(a).push_back(state.at(a + 1).back());
+		state.at(a + 1).pop_back();
+	}
+	else
+	{
+		state.at(a + 1).push_back(state.at(a).back());
+		state.at(a).pop_back();
+	}
+}
+// intの累乗
+int posint(int a, int x)
+{
+	int re = 1;
+	if (x == 0)
+		return 1;
+	for (int i = 0; i < x; i++)
+		re *= a;
+	return re;
+}
+// 状態を3進数に変換する
+int done_int(vector<vector<int>>& state)
+{
+	int re = 0;
+	for (int a = 1; a < 3; a++)
+	{
+		int size = state.at(a).size();
+		if (size == 0)
+			continue;
+		for (int b = 0; b < size; b++)
+		{
+			re += a * posint(3, state.at(a).at(b));
+		}
+	}
+	return re;
+}
+
+void solve(bool& flag)
+{
+	int n, m;
+	cin >> n >> m;
+	if (n == 0 && m == 0)
+	{
+		flag = true;
+		return;
+	}
+	// ABCのコップの置かれ方
+	vector<vector<int>>state(3);
+	for (int a = 0; a < 3; a++)
+	{
+		int num;
+		cin >> num;
+		if (num == 0)
+			continue;
+		for (int b = 0; b < num; b++)
+		{
+			int x;
+			cin >> x;
+			state.at(a).push_back(x);
+		}
+	}
+	// 待ち行列 (状態,手数)のpair
+	queue<pair<vector<vector<int>>,int>>que;
+	que.push(make_pair(state, 0));
+	// 既に経験した状態を記録する
+	set<int>done;
+	done.insert(done_int(state));
+	while (!que.empty())
+	{
+		vector<vector<int>>base = que.front().first;
+		int cnt_base = que.front().second;
+		que.pop();
+		for (int a = 0; a < 2; a++)
+		{
+			vector<vector<int>>now = base;
+			int cnt = cnt_base;
+			// 直前の手によって動かしたペア以外が空となった可能性があるのでここで確認
+			if (now.at(a).size() == 0 && now.at(a + 1).size() == 0)
+			{
+				cout << cnt << endl;
+				return;
+			}
+			replace(now, a);
+			int now_int = done_int(now);
+			if (done.count(now_int))
+				continue;
+			cnt++;
+			if (cnt > m)
+			{
+				cout << -1 << endl;
+				return;
+			}
+			que.push(make_pair(now, cnt));
+			done.insert(now_int);
+		}
+	}
+}
+int main()
+{
+	bool flag = false;
+	while (!flag)
+		solve(flag);
+}

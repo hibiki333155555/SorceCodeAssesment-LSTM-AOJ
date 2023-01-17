@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+struct Point {
+  int x, y;
+  double angle = -1.0 * M_PI / 2.0;
+};
+
+int main() {
+  int n; std::cin >> n;
+  std::vector<Point> points(n);
+  for (int i=0; i<n; i++) {
+    std::cin >> points[i].x >> points[i].y;
+  }
+  
+  int min_idx = 0;
+  for (int i=1; i<n; i++) {
+    if (points[i].y < points[min_idx].y ||
+        (points[i].y == points[min_idx].y && points[i].x < points[min_idx].x)) {
+      min_idx = i;
+    }
+  }
+  for (int i=0; i<n; i++) {
+    if (i != min_idx) {
+      points[i].angle = std::atan2(
+        points[i].y - points[min_idx].y,
+        points[i].x - points[min_idx].x
+      );
+    }
+  }
+  
+  std::sort(points.begin(), points.end(), [](const Point& lhs, const Point& rhs) {
+    return lhs.angle < rhs.angle;
+  });
+  
+  std::vector<int> accepted;
+  accepted.push_back(0);
+  accepted.push_back(1);
+  for (int i=2; i<n; i++) {
+    int center_idx = accepted[accepted.size() - 1];
+    int left_idx = accepted[accepted.size() - 2];
+    const Point& center = points[center_idx];
+    const Point& left = points[left_idx];
+    const Point& right = points[i];
+    int cross = (right.x-center.x)*(left.y-center.y)-(right.y-center.y)*(left.x-center.x);
+    if (cross >= 0) {
+      accepted.push_back(i);
+    } else {
+      accepted.back() = i;
+    }
+  }
+
+  std::cout << accepted.size() << std::endl;
+  for (int idx : accepted) {
+    std::cout << points[idx].x << " " << points[idx].y << std::endl;
+  }
+  
+}

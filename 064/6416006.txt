@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+#define rep(i,cc,n) for(int i=cc;i<n;++i)
+#define drep(i,cc,n) for(int i=cc;i>=n;--i)
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+const long long INF = 1LL << 60;
+const long long  MOD = 1e9 + 7;
+long double PI = 3.14159265358979;
+typedef long long ll;
+using namespace std;
+
+int seen[110];
+int cnt = 0;
+
+void dfs(vector<vector<int>> &G, vector<vector<int>> &ans, int now){
+    cnt++;
+    ans[now].push_back(cnt);
+    seen[now] = 1;;
+    for(auto x : G[now]){
+        if(seen[x]) continue;
+        dfs(G, ans, x);
+    }
+    cnt++;
+    ans[now].push_back(cnt);
+}
+
+int main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+
+    int n;
+    cin >> n;
+    vector<vector<int>> G(n);
+    rep(i,0,n){
+        int u, k;
+        cin >> u >> k;
+
+        rep(i,0,k){
+            int v;
+            cin >> v;
+            v--;
+            G[i].push_back(v);
+            G[v].push_back(i);
+        }
+    }
+    vector<vector<int>> ans(n);
+    rep(i,0,n) if(!seen[i]) dfs(G, ans, i);
+
+    rep(i,0,n){
+        cout << i + 1 << ' ';
+        for(auto x : ans[i]) cout << x << ' ';
+        cout << endl;
+    }
+    return 0;        
+}

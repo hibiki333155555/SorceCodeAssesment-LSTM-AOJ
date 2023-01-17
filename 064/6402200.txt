@@ -1,0 +1,8 @@
+class Main{
+    public static void main(String[] args){
+        int l = 2;
+        int m = 3;
+        System.out.println(l*l*l);
+        System.out.println(m*m*m);
+    }
+}

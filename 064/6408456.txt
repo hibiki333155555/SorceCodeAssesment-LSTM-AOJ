@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+int main()
+{
+	int a,b,c;
+    scanf("%d%d%d",&a,&b,&c);
+    long long int x[a][b],y[b][c],sum[a][c];
+    for(int i=0; i<a; i++){
+        for(int j=0; j<c; j++){
+            sum[i][j]=0;
+        }
+    }
+    for(int i=0; i<a; i++){
+        for(int j=0; j<b; j++){
+            scanf("%lld",&x[i][j]);
+        }
+    }
+    for(int i=0; i<b; i++){
+        for(int j=0; j<c; j++){
+            scanf("%lld",&y[i][j]);
+        }
+    }
+    for(int i=0; i<a; i++){
+        for(int j=0; j<c; j++){
+            for(int h=0; h<b; h++){
+             sum[i][j]+=x[i][h]*y[h][j];
+            }
+        }
+    }
+
+    for(int i=0; i<a; i++){
+        for(int j=0; j<c; j++){
+            if(j!=c-1)
+            printf("%lld ",sum[i][j]);
+            else
+            printf("%lld",sum[i][j]);
+        }
+        puts("");
+    }
+	return 0;
+}

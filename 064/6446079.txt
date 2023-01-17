@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+//#define lson (rt<<1)
+//#define rson ((rt<<1)+1)
+//#define mid ((l+r)>>1)
+#define mst(a) memset(a,0,sizeof(a))
+#define cf int Tcodeforces, Tcodeforce;cin>>Tcodeforces;for(Tcodeforce = 1; Tcodeforce <= Tcodeforces; Tcodeforce++)
+typedef long long ll;
+typedef double db;
+const ll maxn = 2e5 +7;
+const ll maxm = 2e5 +7;
+const ll inf = 0x3f3f3f3f;
+const ll mod = 1e9 +7;
+
+int n, m, q, c;
+vector<int> e[maxn];
+int vk[maxn];
+
+void dfs(int rt) {
+    vk[rt] = c;
+    for(auto y: e[rt]) {
+        if(vk[y]) continue;
+        dfs(y);
+    }
+}
+
+signed main() {
+    #ifdef moyi_qwq
+        freopen("D:/source file/intxt/in.txt","r",stdin);
+    #endif
+    
+    cin>>n>>m;
+    for(int i = 1; i <= m; i++) {
+        int u, v; cin>>u>>v;
+        e[u].push_back(v);
+        e[v].push_back(u);
+    }
+    for(int i = 0; i < n; i++) {
+        if(vk[i]) continue;
+        c++;
+        dfs(i);
+    }
+    cin>>q;
+    for(int i = 1; i <= q; i++) {
+        int u, v; cin>>u>>v;
+        cout<<(vk[u]==vk[v]?"yes":"no")<<endl;
+    }
+    
+    //cerr<<"Time : "<<1000*((double)clock())/(double)CLOCKS_PER_SEC<<"ms";
+    return (0);
+}
+

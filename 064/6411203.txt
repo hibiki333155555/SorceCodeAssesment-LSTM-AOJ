@@ -1,0 +1,7 @@
+n=int(input())
+l=input().split()
+ans=[]
+for i in range(n):
+    ans.append(l[n-1-i])
+ans=" ".join(ans)
+print(ans)

@@ -1,0 +1,91 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class SimpleClass
+{
+private:
+    int number;
+};
+
+class Dice2
+{
+private: 
+    int a[6];
+public:
+    int b[6];
+};
+class Dice
+{
+private:
+    int a[6];
+
+public:
+    void inputN() {
+        for (int i=0;i<6;i++) {
+            cin >> a[i];
+        }
+    };
+
+    void w() {
+        int tmp = a[0];
+        a[0] = a[2];
+        a[2] = a[5];
+        a[5] = a[3];
+        a[3] = tmp;
+    };
+
+    void e() {
+        int tmp = a[0];
+        a[0] = a[3];
+        a[3] = a[5];
+        a[5] = a[2];
+        a[2] = tmp;
+    };
+
+    void n() {
+        int tmp = a[0];
+        a[0] = a[1];
+        a[1] = a[5];
+        a[5] = a[4];
+        a[4] = tmp;
+    };
+
+    void s() {
+        int tmp = a[0];
+        a[0] = a[4];
+        a[4] = a[5];
+        a[5] = a[1];
+        a[1] = tmp;
+    };
+
+    int top() {
+        return a[0];
+    };
+};
+
+int main() {
+    Dice d;
+    string order;
+    d.inputN();
+    std::cin >> order;
+    for (int i=0;i<order.length();i++) {
+        switch(order[i]) {
+            case 'W':
+               d.w();
+               break;
+            case 'E':
+              d.e();
+              break;
+            case 'N':
+              d.n();
+              break;
+            case 'S':
+              d.s();
+              break;
+            default:
+              break;
+        }
+    }
+    cout << d.top() << endl;
+}

@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main()
+{
+    int i;
+    int a;
+    for(i=0 ;  ; i++)
+    {
+        scanf("%d",&a);
+        if(a==0) break;
+        printf("case %d: %d",i+1,a);
+    }
+    return 0;
+}

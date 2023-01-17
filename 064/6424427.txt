@@ -1,0 +1,23 @@
+V,E,r = map(int,input().split())
+route = []
+for i in range(E):
+    s,t,d = map(int,input().split())
+    route.append([s,t,d])
+point_list = [10*1000]*V
+point_list[r] = 0
+
+for a in range(V):
+    check = 0
+    for j,k,l in route:
+        if point_list[k] > point_list[j] + l:
+            point_list[k] = point_list[j] + l
+            check = 1
+    if check == 0:
+        for j in point_list:
+            if j == 10000:
+                print("INF")
+            else:
+                print(j)
+        break
+if check == 1:
+    print("NEGATIVE CYCLE")

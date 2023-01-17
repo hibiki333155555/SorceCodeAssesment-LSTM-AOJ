@@ -1,0 +1,114 @@
+#include "utilitys.hpp"
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ALL(x) (x).begin(), (x).end()
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+
+#include "atcoder/scc.hpp"
+
+int main() {
+    int N, M;
+    cin >> N >> M;
+    vector<int> A(M), B(M);
+    vector<i64> C(M);
+    REP(i, M) {
+        cin >> A[i] >> B[i] >> C[i];
+        --A[i], --B[i];
+    }
+
+    auto calc_min = [&]() -> i64 {
+        auto judge_connect = [&](i64 lmt) {
+            vector<vector<int>> graph(N);
+            REP(i, M) if (lmt % C[i] == 0) { graph[A[i]].pb(B[i]); }
+            vector<char> visited(N);
+            auto dfs = rec_lambda([&](auto &&self, const int v) -> void {
+                visited[v] = true;
+                for (const int t : graph[v]) {
+                    if (not visited[t]) {
+                        self(t);
+                    }
+                }
+            });
+            dfs(0);
+            return visited[N - 1];
+        };
+
+        set<int> s;
+        i64 ans = infty<i64>;
+        REP(bit, 1 << 20) {
+            i64 v = 1;
+            REP(i, 20) if (bit & (1 << i)) { v = lcm(v, i + 1); }
+            if (s.find(v) == s.end()) {
+                s.insert(v);
+                if (judge_connect(v)) chmin(ans, v);
+            }
+        }
+        if (ans == infty<i64>) ans = -1;
+        return ans;
+    };
+
+    auto calc_max = [&]() -> i64 {
+        atcoder::scc_graph scc(N);
+        REP(i, M) scc.add_edge(A[i], B[i]);
+        const auto groups = scc.scc();
+        vector<int> parent(N);
+        vector<i64> lcm_data(N, 1);
+        for (const auto &vec : groups) {
+            const int leader = vec[0];
+            for (const int e : vec) {
+                parent[e] = leader;
+            }
+        }
+
+        vector<vector<pair<int, i64>>> graph(N);
+        REP(i, M) {
+            if (parent[A[i]] == parent[B[i]]) {
+                lcm_data[parent[A[i]]] = lcm(lcm_data[parent[A[i]]], C[i]);
+            } else {
+                graph[parent[A[i]]].pb({parent[B[i]], C[i]});
+            }
+        }
+
+        vector<set<i64>> dp(N);
+        REP(i, N) dp[i].insert(1);
+        dp[parent[0]].insert(lcm_data[parent[0]]);
+        vector<bool> visited(N);
+        auto dfs = rec_lambda([&](auto &&self, const int v) -> void {
+            visited[v] = true;
+            for (const auto &[t, c] : graph[v]) {
+                if (not visited[t]) {
+                    self(t);
+                }
+            }
+        });
+        dfs(parent[0]);
+
+        for (const auto &vec : groups) {
+            const int leader = vec[0];
+            if (not visited[leader]) continue;
+            for (const auto &[t, c] : graph[leader]) {
+                for (const i64 e : dp[leader]) {
+                    dp[t].insert(lcm(lcm_data[t], lcm(e, c)));
+                }
+            }
+        }
+
+        const int lst = parent[N - 1];
+        if (dp[lst].empty())
+            return -1;
+        else
+            return *dp[lst].rbegin();
+    };
+
+    const i64 mi = calc_min();
+    if (mi == -1) {
+        cout << "IMPOSSIBLE" << eoln;
+    } else {
+        cout << mi << ' ' << calc_max() << eoln;
+    }
+}

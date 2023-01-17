@@ -1,0 +1,100 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < (n); i++)
+using namespace std;
+using pii = pair<int, int>;
+using ll = long long;
+
+const int inf = 1e9;
+
+struct SegmentTree {
+  int n;
+  vector<pii> node;
+
+  SegmentTree(vector<pii> v) {
+    int sz = v.size();
+    n = 1;
+    while (n < sz) n *= 2;
+    node.resize(2 * n - 1);
+
+    for (int i = 0; i < sz; i++) {
+      node[i + n - 1] = v[i];
+    }
+    for (int i = n - 2; i >= 0; i--) {
+      node[i] = min(node[i * 2 + 1], node[i * 2 + 2]);
+    }
+  }
+
+  void update(int x, int v) {
+    x += n - 1;
+    node[x] = pii{v, x};
+    while (x) {
+      x = (x - 1) / 2;
+      node[x] = min(node[x * 2 + 1], node[x * 2 + 2]);
+    }
+  }
+
+  pii get(int a, int b, int x = 0, int l = 0, int r = -1) {
+    if (r < 0) r = n;
+    if (r <= a || b <= l) return pii{inf, inf};
+    if (a <= l && r <= b) return node[x];
+    pii lv = get(a, b, x * 2 + 1, l, (l + r) / 2);
+    pii rv = get(a, b, x * 2 + 2, (l + r) / 2, r);
+    return min(lv, rv);
+  }
+};
+
+vector<vector<int>> g;
+vector<int> id, d;
+
+void dfs(int v, int p = -1) {
+	id.push_back(v);
+	for (auto nv : g[v]) {
+		if (nv == p) continue;
+		d[nv] = d[v] + 1;
+		dfs(nv, v);
+		id.push_back(v);
+	}
+}
+
+int main() {
+	int n;
+	cin >> n;
+	g.resize(n);
+	rep(i, n) {
+		int k;
+		cin >> k;
+		rep(j, k) {
+			int c;
+			cin >> c;
+			g[i].push_back(c);
+			g[c].push_back(i);
+		}
+	}
+
+	d.resize(n);
+	dfs(0);
+
+	vector<int> fst(n, -1);
+	rep(i, id.size()) {
+		if (fst[id[i]] == -1) {
+			fst[id[i]] = i;
+		}
+	}
+
+	vector<pii> p(id.size());
+	rep(i, id.size()) {
+		p[i] = pii{d[id[i]], id[i]};
+	}
+
+	SegmentTree seg(p);
+	int q;
+	cin >> q;
+	rep(i, q) {
+		int u, v;
+		cin >> u >> v;
+		if (fst[u] > fst[v]) swap(u, v);
+		cout << seg.get(fst[u], fst[v] + 1).second << endl;
+	}
+	
+	return 0;
+}

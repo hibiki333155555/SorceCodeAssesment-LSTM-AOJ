@@ -1,0 +1,16 @@
+while True:
+    n = int(input())
+    if n == 0:
+        break
+    ANS = [0, 0]
+    for _ in range(n):
+        a, b = map(int, input().split())
+        if a > b:
+            ANS[0] += a + b
+        elif a < b:
+            ANS[1] += a + b
+        else:
+            ANS[0] += a
+            ANS[1] += b
+    print(*ANS)
+

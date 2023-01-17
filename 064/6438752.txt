@@ -1,0 +1,26 @@
+n = int(input())
+
+R, C = [], []
+for _ in range(n):
+    a, b = map(int, input().split())
+    R.append(a)
+    C.append(b)
+
+INF = 10 ** 18
+# dp[l][r] := l から r までに必要な最小の連鎖行列積
+dp = [[INF] * (n + 1) for _ in range(n + 1)]
+
+for i in range(n + 1):
+    dp[i][i] = 0
+
+# 1-indexed
+for span in range(2, n + 1):
+    for l in range(1, n + 1):
+        r = l + span - 1
+        if r > n: continue
+        for mid in range(l, r + 1):
+            cost = R[l - 1] * C[mid - 1] * C[r - 1]
+            if l <= mid + 1 <= r:
+                dp[l][r] = min(dp[l][r], dp[l][mid] + dp[mid + 1][r] + cost)
+
+print(dp[1][n])

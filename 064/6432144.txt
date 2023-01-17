@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+int main()
+{
+   ll n,m;
+    cin>>n>>m;
+    queue<ll>q[n];
+
+    for(int i=0;i<m;i++)
+    {
+        int key;
+        cin>>key;
+        if(key==0)
+        {
+             ll x,y;
+            cin>>x>>y;
+            q[x].push(y);
+        }
+        else if(key==1)
+        {
+            ll d;
+            cin>>d;
+            if(!q[d].empty())
+            {
+                cout<<q[d].front()<<endl;
+            }
+
+        }
+        else if(key==2)
+            {
+
+              int t;
+              cin>>t;
+              if(!q[t].empty())
+              {
+                  q[t].pop();
+              }
+
+            }
+}
+}
+

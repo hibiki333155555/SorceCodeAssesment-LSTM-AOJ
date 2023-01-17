@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+//rocketscientists_69
+int main( ){
+    int w,h;
+    cin>>w>>h;
+    
+    for (int i=1; i<=w; i++) {
+        for (int j=1; j<=h; j++) {
+            if ((i+j)%2==0) {
+                cout<<"#";
+            }
+            else{
+                cout<<".";
+            }
+        }
+        cout<<endl;
+    }
+    
+    
+    return 0;
+}
+
+
+

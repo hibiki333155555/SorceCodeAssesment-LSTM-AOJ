@@ -1,0 +1,23 @@
+#include<stdio.h>
+int main(void){
+    char s1[]="abcdefghijklmnopqrstuvwxyz";
+    char s2[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    char mid[1200];
+    for(int k=0;k<1200;k++){
+    	scanf("%c",&mid[k]);
+    }
+    printf("%s\n",mid);
+    for(int i=0;i !=1200;i++){
+        for(int j=0;s1[j] !='\0';j++){
+        if(mid[i]==s1[j])
+        mid[i]=s2[j];
+        else if(mid[i]==s2[j])
+        mid[i]=s1[j];
+        else
+        ;
+        }
+    }
+    printf("%s\n",mid);
+    
+    return 0;
+}

@@ -1,0 +1,55 @@
+#!/usr/bin/python3
+
+N, M = map(int, input().split())
+A = []
+B = []
+C = []
+for i in range(N):
+    a, b, c = map(int, input().split())
+    A.append(a)
+    B.append(b)
+    C.append(c)
+Q = int(input())
+D = []
+E = []
+for i in range(Q):
+    d, e = map(int, input().split())
+    D.append(d)
+    E.append(e)
+demonStrength = []
+for i in range(M+2):
+    demonStrength.append(0)
+for i in range(Q):
+    demonStrength[E[i]] += D[i]
+slayerStrength = []
+for i in range(M+2):
+    slayerStrength.append(0)
+slayerPositions = []
+for i in range(M+2):
+    slayerPositions.append([])
+for i in range(N):
+    slayerStrength[B[i]] += A[i]
+    slayerStrength[C[i] + 1] -= A[i]
+    slayerPositions[B[i]].append(i)
+for i in range(M+1):
+    slayerStrength[i+1] += slayerStrength[i]
+ans = 0
+totalDopingStrength = 0
+maxC = 0
+dopingStrength = []
+for i in range(M+2):
+    dopingStrength.append(0)
+for i in range(M+1):
+    totalDopingStrength -= dopingStrength[i]
+    for slayerId in slayerPositions[i]:
+        maxC = max(maxC, C[slayerId])
+    necessaryDoping = demonStrength[i] - slayerStrength[i] - totalDopingStrength
+    if necessaryDoping <= 0:
+        continue
+    if slayerStrength[i] == 0:
+        print(-1)
+        exit()
+    ans += necessaryDoping
+    totalDopingStrength += necessaryDoping
+    dopingStrength[maxC + 1] += necessaryDoping
+print(ans)

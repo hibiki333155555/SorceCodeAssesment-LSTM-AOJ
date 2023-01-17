@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+
+int main()
+{
+    double x[2], y[2];
+    std::cin >> x[0] >> x[1] >> y[0] >> y[1];
+    
+    double xdist = x[1] - x[0], ydist = y[1]-y[0];
+    double result = std::sqrtl( xdist*xdist + ydist*ydist );
+    std::cout << result << std::endl;
+    return 0;
+}

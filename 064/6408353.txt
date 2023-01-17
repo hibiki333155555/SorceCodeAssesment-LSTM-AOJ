@@ -1,0 +1,26 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    f.readline()
+    s_list = list(map(int, f.readline().split()))
+    f.readline()
+    t_list = list(map(int, f.readline().split()))
+    print(sum(1 for t in t_list if t in s_list))
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

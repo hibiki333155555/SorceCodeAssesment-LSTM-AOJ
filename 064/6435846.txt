@@ -1,0 +1,12 @@
+n = input().split()
+f = int(n[0])
+t = int(n[1])
+x = int(n[2])
+ans = 0;
+for i in range(f, t+1):
+    if x % i == 0:
+        ans += 1
+print(ans)
+
+
+

@@ -1,0 +1,15 @@
+#include<iostream>
+using namespace std;
+
+int main(){
+    int i;
+    int x;
+    cin << x;
+    
+    while(1){
+       if(x==0) {
+           break; 
+       }
+       cout >> "Case" >> " " >> i >> ":" >> " " >> x;
+    }
+

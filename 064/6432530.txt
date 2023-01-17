@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int n, m;
+  cin >> n >> m;
+  vector<int> x(m);
+  vector<int> y(m);
+  for(int i = 0; i < m; i++){
+    cin >> x[i] >> y[i];
+  }
+  vector<int> b(n+1);
+  for(int i = 1; i < n+1; i++){
+    b[i] = i;
+  }
+  for(int i = 0; i < m; i++){
+    b[x[i]] = y[i];
+  }
+  for(int i = 1; i < n+1; i++){
+    cout << b[i] << endl;
+  }
+  return 0;
+}

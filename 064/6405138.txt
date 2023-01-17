@@ -1,0 +1,21 @@
+import java.util.Scanner;
+public class Main {
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();
+		int [] bango = new int[N+1];
+		for(int i=1;i<=N;i++) {
+			bango[i]=sc.nextInt();
+		}
+		for(int a=1;a<bango.length;a++) {
+			int x = 0;
+			x=bango[a]-bango[a-1];
+			bango[0]=bango[0]+Math.abs(x);
+		}
+		System.out.println(bango[0]);
+	}
+
+}
+

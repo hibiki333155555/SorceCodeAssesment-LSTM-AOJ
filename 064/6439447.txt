@@ -1,0 +1,109 @@
+#include<stdio.h>
+#include<vector>
+#include<algorithm>
+#include<iostream>
+#include<cmath>
+#include<map>
+#include<set>
+#include <numeric>
+using namespace std;
+          
+class Node{
+public:
+  int parent;
+  int left;
+  int right;
+  Node();
+};
+
+Node::Node() : parent(-1),left(-1),right(-1){}
+
+Node T[100005];
+int D[100005];
+int H[100005];
+
+int getSibling(int u){
+  if(T[u].parent == -1){return -1;}
+  else{
+    if((T[T[u].parent].left != u)&&(T[T[u].parent].left != -1)){
+      return T[T[u].parent].left;
+    }
+    if((T[T[u].parent].right != u)&&(T[T[u].parent].right != -1)){
+      return T[T[u].parent].right;
+    }
+  }
+}
+
+void setDepth(int u, int p){
+  D[u] = p;
+  if(T[u].right != -1){
+    setDepth(T[u].right,p+1);
+  }
+  if(T[u].left != -1){
+    setDepth(T[u].left,p+1);
+  }
+}
+
+int setHeight(int u){
+  int h1, h2 = 0;
+  if(T[u].right != -1){
+    h1 = setHeight(T[u].right) + 1;
+  }
+  if(T[u].left != -1){
+    h2 = setHeight(T[u].left) + 1;
+  }
+  int h = max(h1,h2);
+  return H[u] = h;
+} 
+
+int main(){
+  int n;
+  scanf("%d",&n);
+  for(int i = 0; i < n; i++){
+    int id;
+    scanf("%d",&id);
+    int l,r;
+    scanf("%d%d",&l,&r);
+    T[id].left = l;
+    if(l!=-1){
+      T[l].parent = id;
+    }
+    T[id].right = r;
+    if(r!=-1){
+      T[r].parent = id;
+    }
+  }
+  int root = 0;
+  for(int i = 0; i < n; i++){
+    if(T[i].parent == -1){root = i;}
+  }
+  
+  setDepth(root,0);
+  setHeight(root);
+  
+  for(int i = 0; i < n; i++){
+    cout << "node " << i << ": ";
+    cout << "parent = " << T[i].parent << ", ";
+    cout << "sibling = " << getSibling(i) << ", " ;
+    int deg = 0;
+    if(T[i].left != -1){
+      deg++;
+    }
+    if(T[i].right != -1){
+      deg++;
+    }
+    cout << "degree = " << deg << ", ";
+    cout << "depth = " << D[i] << ", ";
+    cout << "height = " << H[i] << ", ";
+    if(T[i].parent == -1){
+      cout << "root" <<endl;
+    }
+    else if((T[i].left == -1)&&(T[i].right == -1)){
+      cout << "leaf" <<endl;
+    }
+    else{
+      cout << "internal node"<<endl;
+    }
+  }
+      
+}

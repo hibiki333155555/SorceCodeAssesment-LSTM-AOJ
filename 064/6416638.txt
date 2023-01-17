@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+int main()
+{
+    int x;
+    
+    printf("Enter the integer: ");
+    scanf("%d", &x);
+    
+    if(x >= 1 && x <= 100)
+    {
+        printf("%d\n", x * x * x);
+    }
+    else
+    {
+        printf("Invalide input\n");
+    }
+    
+    return 0;
+}

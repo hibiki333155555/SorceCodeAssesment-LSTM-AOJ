@@ -1,0 +1,24 @@
+def main():
+  n, p = map(int, input().split())
+  isEnd = False
+  n_a = [0] * n
+  p_now = p
+  index = 0
+  while not isEnd:
+    if p_now > 0:
+      n_a[index] += 1
+      p_now -= 1
+      if n_a[index] == p:
+        isEnd = True
+        break
+    else:
+      p_now += n_a[index]
+      n_a[index] = 0
+    index += 1
+
+    if index == n:
+      index = 0
+  
+  print(index)
+
+main()

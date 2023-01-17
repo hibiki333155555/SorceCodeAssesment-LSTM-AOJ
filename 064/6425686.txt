@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+#ifdef MY_DEBUG
+  #include "dprint.cpp"
+  # define dprint(a, ...);                 \
+      do {                                 \
+          printf("line : %d, func : %s\n", \
+                __LINE__, __func__);       \
+          dprint(#a,a,##__VA_ARGS__ );     \
+      } while (0)
+#else
+  #define dprint(a,...) 
+#endif
+using namespace std;
+
+int main() {
+  int n,m;
+  cin >>n>>m;
+  vector<int> vec(m+1);
+  for (int i = 1; i <= m; i++) cin >> vec[i];
+sort(vec.begin(),vec.end());
+vector<vector<int>> memo(m+1, vector<int>(n+1,INT_MAX));
+memo[0][0]=0;
+for (int i = 1; i <= m; i++){
+  for(int j=0;j<=n;j++){
+    if(j-vec[i]>=0){
+      if(memo[i][j-vec[i]]!=INT_MAX){
+        memo[i][j]=min(memo[i][j],memo[i][j-vec[i]]+1);
+      }
+      if(memo[i-1][j-vec[i]]!=INT_MAX){
+        memo[i][j]=min(memo[i][j],memo[i-1][j-vec[i]]+1);
+      }
+     
+    }
+    if(memo[i-1][j]!=INT_MAX){
+      memo[i][j]=min(memo[i][j],memo[i-1][j]);
+    }
+  }
+  
+}
+
+cout << memo[m][n] << endl;
+return 0;
+}

@@ -1,0 +1,49 @@
+import sys
+import math
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    point_list = [(0, 0), (100, 0)]
+    theta = math.radians(60)
+    sin_theta = math.sin(theta)
+    cos_theta = math.cos(theta)
+
+    for _ in range(n):
+        tmp_point_list = []
+        for i in range(len(point_list) - 1):
+            p0 = point_list[i]
+            p1 = point_list[i + 1]
+            v = [(p1[0] - p0[0]) / 3, (p1[1] - p0[1]) / 3]
+            ps = (p0[0] + v[0], p0[1] + v[1])
+            pt = (p0[0] + 2 * v[0], p0[1] + 2 * v[1])
+            pu = (ps[0] + cos_theta * v[0] - sin_theta * v[1],
+                  ps[1] + sin_theta * v[0] + cos_theta * v[1])
+
+            tmp_point_list.append(p0)
+            tmp_point_list.append(ps)
+            tmp_point_list.append(pu)
+            tmp_point_list.append(pt)
+
+        tmp_point_list.append(point_list[-1])
+        point_list = tmp_point_list
+
+    for (x, y) in point_list:
+        print(f'{x:4f} {y:4f}')
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

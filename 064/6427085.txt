@@ -1,0 +1,19 @@
+#include<stdio.h>
+
+int main()
+{
+    int sec,H,M;
+    double S;
+
+    printf("Enter second :");
+    scanf("%d",&sec);
+
+    H=sec/3600;
+    M=(sec%3600)/60;
+    S=sec%60;
+
+    printf("%d\n%d\n%lf\n",H,M,S);
+
+    return 0;
+}
+

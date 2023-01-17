@@ -1,0 +1,35 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    char c;
+    int alphCnt[26];
+    for (int i = 0; i < 26; i++)
+    {
+        alphCnt[i] = 0;
+    }
+
+    while (cin >> c)
+    {
+        if (isalpha(c))
+        {
+            alphCnt[tolower(c) - 'a']++;
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    for (int i = 0; i < 26; i++)
+    {
+        cout << (char)('a' + i) << " : " << alphCnt[i] << endl;
+    }
+
+    return 0;
+}

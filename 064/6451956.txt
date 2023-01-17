@@ -1,0 +1,13 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    double r;
+    cin >> r;
+    double p = 3.141592653589793238;
+    double s = r*r*p;
+    double l = 2*p*r;
+    
+    cout << s << " " << l << endl;
+    return 0;
+} 

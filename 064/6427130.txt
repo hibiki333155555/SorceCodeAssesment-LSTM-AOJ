@@ -1,0 +1,9 @@
+W = gets.chomp.downcase
+count = 0
+while true
+    s = gets.split(' ')
+    break if s[0] == "END_OF_TEXT"
+    count += s.map(&:downcase).count(W)
+end
+
+puts count

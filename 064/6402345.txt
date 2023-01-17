@@ -1,0 +1,8 @@
+w, h, x, y, r = map(int, input().split(" "))
+w -= r
+h -= r
+
+if x >= r and y >= r and x <= w and y <= h;
+    print("Yes")
+else:
+    prit("No")

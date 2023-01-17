@@ -1,0 +1,44 @@
+import java.util.Scanner;
+
+public class Main{
+    public static void main(String[] args){
+        Scanner scan = new Scanner(System.in);
+        
+        int n = scan.nextInt();
+        int x[] = new int[n];
+        
+        
+        for(int i = 0;i < n;i++){
+            x[i] = scan.nextInt();
+        }
+        
+        boolean flag = true;
+        int benefit = 0;
+        int max = Integer.MIN_VALUE;
+        int small = 0;
+        for(int i = 0;i < n-1;i++){
+        	int s = x[i+1] - x[i]; 
+        	if((benefit + s) > 0) {
+        		benefit += s;
+        		flag = false;
+        	}
+        	else {
+        		benefit = 0;
+        		if(small < s) {
+        			small = s;
+        		}
+        	}
+        	
+        	
+        	if(max < benefit) {
+        		max = benefit;
+        	}
+        }
+        
+        if(flag) {
+        	max = small;
+        }
+        
+        System.out.println(max);
+    }
+}

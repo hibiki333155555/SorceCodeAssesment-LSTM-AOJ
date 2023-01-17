@@ -1,0 +1,93 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+constexpr ll MOD = 998244353;
+
+int n;
+vector<vector<int>> g;
+vector<vector<int>> dp;
+vector<ll> lower;
+vector<int> depth;
+vector<ll> all;
+
+void make_lower(int from, int par) {
+    lower[from] = 1;
+    for(int to : g[from]) {
+        if(to == par) continue;
+        depth[to] = depth[from] + 1;
+        dp[0][to] = from;
+        make_lower(to, from);
+        lower[from] += lower[to] * 2;
+        lower[from] %= MOD;
+    }
+}
+
+void make_all (int from, int par) {
+    for(int to : g[from]) {
+        if(to == par) continue;
+        all[to] += (all[from] - 2 * lower[to]) * 2;
+        all[to] %= MOD;
+        if(all[to] < 0) all[to] += MOD;
+        make_all(to, from);
+    }
+}
+
+int main() {
+    cin >> n;
+    g.resize(n);
+    for(int i = 0; i < n - 1; i++) {
+        int a, b; cin >> a >> b; a--; b--;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    int m = 20;
+    dp = vector<vector<int>>(m, vector<int>(n, -1));
+    lower.resize(n);
+    depth.resize(n);
+    make_lower(0, -1);
+    all = vector<ll>(lower.begin(), lower.end());
+    make_all(0, -1);
+    for(int i = 0; i < m - 1; i++) {
+        for(int j = 0; j < n; j++) {
+            dp[i+1][j] = dp[i][j] == -1? -1 : dp[i][dp[i][j]];
+        }
+    }
+    auto climb = [&](int from, int x) -> int {
+        for(int i = 0; i < m; i++) {
+            if(x >> i & 1) from = dp[i][from];
+            if(from == -1) return -1;
+        }
+        return from;
+    };
+    vector<ll> two_pow(n + 1, 1);
+    for(int i = 0; i < n; i++) {
+        two_pow[i + 1] = two_pow[i] * 2 % MOD;
+    }
+    int q; cin >> q;
+    for(int _ = 0; _ < q; _++) {
+        int x, y; cin >> x >> y; x--; y--;
+        if(depth[x] > depth[y]) swap(x, y);
+        int d = depth[y] - depth[x];
+        if(x == climb(y, d)) {
+            int z = climb(y, d - 1);
+            ll ans = (all[x] - 2 * lower[z]) % MOD * lower[y] % MOD;
+            ans *= two_pow[d];
+            ans %= MOD;
+            if(ans < 0) ans += MOD;
+            cout << ans << '\n';
+        } else {
+            int d2 = (1 << m) - 1;
+            for(int i = m - 1; i >= 0; i--) {
+                int nd = d2 & ~(1 << i);
+                if(climb(x, nd) == climb(y, d + nd)) {
+                    d2 = nd;
+                }
+            }
+            ll ans = lower[x] * lower[y] % MOD;
+            ans *= two_pow[d + d2 * 2];
+            ans %= MOD;
+            cout << ans << '\n';
+        }
+    }
+}
+

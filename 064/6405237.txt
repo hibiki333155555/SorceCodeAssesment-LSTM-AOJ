@@ -1,0 +1,15 @@
+counter = [0 for i in range(26)]
+while True:
+    try:
+        str = input()
+    except EOFError:
+        break
+    for ch in str:
+        if ord(ch)-ord('a') >= 0:
+            counter[ord(ch)-ord('a')] += 1
+        elif ord(ch)-ord('A') >= 0:
+            counter[ord(ch)-ord('A')] += 1
+
+for i in range(ord('a'), ord('z')+1):
+    print('{} : {}'.format(chr(i), counter[i-ord('a')]))
+            

@@ -1,0 +1,55 @@
+import sys
+
+sys.setrecursionlimit(10 ** 6)
+input = sys.stdin.readline
+
+
+V, E = map(int, input().split())
+G = [[] for _ in range(V)]
+rG = [[] for _ in range(V)]
+for _ in range(E):
+    s, t = map(int, input().split())
+    s -= 1
+    t -= 1
+    G[s].append(t)
+    rG[t].append(s)
+order = []
+seen = [False] * V
+group_ids = [-1] * V
+
+
+def dfs(v):
+    seen[v] = True
+    for nv in G[v]:
+        if not seen[nv]:
+            dfs(nv)
+    order.append(v)
+
+
+def dfs2(v):
+    group_ids[v] = gid
+    seen[v] = True
+    for nv in rG[v]:
+        if not seen[nv]:
+            dfs2(nv)
+
+
+for s in range(V):
+    if not seen[s]:
+        dfs(s)
+seen = [False] * V
+gid = 0
+for s in reversed(order):
+    if not seen[s]:
+        dfs2(s)
+        gid += 1
+Q = int(input())
+for _ in range(Q):
+    u, v = map(int, input().split())
+    u -= 1
+    v -= 1
+    if group_ids[u] == group_ids[v]:
+        print(1)
+    else:
+        print(0)
+

@@ -1,0 +1,86 @@
+P = 998244353
+
+def gauss(A, Y):
+    # A: n * n 行列
+    # Y: n 次元 vector
+    # AX = Y を満たす n 次元 vector X を求める
+    # 解が唯一つ存在することが前提
+    
+    n = len(A)
+    L = []
+    for a, y in zip(A, Y):
+        L.append(a + [y])
+    for i in range(n):
+        ii = i
+        while L[ii][i] == 0:
+            ii += 1
+        if ii > i:
+            L[ii], L[i] = L[i], L[ii]
+        
+        Li = L[i]
+        iv = pow(Li[i], P - 2, P)
+        for j in range(i, n + 1):
+            Li[j] = Li[j] * iv % P
+        for ii in range(i + 1, n):
+            Lii = L[ii]
+            a = Lii[i]
+            for jj in range(i + 1, n + 1):
+                Lii[jj] = (Lii[jj] - Li[jj] * a) % P
+            Lii[i] = 0
+    X = [0] * n
+    for i in range(n)[::-1]:
+        Li = L[i]
+        x = Li[-1]
+        for j in range(i + 1, n):
+            x = (x - Li[j] * X[j]) % P
+        X[i] = x
+    return X
+
+N = int(input())
+Z = []
+D = {}
+c = 0
+for i in range(N + 1):
+    for j in range(N + 1):
+        k = N - i - j
+        if k >= 0:
+            Z.append((i, j, k))
+            D[(i, j, k)] = c
+            c += 1
+A = [[0] * c for _ in range(c)]
+Y = [0] * c
+for t, (i, j, k) in enumerate(Z):
+    if (i, j, k) == (0, 0, N):
+        A[t][t] = 1
+        Y[t] = 0
+        continue
+    
+    if i >= 2:
+        nn = (i - 2, j + 2, k)
+        nt = D[nn]
+        A[t][nt] = P - i * (i - 1) // 2
+    if j >= 2:
+        nn = (i, j - 2, k + 2)
+        nt = D[nn]
+        A[t][nt] = P - j * (j - 1) // 2
+    if k >= 2:
+        nn = (i + 2, j, k - 2)
+        nt = D[nn]
+        A[t][nt] = P - k * (k - 1) // 2
+    if i and j:
+        nn = (i - 1, j, k + 1)
+        nt = D[nn]
+        A[t][nt] = P - i * j
+    if j and k:
+        nn = (i + 1, j - 1, k)
+        nt = D[nn]
+        A[t][nt] = P - j * k
+    if i and k:
+        nn = (i, j + 1, k - 1)
+        nt = D[nn]
+        A[t][nt] = P - i * k
+    A[t][t] = N * (N - 1) // 2
+    Y[t] = N * (N - 1) // 2
+
+print(gauss(A, Y)[D[(N, 0, 0)]] if N > 2 else 2)
+

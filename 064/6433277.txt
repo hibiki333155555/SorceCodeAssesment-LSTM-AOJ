@@ -1,0 +1,3 @@
+a,t,r = map(int, input().split())
+elapse = (t/a)*r
+print(elapse)

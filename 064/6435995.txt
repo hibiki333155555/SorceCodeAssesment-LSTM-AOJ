@@ -1,0 +1,39 @@
+import java.util.Scanner;
+class Main
+{
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        int midTest;
+        int finTest;
+        int reTest;
+        while(true){
+            midTest = sc.nextInt();
+            finTest = sc.nextInt();
+            reTest = sc.nextInt();
+            
+            if(midTest == -1 && finTest == -1 && reTest == -1){
+                break;
+            }
+            if(midTest == -1 || finTest == -1){
+                System.out.println("F");
+            }else{
+                if(midTest + finTest >= 80){
+                    System.out.println("A");
+                }else if(midTest + finTest >= 65){
+                    System.out.println("B");
+                }else if(midTest + finTest >= 50){
+                    System.out.println("C");
+                }else if(midTest + finTest >= 30){
+                    if(reTest >= 50){
+                        System.out.println("C");
+                    }else{
+                        System.out.println("D");
+                    }
+                }else{
+                    System.out.println("F");
+                }
+            }
+        }
+    }
+}

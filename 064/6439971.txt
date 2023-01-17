@@ -1,0 +1,24 @@
+n = int(input())
+Alst = list(map(int, input().split()))
+q = int(input())
+mlst = list(map(int, input().split()))
+
+mat = []
+for i in range(n+1):
+    tmp = [0]*2001
+    mat.append(tmp)
+
+mat[0][0] = 1
+for i in range(n):
+    for j in range(2001):
+        if mat[i][j]:
+            mat[i+1][j] = 1
+            if j + Alst[i] <= 2000:
+                mat[i+1][j+Alst[i]] =1
+
+for i in range(q):
+    if mat[-1][mlst[i]]:
+        ans = 'yes'
+    else:
+        ans = 'no'
+    print(ans)

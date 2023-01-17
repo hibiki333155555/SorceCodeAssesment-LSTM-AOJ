@@ -1,0 +1,19 @@
+w, h, x, y, r = map(int, input().split())
+
+wip = w - x
+yap = h - y
+
+if x > wip:
+    wr = wip
+else:
+    wr = x
+
+if y > yap:
+    hr = yap
+else:
+    hr = y
+    
+if r <= hr and r <= wr:
+    print('Yes')
+else:
+    print('No')

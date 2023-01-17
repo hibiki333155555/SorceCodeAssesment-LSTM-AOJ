@@ -1,0 +1,128 @@
+#line 1 "main.cpp"
+#define PROBLEM \
+  "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_4_B"
+
+#line 2 "lib/prelude.hpp"
+#ifndef LOCAL
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2")
+#endif
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define rep2(i, m, n) for (auto i = (m); i < (n); i++)
+#define rep(i, n) rep2(i, 0, n)
+#define repr2(i, m, n) for (auto i = (n); i-- > (m);)
+#define repr(i, n) repr2(i, 0, n)
+#define all(x) begin(x), end(x)
+#line 3 "lib/graph.hpp"
+
+struct unit_edge {
+  int v;
+  int to() const { return v; }
+  operator int() const { return to(); }
+  int w() const { return 1; }
+};
+
+template <class Weight>
+struct weighted_edge {
+  int v;
+  Weight weight;
+  int to() const { return v; }
+  operator int() const { return to(); }
+  Weight w() const { return weight; }
+};
+
+template <class Inner>
+struct basic_graph {
+  using weight_type = int;
+  constexpr static bool weighted = false;
+  const Inner& inner;
+  basic_graph(const Inner& g) : inner(g) {}
+  template <class F>
+  void adj(int v, F&& f) const {
+    for (auto u : inner[v]) f(unit_edge{u});
+  }
+};
+
+template <class Inner, class Weight>
+struct basic_weighted_graph {
+  using weight_type = Weight;
+  constexpr static bool weighted = true;
+  const Inner& inner;
+  basic_weighted_graph(const Inner& g) : inner(g) {}
+  template <class F>
+  void adj(int v, F&& f) const {
+    for (auto [u, w] : inner[v]) f(weighted_edge<weight_type>{u, w});
+  }
+};
+
+template <class T>
+struct graph_trait : public T {
+  graph_trait(T t) : T(move(t)) {}
+};
+
+template <class T>
+using W = typename graph_trait<T>::weight_type;
+
+template <size_t N>
+struct graph_trait<vector<int>[N]> : basic_graph<vector<int>[N]> {
+  using basic_graph<vector<int>[N]>::basic_graph;
+  int size() const { return N; }
+};
+
+template <>
+struct graph_trait<vector<vector<int>>> : basic_graph<vector<vector<int>>> {
+  using basic_graph<vector<vector<int>>>::basic_graph;
+  int size() const { return basic_graph<vector<vector<int>>>::inner.size(); }
+};
+
+template <size_t N, class Weight>
+struct graph_trait<vector<pair<int, Weight>>[N]>
+    : basic_weighted_graph<vector<pair<int, Weight>>[N], Weight> {
+  using basic_weighted_graph<vector<pair<int, Weight>>[N],
+                             Weight>::basic_weighted_graph;
+  int size() const { return N; }
+};
+
+template <class Weight>
+struct graph_trait<vector<vector<pair<int, Weight>>>>
+    : basic_weighted_graph<vector<vector<pair<int, Weight>>>, Weight> {
+  using basic_weighted_graph<vector<vector<pair<int, Weight>>>,
+                             Weight>::basic_weighted_graph;
+  int size() const { return basic_graph<vector<vector<int>>>::inner.size(); }
+};
+#line 3 "lib/graph/topo_sort.hpp"
+
+template <class G>
+optional<vector<int>> topo_sort(const G& graph) {
+  graph_trait<G> g(graph);
+  vector<int> deg(g.size()), nxt, res;
+  nxt.reserve(g.size());
+  res.reserve(g.size());
+  rep(v, g.size()) g.adj(v, [&](int u) { deg[u]++; });
+  rep(v, g.size()) if (deg[v] == 0) nxt.push_back(v);
+  int i = 0;
+  while (i != nxt.size()) {
+    int v = nxt[i++];
+    res.push_back(v);
+    g.adj(v, [&](int u) {
+      if (--deg[u] == 0) nxt.push_back(u);
+    });
+  }
+  return nxt.size() == g.size() ? optional<vector<int>>(nxt) : nullopt;
+}
+#line 5 "main.cpp"
+
+int main() {
+  int n, m;
+  scanf("%d%d", &n, &m);
+  vector<vector<int>> G(n);
+  rep(_, m) {
+    int u, v;
+    scanf("%d%d", &u, &v);
+    G[u].push_back(v);
+  }
+  printf("%d\n", int(!topo_sort(G).has_value()));
+}
+

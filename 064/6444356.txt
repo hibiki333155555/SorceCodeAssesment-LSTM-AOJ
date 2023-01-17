@@ -1,0 +1,100 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
+#include <tuple>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <algorithm>
+#include <numeric>
+#include <cmath>
+#include <iomanip>
+#include <bitset>
+
+#define rep(i, m, n) for (int i=m; i<n; i++)
+#define rept(i, m, n) for (int i=m; i<=n; i++)
+#define repi(n) for (int i=0; i<n; i++)
+#define repi1(n) for (int i=1; i<=n; i++)
+#define repj(n) for (int j=0; j<n; j++)
+#define repj1(n) for (int j=1; j<=n; j++)
+#define repk(n) for (int k=0; k<n; k++)
+#define repk1(n) for (int k=1; k<=n; k++)
+
+#define ALL(x) begin(x), end(x)
+
+#define YY cout<<"Yes"<<endl;
+#define NN cout<<"No"<<endl;
+
+#define nextcon(nx, ny, h, w) (0<=nx && nx<h && 0<=ny && ny<w)
+#define nxnycon (0<=nx && nx<h && 0<=ny && ny<w)
+const int dx[] = {-1, 0, 1, 0};
+const int dy[] = {0, 1, 0, -1};
+const int dx8[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+const int dy8[] = {0, 1, 1, 1, 0, -1, -1, -1};
+
+using namespace std;
+using ll = long long;
+using vi = vector<int>;
+using vvi = vector<vector<int>>;
+using pii = pair<int, int>;
+using vl = vector<ll>;
+using vvl = vector<vector<ll>>;
+using pll = pair<ll, ll>;
+using graph = vector<vector<int>>;
+using wgraph = vector<vector<pair<int, ll>>>;
+
+const int inf = 1e9;
+const ll INF = 1e18;
+const ll MOD = 1e9 + 7;
+
+
+
+int main(){
+    while(1){
+        int h;
+        cin>>h;
+        if(h==0)break;
+        vector<vector<pair<int,int>>> s(5,vector<pair<int,int>>(h));
+        repi(h){
+            repj(5){
+                int ss;
+                cin>>ss;
+                s[j][h-1-i]=pii(h-i-1,ss);
+            }
+        }
+        vvi v(5,vi(h));
+        int score=0;
+        while(1){
+            int f=0;
+            repi(h){
+                int p=0;
+                int c=0;
+                repj(5){
+                    int ss=s[j][i].second;
+                    if(p==ss&&ss!=10){
+                        c++;
+                    }else{
+                    c=1;
+                    }
+                    if(c==3){
+                        s[j-2][i]=s[j-1][i]=pii(10,10);
+                        score+=2*ss;
+                        f=1;
+                    }
+                    if(c>=3){
+                        s[j][i]=pii(10,10);
+                        score+=ss;
+                    }
+                    p=ss;
+                }
+            }
+            repi(5){
+                sort(ALL(s[i]));
+            }
+            if(!f)break;
+        }
+        cout<<score<<endl;
+    }
+}
+

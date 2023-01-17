@@ -1,0 +1,93 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef unsigned int ull;
+typedef pair<int, int> pil;
+const ll ll_INF = 0x3f3f3f3f3f3f3f3f;
+const ll ll_MAX = 0x7fffffffffffffff;
+const int int_INF = 0x3f3f3f3f;
+const int int_MAX = 0x7fffffff;
+const double EPS = 1e-7;
+const double PI = acos(-1.0);
+const int dy[8] = {-1, 0, 1, 0, 1, -1, 1, -1};
+const int dx[8] = {0, -1, 0, 1, 1, -1, -1, 1};
+#define R register
+#define _max(a, b) ((a) > (b) ? (a) : (b))
+#define _min(a, b) ((a) < (b) ? (a) : (b))
+#define _abs(a) ((a) > 0 ? (a) : -(a))
+#define _swap(a, b) ((a) ^= (b) ^= (a) ^= (b))
+#define _eql(x, y) (_abs((x) - (y)) < EPS)
+const int MOD = 1e9 + 7;
+const int MX = 1000010;
+ll _r() {
+    ll x = 0, f = 1;
+    char c = getchar();
+    while(c > '9' || c < '0') {
+        if(c == '-')
+            f = -1;
+        c = getchar();
+    }
+    while(c >= '0' && c <= '9')
+        x = (x << 3) + (x << 1) + (c ^ 48), c = getchar();
+    return f == -1 ? -x : x;
+}
+int r, c, q, n;
+int a[MX] = {0};
+int ST[MX][25] = {0};
+int Log2[MX] = {0};
+void creat_ST() {
+    for(int i = 1; i <= n; i++)
+        ST[i][0] = a[i];
+    for(int i = 1; i < 22; i++) {
+        for(int j = 1; j <= n - (1 << (i - 1)) + 1; j++) {
+            ST[j][i] = min(ST[j][i - 1], ST[j + (1 << (i - 1))][i - 1]);
+        }
+    }
+}
+int query_ST(int l, int r) {
+    int k = Log2[r - l + 1];
+    return min(ST[l][k], ST[r - (1 << k) + 1][k]);
+}
+
+void Init() {
+    n = r * c;
+    for(int i = 1; i <= n; i++) {
+        a[i] = _r();
+    }
+}
+
+void solve() {
+    creat_ST();
+    int r1, c1, r2, c2;
+    while(q--) {
+        r1 = _r(), c1 = _r(), r2 = _r(), c2 = _r();
+        ll ans = ll_INF;
+        int x = r1 * c + c1 + 1;
+        int y = r1 * c + c2 + 1;
+        for(int i = r1; i <= r2; i++) {
+            ans = _min(ans, query_ST(x, y));
+            x += c;
+            y += c;
+        }
+        cout << ans << endl;
+    }
+}
+int main() {
+    std::ios::sync_with_stdio(false);
+#ifdef LOCAL
+    freopen("data.in", "r", stdin);
+    freopen("data.out", "w", stdout);
+#endif
+
+    Log2[1] = 0, Log2[2] = 1;
+    for(int i = 3; i < MX; i++)
+        Log2[i] = Log2[i >> 1] + 1;
+    while(1) {
+        r = _r(), c = _r(), q = _r();
+        if(r == 0 && c == 0 && q == 0)
+            break;
+        Init();
+        solve();
+    }
+    return 0;
+}

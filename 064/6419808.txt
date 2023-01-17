@@ -1,0 +1,71 @@
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+using namespace std;
+
+int main() 
+{  
+int num1,num2,num3;
+cin >> num1 >> num2 >> num3;
+if (num1 < num2 && num2 < num3)
+{
+lowest = num1;
+middle = num2;
+highest = num3;
+
+cout << lowest << endl;
+cout << middle << endl;
+cout << highest << endl;
+}
+else if (num2 < num1 && num1 < num3)
+{
+lowest = num2;
+middle = num1;
+highest = num3;
+
+cout << lowest << endl;
+cout << middle << endl;
+cout << highest << endl;
+}
+else if (num3 < num2 && num2 < num1)
+{
+lowest = num3;
+middle = num2;
+highest = num1;
+
+cout << lowest << endl;
+cout << middle << endl;
+cout << highest << endl;
+}
+else if (num3 < num1 && num1 < num2)
+{
+lowest = num3;
+middle = num1;
+highest = num2;
+
+cout << lowest << endl;
+cout << middle << endl;
+cout << highest << endl;
+}
+else if (num2 < num3 && num3 < num1)
+{
+lowest = num2;
+middle = num3;
+highest = num1;
+
+cout << lowest << endl;
+cout << middle << endl;
+cout << highest << endl;
+}
+else if (num1 < num3 && num3 < num2)
+{
+lowest = num1;
+middle = num3;
+highest = num2;
+
+cout << lowest << endl;
+cout << middle << endl;
+cout << highest << endl;
+}
+
+}

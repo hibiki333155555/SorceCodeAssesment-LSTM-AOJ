@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void bebbleSort(vector<int> &ss, int n) {
+    int sum = 0;
+    for ( int i = 0; i < n; i++) {
+        int minj = i;
+        for (int j = i; j < n; j++) {
+            if (ss.at(j) < ss.at(minj)) minj = j;
+        }
+        swap(ss.at(i), ss.at(minj));
+        sum++;
+    }
+    for ( int i = 0; i < n; i++) {
+        if (i < n-1) cout << ss.at(i) << " ";
+        else cout << ss.at(i) << endl;
+    }
+    cout << sum << endl;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> ss(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> ss.at(i);
+    }
+    bebbleSort(ss, n);
+}

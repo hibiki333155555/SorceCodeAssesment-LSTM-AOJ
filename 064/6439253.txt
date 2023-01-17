@@ -1,0 +1,11 @@
+//１つの整数 x を読み込んで、x の３乗を計算し結果を出力するプログラムを作成して下さい。1 ≤ x ≤ 100
+
+#include<iostream>
+
+using namespace std;
+
+int main(){
+    int n;
+    cin >> n;
+    cout << n*n*n << endl;
+}

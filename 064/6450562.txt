@@ -1,0 +1,467 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<map>
+#include<stdio.h>
+#include<vector>
+#include<queue>
+#include<math.h>
+#include<deque>
+#include<set>
+#include<tuple>
+#include<string>
+#include<random>
+#include<ctime>
+#include<bitset>
+#include<iomanip>
+#include<limits>
+#include<stdlib.h>
+using namespace std;
+#define ll long long
+#define int long long
+#define double long double
+#define rep(s,i,n) for(int i=s;i<n;i++)
+#define c(n) cout<<n<<endl;
+#define ic(n) int n;cin>>n;
+#define sc(s) string s;cin>>s;
+#define mod 998244353
+#define inf 2000000000000000007
+#define f first
+#define s second
+#define mini(c,a,b) *min_element(c+a,c+b)
+#define maxi(c,a,b) *max_element(c+a,c+b)
+#define pi 3.141592653589793238462643383279
+#define e_ 2.718281828459045235360287471352
+#define P pair<int,int>
+#define upp(a,n,x) upper_bound(a,a+n,x)-a;
+#define low(a,n,x) lower_bound(a,a+n,x)-a;
+#define UF UnionFind 
+#define pb push_back
+struct UnionFind {
+	vector<int> par; // par[i]:iの親の番号　(例) par[3] = 2 : 3の親が2
+	vector<int> siz; 
+    UnionFind(int N) :par(N),siz(N){ //最初は全てが根であるとして初期化
+        for(int i = 0; i < N; i++){
+        	par[i] = i;
+        	siz[i]=1;
+        }	
+    }
+ 
+    int root(int x) { // データxが属する木の根を再帰で得る：root(x) = {xの木の根}
+        if (par[x] == x) return x;
+        return par[x] = root(par[x]);
+    }
+    
+    void unite(int x, int y) { // xとyの木を併合
+        int rx = root(x); //xの根をrx
+        int ry = root(y); //yの根をry
+        if (rx == ry) return; //xとyの根が同じ(=同じ木にある)時はそのまま
+        par[rx]=ry;
+        siz[ry]+=siz[rx];
+    }
+    bool same(int x, int y) { // 2つのデータx, yが属する木が同じならtrueを返す
+        int rx = root(x);
+        int ry = root(y);
+        return rx == ry;
+    }
+    int size(int x){
+    	return siz[root(x)];
+    }	
+};
+vector<int> toposo(vector<vector<int>> G,vector<int> indegree,int n){
+	vector<int> sorted_vertices;
+	priority_queue<int,vector<int>,greater<int>> que;
+	rep(0,i,n)if(!indegree[i])que.push(i);
+	while(!que.empty()){
+		int v=que.top();
+		que.pop();
+		rep(0,i,G[v].size()){
+			int u=G[v][i];
+			indegree[u]-=1;
+			if(!indegree[u])que.push(u);
+		}
+		sorted_vertices.pb(v);
+	}
+	return sorted_vertices;
+}
+struct segtree{
+	vector<int> dat;
+	int n;
+	segtree(int n_):n(),dat(n_*4,inf){
+		int x=1;
+		while(n_>=x)x*=2;
+		n=x;
+	}
+	void update(int i,int x){
+		i+=n-1;
+		dat[i]=x;
+		while(i>0){
+			i=(i-1)/2;
+			dat[i]=min(dat[i*2+1],dat[i*2+2]);
+		}
+	}
+	int query(int a,int b){return query_sub(a,b,0,0,n);}
+	int query_sub(int a,int b,int k,int l,int r){
+		if(r<=a||b<=l)return inf;
+		else if(a<=l&&r<=b)return dat[k];
+		else{
+			int vl=query_sub(a,b,k*2+1,l,(l+r)/2);
+			int vr=query_sub(a,b,k*2+2,(l+r)/2,r);
+			return min(vl,vr);
+		}
+	}
+	int rightest(int a,int b,int x){return rightest_sub(a,b,x,0,0,n);}
+	int rightest_sub(int a,int b,int x,int k,int l,int r){
+		if(dat[k]>x||r<=a||b<=l)return a-1;
+		else if(k>=n-1)return k-(n-1);
+		else{
+			int vr=rightest_sub(a,b,x,2*k+2,(l+r)/2,r);
+			if(vr!=a-1)return vr;
+			else return rightest_sub(a,b,x,2*k+1,l,(l+r)/2);
+		}	
+	}
+	int leftest(int a,int b,int x){return leftest_sub(a,b,x,0,0,n);}
+	int leftest_sub(int a,int b,int x,int k,int l,int r){
+		if(dat[k]>x||r<=a||b<=l)return b;
+		else if(k>=n-1)return k-(n-1);
+		else{
+			int vl=leftest_sub(a,b,x,2*k+1,l,(l+r)/2);
+			if(vl!=b)return vl;
+			else return leftest_sub(a,b,x,2*k+2,(l+r)/2,r);
+		}	
+	}
+};
+template<int MOD> struct Fp {
+    long long val;
+    constexpr Fp(long long v = 0) noexcept : val(v % MOD) {
+        if (val < 0) v += MOD;
+    }
+    constexpr int getmod() { return MOD; }
+    constexpr Fp operator - () const noexcept {
+        return val ? MOD - val : 0;
+    }
+    constexpr Fp operator + (const Fp& r) const noexcept { return Fp(*this) += r; }
+    constexpr Fp operator - (const Fp& r) const noexcept { return Fp(*this) -= r; }
+    constexpr Fp operator * (const Fp& r) const noexcept { return Fp(*this) *= r; }
+    constexpr Fp operator / (const Fp& r) const noexcept { return Fp(*this) /= r; }
+    constexpr Fp& operator += (const Fp& r) noexcept {
+        val += r.val;
+        if (val >= MOD) val -= MOD;
+        return *this;
+    }
+    constexpr Fp& operator -= (const Fp& r) noexcept {
+        val -= r.val;
+        if (val < 0) val += MOD;
+        return *this;
+    }
+    constexpr Fp& operator *= (const Fp& r) noexcept {
+        val = val * r.val % MOD;
+        return *this;
+    }
+    constexpr Fp& operator /= (const Fp& r) noexcept {
+        long long a = r.val, b = MOD, u = 1, v = 0;
+        while (b) {
+            long long t = a / b;
+            a -= t * b; swap(a, b);
+            u -= t * v; swap(u, v);
+        }
+        val = val * u % MOD;
+        if (val < 0) val += MOD;
+        return *this;
+    }
+    constexpr bool operator == (const Fp& r) const noexcept {
+        return this->val == r.val;
+    }
+    constexpr bool operator != (const Fp& r) const noexcept {
+        return this->val != r.val;
+    }
+    friend constexpr ostream& operator << (ostream &os, const Fp<MOD>& x) noexcept {
+        return os << x.val;
+    }
+    friend constexpr istream& operator >> (istream &is, Fp<MOD>& x) noexcept {
+        return is >> x.val;
+    }
+    friend constexpr Fp<MOD> modpow(const Fp<MOD> &a, long long n) noexcept {
+        if (n == 0) return 1;
+        auto t = modpow(a, n / 2);
+        t = t * t;
+        if (n & 1) t = t * a;
+        return t;
+    }
+};
+template<typename T,T INF>
+struct Beats {
+    int size = 1;
+ 
+   private:
+    vector<T> mx, smx, mxc;
+    vector<T> mn, smn, mnc;
+    vector<T> sum, lazy;
+    vector<bool> flag;
+ 
+    void update(int k) {
+        sum[k] = sum[k * 2 + 1] + sum[k * 2 + 2];
+ 
+        mx[k] = max(mx[2 * k + 1], mx[2 * k + 2]);
+        if (mx[2 * k + 1] < mx[2 * k + 2]) {
+            mxc[k] = mxc[2 * k + 2];
+            smx[k] = max(mx[2 * k + 1], smx[2 * k + 2]);
+        } else if (mx[2 * k + 1] > mx[2 * k + 2]) {
+            mxc[k] = mxc[2 * k + 1];
+            smx[k] = max(smx[2 * k + 1], mx[2 * k + 2]);
+        } else {
+            mxc[k] = mxc[2 * k + 1] + mxc[2 * k + 2];
+            smx[k] = max(smx[2 * k + 1], smx[2 * k + 2]);
+        }
+ 
+        mn[k] = min(mn[2 * k + 1], mn[2 * k + 2]);
+        if (mn[2 * k + 1] < mn[2 * k + 2]) {
+            mnc[k] = mnc[2 * k + 1];
+            smn[k] = min(smn[2 * k + 1], mn[2 * k + 2]);
+        } else if (mn[2 * k + 1] > mn[2 * k + 2]) {
+            mnc[k] = mnc[2 * k + 2];
+            smn[k] = min(mn[2 * k + 1], smn[2 * k + 2]);
+        } else {
+            mnc[k] = mnc[2 * k + 1] + mnc[2 * k + 2];
+            smn[k] = min(smn[2 * k + 1], smn[2 * k + 2]);
+        }
+    }
+    void updateNodeMax(int k, T x) {
+        sum[k] += (x - mx[k]) * mxc[k];
+        if (mx[k] == mn[k]) {
+            mx[k] = mn[k] = x;
+        } else if (mx[k] == smn[k]) {
+            mx[k] = smn[k] = x;
+        } else {
+            mx[k] = x;
+        }
+    }
+    void updateNodeMin(int k, T x) {
+        sum[k] += (x - mn[k]) * mnc[k];
+        if (mx[k] == mn[k]) {
+            mx[k] = mn[k] = x;
+        } else if (smx[k] == mn[k]) {
+            smx[k] = mn[k] = x;
+        } else {
+            mn[k] = x;
+        }
+    }
+    void updateNodeAdd(int k, int len, T x) {
+        mx[k] += x;
+        if (smx[k] != -INF) smx[k] += x;
+        mn[k] += x;
+        if (smn[k] != INF) smn[k] += x;
+        sum[k] += x * len;
+        lazy[k] += x;
+    }
+    void updateNodeAssign(int k, int len, T x) {
+        mx[k] = x;
+        smx[k] = -INF;
+        mxc[k] = len;
+        mn[k] = x;
+        smn[k] = INF;
+        mnc[k] = len;
+        sum[k] = x * len;
+        lazy[k] = x;
+        flag[k] = true;
+    }
+    void push(int k, int len) {
+        if (k >= size - 1) return;
+        if (flag[k] || lazy[k] != 0) {
+            if (flag[k]) {
+                updateNodeAssign(k * 2 + 1, len / 2, lazy[k]);
+                updateNodeAssign(k * 2 + 2, len / 2, lazy[k]);
+            } else {
+                updateNodeAdd(k * 2 + 1, len / 2, lazy[k]);
+                updateNodeAdd(k * 2 + 2, len / 2, lazy[k]);
+            }
+            lazy[k] = 0;
+            flag[k] = false;
+        }
+        if (mx[k * 2 + 1] > mx[k]) updateNodeMax(k * 2 + 1, mx[k]);
+        if (mx[k * 2 + 2] > mx[k]) updateNodeMax(k * 2 + 2, mx[k]);
+        if (mn[k * 2 + 1] < mn[k]) updateNodeMin(k * 2 + 1, mn[k]);
+        if (mn[k * 2 + 2] < mn[k]) updateNodeMin(k * 2 + 2, mn[k]);
+    }
+ 
+   public:
+    void updateMin(int a, int b, T x, int k = 0, int l = 0, int r = -1) {
+        if (r == -1) r = size;
+        if (r <= a || b <= l || mx[k] <= x) return;
+        if (a <= l && r <= b && smx[k] < x) {
+            updateNodeMax(k, x);
+            return;
+        }
+        push(k, r - l);
+        updateMin(a, b, x, k * 2 + 1, l, (l + r) / 2);
+        updateMin(a, b, x, k * 2 + 2, (l + r) / 2, r);
+        update(k);
+    }
+    void updateMax(int a, int b, T x, int k = 0, int l = 0, int r = -1) {
+        if (r == -1) r = size;
+        if (r <= a || b <= l || mn[k] >= x) return;
+        if (a <= l && r <= b && smn[k] > x) {
+            updateNodeMin(k, x);
+            return;
+        }
+        push(k, r - l);
+        updateMax(a, b, x, k * 2 + 1, l, (l + r) / 2);
+        updateMax(a, b, x, k * 2 + 2, (l + r) / 2, r);
+        update(k);
+    }
+    void updateAdd(int a, int b, T x, int k = 0, int l = 0, int r = -1) {
+        if (r == -1) r = size;
+        if (r <= a || b <= l) return;
+        if (a <= l && r <= b) {
+            updateNodeAdd(k, r - l, x);
+            return;
+        }
+        push(k, r - l);
+        updateAdd(a, b, x, k * 2 + 1, l, (l + r) / 2);
+        updateAdd(a, b, x, k * 2 + 2, (l + r) / 2, r);
+        update(k);
+    }
+    void updateAssign(int a, int b, T x, int k = 0, int l = 0, int r = -1) {
+        if (r == -1) r = size;
+        if (r <= a || b <= l) return;
+        if (a <= l && r <= b) {
+            updateNodeAssign(k, r - l, x);
+            return;
+        }
+        push(k, r - l);
+        updateAssign(a, b, x, k * 2 + 1, l, (l + r) / 2);
+        updateAssign(a, b, x, k * 2 + 2, (l + r) / 2, r);
+        update(k);
+    }
+ 
+    void set(int k, T x) {
+        k += size - 1;
+        mx[k] = x;
+        mn[k] = x;
+        sum[k] = x;
+    }
+    void init() {
+        for (T i = size - 2; i >= 0; i--) update(i);
+    }
+    T queryMin(int a, int b, int k = 0, int l = 0, int r = -1) {
+        if (r == -1) r = size;
+        if (r <= a || b <= l) return INF;
+        if (a <= l && r <= b) return mn[k];
+        push(k, r - l);
+        T lv = queryMin(a, b, k * 2 + 1, l, (l + r) / 2);
+        T rv = queryMin(a, b, k * 2 + 2, (l + r) / 2, r);
+        return min(lv, rv);
+    }
+    T queryMax(int a, int b, int k = 0, int l = 0, int r = -1) {
+        if (r == -1) r = size;
+        if (r <= a || b <= l) return -INF;
+        if (a <= l && r <= b) return mx[k];
+        push(k, r - l);
+        T lv = queryMax(a, b, k * 2 + 1, l, (l + r) / 2);
+        T rv = queryMax(a, b, k * 2 + 2, (l + r) / 2, r);
+        return max(lv, rv);
+    }
+    T querySum(int a, int b, int k = 0, int l = 0, int r = -1) {
+        if (r == -1) r = size;
+        if (r <= a || b <= l) return 0;
+        if (a <= l && r <= b) return sum[k];
+        push(k, r - l);
+        T lv = querySum(a, b, k * 2 + 1, l, (l + r) / 2);
+        T rv = querySum(a, b, k * 2 + 2, (l + r) / 2, r);
+        return lv + rv;
+    }
+    Beats(int x) {
+        while (size < x) size *= 2;
+        mx.resize(size * 2 - 1, -INF + 1);
+        smx.resize(size * 2 - 1, -INF);
+        mxc.resize(size * 2 - 1, 1);
+        mn.resize(size * 2 - 1, INF - 1);
+        smn.resize(size * 2 - 1, INF);
+        mnc.resize(size * 2 - 1, 1);
+        
+        sum.resize(size * 2 - 1);
+        lazy.resize(size * 2 - 1);
+        flag.resize(size * 2 - 1);
+    }
+};
+struct StronglyConnectedComponents {
+private:
+    vector<vector<int>> g, rg;
+    vector<int> order; 
+    vector<bool> visited;
+    int V;
+    void dfs(int v) {
+        if (visited[v]) return;
+        visited[v] = true;
+        for (int u : g[v]) dfs(u);
+        order.push_back(v);
+    }
+    void rdfs(int v, int c) {
+        if (comp[v] != -1) return;
+        comp[v] = c;
+        for (int u : rg[v]) rdfs(u, c);
+    }
+public:
+    vector<vector<int>> Graph; 
+    vector<int> comp; 
+    StronglyConnectedComponents(int v) : V(v) {
+        g.resize(v);
+        rg.resize(v);
+        visited.resize(v);
+        comp.resize(v);
+    }
+    void add_edge(int from, int to) {
+        g[from].push_back(to);
+        rg[to].push_back(from);
+    }
+    void build() {
+        Graph = vector<vector<int>>();
+        order = vector<int>();
+        visited.assign(V, false);
+        comp.assign(V, -1);
+        for (int i = 0; i < V; i++) dfs(i);
+        reverse(order.begin(), order.end());
+        int number = 0;
+        for (int i = 0; i < V; i++) {
+            if (comp[order[i]] == -1) {
+                rdfs(order[i], number++);
+            }
+        }
+        Graph.resize(number);
+        for (int i = 0; i < V; i++) {
+            for (int v : g[i]) {
+                if (comp[i] == comp[v]) continue;
+                Graph[comp[i]].push_back(comp[v]);
+            }
+        }
+    }
+};
+using mint=Fp<mod>;
+mint dp[5145][5145];
+int a[2145];
+mint bik(int k){
+	if(k<=0)return 1;
+	mint t=1;
+	while(k){
+		t*=k;
+		k-=1;
+	}	
+	return t;
+}
+mint su[5145][5145];
+signed main(){
+	ic(n) ic(m)
+	rep(0,i,m)cin>>a[i];
+	dp[0][0]=1;
+	rep(0,i,m){
+		rep(0,j,n+1){
+			su[i][j]+=dp[i][j];
+			su[i][j+a[i]+1]-=dp[i][j];
+		}
+		dp[i+1][0]+=su[i][0];
+		rep(1,j,n+1)dp[i+1][j]=dp[i+1][j-1]+su[i][j];
+	}
+	mint ans=dp[m][n]*bik(n);
+	c(ans)
+}	
+

@@ -1,0 +1,86 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define REP(i,n) for(int i=0;i<(n);i++)
+
+template<typename T>
+struct RangeTree{
+  typedef vector<T> V;
+  int n;
+   
+  vector<V> dat;
+
+  static constexpr auto V_merge=[](const V&a,const V&b){
+    V res;
+    std::merge(a.begin(),a.end(),b.begin(),b.end(),std::back_inserter(res));
+    return res;
+  };
+  
+  RangeTree(){}; 
+  RangeTree(int n_){
+    n=1;
+    while(n<n_) n<<=1;
+    dat.assign(n<<1,V());
+  }
+  RangeTree(const V &v){
+    int n_=v.size();
+    n=1;
+    while(n<n_)n<<=1;
+    dat.assign(n<<1,V());
+    for(int i=0;i<n_;i++)dat[n+i]=V(1,v[i]);
+    for(int i=n-1;i;i--)dat[i]=V_merge(dat[2*i],dat[2*i+1]);
+  }
+  
+  void set_val(int idx,T x){
+    dat[idx+=n]=V(1,x);  
+    while(idx>>=1)dat[idx]=V_merge(dat[2*idx],dat[2*idx+1]);
+  }
+  
+  /*
+  [a,b)の範囲でのcheck結果の総和を返す Rmergeは結合法則満たす
+  例えば Q(v)=v内のk以上の個数 , Rmerge(a,b)=a+b とか
+  */
+  int query(int a,int b,function<int(const V&)>Q,function<int(int,int)>merge,int e){
+    int vl=e,vr=e;
+    for(int l=a+n,r=b+n;l<r;l>>=1,r>>=1){
+      if(l&1)vl=merge(vl,Q(dat[l++]));
+      if(r&1)vr=merge(Q(dat[--r]),vr);
+    }
+    return merge(vl,vr);
+  }
+};
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int n;cin>>n;
+  vector<int> v(n);
+  REP(i,n)cin>>v[i];
+  RangeTree<int> rt(v);
+
+  int q;cin>>q;
+  REP(_,q){
+    int l,r,e;cin>>l>>r>>e;l--;r--;
+    int a=min(v[l],v[r])-e,b=max(v[l],v[r])+e;
+
+    auto Q=[&](const vector<int>&ve)->int{
+      int L=-1,R=ve.size();//[0,L]がa未満
+      while(R-L>1){
+        int M=(L+R)>>1;
+        (ve[M]<a?L:R)=M;
+      }
+      int tmp=L+1;
+      L=-1,R=ve.size();//[R,ve.size())がbより大きい
+      while(R-L>1){
+        int M=(L+R)>>1;
+        (ve[M]>b?R:L)=M;
+      }
+      return tmp+(ve.size()-R);
+    };
+    auto merge=[](int a,int b){return a+b;};
+    cout<<rt.query(l,r,Q,merge,0)<<endl;
+  }
+}
+  

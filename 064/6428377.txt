@@ -1,0 +1,16 @@
+#include<stdio.h>
+int main() 
+{
+int H,W,i,j;
+scanf("%d %d", &H, &W);
+
+for(i=1;i<=H;i++)
+{
+for(j=1;j<=W;j++)
+{
+printf("#");
+}
+}
+return 0;
+//Nabla
+}

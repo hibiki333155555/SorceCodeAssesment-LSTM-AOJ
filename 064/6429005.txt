@@ -1,0 +1,18 @@
+n = int(input())
+#多次元配列
+tower = [[[0 for j in range(10)] for i in range(3)] for k in range(4)]
+br = ["#" for i in range(20)]
+x = 0
+
+for i in range(n):
+    b,f,r,v = map(int, input().split())
+    tower[b - 1][f - 1][r - 1] == v
+
+for i in range(4):
+    if x != 0:
+        print("".join(br))
+    x += 1
+    for j in range(3):
+        for k in range(10):
+            print(tower[i][j][k], end=" ")
+        print()

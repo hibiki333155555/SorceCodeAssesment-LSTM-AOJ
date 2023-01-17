@@ -1,0 +1,20 @@
+N, K = gets.split.map(&:to_i)
+A = gets.split.map(&:to_i)
+
+sum = A.sum
+one = A.count(1)
+six = A.count(6)
+B = A.filter { |x| x != 6 }.sort
+
+[B.size, K].min.times do |i|
+    x = A[i]
+    y = (x == 1) ? 5 : 6
+    sum -= x
+    sum += y
+end
+
+if B.size < K
+    sum += [one, K - B.size].min
+end
+
+puts sum

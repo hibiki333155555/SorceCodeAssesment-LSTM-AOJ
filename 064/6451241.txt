@@ -1,0 +1,44 @@
+#include <iostream>
+#include <stdio.h>
+
+using namespace std;
+
+int main()
+{
+    int r, c;
+    scanf("%d %d", &r, &c);
+    int r_sum[r], c_sum[c];
+    int sum = 0;
+
+
+    for (int i = 0; i < r; i++) {
+        r_sum[i] = 0;
+    }
+
+    for (int i = 0; i < c; i++) {
+        c_sum[i] = 0;
+    }
+
+    for (int i=0; i<r; i++) {
+        for (int j=0; j<c; j++) {
+            int num;
+            cin >> num;
+            printf("%d ", num);
+            r_sum[i] += num;
+            c_sum[j] += num;
+            if (j== c - 1) {
+                printf("%d\n", r_sum[i]);
+            }
+        }
+    }
+
+    for (int i=0; i<c; i++) {
+        if (i == c - 1) {
+            sum += c_sum[i];
+            printf("%d %d\n", c_sum[i], sum);
+        } else {
+            sum += c_sum[i];
+            printf("%d ", c_sum[i]);
+        }
+    }
+}

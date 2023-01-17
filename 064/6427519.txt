@@ -1,0 +1,44 @@
+/*
+とりあえず完成
+*/
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+std::vector<int> InputRtPrices(int n)
+{
+    std::vector<int> Rt;
+    for (int i = 0; i < n; i++)
+    {
+        int price;
+        std::cin >> price;
+        Rt.push_back(price);
+    }
+    return Rt;
+}
+
+int SarchMaximunDifference(std::vector<int> Rt)
+{
+    int n = Rt.size();
+    int max_diff = -999999999;
+    int min_Rt = Rt[0];
+    for (int j = 1; j < n; j++)
+    {
+        max_diff = std::max(max_diff, Rt[j] - min_Rt);
+        min_Rt = std::min(min_Rt, Rt[j]);
+    }
+    return max_diff;
+}
+
+int main(void)
+{
+    int n;
+    std::cin >> n;
+    std::vector<int> Rt = InputRtPrices(n);
+    int max_diff = SarchMaximunDifference(Rt);
+    std::cout << max_diff << std::endl;
+    return 0;
+}

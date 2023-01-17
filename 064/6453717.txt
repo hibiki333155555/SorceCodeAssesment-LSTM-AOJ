@@ -1,0 +1,18 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    int a,b,C; cin>>a>>b>>C;
+    cout<<fixed<<setprecision(6);
+    double S,c,L,h;
+    S = a*b*sin(C/360.0*2*M_PI)/2.0;
+    c = sqrt(pow(a,2)+pow(b,2)-2.0*a*b*cos(C/360.0*2*M_PI));
+    L = a + b + c;
+    h = b*sin(C/360.0*2*M_PI);
+    cout<<S<<endl;
+    cout<<L<<endl;
+    cout<<h<<endl;
+    return 0;
+}

@@ -1,0 +1,8 @@
+input_line = input().lower()
+arr = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+outarr = [0]*26
+for i in range(26):
+    outarr[i] += input_line.count(arr[i])
+for i in range(26):
+    print(arr[i],":",outarr[i])
+

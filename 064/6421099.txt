@@ -1,0 +1,158 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef vector<vector<int>> vvi;
+typedef vector<vector<ll>> vvl;
+
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef vector<pii> vpii;
+typedef vector<pll> vpll;
+
+#define FOR(i, a, b) for(ll i=(a); i<(b); ++i)
+#define REP(i, n) FOR(i, 0, n)
+#define NREP(i, n) FOR(i, 1, n+1)
+
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+
+using SimpleGraph = vector<vector<ll>>;
+struct Edge{
+	ll to, cost;
+	Edge(ll t, ll c) : to(t), cost(c) { }
+};
+using Graph = vector<vector<Edge>>;
+struct Edge3{
+	ll from, to, cost;
+	Edge3(ll f, ll t, ll c) : from(f), to(t), cost(c) { }
+};
+using EdgeGraph = vector<vector<Edge3>>;
+
+ll H, W;
+ll isvalid(ll x, ll y) {
+	if(0 <= x && x < H && 0 <= y && y < W) {return true;}
+	else{return false;}
+}
+
+ll bert(ll x, ll y) {
+	ll ret = x * W + y;
+	return ret;
+}
+
+const ll INF = 1e15;
+
+int main(void){
+	cin >> H >> W;
+	ll N = H * W;
+	Graph G(N);
+	
+	ll S = 0, T = 0;
+	vector<vector<char>> C(H, vector<char>(W));
+	vvl dp(H, vl(W, INF));
+	REP(i, H) {
+		REP(j, W) {
+			char c; cin >> c;
+			C[i][j] = c;
+			ll now = bert(i, j);
+			
+			if(c == 'S') {
+				S = now;
+			}
+			if(c == 'G') {
+				T = now;
+				continue;
+			}
+			
+			if(c == '.' || c == 'S') {
+				for(ll di = -1; di <= 1; ++di) {
+					for(ll dj = -1; dj <= 1; ++dj) {
+						if(abs(di) + abs(dj) != 1) {continue;}
+						
+						ll ni = i + di, nj = j + dj;
+						if(isvalid(ni, nj)) {
+							ll nv = bert(ni, nj);
+							G[now].push_back({nv, 1});
+						}
+					}
+				}
+				continue;
+			}
+			
+			if(c == 'U') {
+				ll di = -1, dj = 0;
+				ll ni = i + di, nj = j + dj;
+				
+				if(isvalid(ni, nj)) {
+					ll nv = bert(ni, nj);
+					G[now].push_back({nv, 0});
+				}
+				continue;
+			}
+			if(c == 'D') {
+				ll di = 1, dj = 0;
+				ll ni = i + di, nj = j + dj;
+				
+				if(isvalid(ni, nj)) {
+					ll nv = bert(ni, nj);
+					G[now].push_back({nv, 0});
+				}
+				continue;
+			}
+			if(c == 'L') {
+				ll di = 0, dj = -1;
+				ll ni = i + di, nj = j + dj;
+				
+				if(isvalid(ni, nj)) {
+					ll nv = bert(ni, nj);
+					G[now].push_back({nv, 0});
+				}
+				continue;
+			}
+			if(c == 'R') {
+				ll di = 0, dj = 1;
+				ll ni = i + di, nj = j + dj;
+				
+				if(isvalid(ni, nj)) {
+					ll nv = bert(ni, nj);
+					G[now].push_back({nv, 0});
+				}
+				continue;
+			}
+
+			
+			
+		}
+	}
+	
+	vl dist(N, INF);
+	dist[S] = 0;
+	priority_queue<pll, vpll, greater<pll>> pq;
+	pq.emplace(0, S);
+	
+	while(pq.size()) {
+		auto [d, v] = pq.top();
+		pq.pop();
+		
+		if(dist[v] < d) {continue;}
+		
+		for(auto e:G[v]) {
+			ll nv = e.to, cst = e.cost;
+			
+			if(chmin(dist[nv], dist[v] + cst)) {
+				pq.emplace(dist[nv], nv);
+			}
+		}
+		
+	}
+	
+	ll res = dist[T];
+	if(res == INF) {cout << -1 << endl;}
+	else {cout << res << endl;}
+	
+	return 0;
+}

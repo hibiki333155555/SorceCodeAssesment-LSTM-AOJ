@@ -1,0 +1,176 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(ll i=0;i<n;i++)
+#define repl(i,l,r) for(ll i=(l);i<(r);i++)
+#define per(i,n) for(ll i=(n)-1;i>=0;i--)
+#define perl(i,r,l) for(ll i=r-1;i>=l;i--)
+#define fi first
+#define se second
+#define pb push_back
+#define ins insert
+#define pqueue(x) priority_queue<x,vector<x>,greater<x>>
+#define all(x) (x).begin(),(x).end()
+#define CST(x) cout<<fixed<<setprecision(x)
+#define vtpl(x,y,z) vector<tuple<x,y,z>>
+#define rev(x) reverse(x);
+using ll=long long;
+using vl=vector<ll>;
+using vvl=vector<vector<ll>>;
+using pl=pair<ll,ll>;
+using vpl=vector<pl>;
+using vvpl=vector<vpl>;
+const ll MOD=1000000007;
+const ll MOD9=998244353;
+const int inf=1e9+10;
+const ll INF=4e18;
+const ll dy[9]={0,1,-1,0,1,1,-1,-1,0};
+const ll dx[9]={1,0,0,-1,1,-1,1,-1,0};
+template<class T> inline bool chmin(T& a, T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+const int mod = MOD9;
+const int max_n = 200005;
+struct mint {
+  ll x; // typedef long long ll;
+  mint(ll x=0):x((x%mod+mod)%mod){}
+  mint operator-() const { return mint(-x);}
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) { (x *= a.x) %= mod; return *this;}
+  mint operator+(const mint a) const { return mint(*this) += a;}
+  mint operator-(const mint a) const { return mint(*this) -= a;}
+  mint operator*(const mint a) const { return mint(*this) *= a;}
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+  bool operator==(const mint &p) const { return x == p.x; }
+  bool operator!=(const mint &p) const { return x != p.x; }
+  // for prime mod
+  mint inv() const { return pow(mod-2);}
+  mint& operator/=(const mint a) { return *this *= a.inv();}
+  mint operator/(const mint a) const { return mint(*this) /= a;}
+};
+istream& operator>>(istream& is, mint& a) { return is >> a.x;}
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
+using vm=vector<mint>;
+using vvm=vector<vm>;
+struct combination {
+  vector<mint> fact, ifact;
+  combination(int n):fact(n+1),ifact(n+1) {
+    assert(n < mod);
+    fact[0] = 1;
+    for (int i = 1; i <= n; ++i) fact[i] = fact[i-1]*i;
+    ifact[n] = fact[n].inv();
+    for (int i = n; i >= 1; --i) ifact[i-1] = ifact[i]*i;
+  }
+  mint operator()(int n, int k) {
+    if (k < 0 || k > n) return 0;
+    return fact[n]*ifact[k]*ifact[n-k];
+  }
+}comb(max_n);
+
+vm gauss_jordan(const vvm &A,const vm &b){
+    int n=A.size();
+    vvm B(n,vm(n+1));
+    rep(i,n){
+        rep(j,n)B[i][j]=A[i][j];
+    }
+    rep(i,n)B[i][n]=b[i];
+    rep(i,n){
+        /*int pivot=i;
+        for(int j=i;j<n;j++){
+            if(B[j][i].x>B[pivot][i].x)pivot=j;
+        }
+        swap(B[i],B[pivot]);*/
+        for(int j=i+1;j<=n;j++)B[i][j]/=B[i][i];
+        rep(j,n){
+            if(i!=j){
+                for(int k=i+1;k<=n;k++)B[j][k]-=B[j][i]*B[i][k];
+            }
+        }
+    }
+    vm x(n);
+    rep(i,n)x[i]=B[i][n];
+    return x;
+}
+int main(){
+    ll n;cin >> n;
+    map<pl,ll> pls;
+    ll cnt=0;
+    rep(i,n+1){
+        rep(j,n+1){
+            rep(k,n+1){
+                if(i+j+k==n){
+                    pls[{i,j}]=cnt;cnt++;
+                }
+            }
+        }
+    }
+    vvm mat(cnt,vm(cnt));
+    mint inval=mint(1)/n/(n-1)*2;
+    mint invtwo=mint(1)/2;
+    rep(i,n+1){
+        rep(j,n+1){
+            rep(k,n+1){
+                if(i+j+k!=n)continue;
+                ll now=pls[{i,j}];
+                mat[now][now]=-1;
+                if(i==0&&j==0){
+                    continue;
+                }
+                mint al=n*(n-1)/2;
+                if(i>=2){
+                    ll to=pls[{i-2,j+2}];
+                    mat[now][to]=mint(i)*(i-1)*invtwo*inval;
+                }
+                if(i>=1&&j>=1){
+                    ll to=pls[{i-1,j}];
+                    mat[now][to]=mint(i)*(j)*inval;
+                }
+                if(i>=1&&k>=1){
+                    ll to=pls[{i,j+1}];
+                    mat[now][to]=mint(i)*(k)*inval;
+                }
+                if(j>=2){
+                    ll to=pls[{i,j-2}];
+                    mat[now][to]=mint(j)*(j-1)*invtwo*inval;
+                }
+                if(j>=1&&k>=1){
+                    ll to=pls[{i+1,j-1}];
+                    mat[now][to]=mint(j)*(k)*inval;
+                }
+                if(k>=2){
+                    ll to=pls[{i+2,j}];
+                    mat[now][to]=mint(k)*(k-1)*invtwo*inval;
+                }
+            }
+        }
+    }
+    vm b(cnt,-1);b[pls[{0,0}]]=0;
+    auto ans=gauss_jordan(mat,b);
+   // for(auto p:ans)cout << p <<" ";cout << endl;
+    cout << ans[pls[{n,0}]] << endl;
+}
+

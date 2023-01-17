@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+  deque<int> deq;
+  char c[10];
+  int first, second, result;
+  while (true) {
+    memset(c, 0, sizeof(c));
+    scanf("%s", c);
+    if (c[0] == 0 || c[0] == '\n') break;
+    if (c[0] == '+') {
+      first = deq.back();
+      deq.pop_back();
+      second = deq.back();
+      deq.pop_back();
+      result = first + second;
+      deq.push_back(result);
+    } else if (c[0] == '-') {
+      first = deq.back();
+      deq.pop_back();
+      second = deq.back();
+      deq.pop_back();
+      result = second - first;
+      deq.push_back(result);
+    } else if (c[0] == '*') {
+      first = deq.back();
+      deq.pop_back();
+      second = deq.back();
+      deq.pop_back();
+      result = second * first;
+      deq.push_back(result);
+    } else if (c[0] == '/') {
+      first = deq.back();
+      deq.pop_back();
+      second = deq.back();
+      deq.pop_back();
+      result = second / first;
+      deq.push_back(result);
+    } else {
+      deq.push_back(atoi(c));
+    }
+  }
+  int print = deq.back();
+  cout << print << endl;
+}

@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+const int INF = 1e9;
+const ll inf = 1LL<<60;
+
+void solve() {
+  int n, k; cin >> n >> k;
+  assert(n > 0);
+  if (k == 1) cout << 1 << '\n';
+  else if (k == 2) cout << n+1 << '\n';
+  else {
+    ll ans = 1;
+    while (n--) {
+      ans *= 2;
+      ans %= 998244353;
+    }
+    cout << ans << '\n';
+  }
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  // int t; cin >> t;
+  /*while (t--)*/ solve();
+}
+

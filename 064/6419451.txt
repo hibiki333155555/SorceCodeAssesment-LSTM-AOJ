@@ -1,0 +1,33 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+    int n = 0;
+    cin>>n;
+
+    int max1 = 0;
+    int min1 = 0;
+    int sum = 0;
+    for(int i = 1; i < n+1; i++)
+    {
+        int arr[i];
+        cin>>arr[i];
+
+        if(max1 < arr[i])
+        {
+            max1 = arr[i];
+        }
+
+        if(min1 > arr[i])
+        {
+            min1 = arr[i];
+        }
+
+        sum += arr[i];
+    }
+    cout<<min1<<" "<<max1<<" "<<sum<<endl;
+    return 0;
+}
+

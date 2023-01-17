@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+#define FOR(i, a, b) for(ll i = (a); i < (b); ++i)
+#define FORR(i, a, b) for(ll i = (a); i > (b); --i)
+#define REP(i, n) for(ll i = 0; i < (n); ++i)
+#define REPR(i, n) for(ll i = n; i >= 0; i--)
+#define FOREACH(x, a) for(auto &(x) : (a))
+#define dump(x) cout << #x << " = " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define SP << " " <<
+using namespace std;
+using ll = long long;
+using P = pair<ll, ll>;
+
+#define int long long
+
+int n, m;
+
+vector<vector<int>> matrix;
+vector<int> colors;
+
+void bfs(int s) {
+  queue<int> q;
+
+  q.push(s);
+  while(!q.empty()) {
+    int v = q.front();
+    q.pop();
+    REP(i, matrix[v].size()) {
+      if(colors[matrix[v][i]] == -1) {
+        colors[matrix[v][i]] = s;
+        q.push(matrix[v][i]);
+      }
+    }
+  }
+}
+
+signed main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  cin >> n >> m;
+  matrix.assign(n, vector<int>());
+  colors.assign(n, -1);
+
+  REP(i, m) {
+    int s, t;
+    cin >> s >> t;
+    matrix[s].push_back(t);
+    matrix[t].push_back(s);
+  }
+
+  REP(i, n) { bfs(i); }
+
+  int q;
+  cin >> q;
+  REP(i, q) {
+    int s, t;
+    cin >> s >> t;
+    colors[s] == colors[t] ? cout << "yes" << endl : cout << "no" << endl;
+  }
+
+  return 0;
+}
+

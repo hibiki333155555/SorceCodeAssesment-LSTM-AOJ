@@ -1,0 +1,23 @@
+#include <iostream>
+#include <iomanip>
+
+int main() {
+  double x1, y1, x2, y2;
+  std::cin >> x1 >> y1 >> x2 >> y2;
+  double denom = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+  int q; std::cin >> q;
+  for (int i=0; i<q; i++) {
+    double x, y; std::cin >> x >> y;
+    double numer_x = 0.0, numer_y = 0.0;
+    double numer = (x - x1) * (x2 - x1) + (y - y1) * (y2 - y1);
+    numer_x += numer / denom * (x2 - x1);
+    numer_y += numer / denom * (y2 - y1);
+    numer_x += (x1 - x);
+    numer_y += (y1 - y);
+    numer_x = x + 2 * numer_x;
+    numer_y = y + 2 * numer_y;
+    std::cout << std::fixed << std::setprecision(9);
+    std::cout << numer_x << " " << numer_y << std::endl;
+  }
+}
+

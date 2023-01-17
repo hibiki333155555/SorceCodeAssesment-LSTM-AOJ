@@ -1,0 +1,83 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <cassert>
+
+#define int long long 
+
+class SegmentTree {
+ public:
+    SegmentTree(size_t N) {
+        N++;
+
+        size_ = 1;
+        while (size_ < N) {
+            size_ *= 2;
+        }
+
+        c_.resize(2 * size_ - 1);
+        for (int i = 0; i < 2 * size_ - 1; i++) {
+            c_[i] = this->INF_;
+        }
+    }
+
+    void update(size_t index, int val) {
+        index += size_ - 1;
+        c_[index] = val;
+
+        while (index > 0) {
+            index = (index - 1) / 2;
+            c_[index] = std::min(c_[2 * index + 1], c_[2 * index + 2]);
+        }
+    }
+
+    int query(int left, int right) const {
+        return query_(left, right, 0, 0, size_);
+    }
+
+ private:
+    int query_(int left, int right, int current, int L, int R) const {
+        if (left >= R || right <= L) {
+            return this->INF_;
+        } 
+        
+        if (left <= L && R <= right) {
+            return c_[current];
+        }
+
+        int vl = query_(left, right, current * 2 + 1, L, (L + R) / 2);
+        int vr = query_(left, right, current * 2 + 2, (L + R) / 2, R);
+
+        return std::min(vl, vr);
+    }
+    
+    const int INF_ = (1UL << 31) - 1;
+    size_t size_;
+    std::vector<int> c_;
+
+};
+
+
+using namespace std;
+
+
+
+signed main() {
+    int n, q;
+    cin >> n >> q;
+
+    SegmentTree st(n);
+
+    for (int i = 0; i < q; i++) {
+        int c, x, y;
+        cin >> c >> x >> y;
+
+        if (c == 0) {
+            st.update(x, y);
+        } else {
+            cout << st.query(x, y + 1) << endl;
+        }
+    }
+
+    return 0;
+}

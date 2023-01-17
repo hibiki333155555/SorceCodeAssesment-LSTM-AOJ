@@ -1,0 +1,1 @@
+main = getLine >> getLine >>= mapM_ putStrLn . reverse . words

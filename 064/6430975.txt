@@ -1,0 +1,18 @@
+import java.util.* ;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int i =0;
+        if (i < 2) {
+            int a = c.nextInt();
+            int b = sc.nextInt();
+            String op = sc.next();
+            if (op.equals("?")) {
+                break;
+            }else {
+                System.out.println(a + op + b);
+            }
+        }
+    }
+}

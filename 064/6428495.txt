@@ -1,0 +1,18 @@
+S = int(input())
+A = int(input())
+B = int(input())
+
+#ベースのアイスは250円、追加アイス100円
+#ベース高さA、追加アイス高さB
+money = 250
+ice = A
+while True:
+    if A >= S:
+        print(money)
+        break
+    else:
+        ice += B
+        money += 100
+        if ice >= S:
+            print(money)
+            break

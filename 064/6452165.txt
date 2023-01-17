@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+typedef long long ll;
+using namespace std;
+
+void solve(int N, int M) {
+    vector<ll> A(N), B(M);
+    rep(i, N) cin >> A[i];
+    rep(i, M) cin >> B[i];
+
+    set<ll> weight;
+    auto dfs = [&](auto &&self, vector<int> p) -> void {
+        if (p.size() == M) {
+            ll sum = 0;
+            rep(i, M) sum += B[i] * p[i];
+            if (sum >= 0) weight.insert(sum);
+        } else {
+            p.emplace_back(-1);
+            while (p.back() <= 1) {
+                self(self, p);
+                p.back()++;
+            }
+        }
+    };
+    dfs(dfs, vector<int>());
+
+    bool flag = false;
+    set<ll> st;
+    rep(i, N) {
+        set<ll> next;
+
+        // もし計量できる時
+        if (weight.find(A[i]) != weight.end()) continue;
+
+        // 計量できない時
+        if (!flag) {
+            for (ll w : weight) {
+                next.insert(abs(A[0] - w));
+            }
+            flag = true;
+        }
+
+        for (ll w : weight) {
+            if (st.find(abs(A[i] - w)) != st.end())
+                next.insert(abs(A[i] - w));
+        }
+        swap(st, next);
+    }
+
+    if (flag && st.empty())
+        cout << "-1\n";
+    else
+        cout << *st.begin() << "\n";
+}
+
+int main() {
+    cin.tie(0);
+    ios_base::sync_with_stdio(false);
+
+    int N, M;
+    while (cin >> N >> M) {
+        if (N == 0 && M == 0) break;
+        solve(N, M);
+    }
+
+    return 0;
+}
+

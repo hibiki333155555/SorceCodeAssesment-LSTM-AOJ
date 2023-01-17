@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+#define FOR(i, a, b) for(ll i = (a); i < (b); ++i)
+#define FORR(i, a, b) for(ll i = (a); i > (b); --i)
+#define REP(i, n) for(ll i = 0; i < (n); ++i)
+#define REPR(i, n) for(ll i = n; i >= 0; i--)
+#define FOREACH(x, a) for(auto &(x) : (a))
+#define dump(x) cout << #x << " = " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define SP << " " <<
+using namespace std;
+using ll = long long;
+using P = pair<ll, ll>;
+
+#define int long long
+
+int parent(int i) { return i / 2; }
+int left(int i) { return 2 * i; }
+int right(int i) { return 2 * i + 1; }
+
+signed main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  int n;
+  cin >> n;
+
+  vector<int> nodes(n + 1); // 1-origin
+  REP(i, n) {
+    int v;
+    cin >> v;
+    nodes[i + 1] = v;
+  }
+
+  for(int i = 1; i < n + 1; i++) {
+    cout << "node " << i << ": ";
+    cout << "key = " << nodes[i] << ", ";
+    int parent_i = parent(i);
+    if(1 <= parent_i) { cout << "parent key = " << nodes[parent_i] << ", "; }
+    int left_i = left(i);
+    if(left_i <= n) { cout << "left key = " << nodes[left_i] << ", "; }
+    int right_i = right(i);
+    if(right_i <= n) { cout << "right key = " << nodes[right_i] << ", "; }
+    cout << " " << endl;
+  }
+
+  return 0;
+}
+

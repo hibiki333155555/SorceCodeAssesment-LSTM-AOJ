@@ -1,0 +1,66 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<string>
+#include<map>
+#include<queue>
+using namespace std;
+
+string ans = "01234567";
+map<string, int> d;
+string x;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+void bfs()
+{
+	queue<string> que;
+	que.push(ans);
+	d[ans] = 0;
+	while(!que.empty())
+	{
+		string s = que.front();
+		//cout << s << endl;
+		que.pop();
+		int t = d[s];
+		int id = s.find('0');
+		//cout << s << " " <<  d[s]<<endl;
+		int i = id / 4;
+		int j = id % 4; 
+		for (int k = 0; k < 4; k++)
+		{
+			int xx = i + dx[k];
+			int yy = j + dy[k];
+			if (xx < 0 || xx >= 2) continue;
+			if (yy < 0 || yy >= 4) continue;
+			int idd = xx * 4 + yy;
+			swap(s[id], s[idd]);
+			if (!d.count(s))
+			{
+				d[s] = t + 1;
+				que.push(s); 
+				//cout << x << endl;
+			}
+			swap(s[id], s[idd]); 
+		}
+	}
+}
+
+
+int main()
+{
+	char a;
+	x = "01234567";
+	bfs();
+	while(scanf("%c %c %c %c %c %c %c %c", &x[0], &x[1], &x[2], &x[3], &x[4], &x[5], &x[6], &x[7]))
+	{
+		getchar();
+		//cout << x << endl;
+		if(d.count(x))
+			cout << d[x] << endl;
+		else
+			cout << -1 << endl;
+	}
+	
+	return 0;
+}

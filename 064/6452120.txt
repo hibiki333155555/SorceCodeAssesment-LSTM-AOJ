@@ -1,0 +1,20 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main(){
+	char s[1001],alp[26];
+	int i,j,count;
+	gets(s);
+	for (i = 0; i < 26 ; i++) {
+		alp[i] = 97 + i;
+		int count = 0;
+		for (j = 0; s[j]; j++) {
+			if (alp[i] == s[j] || alp[i]-32==s[j]) {
+				count++;
+			}
+		}
+		printf("%c : %d\n",alp[i], count);
+	}
+	return 0;
+	//2003008
+} 

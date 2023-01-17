@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+//#include<stdlib.h>
+//#include<string.h>
+//#include<ctype.h>
+//#include<stdio.h>
+using namespace std;
+//分析见书《挑战程序设计竞赛2》上P112 
+int a[22];
+int n;
+
+int add(int i,int x)
+{
+	if(x==0)
+		return 1;
+	if(i>=n)
+		return 0;
+	
+	int re;
+	re=add(i+1,x)||add(i+1,x-a[i]);
+	return re;
+}
+
+int main()
+{	
+	int sum,i,q; 
+	
+	cin>>n;
+	for(i=0;i<n;i++)
+		cin>>a[i];
+	cin>>q;
+	for(i=0;i<q;i++)
+	{
+		cin>>sum;
+		if(add(0,sum)==1)
+			cout<<"yes"<<endl;
+		else 
+			cout<<"no"<<endl;
+	}
+	
+return 0;
+}
+

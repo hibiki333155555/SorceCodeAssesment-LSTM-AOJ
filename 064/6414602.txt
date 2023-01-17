@@ -1,0 +1,51 @@
+#include<iostream>
+#include<string>
+#include<iomanip>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+#include<utility>
+
+using namespace std;
+
+#define int long long
+#define endl "\n"
+
+constexpr long long INF = 1e18;
+constexpr long long MOD = 998244353; 
+
+struct fast_io {
+  fast_io(){
+    std::cin.tie(nullptr);
+    std::ios::sync_with_stdio(false);
+    cout<<fixed<<setprecision(10);
+  };
+} fio;
+
+signed main(){
+  
+  int N;
+  vector<int> A;
+  int ans = 1;
+  
+  cin>>N;
+  
+  A.resize(N);
+  
+  for(int i = 0; i < N; i++){
+    cin>>A[i];
+    
+    A[i] = A[i] + i;
+  }
+  
+  sort(A.begin(), A.end());
+  
+  for(int i = 0; i < N; i++){
+    ans *= (A[i] - i);
+    ans %= MOD;
+  }
+  
+  cout<<ans<<endl;
+  
+  return 0;
+}

@@ -1,0 +1,3 @@
+1000.times do |_|
+    puts "Hello World"
+end

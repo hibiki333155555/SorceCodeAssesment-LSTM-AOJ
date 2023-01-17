@@ -1,0 +1,18 @@
+S = input()
+po = 0
+ans = []
+l = []
+for s in S:
+    if s in "1234567890":
+        s = int(s)
+        l.append(s)
+        po += s
+    elif s in "()":
+        if s == ")":
+            po -= l.pop()
+    else:
+        x = ord(s)-ord("a")
+        x = (x+po)%26
+        ans.append(chr(ord("a")+x))
+print(*ans,sep="")
+

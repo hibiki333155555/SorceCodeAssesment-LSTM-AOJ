@@ -1,0 +1,11 @@
+while True:
+  x = input()
+  if x == "0":
+    break
+    
+  sum = 0  
+  for c in x:
+    c = int(c)
+    sum += c
+    
+  print(sum)

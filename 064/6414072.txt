@@ -1,0 +1,10 @@
+x,y = map(int, input().split())
+while True:
+    if x < y:
+        x = y
+        print(x," ",y)
+    
+    else:
+        y = x
+        print(x," ",y)
+break

@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+int dx[]={1,0,-1,0},dy[]={0,1,0,-1};
+int main()
+{
+    char ord[10]={0};
+    while (1)
+    {
+        int m,n,dir=0,tdir=-1,t=0,x=1,y=1;
+        scanf("%d%d",&m,&n);
+        if (n==0) break;
+        while (1)
+        {
+            scanf("%s",ord);
+            if (ord[0]=='S') break;
+            if (ord[0]=='F') scanf("%d",&t),tdir=dir;
+            else if (ord[0]=='B') scanf("%d",&t),tdir=(dir+2)%4;
+            else if (ord[0]=='L') dir=(dir+3)%4;
+            else if (ord[0]=='R') dir=(dir+1)%4;
+            if (tdir==-1) continue;
+            for (int i=0;i<t;i++)
+            {
+                int xx=x+dx[tdir],yy=y+dy[tdir];
+                if (xx>0&&xx<=n&&yy>0&&yy<=m)
+                    x=xx,y=yy;
+            }
+            tdir=-1;
+        }
+        printf("%d %d\n",y,x);
+    }
+}

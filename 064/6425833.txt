@@ -1,0 +1,24 @@
+#include<stdio.h>
+#define NIL -1
+#define MAX 45
+typedef long long ll;
+
+ll A[MAX];
+
+ll fib(int n){
+  if(A[n] != NIL) return A[n];
+  else{
+    A[n] = fib(n - 1) + fib(n - 2);
+    return A[n];
+  }
+}
+
+int main()
+{
+  int n;
+  scanf("%d", &n);
+  for(int i = 0; i <= MAX; i++) A[i] = NIL;
+  A[0] = A[1] = 1;
+  printf("%d\n", fib(n));
+  return 0;
+}

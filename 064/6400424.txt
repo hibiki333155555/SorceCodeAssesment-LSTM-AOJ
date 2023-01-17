@@ -1,0 +1,13 @@
+for i in range(2):
+    a = int(input())
+
+
+l = map(int, input().split())
+min = l[1][0]
+max = l[1][0]
+for i in range(2, len(l)):
+    if min > l[i]:
+        min = l[i]
+    if max < l[i]:
+        max = l[i]
+print('{} {} {}'.format(min, max, l.sum()))

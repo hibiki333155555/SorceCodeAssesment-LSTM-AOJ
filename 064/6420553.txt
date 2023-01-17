@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+/*
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
+namespace mp = boost::multiprecision;
+using bint = mp::cpp_int;
+*/
+#define rep(i,n) for (int i = 0; i < int(n); ++i)
+#define repp(i,n,m) for (int i = m; i < int(n); ++i)
+#define repb(i,n) for (int i = int(n)-1; i >= 0; --i)
+#define fi first
+#define se second
+#define endl "\n"
+using namespace std;
+using ll = long long;
+using ld = long double;
+using P = pair<int, int>;
+using PL = pair<long long, long long>;
+using Pxy = pair<long double, long double>;
+using pil = pair<int,ll>;
+using pli = pair<ll,int>;
+using ppi = pair<P,int>;
+using pip = pair<int,P>;
+const int INF = 1001001007;
+const long long mod1 = 1000000007LL;
+const long long mod2 = 998244353LL;
+const ll inf = 2e18;
+const ld pi = 3.14159265358979323;
+const ld eps = 1e-7;
+const char _ = ' ';
+template<class T>istream &operator>>(istream &is,vector<T> &v){for(auto &e:v)is>>e;return is;}
+template<class T>ostream &operator<<(ostream &os,const vector<T> &v){if(v.size()!=0){rep(i,v.size())os<<v[i]<<(i+1==v.size()?"":" ");}return os;}
+template<class T>istream &operator>>(istream &is,vector<vector<T>> &v){for(auto &e:v)is>>e;return is;}
+template<class T>ostream &operator<<(ostream &os,const vector<vector<T>> &v){if(v.size()!=0){for(auto &e:v)os<<e;}return os;}
+template<typename T>bool range(T a,T b,T x){return (a<=x&&x<b);}
+template<typename T>bool rrange(T a,T b,T c,T d,T x,T y){return (range(a,c,x)&&range(b,d,y));}
+template<typename T>void rev(vector<T> &v){reverse(v.begin(),v.end());}
+void revs(string &s) {reverse(s.begin(),s.end());}
+template<typename T>void sor(vector<T> &v, int f=0){sort(v.begin(),v.end());if(f!=0) rev(v);}
+template<typename T>bool chmin(T &a,const T &b){if(a>b){a=b;return true;}return false;}
+template<typename T>bool chmax(T &a,const T &b){if(a<b){a=b;return true;}return false;}
+template<typename T>void eru(vector<T> &v){sor(v);v.erase(unique(v.begin(),v.end()),v.end());}
+template<typename T>T cel(T a,T b){if(a%b==0)return a/b;return a/b +1;}
+void o(){cout<<"!?"<<endl;}
+template<typename T>void o(T a){cout<<a<<endl;}
+template<typename T,typename U>void o2(T a,U b){cout<<a<<_<<b<<endl;}
+template<typename T,typename U>void o2(pair<T,U> a){o2(a.first,a.second);}
+template<typename T,typename U,typename V>void o3(T a,U b,V c){cout<<a<<_<<b<<_<<c<<endl;}
+void yes(){cout << "Yes" << endl;}
+void no (){cout << "No" << endl;}
+void yn (bool t){if(t)yes();else no();}
+template<typename T>void dame(bool t, T s){if(!t){cout << s << endl;exit(0);}}
+void fast_io(){cin.tie(0); ios::sync_with_stdio(0); cout<<fixed<<setprecision(20);}
+vector<int> dx = {0,1,0,-1};
+vector<int> dy = {1,0,-1,0};
+const string ALP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const string alp = "abcdefghijklmnopqrstuvwxyz";
+const string num = "0123456789";
+
+ll gcd(ll a,ll b){return b?gcd(b,a%b):a;}
+ll mpow(ll x,ll n,ll m){if(n==0)return 1LL;x%=m;ll a=mpow(x,n/2,m);a=a*a%m;return (n&1)?a*x%m:a;}
+
+/*
+AClibrary 未使用
+*/
+
+int main(){
+    ll h1, w1, h2, w2; cin >> h1 >> w1 >> h2 >> w2;
+    ll ansa = cel(h1,h2) * cel(w1,w2);
+    o(ansa);
+}
+

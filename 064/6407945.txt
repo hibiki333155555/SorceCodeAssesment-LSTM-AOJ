@@ -1,0 +1,16 @@
+n = int(input())
+residents = [[[0 for i in range(10)] for j in range(3)] for k in range(4)]
+
+for i in range(n):
+    b, f, r, v = map(int, input().split())
+    residents[b-1][f-1][r-1] = v
+
+for i in range(4) :
+  for j in range(3) :
+    for k in range(10) :
+      print(" ", residents[i][j][k], sep="", end="")
+    print()
+  for l in range(20) :
+    if i == 0 or 1 or 2 :
+      print("#", end="")
+  print()

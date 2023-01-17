@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+int x[110], y[110];
+int main() {
+	int n;
+	cin>>n;
+	for (int i = 0; i < n; i++) cin>>x[i];
+	for (int i = 0; i < n; i++) cin>>y[i];
+	for (int j = 1; j <= 3; j++) {
+		double ans = 0;
+		for (int i = 0; i < n; i++) {
+			ans += pow(fabs(x[i]-y[i]), j);
+		}
+		cout<<fixed<<setprecision(6)<<pow(ans, 1.0/j)<<endl;
+	}
+	double ans = 0;
+	for (int i = 0; i < n; i++) {
+		ans = max(ans, fabs(x[i]-y[i]));
+	}
+	cout<<fixed<<setprecision(6)<<ans<<endl;
+	
+	
+	return 0;
+} 

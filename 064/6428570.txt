@@ -1,0 +1,78 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+// 入力
+const long long mod = 998244353;
+long long N, A[1 << 18];
+
+// その他の変数
+long long dp[1 << 18];
+long long cl[1 << 18], cr[1 << 18], par[1 << 18];
+bool used[1 << 18];
+
+long long modpow(long long a, long long b, long long m) {
+	long long p = 1, q = a;
+	for (int i = 0; i < 30; i++) {
+		if ((b & (1LL << i)) != 0) { p *= q; p %= m; }
+		q *= q; q %= m;
+	}
+	return p;
+}
+
+long long Div(long long a, long long b, long long m) {
+	return (a * modpow(b, m - 2, m)) % m;
+}
+
+void dfs(int pos, int pa) {
+	// 再帰
+	if (pos >= N) {
+		dp[pos] = A[pos];
+	}
+	else {
+		dfs(pos * 2 + 0, pos);
+		dfs(pos * 2 + 1, pos);
+		dp[pos] = min({ A[pos], dp[pos * 2] + dp[pos * 2 + 1] });
+	}
+
+	// cl, cr の計算
+	if (pos >= N) {
+		cl[pos] = pos - N + 1;
+		cr[pos] = pos - N + 1;
+	}
+	else {
+		cl[pos] = min(cl[pos * 2], cl[pos * 2 + 1]);
+		cr[pos] = max(cr[pos * 2], cr[pos * 2 + 1]);
+	}
+}
+
+int main() {
+	// Step #1. 入力
+	cin >> N;
+	for (int i = 1; i <= 2 * N - 1; i++) cin >> A[i];
+
+	// Step #2. 動的計画法
+	dfs(1, -1);
+	par[1] = -1;
+	for (int i = 2; i <= 2 * N - 1; i++) {
+		if (cl[i / 2] == 1 && cr[i / 2] == N) par[i] = -1;
+		else par[i] = i / 2;
+	}
+
+	// Step #3. 総和を求める
+	long long Answer = 0;
+	for (int i = 1; i <= 2 * N - 1; i++) {
+		long long a1 = cl[i], a2 = N - cr[i] + 1LL, a3 = 1;
+		if (par[i] != -1 && i % 2 == 0) { a2 = cr[par[i]] - cr[i]; a3 = 0; }
+		if (par[i] != -1 && i % 2 == 1) { a1 = cl[i] - cl[par[i]]; a3 = 0; }
+		Answer += ((a1 * a2 + mod - a3) % mod) * dp[i];
+		Answer %= mod;
+	}
+	Answer += dp[1];
+	Answer %= mod;
+
+	// Step #4. 答えを出力
+	long long FinalAns = Div(Answer, (N * (N + 1) / 2LL) % mod, mod);
+	cout << FinalAns << endl;
+	return 0;
+}

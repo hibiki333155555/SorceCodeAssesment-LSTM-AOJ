@@ -1,0 +1,19 @@
+def main():
+    n = int(input())
+    ans_n = n
+
+    div_list = []
+    for val in range(2, n+1):
+        if val ** 2 > n:
+            break
+        while n % val == 0:
+            div_list.append(val)
+            n //= val
+    if n != 1:
+        div_list.append(n)
+    div_list.sort()
+    print(str(ans_n) + ':', *div_list)
+
+
+main()
+

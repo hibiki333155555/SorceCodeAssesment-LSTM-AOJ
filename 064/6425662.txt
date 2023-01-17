@@ -1,0 +1,12 @@
+fn main() {
+    let n : usize = input();
+    let mut ans = 0;
+    for _ in 0..n {
+        let x : usize = input();
+        if miller_rabin(x) { ans += 1; }
+    }
+    println!("{}", ans);
+}
+
+type MT = usize; fn miller_rabin(n : MT) -> bool { const P: [MT; 12] = [2,3,5,7,11,13,17,19,23,29,31,37]; let pow = |mut x:MT, mut n:MT, m:MT| { let mut res = 1; while n != 0 { if n%2==1 { res *= x; res %= m; } x *= x; x %= m; n /= 2; } res }; if P.contains(&n) { return true; } if n <= 1 || n % 2 == 0 { return false; } let mut d = n - 1; while d % 2 == 0 { d /= 2; } for &p in P.iter() { let mut t = d; let mut y = pow(p, t, n); while t!=n-1 && y!=1 && y!=n-1 { y *= y; y %= n; t *= 2; } if y!=n-1 && t%2==0 { return false; } } true }
+#[allow(dead_code)] fn input<T: std::str::FromStr>() -> T { let mut s = String::new(); std::io::stdin().read_line(&mut s).ok(); s.trim().parse().ok().unwrap() } #[allow(dead_code)] fn input_t<T: std::str::FromStr, U: std::str::FromStr>() -> (T, U) { let mut s = String::new(); std::io::stdin().read_line(&mut s).ok(); let s = s.trim().split_whitespace().collect::<Vec<&str>>(); (s[0].parse().ok().unwrap(), s[1].parse().ok().unwrap()) } #[allow(dead_code)] fn input_t3<T1: std::str::FromStr, T2: std::str::FromStr, T3: std::str::FromStr>() -> (T1, T2, T3) { let mut s = String::new(); std::io::stdin().read_line(&mut s).ok(); let s = s.trim().split_whitespace().collect::<Vec<&str>>(); (s[0].parse().ok().unwrap(), s[1].parse().ok().unwrap(), s[2].parse().ok().unwrap()) } #[allow(dead_code)] fn input_t4<T1: std::str::FromStr, T2: std::str::FromStr, T3: std::str::FromStr, T4: std::str::FromStr>() -> (T1, T2, T3, T4) { let mut s = String::new(); std::io::stdin().read_line(&mut s).ok(); let s = s.trim().split_whitespace().collect::<Vec<&str>>(); (s[0].parse().ok().unwrap(), s[1].parse().ok().unwrap(), s[2].parse().ok().unwrap(), s[3].parse().ok().unwrap()) } #[allow(dead_code)] fn input_t5<T1: std::str::FromStr, T2: std::str::FromStr, T3: std::str::FromStr, T4: std::str::FromStr, T5: std::str::FromStr>() -> (T1, T2, T3, T4, T5) { let mut s = String::new(); std::io::stdin().read_line(&mut s).ok(); let s = s.trim().split_whitespace().collect::<Vec<&str>>(); (s[0].parse().ok().unwrap(), s[1].parse().ok().unwrap(), s[2].parse().ok().unwrap(), s[3].parse().ok().unwrap(), s[4].parse().ok().unwrap()) } #[allow(dead_code)] fn input_vec<T: std::str::FromStr>() -> Vec<T> { let mut s = String::new(); std::io::stdin().read_line(&mut s).ok(); s.trim().split_whitespace().map(|s| s.parse().ok().unwrap()).collect() }

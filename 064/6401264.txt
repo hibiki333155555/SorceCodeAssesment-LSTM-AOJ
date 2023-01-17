@@ -1,0 +1,168 @@
+#ifdef __LOCAL
+#define _GLIBCXX_DEBUG
+#endif
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using u8 = unsigned char;
+using u16 = unsigned short;
+using uint = unsigned int;
+using ull = unsigned long long;
+using ld = long double;
+using P = pair<int,int>;
+using PIL = pair<int,ll>;
+using PLI = pair<ll,int>;
+using PLL = pair<ll,ll>;
+template<class T> using Matrix = vector<vector<T>>;
+template <class T> using PQmax = priority_queue<T>;
+template <class T> using PQmin = priority_queue<T, std::vector<T>, std::greater<T>>;
+#define REP(i,n) for(int i=0;i<int(n);i++)
+#define foa(s,v) for (auto &s : v)
+
+const int inf = 1001001001;
+const ll INF = 1LL << 60;
+// const ll MOD = 1000000007LL;
+const ll MOD = 998244353LL;
+const ld pi = 3.14159265358979;
+const ld eps = 1e-10;
+const ld dinf = 1e12;
+inline bool dequal(const double &a, const double &b) {return fabs(a - b) < eps;}
+inline int sgn(const ld &r) {return ((r > eps) - (r < -eps));}
+inline int sgn(const ld &a, const ld &b) {return sgn(a - b);}
+ld degtorad(ld deg) {return deg * pi / 180.0;}
+ld radtodeg(ld rad) {return rad * 180 / pi;}
+const vector<int> h_idx4 = {-1, 0,0,1};
+const vector<int> w_idx4 = { 0,-1,1,0};
+const vector<int> h_idx8 = {-1,-1,-1, 0,0, 1,1,1};
+const vector<int> w_idx8 = {-1, 0, 1,-1,1,-1,0,1};
+
+template<class T> void show_vec(T v) {for (int i = 0; i < v.size(); i++) cout << v[i] << "\n";}
+template<class T> void show_pair(T p) {cout << p.first << " " << p.second << "\n";}
+void YESNO(bool f) {cout << ((f) ? "YES" : "NO") << "\n";}
+void YesNo(bool f) {cout << ((f) ? "Yes" : "No") << "\n";}
+void yesno(bool f) {cout << ((f) ? "yes" : "no") << "\n";}
+
+template<class T> bool chmin(T &a, T b) {if (a > b){a = b; return 1;} return 0;}
+template<class T> bool chmax(T &a, T b) {if (a < b){a = b; return 1;} return 0;}
+template<class T> bool is_bit_set(T x,T bit) {return (x & (1LL << bit));}
+template<class T> T ROUNDUP(T a, T b) {return ((a + b - 1) / b);}
+template<class T> T tousa_sumFLN(T first, T last, T n) {return (n * (first + last) / 2);}
+template<class T> T tousa_sumFDN(T first, T diff, T n) {return (n * ((first * 2) + ((n - 1) * diff)) / 2);}
+template<class T> T tousa_sumFLD(T first, T last, T diff) {assert(first <= last); return tousa_sum2(first,diff,((last - first) / diff) + 1);}
+ll intpow(ll a, ll n) {ll res = 1; while (n > 0){if (n & 1){res *= a;} a = a * a; n >>= 1;} return res;}
+ll modpow(ll a, ll n) {ll res = 1; while (n > 0){if (n & 1){res = res * a % MOD;} a = a * a % MOD; n >>= 1;} return res;}
+ll eachmodpow(ll a, ll n,ll mod){
+	ll res = 1; while (n > 0){if (n & 1){res = res * a % mod;} a = a * a % mod; n >>= 1;} return res;
+}
+
+template<class T> T GCD(T a, T b) {if (b == 0) return a; return (GCD(b, a % b));}
+template<class T> T LCM(T a, T b) {if (b == 0) return (0); return ((a / GCD(a, b)) * b);}
+template<class T> T extGCD(T a, T b, T &x, T &y){ // ax + by = GCD(a,b)
+	if (b == 0){ x = 1; y = 0; return a;}
+	T d = extGCD(b, a % b, y, x); y -= ((a / b) * x); return d;
+}
+template<class T> T modinv(T a,T mod){ // only GCD(a,mod) = 1
+	T x,y; extGCD(a,mod,x,y); return ((x % mod) + mod) % mod;
+}
+
+template<class T> vector<int> sort_with_index(vector<T> &vec){
+	vector<int> indices(vec.size());
+	iota(indices.begin(),indices.end(),0);
+	sort(indices.begin(), indices.end(),[&](int &lhs,int &rhs){ return vec[lhs] < vec[rhs]; });
+	vector<T> sorted(vec.size());
+	for (int i = 0; i < (int)vec.size(); i++) sorted[i] = vec[indices[i]];
+	vec = sorted; return indices;
+}
+template<class T,class Func> vector<int> sort_with_index(vector<T> &vec,Func comp){
+	vector<int> indices(vec.size());
+	iota(indices.begin(),indices.end(),0);
+	sort(indices.begin(), indices.end(),[&](int lhs,int rhs){ return comp(vec[lhs],vec[rhs]);});
+	vector<T> sorted(vec.size());
+	for (int i = 0; i < (int)vec.size(); i++) sorted[i] = vec[indices[i]];
+	vec = sorted; return indices;
+}
+template<class T,class U> vector<int> sort_with_basevec(vector<T> &base,vector<U> &with){
+	assert(base.size() == with.size());
+	vector<int> indices(base.size());
+	iota(indices.begin(),indices.end(),0);
+	sort(indices.begin(), indices.end(),[&](int &lhs,int &rhs){ return base[lhs] < base[rhs]; });
+	vector<T> sorted_base(base.size()); vector<U> sorted_with(with.size());
+	for (int i = 0; i < (int)base.size(); i++){ sorted_base[i] = base[indices[i]]; sorted_with[i] = with[indices[i]];}
+	base = sorted_base; with = sorted_with; return indices;
+}
+
+ll ceilsqrt(ll n,ll r = 2){ // nのr乗根を切り上げた整数
+	assert(n >= 0);
+	ll res = (ll)floor(pow((double)n, 1.0 / r)) - 1; while (res < 0 || intpow(res,r) < n) res++; return res;
+}
+ll floorsqrt(ll n,ll r = 2){ // nのr乗根を切り捨てた整数
+	assert(n >= 0); 
+	ll res = (ll)ceil(pow((double)n, 1.0 / r)) + 1; while (intpow(res,r) > n) res--; return res;
+}
+
+// min_it s.t. vec[it] >(=) val [0,n]
+template<class T>
+int higher_minindex(vector<T> &vec,T val,bool equal = false){
+	int ok = (int)vec.size(),ng = -1;
+		while (abs(ok - ng) > 1){
+			int mid = (ok + ng) / 2;
+			if (equal){(vec[mid] >= val) ? (ok = mid) : (ng = mid);}
+			else {(vec[mid] > val) ? (ok = mid) : (ng = mid);}
+		}
+	return ok;
+}
+// max_it s.t. vec[it] <(=) val [-1,n-1]
+template<class T>
+int lower_maxindex(vector<T> &vec,T val,bool equal = false){
+	int ok = -1,ng = (int)vec.size();
+		while (abs(ok - ng) > 1){
+			int mid = (ok + ng) / 2;
+			if (equal){(vec[mid] <= val) ? (ok = mid) : (ng = mid);}
+			else {(vec[mid] < val) ? (ok = mid) : (ng = mid);}
+		}
+	return ok;
+}
+
+int dp[2012][2012][3];
+int func(int a,int b,int c){
+	if (dp[a][b][c] != -1) return dp[a][b][c];
+	int x = 1;
+	if (c <= 1){
+		if (a > 0) chmin(x,func(a - 1,b,c + 1));
+		if (b > 0) chmin(x,func(a,b - 1,c + 1));
+		if (b > 0) chmin(x,func(a + 1,b - 1,c + 1));
+
+		if (x == 0) return dp[a][b][c] = 1;
+		else return dp[a][b][c] = 0;
+	}
+	else{
+		if (a > 0) chmin(x,func(a - 1,b + 1,0));
+		if (b > 0) chmin(x,func(a,b,0));
+		if (b > 0) chmin(x,func(a + 1,b,0));
+
+		if (x == 0) return dp[a][b][c] = 1;
+		else return dp[a][b][c] = 0;
+	}
+}
+
+int main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout << fixed << setprecision(15);
+
+	int n;
+	cin >> n;
+	for (int i = 0; i < 2012; i++){
+		for (int j = 0; j < 2012; j++){
+			for (int k = 0; k < 3; k++){
+				dp[i][j][k] = -1;
+			}
+		}
+	}
+	dp[0][0][1] = 0;
+	dp[0][0][2] = 0;
+
+	if (func(0,n,0) == 0) cout << "Bob" << endl;
+	else cout << "Alice" << endl;
+
+}

@@ -1,0 +1,44 @@
+#include<iostream>
+using namespace std;
+int main(){
+  long long n, m, l;
+  cin >> n >> m >> l;
+  
+  //変数の定義
+  long long matrix_nm[n][m] = {};	 //n×m行列の定義
+  long long matrix_ml[m][l] = {};  //m×l行列の定義
+  long long matrix_nl[n][l] = {};  //n×l行列の定義
+  
+  //n×m行列のデータ取得
+  for (int i=0; i<n; i++){
+    for (int j=0; j<m; j++){
+      cin >> matrix_nm[i][j];
+    }
+  }
+  
+  //m×l行列のデータ取得
+  for (int i=0; i<m; i++){
+    for (int j=0; j<l; j++){
+      cin >> matrix_ml[i][j];
+    }
+  }
+  
+  //n×l行列の作成
+  for (int i=0; i<n; i++){
+    for (int j=0; j<l; j++){
+      for (int k=0; k<m; k++){
+        matrix_nl[i][j] += matrix_nm[i][k] * matrix_ml[k][j]; 
+      }
+    }
+  }
+  
+  //出力
+  for (int i=0; i<n; i++){
+    for (int j=0; j<l-1; j++){
+      cout << matrix_nl[i][j] << " ";
+    }
+    cout << matrix_nl[i][l-1] << endl;
+  }
+  
+  
+}

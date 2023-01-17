@@ -1,0 +1,40 @@
+input_line = input().split()
+n = int(input_line[0])
+m = int(input_line[1])
+l = int(input_line[2])
+A = []
+B = []
+for i in range(n):
+    A.append(input().split())
+for i in range(m):
+    B.append(input().split())
+    
+# print(A)
+# print(B)
+B1 = [[0]*m]*l
+for i in range(l):
+    s = ""
+    for j in range(m):
+        s += B[j][i]
+        if not(j==m-1):
+            s += " "
+    B1[i] = s.split()
+# print(B1)
+C = []
+for i in range(n):
+    for j in range(l):
+        sum = 0
+        for k in range(m):
+            # print("A[i][k]は{}でB[j][k]は{}なので掛け算すると{}".format(A[i][k],B1[j][k],int(A[i][k]) * int(B1[j][k])))
+            sum += int(A[i][k]) * int(B1[j][k])
+        # print("ここまでのSUMは",sum)
+        C.append(sum)
+for i in range(n):
+    for j in range(l):
+        if j==l-1:
+            print(C[i*n+j])
+        else:
+            print(C[i*n+j],end=" ")
+        
+
+

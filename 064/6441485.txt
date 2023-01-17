@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main(){
+    string c1, c2;
+    int r1, r2;
+    cin >> c1 >> r1 >> c2 >> r2;
+    int C1, C2;
+    for(int i = 0; i < 26; ++i){
+        char c = 'A' + i;
+        if(c1.size() == 1 && c1[0] == c){
+            C1 = i;
+        }
+        if(c2.size() == 1 && c2[0] == c){
+            C2 = i;
+        }
+    }
+    for(int i = 0; i < 26; ++i){
+        char c = 'A' + i;
+        for(int j = 0; j < 26; ++j){
+            char d = 'A' + j;
+            int num = 26 + i * 26 + j;
+            if(c1.size() == 2 && c1[0] == c && c1[1] == d){
+                C1 = num;
+            }
+            if(c2.size() == 2 && c2[0] == c && c2[1] == d){
+                C2 = num;
+            }
+        }
+    }
+    int ans = (C2 - C1 + 1) * (r2 - r1 + 1);
+    cout << ans << endl;
+}
+

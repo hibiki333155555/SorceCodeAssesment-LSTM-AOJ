@@ -1,0 +1,125 @@
+#include <iostream>
+using namespace std;
+
+struct Card {
+    char suit;
+    char value;
+};
+/*
+void showCard(Card C)
+{
+    cout << C.suit << C.value;
+}
+*/
+void layCards(Card A[], int n)
+{
+    for (int i = 0; i < n; ++i) {
+	cout << A[i].suit << A[i].value;
+	if (i < n - 1)
+	    cout << ' ';
+	else
+	    cout << endl;
+    }
+}
+
+int bubbleSort(Card A[], int n)
+{
+    int sw = 0;
+    int flag = 1;
+    for (int i = 0; flag; ++i) {
+	flag = 0;
+	for (int j = n - 1; j > i; --j) {
+	    if (A[j - 1].value > A[j].value) {
+		swap(A[j - 1], A[j]);
+		flag = 1;
+		++sw;
+	    }
+	}
+    }
+    return sw;
+}		
+
+int selectionSort(Card A[], int N)
+{
+    int sw = 0;
+    
+    for (int i = 0; i < N - 1; ++i) {
+	int minIdx = i;
+	for (int j = i + 1; j < N; ++j) {
+	    if (A[j].value < A[minIdx].value)
+		minIdx = j;
+	}
+	if (i != minIdx) {
+	    swap(A[i], A[minIdx]);
+	    ++sw;
+	}
+    }
+
+    return sw;
+}
+
+bool isStable(Card in[], Card out[], int N)
+{
+    for (int i = 0; i < N; ++i) {
+	int val = in[i].value;
+	for (int j = i + 1; j < N; ++j) {
+	    if (in[j].value != val)
+		continue;
+	    for (int a = 0; a < N; ++a) {
+		if (out[a].value != val)
+		    continue;
+		for (int b = a + 1; b < N; ++b) {
+		    if (out[b].value != val)
+			continue;
+		    if ((in[i].suit == out[b].suit) &&
+			(in[j].suit == out[a].suit)) {
+			return false;
+		    }
+		}
+	    }
+	}
+    }
+    return true;
+}
+			
+int main()
+{
+    Card A1[36], A2[36];
+ 
+    int N;
+    cin >> N;
+    for (int i = 0; i < N; ++i) {
+	cin >> A1[i].suit;
+	cin >> A1[i].value;
+    }
+    
+    for (int i = 0; i < N; ++i) {
+	A2[i] = A1[i];
+    }
+
+    //    cout << "Bubble Sort: " << endl;
+    bubbleSort(A2, N);
+    layCards(A2, N);
+    
+    if (isStable(A1, A2, N))
+	cout << "Stable" << endl;
+    else
+	cout << "Not stable" << endl;
+    
+    for (int i = 0; i < N; ++i) {
+	A2[i] = A1[i];
+    }
+
+    //    cout << "Selection Sort: " << endl;
+    selectionSort(A2, N);
+    layCards(A2, N);
+
+    if (isStable(A1, A2, N))
+	cout << "Stable" << endl;
+    else
+	cout << "Not stable" << endl;
+
+    return 0;
+}
+	    
+

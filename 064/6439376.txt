@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  char op;
+  int a, b;
+  int answer[10000];
+  int i = 0;
+  while (1) {
+    cin >> a >> op >> b;
+    if (op == '?') break;
+    if (op == '+') answer[i] = a + b;
+    if (op == '-') answer[i] = a - b;
+    if (op == '*') answer[i] = a * b;
+    if (op == '/') answer[i] = a / b;
+    i++;
+  }
+
+  for (int j = 0; j < i; j++) {
+    cout << answer[j] << endl;
+  }
+  
+  return 0;
+}
+

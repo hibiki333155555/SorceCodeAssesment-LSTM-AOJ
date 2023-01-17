@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+using ld=long double;
+ll inf=10010010010010010;
+ll mod=998244353 ;
+int main(){
+    ll n,m;
+    cin >> n >> m;
+    vector<ll>c(n);
+    vector<ll>imos(m+1,0),last(m+1,-1);
+    for (ll i = 0; i < n; i++)
+    {
+        ll a,b;
+        cin >> c[i] >> a >> b;
+        imos[a-1]+=c[i];
+        imos[b]-=c[i];
+        last[a-1]=b-1;
+    }
+    for (ll i = 1; i <=m; i++)
+    {
+        last[i]=max(last[i-1],last[i]);
+    }
+    ll q;
+    cin >> q;
+    vector<ll>memo(m+1,0);
+    for (ll i = 0; i < q; i++)
+    {
+        ll d,e;
+        cin >> d >> e;
+        memo[e-1]=d;
+    }
+    ll ans=0;
+    for (ll i = 0; i <m; i++)
+    {
+        if (i==0)
+        {
+            if (imos[i]<memo[i])
+            {
+                if (last[i]<i)
+                {
+                    cout << -1 << endl;
+                    return 0;
+                }else{
+                    ll k=memo[i]-imos[i];
+                    imos[i]+=k;
+                    imos[last[i]+1]-=k;
+                    ans+=k;
+                }
+            }
+            continue;
+        }
+        imos[i]+=imos[i-1];
+        if (imos[i]<memo[i])
+        {
+            if (last[i]<i)
+            {
+                cout << -1 << endl;
+                return 0;
+            }else{
+                ll k=memo[i]-imos[i];
+                imos[i]+=k;
+                imos[last[i]+1]-=k;
+                ans+=k;
+            }
+        }
+    }
+    cout << ans << endl;
+}

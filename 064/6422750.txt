@@ -1,0 +1,47 @@
+
+class DisjointSet(
+  var rank: Int,
+  val id: Int
+) {
+  var p = this
+  val representative: DisjointSet
+    get() {
+      return if (p === this) {
+        return p
+      } else {
+        p.representative
+      }
+    }
+}
+
+fun main() {
+  val (N, Q) = readLine()!!.split(" ").map { it.toInt() }
+  val disjointSets = MutableList(N) { DisjointSet(rank = 0, id = it) }
+  repeat(Q) {
+    val (op, x, y) = readLine()!!.split(" ").map { it.toInt() }
+    val xds = disjointSets[x].representative
+    val yds = disjointSets[y].representative
+    when (op) {
+      0 -> {
+        if (xds.rank > yds.rank) {
+          yds.p = xds
+        } else if (yds.rank > xds.rank) {
+          xds.p = yds
+        } else {
+          xds.p = yds
+          yds.rank += 1
+        }
+      }
+      1 -> {
+        println(
+          if (xds.representative === yds.representative) {
+            1
+          } else {
+            0
+          }
+        )
+      }
+      else -> throw Error("Unexpected op $op")
+    }
+  }
+}

@@ -1,0 +1,19 @@
+s = []
+
+for i in input().split():
+    #末尾から順にデータを読み込み符号に応じて計算する。
+    if i == '+':
+        a = s.pop()
+        b = s.pop()
+        s.append(a+b)
+    elif i == '-':
+        b = s.pop()
+        a = s.pop()   
+        s.append(a-b)
+    elif i == '*':
+        a = s.pop()
+        b = s.pop()
+        s.append(a*b)
+    else:
+        s.append(int(i))
+print(s.pop())

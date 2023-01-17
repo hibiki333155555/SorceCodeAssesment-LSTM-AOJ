@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <stack>
+#include <set>
+#include <numeric>
+using namespace std;
+typedef long long Int;
+typedef long long ll;
+const int Inf = 1e9 + 7;
+const Int INF = (Int)1e18 + 7;
+const double EPS = 1e-10;
+
+#define chmax(x, y) x = max(x, y)
+
+int main() {
+  int N;
+  cin >> N;
+  vector<int> S(N), L(N), P(N);
+  for (int i = 0; i < N; i++) cin >> S[i] >> L[i] >> P[i];
+  int M;
+  cin >> M;
+  vector<int> W(M);
+  for (int j = 0; j < M; j++) cin >> W[j];
+
+  vector<int> ans;
+
+  for (int j = 0; j < M; j++) {
+    vector<int> dp(W[j]+1, 0);
+    for (int w = 0; w < W[j]; w++)
+      for (int i = 0; i < N; i++)
+        for (int k = S[i]; k <= L[i]; k++)
+          if (w+k <= W[j]) chmax(dp[w+k], dp[w]+P[i]);
+    if (!dp[W[j]]) {
+      cout << -1 << endl;
+      return 0;
+    }
+    ans.push_back(dp[W[j]]);
+  }
+  for (auto a : ans) cout << a << endl;
+  return 0;
+}

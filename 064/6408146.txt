@@ -1,0 +1,17 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main() {
+    string W;
+    int count = 0;
+    while(1) {
+        string T;
+        cin >> T;
+        if (T == "END_OF_TEXT") {
+            break;
+        } else if (T == W) {
+            count++;
+        }
+    }
+    cout << count << endl;
+}

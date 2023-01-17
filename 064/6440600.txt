@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct DAG {
+    int n;
+    vector<vector<int>> e;
+    DAG(int n) : n(n), e(n, vector<int>()) {}
+    void add_edge(int s, int t) {
+        e[s].push_back(t);
+    }
+    vector<int> topo_sort() const {
+        vector<int> res(n); int cur = n;
+
+        vector<bool> visited(n, false);
+        auto f = [&](auto f, int v) -> void {
+            if(visited[v]) return;
+            visited[v] = true;
+            for(int u : e[v]) f(f, u);
+            res[--cur] = v;
+        };
+        for(int i=0; i<n; i++) f(f, i);
+
+        return res;
+    }
+};
+
+int main() {
+
+    int v, e; cin >> v >> e;
+
+    DAG g(v);
+    for(int i=0; i<e; i++) {
+        int s, t; cin >> s >> t;
+        g.add_edge(s, t);
+    }
+
+    auto res = g.topo_sort();
+
+    for(int i : res) cout << i << endl;
+    
+    return 0;
+}

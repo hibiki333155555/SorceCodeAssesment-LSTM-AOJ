@@ -1,0 +1,15 @@
+#include <stdio.h>
+
+int x,y;
+
+int main(){
+
+ scanf("%d",&x);
+
+ y = x^3;
+
+ printf("%d\n",y);
+
+return 0;
+
+}

@@ -1,0 +1,5 @@
+x = int(input())
+
+cube_by_power = x**3
+
+print(cube_by_power)

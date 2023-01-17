@@ -1,0 +1,128 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long LL;
+typedef long double LD;
+
+#define rep(i,n) for(LL i=0;i<(n);i++)
+
+/*
+  0
+3   1
+  2
+*/
+
+void search(vector<string> data,LL pos_x,LL pos_y,LL cnt,LL from, LL &min){
+
+    if(pos_x < 0 || data.at(0).size() <= pos_x){
+        return;
+    }
+
+    if(pos_y < 0 || data.size() <= pos_y){
+        return;
+    }
+
+    if(data.at(pos_y).at(pos_x) == '#'){
+        return;
+    }
+
+    if(data.at(pos_y).at(pos_x) == 'G'){
+
+        if(min == -1){
+            min = cnt;
+        }
+
+        min = std::min(min,cnt);
+
+        return;
+    }
+
+    char prev = data.at(pos_y).at(pos_x);
+    data.at(pos_y).at(pos_x) = '#';
+    //cout << pos_x << " " << pos_y << endl;
+
+    if(prev == 'U'){
+
+        if(from != 0){
+            search(data,pos_x,pos_y-1,cnt,2,min);
+        }
+    
+    }
+    else if(prev == 'D'){
+
+        if(from != 2){
+            search(data,pos_x,pos_y+1,cnt,0,min);
+        }
+
+    }
+    else if(prev == 'R'){
+
+        if(from != 1){
+            search(data,pos_x+1,pos_y,cnt,3,min);
+        }
+
+    }
+    else if(prev == 'L'){
+
+        if(from != 3){
+            search(data,pos_x-1,pos_y,cnt,1,min);
+        }
+
+    }
+    else{
+        cnt++;
+
+        if(from != 0){
+            search(data,pos_x,pos_y-1,cnt,2,min);
+        }
+
+        if(from != 2){
+            search(data,pos_x,pos_y+1,cnt,0,min);
+        }
+
+        if(from != 1){
+            search(data,pos_x+1,pos_y,cnt,3,min);
+        }
+
+        if(from != 3){
+            search(data,pos_x-1,pos_y,cnt,1,min);
+        }
+
+    }
+
+
+}
+
+int main(){
+    LL h, w;
+    LL min = -1;
+
+    cin >> h >> w;
+
+    LL start_y = 0;
+    LL start_x = 0;
+
+    vector<string> data;
+
+    rep(i,h){
+        string s; cin >> s;
+        data.push_back(s);
+
+        rep(j,s.size()){
+            if(s.at(j) == 'S'){
+                start_y = i;
+                start_x = j;
+            }
+        }
+
+    }
+
+    LL cnt = 0;
+
+    search(data,start_x,start_y,cnt,-1,min);
+
+    cout << min << endl;
+
+    return 0;
+}

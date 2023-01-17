@@ -1,0 +1,8 @@
+Total_second = int(input())
+Total_minute = int(Total_second//60)
+Hour = int(Total_minute//60)
+Mitute = int(Total_minute%60)
+Second = int(Total_second%60)
+
+print (int(Hour) +";"+ int(Minute) +";"+ int(Second))
+

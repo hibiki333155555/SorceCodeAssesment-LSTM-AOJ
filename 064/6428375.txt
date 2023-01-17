@@ -1,0 +1,18 @@
+#include<stdio.h>
+int main()
+{
+    for(int i=1;;i++){
+    int H,w,i,j;
+    scanf("%d %d",&H,&w);
+    if(H==0 && w==0)
+                break;
+    for(i=1;i<=H;i++){
+        for(j=1;j<=w;j++){
+
+            printf("#");
+    }
+     printf("\n");
+    }
+   printf ("\n"); }
+    return 0;
+}

@@ -1,0 +1,14 @@
+#include<iostream>
+#include<stdio.h>
+
+#define PI 3.141592653589
+
+using namespace std;
+
+int main() {
+    double r;
+    cin >> r;
+    
+    printf("%f %f\n", PI * r * r, 2.0 * PI * r);
+    return 0;
+}

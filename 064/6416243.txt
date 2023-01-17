@@ -1,0 +1,39 @@
+//
+// Created by TangQihui on 2022/3/19.
+//
+
+#include "iostream"
+using namespace std;
+int A[100001];
+int partition(int p,int n){
+    int r = p-1;//r表示第一个大于A[n-1]的元素的前一个的下标，初始值为p-1，当p=0时，r = -1表示不存在大于A[n-1]的元素
+    for(int i = p;i<n-1;i++){
+        if(A[i]<A[n-1]){//发现比A[n-1]的元素，将它与A[r+1]交换位置
+            r++;
+            int k = A[r];
+            A[r] = A[i];
+            A[i] = k;
+        }
+    }
+    r++;
+    int k = A[r];
+    A[r] = A[n-1];
+    A[n-1] = k;
+    return r;//返回分割的位置
+}
+int main(){
+    int n;
+    cin>>n;
+    for (int i = 0; i < n; ++i) {
+        cin>>A[i];
+    }
+    int k = partition(0,n);
+    for (int i = 0; i < n; ++i) {
+        if (i)cout<<' ';
+        if (i==k)cout<<'[';
+        cout<<A[i];
+        if (i==k)cout<<']';
+    }
+    cout<<endl;
+    return 0;
+}

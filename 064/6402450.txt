@@ -1,0 +1,16 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main(){
+    string key, str;
+    cin>>key;
+    
+    int c;
+    while(true){
+        cin>>str;
+        if(str == "END_OF_TEXT") break;
+        if(str == key) c++;
+    }
+    cout << c << endl;
+}

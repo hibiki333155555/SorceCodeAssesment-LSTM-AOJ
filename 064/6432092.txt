@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+#include <string>
+typedef long long ll;
+typedef long double lld;
+typedef unsigned long long ull;
+using namespace std;
+void word()
+{
+    string w;
+    cin >> w;
+    int cnt = 0;
+    while (1)
+    {
+        string t;
+        cin >> t;
+        if (t == "END_OF_TEXT")
+        {
+            break;
+        }
+        else
+        {
+            if (t == w)
+            {
+                cnt++;
+            }
+        }
+    }
+    cout << cnt << endl;
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    word();
+    return 0;
+}

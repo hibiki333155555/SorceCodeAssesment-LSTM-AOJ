@@ -1,0 +1,79 @@
+#include<iostream>
+
+using namespace std;
+const int NIL = -1;
+const int MAX = 25;
+struct Node
+{
+    int id, left, right;
+    Node() : id(NIL), left(NIL), right(NIL){}
+};
+using Node = struct Node;
+inline void Preorder(Node *binaryTree, int i);
+inline void Inorder(Node *binaryTree, int i);
+inline void Postorder(Node *binaryTree, int i);
+
+int main()
+{
+    int n;
+    cin >> n;
+    Node *binaryTree = new Node[n];
+    bool flags[MAX]{false};
+    int _id, _left, _right, root;
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> _id >> _left >> _right;
+        binaryTree[_id].id = _id;
+        binaryTree[_id].left = _left;
+        binaryTree[_id].right = _right;
+        flags[_left] = flags[_right] = true;
+    }
+    for (int i = 0; i < n; ++i)
+    {
+        if(!flags[i])
+        {
+            root = i;
+            break;
+        }
+    }
+
+    cout << "Preorder" << endl;
+    Preorder(binaryTree, root);
+    cout << endl;
+    cout << "Inorder" << endl;
+    Inorder(binaryTree, root);
+    cout << endl;
+    cout << "Postorder" << endl;
+    Postorder(binaryTree, root);
+    cout << endl;
+
+    delete[] binaryTree;
+    return 0;
+}
+void Preorder(Node *binaryTree, int i)
+{
+    if(i != NIL)
+    {
+        cout << " " << binaryTree[i].id;
+        Preorder(binaryTree, binaryTree[i].left);
+        Preorder(binaryTree, binaryTree[i].right);
+    }
+}
+void Inorder(Node *binaryTree, int i)
+{
+    if(i != NIL)
+    {
+        Inorder(binaryTree, binaryTree[i].left);
+        cout << " " << binaryTree[i].id;
+        Inorder(binaryTree, binaryTree[i].right);
+    }
+}
+void Postorder(Node *binaryTree, int i)
+{
+    if(i != NIL)
+    {
+        Postorder(binaryTree, binaryTree[i].left);
+        Postorder(binaryTree, binaryTree[i].right);
+        cout << " " << binaryTree[i].id;
+    }
+}

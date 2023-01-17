@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+//#include <atcoder/all>
+using namespace std;
+//using namespace atcoder;
+#define rep(i, n) for(int i = 0; i < n; i++)
+#define repr(i, n) for(int i = n; i >= 0; i--)
+#define range(i, m, n) for(int i = m; i < n; i++)
+#define ALL(v) v.begin(), v.end()
+#define RALL(v) v.rbegin(), v.rend()
+#define sum(v) accumulate(ALL(v),0)
+#define int long long
+typedef long long ll;
+typedef vector<ll> vl;
+typedef vector<vector<ll>> vvl;
+const ll MOD = 1000000007;
+const ll MOD2 = 998244353;
+const ll INF = 1e16;
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+using Graph = vector<vector<ll>>;
+int32_t main(){
+    int N,K;cin >> N >> K;
+    vl A(N,0);
+    rep(i,N){
+        cin >> A[i];
+    }
+    sort(ALL(A));
+    int Ans = sum(A);
+    int Lim = N;
+    chmin(Lim,K);
+    int Rest = K-Lim;
+    rep(i,Lim){
+        if(A[i] == 1){
+            Ans+=4;
+            A[i] = 5;
+        }
+        else if(A[i]==6){
+            Rest = K-i;
+            break;
+        }
+        else{
+            Ans+= 6-A[i];
+            A[i] = 6;
+        }
+    }
+    rep(i,Rest){
+        Ans += 6-A[i];
+    }
+    cout << Ans << endl;
+}

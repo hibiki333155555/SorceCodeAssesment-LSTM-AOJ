@@ -1,0 +1,11 @@
+#include<stdio.h>
+int main(){
+int H,W,i,j;
+scanf("%d %d",&H,&W);
+for(i=0;i<H;i++){
+  for(j=0;j<W;j++){
+    printf("#");
+}
+}
+return 0;
+}

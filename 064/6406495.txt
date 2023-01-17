@@ -1,0 +1,28 @@
+#include<stdio.h>
+
+int main(){
+    int a,b,i=1;
+    char op;
+    
+    scanf("%d%c%d",&a,&op,&b);
+    
+    while(i){
+        switch(op){
+            case '+':
+             printf("%d\n",a+b);
+             break;
+            case '-':
+             printf("%d\n",a-b);
+             break;
+            case '/':
+             printf("%d\n",a/b);
+             break;
+            case '*':
+             printf("%d\n",a*b);
+             break;
+            default:
+             i=0;
+        }
+    }
+    return 0;
+}

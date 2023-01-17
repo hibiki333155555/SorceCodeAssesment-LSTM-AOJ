@@ -1,0 +1,13 @@
+cnt=0
+while True:
+    n, x = map(int,input().split())
+    if n==0 and x==0:
+        break
+    for i in range(1, n-1):
+        for j in range(i+1, n):
+            for k in range(j+1, n+1):
+                if x-i-j<=n and x-i-j == i or x-i-j<=n and x-i-j == j:
+                    continue
+                elif 0<k<=n and k+i+j==x:
+                    cnt+=1
+print(cnt)

@@ -1,0 +1,16 @@
+n = int(input())
+a = [0] * n
+for i in range(n):
+    a[i] = int(input())
+
+b = sorted(a)
+
+b.remove(a[0])
+ans = 0
+for i in range(n-1):
+    ans = max(ans, b[-1] - a[i])
+    b.remove(a[i+1])
+
+print(ans)
+
+

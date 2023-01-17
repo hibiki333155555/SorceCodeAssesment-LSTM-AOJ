@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+
+c1, r1, c2, r2 = input().split()
+
+def str_to_int(s):
+    if len(s) == 1:
+        return ord(s) - ord('A')
+    return (ord(s[0]) - ord('A') + 1) * 26 + (ord(s[1]) - ord('A'))
+
+print((str_to_int(c2) - str_to_int(c1) + 1) * (int(r2) - int(r1) + 1))
+

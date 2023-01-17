@@ -1,0 +1,9 @@
+import string
+import sys
+
+words = sys.stdin.read()
+words = words.lower()
+for i in range(26):
+    alp = string.ascii_lowercase[i]
+    print(alp + " : " + words.count(alp))
+

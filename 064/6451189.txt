@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int a,b,c,n,x,i,ct;
+    do
+    {
+        ct=0;
+        cin >> n >> x;
+        if(x > (n-1)*3)
+            break;
+        else
+        {
+            for(a=1,b=n;a<b;a++,b--)
+            {
+                c=x-(a+b);
+                if(a!=c && b!=c)
+                    ct++;
+            }
+        }
+        cout << ct << endl;
+    }
+    while(n!=0 && x!=0);
+}
+

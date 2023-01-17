@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class SCC{
+private:
+    vector<vector<int>> G;
+    vector<vector<int>> rG;
+    vector<bool> visited;
+    vector<int> vs;
+    vector<int> cmp;
+
+    void dfs1(int v){
+        visited[v] = true;
+        for(auto &nex: G[v]){
+            if(visited[nex]) continue;
+            dfs1(nex);
+        }
+        vs.emplace_back(v);
+    }
+
+    void dfs2(int v, int k){
+        visited[v] = true;
+        cmp[v] = k;
+        for(auto &nex: rG[v]){
+            if(visited[nex]) continue;
+            dfs2(nex, k);
+        }
+    }
+public:
+    SCC(int n):
+    G(vector<vector<int>>(n)), rG(vector<vector<int>>(n)),
+    visited(vector<bool>(n, false)), cmp(vector<int>(n)) {}
+
+    void add_edge(int from, int to){
+        G[from].emplace_back(to);
+        rG[to].emplace_back(from);
+    }
+
+    vector<vector<int>> scc(){
+        for(int i = 0; i < G.size(); i++){
+            if(!visited[i]) dfs1(i);
+        }
+
+        fill(visited.begin(), visited.end(), false);
+        reverse(vs.begin(), vs.end());
+        int k = 0;
+        for(auto &it: vs){
+            if(visited[it]) continue;
+            dfs2(it, k);
+            k++;
+        }
+
+        vector<vector<int>> res(k);
+        for(int i = 0; i < G.size(); i++) res[cmp[i]].emplace_back(i);
+        return res;
+    }
+};
+
+int main(){
+    int n; cin >> n;
+    vector<int> a(n);
+    for(auto &it: a) cin >> it;
+    SCC G(n);
+    for(int i = 0; i < n; i++){
+        G.add_edge(i, (i+a[i])%n);
+    }
+
+    auto res = G.scc();
+    int ans = 0;
+    for(auto vec: res){
+        if(vec.size() > 1) ans += vec.size();
+    }
+    for(auto &it: a){
+        if(it%n == 0) ans++;
+    }
+    cout << ans << endl;
+    return 0;
+}

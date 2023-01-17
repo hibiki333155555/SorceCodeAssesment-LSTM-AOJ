@@ -1,0 +1,54 @@
+#include <iostream>
+using namespace std;
+
+long long V_MAX = 10e11;
+long long dp[101][101];
+
+int main() {
+    int V, E;
+    cin >> V >> E;
+    
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (i == j) dp[i][j] = 0;
+            else dp[i][j] = V_MAX;
+        }
+    }
+
+    for (int i = 0; i < E; i++) {
+        int s, t, d;
+        cin >> s >> t >> d;
+        dp[s][t] = d;
+    }
+
+    for (int k = 0; k < V; k++) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dp[i][k] == V_MAX || dp[k][j] == V_MAX) dp[i][j] = min(dp[i][j], V_MAX);
+                else dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
+            }
+        }
+    }
+
+    for (int i = 0; i < V; i++) {
+        if (dp[i][i] < 0) {
+            cout << "NEGATIVE CYCLE" << endl;
+            return 0;
+        }
+    }
+
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (j == 0) {
+                if (dp[i][j] != V_MAX) cout << dp[i][j];
+                else cout << "INF";
+            } else {
+                if (dp[i][j] != V_MAX) cout << " " << dp[i][j];
+                else cout << " " << "INF";
+            }
+        }
+        cout << endl;
+    }
+
+    return 0;
+}

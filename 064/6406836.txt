@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define fr(i,a,b) for(int i=a;i<=b;i++)
+#define N 200005
+int n,m,f[N];
+struct Robot{
+	int x,y;
+}a[N];
+bool cmp(Robot A,Robot B){
+	return A.x<B.x;
+}
+int main(){
+	scanf("%d%d",&n,&m);
+	fr(i,1,n)f[i]=1;
+	fr(i,1,m)scanf("%d%d",&a[i].x,&a[i].y);
+	sort(a+1,a+m+1,cmp);
+	fr(i,1,m)f[a[i].y]=f[a[i].y+1]=f[a[i].y]+f[a[i].y+1];
+	fr(i,1,n-1)printf("%d ",f[i]);
+	printf("%d\n",f[n]); 
+	return 0;
+}

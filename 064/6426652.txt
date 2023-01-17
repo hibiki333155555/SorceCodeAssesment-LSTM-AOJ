@@ -1,0 +1,14 @@
+n=int(input())
+for i in range(n):
+    if i%3==0:
+        print(i,endl='')
+        continue
+    a=i
+    while True:
+        if a%10==3:
+            print(i,endl='')
+            break
+        a=a//10
+        if a==0:
+            break
+print(array)

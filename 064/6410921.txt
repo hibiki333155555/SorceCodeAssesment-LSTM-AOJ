@@ -1,0 +1,5 @@
+a=input
+b=input
+S=a*b
+L=2*(a+b)
+print(S L)

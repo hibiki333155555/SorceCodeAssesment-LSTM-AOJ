@@ -1,0 +1,7 @@
+W,H,x,y,r = map(int,input().split())
+0 < W,H,r <= 100
+-100 <= x,y <= 100
+if r < x < W - r and r < y < H - r:
+    print("yes")
+else:
+    print("No")

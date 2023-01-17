@@ -1,0 +1,9 @@
+import java.util.Scanner;
+
+class Main{
+    public static viod main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        ans = scanner*scanner*scanner;
+        System.out.println(ans);
+    }
+}

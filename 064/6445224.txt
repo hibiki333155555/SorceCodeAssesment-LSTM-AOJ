@@ -1,0 +1,14 @@
+X = input().split()
+str_o = '0'
+str_o += input()
+str_o += '0'
+
+A = int(X[1])
+B = int(X[2])    #下标
+
+im = str_o[B:A-1:-1]  #做逆序的部分。注意，用切片做逆序，begin使用从序列右边开始的。
+ib = str_o[1:A]
+il = str_o[B+1:-1]
+
+print(ib + im + il)
+

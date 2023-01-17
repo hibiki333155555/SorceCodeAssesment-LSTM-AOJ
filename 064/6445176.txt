@@ -1,0 +1,105 @@
+#include<bits/stdc++.h>
+
+#define mp make_pair 
+#define pb push_back 
+#define MAX(a, b) a = max(a, b) 
+#define MIN(a, b) a = min(a, b) 
+#define SQR(x) ((LL)(x) * (x)) 
+#define RESET(a, b) memset(a, b, sizeof(a))
+#define ALL(v) v.begin(), v.end() 
+#define SORT(v) sort(ALL(v)) 
+#define PERMUTE next_permutation
+#define fi first 
+#define se second
+
+#define MOD 1000000009 //1E9+9
+
+using namespace std;
+
+typedef int64_t i64;
+
+typedef pair<i64,i64> p64;
+typedef vector<i64> v64;
+typedef vector<p64>  v6464;
+typedef vector < v64 > vv64;
+
+typedef double dle;
+typedef long double ldle;
+
+typedef pair<int,int> pii; 
+typedef vector<int> vi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+typedef vector< pii > vii;
+typedef vector< vi > vvi;
+typedef vector<vii> vvii;
+
+
+typedef pair<string,string> pss;
+typedef vector<string> vs;
+typedef vector<pss> vss;
+
+typedef pair<int,string> pis;
+typedef vector<pis> vis;
+typedef pair<string,int> psi;
+typedef vector<psi> vsi;
+
+typedef map<string,string> mss;
+typedef map<int,string> mis;
+typedef map<string,int> msi;
+
+///operators overloading
+void operator+=(pii& a,const pii&b){
+    a.fi+=b.fi;
+    a.se+=b.se;
+}
+pii operator+(const pii& a,const pii&b){
+    return {a.fi+b.fi,a.se+b.se};
+}
+
+void operator-=(pii& a,const pii&b){
+    a.fi-=b.fi;
+    a.se-=b.se;
+}
+pii operator-(const pii& a,const pii&b){
+    return {a.fi-b.fi,a.se-b.se};
+}
+
+//https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_A
+
+int n;
+
+int find(int a,vi & p,vi & sz){
+    for(;p[a]!=a;a=p[a]=p[p[a]]);
+    return a;
+}
+
+void unite(int a,int b,vi & p,vi & sz){
+    a = find(a,p,sz);
+    b = find(b,p,sz);
+    //enssure sz[a] >= sz[b]
+    if(sz[a]<sz[b])
+        swap(a,b);
+    p[b]=a;
+    sz[a]+=sz[b];
+}
+
+int main(){
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int q;
+    vi p,sz;
+    cin >> n >> q;
+    for(int i = 0 ; i < n ; i ++){
+        p.pb(i);
+        sz.pb(1);
+    }
+    int c,x,y;
+    while(q--){
+        cin >> c >> x >> y;
+        if(c)
+            cout << (find(x,p,sz)==find(y,p,sz)) << '\n';
+        else
+            unite(x,y,p,sz);
+    }
+    return 0;
+}

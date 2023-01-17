@@ -1,0 +1,11 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner input = new Scanner(System.in);
+        double a = input.nextDouble();
+        double l = 2*a*Math.PI;
+        double s = a*a*Math.PI;
+        System.out.println(String.format("%.5f %.5f",l,s));
+    }
+}

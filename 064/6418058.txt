@@ -1,0 +1,54 @@
+
+// TLE
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void solve(){
+    int N; cin >> N;
+    string s; cin >> s;
+
+    int ans = 0;
+
+    char prec = s[0];
+    int left = 1, right = 1;
+    for(int i = 1; i < N; i++){
+    	if(prec != s[i]) break;
+	left++;
+    }
+    if(left == N){
+    	cout << left - 1 << endl;
+	return;
+    }
+    else{
+    	prec = s[N-1];
+	for(int i = N-2; i > 0; i--){
+	    if(prec != s[i]) break;
+	    right++;
+	}
+	ans += (left / 2) + (right / 2);
+    }
+
+    for(int i = left + 1; i <= N - right - 1; i++){
+        bool ok = 1;
+	int j = 0, k = min(i-1, N-i-1);
+        for(;j <= k; j++, k--){
+            if(s[i-j-1] != s[i+j] || s[i-k-1] != s[i+k]){
+                ok = 0;
+                break;
+            }
+	}
+        if(ok) ans++;
+    }
+
+    cout << ans << "\n";
+}
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    solve();
+    return 0;
+}

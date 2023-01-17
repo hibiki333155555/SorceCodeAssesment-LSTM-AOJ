@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int min4(int a, int b, int c, int d)
+{
+    int t = min(a, b);
+    t = min(t, c);
+    t = min(t, d);
+    return t;
+}
+
+map<int, int> mp;
+
+int dfs(int n)
+{
+    if(mp.count(n)!=0)
+        return mp[n];
+    if(n==0)
+        return 0;
+    else if(n<0)
+        return 1e9;
+    else
+    {
+        mp[n] = min4(dfs(n-25)+1, dfs(n-10)+1, dfs(n-5)+1, dfs(n-1)+1);
+        return(mp[n]);
+    }
+}
+
+
+
+int main()
+{
+    int n;
+    cin >> n;
+    cout << dfs(n) << endl;
+    return 0;
+}

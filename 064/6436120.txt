@@ -1,0 +1,9 @@
+n=int(input())
+l=[]
+for i in range(n):
+    m,o=input().split()
+    l.append([m,int(o)])
+for i in ('S','H','C','D'):
+    for j in range(1,14):
+        if [i,j] not in l:
+            print(i,j)

@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    int a[n];
+    int standard[n];
+    int count = 1,max=-1,min;
+    cin >> a[0];
+    min = a[0];
+    standard[0] = a[0];
+    for(int i=1;i<n;i++) {
+        cin >> a[i];
+        if (i==1) {
+            max = a[1] - a[0];
+        }
+        for (int j=0;j<count;j++) {
+            if (min > a[i]) {
+                standard[count] = a[i];
+                count++;
+                min = a[i];
+                break;
+            }
+            if (a[i] - standard[j] > max) {
+                max = a[i] - standard[j];
+            }
+        }
+    }
+    cout << max << endl;
+}

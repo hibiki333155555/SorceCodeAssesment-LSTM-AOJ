@@ -1,0 +1,22 @@
+
+import sys
+
+s = set()
+input()
+
+for q in sys.stdin:
+    q = q.split()
+    if q[0] == '0':
+        s.add(int(q[1]))
+        print(len(s))
+    elif q[0] == '1':
+        print(int(int(q[1]) in s))
+    elif q[0] == '2':
+        s.discard(int(q[1]))
+    else:
+        ans = []
+        for i in s:
+            if int(q[1]) <= i <= int(q[2]):
+                ans.append(i)
+            for i in sorted(ans):
+                print(i)

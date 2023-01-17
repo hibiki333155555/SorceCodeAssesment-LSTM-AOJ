@@ -1,0 +1,67 @@
+#include <iostream>
+#include <stack>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
+#include <queue>
+#include <bitset>
+#include <set>
+using namespace std;
+#define MAX 100000
+
+int n,k;
+long long T[MAX];
+
+int check(long long P)
+{
+    int i = 0;
+    for(int j = 0; j < k; j++)
+    {
+        long long s = 0;
+        while(s + T[i] <= P)
+        {
+            s+=T[i];
+            i++;
+            if(i == n)
+            return n;
+        }
+    }
+    return i;
+}
+
+int solve()
+{
+    long long left = 0;
+    long long right = 10000*100000+1;
+    long long mid;
+    while(right > left)
+    {
+        mid = (left+right)/2;
+        int v = check(mid);
+        if (v == n)
+            right = mid;
+        else
+            left = mid+1;
+    }
+
+    return right;
+}
+
+
+
+int main()
+{
+    cin >> n >> k;
+    for(int i = 0;i <n;i++)
+        cin >> T[i];
+    long long ans = solve();
+    cout << ans << endl;
+
+
+
+    return 0;
+}

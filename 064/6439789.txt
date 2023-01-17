@@ -1,0 +1,8 @@
+n=int(input())
+def f(i,j,c):
+    if c==n:print(j)
+    else:
+        f(i+j,i,c+1)
+
+
+f(1,1,1)

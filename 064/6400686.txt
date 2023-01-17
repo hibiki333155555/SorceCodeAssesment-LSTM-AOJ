@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    string T, P;
+    cin >> T >> P;
+    int tLen = T.length();
+    int pLen = P.length();
+
+    for( int i=0; i<=tLen-pLen; i++ )
+    {
+        if(
+           T.substr( i, pLen ) == P &&
+           i < tLen
+        ){
+            cout << i << "\n";
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,4 @@
+num = int(input())
+number_list = [int(number) for number in input().split()]
+
+print(f"{min(number_list)} {max(number_list)} {sum(number_list)}")

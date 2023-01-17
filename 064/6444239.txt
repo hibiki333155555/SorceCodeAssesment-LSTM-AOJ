@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+using namespace std;
+//
+
+int main()
+{	
+	int N,i,j,k;
+	int a[105];
+	
+	cin>>N;
+	for(i=0;i<N;i++)
+	{
+		cin>>a[i];
+		cout<<a[i];
+		
+		if(i==N-1)
+			cout<<endl;
+		else
+			cout<<" ";
+	}
+	
+	//插入排序 
+	for(i=1;i<=N-1;i++)
+	{
+		//
+		k=a[i];		
+		for(j=i;j>=1;j--)
+		{
+			if(a[j-1]>k)
+				a[j]=a[j-1];
+			else
+			{
+				a[j]=k;
+				break;
+			}		
+		}
+		if(j==0)
+			a[0]=k;
+	//
+		
+		for(j=0;j<N;j++)
+		{
+			cout<<a[j];
+		
+			if(j==N-1)
+				cout<<endl;
+			else
+				cout<<" ";
+		}
+	
+	
+	}
+	
+return 0;
+}
+

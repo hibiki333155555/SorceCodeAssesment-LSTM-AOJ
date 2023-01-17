@@ -1,0 +1,22 @@
+n = int(input())
+S = list(map(int, input().split()))
+q = int(input())
+T = list(map(int, input().split()))
+
+cnt = 0
+for t in T:
+    lft, rgt = 0, n-1
+    if S[lft] == t or S[rgt] == t:
+        cnt += 1
+    else:
+        while rgt - lft > 1:
+            mid = (lft + rgt)//2
+            if S[mid] == t:
+                cnt += 1
+                break 
+            elif S[mid] > t:
+                rgt = mid 
+            else:
+                lft = mid 
+                
+print(cnt)

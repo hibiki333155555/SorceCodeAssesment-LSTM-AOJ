@@ -1,0 +1,13 @@
+n = sorted(input().split())
+a = n[0]
+b = n[1]
+e = False
+while not e:
+    print(int(a),int(b))
+    n = sorted(input().split())
+    if n[0]=="0" and n[1]=="0":
+        e = True
+    else:
+        a = n[0]
+        b = n[1]
+        

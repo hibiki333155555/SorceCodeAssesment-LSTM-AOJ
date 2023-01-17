@@ -1,0 +1,20 @@
+l=input().split()
+
+a=int(l[0])
+b=int(l[2])
+op=str(l[1])
+
+if op=="+":
+    r=a+b
+elif op=="-":
+    r=a-b
+elif op=="*":
+    r=a*b
+elif op=="/":
+    if a%b==o:
+        r=float(a/b)
+    else:
+        r=int(a/b)
+elif op=="?":
+    end
+print(r)

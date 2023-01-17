@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+internal class Program
+{
+    public static void Main()
+    {
+        if (new System.Diagnostics.StackFrame(1).GetMethod() == null)
+            Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false });
+
+        Console.ReadLine();
+        var S = Console.ReadLine().Split().Select(x => x.ParseInt()).ToArray();
+        var MS = new Sort(S);
+        Console.WriteLine(MS.MergeSort().StringJoin(" "));
+        Console.WriteLine(MS.counter);
+
+        Console.Out.Flush();
+    }
+}
+
+class Sort
+{
+    public int counter = 0;
+    int[] array;
+    public Sort(int[] array)
+    {
+        this.array = array;
+    }
+
+    public int[] MergeSort()
+    {
+        internalMergeSort(array, 0, array.Length);
+        return array;
+    }
+
+    void internalMergeSort(int[] A, int left, int right)
+    {
+        if (left + 1 < right)
+        {
+            var mid = (left + right) / 2;
+            internalMergeSort(A, left, mid);
+            internalMergeSort(A, mid, right);
+            internalMerge(A, left, mid, right);
+        }
+    }
+
+    void internalMerge(int[] A, int left, int mid, int right)
+    {
+        var n1 = mid - left;
+        var n2 = right - mid;
+        var L = new int[n1 + 1];
+        var R = new int[n2 + 1];
+        Array.Copy(A, left, L, 0, n1);
+        Array.Copy(A, mid, R, 0, n2);
+        L[n1] = int.MaxValue;
+        R[n2] = int.MaxValue;
+        var li = 0;
+        var ri = 0;
+        for (int i = left; i < right; i++)
+        {
+            if (L[li] <= R[ri])
+                A[i] = L[li++];
+            else
+                A[i] = R[ri++];
+            counter++;
+        }
+    }
+}
+
+
+internal static class Extensions
+{
+    public static int ParseInt(this string s) => int.Parse(s);
+    public static string StringJoin<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+}

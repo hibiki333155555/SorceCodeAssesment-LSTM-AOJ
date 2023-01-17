@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    int H, W, N;
+    cin >> H >> W >> N;
+    vector<int> s(2), g(2);
+    for(int i = 0; i < 2; i++) {
+        cin >> s[i];
+        s[i]--;
+    }
+    for(int i = 0; i < 2; i++) {
+        cin >> g[i];
+        g[i]--;
+    }
+    vector<vector<int>> field(H, vector<int>(W, -1));
+    int dx[4] = {0, 1, 0, -1}, dy[4] = {1, 0, -1, 0};
+    {priority_queue<tuple<int, int, int>> q;
+    for(int i = 0; i < N; i++){
+        int x, y, k;
+        cin >> x >> y >> k;
+        x--;
+        y--;
+        field[x][y] = k;
+        q.push({k, x, y});
+    }
+    while(!q.empty()){
+        auto [rest, x, y] = q.top();
+        q.pop();
+        if(rest == 0) continue;
+        if(field[x][y] > rest) continue;
+        rest--;
+        for(int i = 0; i < 4; i++){
+            int nx = x + dx[i], ny = y + dy[i];
+            if(0 <= nx && nx < H && 0 <= ny && ny < W && field[nx][ny] < rest){
+                field[nx][ny] = rest;
+                q.push({rest, nx, ny});
+            }
+        }
+    }}
+    vector<vector<bool>> d(H, vector<bool>(W, false));
+    queue<pair<int, int>> q;
+    q.push({s[0], s[1]});
+    d[s[0]][s[1]] = true;
+    while(!q.empty()){
+        auto[x, y] = q.front();
+        q.pop();
+        for(int i = 0; i < 4; i++){
+            int nx = x + dx[i], ny = y + dy[i];
+            if(0 <= nx && nx < H && 0 <= ny && ny < W && field[nx][ny] == -1 && !d[nx][ny]){
+                d[nx][ny] = true;
+                q.push({nx, ny});
+            }
+        }
+    }
+    if(d[g[0]][g[1]]) cout << "Yes" << endl;
+    else cout << "No" << endl;
+}

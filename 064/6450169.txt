@@ -1,0 +1,36 @@
+import sys
+input = lambda :sys.stdin.readline()[:-1]
+ni = lambda :int(input())
+na = lambda :list(map(int,input().split()))
+yes = lambda :print("yes");Yes = lambda :print("Yes");YES = lambda : print("YES")
+no = lambda :print("no");No = lambda :print("No");NO = lambda : print("NO")
+#######################################################################
+
+n,m = na()
+a = na()
+dp = [[0 for j in range(n+10)]for i in range(m+10)]
+dp[0][n] = 1
+mod = 998244353
+nn = n + 10
+fact = [1] * nn
+for i in range(nn - 1):
+    fact[i + 1] = fact[i] * (i + 1) % mod
+invfact = [1] * nn
+invfact[nn - 1] = pow(fact[nn - 1], mod - 2, mod)
+for i in range(nn - 1)[::-1]:
+    invfact[i] = invfact[i + 1] * (i + 1) % mod
+ 
+def binom(x, y):
+    if x < 0 or y < 0 or x - y < 0:
+        return 0
+    return fact[x] * invfact[y] % mod * invfact[x - y] % mod
+
+for i in range(m):
+    for j in range(n+1):
+        dp[i+1][j-(min(j,a[i]))]+=dp[i][j]*fact[j]
+        dp[i+1][j+1]-=dp[i][j]*fact[j]
+    for j in range(n+1):
+        dp[i+1][j+1]+=dp[i+1][j]
+        dp[i+1][j]*=invfact[j]
+        dp[i+1][j]%=mod
+print(dp[m][0])

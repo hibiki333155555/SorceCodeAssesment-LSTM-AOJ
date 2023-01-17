@@ -1,0 +1,140 @@
+// #include "atcoder/all"
+#include <iostream> // cout, endl, cin
+#include <string> // string, to_string, stoi
+#include <vector> // vector
+#include <algorithm> // min, max, swap, sort, reverse, lower_bound, upper_bound
+#include <utility> // pair, make_pair
+#include <tuple> // tuple, make_tuple
+#include <cstdint> // int64_t, int*_t
+#include <cstdio> // printf
+#include <map> // map
+#include <queue> // queue, priority_queue
+#include <set> // set
+#include <stack> // stack
+#include <deque> // deque
+#include <unordered_map> // unordered_map
+#include <unordered_set> // unordered_set
+#include <bitset> // bitset
+#include <cctype> // isupper, islower, isdigit, toupper, tolower
+#include <iomanip> // setprecision
+#include <complex> // complex
+#include <math.h>
+#include <functional>
+#include <cassert>
+using namespace std;
+// using namespace atcoder;
+using ll = long long;
+using P = pair<ll,ll>;
+constexpr ll INF = 1e15;
+constexpr ll LLMAX = 9223372036854775807;
+constexpr int inf = 1e9;
+// constexpr ll mod = 1000000007;
+constexpr ll mod = 998244353;
+// 右下左上
+const int dx[8] = {1, 0, -1, 0,1,1,-1,-1};
+const int dy[8] = {0, 1, 0, -1,1,-1,1,-1};
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+#define eol "\n"
+// ---------------------------------------------------------------------------
+
+
+struct mint {
+  ll x; // typedef long long ll;
+  mint(ll x=0):x((x%mod+mod)%mod){}
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) {
+    (x *= a.x) %= mod;
+    return *this;
+  }
+  mint operator+(const mint a) const {
+    mint res(*this);
+    return res+=a;
+  }
+  mint operator-(const mint a) const {
+    mint res(*this);
+    return res-=a;
+  }
+  mint operator*(const mint a) const {
+    mint res(*this);
+    return res*=a;
+  }
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const {
+    return pow(mod-2);
+  }
+  mint& operator/=(const mint a) {
+    return (*this) *= a.inv();
+  }
+  mint operator/(const mint a) const {
+    mint res(*this);
+    return res/=a;
+  }
+};
+
+struct combination {
+  vector<mint> fact, ifact;
+  combination(int n):fact(n+1),ifact(n+1) {
+    assert(n < mod);
+    fact[0] = 1;
+    for (int i = 1; i <= n; ++i) fact[i] = fact[i-1]*i;
+    ifact[n] = fact[n].inv();
+    for (int i = n; i >= 1; --i) ifact[i-1] = ifact[i]*i;
+  }
+  mint operator()(int n, int k) {
+    if (k < 0 || k > n) return 0;
+    return fact[n]*ifact[k]*ifact[n-k];
+  }
+};
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    ll N;
+    cin >> N;
+    vector<ll> A(2*N);
+    for(int i=1; i<=2*N-1; i++){
+        cin >> A[i];
+    }
+    mint ans = 0;
+    for(ll i=2; i<=N; i+=2){
+        if(i+N-1 <= 2*N-1){
+            ans += i*min(A[i/2],A[i+N-1]);
+        }else{
+            ans += i*A[i/2];
+        }
+    }
+    {
+        ll rem = N-2;
+        for(ll i=3; i<=N; i+=2){
+            if(i+N-1 <= 2*N-1){
+                ans += rem*min(A[i/2],A[i+N-1]);
+            }else{
+                ans += rem*A[i/2];
+            }
+            rem -= 2;
+        }
+    }
+    for(int i=2; i<=N; i+=2){
+        ans += i*(N-(i+1)+1)*min(A[i/2],A[i+N-1]+A[i+N]);
+    }
+    ans += N*A[1+N-1];
+    ans /= N*(N+1)/2;
+    cout << ans.x << endl;
+    return 0;
+}

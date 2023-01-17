@@ -1,0 +1,9 @@
+l = input()
+l = list(map(int, l))
+a = l[0]
+b = l[1]
+c = l[2]
+if a < b and b < c:
+    print("yes")
+else:
+    print("no")

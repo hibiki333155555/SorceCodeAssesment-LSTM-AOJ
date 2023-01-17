@@ -1,0 +1,2 @@
+if input().find("?") == -1:
+    print(eval(input()))

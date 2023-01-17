@@ -1,0 +1,40 @@
+#include <iostream>
+#include <map>
+#include <algorithm>
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    int op, e;
+    string l, r;
+    multimap<string, int> m;
+    while(n--){
+        cin>>op>>l;
+        switch(op){
+            case 0:
+            cin>>e;
+            m.emplace(l,e)
+            break;
+            case 1:
+            auto range = m.equal_range(m.begin(), m.end(), l);
+            for(auto it = range.first; it != range.second; it++){
+                cout << it->second << endl;
+            }
+            break;
+            case 2:
+            m.erase(l);
+            break;
+            case 3:
+            cin>>r;
+            auto le = m.lower_bound(l);
+            auto ri = m.upper_bound(r);
+            for(auto it = le; it != ri; it++){
+                cout << it->first << " " << it->second << endl;
+            }
+            break;
+        }
+    }
+    
+}
+

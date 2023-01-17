@@ -1,0 +1,24 @@
+import sys
+
+S = str(input())
+P = str(input())
+
+is_ok = False
+
+for i in range(len(S)):
+    FLG = True
+    for k in range(len(P)):
+        if S[(i+k)%(len(S))] != P[k]:
+            
+            FLG = False
+            break
+        if FLG == True:
+            is_ok = True
+            break
+
+if is_ok == True:
+    print("Yes")
+else:
+    print("No")
+
+

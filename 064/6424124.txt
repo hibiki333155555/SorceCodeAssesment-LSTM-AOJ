@@ -1,0 +1,30 @@
+#include<stdio.h>
+#include<string.h>
+
+int main (void){
+    char a[201],b[201];
+    int m,h,i,x,y,z;
+    
+    while(1){
+        scanf("%s\n%d",a,&m);
+        if(!strcmp(a, "-"))break;
+        
+        for(i=0;i<m;i++){
+            scanf("%d",&h);
+            for(x=h;a[x]!='\0';x++)
+            {
+                b[x-h]=a[x];
+            }
+            for(y=0;y<h;y++)
+            {
+                b[x-h+y]=a[y];
+            }
+            for(x=0;b[x]!='\0';x++)
+            {
+                a[x]=b[x];
+            }
+        }
+        printf("%s\n",a);
+    }
+    return 0;
+}

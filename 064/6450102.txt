@@ -1,0 +1,70 @@
+import sys
+from operator import itemgetter
+from collections import defaultdict, deque
+import heapq
+from heapq import heapify, heappop, _heapify_max, heappush
+from bisect import bisect_left, bisect_right
+import math
+import itertools
+import copy
+
+stdin=sys.stdin
+sys.setrecursionlimit(10 ** 8)
+## import pypyjit
+## pypyjit.set_param('max_unroll_recursion=-1')
+
+ip=lambda: int(sp())
+fp=lambda: float(sp())
+lp=lambda:list(map(int,stdin.readline().split()))
+sp=lambda:stdin.readline().rstrip()
+Yp=lambda:print('Yes')
+Np=lambda:print('No')
+inf = 1 << 60
+inf = float('inf')
+mod = 10 ** 9 + 7
+mod = 998244353
+eps = 1e-9
+sortkey1 = itemgetter(0)
+sortkey2 = lambda x: (x[0], x[1])
+
+## _heapify_maxしてから
+def _heappush_max(heap, item):
+    heap.append(item)
+    heapq._siftdown_max(heap, 0, len(heap)-1)
+def _heappop_max(heap):
+    lastelt = heap.pop()
+    if heap:
+        returnitem = heap[0]
+        heap[0] = lastelt
+        heapq._siftup_max(heap, 0)
+        return returnitem
+    return lastelt
+
+###############################################################
+
+N = ip()
+S = [sp() for _ in range(N)]
+l = len(S[0])
+ans = 0
+for i in range(N):
+    ok = True
+    for j in range(N):
+        res = 0
+        if i == j:
+            continue
+        for k in range(l):
+            if S[i][k] != S[j][k]:
+                res += 1
+        if res <= 1:
+            ok = False
+    if not ok:
+        ans += 1
+
+print(ans)
+
+
+
+
+
+
+exit()

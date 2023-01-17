@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Tools;
+
+internal class Program
+{
+    public static void Main()
+    {
+        if (new System.Diagnostics.StackFrame(1).GetMethod() == null)
+            Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false });
+
+        Console.ReadLine();
+        var A = Console.ReadLine().Split().Select(int.Parse).ToArray();
+        var q = Partition(A, 0, A.Length - 1);
+        Console.WriteLine(A.Select((i, index) => index == q ? $"[{i}]" : i.ToString()).StringJoin(" "));
+
+        Console.Out.Flush();
+    }
+
+    public static int Partition(int[] A, int p, int r)
+    {
+        var x = A[r];
+        var i = p;
+        for (int j = 0; j < r; j++)
+        {
+            if (A[j] <= x)
+            {
+                Swap(ref A[i++], ref A[j]);
+            }
+        }
+        Swap(ref A[i], ref A[r]);
+        return i;
+    }
+}
+
+internal class Tools
+{
+    public static void Swap<T>(ref T a, ref T b)
+    {
+        var t = a;
+        a = b;
+        b = t;
+    }
+}
+
+internal static class Extensions
+{
+    public static string StringJoin<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+}

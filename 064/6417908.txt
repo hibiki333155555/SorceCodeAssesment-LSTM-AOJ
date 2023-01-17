@@ -1,0 +1,71 @@
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+//二叉树的前中后序遍历
+#define MAXN 30
+#define fr(n)	for(int i = 0; i < n; i++)
+#define NIF -1
+struct node {
+	int p, l, r;
+}T[MAXN];
+
+int n;
+
+void preorder(int u) {
+	if (u == NIF) {
+		return;
+	}
+	printf(" %d", u);
+	preorder(T[u].l);
+	preorder(T[u].r);
+}
+
+void inorder(int u) {
+	if (u == -1) {
+		//cout << " u = " << u << endl;
+		return;
+	}
+	//cout << "u = " << u << endl;
+	inorder(T[u].l);
+	printf(" %d", u);
+	inorder(T[u].r);
+}
+
+void postorder(int u) {
+	if (u == NIF) {
+		return;
+	}
+	postorder(T[u].l);
+	postorder(T[u].r);
+	printf(" %d", u);
+}
+
+int main() {
+	cin >> n;
+	fr(n) {
+		T[i].p = NIF;
+	}
+	fr(n) {
+		int p, l, r;
+		cin >> p >> l >> r;
+		T[p].l = l;
+		T[p].r = r;
+		if (l != NIF)	T[l].p = p;
+		if (r != NIF)	T[r].p = p;
+	}
+	int root = 0;
+	fr(n) {
+		if (T[i].p == NIF)	root = i;
+	}
+	cout << "Preorder" << endl;
+	preorder(root);
+	cout << endl;
+	cout << "Inorder" << endl;
+	inorder(root);
+	cout << endl;
+	cout << "Postorder" << endl;
+	postorder(root);
+	cout << endl;
+	return 0;
+}

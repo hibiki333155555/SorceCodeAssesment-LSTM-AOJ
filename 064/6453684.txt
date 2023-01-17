@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+int n, k,S; // n: 荷物の個数、k: k台のトラック
+long W[100000];
+
+int check(long P){ // P: 最大積載量
+    int x = 0;
+    for(S = 0; S < k; S++){
+        long sum = 0;
+        while(sum + W[x] <= P){
+            sum += W[x];
+            x++;
+            if(x == n) return n;
+        }
+    }
+    return x;
+}
+
+int binarySearch(){
+    long left = 0, right = 100000*10000, mid;
+    int tmp;
+
+    while(left + 1 < right){
+        mid = (left + right)/2;
+        tmp = check(mid);
+	if(S == k && tmp == n) return tmp;
+        else if(tmp == n)
+            right = mid;
+        else if(tmp < n)
+            left = mid;
+    }
+    return right;
+}
+
+int main(){
+    scanf("%d%d", &n, &k);
+    for(int i = 0; i < n; i++){
+        scanf("%ld", &W[i]);
+    }
+    int tmp = binarySearch();
+    printf("%d\n", tmp);
+    return 0;
+}
+

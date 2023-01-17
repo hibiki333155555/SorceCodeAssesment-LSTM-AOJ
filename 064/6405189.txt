@@ -1,0 +1,10 @@
+#include<stdio.h>
+#define PI 3.141592653589
+int main(){
+	long double r,c,a;
+	scanf("%lf",&r);
+	c=PI*(r*2);
+	a=PI*(r*r);
+	printf("%lf %lf\n",a,c);//ms67
+		return 0;
+}

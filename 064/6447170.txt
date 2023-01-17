@@ -1,0 +1,14 @@
+n = int(input())
+a = list(map(int, input().split()))
+
+for i, value in enumerate(a):
+    if i < n//2:
+        t = value
+        a[i] = a[n-i-1]
+        a[n-i-1] = t
+    else:
+        break
+
+for val in a:
+    print(val, end=' ')
+print()

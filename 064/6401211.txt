@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+4;
+#define d2(x,y) (x-y)*(x-y)
+#define cmax(x,y) x=max(x,y)
+#define cmin(x,y) x=min(x,y)
+typedef complex<double> P;
+const int INF=1e9+5;
+int n,ans;
+double a, b, c, d, e, f, cx, cy, r = 0, t, u, v;
+
+int main()
+{
+	cin >> a >> d >> b >> e >> c >> f;
+
+	t = sqrt((b - c) * (b - c) + (e - f) * (e - f));
+	u = sqrt((c - a) * (c - a) + (f - d) * (f - d));
+	v = sqrt((a - b) * (a - b) + (d - e) * (d - e));
+
+	cx = (t * a + u * b + v * c) / (t + u + v);
+	cy = (t * d + u * e + v * f) / (t + u + v);
+	r = sqrt((t + u - v) * (t - u + v) * (-t + u + v) / (t + u + v)) / 2;
+
+	cout << setprecision(15) << cx << " " << cy << " " << r << endl;
+}
+

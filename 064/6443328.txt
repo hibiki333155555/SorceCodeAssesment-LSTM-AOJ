@@ -1,0 +1,11 @@
+main(require("fs").readFileSync("/dev/stdin", "utf8"));
+//main("3 5")
+function main(raw) {
+    // データ処理
+    const args = raw.split("\n");
+    const input = args[0].split(' ').map(Number);
+    // 計算
+    const s = input[0]*input[1];
+    const l = 2*(input[0]+input[1]);
+    console.log(`${s} ${l}`);
+}

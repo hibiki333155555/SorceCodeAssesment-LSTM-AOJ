@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long gcd(long long a, long long b){
+  if (b == 0){
+    return a;
+  } else {
+    return gcd(b, a % b);
+  }
+}
+long long lcm(long long a, long long b){
+  return a / gcd(a, b) * b;
+}
+int main(){
+  int N, M;
+  cin >> N >> M;
+  vector<vector<pair<int, int>>> E(N);
+  for (int i = 0; i < M; i++){
+    int a, b, c;
+    cin >> a >> b >> c;
+    a--;
+    b--;
+    E[a].push_back(make_pair(c, b));
+  }
+  vector<long long> L1 = {1};
+  for (int i = 1; i <= 20; i++){
+    vector<long long> L2;
+    for (long long x : L1){
+      L2.push_back(x);
+      L2.push_back(lcm(x, i));
+    }
+    sort(L2.begin(), L2.end());
+    L2.erase(unique(L2.begin(), L2.end()), L2.end());
+    swap(L1, L2);
+  }
+  int cnt = L1.size();
+  vector<vector<int>> nxt(cnt, vector<int>(20));
+  for (int i = 0; i < cnt; i++){
+    for (int j = 0; j < 20; j++){
+      int p = lcm(L1[i], j + 1);
+      nxt[i][j] = lower_bound(L1.begin(), L1.end(), p) - L1.begin();
+    }
+  }
+  vector<vector<bool>> used(N, vector<bool>(cnt, false));
+  used[0][0] = true;
+  queue<pair<int, int>> Q;
+  Q.push(make_pair(0, 0));
+  while (!Q.empty()){
+    int v = Q.front().first;
+    int l = Q.front().second;
+    Q.pop();
+    for (auto P : E[v]){
+      int w = P.second;
+      int l2 = nxt[l][P.first - 1];
+      if (!used[w][l2]){
+        used[w][l2] = true;
+        Q.push(make_pair(w, l2));
+      }
+    }
+  }
+  vector<int> R;
+  for (int i = 0; i < cnt; i++){
+    if (used[N - 1][i]){
+      R.push_back(L1[i]);
+    }
+  }
+  if (R.empty()){
+    cout << "IMPOSSIBLE" << endl;
+  } else {
+    cout << R[0] << ' ' << R.back() << endl;
+  }
+}

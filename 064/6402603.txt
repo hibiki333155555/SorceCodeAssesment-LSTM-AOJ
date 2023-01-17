@@ -1,0 +1,21 @@
+#include<stdio.h>
+int main(void)
+{
+    int i=0,a[10001];
+    while(i<10000)
+    {
+        scanf("%d",&a[i]);
+        if(a[i]==0)
+        {
+            break;
+        }
+        i++;
+    }
+    i = 0;
+    while(a[i]!='\0')
+    {
+        printf("Case %d: %d\n",i+1,a[i]);
+        i++;
+    }
+    return 0;
+}

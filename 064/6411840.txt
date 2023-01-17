@@ -1,0 +1,7 @@
+x, y = map(int, input().split(" "))
+d = min([x, y, max(x, y)/2])
+while d < 0:
+    if x%d == 0 and y%d == 0:
+        break
+    d -= 1
+print(d)

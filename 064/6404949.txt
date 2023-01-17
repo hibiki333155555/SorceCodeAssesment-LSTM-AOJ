@@ -1,0 +1,11 @@
+using System;
+
+class Rev
+{
+    static void Main()
+    {
+        var nums = new int[int.Parse(Console.ReadLine())];
+        nums = Console.ReadLine().Split();
+        Console.WriteLine(String.Join(" ", Array.Reverse(nums)));
+    }
+}

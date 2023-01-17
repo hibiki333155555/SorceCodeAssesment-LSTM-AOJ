@@ -1,0 +1,20 @@
+package パソコン甲子園;
+import java.util.Scanner;
+public class Pck0453 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);	
+		//変数
+		int d=4;
+		double m;
+
+		//処理
+		while(4<=d&&d<=400&&d/4==(double)d/4) {
+			d = sc.nextInt();
+			m=d*0.25;
+			if(4*(int)m==d&&m>0&&m<=100) {
+				System.out.println((int)m);
+			}
+		}
+	}
+}
+

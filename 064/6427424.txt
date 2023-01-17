@@ -1,0 +1,25 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int n; cin >> n;
+	vector<int> P(n); P[0] = -1;
+	for (int i = 0, k; i < n; ++i) {
+		cin >> k;
+		for (int j = 0, c; j < k; ++j, P[c] = i) cin >> c;
+	}
+	int q; cin >> q;
+	vector<vector<int>> U(n);
+	for (int i = 0, u, v, a = 0; i < q; ++i) {
+		cin >> u >> v;
+		if (U[u].empty()) for (int j = u; j >= 0; j = P[j]) U[u].push_back(j);
+		if (U[v].empty()) for (int j = v; j >= 0; j = P[j]) U[v].push_back(j);
+		for (auto p = U[u].crbegin(), q = U[v].crbegin(); p != U[u].crend() && q != U[v].crend() && *p == *q; ++p, ++q) a = *p;
+		cout << a << endl;
+	}
+	return 0;
+}
+

@@ -1,0 +1,68 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 998244353
+
+def main():
+    n = list(map(int,input()))
+    K = I()
+    if K == 0:
+        print(0)
+        return
+    dp = [[0]*2 for _ in range(K+1)]
+    c = [[0]*2 for _ in range(K+1)]
+    dp[1][0] = 1
+    c[1][0] = 1
+    c[0][0] = 1
+    for i in n[1:]:
+        ndp = [[0]*2 for _ in range(K+1)]
+        nc = [[0]*2 for _ in range(K+1)]
+        ndp[1][1] = 1
+        nc[1][1] = 1
+        nc[0][0] = 1
+        for k in range(K+1):
+            for j in range(2):
+                dpkj = dp[k][j]
+                ckj = c[k][j]
+                if not dpkj:
+                    continue
+                d = 1 if j else i
+                for x in range(d+1):
+                    nk = k+x
+                    if nk > K:
+                        continue
+                    nj = j|(x<i)
+                    res = ndp[nk][nj] + 2*dpkj + x*ckj
+                    if res >= mod:
+                        res %= mod
+                    ndp[nk][nj] = res
+                    res = nc[nk][nj] + ckj
+                    if res >= mod:
+                        res %= mod
+                    nc[nk][nj] = res
+        dp = ndp[:]
+        c = nc
+    ans = 0
+    for i in dp[k]:
+        if i > 0:
+            ans += i
+            ans %= mod
+    print(ans)
+    return
+
+
+if __name__ == "__main__":
+    main()
+

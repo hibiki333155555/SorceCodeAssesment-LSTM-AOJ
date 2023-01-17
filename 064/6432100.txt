@@ -1,0 +1,16 @@
+#include <stdio.h>
+int main()
+{
+    int i,N;
+    for (i = 1; N != 0; i++)
+    {
+       scanf("%d",&N);
+
+       if (N==0)
+       {
+           break;
+       }
+       printf("Case %d: %d\n",i,N);
+    }
+    return 0;
+}

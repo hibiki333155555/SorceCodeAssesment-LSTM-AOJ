@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+int n;
+int count;
+int pos;
+cin >> n;
+vector<int> v(n);
+count = 0;
+for(int i = 0; i<n; i++){
+cin >> v[i];
+}
+for(int i = 0; i<n; i++){
+        if(i != n-1){
+        cout << v[i]<<" ";
+        }
+        else{
+        cout << v[i]<<"\n";
+        }
+}
+int i, key, j;
+    for (i = 1; i < n; i++)
+    {
+        key = v[i];
+        j = i - 1;
+ 
+        while (j >= 0 && v[j] > key)
+        {
+            v[j + 1] = v[j];
+            j = j - 1;
+        }
+        v[j + 1] = key;
+        //cout << j+1 << " ";
+        for(int i = 0; i<n; i++){
+        if(i != n-1){
+        cout << v[i]<<" ";
+        }
+        else{
+        cout << v[i]<<"\n";
+        }
+}
+       
+    }
+
+return 0;
+}//r
+

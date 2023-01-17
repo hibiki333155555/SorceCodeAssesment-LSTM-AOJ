@@ -1,0 +1,19 @@
+using System;
+class program
+{
+    static void Main(string[] args)
+    {
+        var s = Console.ReadLine();
+        var s1 = new long[s];
+        int d;
+        int t;
+        for(int i = 1; i <= (s1[0] / 2); i++)
+        {
+            t = s1[0] - i;
+            d = s1[i];
+            s1[i] = s1[t];
+            s1[t] = d;
+            d = 0;
+        }
+    }
+}

@@ -1,0 +1,120 @@
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+#define double long double
+const int N = 201;
+const double eps = 1e-12;
+struct vec{
+	double x,y;
+}pos[N];
+inline vec const operator + (const vec &a,const vec &b){
+	return (vec){a.x + b.x,a.y + b.y};
+}
+inline vec const operator - (const vec &a,const vec &b){
+	return (vec){a.x - b.x,a.y - b.y};
+}
+inline vec const operator * (const vec &a,const double &b){
+	return (vec){a.x  * b,a.y * b};
+}
+inline vec const operator / (const vec &a,const double &b){
+	return (vec){a.x / b,a.y / b};
+}
+inline double dot(const vec &a,const vec &b){
+	return a.x * b.x + a.y * b.y;
+}
+inline double cross(const vec &a,const vec &b){
+	return a.x * b.y - a.y * b.x;
+}
+inline double dist(const vec &a,const vec &b){
+	return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+}
+
+struct line{
+	vec point,way;
+	inline void add(const vec &a,const vec &b){
+		point = a,way = b;
+	}
+}l,r;
+inline vec intersect(line a,line b){
+	double x = cross(b.way,a.point - b.point) / cross(a.way,b.way);
+	return a.point + a.way * x;
+}
+
+int n,m;
+double area(){
+	double sum = 0;
+	int i;
+	for(i = 1;i < n;i++){
+		sum += cross(pos[i],pos[i + 1]);
+	}
+	sum += cross(pos[n],pos[1]);
+	return sum;
+}
+int check(){
+	int i;
+	vec A = (vec){1,0};
+	l.add(pos[n + 1],A);
+	int sum = 0;
+	for(i = 2;i <= n;i++){
+		vec u = pos[i],v = pos[i - 1];
+		if(fabs(cross(u - v,pos[n + 1] - v)) < eps && dot(v - pos[n + 1],u - pos[n + 1]) < eps) return 1;
+		r.add(u,u - v);
+		if(fabs(r.way.y) <= eps) continue;
+		if(max(u.y,v.y) + eps < pos[n + 1].y || pos[n + 1].y < eps + min(u.y,v.y)) continue;
+		vec C = intersect(l,r);
+		//printf("%lf\n",C.x);
+		if(C.x < pos[n + 1].x) ++sum;
+	}
+	vec u = pos[1],v = pos[n];
+	if(fabs(cross(u - v,pos[n + 1] - v)) <= eps && dot(v - pos[n + 1],u - pos[n + 1]) < eps) return 1;
+	r.add(u,u - v);
+	if(fabs(r.way.y) <= eps){
+		if(sum & 1) return 2;
+		return 0;
+	}
+	if(max(u.y,v.y) + eps < pos[n + 1].y || pos[n + 1].y < eps + min(u.y,v.y)){
+		if(sum & 1) return 2;
+		return 0;
+	}
+	vec C = intersect(l,r);
+	//printf("%lf\n",C.x);
+	if(C.x < pos[n + 1].x) ++sum;
+	//printf("%d\n",sum);
+	if(sum & 1) return 2;
+	return 0;
+}
+
+int main(){
+	int i,tt = 0;
+	//while(1){
+		//++tt;
+		scanf("%d",&n);
+		//if(!n) return 0;
+		//if(tt ^ 1) puts("");
+	//	printf("Problem %d:\n",tt);
+		for(i = 1;i <= n;i++){
+			scanf("%Lf %Lf",&pos[i].x,&pos[i].y);
+		}
+		if(area() <= 0) reverse(pos + 1,pos + n + 1);
+		scanf("%d",&m);
+		for(i = 1;i <= m;i++){
+			scanf("%Lf %Lf",&pos[n + 1].x,&pos[n + 1].y);
+			printf("%d\n",check());
+		}
+	//}
+	return 0;
+}
+/*
+5 3
+2 0
+4 0
+4 4
+3 2
+2 4
+3 3
+3 2
+4 2
+*/
+

@@ -1,0 +1,3 @@
+var x = Number(prompt());
+console.log(x**3)
+

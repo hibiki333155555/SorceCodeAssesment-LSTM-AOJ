@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+#define dou double
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define gi greater<int>
+#define int2 int,int
+#define pb push_back
+#define mp make_pare
+#define emp emplace
+#define rep(i,a,n) for(int i=(int)(a);i<(int)(n);i++)
+#define p_rep(i,a,n) for(int i=(int)(a);i<=(int)(n);i++)
+#define r_rep(i,a,n) for(int i=(int)(a);i>(int)(n);i--)
+#define rp_rep(i,a,n) for(int i=(int)(a);i>=(int)(n);i--)
+#define fir first
+#define sec second
+#define uns unsigned
+#define INF 10e9
+#define fix(x,k) fixed<<setprecision(k)<<x
+using namespace std;
+int main(){
+    int a,b,x; cin>>a>>b>>x;
+    int lit=x/1000;
+    int mil=ceil((dou)(x%1000)/500.00);
+    if(lit*a>b*ceil((dou)(x/500))) cout<<b*ceil((dou)(x/500.00))<<"\n";
+    else if(mil*b>a*ceil((dou)(x/1000.00))) cout<<a*ceil((dou)(x/1000.00))<<"\n";
+    else cout<<lit*a+mil*b<<"\n";
+    return 0;
+}

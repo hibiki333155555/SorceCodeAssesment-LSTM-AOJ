@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cstdio>
+#include <fstream>
+#include <algorithm>
+#include <cmath>
+#include <deque>
+#include <vector>
+#include <queue>
+#include <string>
+#include <cstring>
+#include <map>
+#include <stack>
+#include <set>
+#include <sstream>
+#define mod 1000000007
+#define eps 1e-6
+#define ll long long
+#define INF 0x3f3f3f3f
+#define MEM(x,y) memset(x,y,sizeof(x))
+#define Maxn 25
+using namespace std;
+int n,m;
+int a[Maxn];
+int ans1[Maxn];// 分别表示两边的容器
+int ans2[Maxn];
+int main()
+{
+    cin>>n;
+    while(n--)
+    {
+        MEM(a,0);// 全部初始化
+        MEM(ans1,0);
+        MEM(ans2,0);
+        for(int i=1; i<=10; i++)// 读入数据
+            cin>>a[i];
+        ans1[1]=a[1];
+        ans2[0]=0;
+        int p1=0,p2=0;//ans1 ans2 的下标
+        int i;
+        for(i=2; i<=10; i++)// 一个一个往左右两个容器内放
+        {
+            if(a[i]>ans1[p1])
+                ans1[++p1]=a[i];
+            else if(a[i]>ans2[p2])
+                ans2[++p2]=a[i];
+            else//a[i]<ans1[p1]且 a[i]<ans2[p2]
+            {
+                cout<<"NO"<<endl;
+                break;
+            }
+        }
+        if(i>10)
+            cout<<"YES"<<endl;
+    }
+}

@@ -1,0 +1,90 @@
+from collections import deque
+from math import gcd
+
+
+def bfs(s, t, par, adj_matrix):
+    visited = [False] * len(adj_matrix)
+    dq = deque()
+    
+    visited[s] = True
+    dq.append(s)
+    
+    while dq:
+        now = dq.popleft()
+        if now == t:
+            break
+        for to, cost in enumerate(adj_matrix[now]):
+            if (not visited[to]) and cost > 0:
+                visited[to] = True
+                par[to] = now
+                dq.append(to)
+    
+    return True if visited[t] else False
+
+def ford_fulkerson(source, sink, adj_matrix):
+    parent = [-1] * len(adj_matrix)
+    max_flow = 0
+    INF = 10**15
+    
+    while bfs(source, sink, parent, adj_matrix):
+        # Pathの復元
+        path_flow = INF
+        s = sink
+        while s != source:
+            path_flow = min(path_flow, adj_matrix[parent[s]][s])
+            s = parent[s]
+        
+        # 最大流の更新
+        max_flow += path_flow
+        
+        # 残余グラフの更新
+        v = sink
+        while v != source:
+            u = parent[v]
+            adj_matrix[u][v] -= path_flow
+            adj_matrix[v][u] += path_flow
+            v = parent[v]
+
+    return max_flow
+
+def solve():
+    m, n = map(int, input().split())
+    if m == 0 and n == 0:
+        exit()
+    B, R = [], []
+    cnt = 0
+    while cnt < n + m:
+        a = list(map(int, input().split()))
+        if cnt < m:
+            B.extend(a)
+            cnt += len(a)
+        else:
+            R.extend(a)
+            cnt += len(a)
+    s = 0
+    t = m + n + 1
+    
+    """
+    start = 0
+    B = 1, 2, 3 (N=3)
+    R = 4, 5, 6, 7 (M = 4)
+    sink = 8
+    """
+    
+    V = t + 1
+    adj_matrix = [[0] * V for _ in range(V)]
+    for i in range(1, m+1):
+        adj_matrix[0][i] = 1
+    for i in range(1, n+1):
+        adj_matrix[m+i][t] = 1
+    
+    for i in range(m):
+        for j in range(n):
+            if gcd(B[i], R[j]) > 1:
+                adj_matrix[i+1][m+(j+1)] = 1
+    
+    max_flow = ford_fulkerson(s, t, adj_matrix)
+    print(max_flow)
+
+while True:
+    solve()

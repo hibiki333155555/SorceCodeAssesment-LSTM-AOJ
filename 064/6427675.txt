@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+int main(){
+    int n, q;
+    cin>>n>>q;
+    queue<pair<string, int>> que;
+    while(n--){
+        string process;
+        int time;
+        cin>> process >> time;
+        que.push({process, time});
+    }
+    
+    int time = 0;
+    while(que.size()!=0){
+        auto p = que.front();
+        que.pop();
+        p.second -= q;
+        time += q;
+        if(p.second<=0){
+            time += p.second;
+            cout << p.first << " " << time << endl;
+        }
+        else{
+            que.push(p);
+        }
+    }
+    return 0;
+}

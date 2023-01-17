@@ -1,0 +1,128 @@
+#define READ_FROM_FILE 0
+
+#if READ_FROM_FILE
+#include <fstream>
+#endif
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int inf = 2147483647;
+
+
+class Edge {
+public:
+	int v;
+	int c;
+	Edge* b_edge;
+
+public:
+	Edge() : v(-1), c(-1), b_edge(nullptr){}
+
+
+	Edge(int u, int cap, Edge* b) : v(u), c(cap), b_edge(b){}
+
+	~Edge(){}
+};
+
+class FordFulkerson {
+private:
+	int num_vertexes_;
+	int goal_;
+	vector<vector<Edge*>> graph_;
+	vector<bool> is_used_;
+
+private:
+	int dfs(int v, int f) {
+		if (v == goal_) {
+			return f;
+		}
+
+		is_used_[v] = true;
+		for (Edge* edge : graph_[v]) {
+			int& u = edge->v;
+			int& c = edge->c;
+			Edge* b_edge = edge->b_edge;
+
+			if (c > 0 && !is_used_[u]) {
+				int mf = dfs(u, min(c, f));
+				if (mf > 0) {
+					edge->c -= mf;
+					b_edge->c += mf;
+					return mf;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+public:
+	FordFulkerson(int num_vertexes) : num_vertexes_(num_vertexes), goal_(-1) {
+		graph_ = vector<vector<Edge*>>(num_vertexes_);
+		is_used_ = vector<bool>(num_vertexes_, false);
+		return;
+	}
+
+	~FordFulkerson(){
+		for (vector<Edge*>& edges : graph_) {
+			for (int i = 0; i < edges.size(); i++) {
+				delete edges[i];
+			}
+		}
+		return;
+	}
+
+	void add_edge(int v, int u, int c) {
+		Edge* f_edge = new Edge(u, c, nullptr);
+		Edge* b_edge = new Edge(v, 0, nullptr);
+
+		f_edge->b_edge = b_edge;
+		b_edge->b_edge = f_edge;
+
+		graph_[v].push_back(f_edge);
+		graph_[u].push_back(b_edge);
+		return;
+	}
+
+	int calc_max_flow(int s, int t) {
+		int total_flow = 0;
+		int f = inf;
+
+		goal_ = t;
+		while (f > 0) {
+			is_used_ = vector<bool>(num_vertexes_, false);
+			f = dfs(s, inf);
+			total_flow += f;
+		}
+
+		return total_flow;
+	}
+};
+
+
+int main(int argc, char** argv) {
+#if READ_FROM_FILE
+	ifstream ifs("test0.txt");
+	cin.rdbuf(ifs.rdbuf());
+#endif
+	int num_vertexes = -1;
+	int num_edges = -1;
+	int v = -1;
+	int u = -1;
+	int c = -1;
+
+	cin >> num_vertexes >> num_edges;
+
+	FordFulkerson ff(num_vertexes);
+
+	for (int i = 0; i < num_edges; i++) {
+		cin >> v >> u >> c;
+		ff.add_edge(v, u, c);
+	}
+
+	cout << ff.calc_max_flow(0, num_vertexes - 1) << endl;
+	return 0;
+}
+

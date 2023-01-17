@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#ifdef _RUTHEN
+#include "debug.hpp"
+#else
+#define show(...) true
+#endif
+
+using ll = long long;
+#define rep(i, n) for (int i = 0; i < (n); i++)
+template <class T> using V = vector<T>;
+
+int f(V<string>& s) {
+    int N = s.size(), M = s[0].size();
+    V<V<int>> cum(N + 1, V<int>(2, 0));
+    int ret = 1 << 30;
+    rep(i, N) {
+        rep(j, 2) cum[i + 1][j] += cum[i][j];
+        rep(j, M) { cum[i + 1][s[i][j] == 'o']++; }
+    }
+    for (int i = 1; i < N; i++) {
+        ret = min(ret, cum[i][0] + cum[N][1] - cum[i][1]);
+        ret = min(ret, cum[i][1] + cum[N][0] - cum[i][0]);
+    }
+    return ret;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int N, M;
+    cin >> N >> M;
+    V<string> s(N);
+    rep(i, N) cin >> s[i];
+    int ans = 1 << 30;
+    ans = min(ans, f(s));
+    V<string> t(M);
+    rep(i, N) rep(j, M) t[j] += s[i][j];
+    ans = min(ans, f(t));
+    cout << ans << '\n';
+    return 0;
+}

@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int x,i,q,y;
+    string c,d;
+    map<string,int>mp;
+    cin>>q;
+    for(i=0;i<q;i++){
+        cin>>x;
+        if(x==0){
+            cin>>c>>y;
+            mp[c]=y;
+        }
+        else if(x==1){
+            cin>>c;
+            cout<<mp[c]<<endl;
+        }
+        else if(x==2){
+            cin>>c;
+            mp.erase(c);
+        }
+        else if(x==3){
+                cin>>c>>d;
+            for(auto it=mp.lower_bound(c);it!=mp.upper_bound(d);it++)
+                {
+            cout<<it->first<< " "<<it->second<<endl;
+            }
+        }
+    }
+
+    return 0;
+}
+

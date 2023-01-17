@@ -1,0 +1,9 @@
+import java.util.Scanner;
+
+class Main{
+    int a = sc.nextInt();
+    int b = sc.nextInt();
+    int S = a * b;
+    int P = 2 * (a + b);
+    System.out.println(S + "" + P);
+}

@@ -1,0 +1,16 @@
+l = input()
+l = list(map(int, l.split()))
+a = l[0]
+b = l[1]
+c = l[2]
+
+if a > b:
+    a, b = b, a
+
+if c < a:
+    a, c = c, a
+
+if b < c and c < a:
+    b, c = c, b
+
+print(a, " " + b, " ", c)

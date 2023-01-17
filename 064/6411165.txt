@@ -1,0 +1,30 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n, cards[4][14];
+    string suits[4] = {"S", "H", "C", "D"};
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        string s;
+        int r;
+        cin >> s >> r;
+        if (s == "S") {
+            cards[0][r - 1] = 1; 
+        } else if (s == "H") {
+            cards[1][r - 1] = 1;
+        } else if (s == "C") {
+            cards[2][r - 1] = 1;
+        } else if (s == "D") {
+            cards[3][r - 1] = 1;
+        }
+    }
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 14; j++) {
+            if (cards[i][j] == 0) {
+                cout << suits[i] << " " << j << endl;
+            }
+        }
+    }
+    return 0;
+}

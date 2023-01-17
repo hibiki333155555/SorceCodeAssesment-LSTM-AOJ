@@ -1,0 +1,18 @@
+while True:
+    H,W=map(int,input().split())
+    if H==0 and W==0:
+        break 
+    w=W//2 
+    for h in range(H//2):
+        if W%2==0:
+            print("#."*w)
+            print(".#"*w)
+        else:
+            print("#."*w+"#")
+            print(".#"*w+".")
+    if H%2==1:
+        if W%2==0:
+            print("#."*w)
+        else:
+            print("#."*w+"#")
+    print()

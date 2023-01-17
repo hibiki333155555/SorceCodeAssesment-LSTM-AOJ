@@ -1,0 +1,10 @@
+while(True):
+    word = input()
+    if input() == "-":
+        break
+    m = int(input())
+    for i in range(m):
+        sh = int(input())
+        word = word[sh:] + word[:sh]
+    print(word)
+

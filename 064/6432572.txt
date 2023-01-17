@@ -1,0 +1,10 @@
+import math
+n=input()
+x=list(map(float,raw_input().split()))
+y=list(map(float,raw_input().split()))
+p=[1,2,3,1]
+for i in range(n):
+    d = abs(x[i]-y[i])
+    D.append(d)
+for i in range(4):
+    print sum(D[n*i:n+n*i])**(1.0/p[i])

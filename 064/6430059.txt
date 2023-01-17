@@ -1,0 +1,16 @@
+#include <iostream>
+#include <math.h>
+using namespace std;
+int main(){
+    int a,b,c;cin>>a;
+    int f[a];
+    for(int i=0;i<a;i++){
+        cin>>b>>c;
+        f[i]=b%c;
+        if(f[i]==0){
+            f[i]=c;
+        }
+    }
+    for(int i=0;i<a;i++)cout<<f[i]<<endl;
+    return(0);
+}

@@ -1,0 +1,112 @@
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+#include <string>
+#include <queue>
+#include <vector>
+#include <stack>
+#include <map>
+#include <utility>
+#define cs cout << "Wish You AC!" << endl;
+#define js ios::sync_with_stdio(false); cin.tie(0);
+#define MEM(a,x) memset(a,x,sizeof(a))
+#define lowbit(x) (x&-x)
+#define lson(x) x*2
+#define rson(x) x*2 + 1
+#define ll long long
+#define ull unsigned long long
+#define debug(x) std::cout << #x << " is " << (x) << '\n'
+#define INF 1e14
+#define pb push_back
+#define pii pair<ll, ll>
+using namespace std;
+inline void read(ll &x){
+    char c; int flag=0;
+    while(!isdigit(c=getchar()))
+        if(c=='-') flag=1;
+    x=c-'0';
+    while(isdigit(c=getchar()))
+        x=x*10+c-'0';
+    if(flag) x=-x;
+}
+const int N = 2e5 + 10;
+ll n;
+ll w[N];
+struct Node{
+    ll l, r;
+    ll sum;
+    ll add;
+}tr[N << 2];
+void pushup(ll u)
+{
+    tr[u].sum = min(tr[u << 1].sum, tr[u << 1 | 1].sum);
+}
+void build(ll u, ll l, ll r)
+{
+    if(l == r){
+        tr[u] = {l, r, (1<<31)-1, -1};
+    }
+    else{
+        tr[u] = {l, r, (1<<31)-1, -1};
+        ll mid = (l + r) >> 1;
+        build(u << 1, l, mid); build(u << 1 | 1, mid + 1, r);
+    }
+}
+void pushdown(ll u)
+{
+    if(tr[u].add >= 0){
+        tr[u << 1].add = tr[u].add; tr[u << 1 | 1].add = tr[u].add;
+        tr[u << 1].sum = tr[u << 1 | 1].sum = tr[u].add;
+        tr[u].add = -1;
+    }
+}
+void modify(ll u, ll l, ll r, ll d)
+{
+    if(tr[u].l >= l && tr[u].r <= r){
+        tr[u].sum = d;
+        tr[u].add = d;
+        return;
+    }
+    else{
+        pushdown(u);
+        ll mid = (tr[u].l + tr[u].r) >> 1;
+        if(l <= mid) modify(u << 1, l, r, d);
+        if(r > mid) modify(u << 1 | 1, l, r, d);
+        pushup(u);
+    }
+}
+ll query(ll u, ll l, ll r)
+{
+    if(tr[u].l >= l && tr[u].r <= r){
+        return tr[u].sum;
+    }
+    else{
+        pushdown(u);
+        ll mid = (tr[u].l + tr[u].r) >> 1;
+        ll sum = INF;
+        if(l <= mid) sum = min(sum, query(u << 1, l, r));
+        if(r > mid) sum = min(sum, query(u << 1 | 1, l, r));
+        return sum;
+    }
+}
+int main()
+{
+    ll q;
+    cin >> n >> q;
+    for(ll i = 1; i <= n; i++) read(w[i]);
+    build(1, 1, n);
+    while(q--)
+    {
+        char op[2]; ll l, r;
+        scanf("%s%lld%lld", op, &l, &r);
+        if(op[0] == 'C'){
+            ll d; read(d);
+            modify(1, l, r, d);
+        }
+        else cout << query(1, l, r) << endl;
+    }
+    return 0;
+}
+

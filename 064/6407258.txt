@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for (int i = 0; i < (n); ++i)
+
+struct Node {
+    int key;
+    Node *left, *right, *parent;
+};
+
+Node *root, *NIL;
+
+void insert(int key){
+    Node *x = root;
+    Node *y = NIL;
+    Node *z;
+
+    z = (Node *)malloc(sizeof(Node));
+    z->key = key;
+    z->left = NIL;
+    z->right = NIL;
+
+    while(x != NIL){
+        y = x;
+        if(x->key > z->key){
+            x = x->left;
+        } else {
+            x = x->right;
+        }
+    }
+
+    z->parent = y;
+    if(y == NIL){
+        root = z;
+    } else {
+        if(y->key > z->key){
+            y->left = z;
+        } else {
+            y->right = z;
+        }
+    }
+}
+
+Node * find(Node *u, int k){
+    while(u != NIL && k != u->key){
+        if(k < u->key) u = u->left;
+        else u = u->right;
+    }
+    return u;
+}
+
+void inorder(Node *u){
+    if(u == NIL) return;
+    inorder(u->left);
+    printf(" %d", u->key);
+    inorder(u->right);
+}
+
+void preorder(Node *u){
+    if(u == NIL) return;
+    printf(" %d", u->key);
+    preorder(u->left);
+    preorder(u->right);
+}
+
+int main() {
+    int n, a;
+    cin >> n;
+    string cmd;
+    rep(i, n){
+        cin >> cmd;
+        if(cmd == "insert"){
+            cin >> a;
+            insert(a);
+        } else if(cmd == "find"){
+            cin >> a;
+            Node *t = find(root, a);
+            if(t != NIL) cout << "yes" << endl;
+            else cout << "no" << endl;
+        } else if(cmd == "print"){
+            inorder(root);
+            cout << endl;
+            preorder(root);
+            cout << endl;
+        }
+    }
+    return 0;
+}

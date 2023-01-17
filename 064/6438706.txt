@@ -1,0 +1,11 @@
+while True:
+    str=input()
+    num=str.split()
+    N1=int(num[1])
+    N2=int(num[2])
+    if N1==0 and N2==0:
+        break
+    elif N1>=N2:
+        print(str)
+    elif N1<=N2:
+        print("%d %d"%(N2,N1))

@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MOD 998244353
+
+int main() {
+  
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  
+  int n;
+  cin >> n;
+  vector<long long> a(n);
+  for (int i=0;i<n;i++) {
+    cin >> a[i];
+  }
+  for (int i=0;i<n;i++) {
+    a[i] += i;
+    a[i] = min(a[i],(long long)n);
+  }
+  sort(a.begin(),a.end());
+  long long ans = 1;
+  for (int i=0;i<n;i++) {
+    ans = ans*(a[i]-i);
+    ans %= MOD;
+  }
+  cout << ans << endl;
+}
+
+
+

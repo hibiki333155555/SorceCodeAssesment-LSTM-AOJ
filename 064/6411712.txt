@@ -1,0 +1,86 @@
+#pragma GCC optimize("Ofast")
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  int n,m;
+  cin >> n >> m;
+  set<string> st;
+  for(int i=0;i<m;i++){
+    string mem;
+    cin >> mem;
+    st.insert(mem);
+  }
+  vector<pair<int,string>> keep;
+  for(auto &nx : st){
+    int qc=0;
+    for(auto &ny : nx){
+      if(ny=='?'){qc++;}
+    }
+    keep.push_back({qc,nx});
+  }
+  sort(keep.begin(),keep.end());
+  reverse(keep.begin(),keep.end());
+  st.clear();
+  m=keep.size();
+
+  for(int i=0;i<m;i++){st.insert(keep[i].second);}
+
+  vector<bitset<400>> lbs(m);
+  vector<bitset<100>> qbs(m);
+  int id=0;
+  for(auto &nx : st){
+    for(int i=0;i<n;i++){
+      if(nx[i]=='A' || nx[i]=='?'){lbs[id].set(4*i);}
+      if(nx[i]=='C' || nx[i]=='?'){lbs[id].set(4*i+1);}
+      if(nx[i]=='G' || nx[i]=='?'){lbs[id].set(4*i+2);}
+      if(nx[i]=='T' || nx[i]=='?'){lbs[id].set(4*i+3);}
+      if(nx[i]=='?'){qbs[id].set(i);}
+    }
+    id++;
+  }
+  bitset<400> lall;
+  for(int i=0;i<4*n;i++){lall.set(i);}
+  bitset<100> qall;
+  for(int i=0;i<n;i++){qall.set(i);}
+
+  vector<bitset<400>> lpre((1<<15),lall),lsuf((1<<15),lall);
+  vector<bitset<100>> qpre((1<<15),qall),qsuf((1<<15),qall);
+  for(int i=0;i<(1<<15);i++){
+    for(int j=0;j<15;j++){
+      if((i&(1<<j))==0){continue;}
+      if(j<m){
+        lpre[i]&=lbs[j];
+        qpre[i]&=qbs[j];
+      }
+      if((15+j)<m){
+        lsuf[i]&=lbs[15+j];
+        qsuf[i]&=qbs[15+j];
+      }
+    }
+  }
+
+  vector<int> mem(n+1,0);
+  for(int i=1;i<(1<<m);i++){
+    int pc=__builtin_popcount((unsigned int)i);
+    bool ck=false;
+    int lpc=(lpre[i&((1<<15)-1)]&lsuf[i>>15]).count();
+    int qpc=(qpre[i&((1<<15)-1)]&qsuf[i>>15]).count();
+    lpc-=3*qpc;
+    if(lpc==n){
+      if(pc%2){mem[qpc]++;}
+      else{mem[qpc]--;}
+    }
+  }
+
+  long double res=0.0;
+  for(int i=0;i<=n;i++){
+    res+=((long double)mem[i])*pow(4.0,i);
+  }
+  res/=pow(4.0,n);
+  cout << res << '\n';
+  return 0;
+}

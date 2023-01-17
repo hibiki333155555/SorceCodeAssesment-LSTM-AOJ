@@ -1,0 +1,7 @@
+import math
+s=input()
+r=float(s)
+zone=math.PI*r**2
+nagasa=2*math.PI*r
+
+print("{0:6f} {1:6f}".format(zone,nagasa))

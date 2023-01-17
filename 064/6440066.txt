@@ -1,0 +1,60 @@
+//
+// Created by TangQihui on 2022/3/29.
+//
+#include "iostream"
+using namespace std;
+#define N 100
+int Pre[N];
+int In[N];
+typedef struct node{
+    int id;
+    int parent,left,right;
+}node;
+node T[N];
+int O[N];
+int cn=0;
+int reproduction(int l,int r,int p){
+    if (l>r)return -1;
+    else{
+        int f,i;
+        for (i = l; i <= r; ++i) {
+            if (Pre[cn]==In[i]){
+                break;
+            }
+        }
+        f = cn;
+        cn++;
+        T[f].id = In[i];
+        T[f].parent = p;
+        T[f].left = reproduction(l,i-1,f);
+        T[f].right = reproduction(i+1,r,f);
+        return f;
+    }
+}
+int flag=0;
+void postOrder(int x){
+    if (x!=-1){
+        postOrder(T[x].left);
+        postOrder(T[x].right);
+        O[flag++] = T[x].id;
+    }
+}
+int main(){
+    int n;
+    cin>>n;
+    for (int i = 0; i < n; ++i) {
+        cin>>Pre[i];
+    }
+    for (int i = 0; i < n; ++i) {
+        cin>>In[i];
+    }
+    int root = reproduction(0,n-1,-1);
+    postOrder(root);
+    for (int i = 0; i < n; ++i) {
+        if (i)cout<<' ';
+        cout<<O[i];
+    }
+    cout<<endl;
+    return 0;
+}
+

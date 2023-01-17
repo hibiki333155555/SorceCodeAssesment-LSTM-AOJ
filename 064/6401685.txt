@@ -1,0 +1,18 @@
+from sys import stdin
+
+q = int(input())
+M = dict()
+for i in stdin:
+    op = i.split()
+    if op[0] == "0":
+        M[op[1]] = int(op[2])
+    elif op[0] == "1":
+        try:
+            print(M[op[1]])
+        except:
+            print(0)
+    elif op[0] == "2":
+        try:
+            M.pop(op[1])
+        except:
+            i = 0

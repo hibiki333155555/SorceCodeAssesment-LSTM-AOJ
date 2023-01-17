@@ -1,0 +1,14 @@
+
+#include<iostream>
+
+int main()
+{
+    int a, b;
+    std::cin >> a;
+    std::cin >> b;
+    int S = a * b;
+    int L = 2 * (a + b);
+    
+    std::cout << S << " " << L << std::endl;
+    return 0;
+}

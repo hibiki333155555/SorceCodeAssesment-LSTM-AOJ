@@ -1,0 +1,27 @@
+import java.util.* ;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in) ;
+        int a = sc.nextInt();
+        int sum = 0;
+        int max ;
+        int min ;
+        
+        int[] list = new list[a]; 
+        for (int i = 0;i<a;i++){
+            int b =sc.nextInt();
+            sum += b;
+        }
+        max = list[0];
+        min = list[0];
+        for (int n = 1 ;n < a;n++) {
+            if (list[n] > max) {
+                max = list[n];
+            }else if (list[n] > min) {
+            min = list[n] ;
+            }
+        }
+        System.out.println(min +" "+max+" "+sum);
+    }
+}

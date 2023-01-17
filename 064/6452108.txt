@@ -1,0 +1,6 @@
+t = gets.to_i
+h, r = t.divmod(3600)
+m, r = r.divmod(60)
+s = r
+
+puts "#{h}:#{m}:#{s}"

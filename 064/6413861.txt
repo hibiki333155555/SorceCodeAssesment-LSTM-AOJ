@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define rep(i,a,b) for(int i=a;i<b;i++)
+#define fore(i,a) for(auto &i:a)
+
+int N, W;
+
+int main() {
+  cin >> N >> W;
+  
+  vector<int> value(N);
+  vector<int> weight(N);
+  
+  rep(i,0,N) cin >> value.at(i) >> weight.at(i);
+  
+  vector<vector<int> > dp(N+1, vector<int>(W+1, 0));
+  
+  rep(i,0,N) {
+    rep(j,0,W+1) {
+      rep(k,0,10000) {
+        if (j-k*weight.at(i) < 0) break;
+        if (k != 0) dp.at(i+1).at(j) = max(dp.at(i).at(j-k*weight.at(i)) + value.at(i)*k, dp.at(i).at(j));
+        else dp.at(i+1).at(j) = dp.at(i).at(j);
+      }
+    }
+  }
+  
+  cout << dp.at(N).at(W) << endl;
+}
+

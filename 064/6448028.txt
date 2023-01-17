@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+int Cubic(int a){
+    return a*a*a;
+}
+
+int main(void){
+
+    int a;
+    
+    scanf("%d",&a);
+    printf("%d\n",Cubic(a));
+
+    return 0;
+}

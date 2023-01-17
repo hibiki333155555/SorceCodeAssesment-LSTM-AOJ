@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+/*Global*/
+int S[1000000];
+int T[1000000];
+int counter = 0;
+
+void BinarySearch(int vec[], int n, int key){
+    int begin = 0, end = n, mid;
+    while(begin < end){
+        mid = (begin + end) / 2;
+        if(mid == key){
+            counter++;
+            return;
+        }
+        if(mid < key){
+            begin = mid + 1;
+        }else if(mid > key){
+            end = mid;
+        }
+    }
+}
+
+int main(){
+    /*標準入力*/
+    int n,q,tmp;
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        tmp = -1;
+        cin >> tmp;
+        S[i] = tmp;
+    }
+    cin >> q;
+    for(int i = 0; i < q; i++){
+        tmp = -1;
+        cin >> tmp;
+        T[i] = tmp;
+    }
+
+    /*BinarySearch()にkeyとS[]を投げる*/
+    for(int i = 0; i < q; i++){
+        int key = T[i];
+        BinarySearch(S, n, key);
+    }
+
+    cout << counter << endl;
+
+}

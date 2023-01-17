@@ -1,0 +1,39 @@
+main()
+{
+#if 0    
+    short a, b=0;
+    
+    scanf("%x %x", &a, &b);
+    
+    /* aとbを比較 */
+    if(a<b)
+    {
+        printf("%x < %x\n", a, b);
+    }
+    else if(a>b)
+    {
+        printf("%x > %x\n", a, b);
+    }
+    else if(a==b)
+    {
+        printf("%x == %x\n", a, b);
+    }
+#endif
+    int a, b=0;
+    
+    scanf("%d %d", &a, &b);
+    
+    /* aとbを比較 */
+    if(a<b)
+    {
+        printf("%d < %d\n", a, b);
+    }
+    else if(a>b)
+    {
+        printf("%d > %d\n", a, b);
+    }
+    else if(a==b)
+    {
+        printf("%d == %d\n", a, b);
+    }
+}

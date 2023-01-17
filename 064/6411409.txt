@@ -1,0 +1,20 @@
+n = int(input())
+ans = 0
+for _ in range(n):
+    i = int(input())
+    j = 3
+    if i == 2:
+        ans += 1
+        continue
+    elif i % 2 == 0:
+        continue
+    flag = True
+    while j*j <= i:
+        if i % j == 0:
+            flag =False
+            break
+        j += 2
+    if flag:
+        ans += 1
+
+print(ans)

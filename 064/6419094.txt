@@ -1,0 +1,11 @@
+#include <stdio.h>
+int main ()
+{
+//mizanur
+int a,X;
+scanf("%d",&a);
+X=a*a*a;
+printf("%d=X",X);
+return 0;
+}
+

@@ -1,0 +1,30 @@
+#include<stdio.h>
+#include<ctype.h>
+
+int main(void)
+{
+    int count[26];
+    int num,i;
+    char ch;
+    for(i=0;i<26;i++)
+    {
+        count[i]=0;
+    }
+    while(1)
+    {
+            scanf("%c",&ch);
+            if(ch==EOF)break;
+    		if('A'<=ch&&ch<='Z')
+    		ch=tolower(ch);
+    		if('a'<=ch&&ch<='z')
+    		{
+                num=ch-'a';
+                count[num]++;
+    		}
+    }
+    for(i=0;i<26;i++)
+    {
+        printf("%c:%d\n",'a'+i,count[i]);
+    }
+    return 0;
+}

@@ -1,0 +1,10 @@
+mozi = "".join(input().split())
+memo = [ 0 for _ in range(26)]
+
+for i in mozi:
+  for j in range(26):
+    if (ord(i) == (ord("a") + j)) or (ord(i) == (ord("A") + j)):
+      memo[j] += 1
+
+for i in range(26):
+  print(chr(ord("a") + i) + " : " + str(memo[i]))

@@ -1,0 +1,11 @@
+let x = require(`fs`).readFileSync(`/dev/stdin`, `utf-8`).split(`\n`);
+/*
+for (let i=0; i<x.length; i++) {
+    if(x[i] == 0) break;
+    console.log(`Case ${i+1}: ${x[i]}`);
+}
+*/
+console.log(x.map((item, index) => {
+    if (item == 0) break;
+    `Case ${index+1}: ${item};
+    }`).join(`\n`));

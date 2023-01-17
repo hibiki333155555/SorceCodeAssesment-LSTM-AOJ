@@ -1,0 +1,13 @@
+#include <stdio.h>
+#define pi 3.1415926
+int main(){
+   int r;
+   scanf("%d",&r);
+   float area,cir;
+   area=(float)pi*r*r;
+   cir=(float)pi*2*r;
+   printf("%0.6f %0.6f\n",area,cir);
+   return 0;
+}
+
+

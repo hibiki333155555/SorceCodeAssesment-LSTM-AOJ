@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+int main(){
+    
+    int a;
+    int b:
+    int seki;
+    int wa;
+    
+    scanf("%d %d",&a,&b);
+    seki = a*b;
+    wa = 2*(a+b);
+    printf("%d %d\n",seki,wa);
+    return 0;
+}

@@ -1,0 +1,57 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    int n; cin >> n;
+    string s; cin >> s;
+    int res = 0;
+    for(int i=0;i<n;i++){
+        if(s[i] == 'N'){
+            i++;
+            bool f = false;
+            while(i<n and s[i] == 'A'){
+                i++;
+                f = true;
+            }
+            if(i == n)break;
+            if(f)res++;
+            i--;
+        }
+    }
+    cout << res << endl;
+}
+

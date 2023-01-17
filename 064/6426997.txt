@@ -1,0 +1,21 @@
+// E - Toggling Cases
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string x;
+    getline(cin,x);
+    for (int i=0; i<x.length(); i++) {
+        char c = x[i];
+        if (c>='A' and c<='Z') {
+            c='a'+c-'A';
+        }
+        else if (c>='a' and c<='z') {
+            c ='A'+c-'a';
+        }
+        cout <<c;
+    }
+    cout <<endl;
+}

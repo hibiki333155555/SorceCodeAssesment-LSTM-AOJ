@@ -1,0 +1,57 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    height, width = map(int, f.readline().split())
+    grid = []
+    for _ in range(height):
+        row = list(map(int, f.readline().split()))
+        grid.append(row)
+
+    hist = [[0] * (width + 1) for _ in range(height)]
+    for x in range(width):
+        for y in range(height):
+            if grid[y][x] == 1:
+                hist[y][x] = 0
+            else:
+                hist[y][x] = hist[y - 1][x] + 1 if y > 0 else 1
+
+    max_area = 0
+    for y in range(height):
+        stack = []
+        hist[y][width] = 0
+        for x in range(width + 1):
+            rect = [hist[y][x], x]
+            if len(stack) == 0:
+                stack.append(rect)
+            else:
+                if stack[-1][0] < rect[0]:
+                    stack.append(rect)
+                elif stack[-1][0] > rect[0]:
+                    pos = x
+                    while len(stack) > 0 and stack[-1][0] >= rect[0]:
+                        p_rect = stack.pop()
+                        area = p_rect[0] * (x - p_rect[1])
+                        max_area = max(max_area, area)
+                        pos = p_rect[1]
+                    rect[1] = pos
+                    stack.append(rect)
+
+    print(max_area)
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

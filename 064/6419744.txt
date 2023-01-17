@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define rep(i,a,b) for(int i=a;i<b;i++)
+#define fore(i,a) for(auto &i:a)
+
+ll INF = 100000000LL;
+
+int main() {
+  vector<ll> tetra(185);
+  rep(i,1,185) {
+    tetra.at(i) = i*(i+1)*(i+2)/6;
+  }
+  
+  while (true) {
+    ll num;
+    cin >> num;
+    if (num==0) break;
+    
+    vector<vector<ll> > dp(185, vector<ll>(num+1, INF));
+    vector<vector<ll> > dp2(185, vector<ll>(num+1, INF));
+    rep(i,0,num+1) {
+      dp.at(1).at(i) = i;
+      dp2.at(1).at(i) = i;
+    }
+    
+    rep(i,2,185) {
+      rep(j,0,num+1) {
+        dp.at(i).at(j) = min(dp.at(i).at(j), dp.at(i-1).at(j));
+        if(j-tetra.at(i) >= 0) {
+          dp.at(i).at(j) = min(dp.at(i).at(j), dp.at(i-1).at(j-tetra.at(i))+1);
+          dp.at(i).at(j) = min(dp.at(i).at(j), dp.at(i).at(j-tetra.at(i))+1);
+        }
+        
+        dp2.at(i).at(j) = min(dp2.at(i).at(j), dp2.at(i-1).at(j));
+        if (tetra.at(i) % 2 == 1) {
+          if(j-tetra.at(i) >= 0) {
+            dp2.at(i).at(j) = min(dp2.at(i).at(j), dp2.at(i-1).at(j-tetra.at(i))+1);
+            dp2.at(i).at(j) = min(dp2.at(i).at(j), dp2.at(i).at(j-tetra.at(i))+1);
+          }
+        }
+      }
+    }
+    
+    cout << dp.at(184).at(num) << " " << dp2.at(184).at(num) << endl;
+  }
+  return 0;
+}
+

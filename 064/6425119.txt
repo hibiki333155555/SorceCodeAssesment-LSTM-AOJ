@@ -1,0 +1,7 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int d; cin>>d;
+    cout<<d/60/60<<" "<<d/60%60<<" "<<d%60%60<<endl;
+    return 0;
+}

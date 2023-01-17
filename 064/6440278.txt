@@ -1,0 +1,30 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    string n;
+    int m;
+    cin >> n;
+    cin >> m;
+    while(n != "-")
+    {
+    for(int i = 0; i < m; i++)
+    {
+       int h = 0;
+       cin >> h;
+       string t , p;
+       t = n.substr(0,h - 1);
+       p = n.substr(h,n.size()-1);
+       n =  p + t;
+       cin >> m;
+       cin >> n;
+    }
+    }
+    cout << n << endl;
+    return 0;
+}
+

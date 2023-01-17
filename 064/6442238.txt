@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+int main(void){
+    int i,c,a,b,flg;
+    
+    while(1){
+        c=0;
+        scanf("%d %d",&a,&b);
+        if(a==0&&b==0) break;
+        for(i=a;i<=b;i++){
+            flg=0;
+            if(i%4==0){
+                if(i%100==0){
+                    if(i%400==0){
+                        flg=1;
+                    }
+                    else{
+                        flg=0;
+                    }
+                }
+                else{
+                    flg=1;
+                }
+            }
+            if(flg==1){
+                printf("%d\n",i);
+                c++;
+            }
+        }
+        if(c==0){puts("NA");}
+        puts("");
+    }
+}

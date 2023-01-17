@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int y,m,d,y2,m2,d2;
+    cin>>y>>m>>d;
+    cin>>y2>>m2>>d2;
+    int ans=abs(y2-y);
+    if(m2>m&&y2>y){
+        ans++;
+    }else if(m==m2&&d2>d){
+        ans++;
+    }
+    cout<<ans<<"\n";
+    return(0);
+}

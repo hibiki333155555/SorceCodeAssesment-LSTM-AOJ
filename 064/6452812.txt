@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+using namespace std;
+int f(string s){
+  if (s.size() == 1){
+    return s[0] - 'a';
+  } else {
+    return 26 + (s[0] - 'a') * 26 + (s[1] - 'a');
+  }
+}
+int main(){
+  string c1;
+  int r1;
+  string c2;
+  int r2;
+  cin >> c1 >> r1 >> c2 >> r2;
+  int x1 = f(c1);
+  int x2 = f(c2);
+  cout << (x2 - x1 + 1) * (r2 - r1 + 1) << endl;
+}

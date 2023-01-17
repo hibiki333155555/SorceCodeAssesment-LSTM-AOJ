@@ -1,0 +1,21 @@
+que = {}
+sumCnt = 0
+order = {}
+n, q = map(int, input().split())
+
+for i in range(n):
+    n, q = map(str, input().split())
+    que[n] = q
+
+while que != {}:
+    rest = 0
+    order = dict.fromkeys(que, 0)
+    rest = int(que.popitem()[1]) - int(q)
+    if rest != 0:
+        que[n[-1]] = rest
+        sumCnt += 100
+    elif rest == 0:
+        sumCnt += rest
+        order[n[-1]] = sumCnt
+    
+print(order)

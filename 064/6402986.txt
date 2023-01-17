@@ -1,0 +1,20 @@
+using System;
+class program
+{
+    static void Main(string[] args)
+    {
+        for( ; ; )
+        {
+            string[] s = Console.ReadLine().Split();
+            var h = int.Parse(s[0]);
+            var w = int.Parse(s[1]);
+            if(h == 0 && w == 0) break;
+            var f = new string("#",w);
+            for(int i = 0; i < h; i++)
+            {
+                Console.WriteLine(f);
+            }
+            Console.WriteLine();
+        }
+    }
+}

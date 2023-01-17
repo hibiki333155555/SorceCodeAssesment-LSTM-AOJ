@@ -1,0 +1,43 @@
+def BubbleSort(A, N):
+    flag = 1
+    i = 0
+    while flag:
+        flag = 0
+        for j in range(n-1,i,-1):
+            if A[j] < A[j-1]:
+                A[j],A[j-1] = A[j-1],A[j]
+                flag = 1
+
+    return A
+
+def SelectionSort(A,N):
+    for i in range(N):
+        minj = i
+        for j in range(i,N):
+            if A[j] < A[minj]:
+                minj = j
+
+        A[i],A[minj] = A[minj],A[i]
+
+    return A
+
+def isStable(A_in, out):
+    for i in range(n):
+        for j in range(i+1,n):
+            for a in range(n):
+                for b in range(a+1,n):
+                    if A_in[i][1] == A_in[j][1] and A_in[i]==out[b] and A_in[j]==out[a]:
+                        return "Not stable"
+    return "Stable"
+
+
+n = int(input())
+A = list(input().split())
+
+A1 = BubbleSort(A,n)
+print(*A1)
+print(isStable(A, A1))
+
+A2 = SelectionSort(A,n)
+print(*A2)
+print(isStable(A, A2))

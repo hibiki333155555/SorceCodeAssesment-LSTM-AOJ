@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+using namespace std;
+class DisjointSet {
+  public:
+  vector<int> rank, p;
+  DisjointSet(){};
+
+  DisjointSet(int size) {
+    rank.resize(size, 0);
+    p.resize(size, 0);
+    for (int i = 0; i < size; i++) {
+      makSet(i);
+    }
+  }
+  void makSet(int i) {
+    p[i] = i;
+    rank[i] = 0;
+  }
+  bool same(int x, int y) {
+    return findSet(x) == findSet(y);
+  }
+
+  void unite(int x, int y) {
+    link(findSet(x), findSet(y));
+  }
+  void link(int x, int y) {
+    if (rank[x] > rank[y]) {
+      p[y] = x;
+    } else {
+      p[x] = y;
+      if (rank[x] == rank[y]) {
+        rank[y]++;
+      }
+    }
+  }
+
+  int findSet(int x) {
+    int tmp = x;
+    while (x != p[x]) {
+      x = p[x];
+    }
+    while (tmp != x) {
+      int p2 = p[tmp];
+      p[tmp] = x;
+      tmp = p2;
+    }
+    return x;
+    // if (x != p[x]) {
+    //   p[x] = findSet(p[x]);
+    // }
+    // return p[x];
+  }
+};
+class Edge {
+  public:
+  int s, t, w;
+  Edge() {}
+  Edge(int s = 0, int t = 0, int w = 0) : s(s), t(t), w(w) {}
+  bool operator<(const Edge& e) const {
+    return this->w < e.w;
+  }
+};
+
+const static int MAX = 100001;
+const static int inf = (1 << 30);
+vector<Edge> g;
+int n, m;
+
+void solve() {
+  sort(g.begin(), g.end());
+  DisjointSet s = DisjointSet(n);
+  int u, v;
+
+  int cost = 0;
+  for (int i = 0; i < g.size(); i++) {
+    u = g[i].s;
+    v = g[i].t;
+
+    if (s.same(u, v))
+      continue;
+    else {
+      s.unite(u, v);
+      cost += g[i].w;
+    }
+  }
+
+  cout << cost << endl;
+}
+int main() {
+  cin >> n >> m;
+  int s, t, w;
+  for (int i = 0; i < m; i++) {
+    cin >> s >> t >> w;
+    g.push_back(Edge(s, t, w));
+  }
+  solve();
+  return 0;
+}

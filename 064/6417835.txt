@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <deque>
+#include <queue>
+#include <string>
+#include <iomanip>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <utility>
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#if __has_include(<atcoder/all>)
+#include <atcoder/all>
+using namespace atcoder;
+#endif
+using namespace std;
+using ll=long long;
+
+ll xx_abs(ll x){
+  if(x<0){
+    return -x;
+  }
+  return x;
+}
+
+int main(){
+  ll is,js,ks;
+  cin>>is>>js>>ks;
+  ll ig,jg,kg;
+  cin>>is>>js>>kg;
+  ll u=xx_abs(is-ig)+xx_abs(js-jg)+xx_abs(ks-kg);
+  if(u%3==0){
+    cout<<"Yes"<<endl;
+  }else{
+    cout<<"No"<<endl;
+  }
+}
+
+

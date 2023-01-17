@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int MOD = 1e9 + 7;
+ll n, a[10], t;
+int main ()
+{
+    cin >> n;
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    t=a[0];
+    for (int i = 1; i < n; ++i) t=(t*a[i])/__gcd(t, a[i]);
+    cout << t << '\n';
+    return 0;
+}

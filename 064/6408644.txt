@@ -1,0 +1,4 @@
+H,W=map(int,input().split())
+i=0
+for　i in range(10):
+    print(W)

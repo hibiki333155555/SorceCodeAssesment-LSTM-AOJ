@@ -1,0 +1,11 @@
+
+
+
+x = int(input())
+
+
+
+answer = x**3
+
+
+print(answer)

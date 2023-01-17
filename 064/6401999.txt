@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+int tc;
+
+void solve() {
+    int n; cin >> n;
+    double W; cin >> W;
+    vector<pair<double, double>> v(n);
+    for (auto& u : v) cin >> u.first >> u.second; // value and weight
+    sort(v.begin(), v.end(), [](auto& p_1, auto& p_2) {
+        return p_1.first/p_1.second > p_2.first/p_2.second;
+    });
+    double ans = 0;
+    for (int i = 0; i < n; i++) {
+        auto& u = v[i];
+        if (u.second < W) {
+            ans += u.first;
+            W -= u.second;
+        } else {
+            ans += u.first * (W/u.second);
+            break;
+        }
+    }
+    cout << fixed << setprecision(12) << ans << "\n";
+}
+
+int main() {
+    int t = 1; tc = 1; // cin >> t;
+    while (t--) solve(), tc++;    
+}

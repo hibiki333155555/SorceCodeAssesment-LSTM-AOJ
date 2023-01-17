@@ -1,0 +1,64 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int m, f, r, i = 0;
+    char scores[50];
+    while (true)
+    {
+        cin >> m >> f >> r;
+
+        if (m == -1 && f == -1 && r == -1)
+        {
+            i++;
+            break;
+        }
+        if (m == -1 || f == -1)
+        {
+            scores[i++] = 'F';
+            continue;
+        }
+        if (m + f >= 80)
+        {
+            scores[i++] = 'A';
+            continue;
+        }
+        else if (m + f >= 65)
+        {
+            scores[i++] = 'B';
+            continue;
+        }
+        else if (m + f >= 50)
+        {
+            scores[i++] = 'C';
+            continue;
+        }
+        else if (m + f >= 30)
+        {
+            scores[i] = 'D';
+            if (r >= 50)
+            {
+                scores[i] = 'C';
+            }
+
+            i++;
+            continue;
+        }
+        else if (m + f < 30)
+        {
+            scores[i++] = 'F';
+            continue;
+        }
+    }
+
+    for (int j = 0; j < i; j++)
+    {
+        cout << scores[j] << endl;
+    }
+
+    return 0;
+}

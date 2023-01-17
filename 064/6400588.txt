@@ -1,0 +1,11 @@
+#include <iostream>
+using namespace std;
+#define PI  3.14159265358979323846
+
+int main() {
+  double r;
+  cin >> r;
+  printf("%.6f %.6f\n", z * r * PI, 2.0 * z * PI);
+  return 0;
+}
+

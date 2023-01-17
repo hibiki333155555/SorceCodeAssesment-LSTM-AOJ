@@ -1,0 +1,20 @@
+B=[]
+W=[]
+a,b=map(int,raw_input().split())
+for i in range(a):
+    A=list(map(int,raw_input().split()))
+    W.append(A)
+for u in range(b):
+    c=input()
+    B.append(c)
+    
+X=[]
+for j in range(a):
+    for g in range(b):
+        x=W[j][g]
+        y=B[g]
+        z=x*y
+        X.append(z)
+for i in range(a):
+    print sum(X[i*b:a+b*i])
+    

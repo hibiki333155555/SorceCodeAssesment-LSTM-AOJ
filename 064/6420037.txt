@@ -1,0 +1,36 @@
+import java.util.*;
+
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][][] nyukyosha = new int[4][3][10];
+        int b; //棟
+        int f; //階
+        int r; //部屋
+        int v; //入居者数
+        
+        // 初期化
+        for(b=0;b<4;b++) for(f=0;f<3;f++) for(r=0;r<10;r++) nyukyosha[b][f][r] = 0;
+        
+        // 入力 → 入居者情報書き換え
+        for(int i=0;i<n;i++){
+            b = sc.nextInt();
+            f = sc.nextInt();
+            r = sc.nextInt();
+            v = sc.nextInt();
+            nyukyosha[b-1][f-1][r-1] += v;
+        }
+        
+        // 表示
+        for(b=0;b<4;b++){
+            for(f=0;f<3;f++){
+                for(r=0;r<10;r++){
+                    System.out.printf(" %d",nyukyosha[b][f][r]);
+                }
+                System.out.printf("\n");
+            }
+            if(b<3) System.out.println("####################");
+        }
+    }
+}

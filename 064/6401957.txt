@@ -1,0 +1,15 @@
+def main():
+    N = int(input())
+    a = list(map(int, input().split()))
+
+    for i in range(N-1,-1,-1):
+        if (i != N-1):
+            print(end=' ')
+
+        print(a[i], end='')
+
+    print()
+    
+
+if __name__ == "__main__":
+    main()

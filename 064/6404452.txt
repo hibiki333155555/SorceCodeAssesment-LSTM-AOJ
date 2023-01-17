@@ -1,0 +1,12 @@
+#include<stdio.h>
+int main()
+{
+     int r;
+    double area,circumference,p;
+    scanf("%d",&r);
+    p=3.141592653589793238;
+    area=p*r*r;
+    circumference=2*p*r;
+    printf("%lf %lf\n",area,circumference);
+}
+

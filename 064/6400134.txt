@@ -1,0 +1,31 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        boolean[][] found = new boolean[4][14];
+        for (int i = 0; i < n; i++) {
+            char suit = sc.next().charAt(0);
+            int num = sc.nextInt();
+            int id = 0;
+            switch (suit) {
+                case 'H':
+                    id = 1;
+                    break;
+                case 'C':
+                    id = 2;
+                    break;
+                case 'D':
+                    id = 3;
+                    break;
+            }
+            found[id][num] = true;
+        }
+        char[] suits = new char[] { 'S', 'H', 'C', 'D'};
+        for (int i = 0; i < 4; i++)
+            for (int j = 1; j <= 13; j++)
+                if (!found[i][j])
+                    System.out.printf("%c %d\n", suits[i], j);
+    }
+}

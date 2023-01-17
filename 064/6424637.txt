@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+
+#define ll long long
+#define ld long double
+#define rep(i,a,b) for (int i = a; i < b; i++)
+#define irep(i,a,b) for (int i = a; i > b; i--)
+
+using namespace std;
+
+int main(){
+    vector<vector<vector<int>>> a(4,vector<vector<int>>(3,vector<int>(10,0)));
+    int n;
+    cin >> n;
+    int b,f,r,v;
+    
+    string s = "####################";
+    //rep(i,0,20) s += "#";
+
+    rep(i,0,n){
+        cin >> b >> f >> r >> v;
+        a[b-1][f-1][r-1] += v;
+    }
+
+    rep(i,0,4){
+        rep(j,0,3){
+            rep(k,0,10){
+                cout << " " << a[i][j][k];
+            }
+            cout << endl;
+        }
+        if (i != 3) cout << s << endl;
+    }
+    //system("pause");
+    return 0;
+}

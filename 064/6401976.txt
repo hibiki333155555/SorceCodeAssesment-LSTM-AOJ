@@ -1,0 +1,11 @@
+import sys
+readline = sys.stdin.readline
+write = sys.stdout.write
+N = int(readline())
+k, *B = map(int, readline().split())
+M = sum(1 << b for b in B)
+if M == 0:
+    write("0:\n")
+for i in range(1, 1 << N):
+    if i & M == M:
+        write("%d: %s\n" % (i, " ".join(str(j) for j in range(N) if i & (1 << j))) )

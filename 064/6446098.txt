@@ -1,0 +1,23 @@
+N,W=map(int,input().split())
+vi=[0]+[]
+wi=[0]+[]
+for i in range(1,N+1):
+ v,w=list(map(int,input().split()))
+ vi.append(v)
+ wi.append(w)
+val=[]
+for i in range(N+1):
+ val.append([-10**9]*(W))
+val[0][0]=0
+for i in range(N+1):
+ for w in range(W):
+  if wi[i]<=W:
+   val[i][w]=max(val[i][w],val[i-1][w-wi[i]]+vi[i])
+  val[i][w]=max(val[i][w],val[i-1][w])
+
+print(val[N][W-1])
+  
+   
+  
+  
+  

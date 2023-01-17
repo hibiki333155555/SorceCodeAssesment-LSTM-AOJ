@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int LEN = 100004;
+struct P {
+    string name;
+    int time;
+};
+P A[LEN];
+int tail, head;
+void enqueue(int x){
+    A[tail].time = x;
+    if(tail + 1 == LEN) tail = 0;
+    else tail++;
+}
+int dequeue(){
+    return A[head].time;
+    if(head + 1 == LEN) head = 0;
+    else head++;
+}
+int main(){
+    int n, q, sum = 0;
+    P A[LEN];
+    cin >> n >> q;
+    for(int i = 0; i < n; i++) cin >> A[i].name >> A[i].time;
+    int head = 0, tail = n, MAX = n;
+    while(head != tail){
+        int a = dequeue();
+        if(a <= q){
+            sum += a;
+            cout << A[head].name << sum << endl;
+        }else{
+            sum += q;
+            if(head == 0) A[tail].name = A[LEN - 1];
+            else A[tail].name = A[head - 1].name;
+            enqueue(a - q);
+            
+        } 
+    }
+    
+    return 0;
+}
+
+

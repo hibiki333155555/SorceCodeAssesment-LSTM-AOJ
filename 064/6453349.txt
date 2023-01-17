@@ -1,0 +1,57 @@
+#include <stdio.h>
+
+char s[100001];
+
+int main(void)
+{
+    int n;
+    int i, j;
+    int flag;
+    
+    scanf("%d", &n);
+    for (i = 0; i < n; i++){
+        scanf("%s", s);
+        
+        j = 0;
+        flag = 0;
+        while (s[j + 1] != '\0'){
+            if (j % 2 == 1){
+                if (!(
+                    s[j] == 'U' && s[j + 1] == 'D' ||
+                    s[j] == 'U' && s[j + 1] == 'R' ||
+                    s[j] == 'D' && s[j + 1] == 'U' ||
+                    s[j] == 'D' && s[j + 1] == 'R' ||
+                    s[j] == 'L' && s[j + 1] == 'U' ||
+                    s[j] == 'L' && s[j + 1] == 'D' ||
+                    s[j] == 'L' && s[j + 1] == 'R')){
+// printf("(L%d->%c %c)", j, s[j], s[j + 1]);
+                    flag = 1;
+                    break;
+                }
+            }
+            else {
+                if (!(
+                    s[j] == 'U' && s[j + 1] == 'D' ||
+                    s[j] == 'U' && s[j + 1] == 'L' ||
+                    s[j] == 'D' && s[j + 1] == 'U' ||
+                    s[j] == 'D' && s[j + 1] == 'L' ||
+                    s[j] == 'R' && s[j + 1] == 'U' ||
+                    s[j] == 'R' && s[j + 1] == 'D' ||
+                    s[j] == 'R' && s[j + 1] == 'L')){
+                    flag = 1;
+// printf("<R%d->%c %c>", j, s[j], s[j + 1]);
+                    break;
+                }
+            }
+            j++;
+        }
+        if (flag == 0){
+            printf("Yes\n");
+        }
+        else {
+            printf("No\n");
+        }
+    }
+    return (0);
+}
+

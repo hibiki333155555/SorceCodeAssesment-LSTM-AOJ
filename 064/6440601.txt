@@ -1,0 +1,10 @@
+#include <iostream>
+
+int main(){
+    int x, C;
+    std::cin >> x;
+    C = x*x*x;
+    std::cout << C << "\n";
+
+    return 0;
+}

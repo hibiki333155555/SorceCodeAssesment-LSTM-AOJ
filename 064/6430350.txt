@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void output(vector<int>seq) {
+    for (int i = 0;i < seq.size();i++)
+		cout << seq.at(i);
+
+	cout << endl;
+	return;
+}
+
+int main() {
+	int N;
+	cin >> N;
+    
+	vector<int>seq(N);
+	for (int i = 0;i < N;i++)
+		cin >> seq.at(i);
+
+	for (int i = 0;i < N;i++) {
+		for (int j = 0;j < i;j++) {
+			if (seq.at(i - j) < seq.at(i - j - 1))
+				swap(seq.at(i - j), seq.at(i - j - 1));
+			else
+				break;
+		}
+		output(seq);
+	}
+}

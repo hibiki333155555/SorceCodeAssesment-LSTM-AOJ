@@ -1,0 +1,15 @@
+N = int(input())
+S = map(int, input().split(" "))
+
+d = {}
+for v in S:
+    if v not in d:
+        d[v] = 1
+    else:
+        d[v] = d[v]+ 1
+
+mini = []
+for k in d.keys():
+    if d[k] == min(d.values()):
+        mini.append(k)
+print(min(mini))

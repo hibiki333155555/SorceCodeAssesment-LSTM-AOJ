@@ -1,0 +1,8 @@
+import math
+
+i = input()
+r = int(i)
+area = '{:.6f}'.format(r ** 2 * math.pi)
+length = '{:.6f}'.format(r * 2 * math.pi)
+print(f"{area} {length}")
+

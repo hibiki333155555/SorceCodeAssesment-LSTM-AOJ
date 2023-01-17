@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+using namespace std;
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+#define rrep(i, n) for (int i = (int)(n)-1; i >= 0; i--)
+#define rep2(i, a, b) for (int i = (int)a; i < (int)(b); i++)
+#define rrep2(i, a, b) for (int i = (int)(b)-1; i >= (int)(a); i--)
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+
+int main(){
+    int N;
+    scanf("%d", &N);
+    gp_hash_table<int, pair<int, int> > mp;
+    rep(i, N) rep(j, N){
+        int A;
+        scanf("%d", &A);
+        if(mp.find(A) == mp.end()) mp[A] = make_pair(i+1, j+1);
+    }
+    int testcase_i;
+    scanf("%d", &testcase_i);
+    for (int ___ = 0; ___ < testcase_i; ___++){
+        int T;
+        scanf("%d", &T);
+        if(mp.find(T) == mp.end()) printf("-1\n");
+        else printf("%d %d\n", mp[T].first, mp[T].second);
+    }
+    return 0;
+}

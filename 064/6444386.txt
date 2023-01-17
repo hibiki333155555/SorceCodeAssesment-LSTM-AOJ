@@ -1,0 +1,19 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+int main() {
+    string deck;
+    int m, h;
+    while (true) {
+        cin >> deck >> m;
+        if (deck == "-") break;
+        for (int i = 0; i < m; i++) {
+            cin >> h;
+            deck = deck.substr(h, deck.size() - h) + deck.substr(0, h);
+        }
+        cout << deck << endl;
+    }
+    return 0;
+}

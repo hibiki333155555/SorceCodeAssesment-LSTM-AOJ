@@ -1,0 +1,2 @@
+const x = require('fs').readFileSync('/dev/stdin', 'utf8');
+console.log(Math.pow(x,3));

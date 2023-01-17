@@ -1,0 +1,9 @@
+N,W=map(int,input().split())
+VW=list(list(map(int,input().split()))for _ in range(N))
+dp=[-float("inf") for _ in range(W+1)]
+dp[0]=0
+for v,w in VW:
+    for i in range(W-w,-1,-1):
+        dp[i+w]=max(dp[i+w],dp[i]+v)
+
+print(max(dp))

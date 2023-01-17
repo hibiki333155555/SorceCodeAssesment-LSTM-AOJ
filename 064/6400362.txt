@@ -1,0 +1,11 @@
+q = int(input())
+S = set()
+
+for i in range(q):
+    op, x = map(int, input().split())
+    if op == 0:
+        S.add(x)
+        print(len(S))
+    else:
+        print(list(S).count(x))
+        

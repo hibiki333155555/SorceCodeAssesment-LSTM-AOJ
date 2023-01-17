@@ -1,0 +1,12 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int a,b,x; cin>>a>>b>>x;
+    if(b*2<a){
+        cout<<(x/500)*b+b<<endl;
+    }else{
+        if((x%1000)%500==0) cout<<(x/1000)*a+(x%1000)/500*b<<endl;
+        else cout<<(x/1000)*a+(x%1000)/500*b+min(a,b)<<endl;
+    }
+    return 0;
+}

@@ -1,0 +1,21 @@
+#include<iostream>
+using namespace std;
+int f()
+{
+	string s;cin>>s;
+	if(s.size()==1)return s[0]-'A';
+	else
+	{
+		return (s[0]-'A')*26+(s[1]-'A')+26;
+	}
+}
+int main()
+{
+	int c1,r1,c2,r2;
+	c1=f();
+	cin>>r1;
+	c2=f();
+	cin>>r2;
+	cout<<(r2-r1+1)*(c2-c1+1)<<endl;
+}
+

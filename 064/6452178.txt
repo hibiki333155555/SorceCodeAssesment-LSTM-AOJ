@@ -1,0 +1,4 @@
+for l in open(0).readlines():
+    a, op, b = l.split()
+    if op == "?": break
+    print(int(eval(f"{a} {op} {b}")))

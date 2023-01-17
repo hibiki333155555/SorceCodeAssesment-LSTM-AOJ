@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long LL;
+typedef long double LD;
+
+#define rep(i,n) for(LL i=0;i<(n);i++)
+
+int main(){
+    LL l, n;
+    bool flag = false;
+    LL ans = -1;
+
+    cin >> l >> n;
+
+    rep(i,n){
+        LL a; cin >> a;
+
+        if(!flag){
+            l -= a;
+
+            if(l <= 0){
+                ans = i + 1;
+                flag = true;
+            }
+
+        }
+
+    }
+
+    if(flag){
+        cout << ans << endl;
+    }
+    else{
+        cout << "No" << endl;
+    }
+
+    return 0;
+}

@@ -1,0 +1,6 @@
+const x=require("fs").readFileSync("/dev/stdin","utf-8").split(" ").map(Number);
+let sum = 0;
+for (let a=x[0],b=x[1],c=x[2],i=a;i<=b;i++){
+    if(c%i===0){sum++;}
+}
+console.log(sum);

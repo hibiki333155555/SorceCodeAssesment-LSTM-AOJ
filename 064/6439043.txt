@@ -1,0 +1,10 @@
+t = input().lower()
+sum = 0
+while(True):
+    text = input()
+    if text == "END_OF_TEXT":
+        break
+    else:
+        sum += text.lower().split().count(text)
+print(sum)
+

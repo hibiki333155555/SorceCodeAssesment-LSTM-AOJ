@@ -1,0 +1,11 @@
+number=int(input())
+i=1
+for i in range(number+1):
+    if i%3==0 and i%10==3:
+        print(i,end=" ")
+        continue
+    elif i%3==0 and i!=0:
+        print(i,end=" ")
+    elif i%10==3:
+        print(i,end=" ")
+    

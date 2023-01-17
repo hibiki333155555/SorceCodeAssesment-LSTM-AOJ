@@ -1,0 +1,97 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define REP(i,n) for(int i=0;i<(n);i++)
+#define ALL(v) v.begin(),v.end()
+#define debug(a) cerr<<#a<<":"<<a<<endl;
+#define debug2(a,b) cerr<<"("<<#a<<","<<#b<<"):("<<a<<","<<b<<")"<<endl;
+#define debug3(a,b,c) cerr<<"("<<#a<<","<<#b<<","<<#c<<"):("<<a<<","<<b<<","<<c<<")"<<endl;
+#define debug4(a,b,c,d) cerr<<"("<<#a<<","<<#b<<","<<#c<<","<<d<<"):("<<a<<","<<b<<","<<c<<","<<d<<")"<<endl;
+
+template<typename T>
+istream& operator>>(istream&is,vector<T>&v){
+  for(T&p:v)is>>p;
+  return is;
+}
+template<typename T>
+ostream& operator<<(ostream&os,const vector<T>&v){
+  if(&os==&cerr)os<<"[";
+  for(int i=0;i<v.size();i++){
+    os<<v[i];
+    if(i+1<v.size())os<<(&os==&cerr?",":" ");
+  }
+  if(&os==&cerr)os<<"]";
+  return os;
+}
+
+template<typename T,typename ...Args>
+auto make_vector(T x,int arg,Args ...args){
+  if constexpr(sizeof...(args)==0)return vector<T>(arg,x);
+  else return vector(arg,make_vector<T>(x,args...));
+}
+
+const int INF=1e9+7;
+int dx[4]={-1,1,0,0},dy[4]={0,0,-1,1};
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int h,w;cin>>h>>w;
+  vector<string> s(h);
+  REP(i,h)cin>>s[i];
+  int sy,sx,gy,gx;
+  REP(i,h)REP(j,w){
+    if(s[i][j]=='S')sy=i,sx=j;
+    if(s[i][j]=='G')gy=i,gx=j;
+  }
+  deque<pair<int,int>> que;
+  que.push_back({sy,sx});
+  auto D=make_vector<int>(INF,h,w);
+  auto used=make_vector<bool>(false,h,w);
+  D[sy][sx]=0;
+  while(que.size()){
+    auto [y,x]=que.front();que.pop_front();
+    if(used[y][x])continue;
+    used[y][x]=true;
+    if(s[y][x]=='R'){
+      x++;
+      if(x<w&&s[y][x]!='#'&&D[y][x]==INF){
+        D[y][x]=D[y][x-1];
+        que.push_front({y,x});
+      }
+    }
+    else if(s[y][x]=='L'){
+      x--;
+      if(x>=0&&s[y][x]!='#'&&D[y][x]==INF){
+        D[y][x]=D[y][x+1];
+        que.push_front({y,x});
+      }
+    }
+    else if(s[y][x]=='D'){
+      y++;
+      if(y<h&&s[y][x]!='#'&&D[y][x]==INF){
+        D[y][x]=D[y-1][x];
+        que.push_front({y,x});
+      }
+    }
+    else if(s[y][x]=='U'){
+      y--;
+      if(y>=0&&s[y][x]!='#'&&D[y][x]==INF){
+        D[y][x]=D[y+1][x];
+        que.push_front({y,x});
+      }
+    }
+    else{
+      REP(d,4){
+        int Y=y+dy[d],X=x+dx[d];
+        if(Y<0||X<0||Y>=h||X>=w||s[Y][X]=='#'||D[Y][X]<INF)continue;
+        D[Y][X]=D[y][x]+1;
+        que.push_back({Y,X});
+      }
+    }
+  }
+  if(D[gy][gx]==INF)cout<<-1<<endl;
+  else cout<<D[gy][gx]<<endl;
+}

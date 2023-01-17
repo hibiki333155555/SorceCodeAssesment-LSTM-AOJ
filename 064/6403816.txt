@@ -1,0 +1,17 @@
+house = []
+for i in range(4):
+    house.append([])
+    for j in range(3):
+        house[i].append([0 for x in range(10)])
+
+n = input()
+for i in range(n):
+    b, f, r, v = map(int, input().split(" "))
+    house[b][f][r] += v
+
+for x in house:
+    for y in x:
+        print(" " + " ".join(y))
+    if x < 3:
+        print("#"*20)
+    

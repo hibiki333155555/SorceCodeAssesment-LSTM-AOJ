@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+struct RollingHash {
+    static constexpr int M = 3;
+    static constexpr long long MODS[M] = {999999937, 1000000007, 1000000009};
+    static constexpr long long BASE = 9973;
+    vector<long long> powb[M], hash[M];
+    int n;
+    RollingHash() {}
+    RollingHash(const string& str) { init(str); }
+    void init(const string& str) {
+        n = str.size();
+        for (int k = 0; k < M; k++) {
+            powb[k].resize(n + 1, 1);
+            hash[k].resize(n + 1, 0);
+            for (int i = 0; i < n; i++) {
+                hash[k][i + 1] = (hash[k][i] * BASE + str[i]) % MODS[k];
+                powb[k][i + 1] = powb[k][i] * BASE % MODS[k];
+            }
+        }
+    }
+    // get hash str[l,r)
+    long long get(int l, int r, int k) {
+        long long res = hash[k][r] - hash[k][l] * powb[k][r - l] % MODS[k];
+        if (res < 0) res += MODS[k];
+        return res;
+    }
+};
+
+bool match(RollingHash& rh1, int l1, int r1, RollingHash& rh2, int l2, int r2) {
+    bool res = true;
+    for (int k = 0; k < RollingHash::M; k++) {
+        res &= rh1.get(l1, r1, k) == rh2.get(l2, r2, k);
+    }
+    return res;
+}
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    int N; cin >> N;
+    string S; cin >> S;
+    string T = S; reverse(T.begin(), T.end());
+    RollingHash HS(S), HT(T);
+
+    int ans = 0;
+    auto f = [&](int i){ return N - (i + 1); };
+    for(int i = 0; i < N - 1; i++) { // 仕切りの位置 S[i] | S[i + 1]
+        // S[0] ~ S[i]: len = i + 1
+        // S[i + 1] ~ S[N - 1]: len = N - i - 1
+        int len = min(i + 1, N - (i + 1));
+        ans += match(HS, i + 1, i + 1 + len, HT, f(i), f(i - len));
+    }
+    cout << ans << endl;
+}

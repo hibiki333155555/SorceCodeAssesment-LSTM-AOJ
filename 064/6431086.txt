@@ -1,0 +1,10 @@
+i = 1
+x = 1
+while(int(x) > 0):
+    x = input()
+    if x != "0":
+        print("Case" + str(i) + ":" + str(x))
+    elif x == 0:
+        break
+    i += 1
+

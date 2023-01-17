@@ -1,0 +1,75 @@
+#include<iostream>
+#include<cstdio>
+using namespace std;
+#define MAXN 5000005
+
+int h[MAXN];
+int n;
+
+inline void swap(int i, int t){
+	int tp = h[i];
+	h[i] = h[t];
+	h[t] = tp;
+}
+//向下调整 
+void siftdown(int i){
+	int t = 0;
+	bool flag = 1;
+	while(flag && i * 2 <= n){
+		if(h[i] < h[i * 2]){
+			t = i * 2;
+		}
+		else{
+			t = i;
+		}
+		if(i * 2 + 1 <= n){
+			if(h[t] < h[i * 2 + 1]){
+				t = i * 2 + 1;
+			}
+		}
+		if(t != i){
+			swap(i, t);
+			i = t;
+		}
+		else{
+			flag = 0;
+		}
+	}
+}
+//向上调整
+void siftup(int i){
+	if(i == 1)	return;
+	int t = 0;
+	bool flag = 1;
+	while(flag && i != 1){
+		if(h[i] > h[i / 2]){
+			t = i / 2;
+		}
+		else{
+			t = i;
+		}
+		if(t != i){
+			swap(t, i);
+			i = t;
+		}
+		else{
+			flag = 0;
+		}
+	}
+} 
+
+int main(){
+	scanf("%d", &n);
+	for(int i = 1; i <= n; i++){
+		scanf("%d", h + i);
+		siftup(i);
+	}
+//	for(int i = n/2; i >= 1; i--){
+//		siftdown(i);
+//	}
+	for(int i = 1; i <= n; i++){
+		cout << " " << h[i];
+	}
+	cout << endl;
+	return 0;
+}

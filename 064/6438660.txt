@@ -1,0 +1,32 @@
+
+n,m,l = map(int, input().split())
+
+tableA = [[0]*m for i in range(n)]
+tableB = [[0]*l for i in range(m)]
+
+for row in range(n):
+    work = list(map(int, input().split()))
+    for col in range(m):
+        tableA[row][col] = work[col]
+
+for row in range(m):
+    work = list(map(int, input().split()))
+    for col in range(l):
+        tableB[row][col] = work[col]
+
+tableC = [[0]*l for i in range(n)]
+
+for I in range(n):
+    for L in range(l):
+        for M in range(m):
+            tableC[I][L] += tableB[M][L] * tableA[I][M]
+
+res = tableC
+
+
+for row in range(n):
+    print("%d"%(res[row][0]),end="")
+    for col in range(1,m+1):
+        print(" %d"%(res[row][col]),end = "")
+    print()
+

@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+const double PI =acos(-1);
+const long double EPS = 1e-14;
+
+int main(){
+  long n, q;
+  cin >> n >> q;
+  queue<string> que;
+  map<string, long> m;
+  long now = 0;
+  for(long i = 0; i < n; i++){
+    string s;
+    long t;
+    cin >> s >> t;
+    m[s] = t;
+    que.push(s);
+  }
+  while(!que.empty()){
+    string tmp = que.front();
+    que.pop();
+    if(m[tmp] - q <= 0){
+      now += m[tmp];
+      cout << tmp << " " << now << endl;
+    }else{
+      m[tmp] -= q;
+      now += q;
+      que.push(tmp);
+    }
+  }
+  return 0;
+}

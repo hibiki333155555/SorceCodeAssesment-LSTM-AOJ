@@ -1,0 +1,29 @@
+#include<stdio.h>
+int main()
+{    int H,W;
+    int i,j;
+    scanf("%d %d",&H,&W);
+    if(((1<=H)&&(H<=300))&&((1<=W)&&(W<=300)))
+    {
+
+        for(i=1;i<=H;i++)
+        {
+
+
+            for(j=W;j>0;j--)
+            {
+                printf("#");
+
+            }
+           printf("\n");
+
+
+        }
+        while((H==0)&&(W==0)){
+            break;
+        }
+    }
+    return 0;
+
+}
+

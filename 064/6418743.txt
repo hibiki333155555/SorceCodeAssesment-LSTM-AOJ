@@ -1,0 +1,191 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+using mcl = map<char, ll>;
+using pll = pair<ll, ll>;
+ll mod = 998244353;
+
+template <typename T> constexpr T modpow(T a, ll n) { //(a^n)%MOD
+    T ret = 1;
+    while (n > 0) {
+        if ((n & 1) != 0) { // n%2==1
+            ret = ret * a % mod;
+        }
+        a = a * a % mod;
+        n = n / 2;
+    }
+    return ret;
+}
+
+ll dob(ll x, ll a, ll b, ll n) {
+    while (n > 0) {
+        if (n % 2 == 1) {
+            n--;
+            x = x * a % mod + b;
+            x %= mod;
+        } else {
+            b = a * b + b;
+            b %= mod;
+            a = (a * a) % mod;
+            n /= 2;
+        }
+    }
+    return x;
+}
+
+ll eval(string s, mcl &m) {
+    ll ret = 0;
+    int i = 0;
+    while (i < s.size()) {
+        ll d = 1;
+        if (s[i] == '-') {
+            ++i;
+            d = mod - 1;
+        }
+        if (s[i] == '+') ++i;
+        if (isalpha(s[i])) {
+            ret += (m[s[i]] * d) % mod;
+            if (ret < 0) ret += mod;
+            ret %= mod;
+            ++i;
+        } else {
+            ll x = 0;
+            while (isdigit(s[i])) {
+                x *= 10;
+                x += s[i] - '0';
+                x %= mod;
+                ++i;
+            }
+            x %= mod;
+            ret += (x * d) % mod;
+            if (ret < 0) ret += mod;
+            ret %= mod;
+        }
+    }
+    return ret;
+}
+
+void freval(ll n, string s, mcl &m, vector<pll> &so) {
+    if (s[1] == 'o') { // for
+        int i = 0;
+        while (s[i] != ')')
+            ++i;
+        ll x = eval(s.substr(4, i - 4), m);
+        freval(n * x, s.substr(i + 1, s.size() - i), m, so);
+        return;
+    }
+
+    if (s[1] == '<') { // 代入
+        char c = s[0];
+        ll a = 0, b = 0;
+        string t = "";
+        int i = 3;
+        if (s[3] == c) {
+            ++a;
+            ++i;
+        }
+        for (; i < s.size(); ++i) {
+            if (s[i] == '+' || s[i] == '-') {
+                if (s[i + 1] == c) {
+                    if (s[i] == '+')
+                        ++a;
+                    else
+                        --a;
+                    i += 1;
+                    continue;
+                }
+            }
+            if (i < s.size()) t.push_back(s[i]);
+        }
+        b = eval(t, m);
+        if (a < 0) a += mod;
+        m[c] = dob(m[c], a, b, n);
+
+        return;
+    }
+    if (s[1] == 'r') { // print
+        so.emplace_back(n, eval(s.substr(6, s.size() - 7), m));
+        return;
+    }
+}
+
+void parse(string s, mcl &m, vector<pll> &so) {
+    if (s.size() == 1) { // 宣言
+        m[s[0]] = 0;
+        return;
+    }
+
+    if (s[1] == '<') { // 代入
+        m[s[0]] = eval(s.substr(3, s.size() - 3), m);
+        return;
+    }
+
+    if (s[1] == 'r') { // print
+        // 単体のprint
+        so.emplace_back(1, eval(s.substr(6, s.size() - 7), m));
+        return;
+    }
+
+    if (s[1] == 'o') { // for
+        freval(1, s, m, so);
+        return;
+    }
+}
+
+bool solve() {
+    int n, m;
+    cin >> n >> m;
+    if (n == 0 && m == 0) return false;
+    vector<pll> so(0), to(0);
+    mcl var;
+    for (int i = 0; i < n; ++i) {
+        string s;
+        cin >> s;
+        parse(s, var, so);
+    }
+    // for(auto p:so)cerr<<p.first<<" "<<p.second<<endl;
+    for (int i = 0; i < m; ++i) {
+        string t;
+        cin >> t;
+        parse(t, var, to);
+    }
+    // for(auto p:to)cerr<<p.first<<" "<<p.second<<endl;
+    int ti = 0;
+    for (auto p : so) {
+        ll n = p.first, v = p.second;
+        while (n > 0) {
+            while (ti < to.size() && to[ti].first == 0)
+                ++ti;
+            if (ti >= to.size()) {
+                cout << "No" << endl;
+                return true;
+            }
+            if (to[ti].second % mod != v % mod) {
+                cout << "No" << endl;
+                return true;
+            }
+
+            if (n < to[ti].first) {
+                to[ti].first -= n;
+                n = 0;
+            } else {
+                n -= to[ti].first;
+                ++ti;
+            }
+        }
+    }
+    if (ti == to.size()) {
+        cout << "Yes" << endl;
+    } else
+        cout << "No" << endl;
+    return true;
+}
+
+int main() {
+    while (solve())
+        ;
+
+    return 0;
+}
+

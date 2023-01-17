@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+int main()
+{
+    
+    multimap<string,int>m;
+    int n,q;
+
+    cin>>n;
+    while (n--)
+    {
+        int a;
+      cin>>a;
+      if(a==0)
+      {
+         
+          string s;
+          int b;
+          cin>>s>>b;
+       
+          m.insert(pair<string, int>(s, b));
+        
+      }
+         
+       
+
+      else if (a==2)
+      {
+        string c;
+        cin>>c;
+          m.erase(c);
+
+      }
+      
+    
+      else if(a==1)
+      {
+          map<string , int > :: iterator it;
+           string c;
+          cin>>c;
+         for (it=m.lower_bound(c); it!=m.upper_bound(c); it++)
+         {
+            cout<<it->second<<endl;
+         }
+          
+      }
+
+      else
+      {
+          map<string , int > :: iterator it;
+          string l,r;
+			cin>>l>>r;
+			
+			for (it=m.lower_bound(l); it!=m.upper_bound(r); it++)
+            {
+				cout<<it->first<<' '<<it->second<<endl;
+      }
+    }
+    }
+    
+   
+
+}

@@ -1,0 +1,74 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    constexpr int inf = 1e9;
+    int mi = inf, mx = -inf;
+    int n,m; cin >> n >> m;
+    vector<vector<pair<int,int>>> g(n);
+    for(int i=0;i<m;i++){
+        int x,y; cin >> x >> y;
+        x--; y--;
+        int c; cin >> c;
+        g[x].push_back({y,c});
+    }
+    set<pair<int,int>> st;
+    auto dfs=[&](auto dfs,int s,int L)->void{
+        if(s == n-1){
+            mi = min(mi, L);
+            mx = max(mx, L);
+        }
+        if(st.find({s,L}) != st.end()){
+            return;
+        }
+        st.insert({s,L});
+        for(auto p:g[s]){
+            int t = p.first;
+            int nL = lcm(L,p.second);
+            dfs(dfs,t,nL);
+        }
+    };
+    dfs(dfs,0,1);
+    if(mi == inf){
+        cout << "IMPOSSIBLE" << endl;
+    }
+    else{
+        cout << mi << " " << mx << endl;
+    }
+}
+
+

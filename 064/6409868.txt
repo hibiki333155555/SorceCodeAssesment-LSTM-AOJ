@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> dp(100,vector<int>(100,-1));
+
+int rec_solve(vector<vector<int>> &M_dim, int l, int r){
+  if (dp.at(l).at(r) != -1) return dp.at(l).at(r);
+  
+  if ( l-r == 0) {
+    dp.at(l).at(r) = 0;
+    return 0;
+  }
+  
+  int ans=-1;
+  for(int i=0; i<r-l; i++){
+    int t;
+    t = rec_solve(M_dim, l, l+i) + rec_solve(M_dim, l+i+1, r);
+    t += M_dim.at(l).at(0) * M_dim.at(l+i).at(1) * M_dim.at(r).at(1);
+    if (ans == -1) {
+      ans = t;
+    }else{
+      ans = min(ans,t);
+    }
+  }
+  
+  dp.at(l).at(r) = ans;
+  return ans;
+}
+
+int main(){
+  int N;
+  cin >> N;
+  vector<vector<int>> M_dim(N,vector<int>(2));
+  for(int i=0; i<N; i++) cin >> M_dim.at(i).at(0) >> M_dim.at(i).at(1);
+  
+  int ans = rec_solve(M_dim,0,N-1);
+  
+  cout << ans << endl;
+}

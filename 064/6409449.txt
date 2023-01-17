@@ -1,0 +1,59 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<cstdio>
+#include<cstring>
+#include<vector>
+#include<queue>
+#include<map>
+#include<set>
+#include<stack>
+#include<iomanip>
+using namespace std;
+typedef long long ll;
+const long long ll_inf=0x3f3f3f3f3f3f3f3f;
+const int inf=0x3f3f3f3f;
+const double pi=acos(-1.0);
+const int Mod=1e9+7;
+const int Max=1010;
+//cout<<setw(8)<<fixed<<setprecision(3);
+//ios::sync_with_stdio(false);
+int d[4]={1,-1,4,-4};
+map<string,int> dp;
+void bfs(){
+      queue<string>q;
+      q.push("01234567");
+      dp["01234567"]=0;
+	while(!q.empty()){
+      	string s=q.front();
+      	q.pop();
+		int pos=0;//pos是0的位置 
+            for(int i=0;i<8;i++){
+            	if(s[i]=='0'){
+            		pos=i;
+            		break;
+			}
+            	
+		}
+		for(int i=0;i<4;i++){
+			int dx=pos+d[i];
+            	if(dx>=0&&dx<8&&!(pos==3&&i==0)&&!(pos==4&&i==1)){//长方形的左上角和右下角需要特殊判断 
+                		string temp=s;
+                		swap(temp[pos],temp[dx]);
+                		if(dp.find(temp)==dp.end()){
+                			dp[temp]=dp[s]+1;
+                			q.push(temp);
+				} 
+            	}
+       	}
+  	}
+}
+int main(){
+	bfs();
+	string s;
+	while(getline(cin,s)){
+		s.erase(remove(s.begin(),s.end(),' '),s.end());
+		cout<<dp[s]<<endl;
+	}
+	return 0;
+}

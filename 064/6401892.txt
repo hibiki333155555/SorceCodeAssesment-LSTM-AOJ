@@ -1,0 +1,19 @@
+if __name__ == "__main__":
+    n = int(input())
+    for _ in range(n):
+        s = str(input())
+        t = str(input())
+
+        # 初期化
+        # sの長さ+1 * tの長さ+1
+        dp = [[0] * (len(t)+1) for _ in range(len(s)+1)]
+
+        for i, s_i in enumerate(s):
+            for j, t_j in enumerate(t):
+                if s_i == t_j:
+                    dp[i + 1][j + 1] = dp[i][j] + 1
+                else:
+                    dp[i + 1][j + 1] = max(dp[i + 1][j], dp[i][j + 1])
+        print(dp[len(s)][len(t)])
+
+

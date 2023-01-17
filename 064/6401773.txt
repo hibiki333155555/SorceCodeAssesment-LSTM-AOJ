@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int main()
+{
+	int r;
+	float A,C,p=3.14159;
+	scanf("%d",&r);
+	A=p*r*r;
+	C=2*p*r;
+	printf("%.6f %.6f\n",A,C);
+	return 0;
+}
+

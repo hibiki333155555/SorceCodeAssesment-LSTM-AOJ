@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+   int n,k;
+   cin>>n>>k;
+   int a[n];
+   for(int i=0;i<n;i++)
+   {
+       cin>>a[i];
+   }
+   int m;
+   for(int i=0;i<n-k+1;i++)
+   {
+        m=INT_MAX;
+       for(int j=i;j<i+k;j++)
+       {
+           m=min(m,a[j]);
+       }
+       cout<<m<<" ";
+   }
+   m=INT_MAX;
+}

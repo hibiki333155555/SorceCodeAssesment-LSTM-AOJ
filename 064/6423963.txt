@@ -1,0 +1,4 @@
+a,b = input().split()
+area = a * b
+length = 2a + 2b
+print("area" + "length")

@@ -1,0 +1,161 @@
+#[allow(unused_macros)]
+macro_rules ! debug { ( $ ( $ a : expr ) ,* ) => { eprintln ! ( concat ! ( $ ( stringify ! ( $ a ) , " = {:?}, " ) ,* ) , $ ( $ a ) ,* ) ; } }
+#[macro_export]
+macro_rules ! input { ( source = $ s : expr , $ ( $ r : tt ) * ) => { let mut parser = Parser :: from_str ( $ s ) ; input_inner ! { parser , $ ( $ r ) * } } ; ( parser = $ parser : ident , $ ( $ r : tt ) * ) => { input_inner ! { $ parser , $ ( $ r ) * } } ; ( new_stdin_parser = $ parser : ident , $ ( $ r : tt ) * ) => { let stdin = std :: io :: stdin ( ) ; let reader = std :: io :: BufReader :: new ( stdin . lock ( ) ) ; let mut $ parser = Parser :: new ( reader ) ; input_inner ! { $ parser , $ ( $ r ) * } } ; ( $ ( $ r : tt ) * ) => { input ! { new_stdin_parser = parser , $ ( $ r ) * } } ; }
+#[macro_export]
+macro_rules ! input_inner { ( $ parser : ident ) => { } ; ( $ parser : ident , ) => { } ; ( $ parser : ident , $ var : ident : $ t : tt $ ( $ r : tt ) * ) => { let $ var = read_value ! ( $ parser , $ t ) ; input_inner ! { $ parser $ ( $ r ) * } } ; }
+#[macro_export]
+macro_rules ! read_value { ( $ parser : ident , ( $ ( $ t : tt ) ,* ) ) => { ( $ ( read_value ! ( $ parser , $ t ) ) ,* ) } ; ( $ parser : ident , [ $ t : tt ; $ len : expr ] ) => { ( 0 ..$ len ) . map ( | _ | read_value ! ( $ parser , $ t ) ) . collect ::< Vec < _ >> ( ) } ; ( $ parser : ident , chars ) => { read_value ! ( $ parser , String ) . chars ( ) . collect ::< Vec < char >> ( ) } ; ( $ parser : ident , usize1 ) => { read_value ! ( $ parser , usize ) - 1 } ; ( $ parser : ident , $ t : ty ) => { $ parser . next ::<$ t > ( ) . expect ( "Parse error" ) } ; }
+use std::io;
+use std::io::BufRead;
+use std::io::Read;
+use std::str;
+pub struct Parser<R> {
+    reader: R,
+    buf: Vec<u8>,
+    pos: usize,
+}
+impl Parser<io::Empty> {
+    pub fn from_str(s: &str) -> Parser<io::Empty> {
+        Parser {
+            reader: io::empty(),
+            buf: s.as_bytes().to_vec(),
+            pos: 0,
+        }
+    }
+}
+impl<R: BufRead> Parser<R> {
+    pub fn new(reader: R) -> Parser<R> {
+        Parser {
+            reader: reader,
+            buf: vec![],
+            pos: 0,
+        }
+    }
+    pub fn update_buf(&mut self) {
+        self.buf.clear();
+        self.pos = 0;
+        loop {
+            let (len, complete) = {
+                let buf2 = self.reader.fill_buf().unwrap();
+                self.buf.extend_from_slice(buf2);
+                let len = buf2.len();
+                if len == 0 {
+                    break;
+                }
+                (len, buf2[len - 1] <= 0x20)
+            };
+            self.reader.consume(len);
+            if complete {
+                break;
+            }
+        }
+    }
+    pub fn next<T: str::FromStr>(&mut self) -> Result<T, T::Err> {
+        loop {
+            let mut begin = self.pos;
+            while begin < self.buf.len() && (self.buf[begin] <= 0x20) {
+                begin += 1;
+            }
+            let mut end = begin;
+            while end < self.buf.len() && (self.buf[end] > 0x20) {
+                end += 1;
+            }
+            if begin != self.buf.len() {
+                self.pos = end;
+                return str::from_utf8(&self.buf[begin..end]).unwrap().parse::<T>();
+            } else {
+                self.update_buf();
+            }
+        }
+    }
+}
+
+fn main() {
+    // input! {
+    //     n:usize,
+    //     q_num:usize,
+    // }
+    let mut line = String::new();
+    io::stdin().read_line(&mut line).unwrap();
+    let mut iter = line.split_whitespace();
+    let n: usize = iter.next().unwrap().parse().unwrap();
+    let q_num: usize = iter.next().unwrap().parse().unwrap();
+
+    let mut bit = Bit::new(n);
+
+    for _ in 0..q_num {
+        let mut line = String::new();
+        io::stdin().read_line(&mut line).unwrap();
+        let mut iter = line.split_whitespace();
+        let q: usize = iter.next().unwrap().parse().unwrap();
+
+        if q == 0 {
+            let l: usize = iter.next().unwrap().parse().unwrap();
+            let r: usize = iter.next().unwrap().parse().unwrap();
+            let x: usize = iter.next().unwrap().parse().unwrap();
+            bit.add(l, r, x as i32);
+        } else {
+            let i: usize = iter.next().unwrap().parse().unwrap();
+            println!("{}", bit.query(i));
+        }
+    }
+}
+
+struct Bit {
+    n: usize,
+    bit: Vec<Vec<i32>>,
+}
+impl Bit {
+    fn new(n: usize) -> Self {
+        let bit = vec![vec![0; n + 2]; 2];
+        Bit { n, bit }
+    }
+
+    fn add(&mut self, l: usize, r: usize, value: i32) {
+        // BIT1を計算
+        self.add_sub(1, l, value);
+        self.add_sub(1, r + 1, -value);
+        // BIT0を計算
+        self.add_sub(0, l, -value * (l - 1) as i32);
+        self.add_sub(0, r + 1, value * r as i32);
+    }
+
+    fn add_sub(&mut self, bit_idx: usize, mut l_idx: usize, value: i32) {
+        if value == 0 {
+            return;
+        }
+
+        loop {
+            self.bit[bit_idx][l_idx] += value;
+            l_idx = l_idx + (l_idx as i32 & -(l_idx as i32)) as usize;
+            if l_idx > self.n {
+                break;
+            }
+        }
+    }
+
+    fn query(&self, l_idx: usize) -> usize {
+        let l_value = self.get_sum(l_idx - 1);
+        let r_value = self.get_sum(l_idx);
+        r_value - l_value
+    }
+
+    fn get_sum(&self, idx: usize) -> usize {
+        (self.sum_sub(0, idx) + self.sum_sub(1, idx) * idx as i32) as usize
+    }
+
+    fn sum_sub(&self, bit_idx: usize, mut idx: usize) -> i32 {
+        let mut value = 0;
+
+        loop {
+            value += self.bit[bit_idx][idx];
+            idx = idx - (idx as i32 & -(idx as i32)) as usize;
+            if idx == 0 {
+                break;
+            }
+        }
+        value
+    }
+}
+

@@ -1,0 +1,44 @@
+# J
+P = 998244353
+nn = 100100
+fa = [1] * (nn+1)
+fainv = [1] * (nn+1)
+for i in range(nn):
+    fa[i+1] = fa[i] * (i+1) % P
+fainv[-1] = pow(fa[-1], P-2, P)
+for i in range(nn)[::-1]:
+    fainv[i] = fainv[i+1] * (i+1) % P
+
+C = lambda a, b: fa[a] * fainv[b] % P * fainv[a-b] % P if 0 <= b <= a else 0
+
+N = int(input())
+A = [int(a) for a in input().split()]
+c1, c2, c3, c5, c6, c7 = 0, 0, 0, 0, 0, 0
+t2, t3 = 0, 0
+ans = 1
+for a in A:
+    if a == 1:
+        c1 += 1
+    elif a == 5:
+        c5 += 1
+    elif a == 7:
+        c7 += 1
+    elif a == 6:
+        c6 += 1
+        ans = ans * C(t2 + t3, t2) % P
+        t2, t3 = 0, 0
+    elif a in (2, 4, 8):
+        c2 += 1
+        t2 += 1
+    elif a in (3, 9):
+        c3 += 1
+        t3 += 1
+    else:
+        assert 0
+
+ans = ans * C(t2 + t3, t2) % P
+ans = ans * C(c2 + c3 + c6 + c5, c5) % P
+ans = ans * C(c2 + c3 + c6 + c5 + c7, c7) % P
+ans = ans * C(c2 + c3 + c6 + c5 + c7 + c1, c1) % P
+print(ans)
+

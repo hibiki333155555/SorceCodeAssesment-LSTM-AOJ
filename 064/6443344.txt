@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class MyDictionary
+{
+private:
+  vector<string> strlist;
+public:
+  void insert(string str)
+  {
+    strlist.push_back(str);
+    sort( strlist.begin(), strlist.end() );
+  }
+  void find(string str)
+  {
+    int left = 0;
+    int right = strlist.size();
+    while (left < right)
+    {
+      int mid = (left + right) / 2;
+      if (str == strlist[mid])
+      {
+        cout << "yes" << endl;
+        return;
+      }
+      else if (str < strlist[mid]) right = mid;
+      else left = mid + 1;
+    }
+    
+    cout << "no" << endl;
+    return;
+  }
+};
+
+int main(int argc, char const *argv[])
+{
+  int n;
+  cin >> n;
+
+  MyDictionary myDict;
+  for (int i = 0; i < n; i++)
+  {
+    string com;
+    string op;
+    cin >> com >> op;
+
+    if (com[0] == 'i') myDict.insert(op);
+    if (com[0] == 'f') myDict.find(op);
+  }
+
+  return 0;
+}
+

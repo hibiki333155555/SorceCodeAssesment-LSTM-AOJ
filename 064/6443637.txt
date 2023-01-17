@@ -1,0 +1,16 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+    int A,B,S;
+    cin >> S >> A >> B; 
+    int cost=250;
+    while(S>A){
+        cost+=100;
+        A+=B; 
+        if(A>=S){
+            break;
+        }
+    }
+    cout << cost << endl;
+}

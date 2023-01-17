@@ -1,0 +1,7 @@
+while True:
+    xy = list(map(int, input().split()))
+    if xy[0] == 0 and xy[1] == 1:
+        break
+    xy.sorted()
+    print(xy[0] + " " + xy[1])
+    

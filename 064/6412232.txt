@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+//vector<vll> PA = { {0,1,2},{0,1,3},{0,1,4}, {0,2,3}, {0,2,4}, {0,3,4}, {1,2,3}, {1,2,4}, {1,3,4}, {2,3,4} };
+vvll PA;
+void init() {
+    vll K = { 0,1,2,3,4 };
+    do {
+        PA.push_back(K);
+    } while (next_permutation(all(K)));
+}
+
+int main() {
+    init();
+    ll N;
+    cin >> N;
+    vll D(N);
+    rep(i, N)cin >> D[i];
+    map<ll, ll> M2, M6;
+    vector<vll> M4(100, vll(100));
+    vector<pair<ll, ll>> PP(100);
+    rep(i, 100) { PP[i] = { 0,i }; }
+    rep(i, N) {
+        ll P = D[i];
+        PP[P % 100].first++;
+        M4[P % 100][(P / 100) % 100]++;
+        M6[P]++;
+    }
+    rep(i, 100) {
+        sort(all(M4[i]));
+        reverse(all(M4[i]));
+    }
+    ll an = 0;
+    rep(i, 100) {//secondの市も2桁
+        ll sc = 0;
+        sc += M4[i][0]*4000;
+        vll OP;
+        rep(p, 100) {
+            if (p == i)continue;
+            OP.push_back(PP[p].first);
+        }
+        sort(all(OP));
+        reverse(all(OP));
+        rep(p, 4) {
+            ll m = 0;
+            rep(d, 4) {
+                if (d == p) {
+                    if (OP[d] > 0)m += 300000;
+                }
+                else {
+                    m += OP[d] * 500;
+                }
+            }
+            an = max(an, sc + m);
+        }
+    }
+    
+    cout << an << endl;;
+}
+

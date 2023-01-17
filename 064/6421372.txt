@@ -1,0 +1,63 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 998244353
+
+def main():
+    n = list(map(int,input()))
+    K = I()
+    if K == 0:
+        print(0)
+        return
+    K_ = (K+1)*2
+    dp = [-1]*K_
+    c = [0]*K_
+    dp[0] = 0
+    c[0] = 1
+    for i in n:
+        ndp = [-1]*K_
+        nc = [0]*K_
+        for index in range(K_):
+            dpkj = dp[index]
+            if dpkj < 0:
+                continue
+            k,j = index>>1,index&1
+            ckj = c[index]
+            d = 1 if j else i
+            for x in range(d+1):
+                if k+x > K:
+                    continue
+                nindex = (x<<1)+(index|(x<i))
+                if ndp[nindex] < 0:
+                    res = 2*dpkj + x*ckj
+                else:
+                    res = ndp[nindex] + 2*dpkj + x*ckj
+                if res >= mod:
+                    res %= mod
+                ndp[nindex] = res
+                res = nc[nindex] + ckj
+                if res >= mod:
+                    res -= mod
+                nc[nindex] = res
+        dp = ndp
+        c = nc
+    ans = (dp[2*K]+dp[2*K+1])%mod
+    print(ans)
+    return
+
+
+if __name__ == "__main__":
+    main()
+

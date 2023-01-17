@@ -1,0 +1,15 @@
+#include<stdio.h>
+int main(void)
+{
+    int a,b;
+    scanf("%d %d",&a,&b);
+    int d,r;
+    double f,g,h;
+    d = a/b;
+    r = a%b;
+    g = a;
+    h = b;
+    f = g/h;
+    printf("%d %d %f\n",d,r,f);
+    return 0;
+}

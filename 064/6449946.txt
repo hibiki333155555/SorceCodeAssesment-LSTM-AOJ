@@ -1,0 +1,39 @@
+n,m = map(int,input().split())
+imos = [0]*(m+2)
+hunt = [list(map(int,input().split())) for i in range(n)]
+for a,b,c in hunt:
+    imos[b] += a
+    imos[c+1] -= a
+
+for i in range(m+1):
+    imos[i+1] += imos[i]
+attack = [0]*(m+2)
+q = int(input())
+for i in range(q):
+    d,e = map(int,input().split())
+    attack[e] += d
+
+for i in range(m+2):
+    if attack[i] and imos[i] == 0:
+        print(-1)
+        exit()
+
+hunt.sort(key=lambda x: x[1])
+
+ans = 0
+now = 0
+r = -1
+imos2 = [0]*(m+2)
+for i in range(1,m+2):
+    imos2[i] += imos2[i-1]
+    while now < n and hunt[now][1] <= i:
+        r = max(r,hunt[now][2])
+        now += 1
+    if imos2[i] + imos[i] >= attack[i]:
+        continue
+    dif = attack[i] - imos[i] - imos2[i]
+    ans += dif
+    imos2[i] += dif
+    imos2[r+1] -= dif
+
+print(ans)

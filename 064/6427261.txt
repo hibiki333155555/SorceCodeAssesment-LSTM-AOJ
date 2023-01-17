@@ -1,0 +1,73 @@
+#include <stdio.h>
+
+const int Mod = 998244353;
+
+long long div_mod(long long x, long long y, long long z)
+{
+	if (x % y == 0) return x / y;
+	else return (div_mod((1 + x / y) * y - x, (z % y), y) * z + x) / y;
+}
+
+typedef struct List {
+	struct List *next;
+	int v;
+} list;
+
+void chmin(int* a, int b)
+{
+	if (*a > b) *a = b;
+}
+
+void chmax(int* a, int b)
+{
+	if (*a < b) *a = b;
+}
+
+int main()
+{
+	int i, N, A[200001];
+	scanf("%d", &N);
+	for (i = 1; i < N * 2; i++) scanf("%d", &(A[i]));
+	
+	int j, l[200001], r[200001];
+	long long ans = 0, x, y;
+	list *head[200001] = {}, *tail[200001] = {}, d[200001], *p;
+	for (i = N * 2 - 1; i >= N; i--) {
+		l[i] = i - (N - 1);
+		r[i] = i - (N - 1);
+		d[i].v = i;
+		d[i].next = NULL;
+		head[i] = &(d[i]);
+		tail[i] = &(d[i]);
+	}
+	for (; i >= 1; i--) {
+		l[i] = l[i*2];
+		chmin(&(l[i]), l[i*2+1]);
+		r[i] = r[i*2];
+		chmax(&(r[i]), r[i*2+1]);
+		head[i] = head[i*2];
+		tail[i] = tail[i*2+1];
+		tail[i*2]->next = head[i*2+1];
+		if (A[i] < A[i*2] + A[i*2+1]) {
+			for (p = head[i]; p != NULL; p = p->next) {
+				j = p->v;
+				x = (long long)l[i] * (N - r[i] + 1);
+				y = (long long)l[j] * (N - r[j] + 1);
+				ans += A[j] * ((y - x) % Mod) % Mod;
+			}
+			
+			d[i].v = i;
+			d[i].next = NULL;
+			head[i] = &(d[i]);
+			tail[i] = &(d[i]);
+		} else A[i] = A[i*2] + A[i*2+1];
+	}
+	for (p = head[1]; p != NULL; p = p->next) {
+		j = p->v;
+		y = (long long)l[j] * (N - r[j] + 1);
+		ans += A[j] * (y % Mod) % Mod;
+	}
+	printf("%lld\n", div_mod(ans % Mod, (long long)N * (N + 1) / 2 % Mod, Mod));
+	fflush(stdout);
+	return 0;
+}

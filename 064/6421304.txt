@@ -1,0 +1,87 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define REP(i,n) for(int i=0;i<(n);i++)
+#define ALL(v) v.begin(),v.end()
+#define debug(a) cerr<<#a<<":"<<a<<endl;
+#define debug2(a,b) cerr<<"("<<#a<<","<<#b<<"):("<<a<<","<<b<<")"<<endl;
+#define debug3(a,b,c) cerr<<"("<<#a<<","<<#b<<","<<#c<<"):("<<a<<","<<b<<","<<c<<")"<<endl;
+#define debug4(a,b,c,d) cerr<<"("<<#a<<","<<#b<<","<<#c<<","<<d<<"):("<<a<<","<<b<<","<<c<<","<<d<<")"<<endl;
+
+template<typename T>
+istream& operator>>(istream&is,vector<T>&v){
+  for(T&p:v)is>>p;
+  return is;
+}
+template<typename T>
+ostream& operator<<(ostream&os,const vector<T>&v){
+  if(&os==&cerr)os<<"[";
+  for(int i=0;i<v.size();i++){
+    os<<v[i];
+    if(i+1<v.size())os<<(&os==&cerr?",":" ");
+  }
+  if(&os==&cerr)os<<"]";
+  return os;
+}
+
+template<typename T,T MOD,T B>
+struct RollingHash{
+  using ll = long long;
+  vector<T> hash,po;
+  RollingHash(vector<T> vs){init(vs);}
+  RollingHash(string &s){
+    vector<T> vs;
+    for(char c:s) vs.emplace_back(c);
+    init(vs);
+  }
+  void init(vector<T> vs){
+    int n=vs.size();
+    hash.assign(n+1,0);
+    po.assign(n+1,1);
+    for(int i=0;i<n;i++){
+      hash[i+1]=((ll)hash[i]*B+vs[i])%MOD;
+      po[i+1]=(ll)po[i]*B%MOD;
+    }
+  }
+  //S[l, r)
+  T find(int l,int r){
+    T res=(ll)hash[r]+MOD-(ll)hash[l]*po[r-l]%MOD;
+    return res>=MOD?res-MOD:res;
+  }
+};
+using ll=long long;
+constexpr ll mod[3]={998244353,998244853,1000000007};
+constexpr ll B[3]={4832943,48932048,890843241};
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  int n;cin>>n;
+  string s;cin>>s;
+  RollingHash<ll,mod[0],B[0]> rh1(s);
+  RollingHash<ll,mod[1],B[1]> rh2(s);
+  RollingHash<ll,mod[2],B[2]> rh3(s);
+  reverse(ALL(s));
+  RollingHash<ll,mod[0],B[0]> rrh1(s);
+  RollingHash<ll,mod[1],B[1]> rrh2(s);
+  RollingHash<ll,mod[2],B[2]> rrh3(s);
+
+  int ans=0;
+  
+  for(int i=1;i<n;i++){
+    int mn=min(i,n-i);
+    int l=i-mn,r=i;
+    int r2=n+1-r;
+    int l2=r2-mn;
+    bool ok=true;
+    if(rh1.find(l,r)!=rrh1.find(l2,r2))ok=false;
+    if(rh2.find(l,r)!=rrh2.find(l2,r2))ok=false;
+    if(rh3.find(l,r)!=rrh3.find(l2,r2))ok=false;
+    ans+=ok;
+  }
+  cout<<ans<<endl;
+}
+
+
+

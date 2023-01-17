@@ -1,0 +1,15 @@
+from itertools import accumulate
+
+
+while 1:
+    n=int(input())
+    if n==0:break
+    cnt=[0 for _ in range(10**5)]
+    for _ in range(n):
+        a,b=input().split()
+        h,m,s=map(int,a.split(":"))
+        cnt[h*60*60+m*60+s]+=1
+        h,m,s=map(int,b.split(":"))
+        cnt[h*60*60+m*60+s]-=1
+    cnt=list(accumulate(cnt))
+    print(max(cnt))

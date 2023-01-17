@@ -1,0 +1,16 @@
+def LCS(x,y):
+    n,m=len(x),len(y)
+    DP=[0 for _ in range(m+1)]
+    for i in range(n):
+        tmp=DP[:]
+        num=x[i]
+        for j in range(m):
+            if num==y[j]:DP[j+1]=tmp[j]+1
+            elif DP[j+1]<DP[j]:DP[j+1]=DP[j]
+    return DP[-1]
+
+
+n=int(input())
+for _ in range(n):
+    print(LCS(input(),input()))
+

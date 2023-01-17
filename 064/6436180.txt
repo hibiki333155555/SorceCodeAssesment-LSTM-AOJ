@@ -1,0 +1,55 @@
+#include <iostream>
+#include<vector>
+using namespace std;
+const int MAX=100000;
+vector<int> Graph[MAX];
+vector<int>Sort;
+int visit[MAX],prenum[MAX];
+
+void dfs(int start){
+    Sort.push_back(start);
+    visit[start]=1;
+    for(int i=0;i<Graph[start].size();i++){
+        int temp=Graph[start][i];
+        prenum[temp]--;
+        if(visit[temp]==0&&prenum[temp]==0){
+            dfs(temp);
+        }
+    }
+}
+
+bool sortGraph(int n){
+    for(int i=0;i<n;i++){
+        if(visit[i]==0&&prenum[i]==0){
+            dfs(i);
+        }
+    }
+    if(Sort.size()<n){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+int main()
+{
+    int m,n,temp1,temp2;
+    cin>>n>>m;
+    for(int i=0;i<n;i++){
+        visit[i]=0;
+        prenum[i]=0;
+    }
+    for(int i=0;i<m;i++){
+        cin>>temp1>>temp2;
+        Graph[temp1].push_back(temp2);
+        prenum[temp2]++;
+    }
+    int result=sortGraph(n);
+    if(result==true){
+        cout<<"0"<<endl;
+    }else{
+        cout<<"1"<<endl;
+    }
+}
+

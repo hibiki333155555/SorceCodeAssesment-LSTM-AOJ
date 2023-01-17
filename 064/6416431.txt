@@ -1,0 +1,39 @@
+while 1:
+    w,h = map(int, raw_input().split())
+    if w == h == 0:
+        break
+    count = 0
+    cnt = 1
+    lst = [list(raw_input()) for i in range(h)]
+    queue = []
+    for i in range(h):
+        if "@" in lst[i]:
+            wNow, hNow = lst[i].index("@"),i
+    queue.append([hNow, wNow])
+    while 1:
+        hNow,wNow = queue[0][0],queue[0][1]
+        queue.pop(0)
+        if hNow < h-1:
+            if lst[hNow+1][wNow] == ".":
+                queue.append([hNow+1,wNow])
+                lst[hNow+1][wNow] = "$"
+                cnt += 1
+        if wNow < w-1:
+            if lst[hNow][wNow+1] == ".":
+                queue.append([hNow,wNow+1])
+                lst[hNow][wNow+1] = "$"
+                cnt += 1
+        if hNow > 0:
+            if lst[hNow-1][wNow] == ".":
+                queue.append([hNow-1,wNow])
+                lst[hNow-1][wNow] = "$"
+                cnt += 1
+        if wNow > 0:
+            if lst[hNow][wNow-1] == ".":
+                queue.append([hNow,wNow-1])
+                lst[hNow][wNow-1] = "$"
+                cnt += 1
+        if len(queue) == 0:
+            break
+    print cnt     
+        

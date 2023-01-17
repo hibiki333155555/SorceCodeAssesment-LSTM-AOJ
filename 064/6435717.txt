@@ -1,0 +1,8 @@
+l = input()
+a, b = map(int, l.split())
+if a < b:
+    print("a < b")
+elif a == b:
+    print("a == b")
+elif a > b:
+    print("a > b")

@@ -1,0 +1,16 @@
+N, M = map(int, input().split())
+
+balls = {i: i for i in range(1, N + 1)}
+print(balls)
+
+for _ in range(M):
+    X, Y = map(int, input().split())
+    balls[X] = Y
+    print(balls)
+
+print(balls[X])
+
+for i in range(1, N + 1):
+    print(balls[i])
+
+

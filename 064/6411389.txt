@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+
+#define MAX_CHAR 256
+#define MAX_LENGTH 1000
+
+using namespace std;
+
+void GetNext(string & p, int & m, int next[])
+{
+	for (int i = 0; i < MAX_CHAR; i++)
+		next[i] = -1;
+	for (int i = 0; i < m; i++)
+		next[p[i]] = i;
+}
+
+void Sunday(string & s, int & n, string & p, int & m)
+{
+	int next[MAX_CHAR];
+	GetNext(p, m, next);
+
+	int j;  // s 的下标
+	int k;  // p 的下标
+	int i = 0;
+	bool is_find = false;
+	while (i <= n - m)
+	{
+		j = i;
+		k = 0;
+		while (j < n && k < m && s[j] == p[k])
+			j++, k++;
+
+		if (k == m)
+		{
+			cout << "在主串下标 " << i << " 处找到匹配\n";
+			is_find = true;
+		}
+
+		if (i + m < n)
+			i += (m - next[s[i + m]]);
+		else
+			break;
+	}
+
+	if (!is_find)
+		cout << "未找到匹配\n";
+}
+
+int main()
+{
+	string s, p;
+	int n, m;
+
+	while (cin >> s >> p)
+	{
+		n = s.size();
+		m = p.size();
+		Sunday(s, n, p, m);
+		cout << endl;
+	}
+
+	return 0;
+}
+

@@ -1,0 +1,38 @@
+import java.util.*;
+
+public class Main {
+	public int sSort(int[] ay, int n) {
+		int count = 0;
+		for (int i = 0; i < n; i++) {
+			int minj = i;
+			for (int j = i; j < n; j++) {
+				if (ay[j] < ay[minj]) {
+					minj = j;
+				}
+			}
+			int tmp = ay[i];
+			ay[i] = ay[minj];
+			ay[minj] = tmp;
+			if (i != minj) {
+				count++;
+			}
+		}
+		return count;
+	}
+	public static void main(String[] args) {
+		Main m = new Main();
+		Scanner scan = new Scanner(System.in);
+		int num = scan.nextInt();
+		int[] a = new int[num]; 
+		for (int i = 0; i < num; i++) {
+			a[i] = scan.nextInt();
+		}
+		int c = m.sSort(a, num);
+		for (int i = 0; i < num; i++) {
+			if (i == num - 1) System.out.println(a[i]);
+			else System.out.print(a[i] + " ");
+		}
+		System.out.println(c);
+	}
+}
+

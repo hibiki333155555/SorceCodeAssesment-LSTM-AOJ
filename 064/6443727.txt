@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+using namespace std;
+//挺复杂 
+int main()
+{	
+	int n,i,j,a,b;
+	char t;
+	string str,q,p;
+	 
+	cin>>str;
+	cin>>n;
+	
+	for(i=0;i<n;i++)
+	{
+		cin>>q;
+		cin>>a>>b;
+		
+		if(q.compare("replace")==0)
+		{
+			cin>>p;
+			for(j=a;j<=b;j++)
+				str[j]=p[j-a];
+		}
+		else if(q.compare("reverse")==0)	
+		{
+			for(j=a;j<=(b+a)/2;j++)
+			{
+				t=str[j];
+				str[j]=str[b+a-j];
+				str[b+a-j]=t;
+			}
+		}
+		else if(q.compare("print")==0)
+		{
+			for(j=a;j<=b;j++)
+				cout<<str[j];
+			cout<<endl;
+		}
+			
+	}
+	
+	
+	
+return 0;
+}
+

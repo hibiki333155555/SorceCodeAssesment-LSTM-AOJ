@@ -1,0 +1,139 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+
+#define REP(i,n) for(int i=0;i<(n);i++)
+#define ALL(v) v.begin(),v.end()
+#define debug(a) cerr<<#a<<":"<<a<<endl;
+#define debug2(a,b) cerr<<"("<<#a<<","<<#b<<"):("<<a<<","<<b<<")"<<endl;
+#define debug3(a,b,c) cerr<<"("<<#a<<","<<#b<<","<<#c<<"):("<<a<<","<<b<<","<<c<<")"<<endl;
+#define debug4(a,b,c,d) cerr<<"("<<#a<<","<<#b<<","<<#c<<","<<d<<"):("<<a<<","<<b<<","<<c<<","<<d<<")"<<endl;
+
+using ll=long long;
+const ll MOD=998244353;
+
+ll pw(ll n,int k){
+  assert(k>=0);
+  ll res=1;
+  while(k){
+  if(k&1)(res*=n)%=MOD;
+    (n*=n)%=MOD;
+    k>>=1;
+  }
+  return res;
+}
+
+template<typename T>
+istream& operator>>(istream&is,vector<T>&v){
+  for(T&p:v)is>>p;
+  return is;
+}
+template<typename T>
+ostream& operator<<(ostream&os,const vector<T>&v){
+  if(&os==&cerr)os<<"[";
+  for(int i=0;i<v.size();i++){
+    os<<v[i];
+    if(i+1<v.size())os<<(&os==&cerr?",":" ");
+  }
+  if(&os==&cerr)os<<"]";
+  return os;
+}
+
+ll num[26];
+
+pair<ll,ll> val(string s,int x=-1){
+  if(x==-1)x=27;
+  ll a=0,b=0;
+  for(int i=0;i<s.size();i++){
+    if(s[i]!='+'&&s[i]!='-'){
+      if(s[i]==('a'+x)){
+        a++;
+      }
+      else{
+        if(s[i]>='a'&&s[i]<='z'){
+          b+=num[s[i]-'a'];
+        }
+        else b+=char(s[i]-'0');
+      }
+    }
+    else{
+      if(s[i]=='+'){
+        i++;
+        if(s[i]==('a'+x)){
+          a++;
+        }
+        else{
+          if(s[i]>='a'&&s[i]<='z'){
+            b+=num[s[i]-'a'];
+          }
+          else b+=s[i]-'0';
+        }
+      }
+      else{
+        i++;
+        if(s[i]==('a'+x)){
+          a--;
+        }
+        else{
+          if(s[i]>='a'&&s[i]<='z'){
+            b-=num[s[i]-'a'];
+          }
+          else b-=s[i]-'0';
+        }
+      }
+    }
+  }
+  return {a,b};
+}
+
+vector<pair<ll,int>> solve(vector<string>S){
+  vector<pair<ll,int>> res;
+  for(string s:S){
+    if(s.size()==1){
+      num[s[0]-'a']=0;
+      continue;
+    }
+    ll times=1;
+    bool P=false;
+    for(int i=0;i<s.size()-3;i++)if(s.substr(i,3)=="pri")P=true;
+    while(s.substr(0,3)=="for"){
+      int r=0;
+      while(s[4+r]!=')')r++;
+      // [ s[4] , s[4+r] ) が式
+      times*=val(s.substr(4,r)).second;
+      if(!P)times%=MOD;
+      s=s.substr(4+r+1);
+    }
+    if(times==0)continue;
+    if(s.substr(0,3)=="pri"){
+      int V=val(s.substr(6,s.size()-6-1)).second;
+      if(res.size()&&res.back().second==V)res.back().first+=times;
+      else res.push_back({times,V});
+    }
+    else{
+      int t=s[0]-'a';
+      auto [a,b]=val(s.substr(3),t);
+      if(a==0)num[t]=b;
+      else{
+        num[t]= (pw(a,times)*(num[t]+ (b*pw(a-1,MOD-2)))%MOD - (b*pw((a-1),MOD-2))%MOD)%MOD;
+        if(num[t]<0)num[t]+=MOD;
+      }
+    }
+  }
+  return res;
+}
+
+signed main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int n,m;
+  while(cin>>n>>m,n){
+    vector<string> s(n),t(m);
+    cin>>s>>t;
+    if(solve(s)==solve(t))cout<<"Yes\n";
+    else cout<<"No\n";
+  }
+}

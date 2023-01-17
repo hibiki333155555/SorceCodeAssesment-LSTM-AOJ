@@ -1,0 +1,9 @@
+S = int(input())
+A = int(input())
+B = int(input())
+ans = A+B
+while ans <= S:
+    ans += B
+    if ans >= S
+    break
+print(ans)

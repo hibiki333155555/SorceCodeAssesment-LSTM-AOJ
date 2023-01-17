@@ -1,0 +1,25 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include<bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+const int INF = 1e9;
+const ll inf = 1LL<<62;
+
+void solve() {
+  vector<ll> s(3), t(3);
+  for (int i=0; i<3; i++) cin >> s[i];
+  for (int i=0; i<3; i++) cin >> t[i];
+  ll a = abs(t[0] - s[0]) % 2, b = abs(t[1] - s[1]) % 2, c = abs(t[2] - s[2]) % 2;
+  cout << (a == b && b == c ? "Yes" : "No") << '\n';
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  // int t; cin >> t;
+  /*while (t--)*/ solve();
+}
+

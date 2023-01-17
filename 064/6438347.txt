@@ -1,0 +1,29 @@
+n = int(input())
+# 全部で120部屋
+arr = []
+for i in range(120):
+    arr.append(0)
+
+def ston(s):
+    l = s.split()
+    b = int(l[0])-1
+    f = int(l[1])-1
+    r = int(l[2])-1
+    return b*30+f*10+r
+
+# arrに入居者データ入力
+for i in range(n):
+    l = input()
+    v = int(l.split()[3])
+    arr[ston(l)] += v
+
+# 出力
+for i in range(12):
+    if not(i==0) and i%3==0:
+        print("####################")
+    for j in range(10):
+        print(arr[i*10+j],end=" ")
+        if j==9:
+            print("")
+
+

@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    while (true) {
+        int h, w;
+        cin >> h >> w;
+        if (h == 0 && w == 0)break;
+
+        vector<vector<int>> e(h, vector<int>(w));
+        for (auto &x: e) for (auto &y: x)cin >> y;
+
+        int ret = 0;
+        for (int u = 0; u < h - 2; u++) {
+            for (int d = u + 2; d < h; d++) {
+                for (int l = 0; l < w - 2; l++) {
+                    for (int r = l + 2; r < w; r++) {
+                        int insideMax = 0, edgeMin = 10;
+
+                        for (int i = u; i <= d; i++) {
+                            for (int j = l; j <= r; j++) {
+                                if (u < i && i < d && l < j && j < r)insideMax = max(insideMax, e[i][j]);
+                                else edgeMin = min(edgeMin, e[i][j]);
+                            }
+                        }
+
+                        ret = max(ret, (d - u - 1) * (r - l - 1) * (edgeMin - insideMax));
+                    }
+                }
+            }
+        }
+
+        cout << ret << endl;
+    }
+    return 0;
+}

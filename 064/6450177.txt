@@ -1,0 +1,225 @@
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+using namespace std;
+using i64 = long long;
+#define rep(i,s,e) for(i64 i = (s);i < (e);i++)
+template<class S, class T> std::ostream& operator<<(std::ostream& os, const std::pair<S, T>& p);
+template<class T> std::ostream& operator<<(std::ostream& os, const std::vector<T>& v);
+template<class S, class T> std::ostream& operator<<(std::ostream& os, const std::pair<S, T>& p) {
+  return (os << "(" << p.first << ", " << p.second << ")");
+}
+template<class T> std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
+  os << "[";
+  for(int i = 0;i < v.size();i++) os << v[i] << ", ";
+  return (os << "]");
+}
+template<class T>
+static inline std::vector<T> ndvec(size_t&& n, T val) { return std::vector<T>(n, std::forward<T>(val)); }
+template<class... Tail>
+static inline auto ndvec(size_t&& n, Tail&&... tail) {
+  return std::vector<decltype(ndvec(std::forward<Tail>(tail)...))>(n, ndvec(std::forward<Tail>(tail)...));
+}
+
+#include <iostream>
+using i64 = long long;
+template<i64 M> struct modint { i64 a;
+  constexpr modint(const i64 x = 0): a((x%M+M)%M){}
+  constexpr i64 value() const { return a; }
+  constexpr modint inv() const { return this->pow(M-2); }
+  constexpr modint pow(i64 r) const {
+    modint ans(1); modint aa = *this;
+    while(r) { if(r & 1) ans *= aa; aa *= aa; r >>= 1; }
+    return ans;
+  }
+  constexpr modint& operator=(const i64 r) { a = (r % M + M) % M; return *this; }
+  constexpr modint& operator+=(const modint r) { a += r.a; if(a >= M) a -= M; return *this; }
+  constexpr modint& operator-=(const modint r) { a -= r.a; if(a < 0) a += M; return *this; }
+  constexpr modint& operator*=(const modint r) { a = a * r.a % M; return *this; }
+  constexpr modint& operator/=(const modint r) { (*this) *= r.inv(); return *this; }
+  constexpr modint operator+(const modint r) const { return modint(*this) += r; }
+  constexpr modint operator-(const modint r) const { return modint(*this) -= r; }
+  constexpr modint operator*(const modint r) const { return modint(*this) *= r; }
+  constexpr modint operator/(const modint r) const { return modint(*this) /= r; }
+  constexpr bool operator!=(const modint r) const { return this->value() != r.value(); }
+};
+
+template<const i64 M> std::ostream& operator<<(std::ostream& os, const modint<M>& m) { os << m.value(); return os; }
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+using i64 = long long;
+
+using fp = modint<998244353>;
+
+struct HeavyLightDecomposition {
+  vector<vector<i64>> G;
+  vector<i64> in, out;
+  vector<i64> sz;
+  vector<i64> seq;
+  vector<i64> next;
+  vector<i64> par;
+  vector<fp> sum;
+
+  HeavyLightDecomposition() {}
+
+  HeavyLightDecomposition(i64 n)
+    : G(n), in(n), out(n), sz(n), next(n, -1), par(n, -1), sum(n, 0) {}
+
+  void add_edge(i64 u, i64 v) {
+    G[u].push_back(v);
+    G[v].push_back(u);
+  }
+
+  void dfs_sz(i64 v, i64 f) {
+    sz[v] = 1;
+    for(i64 i = 0;i < G[v].size();i++) {
+      i64 x = G[v][i];
+      if(x == f) continue;
+      dfs_sz(x, v);
+      par[x] = v;
+      sz[v] += sz[x];
+      sum[v] += fp(1) + sum[x] * 2;
+      if(sz[G[v][0]] < sz[G[v][i]]) { swap(G[v][0], G[v][i]); }
+    }
+  }
+
+  i64 dfs_eul(i64 v, i64 f, i64 t) {
+    in[v] = t++;
+    seq.push_back(v);
+    for(i64 i = 0;i < G[v].size();i++) {
+      i64 x = G[v][i];
+      if(x == f) continue;
+      next[x] = (i == 0) ? next[v] : x;
+      t = dfs_eul(x, v, t);
+    }
+    return out[v] = t;
+  }
+
+  void build(i64 r) {
+    dfs_sz(r, -1);
+    dfs_eul(r, -1, 0);
+  }
+
+  const vector<i64>& sequence() const { return seq; }
+  i64 lca(i64 a, i64 b) const {
+    while(true) {
+      if(in[b] > in[a]) swap(a, b);
+      if(next[b] == next[a]) return b;
+      a = par[next[a]];
+    }
+  }
+
+  pair<vector<pair<i64, i64>>, vector<pair<i64, i64>>> path(i64 a, i64 b, bool edge) const {
+    vector<pair<i64, i64>> l, r;
+    while(true) {
+      if(in[b] > in[a]) { swap(a, b); swap(l, r); }
+      if(next[b] == next[a]) {
+        l.push_back({ in[b] + !!edge, in[a] + 1 });
+        break;
+      }
+      l.push_back({ in[next[a]], in[a] + 1 });
+      a = par[next[a]];
+    }
+    return { std::move(l), std::move(r) };
+  }
+
+  pair<i64, i64> subtree(i64 v, bool edge) { return { in[v] + !!edge, out[v] }; }
+};
+
+
+i64 N;
+i64 Q;
+vector<i64> X, Y;
+vector<vector<i64>> Qs;
+vector<i64> cnt;
+vector<fp> pre;
+vector<fp> res;
+HeavyLightDecomposition hld(N);
+
+void dfs(i64 v, i64 p, fp up) {
+  for(auto qi: Qs[v]) {
+    cnt[qi]++;
+    if(cnt[qi] == 2) {
+        i64 y = v;
+        i64 x = (X[qi] == v) ? Y[qi] : X[qi];
+        auto [l, r] = hld.path(x, y, true);
+        //cout << l << " " << r << endl;
+        i64 len = 0;
+        for(auto [a, b]: l) {
+          len += b - a;
+        }
+        for(auto [a, b]: r) {
+          len += b - a;
+        }
+        //cout << "query " << x << " " << y << " len " << len << endl;
+        if(hld.in[x] <= hld.in[y] && hld.in[y] < hld.out[x]) {
+          fp above = pre[x] + 1;
+          fp below = hld.sum[y] * 2 + 1;
+          //cout << above << " " << x << " " << pre[x] << endl;
+          //cout << below << " " << y << " " << hld.sum[y] + 1 << endl;
+          fp ans = (above * below) * fp(2).pow(len);
+          res[qi] = ans;
+        }
+        else {
+          fp above = hld.sum[x] * 2 + 1;
+          fp below = hld.sum[y] * 2 + 1;
+          //cout << above << " " << below << endl;
+          fp ans = (above * below) * fp(2).pow(len);
+          res[qi] = ans;
+        }
+    }
+  }
+  for(auto u: hld.G[v]) {
+    if(u == p) continue;
+    fp pp = (p == -1) ? 0 : 1;
+    pre[v] = ((hld.sum[v] - hld.sum[u] * 2 - fp(1)) + up * 2 + pp) * 2;
+    dfs(u, v, ((hld.sum[v] - hld.sum[u] * 2 - fp(1)) + up * 2 + pp) * 2);
+  }
+}
+
+int main() {
+  cin >> N;
+  
+  hld = HeavyLightDecomposition(N);
+  rep(i,0,N - 1) {
+    i64 a, b;
+    cin >> a >> b;
+    a--;
+    b--;
+    hld.add_edge(a, b);
+  }
+
+  hld.build(0);
+
+  cin >> Q;
+  
+  X.resize(Q);
+  Y.resize(Q);
+  pre.resize(N);
+  Qs.resize(N);
+  cnt.resize(Q);
+  res.resize(Q);
+  rep(i,0,Q) {
+    i64 x, y;
+    cin >> x >> y;
+    x--;
+    y--;
+    X[i] = x;
+    Y[i] = y;
+    Qs[x].push_back(i);
+    Qs[y].push_back(i);
+  }
+  /*rep(i,0,N) {
+    cout << i << " " << hld.sum[i] << endl;
+  }*/
+  dfs(0, -1, fp(0));
+  
+  rep(i,0,Q) {
+    cout << res[i] << endl;
+  }
+}
+

@@ -1,0 +1,10 @@
+#include <stdio.h>
+int main()
+{
+    float r,pi;
+    pi=3.1415927;
+    scanf("%f", &r);
+    printf("%.6f  %.6f\n",pi*r*r,2*pi*r);
+    return 0;
+}
+

@@ -1,0 +1,85 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+static const int N = 10000;
+static const int NTL = -1;
+
+/*最小生成树的权重和*/
+int weighthe = 0;
+
+struct Edge {
+	int start;
+	int end;
+	int weight; 
+};
+
+/*对边结点*/
+bool big(const Edge& e1, const Edge& e2)
+{
+	return e1.weight > e2.weight;
+}
+
+struct setnode {
+	int parent = NTL;
+	int height = 1;
+};
+
+/*互质集合*/
+setnode myset[N];
+
+/*管理边的vector*/
+vector<Edge> myedge;
+
+/*将两棵互质树合并起来,如果不互质则不做操作*/
+bool unio(int x, int y)
+{
+	int rootx = x, rooty = y;
+	while (myset[rootx].parent != NTL)
+		rootx = myset[rootx].parent;
+	while (myset[rooty].parent != NTL)
+		rooty = myset[rooty].parent;
+	if (rootx == rooty)
+		return 0;
+	if (myset[rootx].height >= myset[rooty].height)
+	{
+		myset[rooty].parent = rootx;
+		if (myset[rootx].height < myset[rooty].height + 1)
+			myset[rootx].height = myset[rooty].height + 1;
+	}
+	else
+	{
+		myset[rootx].parent = rooty;
+		if (myset[rooty].height < myset[rootx].height + 1)
+			myset[rooty].height = myset[rootx].height + 1;
+	}
+	return 1;
+}
+
+int main()
+{
+	int n, e;
+	cin >> n >> e;
+	for (int i = 0; i < e; i++)
+	{
+		int s, t, w;
+		cin >> s >> t >> w;
+		Edge temp;
+		temp.start = s; temp.end = t; temp.weight = w;
+		myedge.push_back(temp);
+		temp.start = t; temp.end = s;
+		myedge.push_back(temp);
+	}
+
+	sort(myedge.begin(), myedge.end(), big );
+	int cishu = myedge.size();
+	for (int i = 0; i < cishu; i++)
+	{
+		if (unio(myedge.back().start, myedge.back().end))
+			weighthe += myedge.back().weight;
+		myedge.pop_back();
+	}
+	cout << weighthe << endl;
+	return 0;
+}

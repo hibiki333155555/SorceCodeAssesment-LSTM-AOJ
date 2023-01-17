@@ -1,0 +1,13 @@
+import scala.io.StdIn
+
+object Main {
+  def main(args: Array[String]): Unit = {
+    val Array(n, m, k, x) = StdIn.readLine().split(" ").map(_.toLong)
+    println(
+      if (StdIn.readLine().split(" ").map(_.toInt).max.toLong * k >= x * m)
+        "Yes"
+      else "No"
+    )
+  }
+}
+

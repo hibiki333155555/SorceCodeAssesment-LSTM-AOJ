@@ -1,0 +1,96 @@
+#include <iostream>
+#include<cstdio>
+using namespace std;
+
+struct Node {
+	int key;
+	Node* prev, * next;
+};
+Node* nil;
+void init()
+{
+	nil = (Node*)malloc(sizeof(Node));
+	nil->next = nil;
+	nil->prev = nil;
+}
+void printList()
+{
+	Node* cur = nil->next;
+	int isf = 0;
+	while (1)
+	{
+		if (cur == nil)break;
+		if (isf++ > 0)printf(" ");
+		printf("%d", cur->key);
+		cur = cur->next;
+	}
+}
+void insert(int key) //头插
+{
+	Node* x = (Node*)malloc(sizeof(Node));
+	x->key = key;
+	x->next = nil->next;
+	nil->next->prev = x;
+	nil->next = x;
+	x->prev = nil;
+
+}
+
+Node* listSearch(int key)
+{
+	Node* cur = nil->next;
+	while (cur != nil && cur->key != key)
+	{
+		cur = cur->next;
+	}
+	return cur;
+}
+void deleteNode(Node* t)
+{
+	if (t == nil) return;
+	t->prev->next = t->next;
+	t->next->prev = t->prev;
+}
+void deleteFirst()
+{
+	deleteNode(nil->next);
+}
+void deleteLast()
+{
+	deleteNode(nil->prev);
+}
+void deleteKey(int key)
+{
+	deleteNode(listSearch(key));
+}
+int main()
+{
+	int num,n;
+	char command[20];
+	int np = 0, nd = 0, size = 0;
+	scanf("%d", &num);
+	init();
+	for (int i = 0; i < num; i++)
+	{
+		scanf("%s %d", command,&n);
+		if (command[0] == 'i')
+		{
+			insert(n); np++; size++;
+		}
+		else if (command[0] == 'd')
+		{
+			if (strlen(command) > 6)
+			{
+				if (command[6] == 'F')deleteFirst();
+				else if (command[6] == 'L') deleteLast();
+			}
+			else
+			{
+				deleteKey(n); nd++;
+			}
+			size--;
+		}
+	}
+	printList();
+}
+

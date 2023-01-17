@@ -1,0 +1,23 @@
+#include<stdio.h>
+#include<string.h>
+#include <ctype.h>
+
+int main(void){
+    int cnt[26]={};
+    char moji[1200]; 
+    int i=0;
+
+    while(scanf("%c",&moji[i])!=EOF){
+        if(moji[i]>='A' && moji[i]<='Z'){
+            cnt[(moji[i]-'A')]++;
+        }
+        else if(moji[i]>='a' && moji[i]<='z'){
+            cnt[(moji[i]-'a')]++;
+        }
+        i++;
+    }
+    for(i=0;i<26;i++){
+        printf("%c : %d\n",i+97,cnt[i]);
+    }
+    return 0;
+}

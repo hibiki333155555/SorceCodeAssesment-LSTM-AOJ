@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+ll gcd(ll(a), ll(b)) {
+	ll c = a;
+	while (a % b != 0) {
+		c = a % b;
+		a = b;
+		b = c;
+	}
+	return b;
+}
+
+
+int main() {
+   ll N,M;
+   cin>>N>>M;
+  vector<string> S(M);
+  rep(m,M){cin>>S[m];}
+  vll W(N+1,0);
+  rep(m,M)rep(i,N)if(S[m][i]=='W')W[i+1]++;
+  rep(i,N)W[i+1]+=W[i];
+  ll m=1e18;
+  ll an=-1;
+  rep(i,N+1){
+     ll d1=i*M-W[i];
+     ll d2=(W[N]-W[i]);
+     //cout<<i<<" "<<d1<<" "<<d2<<endl;
+     if(m>(d1+d2)){
+        an=i;
+        m=d1+d2;
+     }
+  }
+  cout<<an<<" "<<an+1<<endl;
+  
+
+
+}
+

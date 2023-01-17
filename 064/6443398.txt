@@ -1,0 +1,14 @@
+# coding: utf-8
+# Your code here!
+l = input().split()
+n1 = int(l[0])
+n2 = int(l[1])
+def f(a1,a2):
+    maxa = max(a1,a2)
+    i = maxa
+    while i > 0:
+        if a1%i==0 and a2%i==0:
+            return i
+            break
+        i -=1
+print(f(n1,n2))

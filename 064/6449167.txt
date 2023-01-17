@@ -1,0 +1,20 @@
+while True:
+    integer=input().split()
+    H=int(integer[0])
+    W=int(integer[1])
+    v=False
+    if H==W==0:
+        break
+    for i in range(H):
+        for j in range(W):
+            if v is False:
+               print("#",end="")
+               v=True
+            else:
+               print(".",end="")
+               v=False
+        print()
+        if i%2==0:
+            v=True
+        else:
+            v=False

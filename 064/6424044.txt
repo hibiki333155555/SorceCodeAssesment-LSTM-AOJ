@@ -1,0 +1,64 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct card{
+    char pic;
+    int num;
+}CARD;
+void quickSort(CARD *,int,int);
+int partition(CARD *,int,int);
+void swap(CARD *,CARD *);
+void mergeSort(CARD *,int,int);
+void merge(CARD *,int,int,int);
+int cmp(CARD *,CARD *,int);
+CARD *cardsQ,*cardsM,*cardsMM;
+int main(){
+    int n;
+    scanf("%d\n",&n);
+    cardsQ=(CARD *)malloc(sizeof(CARD)*n);
+    cardsM=(CARD *)malloc(sizeof(CARD)*n);
+    cardsMM=(CARD *)malloc(sizeof(CARD)*n);
+    for(int i=0;i<n;i++){scanf("%c %d\n",&cardsQ[i].pic,&cardsQ[i].num);cardsM[i]=cardsQ[i];}
+    quickSort(cardsQ,0,n-1);
+    mergeSort(cardsM,0,n);
+    if(cmp(cardsQ,cardsM,n))printf("Stable\n");
+    else printf("Not stable\n");
+    for(int i=0;i<n;i++)printf("%c %d\n",cardsQ[i].pic,cardsQ[i].num);
+    //for(int i=0;i<n;i++)printf("%c %d\n",cardsM[i].pic,cardsM[i].num);
+    return 0;
+}
+
+void quickSort(CARD cardsQ[],int p,int r){
+    if(p<r){
+        int q=partition(cardsQ,p,r);
+        quickSort(cardsQ,p,q-1);
+        quickSort(cardsQ,q+1,r);
+    }
+}
+int partition(CARD cardsQ[],int p,int r){
+    int i=p-1,j;
+    for(j=p;j<r;j++)if(cardsQ[j].num<=cardsQ[r].num)swap(&cardsQ[++i],&cardsQ[j]);
+    swap(&cardsQ[i+1],&cardsQ[r]);
+    return i+1;
+}
+void swap(CARD *a,CARD *b){CARD tmp=*a;*a=*b;*b=tmp;}
+void mergeSort(CARD *cardsM,int left,int right){
+    int mid=(left+right)/2;
+    if(left==right||left+1==right)return;
+    mergeSort(cardsM,left,mid);
+    mergeSort(cardsM,mid,right);
+    merge(cardsM,left,mid,right);
+}
+void merge(CARD *cardsM,int left,int mid,int right){
+    int i=left,j=mid,k=0;
+    while(i<mid&&j<right){
+        if(cardsM[i].num<=cardsM[j].num)cardsMM[k++]=cardsM[i++];
+        else cardsMM[k++]=cardsM[j++];
+    }
+    if(i==mid)while(j<right)cardsMM[k++]=cardsM[j++];
+    else while(i<mid)cardsMM[k++]=cardsM[i++];
+    for(i=0;i<k;i++)cardsM[left+i]=cardsMM[i];
+}
+int cmp(CARD *cardsQ,CARD *cardsM,int n){
+    for(int i=0;i<n;i++)if(cardsQ[i].pic!=cardsM[i].pic||cardsQ[i].num!=cardsM[i].num)return 0;
+    return 1;
+}

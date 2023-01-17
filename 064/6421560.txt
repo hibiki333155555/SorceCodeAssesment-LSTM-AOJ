@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(ll i=0;i<n;i++)
+#define repl(i,l,r) for(ll i=(l);i<(r);i++)
+#define per(i,n) for(ll i=(n)-1;i>=0;i--)
+#define perl(i,r,l) for(ll i=r-1;i>=l;i--)
+#define fi first
+#define se second
+#define pb push_back
+#define ins insert
+#define pqueue(x) priority_queue<x,vector<x>,greater<x>>
+#define all(x) (x).begin(),(x).end()
+#define CST(x) cout<<fixed<<setprecision(x)
+#define rev(x) reverse(x);
+using ll=long long;
+using vl=vector<ll>;
+using vvl=vector<vector<ll>>;
+using pl=pair<ll,ll>;
+using vpl=vector<pl>;
+using vvpl=vector<vpl>;
+const ll MOD=1000000007;
+const ll MOD9=998244353;
+const int inf=1e9+10;
+const ll INF=4e18;
+const ll dy[8]={1,0,-1,0,1,1,-1,-1};
+const ll dx[8]={0,1,0,-1,1,-1,1,-1};
+template <typename T> inline bool chmax(T &a, T b) {
+  return ((a < b) ? (a = b, true) : (false));
+}
+template <typename T> inline bool chmin(T &a, T b) {
+  return ((a > b) ? (a = b, true) : (false));
+}
+int main(){
+  ll n;cin >> n;
+  vl ans(n);rep(i,n)cin >> ans[i];
+  ll q;cin >> q;
+  stack<pl> st;
+  vl sig(n);rep(i,n)sig[i]=i;
+  //vl ans(n);rep(i,n)ans[i]=i;
+  while(q--){
+    ll t;cin >> t;
+    if(t==1){
+      ll x,y;cin >> x >> y;x--;y--;
+      st.push({x,y});
+      swap(sig[x],sig[y]);
+    }
+    else if(t==2){
+      auto [x,y]=st.top();st.pop();
+      swap(sig[x],sig[y]);
+    } 
+    else{
+      vvl dp(33,vl(n));
+      dp[0]=sig;
+      rep(x,32){
+        rep(i,n){
+          dp[x+1][i]=dp[x][dp[x][i]];
+        }
+      }
+      /*rep(ff,3){
+        rep(gg,n)cout << dp[ff][gg] <<" ";cout << endl;
+      }*/
+      ll k;cin >> k;
+      vl nans(n);
+      rep(i,n){
+        ll now=i;
+        per(x,33){
+          if(k>>x&1){
+            now=dp[x][now];
+          }
+        }
+        nans[i]=ans[now];
+      }
+      swap(ans,nans);
+      //cout << endl;
+      //rep(i,n)cout << ans[i] <<" ";cout << endl;
+    }
+  }
+  rep(i,n)cout << ans[i] <<" ";cout << endl;
+} 

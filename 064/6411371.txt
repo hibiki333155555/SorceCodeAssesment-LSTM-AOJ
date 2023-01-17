@@ -1,0 +1,17 @@
+prime = [True] * (10**8 + 1)
+prime[0] = False
+prime[1] = False
+for i in range(2, 10**8 + 1):
+    if prime[i]:
+        j = 2 * i
+        while j <= 10**8:
+            prime[j] = False
+            j += i
+
+n = int(input())
+ans = 0
+for k in range(n):
+    if prime[int(input())]:
+        ans += 1
+
+print(ans)

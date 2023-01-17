@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+public class Main{
+
+
+	public static void main(String[] args){
+		
+		Scanner scan = new Scanner(System.in);
+		
+		int r = scan.nextInt();
+		double ca = Circlearea(r) ;
+		double cl = Circllength(r);
+		
+		System.out.println(ca + " " + cl);
+    }
+	
+	public static double Circlearea(int r) {
+		return r * r * Math.PI;
+	}
+	
+	public static double Circllength(int r) {
+		return r * 2 * Math.PI;
+	}
+    
+}
+

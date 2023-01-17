@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+using namespace std;
+//
+int main()
+{	
+	int x,sum,a,b,c,d;
+	
+	cin>>x;
+	while(x!=0)
+	{
+		a=x/1000;
+		b=(x%1000)/100;
+		c=(x%100)/10;
+		d=x%10;
+		sum=a+b+c+d;
+		
+		cout<<sum<<endl;
+		cin>>x;
+	}
+	
+
+return 0;
+}
+

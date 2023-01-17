@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+queue<pair<double,double> >ans;
+queue<pair<double,double> >tmp;
+
+void solve(pair<double,double> x,pair<double,double> y)
+{
+    pair<double,double> t1;
+    pair<double,double> t2;
+    pair<double,double> t;
+    t1.first=(2*x.first+y.first)/3;
+    t1.second=(2*x.second+y.second)/3;
+    t2.first=(x.first+2*y.first)/3;
+    t2.second=(x.second+2*y.second)/3;
+    double th=M_PI*60.0/180.0;
+    t.first=(t2.first-t1.first)*cos(th)-(t2.second-t1.second)*sin(th)+t1.first;
+    t.second=(t2.first-t1.first)*sin(th)+(t2.second-t1.second)*cos(th)+t1.second;
+    tmp.push(t1);
+    tmp.push(t);
+    tmp.push(t2);
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    ans.push(make_pair(0,0));
+    ans.push(make_pair(100,0));
+    while(n--)
+    {
+        pair<double,double> r;
+        pair<double,double> l;
+        int flag=1;
+        while(!ans.empty())
+        {
+            l=ans.front();
+            ans.pop();
+            if(ans.empty()){break;}
+            r=ans.front();
+            tmp.push(l);
+
+            solve(l,r);
+        }
+        tmp.push(l);
+        while(!tmp.empty()){ans.push(tmp.front());tmp.pop();}
+    }
+    while(!ans.empty()){
+        pair<double,double> t=ans.front();
+        printf("%.8lf %.8lf\n",t.first,t.second);
+
+        ans.pop();
+    }
+}
+

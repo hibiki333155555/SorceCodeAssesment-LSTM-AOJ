@@ -1,0 +1,17 @@
+n = int(input())
+G = [None] * n
+for _ in range(n):
+  u, _, *V = map(int, input().split())
+  G[u-1] = [v-1 for v in V]
+
+d = [0] + [-1] * (n-1)
+q = [0]
+while q:
+  v = q.pop(0)
+  for u in G[v]:
+    if d[u] == -1:
+      d[u] = d[v] + 1
+      q.append(u)
+
+for v in range(n):
+  print(v+1, d[v])

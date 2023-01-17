@@ -1,0 +1,17 @@
+import java.util.*;
+public class Main{
+public static void main(String[] args){
+  Scanner sc= new Scanner(System.in);
+    //標準入力うけつけ
+    int[] x=new int[10001];
+    int i=0;
+
+   while(true){
+	   x[i]=sc.nextInt();
+	   if(x[i]==0) {break;}
+    	System.out.println("case "+(i+1)+": "+x[i]);
+    	i++;
+    }
+  }    
+}
+

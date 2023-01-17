@@ -1,0 +1,41 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+    	Scanner sc = new Scanner(System.in);
+    	int H;
+    	int W;
+    	
+    	while (true) {
+    		H = sc.nextInt();
+    		W = sc.nextInt();
+    		
+    		if (H == 0 && W == 0) {
+    			break;
+    		}
+    		
+    		for (int i = 1; i <= H; i ++) {
+    			for (int j = 1; j <= W; j++) {
+    				if (i == 1 || i == H) {
+    					System.out.print('#');    //最初と最後の行は全部#
+    				} else {
+    					if (j == 1 || j == W) {   //最初と最後の列だけ#で、あとは.を出力
+    						System.out.print('#');
+    					} else {
+    						System.out.print('.');
+    					}
+    				}
+    				
+    				if (j == W) {
+    					System.out.println("");
+    				}
+    			}
+    			if (i == H) {
+    				System.out.println("");		//長方形の間の改行
+    			}
+    		}
+    		
+    	}
+    }
+}
+

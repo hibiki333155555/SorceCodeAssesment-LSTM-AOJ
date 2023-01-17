@@ -1,0 +1,7 @@
+while True:
+    if input() == "0 0":
+        break
+    
+    h, w = map(int, input().split(" "))
+    for i in range(h):
+        print("#" * w)

@@ -1,0 +1,19 @@
+list = []
+while True:
+  try:
+    list.append(input().split())
+  except:
+    break
+    
+for index, numbers in enumerate(list):
+  f, s = numbers
+  f = int(f)
+  s = int(s)
+  
+  if f == 0 and s == 0:
+    break
+  
+  if f <= s:
+    print(f, s) 
+  else:
+    print(s, f)

@@ -1,0 +1,6 @@
+n=int(input())
+h = n // 3600
+mod = n % 3600
+m = mod // 60
+s = mod % 60
+print(f'{h}:{m}:{s}')

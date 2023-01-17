@@ -1,0 +1,560 @@
+#line 2 "/mnt/c/Users/Cyanmond/ProCon/Library/utilitys.hpp"
+#include <algorithm>
+#include <array>
+#include <cstdint>
+#include <cassert>
+#include <iterator>
+#include <limits>
+#include <numeric>
+#include <queue>
+#include <tuple>
+#include <type_traits>
+#include <utility>
+
+using i8 = std::int8_t;
+using u8 = std::uint8_t;
+using i16 = std::int16_t;
+using i32 = std::int32_t;
+using i64 = std::int64_t;
+using u16 = std::uint16_t;
+using u32 = std::uint32_t;
+using u64 = std::uint64_t;
+
+constexpr i8 operator""_i8(unsigned long long n) noexcept { return static_cast<i8>(n); }
+constexpr i16 operator""_i16(unsigned long long n) noexcept {
+    return static_cast<i16>(n);
+}
+constexpr i32 operator""_i32(unsigned long long n) noexcept {
+    return static_cast<i32>(n);
+}
+constexpr i64 operator""_i64(unsigned long long n) noexcept {
+    return static_cast<i64>(n);
+}
+constexpr u8 operator""_u8(unsigned long long n) noexcept { return static_cast<u8>(n); }
+constexpr u16 operator""_u16(unsigned long long n) noexcept {
+    return static_cast<u16>(n);
+}
+constexpr u32 operator""_u32(unsigned long long n) noexcept {
+    return static_cast<u32>(n);
+}
+constexpr u64 operator""_u64(unsigned long long n) noexcept {
+    return static_cast<u64>(n);
+}
+
+constexpr char eoln = '\n';
+
+template <typename T, T Div = 2> constexpr T infty = std::numeric_limits<T>::max() / Div;
+template <class T>
+using RevPriorityQueue = std::priority_queue<T, std::vector<T>, std::greater<T>>;
+
+constexpr std::array<std::pair<int, int>, 4> dxy4 = {{{1, 0}, {0, 1}, {-1, 0}, {0, -1}}};
+
+class Range {
+    struct Iterator {
+        int itr;
+        constexpr Iterator(const int pos) noexcept : itr(pos) {}
+        constexpr void operator++() noexcept { ++itr; }
+        constexpr bool operator!=(const Iterator &other) const noexcept {
+            return itr != other.itr;
+        }
+        constexpr int operator*() const noexcept { return itr; }
+    };
+    const Iterator first, last;
+
+  public:
+    explicit constexpr Range(const int f, const int l) noexcept
+        : first(f), last(std::max(f, l)) {}
+    constexpr Iterator begin() const noexcept { return first; }
+    constexpr Iterator end() const noexcept { return last; }
+};
+
+class ReversedRange {
+    struct Iterator {
+        int itr;
+        constexpr Iterator(const int pos) noexcept : itr(pos) {}
+        constexpr void operator++() noexcept { --itr; }
+        constexpr bool operator!=(const Iterator &other) const noexcept {
+            return itr != other.itr;
+        }
+        constexpr int operator*() const noexcept { return itr; }
+    };
+    const Iterator first, last;
+
+  public:
+    explicit constexpr ReversedRange(const int f, const int l) noexcept
+        : first(l - 1), last(std::min(f, l) - 1) {}
+    constexpr Iterator begin() const noexcept { return first; }
+    constexpr Iterator end() const noexcept { return last; }
+};
+
+#define SIKICM_REP1(i, r) for (const int i : Range(0, r))
+#define SIKICM_REP2(i, l, r) for (int i : Range(l, r))
+#define SIKICM_RVP1(i, r) for (const int i : ReversedRange(0, r))
+#define SIKICM_RVP2(i, l, r) for (int i : ReversedRange(l, r))
+#define SIKICM_SELECT2(a, b, c, name, ...) name
+#define REP(...) SIKICM_SELECT2(__VA_ARGS__, SIKICM_REP2, SIKICM_REP1)(__VA_ARGS__)
+#define RVP(...) SIKICM_SELECT2(__VA_ARGS__, SIKICM_RVP2, SIKICM_RVP1)(__VA_ARGS__)
+#define HRL(n) for ([[maybe_unused]] const int loop_counter : Range(0, n))
+
+template <class Container> constexpr int len(const Container &c) {
+    return static_cast<int>(std::size(c));
+}
+
+template <typename T> constexpr bool chmin(T &v, const T a) {
+    if (v > a) {
+        v = a;
+        return true;
+    }
+    return false;
+}
+
+template <typename T> constexpr bool chmax(T &v, const T a) {
+    if (v < a) {
+        v = a;
+        return true;
+    }
+    return false;
+}
+
+template <typename T> constexpr T ceil_div(const T x, const T y) {
+    assert(y != 0);
+    assert(x > 0 and y > 0);
+    return (x + y - 1) / y;
+}
+
+template <class Container, class T> constexpr int lwb(const Container &c, const T &val) {
+    return static_cast<int>(
+        std::distance(c.cbegin(), std::lower_bound(c.cbegin(), c.cend(), val)));
+}
+
+template <class Container, class T> constexpr int upb(const Container &c, const T &val) {
+    return static_cast<int>(
+        std::distance(c.cbegin(), std::upper_bound(c.cbegin(), c.cend(), val)));
+}
+
+template <class Container, class F> constexpr int lmp(const Container &c, const F &f) {
+    return static_cast<int>(
+        std::distance(c.cbegin(), std::partition_point(c.cbegin(), c.cend(), f)));
+}
+
+template <class F> class RecursiveLambda {
+    F f;
+
+  public:
+    explicit constexpr RecursiveLambda(F &&f_) : f(std::forward<F>(f_)) {}
+    template <class... Args> constexpr auto operator()(Args &&... args) const {
+        return f(*this, std::forward<Args>(args)...);
+    }
+};
+
+template <class F> constexpr decltype(auto) rec_lambda(F &&f) {
+    return RecursiveLambda<F>(std::forward<F>(f));
+}
+
+template <class T, class... Tail>
+void renumber(const std::vector<int> &order, std::vector<T> &head, Tail &... tail) {
+    const int n = len(order);
+    std::vector<T> sorted_head(n);
+    REP(i, n) sorted_head[i] = head[order[i]];
+
+    head = std::move(sorted_head);
+    if constexpr (sizeof...(Tail) != 0) {
+        renumber(order, tail...);
+    }
+}
+
+template <class Head, class... Tail>
+std::vector<int> priority_sort(std::vector<Head> &head, std::vector<Tail> &... tail) {
+    const int n = len(head);
+    std::vector<std::tuple<Head, Tail..., int>> res(n);
+    REP(i, n) res[i] = std::make_tuple(head[i], tail[i]..., i);
+    std::sort(res.begin(), res.end());
+
+    std::vector<int> order(n);
+    REP(i, 0, n)
+    order[i] = std::get<std::tuple_size_v<std::tuple<Head, Tail...>>>(res[i]);
+    renumber(order, head, tail...);
+    return order;
+}
+
+template <class T> auto make_vec(const int n, const T &value) {
+    return std::vector<T>(n, value);
+}
+template <class... Args> auto make_vec(const int n, Args... args) {
+    return std::vector<decltype(make_vec(args...))>(n, make_vec(args...));
+}
+
+std::vector<int> iotav(const int n) {
+    std::vector<int> ret(n);
+    std::iota(ret.begin(), ret.end(), 0);
+    return ret;
+}
+
+template <class T> std::vector<T> make_prefix_sum(const std::vector<T> &vec) {
+    const int n = len(vec);
+    std::vector<T> res(n + 1);
+    REP(i, n) res[i + 1] = res[i] + vec[i];
+    return res;
+}
+
+template <class Container> auto calc_sum(const Container &c) {
+    return std::accumulate(c.cbegin(), c.cend(),
+                           static_cast<typename Container::value_type>(0));
+}
+
+template <class T, class F, class... Args>
+int apply_id(T first, T last, F &&func, Args &&... args) {
+    return std::distance(first, func(first, last, std::forward<Args>(args)...));
+}
+#line 2 "main.cpp"
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ALL(x) (x).begin(), (x).end()
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+
+// Luzhiled's memo
+template <typename G> struct DoublingLowestCommonAncestor {
+    const int LOG;
+    vector<int> dep;
+    const G &g;
+    vector<vector<int>> table;
+
+    DoublingLowestCommonAncestor(const G &g)
+        : g(g), dep(g.size()), LOG(32 - __builtin_clz(g.size())) {
+        table.assign(LOG, vector<int>(g.size(), -1));
+    }
+
+    void dfs(int idx, int par, int d) {
+        table[0][idx] = par;
+        dep[idx] = d;
+        for (auto &to : g[idx]) {
+            if (to != par) dfs(to, idx, d + 1);
+        }
+    }
+
+    void build() {
+        dfs(0, -1, 0);
+        for (int k = 0; k + 1 < LOG; k++) {
+            for (int i = 0; i < table[k].size(); i++) {
+                if (table[k][i] == -1)
+                    table[k + 1][i] = -1;
+                else
+                    table[k + 1][i] = table[k][table[k][i]];
+            }
+        }
+    }
+
+    int query(int u, int v) {
+        if (dep[u] > dep[v]) swap(u, v);
+        for (int i = LOG - 1; i >= 0; i--) {
+            if (((dep[v] - dep[u]) >> i) & 1) v = table[i][v];
+        }
+        if (u == v) return u;
+        for (int i = LOG - 1; i >= 0; i--) {
+            if (table[i][u] != table[i][v]) {
+                u = table[i][u];
+                v = table[i][v];
+            }
+        }
+        return table[0][u];
+    }
+
+    int calc_dist(int u, int v) {
+        const int lca = query(u, v);
+        return dep[u] + dep[v] - 2 * dep[lca];
+    }
+
+    int cst(int v, int d) {
+        int now = v;
+        REP(i, LOG) {
+            if (d & (1 << i)) {
+                now = table[i][now];
+                if (now == -1) break;
+            }
+        }
+        return now;
+    }
+};
+
+#line 7 "/mnt/c/Users/Cyanmond/ProCon/Library/static_mod.hpp"
+
+template <u32 MOD> class StaticModint {    
+    using this_type = StaticModint;
+    u32 value;
+
+  public:
+    static constexpr u32 mod() noexcept { return MOD; }
+    template <class T> static constexpr T mod() noexcept { return static_cast<T>(MOD); }
+
+    template <class T, std::enable_if_t<std::is_unsigned_v<T>> * = nullptr>
+    static constexpr u32 normalize(const T v) noexcept {
+        return static_cast<u32>(v % mod<T>());
+    }
+    template <class T, std::enable_if_t<std::is_signed_v<T>> * = nullptr>
+    static constexpr u32 normalize(const T v) noexcept {
+        if (v < 0) {
+            return static_cast<u32>(v % mod<T>() + mod<T>());
+        } else {
+            return static_cast<u32>(v % mod<T>());
+        }
+    }
+
+    constexpr StaticModint() noexcept : value(0) {}
+    template <class T> constexpr StaticModint(const T v) noexcept : value(normalize(v)) {}
+
+    template <class T> static constexpr this_type raw(const T v) noexcept {
+        this_type ret;
+        ret.value = static_cast<u32>(v);
+        return ret;
+    }
+
+    constexpr const u32 &val() const noexcept { return value; }
+    constexpr this_type operator-() const noexcept {
+        return value == 0 ? 0 : mod() - value;
+    }
+
+    constexpr bool operator==(const this_type &rhs) const noexcept {
+        return value == rhs.value;
+    }
+    constexpr bool operator!=(const this_type &rhs) const noexcept {
+        return value != rhs.value;
+    }
+    constexpr bool operator<(const this_type &rhs) const noexcept {
+        return value < rhs.value;
+    }
+    constexpr bool operator<=(const this_type &rhs) const noexcept {
+        return value <= rhs.value;
+    }
+    constexpr bool operator>(const this_type &rhs) const noexcept {
+        return value > rhs.value;
+    }
+    constexpr bool operator>=(const this_type &rhs) const noexcept {
+        return value >= rhs.value;
+    }
+    constexpr this_type &operator++() noexcept {
+        ++value;
+        if (value == mod()) value = 0;
+        return *this;
+    }
+    constexpr this_type &operator--() noexcept {
+        if (value == 0) value = mod();
+        --value;
+        return *this;
+    }
+    constexpr this_type operator++(int) noexcept {
+        this_type ret(*this);
+        ++*this;
+        return ret;
+    }
+    constexpr this_type operator--(int) noexcept {
+        this_type ret(*this);
+        --*this;
+        return ret;
+    }
+
+    constexpr this_type operator+(const this_type &rhs) const noexcept {
+        return this_type(*this) += rhs;
+    }
+    constexpr this_type operator-(const this_type &rhs) const noexcept {
+        return this_type(*this) -= rhs;
+    }
+    constexpr this_type operator*(const this_type &rhs) const noexcept {
+        return this_type(*this) *= rhs;
+    }
+    constexpr this_type operator/(const this_type &rhs) const noexcept {
+        return this_type(*this) /= rhs;
+    }
+
+    constexpr this_type &operator+=(const this_type &rhs) noexcept {
+        if ((value += rhs.value) >= mod()) {
+            value -= mod();
+        }
+        return *this;
+    }
+    constexpr this_type &operator-=(const this_type &rhs) noexcept {
+        if (value < rhs.value) {
+            value += mod();
+        }
+        value -= rhs.value;
+        return *this;
+    }
+    constexpr this_type &operator*=(const this_type &rhs) noexcept {
+        value = static_cast<u32>(static_cast<u64>(value) * static_cast<u64>(rhs.value) %
+                                 mod<u64>());
+        return *this;
+    }
+    constexpr this_type &operator/=(const this_type &rhs) noexcept {
+        return *this *= rhs.inv();
+    }
+
+    template <class T> constexpr this_type pow(T n) {
+        this_type ret(1), x(*this);
+        while (n != 0) {
+            if (n & 1) ret *= x;
+            x *= x;
+            n >>= 1;
+        }
+        return ret;
+    }
+    constexpr this_type inv() const {
+        i64 s = mod<i64>(), t = static_cast<i64>(value), a = 0, b = 1;
+        while (t != 0) {
+            const i64 u = s / t;
+            s -= t * u;
+            a -= b * u;
+            auto k = s;
+            s = t;
+            t = k;
+            k = a;
+            a = b;
+            b = k;
+        }
+        if (a < 0) a += mod<i64>();
+        return this_type::raw(a);
+    }
+};
+
+template <class M> class CombinationStaticModPrime {
+        using size_type = int;
+        static inline int size = 1;
+        static inline std::vector<M> factd = {1, 1};
+        static inline std::vector<M> invd = {0, 1};
+        static inline std::vector<M> inv_factd = {1, 1};
+
+        static void reserve(const size_type size_) {
+            if (size < size_) {
+                for (size_type i = size + 1; i <= size_; ++i) {
+                    factd.push_back(factd[i - 1] * M(i));
+                    invd.push_back(-M(M::mod() / i) * invd[M::mod() % i]);
+                    inv_factd.push_back(inv_factd[i - 1] * invd[i]);
+                }
+                size = size_;
+            }
+        }
+
+      public:
+        // beta
+        static void give_reserve_hint(const size_type size_) {
+            factd.reserve(size_ + 1);
+            invd.reserve(size_ + 1);
+            inv_factd.reserve(size_ + 1);
+        }
+
+        static M fact(const size_type i) {
+            reserve(i);
+            return factd[i];
+        }
+
+        static M inv(const size_type i) {
+            assert(i != 0);
+            reserve(i);
+            return invd[i];
+        }
+
+        static M inv_fact(const size_type i) {
+            reserve(i);
+            return inv_factd[i];
+        }
+
+        static M comb(const size_type n, const size_type k) {
+            assert(0 <= k and k <= n);
+            reserve(n);
+            return factd[n] * inv_factd[n - k] * inv_factd[k];
+        }
+
+        static M perm(const size_type n, const size_type k) {
+            assert(0 <= k and k <= n);
+            reserve(n);
+            return factd[n] * inv_factd[n - k];
+        }
+
+        static M homo(const size_type n, const size_type k) {
+            assert(0 <= n and 0 <= k);
+            if (n == 0 and k == 0) return 1;
+            return comb(n + k - 1, k);
+        }
+    };
+#line 77 "main.cpp"
+using Fp = StaticModint<998244353>;
+
+int main() {
+    int N;
+    cin >> N;
+    vector<int> A(N - 1), B(N - 1);
+    vector<vector<int>> Tree(N);
+    REP(i, N - 1) {
+        cin >> A[i] >> B[i];
+        --A[i], --B[i];
+        Tree[A[i]].pb(B[i]);
+        Tree[B[i]].pb(A[i]);
+    }
+
+    DoublingLowestCommonAncestor doub(Tree);
+    doub.build();
+
+    vector<i64> dp_par(N), dp_sum(N);
+    vector<vector<i64>> dp_chd(N);
+    vector<int> subtree_size(N);
+    auto dfs1 = rec_lambda([&](auto &&self, const int v, const int p) -> pair<int, i64> {
+        subtree_size[v] = 1;
+        dp_sum[v] = 1;
+        if (v != 0 and len(Tree[v]) == 1) {
+            return make_pair(1, 2);
+        }
+        for (const int t : Tree[v]) {
+            if (t == p) {
+                dp_chd[v].pb(0);
+                continue;
+            }
+            const auto [s, vl] = self(t, v);
+            dp_sum[v] += vl;
+            dp_chd[v].pb(vl);
+            subtree_size[v] += s;
+        }
+        return make_pair(subtree_size[v], 2 * dp_sum[v]);
+    });
+    dfs1(0, -1);
+    map<int, int> ids;
+
+    auto dfs2 =
+        rec_lambda([&](auto &&self, const int v, const int p, const i64 val) -> void {
+            dp_par[v] = val;
+            dp_sum[v] += val;
+
+            REP(i, len(Tree[v])) {
+                const int t = Tree[v][i];
+                if (t == p) continue;
+                ids[t] = i;
+                self(t, v, 2 * (dp_sum[v] - dp_chd[v][i]));
+            }
+        });
+    dfs2(0, -1, 0);
+
+    int Q;
+    cin >> Q;
+    vector<int> X(Q), Y(Q);
+    REP(i, Q) {
+        cin >> X[i] >> Y[i];
+        --X[i], --Y[i];
+        if (doub.dep[X[i]] > doub.dep[Y[i]]) swap(X[i], Y[i]);
+        const int lca = doub.query(X[i], Y[i]);
+        if (lca == X[i]) {
+            const int base_dist = doub.calc_dist(X[i], Y[i]);
+            const i64 v1 = dp_sum[Y[i]] - dp_par[Y[i]];
+            const int cst = doub.cst(Y[i], base_dist - 1);
+            const i64 v2 = dp_sum[X[i]] - dp_chd[X[i]][ids[cst]];
+            cout << (Fp(v1) * Fp(v2) * Fp(2).pow(base_dist)).val() << eoln;
+        } else {
+            const int base_dist = doub.calc_dist(X[i], Y[i]);
+            const i64 v1 = dp_sum[X[i]] - dp_par[X[i]];
+            const i64 v2 = dp_sum[Y[i]] - dp_par[Y[i]];
+            cout << (Fp(v1) * Fp(v2) * Fp(2).pow(base_dist)).val() << eoln;
+        }
+    }
+}
+

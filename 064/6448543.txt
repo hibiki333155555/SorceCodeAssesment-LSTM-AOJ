@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    int x[n],y[n];
+    for(int i=0;i<n;i++){
+        cin>>x[i];
+    }
+    for(int i=0;i<n;i++){
+        cin>>y[i];
+    }
+    double p = 0;
+    for(int i=0;i<n;i++){
+        p += abs(x[i] - y[i]);
+    }
+    cout << fixed << setprecision(11) << p << "\n";
+    p = 0;
+    for(int i=0;i<n;i++){
+        p += abs(x[i] - y[i]) * abs(x[i] - y[i]);
+    }
+    cout << fixed << setprecision(11) << sqrt(p) << "\n";
+    p = 0;
+    for(int i=0;i<n;i++){
+        p += abs(x[i] - y[i]) * abs(x[i] - y[i]) * abs(x[i] - y[i]);
+    }
+    cout << fixed << setprecision(11) << pow(p, 1.0 / 3.0) << "\n";
+    p = 0;
+    for(int i=0;i<n;i++){
+        p = max((int)p, abs(x[i] - y[i]));
+    }
+    cout << fixed << setprecision(11) << p << "\n";
+    
+    return(0);
+}
+

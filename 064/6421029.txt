@@ -1,0 +1,242 @@
+#define _USE_MATH_DEFINES
+#define _EXT_CODECVT_SPECIALIZATIONS_H 1
+#define _EXT_ENC_FILEBUF_H 1
+#include <bits/stdc++.h>
+#include <bits/extc++.h>
+using namespace std;
+/*
+#include <atcoder/all>
+using namespace atcoder;
+*/
+/*
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+using bll = boost::multiprecision::cpp_int;
+using bdouble = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<100>>;
+using namespace boost::multiprecision;
+*/
+//#define int long long
+using ll = long long;
+constexpr ll MOD = (ll)1e9 + 7; //primitive root = 5
+//constexpr ll MOD = 998244353; //primitive root = 3
+//INT_MAX = (1<<31)-1 = 2147483647, INT64_MAX = (1LL<<63)-1 = 9223372036854775807
+constexpr ll INF = std::numeric_limits<ll>::max() == INT_MAX ? (ll)1e9 + 7 : (ll)1e18;
+constexpr double EPS = 1e-9;
+constexpr ll dx[4] = {1, 0, -1, 0};
+constexpr ll dy[4] = {0, 1, 0, -1};
+constexpr ll dx8[8] = {1, 0, -1, 0, 1, 1, -1, -1};
+constexpr ll dy8[8] = {0, 1, 0, -1, 1, -1, 1, -1};
+#if defined(LOCAL_TEST) || defined(LOCAL_DEV)
+	#define BOOST_STACKTRACE_USE_ADDR2LINE
+	#define BOOST_STACKTRACE_ADDR2LINE_LOCATION /usr/local/opt/binutils/bin/addr2line
+	#define _GNU_SOURCE 1
+	#include <boost/stacktrace.hpp>
+#endif
+#ifdef LOCAL_TEST
+	namespace std {
+		template <typename T> class dvector : public std::vector<T> {
+		public:
+			using std::vector<T>::vector;
+			template <typename T_ = T, typename std::enable_if_t<std::is_same_v<T_, bool>, std::nullptr_t> = nullptr>
+			std::vector<bool>::reference operator[](std::size_t n) {
+				if (this->size() <= n) { std::cerr << boost::stacktrace::stacktrace() << '\n' << "vector::_M_range_check: __n (which is " << n << ") >= this->size() (which is " << this->size() << ")" << '\n'; } return this->at(n);
+			}
+			template <typename T_ = T, typename std::enable_if_t<std::is_same_v<T_, bool>, std::nullptr_t> = nullptr>
+			const T_ operator[](std::size_t n) const {
+				if (this->size() <= n) { std::cerr << boost::stacktrace::stacktrace() << '\n' << "vector::_M_range_check: __n (which is " << n << ") >= this->size() (which is " << this->size() << ")" << '\n'; } return this->at(n);
+			}
+			template <typename T_ = T, typename std::enable_if_t<!std::is_same_v<T_, bool>, std::nullptr_t> = nullptr>
+			T_& operator[](std::size_t n) {
+				if (this->size() <= n) { std::cerr << boost::stacktrace::stacktrace() << '\n' << "vector::_M_range_check: __n (which is " << n << ") >= this->size() (which is " << this->size() << ")" << '\n'; } return this->at(n);
+			}
+			template <typename T_ = T, typename std::enable_if_t<!std::is_same_v<T_, bool>, std::nullptr_t> = nullptr>
+			const T_& operator[](std::size_t n) const {
+				if (this->size() <= n) { std::cerr << boost::stacktrace::stacktrace() << '\n' << "vector::_M_range_check: __n (which is " << n << ") >= this->size() (which is " << this->size() << ")" << '\n'; } return this->at(n);
+			}
+		};
+		template <typename T, typename Compare = std::less<T>, typename Allocator = std::allocator<T>> class dmultiset : public std::multiset<T,Compare,Allocator> {
+		public:
+			using std::multiset<T,Compare,Allocator>::multiset;
+			const typename std::multiset<T,Compare,Allocator>::iterator erase(const typename std::multiset<T,Compare,Allocator>::iterator it) {
+				return std::multiset<T,Compare,Allocator>::erase(it);
+			}
+			std::size_t erase([[maybe_unused]] const T& x) {
+				std::cerr << boost::stacktrace::stacktrace() << '\n'; assert(false);
+			}
+			std::size_t erase_all_elements(const T& x) {
+				return std::multiset<T,Compare,Allocator>::erase(x);
+			}
+		};
+	}
+	#define vector dvector
+	#define multiset dmultiset
+	class SIGFPE_exception : std::exception {};
+	class SIGSEGV_exception : std::exception {};
+	void catch_SIGFPE([[maybe_unused]] int e) { std::cerr << boost::stacktrace::stacktrace() << '\n'; throw SIGFPE_exception(); }
+	void catch_SIGSEGV([[maybe_unused]] int e) { std::cerr << boost::stacktrace::stacktrace() << '\n'; throw SIGSEGV_exception(); }
+	signed convertedmain();
+	signed main() { signal(SIGFPE, catch_SIGFPE); signal(SIGSEGV, catch_SIGSEGV); return convertedmain(); }
+	#define main() convertedmain()
+#else
+	#define erase_all_elements erase
+#endif
+#ifdef LOCAL_DEV
+	template <typename T1, typename T2> std::ostream& operator<<(std::ostream& s, const std::pair<T1, T2>& p) {
+		return s << "(" << p.first << ", " << p.second << ")"; }
+	template <typename T, std::size_t N> std::ostream& operator<<(std::ostream& s, const std::array<T, N>& a) {
+		s << "{ "; for (std::size_t i = 0; i < N; ++i){ s << a[i] << "\t"; } s << "}"; return s; }
+	template <typename T, typename Compare> std::ostream& operator<<(std::ostream& s, const std::set<T, Compare>& se) {
+		s << "{ "; for (auto itr = se.begin(); itr != se.end(); ++itr){ s << (*itr) << "\t"; } s << "}"; return s; }
+	template <typename T, typename Compare> std::ostream& operator<<(std::ostream& s, const std::multiset<T, Compare>& se) {
+		s << "{ "; for (auto itr = se.begin(); itr != se.end(); ++itr){ s << (*itr) << "\t"; } s << "}"; return s; }
+	template <typename T1, typename T2, typename Compare> std::ostream& operator<<(std::ostream& s, const std::map<T1, T2, Compare>& m) {
+		s << "{\n"; for (auto itr = m.begin(); itr != m.end(); ++itr){ s << "\t" << (*itr).first << " : " << (*itr).second << "\n"; } s << "}"; return s; }
+	template <typename T> std::ostream& operator<<(std::ostream& s, const std::deque<T>& v) {
+		for (std::size_t i = 0; i < v.size(); ++i){ s << v[i]; if (i < v.size() - 1) s << "\t"; } return s; }
+	template <typename T> std::ostream& operator<<(std::ostream& s, const std::vector<T>& v) {
+		for (std::size_t i = 0; i < v.size(); ++i){ s << v[i]; if (i < v.size() - 1) s << "\t"; } return s; }
+	template <typename T> std::ostream& operator<<(std::ostream& s, const std::vector<std::vector<T>>& vv) {
+		s << "\\\n"; for (std::size_t i = 0; i < vv.size(); ++i){ s << vv[i] << "\n"; } return s; }
+	template <typename T, std::size_t N, typename std::enable_if_t<!std::is_same_v<T, char>, std::nullptr_t> = nullptr> std::ostream& operator<<(std::ostream& s, const T (&v)[N]) {
+		for (std::size_t i = 0; i < N; ++i){ s << v[i]; if (i < N - 1) s << "\t"; } return s; }
+	template <typename T, std::size_t N, std::size_t M, typename std::enable_if_t<!std::is_same_v<T, char>, std::nullptr_t> = nullptr> std::ostream& operator<<(std::ostream& s, const T (&vv)[N][M]) {
+		s << "\\\n"; for (std::size_t i = 0; i < N; ++i){ s << vv[i] << "\n"; } return s; }
+	#if __has_include(<ext/pb_ds/assoc_container.hpp>)
+		template <typename Key, typename Compare> std::ostream& operator<<(std::ostream& s, const __gnu_pbds::tree<Key, __gnu_pbds::null_type, Compare, __gnu_pbds::rb_tree_tag, __gnu_pbds::tree_order_statistics_node_update>& se) {
+			s << "{ "; for (auto itr = se.begin(); itr != se.end(); ++itr){ s << (*itr) << "\t"; } s << "}"; return s; }
+		template <typename Key, typename T, typename Hash> std::ostream& operator<<(std::ostream& s, const __gnu_pbds::gp_hash_table<Key, T, Hash>& m) {
+			s << "{\n"; for (auto itr = m.begin(); itr != m.end(); ++itr){ s << "\t" << (*itr).first << " : " << (*itr).second << "\n"; } s << "}"; return s; }
+	#endif
+	void debug_impl() { std::cerr << '\n'; }
+	template <typename Head, typename... Tail> void debug_impl(Head& head, Tail&... tail) { std::cerr << " " << head << (sizeof...(tail) ? "," : ""); debug_impl(tail...); }
+	template <typename Head, typename... Tail> void debug_impl(const Head& head, const Tail&... tail) { std::cerr << " " << head << (sizeof...(tail) ? "," : ""); debug_impl(tail...); }
+	#define debug(...) do { std::cerr << ":" << __LINE__ << " (" << #__VA_ARGS__ << ") ="; debug_impl(__VA_ARGS__); } while (false)
+	constexpr inline long long prodlocal([[maybe_unused]] long long prod, [[maybe_unused]] long long local) { return local; }
+#else
+	#define debug(...) do {} while (false)
+	constexpr inline long long prodlocal([[maybe_unused]] long long prod, [[maybe_unused]] long long local) { return prod; }
+#endif
+#define repoverload3(_1, _2, _3, name, ...) name
+#define rep3(i, a, b) for(ll i=(a), i##_length=(b); i<i##_length; ++i)
+#define rep2(i, n) rep3(i, 0, n)
+#define rep1(n) rep3(i, 0, n)
+#define rep(...) repoverload3(__VA_ARGS__, rep3, rep2, rep1)(__VA_ARGS__)
+#define repeq3(i, a, b) rep3(i, (a)+1, (b)+1)
+#define repeq2(i, n) rep3(i, 1, (n)+1)
+#define repeq1(n) rep3(i, 1, (n)+1)
+#define repeq(...) repoverload3(__VA_ARGS__, repeq3, repeq2, repeq1)(__VA_ARGS__)
+#define rrep3(i, a, b) for(ll i=(b)-1; i>=(a); --i)
+#define rrep2(i, n) rrep3(i, 0, n)
+#define rrep1(n) rrep3(i, 0, n)
+#define rrep(...) repoverload3(__VA_ARGS__, rrep3, rrep2, rrep1)(__VA_ARGS__)
+#define rrepeq3(i, a, b) rrep3(i, (a)+1, (b)+1)
+#define rrepeq2(i, n) rrep3(i, 1, (n)+1)
+#define rrepeq1(n) rrep3(i, 1, (n)+1)
+#define rrepeq(...) repoverload3(__VA_ARGS__, rrepeq3, rrepeq2, rrepeq1)(__VA_ARGS__)
+#define all(v) std::begin(v), std::end(v)
+#define rall(v) std::rbegin(v), std::rend(v)
+void p() { std::cout << '\n'; }
+template <typename Head, typename... Tail> void p(Head& head, Tail&... tail) { std::cout << head << (sizeof...(tail) ? " " : ""); p(tail...); }
+template <typename Head, typename... Tail> void p(const Head& head, const Tail&... tail) { std::cout << head << (sizeof...(tail) ? " " : ""); p(tail...); }
+template <typename T> inline void pv(const T& v) { for(ll i=0, N=std::size(v); i<N; i++) std::cout << v[i] << " \n"[i==N-1]; }
+template <typename T> inline bool chmax(T& a, T b) { return a < b && (a = b, true); }
+template <typename T> inline bool chmin(T& a, T b) { return a > b && (a = b, true); }
+template <typename T> inline void uniq(T& v) { std::sort(v.begin(), v.end()); v.erase(std::unique(v.begin(), v.end()), v.end()); }
+template <typename T> inline ll sz(const T& v) { return std::size(v); }
+template <typename T, std::size_t N> std::vector<T> make_vector_impl(std::vector<ll>& sizes, typename std::enable_if<(N==1), const T&>::type x) { return std::vector<T>(sizes.front(),x); }
+template <typename T, std::size_t N> auto make_vector_impl(std::vector<ll>& sizes, typename std::enable_if<(N>1), const T&>::type x) { ll size=sizes.back(); sizes.pop_back(); return std::vector<decltype(make_vector_impl<T,N-1>(sizes,x))>(size,make_vector_impl<T,N-1>(sizes,x)); }
+template <typename T, std::size_t N> auto make_vector(const ll (&sizes)[N], const T& x=T()) { std::vector<ll> s(N); for(std::size_t i=0; i<N; ++i)s[i]=sizes[N-1-i]; return make_vector_impl<T,N>(s,x); }
+#if __has_include(<ext/pb_ds/assoc_container.hpp>)
+	class custom_hash {
+	public:
+		static uint64_t splitmix64(uint64_t x) {
+			x += 0x9e3779b97f4a7c15, x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9, x = (x ^ (x >> 27)) * 0x94d049bb133111eb; return x ^ (x >> 31);
+		}
+		size_t operator()(uint64_t x) const {
+			static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count(); return splitmix64(x + FIXED_RANDOM);
+		}
+	};
+	template <typename Key, typename Mapped, typename Hash = custom_hash, typename std::enable_if_t<std::is_integral_v<Key>, std::nullptr_t> = nullptr> class fmap : public __gnu_pbds::gp_hash_table<Key, Mapped, Hash> {
+	public:
+		using __gnu_pbds::gp_hash_table<Key, Mapped, Hash>::gp_hash_table;
+		template <typename T> fmap(std::initializer_list<std::initializer_list<T>> il) : __gnu_pbds::gp_hash_table<Key, Mapped, Hash>() {
+			for (auto&& x : il) __gnu_pbds::gp_hash_table<Key, Mapped, Hash>::insert(std::pair<Key, Mapped>(*x.begin(), *(x.begin() + 1)));
+		}
+		template <typename T> ll count(const T& x) const {
+			return __gnu_pbds::gp_hash_table<Key, Mapped, Hash>::find(x) != __gnu_pbds::gp_hash_table<Key, Mapped, Hash>::end();
+		}
+	};
+#else
+	template <typename Key, typename Mapped> using fmap = std::map<Key, Mapped>;
+#endif
+template <typename... T> class zip_iterator_base : std::iterator<std::forward_iterator_tag, std::tuple<decltype(*std::declval<T>().begin())...>> {
+public:
+	ll idx_;
+	std::tuple<decltype(std::declval<T>().begin())...> iters_;
+	template <std::size_t... I> auto deref(std::index_sequence<I...>) const { return typename zip_iterator_base::value_type{*std::get<I>(iters_)...}; }
+	template <std::size_t... I> void increment(std::index_sequence<I...>) { [[maybe_unused]] auto l = {(++std::get<I>(iters_), 0)...}; }
+	explicit zip_iterator_base(decltype(iters_) iters) : idx_(0), iters_{std::move(iters)} {}
+	zip_iterator_base& operator++() { ++idx_; increment(std::index_sequence_for<T...>{}); return *this; }
+	zip_iterator_base operator++(int) { auto saved{*this}; ++idx_; increment(std::index_sequence_for<T...>{}); return saved; }
+	bool operator!=(const zip_iterator_base& other) const { return iters_ != other.iters_; }
+};
+template <typename... T> class zip_iterator : public zip_iterator_base<T...> {
+public:
+	using zip_iterator_base<T...>::zip_iterator_base;
+	auto operator*() const { return this->deref(std::index_sequence_for<T...>{}); }
+};
+template <typename... T> class zipindex_iterator : public zip_iterator_base<T...> {
+public:
+	using zip_iterator_base<T...>::zip_iterator_base;
+	auto operator*() const { return std::tuple_cat(std::make_tuple(this->idx_), this->deref(std::index_sequence_for<T...>{})); }
+};
+template <typename IteratorType, typename... T> class zip_helper {
+public:
+	zip_helper(T&... seqs) : begin_{std::make_tuple(seqs.begin()...)}, end_{std::make_tuple(seqs.end()...)} {}
+	IteratorType begin() const { return begin_; }
+	IteratorType end() const { return end_; }
+	IteratorType begin_, end_;
+};
+template <typename... T> auto zip(T&&... seqs) { return zip_helper<zip_iterator<T...>, T...>{seqs...}; }
+template <typename... T> auto zipindex(T&&... seqs) { return zip_helper<zipindex_iterator<T...>, T...>{seqs...}; }
+
+/*-----8<-----template-----8<-----*/
+
+/*-----8<-----library-----8<-----*/
+
+void solve() {
+	ll N;
+	cin>>N;
+	map<ll, vector<pair<ll, ll>>> m;
+	rep(i, N) rep(j, N) {
+		ll a;
+		cin >> a;
+		m[a].push_back({i,j});
+	}
+	for (auto&& [k, v] : m) sort(all(v));
+	ll Q;
+	cin >> Q;
+	while(Q--){
+		ll a;
+		cin >> a;
+		if(m.count(a)==0){
+			p(-1);
+			continue;
+		}
+		p(m[a][0].first + 1, m[a][0].second + 1);
+	}
+
+	std::cout << std::flush;
+	_Exit(0);
+}
+
+signed main() {
+#ifndef LOCAL_DEV
+	std::cin.tie(nullptr);
+	std::ios::sync_with_stdio(false);
+#endif
+	//ll Q; cin >> Q; while(Q--)solve();
+	solve();
+	return 0;
+}
+

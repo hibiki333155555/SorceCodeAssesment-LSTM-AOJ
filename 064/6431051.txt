@@ -1,0 +1,4 @@
+a,b=map(int,raw_input.split)
+d=a/b
+r=a%b
+f=double(a/b)

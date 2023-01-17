@@ -1,0 +1,27 @@
+n = int(input())
+
+for k in range(n):
+    s = input()
+    t = input()
+    M = len(s)
+    N = len(t)
+
+    DP=[[0]*(N+1) for i in range(M+1)]
+
+    l=[[] for i in range(N+M)]
+
+    #ii = [0]*(M+1)
+    #jj = [0]*(N+1)
+
+    for i in range(M):
+        for j in range(N):
+            if s[i] != t[j]:
+                DP[i+1][j+1] = max(DP[i][j+1], DP[i+1][j])
+            elif s[i] == t[j]:
+                DP[i+1][j+1] = min(DP[i][j+1]+1, DP[i+1][j]+1)
+                if DP[i][j+1] == DP[i+1][j]:
+                    num = DP[i+1][j+1]
+    #                ii[num-1] = i
+    #                jj[num-1] = j
+                    l[num].append((i,j))
+    lcs_n = DP[M][N] 

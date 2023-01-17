@@ -1,0 +1,44 @@
+#include <algorithm>
+#include <bits/stdc++.h>
+#include <cmath>
+using namespace std;
+using ll = long long;
+template <typename T> using MaxHeap = priority_queue<T>;
+template <typename T> using MinHeap = priority_queue<T, vector<T>, greater<T>>;
+#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define ff first
+#define ss second
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define all(a) a.begin(), a.end()
+
+const ll INF = 1e18;
+const ll mod = 998244353;
+
+int main() {
+    string s;
+    cin >> s;
+    stack<ll> st;
+    ll now = 0;
+
+    rep(i, s.size()) {
+        if ('0' <= s[i] && s[i] <= '9') {
+            st.push(s[i] - '0');
+            now += s[i] - '0';
+        } else if (s[i] == ')') {
+            now -= st.top();
+            st.pop();
+        } else if (s[i] == '(') {
+            // too oj
+        } else {
+            int ch = s[i] - 'a';
+            ch += now;
+            ch %= 26;
+            s[i] = ch + 'a';
+            cout<<s[i];
+        }
+    }
+    cout<<endl;
+}
+
+

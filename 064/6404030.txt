@@ -1,0 +1,11 @@
+a,b,c = map(int, input().split()) 
+if(a<=b):
+    if(b<=c):
+        print(f"{a}+ " " + {b} + " " + {c}")
+    else:
+        print(f"{a}+ " " + {c} + " " + {b}")
+else:
+    if(a>=c):
+        print(f"{b}+ " " + {c} + " " + {a}")
+    else:
+        print(f"{b}+ " " + {a} + " " + {c}")

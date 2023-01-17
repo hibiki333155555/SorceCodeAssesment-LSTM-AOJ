@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+void print(vector<int>v)
+{   
+	for( int i=0;i<v.size();i++)
+	{
+	  if(i==n-1){
+	  	cout<<v[i];
+	  }
+	  else{
+	  	cout<<v[i]<<" ";
+	}
+	cout<<"\n";
+}
+void Insertion(vector<int>&arr)
+{
+	int n=arr.size(),j,temp;
+	for(int i=1;i<n;i++){
+		j=i-1;
+		temp=arr[i];
+		while(j>=0 && temp <arr[j])
+		{
+			arr[j+1]=arr[j];
+			j--;
+		}
+		arr[j+1]=temp;
+		print(arr);
+	}
+}
+int main()
+{
+	int n; cin>>n;
+	vector<int>v(n);
+	for(int i=0;i<n;i++)
+	{
+		cin>>v[i];
+	}
+for(int i=0;i<n;i++)
+	{
+		cout<<v[i]<<" ";
+	}
+		cout<<"\n";
+	Insertion(v);
+	return 0;
+}

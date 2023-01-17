@@ -1,0 +1,23 @@
+#include<stdio.h>
+
+int main(void){
+    int num,i,counter[26];
+    char ch,chcou='a';
+    
+    for(i = 0;i < 26;i++){
+        counter[i] = 0;
+    }
+    
+    while(scanf("%c",&ch) != EOF){
+        num = ch - 'a';
+        if(num < 0 || num > 25) num = ch - 'A';
+        counter[num]++;
+    }
+    
+    for(i = 0;i < 26;i++){
+        printf("%c : %d\n",chcou,counter[i]);
+        chcou++;
+    }
+    
+    return 0;
+}

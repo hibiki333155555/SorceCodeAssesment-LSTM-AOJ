@@ -1,0 +1,83 @@
+#include <iostream>
+#include <limits.h>
+using namespace std;
+
+
+int cnt=0;
+
+void merge(int a[], int left, int mid, int right)
+{
+    int n1=mid-left;
+    int n2=right-mid;
+    int L[n1], R[n2];
+    for(int i=0; i<n1; i++){
+        L[i] = a[left+i];
+    }   
+    for(int i=0; i<n2; i++){
+        R[i] = a[mid+i];
+    }
+    L[n1] = R[n2] = INT_MAX;
+    int i=0, j=0;
+    for(int k=left; k<right; k++){
+        if(L[i] <= R[j]){
+            a[k] = L[i++];
+            cnt += j;
+        }
+        else{
+            a[k] = R[j++];
+        }
+    }
+}
+/*
+Merge(A, left, mid, right)
+  n1 = mid - left;
+  n2 = right - mid;
+  create array L[0...n1], R[0...n2]
+  for i = 0 to n1-1
+    do L[i] = A[left + i]
+  for i = 0 to n2-1
+    do R[i] = A[mid + i]
+  L[n1] = SENTINEL
+  R[n2] = SENTINEL
+  i = 0;
+  j = 0;
+  for k = left to right-1
+    if L[i] <= R[j]
+      then A[k] = L[i]
+           i = i + 1
+      else A[k] = R[j]
+           j = j + 1
+
+Merge-Sort(A, left, right){
+  if left+1 < right
+    then mid = (left + right)/2;
+         call Merge-Sort(A, left, mid)
+         call Merge-Sort(A, mid, right)
+         call Merge(A, left, mid, right)
+*/
+
+
+void MergeSort(int a[], int left, int right){
+    if(left+1 < right){
+        int mid = (left+right)/2;
+        MergeSort(a, left,  mid);
+        MergeSort(a, mid, right);
+        merge(a, left, mid ,right);
+    }
+}
+int main(){
+    int n;
+    int a[500001];
+    cin >> n;
+    for(int i=0; i<n; i++){
+        cin >> a[i];
+    }
+    MergeSort(a, 0, n);
+    cout << a[0];
+    for(int i=1; i<n; i++){
+        cout << ' ' << a[i];
+    }
+    cout << endl;
+    cout << cnt << endl;
+    return 0;
+}

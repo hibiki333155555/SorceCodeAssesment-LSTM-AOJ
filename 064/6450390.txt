@@ -1,0 +1,96 @@
+import sys
+input=sys.stdin.buffer.readline
+sys.setrecursionlimit(10**6)
+N=int(input())
+G=[[] for i in range(N)]
+for i in range(N-1):
+  a,b=map(int,input().split())
+  a-=1
+  b-=1
+  G[a].append(b)
+  G[b].append(a)
+DP1=[1]*N
+mod=998244353
+def f1(n,p):
+  for i in range(len(G[n])):
+    if G[n][i]!=p:
+      f1(G[n][i],n)
+      DP1[n]=(DP1[n]+DP1[G[n][i]]*2)%mod
+
+f1(0,-1)
+DP2=[0]*N
+i2=pow(2,mod-2,mod)
+def f2(n,p,v):
+  DP2[n]=(v+DP1[n])%mod
+  c=1
+  for i in range(len(G[n])):
+    if G[n][i]!=p:
+      c=(c+DP1[G[n][i]])%mod
+  c=DP1[n]
+  for i in range(len(G[n])):
+    if G[n][i]!=p:
+      f2(G[n][i],n,(v+c-DP1[G[n][i]]*2)*2)
+
+f2(0,-1,0)
+X=[0]*N
+Y=[0]*N
+c=0
+par=[-1]*N
+dist=[0]*N
+def f3(n,p,d):
+  par[n]=p
+  dist[n]=d
+  global c
+  X[n]=c
+  for i in range(len(G[n])):
+    if G[n][i]!=p:
+      c+=1
+      f3(G[n][i],n,d+1)
+  Y[n]=c
+
+f3(0,-1,0)
+par[0]=0
+L=18
+PP=[[0]*N for i in range(L+1)]
+for i in range(N):
+  PP[0][i]=par[i]
+for i in range(L):
+  for j in range(N):
+    PP[i+1][j]=PP[i][PP[i][j]]
+def lca(x,y):
+  if dist[x]>dist[y]:
+    return lca(y,x)
+  s=dist[y]-dist[x]
+  for i in range(L,-1,-1):
+    if (s>>i)&1:
+      y=PP[i][y]
+  if x==y:
+    return x
+  for i in range(L,-1,-1):
+    if PP[i][x]!=PP[i][y]:
+      x=PP[i][x]
+      y=PP[i][y]
+  return par[x]
+
+def ff(x,y):
+  s=dist[y]-dist[x]-1
+  for i in range(L,-1,-1):
+    if (s>>i)&1:
+      y=PP[i][y]
+  return y
+
+P2=[1]
+for i in range(N*3):
+  P2.append(P2[-1]*2%mod)
+Q=int(input())
+for i in range(Q):
+  x,y=map(int,input().split())
+  x-=1
+  y-=1
+  if dist[x]>dist[y]:
+    x,y=y,x
+  l=lca(x,y)
+  if l==x:
+    print(((DP2[x]-DP1[ff(x,y)]*2)*DP1[y]%mod)*P2[dist[y]-dist[x]]%mod)
+  else:
+    print((DP1[x]*DP1[y]%mod)*P2[dist[x]+dist[y]-dist[l]*2]%mod)

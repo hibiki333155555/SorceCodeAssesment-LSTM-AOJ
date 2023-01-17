@@ -1,0 +1,13 @@
+num=[0]*26
+while True:
+  aaa=str(input())
+  if aaa=='':
+    break
+  for mo in aaa:
+    try:
+      num[ord(mo.lower())-97]+=1
+    except IndexError:
+      continue
+
+for i in range(26):
+  print(f'{chr(97+i)} : {num[i]}')

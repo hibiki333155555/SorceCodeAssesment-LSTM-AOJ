@@ -1,0 +1,20 @@
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner scan=new Scanner(System.in);
+		int i=0;//カウント変数
+		int x=1;//入力変数
+		boolean a=true;//入力スイッチ（ずっとon）
+		
+		while(a=true) {
+			i++;//カウント
+			x=scan.nextInt();//入力
+			if(x==0) {
+				break;//0の時処理を止める
+			}
+			System.out.println("Case "+i+": "+x);//出力
+		}
+	}
+}
+

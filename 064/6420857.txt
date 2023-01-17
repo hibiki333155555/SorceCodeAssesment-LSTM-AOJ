@@ -1,0 +1,24 @@
+#include <iostream>
+#include <map>
+
+using namespace std;
+map<int,pair<int,int>> mp;
+int main(){
+    int i,j,n; cin >> n;
+    for(i=0;i<n;i++){
+        for(j=0;j<n;j++){
+            int a; cin >> a;
+            if(mp.find(a)==mp.end()) mp[a] = {i + 1,j + 1};
+            else mp[a] = min(mp[a],{i + 1,j + 1});
+        }
+    }
+    int q; cin >> q;
+    for(i=0;i<q;i++){
+        int t; cin >> t;
+        if(mp.find(t)!=mp.end()){
+            cout << mp[t].first << " " << mp[t].second << "\n";
+        }else{
+            cout << -1 << "\n";
+        }
+    }
+}

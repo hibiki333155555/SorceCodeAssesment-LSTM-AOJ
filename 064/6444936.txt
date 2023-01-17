@@ -1,0 +1,10 @@
+a,b,c=input().split()
+a,b,c=int(a),int(b),int(c)
+count=0
+if a==b:
+    if c%a==0:
+        count=1
+for i in range(a,b):
+    if c%i==0:
+       count=count+1
+print(count)

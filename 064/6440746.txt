@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <map>
+#include <set>
+
+using namespace std;
+
+using Vertex = pair<char, int>;
+using Graph = map<Vertex, map<Vertex, bool>>;
+using Path = map<Vertex, Vertex>;
+
+const Vertex S = {'S', 0}, T = {'T', 0};
+
+Path f(const Graph& G)
+{
+	set<Vertex> D;
+	Path P;
+	queue<Vertex> Q;
+	for (Q.push(S); !Q.empty(); Q.pop()) {
+		auto v = Q.front();
+		for (auto [w, c] : G.at(v)) if (c && D.count(w) == 0) {
+			P[w] = v;
+			if (w == T) continue;
+			D.insert(w);
+			Q.push(w);
+		}
+	}
+	return P;
+}
+
+int main()
+{
+	int nX, nY, nE, x, y, r = 0;
+	Graph G;
+	for (cin >> nX >> nY >> nE >> x >> y; nE > 0; --nE, cin >> x >> y) {
+		G[S][{'X', x}] = G[{'X', x}][{'Y', y}] = G[{'Y', y}][T] = true;
+	}
+	Path P = f(G);
+	while (P.count(T) > 0) {
+		++r;
+		for (Vertex w = T, v = P[w]; w != S; w = v, v = P[w]) {
+			G[v][w] = false;
+			G[w][v] = true;
+		}
+		P.clear();
+		P = f(G);
+	}
+	cout << r << endl;
+	return 0;
+}
+

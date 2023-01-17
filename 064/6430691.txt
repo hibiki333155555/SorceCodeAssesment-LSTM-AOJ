@@ -1,0 +1,5 @@
+a = int(input())
+b = int(intput())
+area = a * b
+length = (a+b)*2
+print(area,length)

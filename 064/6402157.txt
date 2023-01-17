@@ -1,0 +1,7 @@
+x = input()[0]
+y = input()[1]
+
+s = x * y
+l = (x + y) * 2
+
+print(s + " " + l)

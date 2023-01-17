@@ -1,0 +1,36 @@
+#include <iostream>
+#include <iomanip>
+#include <complex>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+pair<complex<double>, double> in() {double x, y, r; cin >> x >> y >> r; return {{x, y}, r};}
+
+void f(vector<pair<double, double>>& P, complex<double> p) {P.push_back({p.real(), p.imag()});}
+
+int main()
+{
+	vector<pair<double, double>> P;
+	cout << fixed << setprecision(10);
+	auto [c1, r1] = in();
+	auto [c2, r2] = in();
+	c2 -= c1;
+	double rr = r1 + r2;
+	complex<double> p, cc2;
+	if (abs(c2) > rr) {
+		cc2 = {rr, sqrt(norm(c2) - rr * rr)};
+		f(P, c1 + c2 * r1 / cc2);
+		f(P, c1 + c2 * r1 / conj(cc2));
+	} else if (abs(c2) == rr) f(P, c1 + c2 * r1 / rr);
+	rr = r1 - r2;
+	cc2 = {rr, sqrt(norm(c2) - rr * rr)};
+	f(P, c1 + c2 * r1 / cc2);
+	f(P, c1 + c2 * r1 / conj(cc2));
+	sort(P.begin(), P.end());
+	for (auto [x, y] : P) cout << x << ' ' << y << endl;
+
+	return 0;
+}
+

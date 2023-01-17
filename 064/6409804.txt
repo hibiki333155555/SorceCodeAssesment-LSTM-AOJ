@@ -1,0 +1,20 @@
+import java.util.Scanner;
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int a;
+        char op;
+        int b;
+        
+        while(true){
+        
+        a = sc.nextInt();
+        op  =sc.next().charAt(0);
+        b = sc.nextInt();
+        if(op == '?'){
+            break;
+        }else{
+        System.out.println(a + op + b);
+        }
+    }
+}

@@ -1,0 +1,354 @@
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+#include<map>
+#include<stdio.h>
+#include<vector>
+#include<queue>
+#include<math.h>
+#include<deque>
+#include<set>
+#include<tuple>
+#include<string>
+using namespace std;
+#define ll long long
+#define int long long
+#define double long double
+#define rep(s,i,n) for(int i=s;i<n;i++)
+#define rrep(s,i,n) for(int i=n;i>=s;i-=1)
+#define c(n) cout<<n<<endl;
+#define ic(n) int n;cin>>n;
+#define sc(s) string s;cin>>s;
+#define mod 1000000007
+#define inf 100000000000000007
+#define f first
+#define s second
+#define mini(c,a,b) *min_element(c+a,c+b)
+#define maxi(c,a,b) *max_element(c+a,c+b)
+#define pi 3.141592653589793238462643383279
+#define e_ 2.718281828459045235360287471352
+#define P pair<int,int>
+#define upp(a,n,x) upper_bound(a,a+n,x)-a;
+#define low(a,n,x) lower_bound(a,a+n,x)-a;
+#define UF UnionFind 
+#define pb push_back
+#define ep emplace_back
+//printf("%.12Lf\n",);
+int keta(int x) {
+	rep(0, i, 30) {
+		if (x < 10) {
+			return i + 1;
+		}
+		x = x / 10;
+	}
+}
+int gcd(int x, int y) {
+	if (x == 0 || y == 0)return x + y;
+	int aa = x, bb = y;
+	rep(0, i, 1000) {
+		aa = aa % bb;
+		if (aa == 0) {
+			return bb;
+		}
+		bb = bb % aa;
+		if (bb == 0) {
+			return aa;
+		}
+	}
+}
+int lcm(int x, int y) {
+	int aa = x, bb = y;
+	rep(0, i, 1000) {
+		aa = aa % bb;
+		if (aa == 0) {
+			return x / bb * y;
+		}
+		bb = bb % aa;
+		if (bb == 0) {
+			return x / aa * y;
+		}
+	}
+}
+bool prime(int x) {
+	if (x == 1)return false;
+	rep(2, i, sqrt(x) + 1) {
+		if (x % i == 0 && x != i) {
+			return false;
+		}
+	}
+	return true;
+}
+int max(int a, int b) {
+	if (a >= b)return a;
+	else return b;
+}
+string maxst(string s, string t) {
+	int n = s.size();
+	int m = t.size();
+	if (n > m)return s;
+	else if (n < m)return t;
+	else {
+		rep(0, i, n) {
+			if (s[i] > t[i])return s;
+			if (s[i] < t[i])return t;
+		}
+		return s;
+	}
+}
+int min(int a, int b) {
+	if (a >= b)return b;
+	else return a;
+}
+int yakuwa(int n) {
+	int sum = 0;
+	rep(1, i, sqrt(n + 1)) {
+		if (n % i == 0)sum += i + n / i;
+		if (i * i == n)sum -= i;
+	}
+	return sum;
+}
+int poow(int n,int m){
+	int pro=1;
+	int nn=n;
+	while(m){
+		if(m%2==1)pro=pro*nn%mod;
+		m=m/2;
+		nn=nn*nn%mod;
+	}
+	return pro;
+}
+int poow2(int n,int m,int modulo){
+	int pro=1;
+	int nn=n;
+	while(m){
+		if(m%2==1)pro=pro*nn%modulo;
+		m=m/2;
+		nn=nn*nn%modulo;
+	}
+	return pro;
+}
+int inv(int n,int m){
+	int t=poow(m,mod-2)%mod;
+	return n*t%mod;
+}
+int com(int n,int m){
+	if(n<m)return 0;
+	int bunsi=1,bunbo=1;	
+	for(int i=n-m+1;i<=n;i++)bunsi=bunsi*i%mod;
+	for(int i=1;i<=m;i++)bunbo=bunbo*i%mod;
+	return inv(bunsi,bunbo);
+}
+int minpow(int x, int y) {
+	int sum = 1;
+	rep(0, i, y)sum *= x;
+	return sum;
+}
+int ketawa(int x, int sinsuu) {
+	int sum = 0;
+	rep(0, i, 100)sum += (x % poow(sinsuu, i + 1)) / (poow(sinsuu, i));
+	return sum;
+}
+int sankaku(int a) {
+	return a * (a + 1) / 2;
+}
+int sames(int a[1111111], int n) {
+	int ans = 0;
+	rep(0, i, n) {
+		if (a[i] == a[i + 1]) {
+			int j = i;
+			while (a[j + 1] == a[i] && j <= n - 2)j++;
+			ans += sankaku(j - i);
+			i = j;
+		}
+	}
+	return ans;
+}
+struct UnionFind {
+	vector<int> par;
+	UnionFind(int n):par(n){
+		rep(0,i,n)par[i]=i;
+	}
+	int root(int x){
+		if (par[x]==x)return x;
+		return par[x]=root(par[x]);
+	}
+	void unite(int x,int y){
+		int rx=root(x);
+		int ry=root(y);
+		if (rx==ry) return; 
+		par[rx]=ry;
+	}
+	bool same(int x,int y){
+		int rx=root(x);
+		int ry=root(y);
+		return rx==ry;
+	}
+};	
+int dijkstraa[514514];
+void dijkstra(int n,int m,int c[750001],int d[750001],int l[750001],int siten,bool mukou){
+	vector<P> e[514514];
+	rep(0,i,m){
+		e[c[i]].pb(P{l[i],d[i]});
+		if(mukou)e[d[i]].pb(P{l[i],c[i]});
+	}
+	rep(0,i,n)dijkstraa[i]=inf;
+	dijkstraa[siten]=0;
+	priority_queue<P,vector<P>,greater<P>>pp;
+	pp.push(P{0,siten});
+	while(!pp.empty()){
+		P t=pp.top();pp.pop();
+		if(t.first!=dijkstraa[t.second])continue;
+		rep(0,i,e[t.s].size()){
+			P g=e[t.s][i];
+			if(dijkstraa[g.second]>t.first+g.first){
+				dijkstraa[g.second]=t.first+g.first;
+				pp.push(P{dijkstraa[g.second],g.second});				
+			}	
+		}
+	}
+}
+int dijkstra2(int shuten){
+	return dijkstraa[shuten];
+}
+vector<int> toposo(vector<vector<int>> G,vector<int> indegree,int n){
+	vector<int> sorted_vertices;
+	queue<int> que;
+	rep(0,i,n)if(!indegree[i])que.push(i);
+	while(!que.empty()){
+		int v=que.front();
+		que.pop();
+		rep(0,i,G[v].size()){
+			int u=G[v][i];
+			indegree[u]-=1;
+			if(!indegree[u])que.push(u);
+		}
+		sorted_vertices.pb(v);
+	}
+	return sorted_vertices;
+}
+struct segtree{
+	vector<int> dat;
+	int n;
+	segtree(int n_):n(),dat(n_*4,inf){
+		int x=1;
+		while(n_>=x)x*=2;
+		n=x;
+	}
+	void update(int i,int x){
+		i+=n-1;
+		dat[i]=x;
+		while(i>0){
+			i=(i-1)/2;
+			dat[i]=min(dat[i*2+1],dat[i*2+2]);
+		}
+	}
+	int query(int a,int b){return query_sub(a,b,0,0,n);}
+	int query_sub(int a,int b,int k,int l,int r){
+		if(r<=a||b<=l)return inf;
+		else if(a<=l&&r<=b)return dat[k];
+		else{
+			int vl=query_sub(a,b,k*2+1,l,(l+r)/2);
+			int vr=query_sub(a,b,k*2+2,(l+r)/2,r);
+			return min(vl,vr);
+		}
+	}
+	int rightest(int a,int b,int x){return rightest_sub(a,b,x,0,0,n);}
+	int rightest_sub(int a,int b,int x,int k,int l,int r){
+		if(dat[k]>x||r<=a||b<=l)return a-1;
+		else if(k>=n-1)return k-(n-1);
+		else{
+			int vr=rightest_sub(a,b,x,2*k+2,(l+r)/2,r);
+			if(vr!=a-1)return vr;
+			else return rightest_sub(a,b,x,2*k+1,l,(l+r)/2);
+		}	
+	}
+	int leftest(int a,int b,int x){return leftest_sub(a,b,x,0,0,n);}
+	int leftest_sub(int a,int b,int x,int k,int l,int r){
+		if(dat[k]>x||r<=a||b<=l)return b;
+		else if(k>=n-1)return k-(n-1);
+		else{
+			int vl=leftest_sub(a,b,x,2*k+1,l,(l+r)/2);
+			if(vl!=b)return vl;
+			else return leftest_sub(a,b,x,2*k+2,(l+r)/2,r);
+		}	
+	}
+};
+template<int MOD> struct Fp {
+    long long val;
+    constexpr Fp(long long v = 0) noexcept : val(v % MOD) {
+        if (val < 0) v += MOD;
+    }
+    constexpr int getmod() { return MOD; }
+    constexpr Fp operator - () const noexcept {
+        return val ? MOD - val : 0;
+    }
+    constexpr Fp operator + (const Fp& r) const noexcept { return Fp(*this) += r; }
+    constexpr Fp operator - (const Fp& r) const noexcept { return Fp(*this) -= r; }
+    constexpr Fp operator * (const Fp& r) const noexcept { return Fp(*this) *= r; }
+    constexpr Fp operator / (const Fp& r) const noexcept { return Fp(*this) /= r; }
+    constexpr Fp& operator += (const Fp& r) noexcept {
+        val += r.val;
+        if (val >= MOD) val -= MOD;
+        return *this;
+    }
+    constexpr Fp& operator -= (const Fp& r) noexcept {
+        val -= r.val;
+        if (val < 0) val += MOD;
+        return *this;
+    }
+    constexpr Fp& operator *= (const Fp& r) noexcept {
+        val = val * r.val % MOD;
+        return *this;
+    }
+    constexpr Fp& operator /= (const Fp& r) noexcept {
+        long long a = r.val, b = MOD, u = 1, v = 0;
+        while (b) {
+            long long t = a / b;
+            a -= t * b; swap(a, b);
+            u -= t * v; swap(u, v);
+        }
+        val = val * u % MOD;
+        if (val < 0) val += MOD;
+        return *this;
+    }
+    constexpr bool operator == (const Fp& r) const noexcept {
+        return this->val == r.val;
+    }
+    constexpr bool operator != (const Fp& r) const noexcept {
+        return this->val != r.val;
+    }
+    friend constexpr ostream& operator << (ostream &os, const Fp<MOD>& x) noexcept {
+        return os << x.val;
+    }
+    friend constexpr istream& operator >> (istream &is, Fp<MOD>& x) noexcept {
+        return is >> x.val;
+    }
+    friend constexpr Fp<MOD> modpow(const Fp<MOD> &a, long long n) noexcept {
+        if (n == 0) return 1;
+        auto t = modpow(a, n / 2);
+        t = t * t;
+        if (n & 1) t = t * a;
+        return t;
+    }
+};
+string s[500];
+bool ok[500];
+signed main(){
+	ic(n)
+	rep(0,i,n)cin>>s[i];
+	rep(0,i,n){
+		int sum=0;
+		rep(i+1,j,n){
+			rep(0,l,s[i].size()){
+				if(s[i][l]!=s[j][l])sum++;
+			}
+			if(sum<=1){
+				ok[i]=true;
+				ok[j]=true;
+			}
+		}
+	}
+	int ans=0;
+	rep(0,i,n)ans+=ok[i];
+	c(ans)
+}

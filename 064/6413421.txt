@@ -1,0 +1,257 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <cassert>
+#include <iomanip>
+using namespace std;
+
+namespace geometry2d{
+    const double EPS = 1e-10;
+
+    int sgn(const double a){
+        return (a < -EPS ? -1 : (a > EPS ? +1 : 0));
+    }
+
+    struct Point{
+        double x, y;
+        Point() = default;
+        Point(double _x, double _y) : x(_x), y(_y){}
+
+        double length() const {
+            return std::sqrt(lengthSquare());
+        }
+
+        double lengthSquare() const {
+            return x*x + y*y;
+        }
+
+        double dot(const Point &other) const {
+            return this->x*other.x + this->y*other.y;
+        }
+
+        double cross(const Point &other) const {
+            return x*other.y - y*other.x;
+        }
+
+        double distanceFrom(const Point &other) const {
+            return (other-*this).length();
+        }
+
+        Point normalized() const {
+            return *this/length();
+        }
+
+        Point normalUnitVector() const {
+            return {-normalized().y, normalized().x};
+        }
+
+        bool isZero() const {
+            return x == 0.0 && y == 0.0;
+        }
+
+        Point rotation(double arg) const {
+            double cs = std::cos(arg), sn = std::sin(arg);
+            return Point(x*cs - y*sn, x*sn+y*cs);
+        }
+
+        double angle() const {
+            return std::atan2(y, x);
+        }
+
+        Point operator+() const {
+            return *this;
+        }
+
+        Point operator-() const {
+            return {-x, -y};
+        }
+
+        Point operator+(const Point &other) const {
+            return {this->x+other.x, this->y+other.y};
+        }
+
+        Point operator-(const Point &other) const {
+            return {this->x-other.x, this->y-other.y};
+        }
+
+        Point operator*(double s) const {
+            return {x*s, y*s};
+        }
+
+        Point operator/(double s) const {
+            return {x/s, y/s};
+        }
+
+        Point &operator+=(const Point &other) {
+            this->x += other.x;
+            this->y += other.y;
+            return *this;
+        }
+
+        Point &operator-=(const Point &other) {
+            this->x -= other.x;
+            this->y -= other.y;
+            return *this;
+        }
+
+        Point &operator*=(double s) {
+            x *= s;
+            y *= s;
+            return *this;
+        }
+
+        Point &operator/=(double s) {
+            x /= s;
+            y /= s;
+            return *this;
+        }
+    };
+
+    inline Point operator*(double s, const Point &a) {
+        return {a.x*s, a.y*s};
+    }
+
+    template <class Char>
+    inline std::basic_ostream<Char> &operator<<(std::basic_ostream<Char> &os,
+    const Point &a){
+        return os << Char('(') << a.x << Char(',') << a.y << Char(')');
+    }
+
+    template <class Char>
+    inline std::basic_istream<Char> &operator>>(std::basic_istream<Char> &is,
+    const Point &a){
+        Char unused;
+        return is >> unused >> a.x >> unused >> a.y >> unused;
+    }
+
+    const Point error_val = { 114514.0, -191981.0 };
+
+    inline bool operator==(const Point &a, const Point &b){
+        return sgn(a.x-b.x) == 0 && sgn(a.y-b.y) == 0;
+    }
+
+    inline bool operator!=(const Point &a, const Point &b){
+        return !(a == b);
+    }
+
+    inline bool operator<(const Point &a, const Point &b){
+        if(sgn(a.x-b.x) != 0) return sgn(a.x-b.x) < 0;
+        else return sgn(a.y-b.y) < 0;
+    }
+
+    int iSP(const Point &a, const Point &b, const Point &c){
+        int flg = sgn((b-a).cross(c-a));
+        if(flg == 1) return +1;
+        else if(flg == -1) return -1;
+        else{
+            if(sgn((b-a).dot(c-b)) > 0) return +2;
+            else if(sgn((a-b).dot(c-a)) > 0) return -2;
+            else return 0;
+        }
+    }
+
+    int angletype(const Point &a, const Point &b, const Point &c){
+        auto v = (a-b).dot(c-b);
+        if(sgn(v) > 0) return 0;
+        else if(sgn(v) == 0) return 1;
+        else return 2;
+    }
+
+    namespace line2d{
+        struct Line{
+            Point begin, end;
+            Line(){
+                begin = Point(), end = Point();
+            }
+            Line(const Point &b, const Point &e){
+                begin = b, end = e;
+            }
+            // ax+by=0
+            Line(const double a, const double b, const double c){
+                if(sgn(a) == 0 && sgn(b) == 0){
+                    assert(-1);
+                }
+                if(sgn(b) == 0){
+                    begin = Point(-c/a, 0.0);
+                    end = Point(-c/a, 1.0);
+                }else{
+                    begin = Point(0.0, -c/b);
+                    end = Point(1.0, -(a+c)/b);
+                }
+            }
+
+            Point vec() const {
+                return end-begin;
+            }
+
+            Point countervec() const {
+                return begin-end;
+            }
+        };
+
+        using Ray = Line;
+        using Segment = Line;
+
+        Point lineIntersection(const Line &l1, const Line &l2){
+            if(sgn(l1.vec().cross(l2.vec())) == 0) return error_val;
+
+            Point res = l1.begin
+            + l1.vec() * abs((l2.end-l1.begin).cross(l2.vec())/l1.vec().cross(l2.vec()));
+            return res;
+        }
+
+        pair<bool, Point> segmentIntersection(const Segment &s1, const Segment &s2){
+            if(iSP(s1.begin, s1.end, s2.begin)*iSP(s1.begin, s1.end, s2.end) <= 0
+            && iSP(s2.begin, s2.end, s1.begin)*iSP(s2.begin, s2.end, s1.end) <= 0){
+                if(sgn(s1.vec().cross(s2.vec())) == 0) return make_pair(true, error_val);
+                else return make_pair(true, lineIntersection(s1, s2));
+            }else return make_pair(false, error_val);
+        }
+
+        double distanceBetweenPointAndLine(const Point &p, const Line &l){
+            return abs(l.vec().cross((p-l.begin))/l.vec().length());
+        }
+
+        double distanceBetweenPointAndRay(const Point &p, const Ray &r){
+            if(angletype(p, r.begin, r.end) < 2){
+                return distanceBetweenPointAndLine(p, r);
+            }else{
+                return r.begin.distanceFrom(p);
+            }
+        }
+
+        double distanceBetweenPointAndSegment(const Point &p, const Segment &s){
+            if(angletype(p, s.begin, s.end) < 2 && angletype(p, s.end, s.begin) < 2){
+                return distanceBetweenPointAndLine(p, s);
+            }else{
+                return min(p.distanceFrom(s.begin), p.distanceFrom(s.end));
+            }
+        }
+
+        double distanceBetWeenSegmentAndSegment(const Segment &s1, const Segment &s2){
+            if(segmentIntersection(s1, s2).first) return 0.0;
+            double ans = distanceBetweenPointAndSegment(s2.begin, s1);
+            ans = min(ans, distanceBetweenPointAndSegment(s2.end, s1));
+            ans = min(ans, distanceBetweenPointAndSegment(s1.begin, s2));
+            ans = min(ans, distanceBetweenPointAndSegment(s1.end, s2));
+            return ans;
+        }
+    }
+}
+
+int main(){
+    using namespace geometry2d;
+    using namespace line2d;
+    
+    int q; cin >> q;
+    while(q--){
+        int x0, y0, x1, y1; cin >> x0 >> y0 >> x1 >> y1;
+        int x2, y2, x3, y3; cin >> x2 >> y2 >> x3 >> y3;
+        Segment s1(Point(x0, y0), Point(x1, y1));
+        Segment s2(Point(x2, y2), Point(x3, y3));
+        Point res = segmentIntersection(s1, s2).second;
+        cout << fixed << setprecision(10) << res.x << " " << res.y;
+        cout << '\n';
+    }
+    return 0;
+}

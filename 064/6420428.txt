@@ -1,0 +1,8 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+int main(){
+  ll a,b,c,d;
+  cin>>a>>b>>c>>d;
+  cout<<(ll(a+c-1)/c)*(ll(b+d-1)/d)<<endl;
+}

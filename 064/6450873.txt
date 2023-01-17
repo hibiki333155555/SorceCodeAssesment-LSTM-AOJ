@@ -1,0 +1,154 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ld = long double;
+template<class T> using V = vector<T>;
+using VI = V<int>;
+using VL = V<ll>;
+using VS = V<string>;
+template<class T> using PQ = priority_queue<T, V<T>, greater<T>>;
+using graph = V<VI>;
+template<class T> using w_graph = V<V<pair<int, T>>>;
+#define FOR(i,a,n) for(int i=(a);i<(n);++i)
+#define eFOR(i,a,n) for(int i=(a);i<=(n);++i)
+#define rFOR(i,a,n) for(int i=(n)-1;i>=(a);--i)
+#define erFOR(i,a,n) for(int i=(n);i>=(a);--i)
+#define all(a) a.begin(),a.end()
+#define rall(a) a.rbegin(),a.rend()
+#define inside(h,w,y,x) (unsigned(y)<h&&unsigned(x)<w)
+#ifdef _DEBUG
+#define line cout << "-----------------------------\n"
+#define stop system("pause")
+#endif
+constexpr ll INF = 1000000000;
+constexpr ll LLINF = 1LL << 61;
+constexpr ll mod = 1000000007;
+constexpr ll MOD = 998244353;
+constexpr ld eps = 1e-10;
+constexpr int dy[]{ -1,0,1,0 }, dx[]{ 0,1,0,-1 };
+template<class T> inline bool chmax(T& a, const T& b) { if (a < b) { a = b; return true; }return false; }
+template<class T> inline bool chmin(T& a, const T& b) { if (a > b) { a = b; return true; }return false; }
+inline void init() { cin.tie(nullptr); cout.tie(nullptr); ios::sync_with_stdio(false); cout << fixed << setprecision(15); }
+template<class T> inline istream& operator>>(istream& is, V<T>& v) { for (auto& a : v)is >> a; return is; }
+template<class T, class U> inline istream& operator>>(istream& is, pair<T, U>& p) { is >> p.first >> p.second; return is; }
+template<class T> inline V<T> vec(size_t a) { return V<T>(a); }
+template<class T> inline V<T> defvec(T def, size_t a) { return V<T>(a, def); }
+template<class T, class... Ts> inline auto vec(size_t a, Ts... ts) { return V<decltype(vec<T>(ts...))>(a, vec<T>(ts...)); }
+template<class T, class... Ts> inline auto defvec(T def, size_t a, Ts... ts) { return V<decltype(defvec<T>(def, ts...))>(a, defvec<T>(def, ts...)); }
+template<class T> inline void print(const T& a) { cout << a << "\n"; }
+template<class T, class... Ts> inline void print(const T& a, const Ts&... ts) { cout << a << " "; print(ts...); }
+template<class T> inline void print(const V<T>& v) { for (int i = 0; i < v.size(); ++i)cout << v[i] << (i == v.size() - 1 ? "\n" : " "); }
+template<class T> inline void print(const V<V<T>>& v) { for (auto& a : v)print(a); }
+template<class T> inline constexpr const T cumsum(const V<T>& a, int l, int r) { return 0 <= l && l <= r && r < a.size() ? a[r] - (l == 0 ? 0 : a[l - 1]) : 0; }//[l,r]
+template<class T> inline constexpr const T min(const V<T>& v) { return *min_element(all(v)); }
+template<class T> inline constexpr const T max(const V<T>& v) { return *max_element(all(v)); }
+
+template<int modulo> struct ModInt {
+    int x;
+
+    ModInt() : x(0) {}
+    ModInt(ll y) : x(y >= 0 ? y % modulo : (modulo - (-y) % modulo) % modulo) {}
+
+    ModInt& operator+=(const ModInt& p) {
+        if ((x += p.x) >= modulo) x -= modulo;
+        return *this;
+    }
+    ModInt& operator-=(const ModInt& p) {
+        if ((x += modulo - p.x) >= modulo) x -= modulo;
+        return *this;
+    }
+    ModInt& operator*=(const ModInt& p) {
+        x = (int)(1LL * x * p.x % modulo);
+        return *this;
+    }
+    ModInt& operator/=(const ModInt& p) {
+        *this *= p.inverse();
+        return *this;
+    }
+
+    ModInt operator-() const { return ModInt(-x); }
+    ModInt operator+(const ModInt& p) const { return ModInt(*this) += p; }
+    ModInt operator-(const ModInt& p) const { return ModInt(*this) -= p; }
+    ModInt operator*(const ModInt& p) const { return ModInt(*this) *= p; }
+    ModInt operator/(const ModInt& p) const { return ModInt(*this) /= p; }
+
+    bool operator==(const ModInt& p) const { return x == p.x; }
+    bool operator!=(const ModInt& p) const { return x != p.x; }
+
+    ModInt inverse() const {
+        int a = x, b = modulo, u = 1, v = 0, t;
+        while (b > 0) {
+            t = a / b;
+            a -= t * b;
+            swap(a, b);
+            u -= t * v;
+            swap(u, v);
+        }
+        return ModInt(u);
+    }
+
+    ModInt pow(ll e) {
+        ll a = 1, p = x;
+        while (e > 0) {
+            if (e % 2 == 0) {
+                p = (p * p) % modulo;
+                e /= 2;
+            }
+            else {
+                a = (a * p) % modulo;
+                e--;
+            }
+        }
+        return ModInt(a);
+    }
+
+    friend ostream& operator<<(ostream& os, const ModInt<modulo>& p) {
+        return os << p.x;
+    }
+    friend istream& operator>>(istream& is, ModInt<modulo>& a) {
+        ll x;
+        is >> x;
+        a = ModInt<modulo>(x);
+        return (is);
+    }
+};
+using mint = ModInt<MOD>;
+
+int main() {
+    init();
+
+    int n; cin >> n;
+    int m = 1;
+    while (m < n * 2)m *= 2;
+
+    VI a(m);
+    FOR(i, 1, n * 2)cin >> a[i];
+    VI len(m, 1);
+
+    VI l(m);
+    FOR(i, 0, m / 2)l[m / 2 + i] = i;
+
+    mint ans = 0;
+    rFOR(i, 1, m) {
+        if (i < n) {
+            chmin(a[i], a[i * 2] + a[i * 2 + 1]);
+            len[i] = len[i * 2] * 2;
+            l[i] = l[i * 2];
+        }
+        if (i <= 2 * n - 1) {
+            if (i == 1)ans += a[i];
+            else if (i & 1) { //右の子
+                ans += mint(a[i]) * len[i] * (n - l[i]);
+            }
+            else { //左の子
+                ans += mint(a[i]) * len[i] * (l[i] + 1);
+            }
+        }
+    }
+    ans /= n;
+    ans /= (n + 1);
+    ans *= 2;
+    print(ans);
+
+    return 0;
+}

@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+const long long INF = 1LL << 60; // 十分大きな値に
+typedef long long ll;
+typedef long double ld;
+
+int main() {
+    ll n; cin >> n;
+    set<string> ch_set;
+    for (ll i=0; i<n; i++) {
+        string s;
+        cin >> s;
+        if (s=="insert") {
+            cin >> s;
+            ch_set.insert(s);
+        }
+        if (s=="find") {
+            cin >> s;
+            auto itr = ch_set.find(s);
+            if ( itr != ch_set.end()) {
+                cout << "Yes" << endl;
+            }
+            else {
+                cout << "No" << endl;
+            }
+        }
+    }
+}

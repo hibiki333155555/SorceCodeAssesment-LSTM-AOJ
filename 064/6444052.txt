@@ -1,0 +1,64 @@
+class Dice:
+
+    def __init__(self, numbers):
+        self.numbers_fr = [i for i in numbers]
+        self.numbers_to = [0 for i in range(6)]
+
+    def move_n(self):
+        self.numbers_to[0] = self.numbers_fr[1]
+        self.numbers_to[1] = self.numbers_fr[5]
+        self.numbers_to[2] = self.numbers_fr[2]
+        self.numbers_to[3] = self.numbers_fr[3]
+        self.numbers_to[4] = self.numbers_fr[0]
+        self.numbers_to[5] = self.numbers_fr[4]
+        self.numbers_fr = self.numbers_to
+        return self.numbers_to
+
+    def move_s(self):
+        self.numbers_to[0] = self.numbers_fr[4]
+        self.numbers_to[1] = self.numbers_fr[0]
+        self.numbers_to[2] = self.numbers_fr[2]
+        self.numbers_to[3] = self.numbers_fr[3]
+        self.numbers_to[4] = self.numbers_fr[5]
+        self.numbers_to[5] = self.numbers_fr[1]
+        self.numbers_fr = self.numbers_to
+        return self.numbers_to
+
+    def move_w(self):
+        self.numbers_to[0] = self.numbers_fr[2]
+        self.numbers_to[1] = self.numbers_fr[1]
+        self.numbers_to[2] = self.numbers_fr[5]
+        self.numbers_to[3] = self.numbers_fr[0]
+        self.numbers_to[4] = self.numbers_fr[4]
+        self.numbers_to[5] = self.numbers_fr[3]
+        self.numbers_fr = self.numbers_to
+        return self.numbers_to
+
+    def move_e(self):
+        self.numbers_to[0] = self.numbers_fr[3]
+        self.numbers_to[1] = self.numbers_fr[1]
+        self.numbers_to[2] = self.numbers_fr[0]
+        self.numbers_to[3] = self.numbers_fr[5]
+        self.numbers_to[4] = self.numbers_fr[4]
+        self.numbers_to[5] = self.numbers_fr[2]
+        self.numbers_fr = self.numbers_to
+        return self.numbers_to
+
+numbers = list(map(int, input().split()))
+
+dice = Dice(numbers)
+
+cmd = input()
+
+for s in cmd:
+    if s == "N":
+        numbers = dice.move_n()
+    elif s == "S":
+        numbers = dice.move_s()
+    elif s == "W":
+        numbers = dice.move_w()
+    elif s == "E":
+        numbers = dice.move_e()
+    
+print(f'{numbers[0]}')
+

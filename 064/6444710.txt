@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+
+void insertArray(int number, std::vector<int> &array){
+    //for j = 2 to A.length();
+    for (unsigned int j = 2; j < array.size();++j){
+        int key = array[j];
+        int i = j -1;
+        while ( i > 0 && i > key){
+            array[i+1] = array[i];
+            i--;
+        }
+        array[i+1] = key;
+        
+    }
+}
+void dumpArray(std::vector<int> &array){
+    for (size_t i = 0; i < array.size(); ++i){
+        std::cout << array[i]<<std::endl;
+    }
+    
+}
+int main (){
+    std::vector<int> array;
+    int number = 0;
+    while(std::cin >> number){
+        insertArray(number, array);
+    }
+    dumpArray(array);
+    
+}
+

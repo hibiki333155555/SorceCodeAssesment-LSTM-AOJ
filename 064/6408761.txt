@@ -1,0 +1,12 @@
+import sys
+a = []
+for l in sys.stdin:
+    a.append(int(l))
+
+i = 1
+while True:
+    for n in a:
+        print(f'Case {i}: {n}')
+    if n == 0:
+        break
+    i += 1

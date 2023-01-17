@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ull = unsigned long long;
+using ld = long double;
+
+struct Setup_io {
+    Setup_io() {
+        ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+        cout << fixed << setprecision(15);
+    }
+} setup_io;
+
+template <typename T>
+inline bool chmax(T &a, const T &b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+template <typename T>
+inline bool chmin(T &a, const T &b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+// #include <boost/multiprecision/cpp_bin_float.hpp>
+// #include <boost/multiprecision/cpp_int.hpp>
+// using namespace boost::multiprecision;
+
+// #include <atcoder>
+// using namespace atcoder;
+// using mint = modint1000000007;
+// using mint = modint998244353;
+
+// const int MOD = 1000000007;
+// const int MOD = 998244353;
+
+struct Edge {
+    int to;
+    ll cost;
+    Edge(){};
+    Edge(int to, ll cost) : to(to), cost(cost){};
+};
+
+int main() {
+    int N;
+    cin >> N;
+    vector<vector<Edge>> G(N);
+    for (int i = 0; i < N - 1; i++) {
+        int s, t;
+        ll w;
+        cin >> s >> t >> w;
+        G[s].emplace_back(Edge(t, w));
+        G[t].emplace_back(Edge(s, w));
+    }
+    int node = 0;
+    int maxdist = 0;
+    vector<int> seen(N, 0);
+    auto dfs = [&](auto &f, int now, int dist) -> void {
+        seen[now] = 1;
+        if (maxdist < dist) {
+            node = now;
+            maxdist = dist;
+        }
+        for (auto i : G[now]) {
+            if (!seen[i.to]) {
+                f(f, i.to, dist + i.cost);
+            }
+        }
+        return;
+    };
+    dfs(dfs, 0, 0);
+    maxdist = 0;
+    seen = vector<int>(N, 0);
+    dfs(dfs, node, 0);
+    cout << maxdist << endl;
+    return 0;
+}

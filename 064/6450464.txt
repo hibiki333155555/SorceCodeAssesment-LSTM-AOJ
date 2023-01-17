@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    vector<string> s;
+    for(char c = 'A'; c <= 'Z'; c++) s.push_back(string("") + c);
+    for(char c = 'A'; c <= 'Z'; c++) {
+        for(char d = 'A'; d <= 'Z'; d++) {
+            s.push_back(string(string("") + c) + d);
+        }
+    }
+
+    auto f = [&](string &x) {
+        rep(i,(int)s.size()) if(x == s[i]) return i;
+        return -1;
+    };
+
+    string c1,c2; int r1,r2; cin >> c1 >> r1 >> c2 >> r2;
+    cout << (r2 - r1 + 1) * (f(c2) - f(c1) + 1) << endl;
+}

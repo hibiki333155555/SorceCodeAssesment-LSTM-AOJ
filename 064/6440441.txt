@@ -1,0 +1,19 @@
+n=input().split()
+a=int(n[0])
+op=n[1]
+b=int(n[2])
+while True:
+    if op="+":
+        result=a+b
+        print(result)
+    elif op="-":
+        result=a-b
+        print(result)
+    elif op="*":
+        result=a*b
+        print(result)
+    elif op="/":
+        result=a/b
+        print(result)
+    elif op="?":
+        break

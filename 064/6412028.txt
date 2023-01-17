@@ -1,0 +1,168 @@
+#include <iostream>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+const int N = 2e5 + 10;
+
+struct Node
+{
+    int key;
+    int priority;
+    int left, right;
+} a[N];
+
+int idx;
+int root;
+
+int rightrotate(int t)
+{
+    int s = a[t].left;
+    a[t].left = a[s].right;
+    a[s].right = t;
+    return s;
+}
+
+int leftrotate(int t)
+{
+    int s = a[t].right;
+    a[t].right = a[s].left;
+    a[s].left = t;
+    return s;
+}
+
+int insert(int t, int key, int priority) // search the corresponding place recursively
+{
+    if (t == -1)
+    {
+        a[idx].key = key;
+        a[idx].priority = priority;
+        a[idx].left = a[idx].right = -1;
+        idx++;
+        return idx - 1;
+    }
+    if (key == a[t].key)
+        return t; // ignore duplicated keys
+
+    if (key < a[t].key) // move to the left child
+    {
+        a[t].left = insert(a[t].left, key, priority); // update the pointer to the left child
+        if (a[t].priority < a[a[t].left].priority)    // rotate right if the left child has higher priority
+            t = rightrotate(t);
+    }
+    else // move to the right child
+    {
+        a[t].right = insert(a[t].right, key, priority);
+        if (a[t].priority < a[a[t].right].priority)
+            t = leftrotate(t);
+    }
+
+    return t;
+}
+
+bool find(int root, int val)
+{
+    if (!idx)
+        return false;
+    if (a[root].key == val)
+        return true;
+    else if (a[root].key < val)
+        return find(a[root].right, val);
+    else
+        return find(a[root].left, val);
+}
+
+int del(int t, int key) // seach the target recursively
+{
+    if (idx == 0 || t == -1)
+        return -1;
+    if (key < a[t].key) // search the target recursively
+        a[t].left = del(a[t].left, key);
+    else if (key > a[t].key)
+        a[t].right = del(a[t].right, key);
+    else
+        return _del(t, key);
+    return t;
+}
+
+int _del(int t, int key) // if t is the target node
+{
+    if (a[t].left == -1 && a[t].right == -1) // if t is a leaf
+        return -1;
+    else if (a[t].left == -1) // if t has only the right child, then perform left rotate
+        t = leftrotate(t);
+    else if (a[t].right == -1) // if t has only the left child, then perform right rotate
+        t = rightrotate(t);
+    else // if t has both the left and right child
+    {
+        if (a[a[t].left].priority > a[a[t].right].priority) // pull up the child with higher priority
+            t = rightrotate(t);
+        else
+            t = leftrotate(t);
+    }
+    return del(t, key);
+}
+
+void Inorder(int root)
+{
+    if (!root)
+        return;
+    Inorder(a[root].left);
+    cout << " " << a[root].key;
+    Inorder(a[root].right);
+}
+
+void Preorder(int root)
+{
+    if (!root)
+        return;
+    cout << " " << a[root].key;
+    Preorder(a[root].left);
+    Preorder(a[root].right);
+}
+
+void print()
+{
+    Inorder(root);
+    cout << endl;
+    Preorder(root);
+    cout << endl;
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    ios::sync_with_stdio(false);
+
+    int n;
+    cin >> n;
+    string op;
+    int val, priority;
+    while (n--)
+    {
+        cin >> op;
+        if (op == "insert")
+        {
+            cin >> val >> priority;
+            root = insert(root, val, priority);
+        }
+        else if (op == "find")
+        {
+            cin >> val;
+            if (find(root, val))
+                cout << "yes" << endl;
+            else
+                cout << "no" << endl;
+        }
+        else if (op == "delete")
+        {
+            cin >> val;
+            root = del(root, val);
+        }
+        else
+            print();
+    }
+
+    return 0;
+}

@@ -1,0 +1,42 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ITP1_7_A
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            while (true)
+            {
+                var input = Console.ReadLine().Split().Select(s => int.Parse(s)).ToArray();
+                var (mid, fin, re) = (input[0], input[1], input[2]);
+                if (mid == -1 && fin == -1 && re == -1)
+                    break;
+
+                Console.WriteLine(Scoreing(mid,fin,re));
+            }
+
+        }
+
+        public static string Scoreing(int mid, int fin, int re)
+        {
+            switch (mid,fin,re)
+            {
+                case var t when t.mid == -1 || t.fin == -1:
+                    return "F";
+                case var t when t.mid + t.fin >= 80:
+                    return "A";
+                case var t when t.mid + t.fin >= 65:
+                    return "B";
+                case var t when t.mid + t.fin >= 50 || t.re >= 50:
+                    return "C";
+                case var t when t.mid + t.fin >= 30:
+                    return "D";
+                default:
+                    return "F";
+            }
+        }
+    }
+}
+

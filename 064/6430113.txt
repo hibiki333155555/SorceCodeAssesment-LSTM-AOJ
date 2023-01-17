@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+ // int型の2次元配列(3000×2要素の)の宣言
+  vector<vector<int>> data(3, vector<int>(4));
+  vector<vector<int>> data(3000, vector<int>(2));
+  
+  // 入力 (2重ループを用いる)
+  int count;	            //0カウント
+  bool flag = false;		//2重ループ抜けるフラグ
+  
+  for (int i = 0; i < 3000; i++) {
+    for (int j = 0; j < 2; j++) {
+      cin >> data.at(i).at(j);      
+    } 
+  }
+  
+  for (int i=0; i < data.size(); i++){
+    for (int j=0; j < 2; j++){
+      if (j == 1){
+        if (data.at(i).at(0) == 0 && data.at(i).at(1) == 0){
+          flag = true;
+          break;
+        }
+        
+        else{
+          if (data.at(i).at(0) >= data.at(i).at(1)){
+            cout << data.at(i).at(1) << " " << data.at(i).at(0) << endl;
+          }
+          
+          else{
+            cout << data.at(i).at(0) << " " << data.at(i).at(1) << endl;
+          }
+          
+        }
+        
+      }
+      
+    }
+  }
+  
+  
+}

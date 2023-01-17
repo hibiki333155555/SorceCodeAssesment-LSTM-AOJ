@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+int main(void)
+{
+    int a = 0, b = 0;
+    do
+    {
+        scanf_s("%d %d",&a,&b,3);
+    } while (!((-1000 <= a && a <= 1000) && (-1000 <= b && b <= 1000)));
+    if(a == b)
+    {
+        printf("a == b\n");
+    }
+    else if(a > b)
+    {
+        printf("a > b\n");
+    }
+    else if(a < b)
+    {
+        printf("a < b\n");
+    }
+    return 0;
+}

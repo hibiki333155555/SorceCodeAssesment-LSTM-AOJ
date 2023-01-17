@@ -1,0 +1,14 @@
+#include<stdio.h>
+
+int main(){
+ double  r,pi, area, peri;
+pi=3.141592653589793238;
+scanf("%lf", &r);
+
+area=(double)pi*r*r;
+peri=(double)2*pi*r;
+printf("%.6lf %.6lf\n",area,peri);
+return 0;
+}
+
+

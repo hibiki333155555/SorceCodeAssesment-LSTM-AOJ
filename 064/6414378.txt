@@ -1,0 +1,16 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	var X, Y, Z int
+	fmt.Scan(&X, &Y, &Z)
+	if (X + Y) <= Z {
+		fmt.Println(1)
+	} else {
+		fmt.Println(0)
+	}
+}
+

@@ -1,0 +1,22 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args){
+        Scanner scan=new Scanner(System.in);
+        int n=scan.nextInt();
+        for(int i=1;i<=n;i++){
+            Boolean b=false;
+            if(i%3==0)b=true;
+            int cop=i;
+            while(cop>0){
+                if(cop%10==3)b=true;
+                cop/=10;
+            }
+            if(b)System.out.print(" "+i);
+        }
+        System.out.println();
+        scan.close();
+    }
+} 
+
+

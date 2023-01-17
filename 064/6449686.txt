@@ -1,0 +1,27 @@
+#include<iostream>
+using namespace std;
+int N;
+string S[100];
+int main()
+{
+	cin>>N;
+	for(int i=0;i<N;i++)cin>>S[i];
+	int cnt=0;
+	for(int i=0;i<N;i++)
+	{
+		bool fn=false;
+		for(int j=0;j<N;j++)if(i!=j)
+		{
+			int c=0;
+			for(int k=0;k<S[i].size();k++)c+=S[i][k]!=S[j][k];
+			if(c<=1)
+			{
+				fn=true;
+				break;
+			}
+		}
+		if(fn)cnt++;
+	}
+	cout<<cnt<<endl;
+}
+

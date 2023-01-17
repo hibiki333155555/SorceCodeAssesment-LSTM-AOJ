@@ -1,0 +1,16 @@
+#include<stdio.h>
+
+int main(){
+    int a,b,c,d;
+    scanf("%d %d %d",&a,&b,&c);
+
+    while(a<=b){
+        if(c%a==0){
+                d++;
+        }
+        a++;
+    }
+    printf("%d\n",d);
+
+    }
+

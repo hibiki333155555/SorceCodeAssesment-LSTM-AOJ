@@ -1,0 +1,16 @@
+a, b, c, t, u, = map(int,input(). split())
+if a>b:
+    a = t
+    b = a
+    t = b
+else:
+    a = a
+    b = b
+if b>c:
+    b = u
+    c = b
+    u = c
+else:
+    b = b
+    c = c
+print(a, b, c)

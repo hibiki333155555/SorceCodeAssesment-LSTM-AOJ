@@ -1,0 +1,3 @@
+n = int(input)
+ans = n % 21
+print(ans)

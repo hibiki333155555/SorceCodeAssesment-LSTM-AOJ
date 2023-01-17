@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int find(vector<int>& nums, int target);
+int findLowerBound(vector<int> &nums, int target);
+int findUpperBound(vector<int> &nums, int target);
+
+int main(){
+    int n;
+    vector<int> arr;
+    cin >> n;
+    for(int i=0; i<n; i++){
+        int x;
+        cin >> x;
+        arr.push_back(x);
+    }
+    int q;
+    cin >> q;
+    for(int i=0; i<q; i++){
+        int query;
+        cin >> query;
+        cout << findLowerBound(arr, query) << " " << findUpperBound(arr, query) << endl;
+    }
+    return 0;
+}
+
+int findTarget(vector<int>& nums, int target) {
+    int left = 0, right = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) left = mid + 1;
+        else right = mid;
+    }
+    return -1;
+}
+
+int findLowerBound(vector<int> &nums, int target){
+    int left = 0, right = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) left = mid + 1;
+        else right = mid;
+    }
+    return right;
+}
+
+int findUpperBound(vector<int> &nums, int target){
+    int left = 0, right = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] <= target) left = mid + 1;
+        else right = mid;
+    }
+    return right;
+}

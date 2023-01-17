@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+const int INF = 1e9;
+const ll inf = 1LL<<62;
+template<int MOD> struct ModInt {
+    static const int Mod = MOD; unsigned x; ModInt() : x(0) { }
+    ModInt(signed sig) { x = sig < 0 ? sig % MOD + MOD : sig % MOD; }
+    ModInt(signed long long sig) { x = sig < 0 ? sig % MOD + MOD : sig % MOD; }
+    int get() const { return (int)x; }
+    ModInt &operator+=(ModInt that) { if ((x += that.x) >= MOD) x -= MOD; return *this; }
+    ModInt &operator-=(ModInt that) { if ((x += MOD - that.x) >= MOD) x -= MOD; return *this; }
+    ModInt &operator*=(ModInt that) { x = (unsigned long long)x * that.x % MOD; return *this; }
+    ModInt &operator/=(ModInt that) { return *this *= that.inverse(); }
+    ModInt operator+(ModInt that) const { return ModInt(*this) += that; }
+    ModInt operator-(ModInt that) const { return ModInt(*this) -= that; }
+    ModInt operator*(ModInt that) const { return ModInt(*this) *= that; }
+    ModInt operator/(ModInt that) const { return ModInt(*this) /= that; }
+    ModInt inverse() const { long long a = x, b = MOD, u = 1, v = 0;
+        while (b) { long long t = a / b; a -= t * b; std::swap(a, b); u -= t * v; std::swap(u, v); }
+        return ModInt(u); }
+    bool operator==(ModInt that) const { return x == that.x; }
+    bool operator!=(ModInt that) const { return x != that.x; }
+    ModInt operator-() const { ModInt t; t.x = x == 0 ? 0 : Mod - x; return t; }
+};
+template<int MOD> ostream& operator<<(ostream& st, const ModInt<MOD> a) { st << a.get(); return st; };
+template<int MOD> ModInt<MOD> operator^(ModInt<MOD> a, unsigned long long k) {
+    ModInt<MOD> r = 1; while (k) { if (k & 1) r *= a; a *= a; k >>= 1; } return r; }
+typedef ModInt<998244353> mint;
+
+template<typename T>
+struct Combination {
+private:
+  int sz;
+  vector<T> F, F_;
+public:
+  Combination(int sz) : sz(sz), F(sz+1), F_(sz+1) {
+    F[0] = 1;
+    for(int i = 0; i < sz; ++i) F[i+1] = F[i]*(i+1);
+    F_.back() = (T)1/F.back();
+    for(int i = sz-1; i >= 0; --i) F_[i] = F_[i+1]*(i+1);
+  }
+  T C(int n, int k){
+    assert(n <= sz);
+    if(n < 0 or k > n) return (T)0;
+    return F[n]*F_[k]*F_[n-k];
+  }
+  T P(int n, int k){
+    assert(n <= sz);
+    if(n < 0 or k > n) return (T)0;
+    return F[n]*F_[n-k];
+  }
+};
+
+void solve() {
+  int n, m; cin >> n >> m;
+  Combination<mint> comb(2500);
+  vector<int> a(m);
+  for (int i=0; i<m; i++) cin >> a[i];
+  vector<vector<mint>> dp(m+1, vector<mint>(n+1));
+  dp[0][0] = comb.P(n, n);
+  for (int i=1; i<=n; i++) dp[0][i] += dp[0][i-1];
+  for (int i=0; i<m; i++) {
+    for (int j=0; j<=n; j++) {
+      /*
+      if (i == 0 && j == 1) {
+        cout << dp[i][j] << endl;
+      }
+      */
+      if (j-a[i] > 0) dp[i+1][j] += dp[i][j] - dp[i][j-a[i]-1];
+      else dp[i+1][j] += dp[i][j];
+      dp[i+1][j] /= comb.P(n-j, n-j);
+    }
+    if (i == m-1) break;
+    for (int j=0; j<=n; j++) dp[i+1][j] *= comb.P(n-j, n-j);
+    for (int j=1; j<=n; j++) dp[i+1][j] += dp[i+1][j-1];
+  }
+  /*
+  for (int i=0; i<=m; i++) {
+    for (int j=0; j<=n; j++) {
+      cout << dp[i][j] << " ";
+    }
+    cout << endl;
+  }
+  */
+  cout << dp[m][n] << '\n';
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  // int t; cin >> t;
+  /*while (t--)*/ solve();
+}
+

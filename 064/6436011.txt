@@ -1,0 +1,25 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int t = 0;
+        int h = 0;
+        for (int i = 0; i < n; i++) {
+            String taro = scan.next();
+            String hana = scan.next();
+            int compare = hana.compareTo(taro);
+            if (compare > 0){
+                h += 3;
+            }else if (compare < 0){
+                t += 3;
+            }else {
+                h++;
+                t++;
+            }
+        }
+        System.out.printf("%d %d",t,h);
+        System.out.println();
+    }
+}

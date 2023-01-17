@@ -1,0 +1,12 @@
+n = int(input())
+num = map(int,input().split())
+bignum = 1500000
+max = -bignum
+min = bignum
+sum = 0
+for i in num:
+    if i > max:
+        max = i
+    if i < min:
+        min = i
+    sum += i

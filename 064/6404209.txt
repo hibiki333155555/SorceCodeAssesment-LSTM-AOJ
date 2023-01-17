@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        String str = new String();
+        Scanner sc = new Scanner(System.in);
+
+        // 標準入力から1行の文字列を読み込む
+        str = sc.nextLine();
+
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+
+            // 英小文字か
+            if (ch >= 'a' && ch <= 'z') {
+                ch = (char) ((int) ch - 32);
+            }
+            // 大文字か
+            else if (ch >= 'A' && ch <= 'Z') {
+                ch = (char) ((int) ch + 32);
+            }
+            System.out.print(ch);
+        }
+        System.out.println("");
+    }
+}
+

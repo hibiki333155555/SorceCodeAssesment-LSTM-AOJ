@@ -1,0 +1,20 @@
+import math
+grid =[]
+j = 0
+while True:
+    N = int(input())
+    if N == 0:
+        break
+    array = list(map(int, input().strip().split()))
+    grid.append(array)
+    j += 1
+
+print(grid)
+
+for k in range(j):
+    avg = sum(grid[k])/len(grid[k])
+    total = 0
+    for l in range(len(grid[k])):
+        total +=(grid[k][l] - avg)**2
+    ans = math.sqrt(total / len(grid[k]))
+    print(ans)

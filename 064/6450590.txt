@@ -1,0 +1,124 @@
+#include "bits/stdc++.h"
+using namespace std;
+
+#define YES		0
+#define	NO		1
+#define MAX		500000
+#define NIL		-1
+
+typedef struct node{
+	int parent,left,right;
+}NODE;
+
+int N;
+int id,l,r;
+int cn;
+int root;
+
+NODE T[MAX];
+int H[MAX];
+
+void init();
+void insert_node(int,int,int);
+void print_allnode();
+void Preorder(int);
+void Preorder_x(int);
+void Inorder(int);
+void Inorder_x(int);
+void Postorder(int);
+void Postorder_x(int);
+
+int main(){
+
+	if(scanf("%d",&N)){
+	}
+
+	init();
+	for(int i = 0;i < N;i++){
+		if(scanf("%d %d %d",&id,&l,&r)){
+		}
+		insert_node(id,l,r);
+	}
+
+	for(int i = 0;i < N;i++){
+		if(T[i].parent == NIL)root = i;
+	}
+	//print_allnode();
+	Preorder(root);
+	Inorder(root);
+	Postorder(root);
+}
+
+void print_allnode(){
+	for(int i = 0;i < N;i++){
+		printf("node %d:parent = %d,left = %d,right = %d\n",i,T[i].parent,T[i].left,T[i].right);
+	}
+}
+
+void Postorder_x(int pos){
+	if(T[pos].left != NIL){
+		Postorder_x(T[pos].left);
+	}
+	if(T[pos].right != NIL){
+		Postorder_x(T[pos].right);
+	}
+	printf(" %d",pos);
+}
+
+void Postorder(int pos){
+	printf("Postorder\n");
+	Postorder_x(pos);
+	printf("\n");
+}
+
+void Inorder_x(int pos){
+	if(T[pos].left != NIL){
+		Inorder_x(T[pos].left);
+	}
+	printf(" %d",pos);
+	if(T[pos].right != NIL){
+		Inorder_x(T[pos].right);
+	}
+}
+
+void Inorder(int pos){
+	printf("Inorder\n");
+	Inorder_x(pos);
+	printf("\n");
+}
+
+void Preorder_x(int pos){
+
+	printf(" %d",pos);
+	if(T[pos].left != NIL){
+		Preorder_x(T[pos].left);
+	}
+	if(T[pos].right != NIL){
+		Preorder_x(T[pos].right);
+	}
+}
+
+void Preorder(int pos){
+	printf("Preorder\n");
+	Preorder_x(pos);
+	printf("\n");
+}
+
+void insert_node(int id,int left,int right){
+
+	T[id].left = left;
+	T[id].right = right;
+
+	if(left != NIL)T[left].parent = id;
+	if(right != NIL)T[right].parent = id;
+}
+
+void init(){
+
+	for(int i = 0;i < MAX;i++){
+		T[i].parent = NIL;
+		T[i].left = NIL;
+		T[i].right = NIL;
+	}
+}
+

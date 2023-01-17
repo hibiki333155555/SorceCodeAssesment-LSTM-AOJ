@@ -1,0 +1,7 @@
+def sanbai(n):
+    print(n ** 3)
+   
+n = int(input())
+sanbai(n)
+
+

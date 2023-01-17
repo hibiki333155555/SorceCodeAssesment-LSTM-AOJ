@@ -1,0 +1,19 @@
+#include <iostream>
+#include <cctype>
+using namespace std;
+
+int main(){
+    char x;
+    while(1){
+        cin >> x;
+        if(isalpha(x)){
+            if(isupper(x)) cout << tolower(x);
+            else cout << toupper(x);
+        }
+        else cout << x;
+        if(x == '\n') break;
+    }
+    
+    return 0;
+}
+

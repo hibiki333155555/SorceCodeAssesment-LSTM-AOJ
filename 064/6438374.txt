@@ -1,0 +1,36 @@
+/* Copyright 2022 © Abdullah AL Shohag */
+
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+int main() {
+    int q;
+    cin >> q;
+    map<string, int> arrays;
+    for(int i = 0; i < q; i++) {
+        int c;
+        string key;
+        cin >> c >> key;
+        if (c == 0) {
+            string t; getline(cin, t);
+            int x = stoi(t);
+            arrays.insert({key,x});
+        } else if (c == 1) {
+            if(arrays.find(key) != arrays.end()) cout << arrays.at(key) << endl;
+            else cout << "0" << endl;
+        } else if(c == 2) {
+            arrays.erase(key);
+        } else if(c == 3) {
+            string t; getline(cin, t);
+            // int r = stoi(t), l = stoi(key);
+            for (auto i = arrays.lower_bound(key) ; i != arrays.upper_bound(t); i++) {
+                if (i != arrays.end()) cout << (*i).first << " " << (*i).second << endl;
+                else break;
+            }
+        }
+    }
+    return 0;
+}

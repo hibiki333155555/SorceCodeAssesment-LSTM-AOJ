@@ -1,0 +1,99 @@
+// ---------- begin scannner ----------
+#[allow(dead_code)]
+mod scanner {
+    use std::str::FromStr;
+    pub struct Scanner<'a> {
+        it: std::str::SplitWhitespace<'a>,
+    }
+    impl<'a> Scanner<'a> {
+        pub fn new(s: &'a String) -> Scanner<'a> {
+            Scanner {
+                it: s.split_whitespace(),
+            }
+        }
+        pub fn next<T: FromStr>(&mut self) -> T {
+            self.it.next().unwrap().parse::<T>().ok().unwrap()
+        }
+        pub fn next_bytes(&mut self) -> Vec<u8> {
+            self.it.next().unwrap().bytes().collect()
+        }
+        pub fn next_chars(&mut self) -> Vec<char> {
+            self.it.next().unwrap().chars().collect()
+        }
+        pub fn next_vec<T: FromStr>(&mut self, len: usize) -> Vec<T> {
+            (0..len).map(|_| self.next()).collect()
+        }
+    }
+}
+// ---------- end scannner ----------
+
+use std::io::Write;
+use std::collections::*;
+
+type Map<K, V> = BTreeMap<K, V>;
+type Set<T> = BTreeSet<T>;
+type Deque<T> = VecDeque<T>;
+
+fn main() {
+    use std::io::Read;
+    let mut s = String::new();
+    std::io::stdin().read_to_string(&mut s).unwrap();
+    let mut sc = scanner::Scanner::new(&s);
+    let out = std::io::stdout();
+    let mut out = std::io::BufWriter::new(out.lock());
+    run(&mut sc, &mut out);
+}
+
+fn run<W: Write>(sc: &mut scanner::Scanner, out: &mut std::io::BufWriter<W>) {
+    let k: usize = sc.next();
+    let n: Vec<usize> = sc.next_vec(k);
+    let mut base = vec![];
+    for n in n {
+        let mut b = vec![];
+        for _ in 0..n {
+            let mut a = sc.next::<usize>();
+            for b in b.iter() {
+                a = a.min(a ^ *b);
+            }
+            if a > 0 {
+                b.push(a);
+            }
+        }
+        base.push(b);
+    }
+    let mut dim = vec![0; 1 << k];
+    for bit in 1..(1 << k) {
+        let mut x = vec![];
+        for (j, base) in base.iter().enumerate() {
+            if bit >> j & 1 == 1 {
+                for b in base.iter() {
+                    let mut b = *b;
+                    for x in x.iter() {
+                        b = b.min(b ^ *x);
+                    }
+                    if b > 0 {
+                        x.push(b);
+                    }
+                }
+            }
+        }
+        dim[bit] = x.len();
+    }
+    let mut ans = 0;
+    for bit in 1usize..(1 << k) {
+        let mut pos = bit;
+        let mut len = 0;
+        while pos > 0 {
+            if pos.count_ones() % 2 == 1 {
+                len += dim[pos];
+            } else {
+                len -= dim[pos];
+            }
+            pos = (pos - 1) & bit;
+        }
+        dim[bit] = len;
+        ans += (-1i64).pow(bit.count_ones() - 1) << len;
+    }
+    println!("{}", ans);
+}
+

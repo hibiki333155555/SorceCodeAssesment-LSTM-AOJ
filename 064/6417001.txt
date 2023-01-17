@@ -1,0 +1,40 @@
+
+
+dice = list(map(int,input().split()))
+direction = list(input())
+
+east_or_west = direction.count('E') - direction.count('W')
+if east_or_west >= 0:
+    if east_or_west % 4 == 0:
+        top = [1,2,6,5]
+    elif east_or_west % 4 == 1:
+        top = [4,2,3,5]
+    elif east_or_west % 4 == 2:
+        top = [6,2,1,5]
+    else:
+        top = [3,2,4,5]
+else:
+    east_or_west = abs(east_or_west)
+    if east_or_west % 4 == 0:
+        top = [1,2,6,5]
+    elif east_or_west % 4 == 1:
+        top = [3,2,4,5]
+    elif east_or_west % 4 == 2:
+        top = [6,2,1,5]
+    else:
+        top = [4,2,3,5]
+
+
+north_or_south = direction.count('N') - direction.count('S')
+if north_or_south >= 0:
+    top = top[north_or_south%4]
+else:
+    north_or_south = abs(north_or_south)
+    if north_or_south%4 == 0 or 2:
+        top = top[north_or_south%4]
+    elif north_or_south % 4 == 1:
+        top = top[north_or_south%4+2]
+    elif north_or_south % 4 == 3:
+        top = top[north_or_south%4-2]
+
+print(top)

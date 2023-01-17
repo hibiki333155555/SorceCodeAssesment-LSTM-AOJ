@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int main(){
+    int S;cin >> S ;
+    int a,b,c,d;
+    a=S/3600;
+    b=S-a*3600;
+    c=b%60;
+    d=b/60;
+    cout << a << ':' << d << ':' << c << endl;
+}

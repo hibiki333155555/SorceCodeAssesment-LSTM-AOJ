@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CsharpforAizeOnlineJudge
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            double r = Double.Parse(Console.ReadLine());
+            Console.WriteLine("{0} {1}", Math.Pow(r, 2) * Math.PI, 2 * r * Math.PI);
+        }
+    }
+}

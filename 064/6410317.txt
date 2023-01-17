@@ -1,0 +1,11 @@
+Word=str(input())
+poi=0
+while True:
+  T=input()
+  if T=='END_OF_TEXT':
+    break
+  Ti=T.split()
+  for TT in Ti:
+    if TT==Word:
+      poi+=1  
+print(poi)

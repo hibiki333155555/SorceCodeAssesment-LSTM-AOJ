@@ -1,0 +1,22 @@
+import java.util.Scanner;
+
+public class  Main {
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+
+        while(true){
+            int a = scanner.nextInt();
+            char op = scanner.next().charAt(0);
+            int b = scanner.nextInt();
+
+            if(op == '?')break;
+
+            if(op == '+')System.out.println((a+b));
+            if(op == '-')System.out.println(a-b);
+            if(op == '*')System.out.println(a*b);
+            if(op == '/')System.out.println(a/b);
+        }
+    }
+
+}
+

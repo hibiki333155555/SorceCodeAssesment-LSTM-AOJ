@@ -1,0 +1,21 @@
+
+cards = ()
+pattern = ["S", "H", "C", "D"]
+n = int(input())
+for i in range(n):
+    m,x = input().split()
+    x = int(x)
+    if m == "S":
+        cards.append(x)
+    elif m == "H":
+        cards.append(13 + x)
+    elif m == "C":
+        cards.append(26 + x)
+    elif m == "D":
+        cards.append(39 + x)
+for i in range(1,53):
+    if not (i in cards):
+        print(pattern[(i - 1) //13],(i - 1) % 13 + 1)
+    
+
+

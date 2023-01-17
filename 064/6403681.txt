@@ -1,0 +1,40 @@
+#include <iostream>
+using namespace std;
+
+int selectionsort(int a[],int n){
+    int sw=0,t,minj;
+    for(int i = 0; i < n-1; i++){
+      minj = i;
+      for(int j = i; j < n; j++){
+          if(a[j] < a[minj]){
+              minj = j;
+          }
+      }
+      t = a[i]; 
+      a[i] = a[minj];
+      a[minj] = t;
+      if(i != minj){
+          sw++;
+      }
+    }
+    return sw;
+}
+
+
+int main(void){
+    int n,sum;
+    cin >> n;
+    int a[n];
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
+    }
+    sum = selectionsort(a,n);
+    for(int i = 0; i < n; i++){
+        if(i > 0){
+            cout << " ";
+        }
+        cout << a[i];
+    }
+    cout << endl;
+    cout << sum <<endl;
+}

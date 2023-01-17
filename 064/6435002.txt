@@ -1,0 +1,17 @@
+n = int(input())
+a = list(map(int, input().split()))
+q = int(input())
+m = list(map(int, input().split()))
+for i in m:
+    s = 0
+    for j in a:
+        if i >= j:
+            continue
+        else:
+            s += 1
+            i - j
+            
+    if s == 2:
+        print('yes')
+    else:
+        print('no')

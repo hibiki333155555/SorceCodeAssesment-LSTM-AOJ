@@ -1,0 +1,8 @@
+import math
+
+a, b, c = map(int, input().split())
+c = math.radians(c)
+h = b*sin(c)
+print(a*H*0.5)
+print(a+b+math.sqrt(a**2+b**2-2*a*b*cos(c)))
+print(h)

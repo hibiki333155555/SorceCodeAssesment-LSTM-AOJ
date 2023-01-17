@@ -1,0 +1,13 @@
+#include<stdio.h>
+#include<math.h>
+#define PI 3.14159265358
+int main()  {
+    int a, b, c;
+    double s, l, h;
+    scanf("%d %d %d", &a, &b, &c);
+    s = sin(c*PI/180.0)*a*b/2;
+    l = a+b+sqrt(a*a+b*b-2*b*c*cos(c*PI/180));
+    h = s/a*2;
+    printf("%lf %lf %lf", s, l, h);
+    return 0;
+}

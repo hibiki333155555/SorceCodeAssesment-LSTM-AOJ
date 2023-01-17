@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+bool is_prime_number(int target) {
+  int size = sqrt(target);
+  for (int i = 2; i <= size; i++) {
+    if (target % i == 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+int main() {
+  int N;
+  scanf("%d", &N);
+  int target;
+  int count = 0;
+  for (int i = 0; i < N; i++) {
+    scanf("%d", &target);
+    if (is_prime_number(target)) count++;
+  }
+  cout << count << endl;
+}

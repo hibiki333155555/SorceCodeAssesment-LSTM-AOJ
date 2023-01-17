@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+const int N=1e9+7;
+using namespace std;
+long long n,m;
+long long luythua(long long m,long long n)
+{
+    if(n==0)
+        return 1;
+    long long a=luythua(m,n/2);
+    a=(a*a)%N;
+    if(n%2==1)
+        a=a*m %N;
+    return a;
+}
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    cin>>n>>m;
+    cout<<luythua(n,m);
+    return 0;
+}
+

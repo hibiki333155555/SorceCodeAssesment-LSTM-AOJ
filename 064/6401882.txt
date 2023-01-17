@@ -1,0 +1,3 @@
+let x = require(`fs`).readFileSync(`/dev/stdin`, `utf-8`).split(` `);
+let op = +x[0] > +x[1] ? ` > ` : +x[0] - +x[0] == 0 ? ` == ` : ` < `;
+console.log(x.join(op));

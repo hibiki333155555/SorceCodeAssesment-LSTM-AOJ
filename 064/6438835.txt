@@ -1,0 +1,144 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ld = long double;
+using pll = pair<ll, ll>;
+using tlll = tuple<ll, ll, ll>;
+constexpr ll INF = 1LL << 60;
+template<class T> bool chmin(T& a, T b) {if (a > b) {a = b; return true;} return false;}
+template<class T> bool chmax(T& a, T b) {if (a < b) {a = b; return true;} return false;}
+ll safemod(ll A, ll M) {return (A % M + M) % M;}
+ll divfloor(ll A, ll B) {if (B < 0) {return divfloor(-A, -B);} return (A - safemod(A, B)) / B;}
+ll divceil(ll A, ll B) {if (B < 0) {return divceil(-A, -B);} return divfloor(A + B - 1, B);}
+template<class T> void unique(vector<T> &V) {V.erase(unique(V.begin(), V.end()), V.end());}
+template<class T> void sortunique(vector<T> &V) {sort(V.begin(), V.end()); V.erase(unique(V.begin(), V.end()), V.end());}
+#define FINALANS(A) do {cout << (A) << '\n'; exit(0);} while (false)
+template<class T> void printvec(vector<T> &V) {int _n = V.size(); for (int i = 0; i < _n; i++) cout << V[i] << (i == _n - 1 ? "" : " ");cout << '\n';}
+template<class T> void printvect(vector<T> &V) {for (auto v : V) cout << v << '\n';}
+template<class T> void printvec2(vector<vector<T>> &V) {for (auto &v : V) printvec(v);}
+
+template <typename Cost>
+struct Edge
+{
+  int from, to;
+  Cost cost;
+  Edge(int s, int t, Cost c = 1) : from(s), to(t), cost(c) {}
+  operator int() const { return to; }
+  bool operator<(const Edge &rhs) const { return cost < rhs.cost; }
+  bool operator>(const Edge &rhs) const { return cost > rhs.cost; }
+};
+template <typename Cost>
+struct Graph : vector<vector<Edge<Cost>>>
+{
+  Graph(int n) : vector<vector<Edge<Cost>>>(n) {}
+  void add_edge(int s, int t, Cost c = 1) { (*this)[s].emplace_back(s, t, c); }
+  void add_edge2(int s, int t, Cost c = 1) { add_edge(s, t, c), add_edge(t, s, c); }
+};
+
+template<typename Cost, typename Data>
+struct ShortestPath : Graph<Cost>
+{
+  vector<Cost> dists;
+  vector<Data> pathcnt;
+
+  ShortestPath(int n) : Graph<Cost>::Graph(n) {}
+
+  vector<Cost> bfs(int sv)
+  {
+    dists.assign((*this).size(), INF);
+    pathcnt.assign((*this).size(), 0);
+    dists[sv] = 0;
+    pathcnt[sv] = 1;
+    queue<Edge<Cost>> que;
+    que.push({-1, sv, 0});
+    while (!que.empty())
+    {
+      auto v = que.front();
+      que.pop();
+
+      for (auto nv : (*this)[v])
+      {
+        if (chmin(dists[nv], dists[v] + nv.cost))
+          que.push(nv);
+        if (dists[nv] == dists[v] + nv.cost)
+          pathcnt[nv] += pathcnt[v];
+      }
+    }
+    return dists;
+  }
+
+  vector<Cost> _01bfs(int sv, int smallercost = 0)
+  {
+    dists.assign((*this).size(), INF);
+    pathcnt.assign((*this).size(), 0);
+    dists[sv] = 0;
+    pathcnt[sv] = 1;
+    deque<Edge<Cost>> deq;
+    deq.push_front({-1, sv, 0});
+    while (!deq.empty())
+    {
+      auto v = deq.front();
+      deq.pop_front();
+
+      for (auto nv : (*this)[v])
+      {
+        if (chmin(dists[nv], dists[v] + nv.cost))
+        {
+          if (nv.cost == smallercost)
+            deq.push_front(nv);
+          else
+            deq.push_back(nv);
+        }
+        if (dists[nv] == dists[v] + nv.cost)
+          pathcnt[nv] += pathcnt[v];
+      }
+    }
+    return dists;
+  }
+
+  vector<Cost> dijkstra(int sv)
+  {
+    dists.assign((*this).size(), INF);
+    pathcnt.assign((*this).size(), 0);
+    dists[sv] = 0;
+    pathcnt[sv] = 1;
+    priority_queue<Edge<Cost>, vector<Edge<Cost>>, greater<Edge<Cost>>> pque;
+    pque.push({-1, sv, 0});
+    while (!pque.empty())
+    {
+      auto v = pque.top();
+      pque.pop();
+
+      for (auto nv : (*this)[v])
+      {
+        if (chmin(dists[nv], dists[v] + nv.cost))
+          pque.push(nv);
+        if (dists[nv] == dists[v] + nv.cost)
+          pathcnt[nv] += pathcnt[v];
+      }
+    }
+    return dists;
+  }
+};
+
+int main()
+{
+  ll N, M, sv;
+  cin >> N >> M >> sv;
+  ShortestPath<ll, ll> G(N);
+  for (ll i = 0; i < M; i++)
+  {
+    ll s, t, d;
+    cin >> s >> t >> d;
+    G.add_edge(s, t, d);
+  }
+
+  auto res = G.dijkstra(sv);
+  for (auto x : res)
+  {
+    if (x == INF)
+      cout << "INF\n";
+    else
+      cout << x << '\n';
+  }
+}

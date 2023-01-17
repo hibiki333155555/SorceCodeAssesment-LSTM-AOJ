@@ -1,0 +1,12 @@
+N = int(input())
+num_list = list(map(int,input().split()))
+flag = True
+
+for n in range(N-1):
+  if num_list[n] > num_list[n+1]:
+    front = num_list[n]
+    num_list[n] = num_list[n+1]
+    num_list[n+1] = front
+    print(num_list)
+
+

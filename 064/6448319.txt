@@ -1,0 +1,93 @@
+#include <bits/stdc++.h>
+
+#define pb push_back
+#define mp make_pair
+#define X first
+#define Y second
+using namespace std;
+
+typedef long long int ll;
+typedef vector <int> vi;
+typedef pair <int,int> pii;
+const int Size=1e6+10;
+const int INF=0x3f3f3f3f;
+
+inline int read()
+{
+    int x=0, f=1; char ch=getchar();
+    while(ch<'0' || ch>'9') {if(ch=='-') f=-1; ch=getchar();}
+    while(ch>='0' && ch<='9') {x=x*10+ch-'0'; ch=getchar();}
+    return x*f;
+}
+
+map<string,int> mmap;
+vi fav;
+vi unfav;
+
+//给出两个开始时间，若相交返回true
+bool check(int x,int y)
+{
+    return (y<=x && x<y+30) || (x<=y && y<x+30);
+}
+
+int main()
+{
+    while (1)
+    {
+        int n=read();
+        if (!n) break;
+
+        mmap.clear();
+        fav.clear();
+        unfav.clear();
+
+        string name;
+        int w,s,h,m,t;
+        while (n--)
+        {
+            cin>>name>>w>>s;
+            m=s%100;
+            h=s/100;
+            t=w*24*60+h*60+m;
+            mmap[name]=t;
+        }
+
+        int p=read();
+        while (p--)
+        {
+            cin>>name;
+            fav.pb(mmap[name]);
+            mmap.erase(name);
+        }
+
+        for (pair<string,int> p:mmap)
+            unfav.pb(p.Y);
+
+        sort(fav.begin(),fav.end());
+        sort(unfav.begin(),unfav.end());
+
+        int siz=fav.size();
+        bool flag=true;
+        for (int i=1;i<siz;++i)
+            if (fav[i]-fav[i-1]<30) {flag=false; break;}
+        if (!flag) {puts("-1"); continue;}
+        int res=siz;
+
+        siz=unfav.size();
+        int pre_end=-1;
+        for (int i=0;i<siz;++i)
+        {
+            bool flag=true;
+            for (int j:fav)
+                if (check(unfav[i],j)) {flag=false; break;}
+            if (!flag) continue;
+            if (pre_end!=-1 && pre_end>unfav[i]) continue;
+            res++;
+            pre_end=unfav[i]+30;
+        }
+
+        printf("%d\n",res);
+    }
+    return 0;
+}
+

@@ -1,0 +1,58 @@
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <numeric>
+#include <string>
+using namespace std;
+
+int * build_next(const string& P)
+{
+    size_t m = P.length(), j = 0;     // ptr to main str
+    int * N = new int[m];           // "next" table
+    int t = N[0] = -1;              // ptr to pattern str
+
+    while(j < m-1)      // end of str
+    {
+        if(t < 0 || P[j] == P[t])
+        {
+            j++;
+            t++;
+            N[j] = P[j] != P[t] ? t : N[t];
+        }
+        else
+            t = N[t];
+    }
+
+    return N;
+}
+
+int main()
+{
+    string str, ps;
+    cin >> str;
+    str = str + str;
+    cin >> ps;
+    int *next = build_next(ps);
+    
+    int i = 0, j = 0, m = str.length(), n = ps.length();
+    
+    while(i < m && j < n)
+    {
+        if(j < 0 || str[i] == ps[j])
+        {
+            i++;
+            j++;
+        }
+        else
+            j = next[j];
+    }
+    delete [] next;
+    if(j == n)
+        cout << "Yes" << endl;
+    else
+        cout << "No" << endl;
+
+
+    return 0;
+}

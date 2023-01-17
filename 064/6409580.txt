@@ -1,0 +1,10 @@
+while True:
+    card = input()
+    if card == '-':
+        break
+    leng = len(card)
+    m = int(input())
+    for i in range(m):
+        h = int(input())
+        card = card[h:leng] + card[0:h]
+    print(card)

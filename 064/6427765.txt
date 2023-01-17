@@ -1,0 +1,16 @@
+#include<stdio.h>
+main(){
+int cnt=0,a,b,c;
+scanf("%d%d%d%d",a,b,c);
+int i=a;
+while(i<=b)
+{
+if(c%i==0)cnt;
+i++;
+
+
+}
+printf("%d\n",cnt);
+//jkhkkh
+}
+

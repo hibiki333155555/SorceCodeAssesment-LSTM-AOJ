@@ -1,0 +1,45 @@
+import sys
+sys.setrecursionlimit(10**6)
+inf=2**31-1
+
+def update(i,x):
+	#i番目の葉の値をxにする
+	i+=N-1
+	value[i]=x
+	while i>0:
+		i=(i-1)//2
+		value[i]=min(value[i*2+1],value[i*2+2])
+
+def query(a,b,k,l,r):
+	#[a,b)区間のクエリに、k区間　[l,r)
+	#区間が被らない
+	if r<=a or b<=l:return inf 
+	#区間を完全に被覆
+	if a<=l and r<=b:
+		return value[k]
+	else:
+		c1=query(a,b,2*k+1,l,(l+r)//2)
+		c2=query(a,b,2*k+2,(l+r)//2,r)
+		return min(c1,c2)
+
+n,q=map(int,input().split())
+N=1
+while N<n:
+	N*=2
+value=[inf]*(2*N-1)
+
+for _ in range(q):
+	l=list(map(int,input().split()))
+	com=l[0]
+	if com==0:
+		i=l[1]
+		x=l[2]
+		update(i,x)
+	else:
+		s=l[1]
+		t=l[2]
+		ans=query(s,t+1,0,0,N)
+		print(ans)
+		
+	
+	

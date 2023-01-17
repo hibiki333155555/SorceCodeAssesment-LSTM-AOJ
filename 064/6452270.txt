@@ -1,0 +1,31 @@
+const x = require('fs').readFileSync('/dev/stdin','utf8').trim('\n').split('\n');
+const createStr = (h,w) =>{
+    let c = '';
+    let all = '';
+    for(let i=0;i<w;i++){
+        if(i === 0 || i===w-1){
+            c+='#';
+        }
+        else{
+            c+='.';
+        }
+        all+='#'    
+    }
+    for(let j=0;j<h;j++){
+        if(j===0 || j===h-1){
+            console.log(`${all}`);
+        }else{
+            console.log(`${c}`);
+        }
+    }
+    console.log('');
+}
+
+(inp =>{
+    for(let i=0,len=inp.length-1;i<len;i++){
+        let arr = inp[i].split(' ').map(Number); 
+        let h = arr[0];
+        let w = arr[1];
+        createStr(h,w);
+    }
+})(x);

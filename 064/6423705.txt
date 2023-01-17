@@ -1,0 +1,50 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int n;
+vector<int> pre, in;
+vector<int> post;
+
+void findpost(int prebg, int midbg, int mided){
+	if(prebg >= n){
+		return ;
+	}
+	if(midbg == mided){
+		post.push_back(in[midbg]);	
+		return ;
+	}
+	if(midbg > mided){
+		return;
+	}
+	int tape = 0;
+	for(int i = midbg; i <= mided; i++){
+		if(pre[prebg] == in[i]){
+			tape = i;
+			break;
+		} 
+	}
+	int len = tape - midbg;
+	findpost(prebg + 1, midbg, tape - 1);
+	findpost(prebg + 1, midbg + len + 1, mided);
+	findpost(prebg + 1, tape, tape);
+}
+
+int main(){
+	scanf("%d", &n);
+	for(int i = 0; i < n; i++){
+		int tp;
+		cin >> tp;
+		pre.push_back(tp); 
+	}
+	for(int i = 0; i < n; i++){
+		int tp;
+		cin >> tp;
+		in.push_back(tp);
+	}
+	findpost(0, 0, n - 1);
+	size_t len = post.size();
+	for(int i = 0; i < len; i++){
+		printf("%d ", post[i]);
+	}
+	return 0;
+}

@@ -1,0 +1,14 @@
+#include<stdio.h>
+
+int main()
+{
+    int S, h, m, s, x;
+    scanf("%d", &S);
+    s = S%60;
+    x = S/60;
+    h = x/60;
+    m = x%60;
+    printf("%d:%d:%d\n", h, m, s);
+    return 0;
+}
+

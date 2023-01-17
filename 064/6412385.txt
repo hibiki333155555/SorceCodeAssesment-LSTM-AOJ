@@ -1,0 +1,60 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        String[] mark;
+        mark = new String[1];
+        int[] card;
+        card = new int[208];
+        for(int i=1;i<=n;i++){
+            mark[0]=sc.next();
+            if(mark[0].equals("S")){
+                card[i]=sc.nextInt();
+            }
+            if(mark[0].equals("H")){
+                card[i+n]=sc.nextInt();
+            }
+            if(mark[0].equals("C")){
+                card[i+n+n]=sc.nextInt();
+            }
+            if(mark[0].equals("D")){
+                card[i+n+n+n]=sc.nextInt();
+            }
+        }
+        for(int j=1;j<=13;j++){
+            for(int k=1;k<=n;k++){
+                if(card[k]==j) break;
+                if(k==n && card[n]!=j){
+                    System.out.println("S "+j);
+                }
+            }
+        }
+        for(int l=1;l<=13;l++){
+            for(int m=(1+n);m<=(n+n);m++){
+                if(card[m]==l) break;
+                if(m==(n+n) && card[n+n]!=l){
+                    System.out.println("H "+l);
+                }
+            }
+        }
+        for(int o=1;o<=13;o++){
+            for(int p=(1+n+n);p<=(n+n+n);p++){
+                if(card[p]==o) break;
+                if(p==(n+n+n) && card[n+n+n]!=o){
+                    System.out.println("C "+o);
+                }
+            }
+        }
+        for(int q=1;q<=13;q++){
+            for(int r=(1+n+n+n);r<=(n+n+n+n);r++){
+                if(card[r]==q) break;
+                if(r==(n+n+n+n) && card[n+n+n+n]!=q){
+                    System.out.println("D "+q);
+                }
+            }
+        }
+    }
+}
+

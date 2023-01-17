@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int x, y, r, W ,H;
+  cin >> W >> H >> x >> y >> r;
+
+  if(x + r > W || x - r < 0 || y + r > H || y - r < 0){
+    cout << "No" << endl;
+  }else{
+    cout << "Yes" << endl;
+  }
+
+  return 0;
+}

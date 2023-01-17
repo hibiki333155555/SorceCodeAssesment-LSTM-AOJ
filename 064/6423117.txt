@@ -1,0 +1,20 @@
+#include<stdio.h>
+int main(){
+int a,b,i;
+for ( i = 0;; i++)
+{
+  
+scanf("%d %d",&a,&b);
+if(a>=b){
+    printf("%d %d\n",b,a);
+}
+else if (b>=a)
+{
+    printf("%d %d\n",a,b);
+    /* code */
+}
+else if(a==0 && b==0)break;
+
+}
+    return 0;
+}

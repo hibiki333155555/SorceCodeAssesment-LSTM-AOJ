@@ -1,0 +1,14 @@
+# https://onlinejudge.u-aizu.ac.jp/courses/lesson/2/ITP1/11/ITP1_11_A
+move_index_map = {
+    'N': [1,5,2,3,0,4],
+    'E': [3,1,0,5,4,2],
+    'S': [4,0,2,3,5,1],
+    'W': [2,1,5,0,4,3],
+}
+
+dice = list(map(int, input().split()))
+
+for command in input():
+    dice = [dice[i] for i in move_index_map[command]]
+
+print(dice[0])

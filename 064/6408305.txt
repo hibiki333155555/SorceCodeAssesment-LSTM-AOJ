@@ -1,0 +1,31 @@
+import java.util.Scanner;
+
+public class Main{
+    public static void main(String args[]){
+        Scanner scan = new Scanner(System.in);
+        
+        int n = scan.nextInt();
+        int x[] = new int[n];
+       int count = 0;
+        
+        for(int i = 0;i < n;i++){
+            x[i] = scan.nextInt();
+        }
+        
+        for(int i = 0;i < n;i++){
+        	boolean flag = true;
+            for(int k = 2;k<Math.sqrt(x[i]);k++){
+                if(x[i] % k == 0){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag) {
+            	count++;
+            }
+        }
+        
+        System.out.println(count);
+        
+    }
+}

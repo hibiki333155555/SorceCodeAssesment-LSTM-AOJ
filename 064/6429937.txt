@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+int main(){
+    int k;
+    bool b=true;
+    while(b){
+        cin>>k;
+        if(k==0) b=false;
+        else{
+            int p[k];
+            for(int j=0;j<k;j++){
+                cin>>p[j];
+            }
+            bool q=false;
+            for(int j=0;j<k;j++){
+                if(p[j]>=2) q=true;
+            }
+            if(q){
+                cout<<k+1<<endl;
+            }else{
+                cout<<"NA\n";
+            }
+        }
+    }
+    return 0;
+}

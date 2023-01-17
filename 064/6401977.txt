@@ -1,0 +1,16 @@
+import sys
+readline = sys.stdin.readline
+write = sys.stdout.write
+N = int(readline())
+k, *B = map(int, readline().split())
+M = sum(1 << b for b in B)
+
+R = []
+v = (-1) & M
+while v:
+    R.append(v)
+    v = (v - 1) & M
+R.sort()
+write("0:\n")
+for i in R:
+    write("%d: %s\n" % (i, " ".join(str(j) for j in range(N) if i & (1 << j))) )

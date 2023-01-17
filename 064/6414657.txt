@@ -1,0 +1,18 @@
+#include<stdio.h>
+
+int main(void)
+{
+    int count[26];
+    int num,i;
+    char ch;
+    while(scanf("%c",&ch)!=EOF)
+    {
+        num=ch-'a';
+        count[num]++;
+    }
+    for(i=0;i<26;i++)
+    {
+        printf("%c : %d\n",'a'+i,count[i]);
+    }
+    return 0;
+}

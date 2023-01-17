@@ -1,0 +1,9 @@
+import string
+import sys
+
+alp = dict.fromkeys(string.ascii_lowercase, 0)
+words = sys.stdin.read()
+words = words.lower()
+for i in alp:
+    print(i + " : " + words.count(i))
+

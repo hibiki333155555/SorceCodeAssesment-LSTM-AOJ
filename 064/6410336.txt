@@ -1,0 +1,81 @@
+import copy
+from sys import stdin
+class Point:
+    def __init__(self,zk):
+        self.p=None
+        self.l=None
+        self.r=None
+        self.key=zk
+
+
+def preorder(l):
+    nowp=l[0]
+    print("",end=" ")
+    ss=set()
+    for i in range(500000):
+        if nowp is None:
+            break
+        if nowp.l is not None:
+            nowp=nowp.l
+            nowp.p.l=None
+            continue
+        if nowp not in ss:
+            print(nowp.key,end=" ")
+            ss.add(nowp)
+        if nowp.r is not None:
+            nowp=nowp.r
+            nowp.p.r=None
+            continue
+        nowp=nowp.p
+    print("")
+
+def inorder(l):
+    nowp=l[0]
+    print("",end=" ")
+    print(nowp.key,end=" ")
+    for i in range(500000):
+        if nowp is None:
+            break
+        if nowp.l is not None:
+            nowp=nowp.l
+            nowp.p.l=None
+            print(nowp.key,end=" ")
+            continue
+        if nowp.r is not None:
+            nowp=nowp.r
+            nowp.p.r=None
+            print(nowp.key,end=" ")
+            continue
+        nowp=nowp.p
+    print("")
+
+n=int(input())
+l=[None]
+for i in range(n):
+    s=stdin.readline()[:-1]
+    if s[0]=="i":
+        num=int(s.split()[1])
+        z=Point(num)
+        y=None
+        x=l[0]
+        while x is not None:
+            y=x
+            if z.key<x.key:
+                x=x.l
+            else:
+                x=x.r
+        z.p=y
+        if y is None:
+            l[0]=z
+            continue
+        elif z.key<y.key:
+            y.l=z
+        else:
+            y.r=z
+        l.append(z)
+    else:
+        l1=copy.deepcopy(l)
+        l2=copy.deepcopy(l)
+        preorder(l1)
+        inorder(l2)
+

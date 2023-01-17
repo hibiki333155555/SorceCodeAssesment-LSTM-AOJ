@@ -1,0 +1,28 @@
+#include <iostream>
+#include <complex>
+
+using namespace std;
+
+complex<double> in()
+{
+	double x, y;
+	cin >> x >> y;
+	return {x, y};
+}
+
+int main()
+{
+	int q;
+	for (cin >> q; q > 0; --q) {
+		complex<double> p0 = in(), p1 = in(), p2 = in(), p3 = in();
+		auto p01 = p1 - p0, p02 = p2 - p0, p03 = p3 - p0;
+		auto p23 = p3 - p2, p20 = p0 - p2, p21 = p1 - p2;
+		auto op12 = p01.real() * p02.imag() - p02.real() * p01.imag();
+		auto op13 = p01.real() * p03.imag() - p03.real() * p01.imag();
+		auto op30 = p23.real() * p20.imag() - p20.real() * p23.imag();
+		auto op31 = p23.real() * p21.imag() - p21.real() * p23.imag();
+		if (op12 * op13 > 0 || op30 * op31 > 0) cout << 0 << endl; else cout << 1 << endl;
+	}
+	return 0;
+}
+

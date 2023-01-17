@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define rep(i, n) for(int i = 0; i < (n); i++)
+#define coutf(f) cout << fixed << setprecision(f)
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+#define pb push_back
+using Graph = vector<vector<int>>;
+
+using Edge = pair<int, pair<int, int>>;
+
+struct UnionFind {
+    vector<int> par, rank, siz;
+
+    UnionFind(int n) : par(n,-1), rank(n,0), siz(n,1) { }
+
+    int root(int x) {
+        if (par[x]==-1) return x;
+        else return par[x] = root(par[x]);
+    }
+
+    bool same(int x, int y) {
+        return root(x)==root(y);
+    }
+
+    bool merge(int x, int y) {
+        int rx = root(x), ry = root(y);
+        if (rx==ry) return false;
+        if (rank[rx]<rank[ry]) swap(rx, ry);
+        par[ry] = rx;
+        
+        if (rank[rx]==rank[ry]) rank[rx]++;
+        siz[rx] += siz[ry]; 
+        return true;
+    }
+
+    int size(int x) {
+        return siz[root(x)];
+    }
+};
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<Edge> edges(m);
+    rep (i,m) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        edges[i] = Edge(w, {u,v});
+    }
+    sort(all(edges));
+    ll res = 0;
+    UnionFind uf(n);
+    rep (i,m) {
+        int w = edges[i].first;
+        int u = edges[i].second.first;
+        int v = edges[i].second.second;
+        if(uf.same(u,v)) continue;
+        res += w;
+        uf.merge(u,v);
+    }
+    cout << res << endl;
+}

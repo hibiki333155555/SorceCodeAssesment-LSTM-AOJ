@@ -1,0 +1,119 @@
+#pragma region Macros
+#include <bits/stdc++.h>
+using namespace std;
+template <class T> inline bool chmax(T &a, T b) {
+    if(a < b) {
+        a = b;
+        return 1;
+    }
+    return 0;
+}
+template <class T> inline bool chmin(T &a, T b) {
+    if(a > b) {
+        a = b;
+        return 1;
+    }
+    return 0;
+}
+#ifdef DEBUG
+template <class T, class U>
+ostream &operator<<(ostream &os, const pair<T, U> &p) {
+    os << '(' << p.first << ',' << p.second << ')';
+    return os;
+}
+template <class T> ostream &operator<<(ostream &os, const vector<T> &v) {
+    os << '{';
+    for(int i = 0; i < (int)v.size(); i++) {
+        if(i) { os << ','; }
+        os << v[i];
+    }
+    os << '}';
+    return os;
+}
+void debugg() { cerr << endl; }
+template <class T, class... Args>
+void debugg(const T &x, const Args &... args) {
+    cerr << " " << x;
+    debugg(args...);
+}
+#define debug(...)                                                             \
+    cerr << __LINE__ << " [" << #__VA_ARGS__ << "]: ", debugg(__VA_ARGS__)
+#define dump(x) cerr << __LINE__ << " " << #x << " = " << (x) << endl
+#else
+#define debug(...) (void(0))
+#define dump(x) (void(0))
+#endif
+
+struct Setup {
+    Setup() {
+        cin.tie(0);
+        ios::sync_with_stdio(false);
+        cout << fixed << setprecision(15);
+    }
+} __Setup;
+
+using ll = long long;
+#define OVERLOAD3(_1, _2, _3, name, ...) name
+#define ALL(v) (v).begin(), (v).end()
+#define RALL(v) (v).rbegin(), (v).rend()
+#define REP1(i, n) for(int i = 0; i < int(n); i++)
+#define REP2(i, a, b) for(int i = (a); i < int(b); i++)
+#define REP(...) OVERLOAD3(__VA_ARGS__, REP2, REP1)(__VA_ARGS__)
+#define UNIQUE(v) sort(ALL(v)), (v).erase(unique(ALL(v)), (v).end())
+#define SZ(v) ((int)(v).size())
+const int INF = 1 << 30;
+const ll LLINF = 1LL << 60;
+constexpr int MOD = 1000000007;
+constexpr int MOD2 = 998244353;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, 1, 0, -1};
+
+void Case(int i) { cout << "Case #" << i << ": "; }
+int popcount(int x) { return __builtin_popcount(x); }
+ll popcount(ll x) { return __builtin_popcountll(x); }
+#pragma endregion Macros
+
+int main() {
+    int H, W;
+    cin >> H >> W;
+    vector<string> s(H);
+    REP(i, H) cin >> s[i];
+
+    vector dp(H, vector<int>(W, INF));
+    int sx, sy, gx, gy;
+    REP(i, H) REP(j, W) {
+        if(s[i][j] == 'S') {
+            sx = i, sy = j;
+        } else if(s[i][j] == 'G') {
+            gx = i, gy = j;
+        }
+    }
+
+    map<char, pair<int, int>> mp;
+    mp['U'] = {-1, 0};
+    mp['D'] = {1, 0};
+    mp['L'] = {0, -1};
+    mp['R'] = {0, 1};
+
+    queue<pair<int, int>> que;
+    que.emplace(sx, sy);
+    dp[sx][sy] = 0;
+    while(!que.empty()) {
+        auto [x, y] = que.front();
+        que.pop();
+        if(s[x][y] == '.' or s[x][y] == 'S' or s[x][y] == 'G') {
+            REP(dir, 4) {
+                int nx = x + dx[dir], ny = y + dy[dir];
+                if(nx < 0 or nx >= H or ny < 0 or ny >= W or s[nx][ny] == '#') continue;
+                if(chmin(dp[nx][ny], dp[x][y] + 1)) que.emplace(nx, ny);
+            }
+        } else {
+            int nx = x + mp[s[x][y]].first, ny = y + mp[s[x][y]].second;
+            if(nx < 0 or nx >= H or ny < 0 or ny >= W or s[nx][ny] == '#') continue;
+            if(chmin(dp[nx][ny], dp[x][y])) que.emplace(nx, ny);
+        }
+    }
+    int ans = dp[gx][gy];
+    if(ans == INF) ans = -1;
+    cout << ans << endl;
+}

@@ -1,0 +1,52 @@
+#include<iostream>
+#include<algorithm>
+#include<cstdio>
+#include<string>
+#include<climits>
+#include<vector>
+#define check cout<<"check"<<endl
+#define rep(a,b,c)   for(int a = b ; a < c ;a++)
+using namespace std;
+using REF = vector< vector<int> > ;
+
+int main()
+{
+    int n,W;
+    cin>>n>>W;
+    vector< int >v,w;
+    rep(i,0,n)
+    {
+        int vi,wi,mi;
+        cin>>vi>>wi>>mi;
+        int y;
+        int x = 1;
+        while(mi >= x)
+        {
+            
+            v.push_back(vi * x);
+            w.push_back(wi * x);
+            mi -= x;
+            x *= 2;
+        }
+        if(mi > 0){
+            v.push_back(vi * mi);
+            w.push_back(wi * mi);
+        }
+    }
+    n = v.size();
+    REF dp(n + 1,vector<int>(W + 1,0));
+    rep(i,0,n)
+    {
+        rep(j,1,W + 1)
+        {
+            dp[i + 1][j] = dp[i][j];
+            int x = j - w[i];
+            if(x < 0)continue;
+            int y = dp[i][x] + v[i];
+            if(dp[i + 1][j] < y)dp[i + 1][j] = y;
+        }
+    }
+    cout<<dp[n][W]<<endl;
+    return 0;
+
+}

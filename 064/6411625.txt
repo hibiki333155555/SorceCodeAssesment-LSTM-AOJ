@@ -1,0 +1,43 @@
+#include<iostream>
+#include<algorithm>
+#include<cstdio>
+#include<string>
+#include<climits>
+#include<vector>
+#define check cout<<"check"<<endl
+#define rep(a,b,c)   for(int a = b ; a < c ;a++)
+using namespace std;
+#define INF 1e9 + 1
+using REF = vector< vector<int> > ;
+
+int main()
+{
+    int n;
+    cin>>n;
+    vector< int > a(n);
+    rep(i,0,n)cin>>a[i];
+    vector< int > dp(n + 1,INF);
+    rep(i,0,n)
+    {
+        int r = 0;
+        int l = i + 1;
+        int mid;
+        while(l - r > 1 )
+        {
+            mid = (r + l) / 2;
+            if(a[i] < dp[mid])l = mid;
+            else r = mid;    
+        }
+        if(dp[r] >= a[i])dp[r] = a[i];
+        else if(dp[l] > a[i])dp[l] = a[i];
+    }
+    int count = 0;
+    rep(i,0,n)
+    {
+        if(dp[i] == INF)continue;
+        count++;
+    }
+    cout<<count<<endl;
+    return 0;
+
+}

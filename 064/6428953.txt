@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+int head[100100];
+int num[100100],maxx,maxp,cnt;
+struct E{
+    int w,to,next;
+}edge[100100];
+void add(int a,int b,int w){
+    edge[cnt].to=b;
+    edge[cnt].w=w;
+    edge[cnt].next=head[a];
+    head[a]=cnt++;
+}
+void dfs(int f,int now){
+    for(int j=head[now];j>=0;j=edge[j].next){
+        if(edge[j].to!=f){
+            num[edge[j].to]=num[now]+edge[j].w;
+            if(maxx<num[edge[j].to])maxx=num[edge[j].to],maxp=edge[j].to;
+            dfs(now,edge[j].to);
+        }
+    }
+}
+int main(){
+    cnt=0;
+    memset(head,-1,sizeof(head));
+    maxx=0;
+    ios::sync_with_stdio(false);
+    int n;
+    cin>>n;
+    for(int i=1;i<n;i++){
+        int a,b,w;
+        cin>>a>>b>>w;
+        add(a,b,w);
+        add(b,a,w);
+    }
+    dfs(-1,0);
+    memset(num,0,sizeof(num));
+    int rem=maxp;
+    maxx=0,maxp=-1;
+    dfs(-1,rem);
+    cout<<maxx<<endl;
+    return 0;
+}
+

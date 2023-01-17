@@ -1,0 +1,10 @@
+import math
+a, b, C = map(int,input().split())
+C_rad = math.radians(C)
+S = (1/2) * a * b * math.sin(C_rad)
+h = (2 * S) / a
+c = math.sqrt((a**2) + (b**2) - (2 * a * b * math.cos(C_rad)))
+
+print(f'{S:.10f}')
+print(f'{h:.10f}')
+print(f'{c:.10f}')

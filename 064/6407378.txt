@@ -1,0 +1,8 @@
+str = gets(nil).downcase
+hash = Hash.new
+
+('a'..'z').each do |s|
+    hash[s] = str.count(s)
+end
+
+hash.each {|s,n| puts "#{s} : #{n}"}

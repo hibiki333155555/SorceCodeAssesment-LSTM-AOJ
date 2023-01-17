@@ -1,0 +1,22 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+const int N=1000005;
+struct pp
+{
+    char name[100];
+    int t;
+};
+struct pp Q[N];
+int head,tail,n;
+int main()
+{
+    
+    
+    
+    
+    
+    
+    
+    return 0;
+}

@@ -1,0 +1,29 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    min_t = 0
+    for _ in range(n):
+        a, t = map(int, f.readline().split())
+        t = a + max(a, t)
+        min_t = max(min_t, t)
+
+    print(min_t)
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

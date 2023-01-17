@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+#define lol long long
+using namespace std;
+int main(){
+    int w,h,x,y,r;
+    cin>>w>>h>>x>>y>>r;
+    if(r <= x && r <= y && x <= w - r && y <= h - r){
+        cout<<"Yes\n";
+    }else{
+        cout<<"No\n";
+    }
+    return 0;
+}

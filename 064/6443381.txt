@@ -1,0 +1,16 @@
+l = input().split()
+n1 = int(l[0])
+n2 = int(l[1])
+def f(a1,a2):
+    cd1 = []
+    cd2 = []
+    for i in range(1,a1):
+        if a1 % i == 0:
+            cd1.append(i)
+    for i in range(1,a2):
+        if a2 % i == 0:
+            cd2.append(i)        
+    mcd = set(cd1) & set(cd2)
+    return max(mcd)
+
+print(f(n1,n2)) 

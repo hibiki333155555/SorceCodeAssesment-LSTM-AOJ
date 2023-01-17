@@ -1,0 +1,9 @@
+while True:
+	h,w=map(int,input().split())
+	if h,w==0,0:
+		break
+    d="#"*h
+    if i in range(h):
+        print(d)
+        
+

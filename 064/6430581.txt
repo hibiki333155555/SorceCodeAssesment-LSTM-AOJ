@@ -1,0 +1,10 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int x;
+    cin >> x;
+    x %= 21;
+    cout << x << endl;
+    return 0;
+}

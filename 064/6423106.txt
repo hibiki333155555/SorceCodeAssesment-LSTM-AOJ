@@ -1,0 +1,14 @@
+#include<stdio.h>
+int main(){
+int a,b;
+for ( a = 1; a<=10000 ; a++)
+{
+    scanf("%d",&b);
+    if (b==0)break;
+    printf("case %d: %d\n",a,b);
+    
+    /* code */
+}
+
+    return 0;
+}

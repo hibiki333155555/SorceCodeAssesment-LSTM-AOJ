@@ -1,0 +1,6 @@
+import math 
+r = float(input())
+a = pi * r*r
+b = pi*2*r
+print(a, b)
+

@@ -1,0 +1,307 @@
+#include<iostream>
+#include<algorithm>    
+#include<bitset>
+#include<cassert>
+#include<cctype>
+#include<cmath>
+#include<ctime>
+#include<fstream>
+#include<functional>
+#include<map>
+#include<math.h>
+#include<numeric>
+#include<queue>
+#include<set>
+#include<stack>
+#include<stdio.h>
+#include<string>
+#include<tuple>
+#include<vector>
+//#include<bits/stdc++.h>
+//#include <atcoder/all>
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#define rep(i, x) for(ll i = 0; i < x; i++)
+#define rep2(i, x) for(ll i = 1; i <= x; i++)
+#define rep3(i, x, y) for(ll i = x; i < y; i++)
+#define REP(i, x) for(ll i = x - 1; i >= 0; i--)
+#define REP2(i, x) for(ll i = x; i >= 1; i--)
+#define fi first
+#define se second
+#define mpa make_pair
+#define mpt make_tuple
+#define pb push_back
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define puts(x) cout << (x) << "\n"
+using ll = long long;
+using ld = long double;
+using namespace std;
+//using namespace atcoder;
+//using mint = modint998244353;
+//using mint = modint1000000007;
+
+const ll INF = 1000000000000000000;
+const int intINF = 1000000000;
+const ll mod = 1000000007;
+const ll MOD = 998244353;
+const ld pi = acos(-1);
+//const ld EPS = 1e-9;
+typedef string::const_iterator State;
+class ParseError {};
+
+template <typename T>
+bool chmax(T& a, const T& b) {
+	if (a < b) {
+		a = b;  // aをbで更新
+		return true;
+	}
+	return false;
+}
+// aよりもbが小さいならばaをbで更新する
+// (更新されたならばtrueを返す)
+template <typename T>
+bool chmin(T& a, const T& b) {
+	if (a > b) {
+		a = b;  // aをbで更新
+		return true;
+	}
+	return false;
+}
+
+bool isprime(int p) {
+	if (p == 1) return false;
+	for (int i = 2; i < p; i++) {
+		if (p % i == 0) return false;
+	}
+	return true;
+}
+//エラトステネスの篩
+vector<bool> isprime_format(ll n) {
+	vector<bool> P(n + 1, 1); P[0] = P[1] = 1;
+	for (ll i = 2; i * i <= n; i++) {
+		if (!P[i]) continue;
+		for (int j = i + i; j <= n; j += i) P[j] = false;
+	}
+	return P;
+}
+vector<ll> prime_format(ll n) {
+	vector<bool> P = isprime_format(n);
+	vector<ll> ans;
+	for (int i = 2; i <= n; i++) {
+		if (P[i]) ans.push_back(i);
+	}
+	return ans;
+}
+ll gcd(ll a, ll b) {
+	if (b == 0) { return a; }
+	return gcd(b, a % b);
+}
+//ax + by = cが整数解をもつための必要十分条件は c が gcd(a,b) で割り切れること。
+// 返り値: a と b の最大公約数
+// ax + by = gcd(a, b) を満たす (x, y) が格納される
+//main関数内に extGCD(a, b, x, y); でx, yに解が格納
+ll extGCD(ll a, ll b, ll& x, ll& y) {
+	if (b == 0) {
+		x = 1;
+		y = 0;
+		return a;
+	}
+	ll d = extGCD(b, a % b, y, x);
+	y -= a / b * x;
+	return d;
+}
+ll lcm(ll a, ll b) {
+	return a / gcd(a, b) * b;
+}
+ll keta(ll n) {
+	ll res = 0;
+	while (n >= 1) {
+		//res++;
+		res += n % 10;
+
+		n /= 10;
+	}
+	return res;
+}
+ll modpow(ll x, ll y, ll m) {
+	ll res = 1;
+	while (y) {
+		if (y % 2) { res *= x; res %= m; }
+		x = x * x % m; y /= 2;
+	}
+	return res;
+}
+
+const int nCkMAX = 212345;
+ll fac[nCkMAX], finv[nCkMAX], inv[nCkMAX];//n!、1/n!、1/n
+// テーブルを作る前処理
+void nCkinit(ll m) {
+	fac[0] = fac[1] = 1;
+	finv[0] = finv[1] = 1;
+	inv[1] = 1;
+	for (int i = 2; i < nCkMAX; i++) {
+		fac[i] = fac[i - 1] * i % m;
+		inv[i] = m - inv[m % i] * (m / i) % m;
+		finv[i] = finv[i - 1] * inv[i] % m;
+	}
+}
+// 二項係数計算
+ll nCk(ll n, ll k, ll m) {
+	if (n < k) return 0;
+	if (n < 0 || k < 0) return 0;
+	return fac[n] * (finv[k] * finv[n - k] % m) % m;
+}
+//nが大きくてkが小さい時
+//nCkMAXはk+2まででOK
+ll nCk2(ll n, ll k, ll m) {
+	ll res = 1;
+	for (int i = n - k + 1; i <= n; i++) {
+		res *= i; res %= m;
+	}
+	res = res * finv[k] % m;
+	return res;
+}
+
+//xorshift　from 「ビット演算 (bit 演算) の使い方を総特集！ 」
+//1~6まで出したいときは
+//xorshift() % 6 + 1
+unsigned int xorshift() {
+	static unsigned int tx = 123456789, ty = 362436069, tz = 521288629, tw = 88675123;
+	unsigned int tt = (tx ^ (tx << 11));
+	tx = ty; ty = tz; tz = tw;
+	return (tw = (tw ^ (tw >> 19)) ^ (tt ^ (tt >> 8)));
+}
+uint64_t seed = 123456789;
+uint64_t xorshift64() {
+	seed ^= seed << 13;
+	seed ^= seed >> 17;
+	seed ^= seed << 7;
+	return seed;
+}
+int rand_int(int l, int r) {
+	return l + int(xorshift64() % (r - l));
+}
+double randouble() {
+	return double(xorshift64()) / double(uint64_t(-1));
+}
+
+
+//printf("%.10f\n", n);
+typedef pair <ll, ll> P;
+typedef pair <ld, ll> pp;
+ll dx[4] = { 1, 0, -1, 0 }, dy[4] = { 0, 1, 0, -1 };
+ll ndx[4] = { 1, -1, -1, 1 }, ndy[4] = { 1, 1, -1, -1 };
+char ds[4] = { 'd', 'r', 'u', 'l' };
+char dl[4] = { 'D', 'R', 'U', 'L' };
+
+
+vector<ll> spf;
+void smallest_prime_factors(ll n) {
+	spf.resize(n + 1); spf[1] = 1;
+	for (int i = 2; i <= n; i++) {
+		if (!spf[i]) {
+			for (int j = i; j < n; j += i) { spf[j] = i; }
+		}
+	}
+}
+std::map<int, int> high_speed_prime_factor(int n) {
+	std::map<int, int> res;
+	while (n != 1) {
+		res[spf[n]]++;
+		n /= spf[n];
+	}
+	return res;
+}
+
+////////////////////////////////struct
+struct Point {
+	ll x, y;
+};
+bool operator<(const Point& a1, const Point& a2) {
+	if (a1.x < a2.x) return true;
+	if (a1.x > a2.x) return false;
+	if (a1.y < a2.y) return true;
+	return false;
+}
+struct status {
+	ll L;//lcm
+	ll v;
+
+	//bool operator<(const status& rhs) const { return c < rhs.c; };
+	//bool operator>(const status& rhs) const { return c > rhs.c; };
+	bool operator<(const status& rhs) const { return v < rhs.v; };
+	bool operator>(const status& rhs) const { return v > rhs.v; };
+};
+void yes(bool a) { cout << (a ? "yes" : "no") << endl; }
+void YES(bool a) { cout << (a ? "YES" : "NO") << endl; }
+void Yes(bool a) { cout << (a ? "Yes" : "No") << endl; }
+struct edge {
+	ll to; ll cost;
+};
+
+vector<ll> divisor(ll n) {
+	vector<ll> res;
+	for (ll i = 1; i * i <= n; i++) {
+		if (n % i == 0) {
+			res.push_back(i);
+			if (i != n / i) res.push_back(n / i);
+		}
+	}
+	return res;
+}
+
+map<ll, ll> di;
+bool d[1456][1000];//始点sから終点tまでのコストd[t]
+vector<edge> G[1456];//コスト
+void dijkstra(ll s) {
+	//greater<P>を指定→firstが小さい順
+	queue<status>que;
+	d[s][di[1]] = true; que.push({ 1, s });
+	while (!que.empty()) {
+		status p = que.front(); que.pop();
+		ll v = p.v;
+		for (int i = 0; i < G[v].size(); i++) {
+			edge e = G[v][i];
+			ll lc = lcm(p.L, e.cost);
+			if (!d[e.to][di[lc]]) {
+				d[e.to][di[lc]] = true;
+				que.push({ lc, e.to });
+			}
+		}
+	}
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	std::cin.tie(nullptr);
+	//cout << fixed << setprecision(15);
+	//priority_queue<ll, vector<ll>, greater<ll>> que;
+	//priority_queue<P, vector<P>, greater<P>> que;
+	//priority_queue<status, vector<status>, greater<status>> que;
+
+	vector<ll> V = divisor(232792560);
+	rep(i, V.size()) {
+		di[V[i]] = i;
+	}
+	ll n, m; cin >> n >> m;
+	rep(i, m) {
+		ll a, b, c; cin >> a >> b >> c;
+		G[a].push_back({ b, c });
+
+	}
+	dijkstra((ll)1);
+	ll mi = INF, ma = 0;
+	rep(i, V.size()) {
+		if (d[n][di[V[i]]]) {
+			chmin(mi, V[i]); chmax(ma, V[i]);
+		}
+	}
+	if (mi == INF) {
+		cout << "IMPOSSIBLE" << endl; return 0;
+	}
+	cout << mi << ' ' << ma << endl;
+	return 0;
+}
+

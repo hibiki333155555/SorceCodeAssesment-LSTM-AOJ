@@ -1,0 +1,5 @@
+count = 1
+while gets.to_i != 0
+    puts "Case #{count}: gets.to_i"
+    count += 1
+end

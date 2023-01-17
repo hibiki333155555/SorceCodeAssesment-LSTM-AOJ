@@ -1,0 +1,7 @@
+len=int(input())
+nums=[]
+nums=list(map(int,input().split()))
+nums.sort()
+
+print(f"{min(nums)} {max(nums)} {sum(nums)}")
+

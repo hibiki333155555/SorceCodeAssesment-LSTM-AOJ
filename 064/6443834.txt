@@ -1,0 +1,25 @@
+/*-- 入力 --*/
+//main("10 10 5 5 5")
+main(require("fs").readFileSync("/dev/stdin", "utf8"));
+
+/*-- 計算&出力 --*/
+function main(raw) {
+    // 入力処理
+    const args = raw.split("\n");
+    const input = args[0].split(' ').map(Number);
+    // 計算
+    const w=input[0];
+    const h=input[1];
+    const x=input[2];
+    const y=input[3];
+    const r=input[4];
+
+    if( (r<=x && x<=(w-r)) && (r<=y && y<=(h-r)) ){
+        output="Yes";
+    }else{
+        output="No";
+    }
+    // 表示
+    console.log(`${output}`);
+}
+

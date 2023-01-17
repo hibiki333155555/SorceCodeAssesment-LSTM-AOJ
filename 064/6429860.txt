@@ -1,0 +1,9 @@
+#include <bits/stdc++.h>
+#define lol long long
+using namespace std;
+int main(){
+    int a,b;
+    cin>>a>>b;
+    cout<<2*a+b*2<<"\n";
+    return 0;
+}

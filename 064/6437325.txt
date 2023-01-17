@@ -1,0 +1,40 @@
+/* Copyright 2022 © Abdullah AL Shohag */
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void dump(vector<int> arrayToPrint) {
+    for (int i = 0; i < arrayToPrint.size(); i++) {
+        printf("%d", arrayToPrint[i]);
+        if (i < (arrayToPrint.size() - 1)) {printf(" ");}
+    }
+    printf("\n");
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    cin.get();
+    vector<vector<int>> arrays(n);
+    for(int i = 0; i < q; i++) {
+        int c, t, x;
+        cin >> c >> t;
+        if (c == 0) {
+            string inputs;
+            long int x;
+            getline(cin, inputs);
+            x = stoi(inputs);
+            arrays.at(t).push_back(x);
+        }
+        else if (c == 1) {
+            dump(arrays.at(t));
+        }
+        else if(c == 2) {
+            arrays.at(t).clear();
+        }
+    }
+    return 0;
+}

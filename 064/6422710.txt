@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long INF = 1LL << 60;
+
+long long min(long long a, long long b){
+  if(a<b){
+    return a;
+  }else{
+    return b;
+  }
+}
+
+struct edge{
+  int to;
+  long long weight;
+  edge(int t, long long w): to(t), weight(w){}
+};
+
+int main(){
+  int v, e, r;
+  cin >> v >> e >> r;
+  vector<vector<edge> > g(v);
+  vector<long long> data(v, INF);
+  for(int i = 0; i < e; i++){
+    int a, b;
+    long long c;
+    cin >> a >> b >> c;
+    g[a].push_back(edge(b, c));
+  }
+  int cur = r;
+  data.at(cur) = 0;
+  for(int i = 0; i < v+1; i++){
+    queue<tuple<int, long long, int> > q;
+    bool changed = false;
+    int count = 0;
+    while(1){
+      //cout << "cur " << cur << " data " << data.at(cur) << endl;
+      //cout << "count " << count << endl;
+      for(int j = 0; j < g[cur].size(); j++){
+        if(data.at(g[cur][j].to) > data.at(cur) + g[cur][j].weight){
+          q.push(make_tuple(g[cur][j].to, g[cur][j].weight, cur));
+        }
+      }
+      if(q.empty()){
+        break;
+      }
+      tuple<int, long long, int> nq = q.front();
+      if(data.at(get<0>(nq)) > data.at(get<2>(nq)) + get<1>(nq)){
+        changed = true;
+      }
+      if(count == e+1){
+        if(changed){
+          cout << "NEGATIVE CIRCLE" << endl;
+          return 0;
+        }else{
+          break;
+        }
+      }
+      data.at(get<0>(nq)) = min(data.at(get<0>(nq)), data.at(get<2>(nq)) + get<1>(nq));
+      cur = get<0>(nq);
+      q.pop();
+      count++;
+      //cout << "yes" << endl;
+      continue;
+    }
+  }
+  for(int i = 0; i < data.size(); i++){
+    if(data.at(i) == INF){
+      cout << "INF" << endl;
+    }else{
+      cout << data.at(i) << endl;
+    }
+  }
+  return 0;
+}

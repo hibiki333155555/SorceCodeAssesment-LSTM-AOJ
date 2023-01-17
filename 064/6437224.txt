@@ -1,0 +1,16 @@
+used = [[False for i in range(13)] for i in range(4)]
+mark = "SHCD"
+dic = {"S": 0, "H": 1, "C": 2, "D": 3}
+
+n = int(input())
+for i in range(n):
+    li = input().split()
+    m = li[0]
+    k = int(li[1])
+
+    used[dic[m]][k - 1] = True
+
+for i in range(4):
+    for j in range(13):
+        if (not used[i][j]):
+            print("{0} {1}".format(mark[i], j+1))

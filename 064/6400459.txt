@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+vector <int>a;
+int flag;
+
+int main(){
+  int q;
+  int p;
+  int x;
+  cin>>q;
+  while(q--){
+    cin>>flag;
+    if(flag==0){
+      cin>>x;
+      a.push_back(x);
+    }
+    if(flag==1){
+      cin>>p;
+      cout<<a[p]<<endl;
+    }
+    else{
+      a.pop_back();
+    }
+    
+	}
+  
+  return 0;
+}

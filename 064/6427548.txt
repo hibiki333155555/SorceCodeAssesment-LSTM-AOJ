@@ -1,0 +1,69 @@
+/*
+mi完成
+*/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+std::vector<int> InputNNumbers(int N)
+{
+    std::vector<int> A;
+    for (int i = 0; i < N; i++)
+    {
+        int number;
+        std::cin >> number;
+        A.push_back(number);
+    }
+    return A;
+}
+
+void ShowNNumbers(std::vector<int> A)
+{
+    int N = A.size();
+    for (int i = 0; i < N; i++)
+    {
+        std::cout << A[i];
+        if (i < N - 1)
+        {
+            std::cout << ' ';
+        }
+    }
+    std::cout << std::endl;
+}
+
+void ChangePlace(int i, std::vector<int> &A)
+{
+    int tmp;
+    tmp = A[i];
+    A[i] = A[i + 1];
+    A[i + 1] = tmp;
+}
+
+int BubbleSort(std::vector<int> &A)
+{
+    int N = A.size();
+    int chanege_count = 0;
+    for (int hikaku_target = 0; hikaku_target < N; hikaku_target++)
+    {
+        std::cout << A[0] << ' ' << A[1] << ' ' << A[2] << ' ' << A[3] << ' ' << A[4] << ' ' << A[5] << std::endl;
+        if (A[hikaku_target] > A[hikaku_target + 1])
+        {
+            ChangePlace(hikaku_target, A);
+            chanege_count++;
+        }
+    }
+    return chanege_count;
+}
+
+int main(void)
+{
+    int N;
+    std::cin >> N;
+    std::vector<int> A = InputNNumbers(N);
+    int chanege_count = BubbleSort(A);
+    ShowNNumbers(A);
+    std::cout << chanege_count << std::endl;
+    return 0;
+}

@@ -1,0 +1,48 @@
+from collections import deque
+H, W = map(int, input().split())
+X = [[a for a in input()] + ["#"] for _ in range(H)] + [["#" for _ in range(W + 1)]]
+for i in range(H):
+    for j in range(W):
+        if X[i][j] == "S":
+            si, sj = i, j
+        elif X[i][j] == "G":
+            ti, tj = i, j
+
+H += 1
+W += 1
+def BFS01():
+    Q = deque([(si, sj)])
+    D = [[-1] * W for _ in range(H)]
+    D[si][sj] = 0
+    while Q:
+        i, j = Q.popleft()
+        x = X[i][j]
+        if x == "#":
+            continue
+        d = D[i][j]
+        if x == "G":
+            return d
+        if x == "." or x == "S":
+            for di, dj in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+                ni, nj = i + di, j + dj
+                if D[ni][nj] == -1:
+                    D[ni][nj] = d + 1
+                    Q.append((ni, nj))
+            continue
+        if x == "R":
+            ni, nj = i, j + 1
+        elif x == "L":
+            ni, nj = i, j - 1
+        elif x == "D":
+            ni, nj = i + 1, j
+        elif x == "U":
+            ni, nj = i - 1, j
+        else:
+            assert 0, x
+        if D[ni][nj] == -1 or D[ni][nj] > d:
+            D[ni][nj] = d
+            Q.appendleft((ni, nj))
+    return -1
+
+print(BFS01())
+

@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+
+#include <atcoder/all>
+
+using namespace atcoder;
+using namespace std;
+using ll = long long;
+const int IINF = 0x3f3f3f3f;  // 2倍しても負にならない
+const long long LINF = 0x3f3f3f3f3f3f3f3fLL;
+long long MOD = 1000000007;
+using plint = pair<ll, ll>;
+using pint = pair<int, int>;
+#define all(obj) (obj).begin(), (obj).end()
+#define rall(obj) (obj).rbegin(), (obj).rend()
+struct Edge {
+  int from, to, cost;
+  Edge(int f, int t, int c) : from(f), to(t), cost(c) {}
+};
+using Graph = vector<vector<int>>;
+
+// 変数宣言------------------
+
+// 関数定義------------------
+
+// メイン------------------
+int main() {
+  // デバッグ用
+  ifstream in("input.txt");
+  if (in.is_open()) {
+    cin.rdbuf(in.rdbuf());
+  }
+
+  int n, q;
+  cin >> n >> q;
+  ll a[n];
+  for (int i = 0; i < n; i++) {
+    cin >> a[i];
+  }
+
+  // クエリ
+  for (int i = 0; i < q; i++) {
+    ll x;
+    cin >> x;
+
+    ll len = 0;
+
+    int r = 0;
+    ll total = 0;
+    for (int l = 0; l < n; l++) {
+      while (r < n && total + a[l] <= x) {
+        total += a[r];
+        r++;
+      }
+
+      len += (r - l);
+      if (r == l) {
+        r++;
+      } else {
+        total -= a[l];
+      }
+    }
+    cout << len << endl;
+  }
+}

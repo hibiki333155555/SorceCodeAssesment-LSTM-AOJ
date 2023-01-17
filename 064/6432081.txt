@@ -1,0 +1,140 @@
+#include<stdio.h>
+#include<stdbool.h>
+#include<stdlib.h>
+#define MAX 10000
+#define INF 1001001001
+
+//隣接リスト用の構造体
+typedef struct Node{
+  int id;
+  int weight;
+  struct Node *next;
+}Node;
+
+//Heap用の構造体
+typedef struct HeapNode{
+  int id;
+  int weight;
+}HeapNode;
+
+int n; //グラフのサイズ
+HeapNode H[MAX]; //priority_queue用の配列とヒープサイズ
+int heap_size = 0;
+Node G[MAX]; //隣接リスト
+int d[MAX], p[MAX];
+bool visited[MAX];
+
+void insert(HeapNode u){
+  HeapNode temp;
+  H[++heap_size] = u;
+  int size = heap_size;
+  while(size > 1 && H[size / 2].weight > H[size].weight){
+    temp = H[size / 2];
+    H[size / 2] = H[size];
+    H[size] = temp;
+    size = size / 2;
+  }
+}
+
+void maxHeapfy(int u){
+  int left = 2 * u;
+  int right = 2 * u + 1;
+  int minest;
+  HeapNode temp;
+
+  if(left <= heap_size && H[left].weight < H[u].weight) minest = left;
+  else minest = u;
+
+  if(right <= heap_size && H[right].weight < H[minest].weight) minest = right;
+
+  if(minest != u){
+    temp = H[minest];
+    H[minest] = H[u];
+    H[u] = temp;
+    maxHeapfy(minest);
+  } 
+}
+
+HeapNode extractMin(){
+  HeapNode min = H[1];
+  H[1] = H[heap_size--];
+  maxHeapfy(1);
+  return min;
+}
+
+int heapSize(){
+  return heap_size;
+}
+
+void dijkstra(){
+
+  for(int i = 0; i < n; i++ ){
+    visited[i] = false;
+    d[i] = INF;
+  }
+
+
+  int u, v;
+  HeapNode heap_node;
+  d[0] = 0;
+  p[0] = -1;
+  heap_node.id = 0;
+  heap_node.weight = 0;
+  insert(heap_node);
+
+  while(1){
+    
+    if(heapSize() == 0) break;
+
+    heap_node = extractMin();
+    u = heap_node.id;
+
+    if(d[u] < heap_node.weight) continue;
+
+    visited[u] = true;
+    
+    Node *ptr = G[u].next;
+
+    while(ptr!=NULL){
+      if(d[ptr->id] > d[u] + ptr->weight && !visited[ptr->id]){
+        heap_node.id = ptr->id;
+        d[ptr->id] = d[u] + ptr->weight;
+        heap_node.weight = d[ptr->id];
+        p[ptr->id] = u;
+        insert(heap_node);
+      }
+      ptr = ptr->next;
+    }
+  }
+}
+
+void stick(int u, int v, int c){
+  Node *ptr = (Node *)malloc(sizeof(Node));
+  ptr->id = v;
+  ptr->weight = c;
+  ptr->next = G[u].next;
+  G[u].next = ptr;
+}
+
+int main()
+{
+  int u, k, v, c;
+  scanf("%d", &n);
+  for(int i = 0; i < n; i++ ) G[i].next = NULL;
+
+  for(int i = 0; i < n; i++ ){
+    scanf("%d %d", &u, &k);
+    for(int j = 0; j < k; j++ ){
+      scanf("%d %d", &v, &c);
+      stick(u, v, c);
+    }
+  }
+
+  dijkstra();
+
+  for(int i = 0; i < n; i++ ){
+    printf("%d %d\n", i, d[i]);
+  }
+
+  return 0;
+}

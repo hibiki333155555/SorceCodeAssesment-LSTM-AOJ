@@ -1,0 +1,10 @@
+x = gets.to_i
+y = gets.to_i
+z = gets.to_i
+
+
+if x + y >= z
+  puts 1
+else
+  puts 0
+end

@@ -1,0 +1,54 @@
+#include <algorithm>
+#include <bitset>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <map>
+#include <numeric>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+#define rep(i, n) for (int i = 0; i < n; ++i)
+#define reps(i, s, n) for (int i = s; i < n; i++)
+#define debug(s, param) std::cerr << s << param << std::endl;
+
+using namespace std;
+using ll = long long;
+using pi = pair<int, int>;
+using pl = pair<ll, ll>;
+
+const int INF = 1e9;
+const ll INFL = 1e18;
+const ll MOD = 1000000007;
+
+int main() {
+  int v, e, r; cin >> v >> e >> r;
+  vector<vector<pi>> graph(v);
+  rep (i, e) {
+    int s, t, d; cin >> s >> t >> d;
+    graph[s].emplace_back(pi(d, t));
+  }
+  vector<int> dijk(v, INF);
+  priority_queue<pi, vector<pi>, greater<pi>> pq;
+  pq.emplace(pi(0, r));
+
+  while (!pq.empty()) {
+    auto [dist, cur] = pq.top(); pq.pop();
+    if (dist < dijk[cur]) dijk[cur] = dist;
+    for (auto [w, next] : graph[cur]) {
+      int nextDist = dist + w;
+      if (dijk[next] <= nextDist) continue;
+      pq.emplace(pi(nextDist, next));
+    }
+  }
+  for (auto e : dijk) {
+    if (e == INF) cout << "INF" << endl;
+    else cout << e << endl;
+  }
+  return 0;
+}

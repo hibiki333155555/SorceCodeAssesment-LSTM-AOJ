@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            String str = sc.next();
+
+            // 終了条件
+            if (str.equals("-")) {
+                break;
+            }
+
+            int m = sc.nextInt();
+            for (int i = 0; i < m; i++) {
+                int h = sc.nextInt();
+                // 部分文字列を取り出して連結する
+                String substr1 = str.substring(0, h);
+                String substr2 = str.substring(h);
+                str = substr2.concat(substr1);
+            }
+            System.out.println(str);
+        }
+    }
+}
+

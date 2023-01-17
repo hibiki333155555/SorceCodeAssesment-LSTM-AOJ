@@ -1,0 +1,51 @@
+#pragma GCC optimize("O3")
+#include <bits/stdc++.h>
+using namespace std;
+
+struct INIT {
+  INIT() {
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    cout << fixed << setprecision(15);
+  }
+} __init;
+
+int n, m;
+vector<int> a, b;
+
+void solve();
+
+int main() {
+  cin >> n >> m;
+  a.resize(n);
+  for (auto &p : a) cin >> p;
+  b.resize(m);
+  for (auto &p : b) cin >> p;
+  solve();
+  for (int i = 0; i < n; ++i) cout << a[i] << " \n"[i == n - 1];
+  for (int i = 0; i < m; ++i) cout << b[i] << " \n"[i == m - 1];
+  return 0;
+}
+
+void solve() {
+  int l = 0, r = 0, nxtl = 0, nxtr = 0, cnt = 0;
+  a.push_back(n + m + 1);
+  b.push_back(n + m + 2);
+  while (l < n || r < m) {
+    ++cnt;
+    while (!a[nxtl]) ++nxtl;
+    while (!b[nxtr]) ++nxtr;
+    if (l < n && a[l] == cnt)
+      ++l, ++nxtl;
+    else if (r < m && b[r] == cnt)
+      ++r, ++nxtr;
+    else if (l == n || a[l])
+      b[r++] = cnt;
+    else if (r == m || b[r])
+      a[l++] = cnt;
+    else if (a[nxtl] < b[nxtr])
+      a[l++] = cnt;
+    else
+      b[r++] = cnt;
+  }
+}

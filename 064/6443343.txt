@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+internal class Program
+{
+    public static void Main()
+    {
+        if (new System.Diagnostics.StackFrame(1).GetMethod() == null)
+            Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false });
+
+        var nk = Console.ReadLine().Split().Select(i => i.ParseInt()).ToArray();
+        var ws = new List<int>();
+        for (int i = 0; i < nk[0]; i++)
+        {
+            ws.Add(Console.ReadLine().ParseInt());
+        }
+        ws.Add(0);
+        var alloc = new Alloc(ws.ToArray(), nk[1]);
+        Console.WriteLine(alloc.Solve());
+
+
+        Console.Out.Flush();
+    }
+}
+
+class Alloc
+{
+    int[] ws;
+    int tm;
+    public Alloc(int[] weight, int maxtruck)
+    {
+        ws = weight;
+        tm = maxtruck;
+    }
+
+    public bool isFit(int P)
+    {
+        var ti = 0;
+        var current = 0;
+        foreach (var w in ws)
+        {
+            if(current + w > P)
+            {
+                ti++;
+                current = w;
+            }
+            else
+            {
+                current += w;
+            }
+            if (ti == tm)
+                return false;
+        }
+        return true;
+    }
+    public int Solve()
+    {
+        var l = 1;
+        var r = 10000 * 100000;
+        while (l != r)
+        {
+            var m = (l + r) / 2;
+            if (isFit(m))
+                r = m;
+            else
+                l = m + 1;
+        }
+        return l;
+    }
+}
+
+
+internal static class Extensions
+{
+    public static int ParseInt(this string s) => int.Parse(s);
+}

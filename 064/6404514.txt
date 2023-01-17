@@ -1,0 +1,13 @@
+#include<stdio.h>
+
+int main()
+{   
+    float r, area, cir;
+    float Pi = 3.14;
+    scanf("%f", &r);
+    area = Pi*r*r;
+    cir = 2*Pi*r;
+    printf("%.5f %.5f\n", area, cir);
+    return 0;
+ }
+ 

@@ -1,0 +1,10 @@
+using System;
+class program
+{
+    static void Main()
+    {
+        double r = double.Parse(Console.ReadLine());
+        double s = 3.141592653589;
+        Console.WriteLine(r * r * 3.141592653589 + " " + 2 * r * 3.141592653589);
+    }
+}

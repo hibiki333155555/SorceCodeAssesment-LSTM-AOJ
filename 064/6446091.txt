@@ -1,0 +1,28 @@
+def add(a,b):
+    print(a+b)
+def sub(a,b):
+    print(a-b)
+def mul(a,b):
+    print(a*b)
+def div(a,b):
+    print("%f"%(a/b))
+
+str=input().split()
+a=int(str[0])
+op=str[1]
+b=int(str[2])
+while True:
+    if op=="+":
+        add(a,b)
+    continue
+    elif op=="-":
+        sub(a,b)
+    continue
+    elif op=="*":
+        sub(a,b)
+    continue
+    elif op=="/":
+        sub(a,b)
+    continue
+    else:
+        break

@@ -1,0 +1,3 @@
+とtailが等しくなったら終わり
+        if(tasks[head].time-q<=0)now+=tasks[head].time;
+        else now+=q;

@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+#define rep(i, n) for (int i=0; i<(int)(n); ++(i))
+#define rep3(i, m, n) for (int i=(m); (i)<(int)(n); ++(i))
+#define repr(i, n) for (int i=(int)(n)-1; (i)>=0; --(i))
+#define rep3r(i, m, n) for (int i=(int)(n)-1; (i)>=(int)(m); --(i))
+#define all(x) (x).begin(), (x).end()
+
+template<typename T>
+struct BIT {
+    int n;
+    vector<T> d;
+    BIT(int n=0) : n(n), d(n+1) {}
+    void add(int i, T x=1) {
+        for (i++; i<=n; i+=i&-i) {
+            d[i] += x;
+        }
+    }
+    T sum(int i) {
+        T x = 0;
+        for (i++; i; i-=i&-i) {
+            x += d[i];
+        }
+        return x;
+    }
+    T sum(int l, int r) {
+        return sum(r-1) - sum(l-1);
+    }
+};
+template<typename T>
+struct RangeBIT {
+    int n;
+    BIT<T> bit0, bit1;
+    RangeBIT(int n=0) : n(n), bit0(n+1), bit1(n+1) {}
+    void add(int i, T x=1) {
+        bit0.add(i, x);
+    }
+    void add(int l, int r, T x=1) {
+        bit0.add(l, -x*(l-1));
+        bit1.add(l, x);
+        bit0.add(r, x*(r-1));
+        bit1.add(r, -x);
+    }
+    T sum(int l, int r) {
+        return bit0.sum(l, r) + bit1.sum(r-1) * (r-1) - bit1.sum(l-1) * (l-1);
+    }
+};
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    RangeBIT<ll> a(n);
+    rep(i, q) {
+        int qi;
+        cin >> qi;
+        if (qi == 0) {
+            int s, t, x;
+            cin >> s >> t >> x;
+            a.add(s, t+1, x);
+        }
+        else {
+            int s, t;
+            cin >> s >> t;
+            cout << a.sum(s, t+1) << endl;
+        }
+    }
+    return 0;
+}
+

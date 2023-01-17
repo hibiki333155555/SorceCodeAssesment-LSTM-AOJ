@@ -1,0 +1,24 @@
+#include <iostream>
+using namespace std;
+int main() {
+	int s, h=0, m=0;
+	cin >> s;
+	if (s <= 59) cout << "0:0:"<<s << endl;
+	else {
+		while (s >= 60) {
+			s -= 60;
+			m++;
+		}
+		if (m <= 59) {
+			cout << "0" << ":" << m << ":" << s << endl;
+		}
+		else {
+			while (m >= 60) {
+				m -= 60;
+				h++;
+			}
+			cout<<h<<":"<< m <<":"<<s<< endl;
+		}
+	}
+	return 0;
+}

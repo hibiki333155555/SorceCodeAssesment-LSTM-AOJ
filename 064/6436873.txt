@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+#define lol long long
+using namespace std;
+int main(){
+    vector<bool> s(13,false),h(13,false),c(13,false),d(13,false);
+    int n;
+    cin>>n;
+    char ch;
+    int num;
+    for(int i=0;i<n;i++){
+        cin>>ch>>num;
+        if(ch == 'S'){
+            s[num-1]=true;
+        }else if(ch == 'H'){
+            h[num-1]=true;
+        }else if(ch == 'C'){
+            c[num-1]=true;
+        }else if(ch == 'D'){
+            d[num-1]=true;
+        }
+    }
+    for(int i = 0;i<13;i++){
+        if(!s[i]){
+            cout<< 'S'<<" "<<i<<"\n";
+        }
+    }
+    for(int i = 0;i<13;i++){
+        if(!h[i]){
+            cout<< 'H'<<" "<<i<<"\n";
+        }
+    }
+    for(int i = 0;i<13;i++){
+        if(!c[i]){
+            cout<< 'C'<<" "<<i<<"\n";
+        }
+    }
+    for(int i = 0;i<13;i++){
+        if(!d[i]){
+            cout<< 'D'<<" "<<i<<"\n";
+        }
+    }
+    return 0;
+}

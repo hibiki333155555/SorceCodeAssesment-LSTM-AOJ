@@ -1,0 +1,12 @@
+#include <stdio.h>
+int main(){
+   const float a=3.14159265;
+   int r;
+   scanf("%d",&r);
+   float area,cir;
+   area=(float)a*r*r;
+   cir=(float)2*a*r;
+   printf("%0.6f %0.6f\n",area,cir);
+   return 0;
+}
+

@@ -1,0 +1,25 @@
+#include <algorithm>
+#include <bits/stdc++.h>
+#include <cmath>
+using namespace std;
+using ll = long long;
+template <typename T> using MaxHeap = priority_queue<T>;
+template <typename T> using MinHeap = priority_queue<T, vector<T>, greater<T>>;
+#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define ff first
+#define ss second
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define all(a) a.begin(), a.end()
+
+const ll INF = 1e18;
+const ll mod = 998244353;
+
+int main() {
+    ll h1,w1,h2,w2;
+    cin>>h1>>w1>>h2>>w2;
+    ll tatae = ceil((double)h1/(double)h2);
+    ll yoyok = ceil((double)w1/(double)w2);
+    cout<<tatae*yoyok<<endl;
+}
+

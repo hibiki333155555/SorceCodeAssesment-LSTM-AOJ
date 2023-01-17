@@ -1,0 +1,106 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <deque>
+#include <queue>
+#include <string>
+#include <iomanip>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <utility>
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#if __has_include(<atcoder/all>)
+#include <atcoder/all>
+using namespace atcoder;
+#endif
+using namespace std;
+using ll=long long;
+
+int main(){
+  ll H,W,sx,sy,gx,gy;
+  cin>>H>>W;
+  vector<string> G(H);
+  for(int i=0;i<H;i++){
+    cin>>G[i];
+    for(int j=0;j<W;j++){
+      if(G[i][j]=='S'){
+        sx=i;
+        sy=j;
+      }else if(G[i][j]=='V'){
+        gx=i;
+        gy=j;
+      }
+    }
+  }
+  ll M;
+  cin>>M;
+  vector<pair<ll,pair<ll,ll>>> query(M);
+  for(int i=0;i<M;i++){
+    cin>>query[i].second.first>>query[i].second.second>>query[i].first;
+  }
+  sort(query.begin(),query.end());
+  deque<pair<ll,ll>> dq,dq2;
+  vector<vector<ll>> d(H,vector<ll>(W,3*H*W)),d2(H,vector<ll>(W,3*H*W));
+  dq.push_back(make_pair(sx,sy));
+  d[sx][sy]=0;
+  int j=0;
+  const vector<pair<ll,ll>> ar={{0,1},{0,-1},{1,0},{-1,0}};
+  bool flag=true;
+  //cerr<<"s"<<endl;
+  for(int i=0;i<=3*H*W;i++){
+    //cerr<<"i:"<<i<<endl;
+    while(j<M && query[j].first-1==i){
+      //cerr<<query[j].second.first-1<<" "<<query[j].second.second-1<<endl;
+      G[query[j].second.first-1][query[j].second.second-1]='#';
+      j++;
+    }
+    while(!dq.empty()){
+      pair<ll,ll> q=dq.front();dq.pop_front();
+      ll x=q.first,y=q.second;
+      //cerr<<"x:"<<x<<" y:"<<y<<endl;
+      for(pair<ll,ll> i:ar){
+        if(x+i.first>=0 && x+i.first<H && y+i.second>=0 && y+i.second<W && G[x+i.first][y+i.second]!='#' && d[x+i.first][y+i.second]>d[x][y]+1){
+          dq2.push_back(make_pair(x+i.first,y+i.second));
+          d[x+i.first][y+i.second]=d[x][y]+1;
+        }
+      }
+    }
+    if(flag && d[gx][gy]!=3*H*W){
+      dq2.clear();
+    }
+    if(flag && dq2.empty()){
+      flag=false;
+      if(d[gx][gy]==3*H*W){
+        cout<<"No"<<endl;
+        return 0;
+      }
+      //cerr<<"V:"<<d[gx][gy]<<endl;
+      ll tmp=d[gx][gy];
+      for(int aa=0;aa<H;aa++){
+        for(int bb=0;bb<W;bb++){
+          d[aa][bb]=3*H*W;
+        }
+      }
+      d[gx][gy]=tmp;
+      //d2[gx][gy]=d[gx][gy];
+      dq2.push_back(make_pair(gx,gy));
+    }else if(dq2.empty()){
+      if(d[sx][sy]==3*H*W){
+        cout<<"No"<<endl;
+        return 0;
+      }else{
+        cout<<"Yes"<<endl;
+        return 0;
+      }
+    }
+    dq.swap(dq2);
+  }
+
+
+}
+
+

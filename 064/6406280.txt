@@ -1,0 +1,14 @@
+# coding: utf-8
+
+import sys
+input = sys.stdin.readline
+
+_ = input()
+
+A = list(map(int, input().split()))
+n = int(input())
+
+for _ in range(n):
+    b, e, k = map(int, input().split())
+    
+    print(A[b:e].count(k))

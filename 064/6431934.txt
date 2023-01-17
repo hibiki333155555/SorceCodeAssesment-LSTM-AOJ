@@ -1,0 +1,108 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+
+namespace AOJ_ITP1_11_C
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var dice1 = new Dice(Console.ReadLine().Split().Select(i => int.Parse(i)));
+            var dice2 = new Dice(Console.ReadLine().Split().Select(i => int.Parse(i)));
+            Console.WriteLine(dice1.Equals(dice2) ? "Yes" : "No");
+        }
+    }
+
+    class Dice
+    {
+        readonly int[] dice;
+        readonly static List<int[]> pattern;
+        int u, f, r, l, b, d; //up down back left front right
+        public Dice(IEnumerable<int> initDice)
+        {
+            dice = initDice.ToArray();
+            (u, f, r, l, b, d) = (dice[0], dice[1], dice[2], dice[3], dice[4], dice[5]);
+        }
+
+        static Dice()
+        {
+            var d = new Dice(Enumerable.Range(0, 6));
+            pattern = new List<int[]> { d.dice };
+            Action add = () => pattern.Add(new int[] { d.u, d.f, d.r, d.l, d.b, d.d });
+            Action rotAndAdd3 = () =>
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    d.Rotate('E');
+                    add();
+                }
+            };
+            rotAndAdd3();
+            foreach (var w in "NSSNN")
+            {
+                d.Rotate(w);
+                add();
+                rotAndAdd3();
+            }
+        }
+        public int GetUp => u;
+        public int GetRight => r;
+        public bool Contains(int target) => dice.Contains(target);
+        public void Rotate(char way)
+        {
+            switch (way)
+            {
+                case 'N':
+                    (u, b, d, f) = ValueTuple.Create(f, u, b, d); //Fuckin Mono Workaround
+                    break;
+                case 'S':
+                    (f, u, b, d) = ValueTuple.Create(u, b, d, f);
+                    break;
+                case 'E':
+                    (u, r, d, l) = ValueTuple.Create(l, u, r, d);
+                    break;
+                case 'W':
+                    (l, u, r, d) = ValueTuple.Create(u, r, d, l);
+                    break;
+            }
+        }
+
+        public bool TrySetFrontThenUp(int up, int front)
+        {
+            while (f != front)
+            {
+                if (r == front || l == front)
+                {
+                    Rotate('E');
+                }
+                Rotate('N');
+            }
+            if (b == up)
+                return false;
+            while (u != up)
+            {
+                Rotate('E');
+            }
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var d2 = obj as Dice;
+            if (d2 == null)
+                return false;
+            var d2d = d2.dice;
+            var check = new List<bool>();
+            foreach (var p in Dice.pattern)
+            {
+                check.Add((u, f, r, l, b, d) == (d2d[p[0]], d2d[p[1]], d2d[p[2]], d2d[p[3]], d2d[p[4]], d2d[p[5]]));
+            }
+            return check.Contains(true);
+        }
+    }
+
+}
+

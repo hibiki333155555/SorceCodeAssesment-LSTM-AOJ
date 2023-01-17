@@ -1,0 +1,16 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int a,b,c;
+    cin>>a>>b>>c;
+    double rad = c*M_PI / 180.0;
+    double me = (double)(0.5 * a  * b * sin(rad));
+    cout<<fixed<<setprecision(11)<<me<<"\n";
+    double hen = sqrt((a * a + b * b)-2*a*b*cos(rad));
+    double shu = a + b + hen;
+    cout<<fixed<<setprecision(11)<<shu<<"\n";
+    double taka = (2.0 * me) / (double)a;
+    cout<<fixed<<setprecision(11)<<taka<<"\n";
+    return(0);
+}
+

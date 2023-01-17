@@ -1,0 +1,29 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+typedef long long Int;
+typedef long long ll;
+const int Inf = 1e9 + 7;
+const Int INF = (Int)1e18 + 7;
+const double EPS = 1e-10;
+
+
+int main() {
+  int N, W;
+  cin >> N >> W;
+  int value[N], weight[N];
+  for (int i = 0; i < N; i++) cin >> value[i] >> weight[i];
+
+  vector<vector<int>> dp(N+1, vector<int>(W+1, 0));
+  for (int i = 0; i < N; i++) {
+    for (int w = 0; w < W; w++) {
+      dp[i+1][w] = max(dp[i+1][w], dp[i][w]);
+      int nw = w+weight[i];
+      if (nw<=W) dp[i+1][nw] = max(dp[i+1][nw], dp[i][w]+value[i]);
+    }
+  }
+  cout << dp[N][W] << endl;
+  return 0;
+}
+

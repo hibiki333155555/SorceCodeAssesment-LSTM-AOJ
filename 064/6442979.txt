@@ -1,0 +1,44 @@
+#include <iostream>
+#include <complex>
+#include <vector>
+
+using namespace std;
+
+const double PI = 3.1415926535897932384626433832795;
+
+complex<double> in()
+{
+	double x, y;
+	cin >> x >> y;
+	return {x, y};
+}
+
+int main()
+{
+	int n, q; cin >> n;
+	vector<complex<double>> g(n); for (auto& p : g) p = in();
+	for (cin >> q; q > 0; --q) {
+		complex<double> p = in();
+		if (g.back() == p || g.front() == p) {
+			cout << 1 << endl;
+			continue;
+		}
+		double a = arg((g.front() - p) / (g.back() - p));
+		bool one = false;
+		for (int i = 0, j = 1; j < n; ++i, ++j) {
+			if (p == g[j]) {
+				one = true;
+				break;
+			}
+			double ca = arg((g[j] - p) / (g[i] - p));
+			if (abs(ca) == PI) {
+				one = true;
+				break;
+			}
+			a += ca;
+		}
+		cout << (one ? 1 : abs(a) < 1 ? 0 : 2) << endl;
+	}
+	return 0;
+}
+

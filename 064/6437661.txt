@@ -1,0 +1,57 @@
+// copyright
+#include<iostream>
+#include<vector>
+
+// DP[val] = 現在の値がvalの時の、差の二乗和の最小値
+int main() {
+    while (true) {
+        int n, m;
+        std::cin >> n >> m;
+
+        if (n == 0 && m == 0) {
+            break;
+        }
+
+        std::vector<int> C(m, 0);
+        for (int i = 0; i < m; i++) {
+            std::cin >> C[i];
+        }
+
+        std::vector<int> x_list(n, 0);
+        for (int i = 0; i < n; i++) {
+            std::cin >> x_list[i];
+        }
+
+        int inf = 256*256*256;
+        std::vector<int> DP(256, inf);
+        DP[128] = 0;
+
+        for (auto x : x_list) {
+            std::vector<int> new_DP(256, inf);
+            for (int pre_val = 0; pre_val < 256; pre_val++) {
+                if (DP[pre_val] == inf) {
+                    continue;
+                }
+                for (auto c : C) {
+                    int cur_val = c+pre_val;
+                    cur_val = std::min(cur_val, 255);
+                    cur_val = std::max(cur_val, 0);
+                    new_DP[cur_val] = std::min(
+                                    new_DP[cur_val],
+                                    DP[pre_val] + (x-cur_val)*(x-cur_val));
+                }
+            }
+            for (int val = 0; val < 256; val++) {
+                DP[val] = new_DP[val];
+            }
+        }
+
+        int ans = inf;
+        for (int val = 0; val < 256; val++) {
+            ans = std::min(ans, DP[val]);
+        }
+        std::cout << ans << std::endl;
+    }
+    return 0;
+}
+

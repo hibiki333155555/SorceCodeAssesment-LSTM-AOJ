@@ -1,0 +1,11 @@
+#include<stdio.h>
+int main()
+{
+    double r, A, C;
+    scanf("%lf",&r);
+    A=3.141592653589793238*r*r;
+    C=2*3.141592653589793238*r;
+    printf("%lf %lf\n",A,C);
+    return 0;
+}
+

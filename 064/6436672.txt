@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+#define lol long long
+using namespace std;
+int main(){
+    int a,b,c;
+    cin>>a>>b>>c;
+    int sum=0;
+    for(int i=a;i<=b;i++){
+        if(c % i == 0){
+            sum++;
+        }
+    }
+    cout<<sum<<"\n";
+    return 0;
+}

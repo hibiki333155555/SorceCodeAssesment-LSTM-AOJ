@@ -1,0 +1,26 @@
+M=[]
+F=[]
+R=[]
+S=[]
+while True:
+    m,f,r=map(int,raw_input().split())
+    if m==-1 and f==-1 and r==-1:
+        break
+    M.append(m)
+    F.append(f)
+    R.append(r)
+for i in range(len(M)):
+    if sum(M[i],F[i])>=80:
+        print "A"
+    elif 65 <= sum(M[i],F[i]) <80:
+        print "B"
+    elif 50 <= sum(M[i],F[i]) <65:
+        print "C"
+    elif 30 <= sum(M[i],F[i]) < 50:
+        if R[i] >= 50:
+            print "C"
+        else:
+            print "D"
+    elif 30 > sum(M[i],F[i]):
+        print "F"
+

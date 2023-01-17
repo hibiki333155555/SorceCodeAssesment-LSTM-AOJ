@@ -1,0 +1,35 @@
+#include<stdio.h>
+#define MAX 500000
+
+int H[MAX];
+int n;
+
+void maxHeapfy(int A[], int i){
+  int left = 2 * i;
+  int right = 2 * i + 1;
+  int largest, temp;
+  if(left <= n && A[left] > A[i]) largest = left;
+  else largest = i;
+  if(right <= n && A[right] > A[largest]) largest = right;
+  if(largest != i){
+    temp = A[largest];
+    A[largest] = A[i];
+    A[i] = temp;
+    maxHeapfy(A, largest);
+  }
+}
+
+void buildMaxHeap(int A[]){
+  for(int i = n / 2; i >= 0; i++ ){
+    maxHeapfy(A, i);
+  }
+}
+
+int main()
+{
+  scanf("%d", &n);
+  for(int i = 1; i <= n; i++ ) scanf("%d", &H[i]);
+  buildMaxHeap(H);
+  for(int i = 1; i <= n; i++ ) printf("%d", H[i]);
+  return 0;
+}

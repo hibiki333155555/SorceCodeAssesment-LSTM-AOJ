@@ -1,0 +1,18 @@
+while True:
+  m, f, r = map(int,input().split())
+  sum = m+f
+  if m ==f == r ==-1:
+    break
+  elif sum >=80:
+    print('A')
+  elif sum >= 65:
+    print('B')
+  elif sum >=50:
+    print('C')
+  elif sum >= 30:
+    if r >=50:
+      print('C')
+    else:
+      print('D')
+  elif m ==-1 or f ==-1 or sum <30:
+    print('F')

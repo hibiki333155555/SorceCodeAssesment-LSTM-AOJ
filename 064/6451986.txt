@@ -1,0 +1,69 @@
+#line 2 "/home/defineprogram/Desktop/Library/template/template.cpp"
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define rep(i, n) for (int i = 0; i < n; i++)
+#define REP(i, n) for (int i = 1; i < n; i++)
+#define rev(i, n) for (int i = n - 1; i >= 0; i--)
+#define REV(i, n) for (int i = n - 1; i > 0; i--)
+#define all(v) v.begin(), v.end()
+#define PL pair<ll, ll>
+#define PI pair<int, int>
+#define len(s) (int)s.size()
+#define compress(v) \
+    sort(all(v));   \
+    v.erase(unique(all(v)), v.end());
+#define comid(v, x) lower_bound(all(v), x) - v.begin()
+
+template<class T>
+using prique=priority_queue<T,vector<T>,greater<>>;
+
+template <class T, class U>
+inline bool chmin(T &a, U b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+template <class T, class U>
+inline bool chmax(T &a, U b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+constexpr ll inf = 3e18;
+constexpr double pi = acos(-1);
+#line 2 "main.cpp"
+
+int dp1[1000001], dp2[1000001];
+int dp1_[1000001], dp2_[1000001];
+int main() {
+    rep(j, 1000001) dp1[j] = dp2[j] = 1e9;
+    dp1[0] = dp2[0] = 0;
+    REP(i, 201) {
+        swap(dp1, dp1_);
+        swap(dp2, dp2_);
+        rep(j, 1000001) dp1[j] = dp2[j] = 1e9;
+        rep(j, 1000001) {
+            chmin(dp1[j], dp1_[j]);
+            chmin(dp2[j], dp2_[j]);
+            int p = i * (i + 1) * (i + 2) / 6;
+            if (j + p <= 1000000) {
+                chmin(dp1_[j + p], dp1_[j] + 1);
+                if (p % 2) {
+                    chmin(dp2_[j + p], dp2_[j] + 1);
+                }
+            }
+        }
+    }
+    while (1) {
+        int N;
+        cin >> N;
+        if (!N) break;
+        cout << dp1[N] << " " << dp2[N] << "\n";
+    }
+}
+

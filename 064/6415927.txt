@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+
+template <typename T>
+bool chmin(T &x, const T &y) {
+    if (x < y) return x = y, true;
+    return false;
+}
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n;
+    std::cin >> n;
+
+    std::vector<int> len(n);
+    for (auto &l : len) std::cin >> l;
+
+    std::vector<std::vector<uint64_t>> dp(1 << n);
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < len[i]; ++j) {
+            uint64_t v;
+            std::cin >> v;
+            for (uint64_t e : dp[1 << i]) {
+                chmin(e, e ^ v);
+            }
+            if (v) dp[1 << i].push_back(v);
+        }
+    }
+
+    auto intersection = [](std::vector<uint64_t> x, std::vector<uint64_t> y) {
+        std::vector<std::pair<uint64_t, uint64_t>> basis;
+        for (uint64_t e : x) basis.emplace_back(e, e);
+        std::vector<uint64_t> res;
+        for (uint64_t e : y) {
+            uint64_t s = 0;
+            for (const auto &[v, t] : basis) if (chmin(e, e ^ v)) s ^= t;
+            if (e == 0) {
+                res.push_back(s);
+            } else {
+                basis.emplace_back(e, s);
+            }
+        }
+        return res;
+    };
+
+    __uint128_t ans = 0;
+
+    for (int s = 1; s < 1 << n; ++s) {
+        int c = __builtin_popcount(s);
+        if (c > 1) {
+            int t = s & -s;
+            dp[s] = intersection(dp[s ^ t], dp[t]);
+        } 
+        if (c & 1) {
+            ans += uint64_t(1) << dp[s].size();
+        } else {
+            ans -= uint64_t(1) << dp[s].size();
+        }
+    }
+
+    std::cout << uint64_t(ans) << std::endl;
+
+    return 0;
+}

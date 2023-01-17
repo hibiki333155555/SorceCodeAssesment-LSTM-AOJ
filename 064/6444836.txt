@@ -1,0 +1,26 @@
+from collections import deque
+Directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+while True:
+    try:
+        F = [list(map(int, list(input()))) for _ in range(12)]
+        seen = [[False for _ in range(12)] for _ in range(12)]
+        ans = 0
+        for i in range(12):
+            for j in range(12):
+                if F[i][j] == 1 and not seen[i][j]:
+                    ans += 1
+                    seen[i][j] = True
+                    Que = deque([(i, j)])
+                    while Que:
+                        ci, cj = Que.popleft()
+                        for di, dj in Directions:
+                            ni = ci + di
+                            nj = cj + dj
+                            if 0 <= ni < 12 and 0 <= nj < 12 and F[ni][nj] == 1 and not seen[ni][nj]:
+                                seen[ni][nj] = True
+                                Que.append((ni, nj))
+        print(ans)
+        input()
+    except:
+        break
+

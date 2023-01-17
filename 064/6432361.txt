@@ -1,0 +1,11 @@
+ls=input().split()
+a,b=map(int,ls)
+
+if a==b:
+    ans=" == "
+elif a>b:
+    ans=" > "
+else:
+    ans=" < "
+    
+print(f"{a}+{ans}+{b}")

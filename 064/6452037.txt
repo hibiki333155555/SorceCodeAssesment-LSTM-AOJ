@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+typedef long long ll;
+using namespace std;
+
+int main() {
+    cin.tie(0);
+    ios_base::sync_with_stdio(false);
+
+    int N, D, X;
+    cin >> N >> D >> X;
+    vector P(D, vector<int>(N));
+    rep(i, D) rep(j, N) cin >> P[i][j];
+
+    rep(i, D - 1) {
+        vector<int> dp(X + 1);
+
+        rep(j, N) {
+            int v = P[i + 1][j] - P[i][j];
+            int w = P[i][j];
+
+            rep(k, X + 1) {
+                if (k - w >= 0) dp[k] = max(dp[k], dp[k - w] + v);
+                if (k) dp[k] = max(dp[k], dp[k - 1]);
+            }
+        }
+        X += max(0, dp[X]);
+    }
+    cout << X << "\n";
+
+    return 0;
+}
+

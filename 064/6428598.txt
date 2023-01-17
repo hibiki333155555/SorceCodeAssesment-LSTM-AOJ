@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+
+string S1, S2;
+int X1, X2, Y1, Y2;
+
+int GetID(string str) {
+	if (str.size() == 1) {
+		return (int)(str[0] - 'A');
+	}
+	int v1 = (int)(str[0] - 'A');
+	int v2 = (int)(str[1] - 'A');
+	return 26 + 26 * v1 + v2;
+}
+
+int main() {
+	// 入力
+	cin >> S1 >> Y1 >> S2 >> Y2;
+
+	// 出力
+	X1 = GetID(S1);
+	X2 = GetID(S2);
+	cout << (X2 - X1 + 1) * (Y2 - Y1 + 1) << endl;
+	return 0;
+}

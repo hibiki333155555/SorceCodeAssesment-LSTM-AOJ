@@ -1,0 +1,32 @@
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <numeric>
+#include <string>
+using namespace std;
+
+
+
+int main()
+{
+    string str, ps;
+    cin >> ps;
+    transform(ps.begin(), ps.end(), ps.begin(), ::tolower);
+    
+    istream_iterator<string> isi(cin), eof;
+
+    int num = 0;
+    for_each(isi, eof, 
+                [&num, &ps](auto& e)
+                    {
+                        if(e.length() != ps.length())
+                            return;
+                        else if(equal(e.begin(), e.end(), ps.begin(), 
+                                                [](auto& a, auto& b){return tolower(a) == b;})) 
+                                num++;
+                    });
+    cout << num << endl;
+
+    return 0;
+}

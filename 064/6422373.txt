@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  while(true){
+    string s;
+    cin >> s;
+    if(s=="-") break;
+    int m;
+    cin >> m;
+    string t=s;
+    for(int i=0; i<m; i++){
+      int h;
+      cin >> h;
+      for(int j=0; j<s.size(); j++){
+        t.at(j) = s.at((j+h)%s.size());
+      }
+      s = t;
+    }
+    cout << t << endl;
+  }
+  return 0;    
+    
+}

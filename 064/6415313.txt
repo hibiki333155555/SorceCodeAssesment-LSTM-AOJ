@@ -1,0 +1,126 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using ll = long long;
+using ull = unsigned long long;
+using ld = long double;
+using P = pair<ll, ll>;
+using tp = tuple<ll, ll, ll>;
+
+template <class T>
+using vec = vector<T>;
+template <class T>
+using vvec = vector<vec<T>>;
+
+#define all(hoge) (hoge).begin(), (hoge).end()
+#define en '\n'
+#define rep(i, m, n) for(ll i = (ll)(m); i < (ll)(n); ++i)
+#define rep2(i, m, n) for(ll i = (ll)(n)-1; i >= (ll)(m); --i)
+#define REP(i, n) rep(i, 0, n)
+#define REP2(i, n) rep2(i, 0, n)
+
+constexpr long long INF = 1LL << 60;
+constexpr int INF_INT = 1 << 25;
+// constexpr long long MOD = (ll)1e9 + 7;
+constexpr long long MOD = 998244353LL;
+static const ld pi = 3.141592653589793L;
+
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+
+template <class T>
+inline bool chmin(T &a, T b) {
+    if(a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+template <class T>
+inline bool chmax(T &a, T b) {
+    if(a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+//グラフ関連
+struct Edge {
+    int to, rev;
+    ll cap;
+    Edge(int _to, int _rev, ll _cap) : to(_to), rev(_rev), cap(_cap) {}
+};
+
+typedef vector<Edge> Edges;
+typedef vector<Edges> Graph;
+
+void add_edge(Graph &G, int from, int to, ll cap, bool revFlag, ll revCap) {
+    G[from].push_back(Edge(to, (int)G[to].size(), cap));
+    if(revFlag)
+        G[to].push_back(Edge(from, (int)G[from].size() - 1, revCap));
+}
+
+void solve() {
+    ll n;
+    cin >> n;
+    vec<ll> h(n);
+    REP(i, n) {
+        cin >> h[i];
+    }
+    if(n == 1) {
+        cout << 0 << en;
+        return;
+    }
+
+    vec<P> v;
+    v.push_back({0, h[0]});
+    v.push_back({1, h[1]});
+
+    rep(i, 2, n) {
+
+        ll x3 = i;
+        ll y3 = h[i];
+        while(v.size() >= 2) {
+            auto [x1, y1] = v[v.size() - 2];
+            auto [x2, y2] = v[v.size() - 1];
+            // cout << (y3 - y1) * (x2 - x1) << " " << (y2 - y1) * (x3 - x1) << en;
+            if((y3 - y1) * (x2 - x1) >= (y2 - y1) * (x3 - x1))
+                v.pop_back();
+            else
+                break;
+        }
+        v.push_back({x3, y3});
+    }
+
+    // for(auto [x, y] : v)
+    //     cout << x << " " << y << en;
+    ll ans = 0;
+    REP(i, v.size() - 1) {
+        auto [x1, y1] = v[i];
+        auto [x2, y2] = v[i + 1];
+        chmax(ans, x2 - x1);
+    }
+    cout << ans << en;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    // cout << fixed << setprecision(10);
+
+    // ll t;
+    // cin >> t;
+    // REP(i, t - 1) {
+    //     solve();
+    // }
+
+    solve();
+
+    return 0;
+}
+

@@ -1,0 +1,7 @@
+y,x=(int,input.split())
+
+
+for i in range(y):
+    for j in range(x):
+        print("#")
+    print("")

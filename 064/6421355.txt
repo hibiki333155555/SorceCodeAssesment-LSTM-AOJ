@@ -1,0 +1,10 @@
+from collections import defaultdict
+n = int(input())
+a = [list(map(int, input().split())) for _ in range(n)]
+d = defaultdict(lambda: -1)
+for i in range(n - 1, -1, -1):
+    for j in range(n - 1, -1, -1):
+        d[a[i][j]] = str(i + 1) + " " + str(j + 1)
+q = int(input())
+for _ in range(q):
+    print(d[int(input())])

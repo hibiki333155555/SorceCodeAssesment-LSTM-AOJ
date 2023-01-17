@@ -1,0 +1,201 @@
+#include "bits/stdc++.h"
+#pragma GCC optimize("Ofast")
+
+// Begin Header {{{
+#pragma region
+using namespace std;
+
+#ifndef DEBUG
+#define dump(...)
+#endif
+
+#define all(x) begin(x), end(x)
+#define rall(x) rbegin(x), rend(x)
+#define rep(i, b, e) for (intmax_t i = (b), i##_limit = (e); i < i##_limit; ++i)
+#define repc(i, b, e) for (intmax_t i = (b), i##_limit = (e); i <= i##_limit; ++i)
+#define repr(i, b, e) for (intmax_t i = (b), i##_limit = (e); i >= i##_limit; --i)
+#define var(Type, ...) \
+    Type __VA_ARGS__;  \
+    input(__VA_ARGS__)
+#define let const auto
+
+constexpr size_t operator""_zu(unsigned long long value) {
+    return value;
+};
+constexpr intmax_t operator""_jd(unsigned long long value) {
+    return value;
+};
+constexpr uintmax_t operator""_ju(unsigned long long value) {
+    return value;
+};
+
+constexpr int INF = 0x3f3f3f3f;
+constexpr intmax_t LINF = 0x3f3f3f3f3f3f3f3f_jd;
+
+using usize = size_t;
+using imax = intmax_t;
+using uimax = uintmax_t;
+using ld = long double;
+
+template <class T, class Compare = less<>>
+using MaxHeap = priority_queue<T, vector<T>, Compare>;
+template <class T, class Compare = greater<>>
+using MinHeap = priority_queue<T, vector<T>, Compare>;
+
+inline void input() {}
+template <class Head, class... Tail>
+inline void input(Head&& head, Tail&&... tail) {
+    cin >> head;
+    input(forward<Tail>(tail)...);
+}
+
+template <class Container, class Value = typename Container::value_type,
+          enable_if_t<!is_same<Container, string>::value, nullptr_t> = nullptr>
+inline istream& operator>>(istream& is, Container& vs) {
+    for (auto& v: vs) is >> v;
+    return is;
+}
+
+template <class T, class U>
+inline istream& operator>>(istream& is, pair<T, U>& p) {
+    is >> p.first >> p.second;
+    return is;
+}
+
+inline void output() {
+    cout << "\n";
+}
+template <class Head, class... Tail>
+inline void output(Head&& head, Tail&&... tail) {
+    cout << head;
+    if (sizeof...(tail)) cout << " ";
+    output(forward<Tail>(tail)...);
+}
+
+template <class Container, class Value = typename Container::value_type,
+          enable_if_t<!is_same<Container, string>::value, nullptr_t> = nullptr>
+inline ostream& operator<<(ostream& os, const Container& vs) {
+    static constexpr const char* delim[] = {" ", ""};
+    for (auto it = begin(vs); it != end(vs); ++it) {
+        os << delim[it == begin(vs)] << *it;
+    }
+    return os;
+}
+
+template <class Iterator>
+inline void join(const Iterator& Begin, const Iterator& End, const string& delim = "\n",
+                 const string& last = "\n") {
+    for (auto it = Begin; it != End; ++it) {
+        cout << ((it == Begin) ? "" : delim) << *it;
+    }
+    cout << last;
+}
+
+template <class T>
+inline vector<T> makeVector(const T& init_value, size_t sz) {
+    return vector<T>(sz, init_value);
+}
+
+template <class T, class... Args>
+inline auto makeVector(const T& init_value, size_t sz, Args... args) {
+    return vector<decltype(makeVector<T>(init_value, args...))>(
+        sz, makeVector<T>(init_value, args...));
+}
+
+template <class Func>
+class FixPoint : Func {
+public:
+    explicit constexpr FixPoint(Func&& f) noexcept : Func(forward<Func>(f)) {}
+
+    template <class... Args>
+    constexpr decltype(auto) operator()(Args&&... args) const {
+        return Func::operator()(*this, std::forward<Args>(args)...);
+    }
+};
+
+template <class Func>
+static inline constexpr decltype(auto) makeFixPoint(Func&& f) noexcept {
+    return FixPoint<Func> {forward<Func>(f)};
+}
+
+template <class Container>
+struct reverse_t {
+    Container& c;
+    reverse_t(Container& c) : c(c) {}
+    auto begin() {
+        return c.rbegin();
+    }
+    auto end() {
+        return c.rend();
+    }
+};
+
+template <class Container>
+auto reversed(Container& c) {
+    return reverse_t<Container>(c);
+}
+
+template <class T>
+inline bool chmax(T& a, const T& b) noexcept {
+    return b > a && (a = b, true);
+}
+
+template <class T>
+inline bool chmin(T& a, const T& b) noexcept {
+    return b < a && (a = b, true);
+}
+
+template <class T>
+inline T diff(const T& a, const T& b) noexcept {
+    return a < b ? b - a : a - b;
+}
+
+void operator|=(vector<bool>::reference lhs, const bool rhs) {
+    lhs = lhs | rhs;
+}
+
+void operator&=(vector<bool>::reference lhs, const bool rhs) {
+    lhs = lhs & rhs;
+}
+
+void operator^=(vector<bool>::reference lhs, const bool rhs) {
+    lhs = lhs ^ rhs;
+}
+
+void ioinit() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout << fixed << setprecision(10);
+    cerr << fixed << setprecision(10);
+    clog << fixed << setprecision(10);
+}
+#pragma endregion
+// }}} End Header
+
+int main() {
+    ioinit();
+    // もけと和解せよ \\🐈//
+
+    size_t H, W;
+    while (input(H, W), H) {
+        vector<string> vs(H);
+        input(vs);
+        int numr = 0, denr = 0;
+        rep(i, 0, H) {
+            int sumrow = 0;
+            rep(j, 0, W) sumrow += vs[i][j] - '0';
+            numr += (i + 1) * sumrow;
+            denr += sumrow;
+        }
+        int numc = 0, denc = 0;
+        rep(j, 0, W) {
+            int sumcol = 0;
+            rep(i, 0, H) sumcol += vs[i][j] - '0';
+            numc += (j + 1) * sumcol;
+            denc += sumcol;
+        }
+        output(ld(numr) / ld(denr), ld(numc) / ld(denc));
+    }
+    return 0;
+}
+

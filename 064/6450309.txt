@@ -1,0 +1,461 @@
+#include <bits/stdc++.h>
+#include <random>
+/*
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
+namespace mp = boost::multiprecision;
+using bint = mp::cpp_int;
+*/
+#define rep(i,n) for (int i = 0; i < int(n); ++i)
+#define repp(i,n,m) for (int i = m; i < int(n); ++i)
+#define repb(i,n) for (int i = int(n)-1; i >= 0; --i)
+#define fi first
+#define se second
+#define endl "\n"
+using namespace std;
+using ll = long long;
+using ld = long double;
+using P = pair<int, int>;
+using PL = pair<long long, long long>;
+using Pxy = pair<long double, long double>;
+using pil = pair<int,ll>;
+using pli = pair<ll,int>;
+using ppi = pair<P,int>;
+using pip = pair<int,P>;
+const int INF = 1001001007;
+const long long mod1 = 1000000007LL;
+const long long mod2 = 998244353LL;
+const ll inf = 2e18;
+const ld pi = 3.14159265358979323;
+const ld eps = 1e-7;
+const char _ = ' ';
+template<class T>istream &operator>>(istream &is,vector<T> &v){for(auto &e:v)is>>e;return is;}
+template<class T>ostream &operator<<(ostream &os,const vector<T> &v){if(v.size()!=0){rep(i,v.size())os<<v[i]<<(i+1==v.size()?"":" ");}return os;}
+template<class T>istream &operator>>(istream &is,vector<vector<T>> &v){for(auto &e:v)is>>e;return is;}
+template<class T>ostream &operator<<(ostream &os,const vector<vector<T>> &v){if(v.size()!=0){for(auto &e:v)os<<e;}return os;}
+template<typename T>bool range(T a,T b,T x){return (a<=x&&x<b);}
+template<typename T>bool rrange(T a,T b,T c,T d,T x,T y){return (range(a,c,x)&&range(b,d,y));}
+template<typename T>void rev(vector<T> &v){reverse(v.begin(),v.end());}
+void revs(string &s) {reverse(s.begin(),s.end());}
+template<typename T>void sor(vector<T> &v, int f=0){sort(v.begin(),v.end());if(f!=0) rev(v);}
+template<typename T>bool chmin(T &a,const T &b){if(a>b){a=b;return true;}return false;}
+template<typename T>bool chmax(T &a,const T &b){if(a<b){a=b;return true;}return false;}
+template<typename T>void eru(vector<T> &v){sor(v);v.erase(unique(v.begin(),v.end()),v.end());}
+template<typename T>T cel(T a,T b){if(a%b==0)return a/b;return a/b +1;}
+void o(){cout<<"!?"<<endl;}
+template<typename T>void o(T a){cout<<a<<endl;}
+template<typename T,typename U>void o2(T a,U b){cout<<a<<_<<b<<endl;}
+template<typename T,typename U>void o2(pair<T,U> a){o2(a.first,a.second);}
+template<typename T,typename U,typename V>void o3(T a,U b,V c){cout<<a<<_<<b<<_<<c<<endl;}
+void yes(){cout << "Yes" << endl;}
+void no (){cout << "No" << endl;}
+void yn (bool t){if(t)yes();else no();}
+void YN (bool t){if(t)o("YES");else o("NO");}
+template<typename T>void dame(bool t, T s){if(!t){cout << s << endl;exit(0);}}
+void fast_io(){cin.tie(0); ios::sync_with_stdio(0); cout<<fixed<<setprecision(20);}
+vector<int> dx = {0,1,0,-1};
+vector<int> dy = {1,0,-1,0};
+const string ALP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const string alp = "abcdefghijklmnopqrstuvwxyz";
+const string num = "0123456789";
+
+ll gcd(ll a,ll b){return b?gcd(b,a%b):a;}
+ll mpow(ll x,ll n,ll m){if(n==0)return 1LL;x%=m;ll a=mpow(x,n/2,m);a=a*a%m;return (n&1)?a*x%m:a;}
+
+/*
+AClibrary 未使用
+*/
+
+
+struct edge{
+    int from, to, idx;
+    long long cost;
+    edge(int _from = -1, int _to = -1, long long _cost = 1LL, int _idx = -1) : from(_from), to(_to), cost(_cost), idx(_idx) {}
+};
+
+struct vertex{
+    vector<edge> adj;
+};
+
+struct Graph{
+    int n;
+    vector<vertex> vs;
+    void add_edge(int from, int to, long long cost = 1LL){
+        assert(0 <= from && from < n);
+        assert(0 <= to && to < n);
+        vs[from].adj.emplace_back(edge(from,to,cost));
+    }
+    void add_dual_edge(int from, int to, long long cost = 1LL){
+        assert(0 <= from && from < n);
+        assert(0 <= to && to < n);
+        vs[from].adj.emplace_back(edge(from,to,cost));
+        vs[to].adj.emplace_back(edge(to,from,cost));
+    }
+    Graph(int _n) : n(_n) , vs(n) {}
+    vector<long long> dijkstra(int s){
+        using pli = pair<long long, int>;
+        priority_queue<pli, vector<pli>, greater<pli>> pque;
+        vector<long long> dist(n,inf);
+        dist[s] = 0LL;
+        pque.push(pli(0,s));
+        while (!pque.empty()){
+            pli p = pque.top(); pque.pop();
+            if (dist[p.second] < p.first) continue;
+            for (edge x : vs[p.second].adj){
+                if (dist[x.to] > p.first + x.cost){
+                    dist[x.to] = p.first + x.cost;
+                    pque.push(pli(dist[x.to],x.to));
+                }
+            }
+        }
+        return dist;
+    }
+    vector<long long> bfs01(int s){
+        deque<int> que;
+        vector<long long> dist(n,inf);
+        dist[s] = 0LL;
+        que.push_front(s);
+        while (!que.empty()){
+            int p = que.front(); que.pop_front();
+            for (edge x : vs[p].adj){
+                if (dist[x.to] > dist[p] + x.cost){
+                    dist[x.to] = dist[p] + x.cost;
+                    if (x.cost == 0LL) que.push_front(x.to);
+                    else que.push_back(x.to);
+                }
+            }
+        }
+        return dist;
+    }
+    vector<int> dfs(int s){
+        vector<int> ans;
+        vector<int> vis(n,0);
+        _dfs(s,ans,vis);
+        return ans;
+    }
+    private:
+    void _dfs(int s, vector<int> &ans, vector<int> &vis){
+        vis[s]++;
+        for (edge x : vs[s].adj){
+            if (vis[x.to] == 0){
+                _dfs(x.to,ans,vis);
+            }
+        }
+        ans.emplace_back(s);
+    }
+};
+
+struct Tree{
+    Tree(int _n, int _root = 0) : n(_n), root(_root) {
+        assert(0 <= root && root < n);
+        initialize();
+    }
+    void add_edge(int from, int to, long long cost = 1LL, int _idx = -1){
+        assert(0 <= from && from < n);
+        assert(0 <= to && to < n);
+        if (_idx == -1) _idx = m, m++;
+        assert(0 <= _idx && _idx < n-1);
+        assert(edge_idx_cnt[_idx] == 0);
+        edge_idx_cnt[_idx]++;
+        vs[from].adj.emplace_back(edge(from,to,cost,_idx));
+        es[_idx] = edge(from,to,cost,_idx);
+    }
+    void add_dual_edge(int from, int to, long long cost = 1LL, int _idx = -1){
+        assert(0 <= from && from < n);
+        assert(0 <= to && to < n);
+        if (_idx == -1) _idx = m, m++;
+        assert(0 <= _idx && _idx < n-1);
+        assert(edge_idx_cnt[_idx] == 0);
+        edge_idx_cnt[_idx]++;
+        vs[from].adj.emplace_back(edge(from,to,cost,_idx));
+        vs[to].adj.emplace_back(edge(to,from,cost,_idx));
+        es[_idx] = edge(from,to,cost,_idx);
+    }
+    int size(){return n;}
+    int parent(int v){
+        assert(0 <= v && v < n);
+        if (is_done_par_rdist_init == false) par_rdist_init();
+        return par[v];
+    }
+    int depth(int v){
+        assert(0 <= v && v < n);
+        if (dep[v] != -1) return dep[v];
+        if (v == root) return dep[v] = 0;
+        return dep[v] = depth(parent(v)) + 1;
+    }
+    int subtree_size(int v){
+        assert(0 <= v && v < n);
+        if (sub[v] != 0) return sub[v];
+        sub[v] = 1;
+        for (edge x : vs[v].adj){
+            if (x.to != parent(v)) sub[v] += subtree_size(x.to);
+        }
+        return sub[v];
+    }
+    int lca(int u, int v){
+        assert(0 <= u && u < n);
+        assert(0 <= v && v < n);
+        if (is_done_lca_init == false) lca_init();
+        if (depth(u) > depth(v)) swap(u,v);
+        for (int i = 0; i < 30; i++) if ((depth(v) - depth(u)) >> i & 1) v = par2[i][v];
+        if (u == v) return u;
+        for (int k = 29; k >= 0; k--){
+            if (par2[k][u] != par2[k][v]) {
+                u = par2[k][u];
+                v = par2[k][v];
+            }
+        }
+        return par2[0][u];
+    }
+    long long dist(int u, int v){
+        assert(0 <= u && u < n);
+        assert(0 <= v && v < n);
+        if (is_done_par_rdist_init == false) par_rdist_init();
+        return rdist[u] + rdist[v] - rdist[lca(u,v)] * 2LL;
+    }
+    vector<int> path(int f, int t){
+        assert(0 <= f && f < n);
+        assert(0 <= t && t < n);
+        int v = lca(f,t);
+        vector<int> fp = {f};
+        vector<int> tp = {t};
+        int fn = f, tn = t;
+        while (fn != v){
+            fn = parent(fn);
+            fp.emplace_back(fn);
+        }
+        while (tn != v){
+            tn = parent(tn);
+            tp.emplace_back(tn);
+        }
+        for (int i = int(tp.size()) - 2; i >= 0; i--){
+            fp.emplace_back(tp[i]);
+        }
+        return fp;
+    }
+    vector<long long> alldists(int v){
+        assert(0 <= v && v < n);
+        if (v == 0) return rdist;
+        vector<long long> dists(n,1e18);
+        vector<int> vis(n,0);
+        dists[v] = 0LL;
+        queue<int> que;
+        que.push(v);
+        while (!que.empty()){
+            int p = que.front(); que.pop();
+            vis[p]++;
+            for (edge x : vs[p].adj){
+                if (vis[x.to] == 0){
+                    dists[x.to] = dists[p] + x.cost;
+                    que.push(x.to);
+                }
+            }
+        }
+        return dists;
+    }
+    vector<int> dfs(int v){
+        assert(0 <= v && v < n);
+        vector<int> ans;
+        vector<int> vis(n,0);
+        _dfs(v,vis,ans);
+        return ans;
+    }
+    edge to_parent(int v){
+        assert(0 <= v && v < n && v != root);
+        if (is_done_par_rdist_init == false) par_rdist_init();
+        return es[epar[v]];
+    }
+    vector<vertex> vs;
+    vector<vector<int>> par2;
+    private:
+    int n;
+    int m;
+    int root;
+    int idx_vhfs;
+    bool is_done_lca_init;
+    bool is_done_par_rdist_init;
+    vector<edge> es;
+    vector<int> edge_idx_cnt;
+    vector<int> par;
+    vector<int> epar;
+    vector<int> dep;
+    vector<int> sub;
+    vector<int> top;
+    vector<long long> rdist;
+    void initialize(){
+        m = 0;
+        is_done_lca_init = false;
+        is_done_par_rdist_init = false;
+        vs.resize(n);
+        es.resize(n-1);
+        edge_idx_cnt.resize(n-1,0);
+        dep.resize(n,-1);
+        sub.resize(n,0);
+    }
+    void lca_init(){
+        par2.resize(30,vector<int>(n,-1));
+        for (int i = 0; i < n; i++) par2[0][i] = parent(i);
+        for (int i = 0; i < 29 ; i++) {
+            for (int j = 0; j < n; j++) {
+                if (par2[i][j] < 0) par2[i+1][j] = -1;
+                else par2[i+1][j] = par2[i][par2[i][j]];
+            }
+        }
+        is_done_lca_init = true;
+    }
+    void par_rdist_init(){
+        par.resize(n,-2);
+        epar.resize(n);
+        rdist.resize(n,-1);
+        par[root] = -1;
+        rdist[root] = 0;
+        queue<int> que;
+        que.push(root);
+        while (!que.empty()){
+            int p = que.front(); que.pop();
+            for (edge x : vs[p].adj){
+                if (par[x.to] == -2){
+                    par[x.to] = p;
+                    epar[x.to] = x.idx;
+                    rdist[x.to] = rdist[p] + x.cost;
+                    que.push(x.to);
+                }
+            }
+        }
+        is_done_par_rdist_init = true;
+    }
+    void _dfs(int v, vector<int> &vis, vector<int> &ans){
+        vis[v]++;
+        for (edge x : vs[v].adj){
+            if (vis[x.to] == 0) _dfs(x.to,vis,ans);
+        }
+        ans.emplace_back(v);
+    }
+};
+
+
+const ll mod = mod2;
+struct mint {
+  ll x; // typedef long long ll;
+  mint(ll x=0):x((x%mod+mod)%mod){}
+  mint operator-() const { return mint(-x);}
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) {
+    (x *= a.x) %= mod;
+    return *this;
+  }
+  mint operator+(const mint a) const {
+    mint res(*this);
+    return res+=a;
+  }
+  mint operator-(const mint a) const {
+    mint res(*this);
+    return res-=a;
+  }
+  mint operator*(const mint a) const {
+    mint res(*this);
+    return res*=a;
+  }
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const {
+    return pow(mod-2);
+  }
+  mint& operator/=(const mint a) {
+    return (*this) *= a.inv();
+  }
+  mint operator/(const mint a) const {
+    mint res(*this);
+    return res/=a;
+  }
+};
+
+vector<mint> dp(100100);
+vector<int> vis(100100,0);
+Tree g(100100);
+vector<mint> ni(100100,1);
+
+mint saiki(int v){
+    dp[v] += 1;
+    vis[v]++;
+    for (edge x : g.vs[v].adj){
+        if (vis[x.to] == 0) dp[v] += saiki(x.to) * 2;
+    }
+    return dp[v];
+}
+
+void solve(){
+    int n; cin >> n;
+    dp.resize(n);
+    vis.resize(n,0);
+    rep(i,n-1){
+        int u, v; cin >> u >> v;
+        g.add_dual_edge(u-1,v-1);
+    }
+    saiki(0);
+    rep(i,100099) ni[i+1] = ni[i] * 2;
+    vector<mint> oya(n,1);
+    vector<int> v(n,0);
+    queue<int> que;
+    que.push(0);
+    while(!que.empty()){
+        int p = que.front(); que.pop();
+        v[p]++;
+        for (edge x : g.vs[p].adj){
+            if (v[x.to] == 0){
+                oya[x.to] = (oya[p] - 1) * 2 + dp[p] * 2 - dp[x.to] * 4 + 1;
+                que.push(x.to);
+            }
+        }
+    }
+    //rep(i,n) o(oya[i].x);
+    int q; cin >> q;
+    rep(i,q){
+        int x, y; cin >> x >> y;
+        x--, y--;
+        int lca = g.lca(x,y);
+        if (x != lca && y != lca){
+            mint ans = dp[x] * dp[y] * ni[g.dist(x,y)];
+            cout << ans.x << endl;
+            continue;
+        }
+        if (y == lca) swap(x,y);
+        int z = y;
+        for (int r = 18; r >= 0; r--){
+            int p = g.par2[r][z];
+            if (p == -1) continue;
+            if (g.depth(x) + 1 <= g.depth(p)) z = p;
+        }
+        //o3(x,y,z);
+        if (x == 0){
+            mint ans = dp[y] * (dp[x] - dp[z] * 2) * ni[g.dist(x,y)];
+            cout << ans.x << endl;
+        }
+        else {
+            mint ans = dp[y] * (dp[x] - dp[z] * 2 + oya[x] - 1) * ni[g.dist(x,y)];
+            cout << ans.x << endl;
+        }
+    }
+}
+
+int main(){
+    fast_io();
+    srand((unsigned)time(NULL));
+    int t = 1;  //cin >> t;
+    while (t--) solve();
+}
+

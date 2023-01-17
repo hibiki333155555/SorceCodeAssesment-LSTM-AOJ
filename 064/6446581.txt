@@ -1,0 +1,2 @@
+w, h, x, y, r = gets.split.map(&:to_i)
+puts x.between?(0+r, w-r) && y.between?(0+r, h-r) ? "Yes" : "No"

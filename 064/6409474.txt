@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int a;
+		a = sc.nextInt();
+		int[] b = new int[a];
+		for (int i = 0; i < a; i++) {
+			b [i] = sc.nextInt();
+		}
+		while (true) {
+			a--;
+			if(a == 0) {
+				System.out.print(b[a]);
+				break;
+			}
+			System.out.print(b[a] + " ");
+		}
+		System.out.println("");
+		sc.close();
+
+	}
+
+}
+

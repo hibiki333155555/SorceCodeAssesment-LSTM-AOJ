@@ -1,0 +1,137 @@
+#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <vector>
+#include <numeric>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <random>
+#include <array>
+#include <climits>
+#include <map>
+#include <cassert>
+#include <stack>
+#include <iomanip>
+#include <cfloat>
+#include <bitset>
+#include <fstream>
+#include <chrono>
+
+constexpr int MOD = 1'000'000'007;
+
+using Puppets = std::vector<std::pair<int, int>>;
+std::vector<std::vector<std::vector<long long int>>> cache;
+long long int solve_rec(const int size, const int head, const int toe, const Puppets& puppets) {
+	if (size == 0) return (head == 0 && toe == 0) ? 1 : 0;
+	if (head <= 0 || toe < 0 || size < head) return 0;
+	if (cache[size][head][toe] >= 0) return cache[size][head][toe];
+	const auto [min, max] = puppets[size - 1];
+	long long int result{ 0 };
+	if (min <= 0 && 0 <= max) {
+		const auto add_top = solve_rec(size - 1, head - 1, toe, puppets);
+		const auto add_child = solve_rec(size - 1, head, toe + 1, puppets) * (toe + 1);
+		result += add_top + add_child;
+	}
+	if (min <= 1 && 1 <= max) {
+		const auto add_top = solve_rec(size - 1, head - 1, toe - 1, puppets) * 2;
+		const auto add_child = solve_rec(size - 1, head, toe, puppets) * toe * 2;
+		result += add_top + add_child;
+	}
+	if (min <= 2 && 2 <= max) {
+		const auto add_top_rr = solve_rec(size - 1, head - 1, toe - 2, puppets);
+		const auto add_top_lr = solve_rec(size - 1, head, toe - 1, puppets) * head * 2;
+		const auto add_child_rr = solve_rec(size - 1, head, toe - 1, puppets) * (toe - 1);
+		const auto add_child_lr = solve_rec(size - 1, head + 1, toe, puppets) * (head + 1) * 2 * toe;
+		result += add_top_rr + add_top_lr + add_child_rr + add_child_lr;
+	}
+	result %= MOD;
+	return cache[size][head][toe] = result;
+}
+long long int check_rec(const int size, const int head, const int toe, const int edge_count, const Puppets& puppets) {
+	if (size == 0) return (head == 0 && toe == 0 && edge_count == 0) ? 1 : 0;
+	if (head <= 0 || toe < 0 || size < head || edge_count < 0) return 0;
+	const auto [min, max] = puppets[size - 1];
+	long long int result{ 0 };
+	if (min <= 0 && 0 <= max) {
+		const auto add_top = check_rec(size - 1, head - 1, toe, edge_count, puppets);
+		const auto add_child = check_rec(size - 1, head, toe + 1, edge_count - 1, puppets) * (toe + 1);
+		result += add_top + add_child;
+	}
+	if (min <= 1 && 1 <= max) {
+		const auto add_top = check_rec(size - 1, head - 1, toe - 1, edge_count, puppets) * 2;
+		const auto add_child = check_rec(size - 1, head, toe, edge_count - 1, puppets) * toe * 2;
+		result += add_top + add_child;
+	}
+	if (min <= 2 && 2 <= max) {
+		const auto add_top_rr = check_rec(size - 1, head - 1, toe - 2, edge_count, puppets);
+		const auto add_top_lr = check_rec(size - 1, head, toe - 1, edge_count - 1, puppets) * head * 2;
+		const auto add_child_rr = check_rec(size - 1, head, toe - 1, edge_count - 1, puppets) * (toe - 1);
+		const auto add_child_lr = check_rec(size - 1, head + 1, toe, edge_count - 2, puppets) * (head + 1) * 2 * toe;
+		result += add_top_rr + add_top_lr + add_child_rr + add_child_lr;
+	}
+	result %= MOD;
+	return result;
+}
+long long int solve(const Puppets& puppets) {
+	const int n = puppets.size(); 
+	std::vector<std::vector<std::vector<int>>> version(n, std::vector<std::vector<int>>(n + 1, std::vector<int>(n + 1, -1)));
+	std::vector<std::vector<std::vector<long long int>>> memo(n, std::vector<std::vector<long long int>>(n + 1, std::vector<long long int>(n + 1, 0)));
+	auto temp = memo;
+	memo[0][0][0] = 1;
+	std::vector<std::tuple<int, int, int>> prev, next; prev.emplace_back(0, 0, 0);
+	int p = 0;
+	auto update = [n, &p, &version, &temp, &next](const int edge_count, const int head, const int toe, long long int count) mutable {
+		if (edge_count < 0 || n <= edge_count) return;
+		if (head <= 0 || toe < 0 || n <= toe) return;
+		count %= MOD;
+		if (count == 0LL) return;
+		if (version[edge_count][head][toe] != p) {
+			version[edge_count][head][toe] = p;
+			next.emplace_back(edge_count, head, toe);
+			temp[edge_count][head][toe] = count;
+		}
+		else {
+			temp[edge_count][head][toe] += count;
+		}
+	};
+	for (; p < n; ++p) {
+		const auto [min, max] = puppets[p];
+		next.clear();
+		for (const auto [edge_count, head, toe] : prev) {
+			const auto count = memo[edge_count][head][toe];
+			if (min <= 0 && 0 <= max) {
+				update(edge_count, head + 1, toe, count);
+				update(edge_count + 1, head, toe - 1, count * toe);
+			}
+			if (min <= 1 && 1 <= max) {
+				update(edge_count, head + 1, toe + 1, count * 2);
+				update(edge_count + 1, head, toe, count * 2 * toe);
+			}
+			if (min <= 2 && 2 <= max) {
+				update(edge_count, head + 1, toe + 2, count);
+				update(edge_count + 1, head, toe + 1, count * 2 * head);
+				update(edge_count + 1, head, toe + 1, count * toe);
+				update(edge_count + 2, head - 1, toe, count * 2 * head * toe);
+			}
+		}
+		for (const auto [edge_count, head, toe] : next) {
+			memo[edge_count][head][toe] = temp[edge_count][head][toe] % MOD;
+		}
+		std::swap(next, prev);
+	}
+	//std::cerr << prev.size() << '\n';
+	if (version[n - 1][1][0] != n - 1) return 0;
+	const auto result = memo[n - 1][1][0];
+	return result;
+}
+int main() {
+	int n; std::cin >> n;
+	Puppets puppets(n);
+	for (auto& [min, max] : puppets) {
+		std::cin >> min >> max;
+	}
+	const auto check = check_rec(n, 1, 0, n - 1, puppets);
+	std::cout << check << '\n';
+}

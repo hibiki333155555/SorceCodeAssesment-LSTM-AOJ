@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int e[12];
+    set<int> s;
+    for(int i=0;i<12;i++){
+        cin>>e[i];
+        s.insert(e[i]);
+    }
+    sort(e,e+12);
+    if(s.size()<=3){
+        if(e[0]==e[1]&&e[1]==e[2]&&e[2]==e[3]){
+            if(e[4]==e[5]&&e[5]==e[6]&&e[6]==e[7]){
+                if(e[8]==e[9]&&e[9]==e[10]&&e[10]==e[11]){
+                    cout<<"yes"<<endl;
+                    return 0;
+                }
+            }
+        }
+    }
+    cout<<"no"<<endl;
+    return(0);
+}

@@ -1,0 +1,11 @@
+#include <stdio.h>
+
+int main(void) { 
+    int x;
+    int y;
+    scanf("%d\n",&x);
+    y=x*x*x;
+    if(x>=1 && x<=100);
+    printf("%d\n",y);
+	return 0;
+}

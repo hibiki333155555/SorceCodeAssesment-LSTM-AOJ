@@ -1,0 +1,18 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main(){
+    int n,m,a,b,maxn;
+    cin >> n >> m;
+    
+    for(int i=0;i<n;i++){
+        cin >> a >> b;
+        maxn=m;
+        m+=a-b;
+        if(m<0){cout<<"0"<<endl; goto E;}
+        
+        maxn=max(maxn,m);
+    }
+E:;    cout<<maxn<<endl;
+}

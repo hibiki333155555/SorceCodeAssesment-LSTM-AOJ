@@ -1,0 +1,19 @@
+from collections import deque
+
+N,Q = map(int, input().split())
+A = list(map(int, input().split()))
+X = list(map(int, input().split()))
+
+for q in X:
+    res = 0
+    S = 0
+    deq = deque()
+    for c in A:
+        deq.append(c)
+        S += c
+        while S > q:
+            l = deq.popleft()
+            S -= l
+        res += len(deq)
+    print(res)
+

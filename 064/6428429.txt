@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+//#include<atcoder/all>
+using namespace std;
+//using namespace atcoder;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+
+ll mod = 1e9 + 7;
+
+
+int main() {
+	ll N;
+	cin >> N;
+	vector<vector<string>> S(N, vector<string>(3));
+	rep(i, N)rep(j, 3)cin >> S[i][j];
+	string T;
+	cin >> T;
+
+	rep(k, T.size()) {
+		rep(t, T.size()) {
+			if (k == 0 || t == 0)continue;
+			if ((ll(T.size()) - k - t) <= 0)continue;
+			//cout << T.size() - k - t << endl;
+			string T1 = T.substr(0, k);
+			string T2 = T.substr(k, t);
+			string T3 = T.substr(k + t, T.size() - k - t);
+
+			//cout<<T1<<" "<<T2<<" "<<T3<<endl;
+			rep(i,N)rep(iN,3)rep(j,N)rep(jN,3)rep(p,N)rep(pN,3){
+				if(make_pair(i,iN)==make_pair(j,jN)||make_pair(j,jN)==make_pair(p,pN)||make_pair(i,iN)==make_pair(p,pN))continue;
+				if((S[i][iN]==T1)&&S[j][jN]==T2&&S[p][pN]==T3){
+					cout<<"Yes"<<endl;
+					return 0;
+				}
+			}
+		}
+	}
+	cout<<"No"<<endl;
+
+}
+

@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll     long long
+#define ull    unsigned long long
+#define YES    cout << "YES\n"
+#define NO     cout << "NO\n"
+#define nn     cout<<endl;
+#define LL_INF (1LL << 62)
+#define INF    (1 << 30)
+#define mod    1000000007
+#define N7     10000007
+#define N5     100005
+#define hakuna ios_base::sync_with_stdio(false);
+#define matata cin.tie(NULL);
+
+int main(){
+    hakuna matata
+    ll t=1; cin>>t;
+    map<string,int> mp;
+    while(t--){
+        
+        int n; cin>>n;
+        if(n<3){
+            string s;
+            cin>>s;
+            int x;
+            if(n==0){
+                cin>>x;
+                mp.insert({s,x});
+            }
+            if(n==1){
+                cout<<mp[s]<<endl;
+            }
+            if(n==2){
+                
+                mp.erase(s);
+            }
+        }
+        else{
+            string L,R; cin>>L>>R;
+            auto it1 = mp.lower_bound(L);
+            auto it2 = mp.upper_bound(R);
+            bool f = 0;
+            int sl = 0;
+            for(auto it=it1; it!=it2; it++){
+                sl++;            
+            }
+            for(auto it=it1; it!=it2; it++){
+                cout<<it->first<<" "<<it->second;  
+                f = 1;  
+                if(--sl) cout<<" ";           
+            }
+            if(f) nn;
+        }
+    }
+    return 0;
+}

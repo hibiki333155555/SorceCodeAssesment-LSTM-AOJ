@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int A,B,h;
+    cin >> A >> B;
+    h = A+B
+    while(h <= 12) cout << h;
+    else cout << h%12 ;
+    return = 0
+}
+

@@ -1,0 +1,14 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+
+
+    int W;
+    cin >> W;
+
+    int ans = W * 32;
+    cout << ans << endl;
+
+    return 0;
+}

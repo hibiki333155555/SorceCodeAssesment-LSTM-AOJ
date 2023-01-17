@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+
+int vx[4] = {1, 0, -1, 0};
+int vy[4] = {0, 1, 0, -1};
+
+int vx2[4] = {2, 0, -2, 0};
+int vy2[4] = {0, 2, 0, -2};
+
+bool is_inside(int x, int y, int w, int h) {
+    return x >= 0 && x < w && y >= 0 && y < h;
+}
+
+int solve(int w, int h) {
+    std::vector<std::vector<int>> maze(h*2, std::vector<int>(w*2, 0));
+
+    for (int i = 0; i < h*2-1; i++) {
+        if (i % 2 == 0) {
+            for (int j = 0; j < w-1; j++) {
+                int x; std::cin >> x;
+                maze[i][1+2*j] = x;
+            }
+        } else {
+            for (int j = 0; j < w; j++) {
+                int x; std::cin >> x;
+                maze[i][2*j] = x;
+            }
+        }
+    }
+
+    // bfs
+    std::vector<std::vector<int>> dist(h*2, std::vector<int>(w*2, 0));
+    std::queue<std::pair<int, int>> Q;
+    dist[0][0] = 1;
+    Q.push(std::make_pair(0, 0));
+
+    while (!Q.empty()) {
+        auto [x, y] = Q.front(); Q.pop();
+        for (int i = 0; i < 4; i++) {
+            int nx2 = x + vx2[i], nx = x + vx[i];
+            int ny2 = y + vy2[i], ny = y + vy[i];
+            if (!is_inside(nx2, ny2, 2*w-1, 2*h-1)) continue;
+            if (dist[ny2][nx2] != 0) continue;
+            if (maze[ny][nx] == 1) continue;
+            dist[ny2][nx2] = dist[y][x] + 1;
+            Q.push(std::make_pair(nx2, ny2));
+        }
+    }
+
+    return dist[2*h-2][2*w-2];
+}
+
+int main() {
+    while (1) {
+        int w, h; std::cin >> w >> h;
+        if (w == 0 && h == 0) break;
+
+        int ret = solve(w, h);
+        printf("%d\n", ret);
+    }
+}

@@ -1,0 +1,61 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 998244353
+
+def main():
+    def comb(a,b):
+        return fact[a]*inv[a-b]*inv[b]%mod
+
+    N = 3*10**5
+    fact = [1]*(N+1)
+    for i in range(N):
+        fact[i+1] = fact[i]*(i+1)%mod
+
+    inv = [None]*(N+1)
+    inv[N] = pow(fact[N],mod-2,mod)
+    for i in reversed(range(N)):
+        inv[i] = inv[i+1]*(i+1)%mod
+
+    n = list(map(int,input()))
+    k = I()
+    if k == 0:
+        print(0)
+        return
+    bit = [pow(2,i,mod) for i in range(len(n)+1)]
+    d = len(n)
+    res = 0
+    ans = 0
+    for i,ni in enumerate(n):
+        d -= 1
+        if ni:
+            if k <= d:
+                ans = (ans+(res*comb(d,k))%mod+(bit[d]-1)*comb(d-1,k-1)%mod)%mod
+            res += bit[~i-1]
+            if res >= mod:
+                res -= mod
+            k -= 1
+            if not k:
+                ans += res
+                if ans >= mod:
+                    ans -= mod
+                break
+    print(ans)
+    return
+
+
+if __name__ == "__main__":
+    main()
+

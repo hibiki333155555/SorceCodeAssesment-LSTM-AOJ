@@ -1,0 +1,8 @@
+import math
+n = int(input())
+sl = map(int, input().split(" "))
+a = 0
+m = sum(sl)/n
+for i in range(n):
+    a += (sl[i] - m)**2/n
+print(math.sqrt(a))

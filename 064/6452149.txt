@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i=0;i<n;i++)
+using namespace std;
+#define all(a) a.begin(),a.end()
+typedef long long ll;
+typedef pair<ll,int> P;
+typedef vector<ll> vi;
+constexpr ll inf=1ll<<61;
+struct RMQ{
+	int n;
+	vector<ll>node,lazy;
+	RMQ(vector<ll>v){
+		int z=v.size();n=1;
+		while(n<z)n*=2;
+		node.resize(2*n);
+		lazy.resize(2*n,0);
+		rep(i,z)node[i+n-1]=v[i];
+		for(int i=n-2;i>=0;i--){
+			node[i]=min(node[2*i+1],node[2*i+2]);
+		}
+	}
+
+	void eval(int k,int l,int r){
+		if(lazy[k]){
+			node[k]+=lazy[k];
+			if(r-l>1){
+				lazy[2*k+1]+=lazy[k];
+				lazy[2*k+2]+=lazy[k];
+			}
+			lazy[k]=0;
+		}
+	}
+
+	void upd(int a,int b,ll x,int k,int l,int r){
+		eval(k,l,r);
+		if(b<=l||r<=a)return;
+		if(a<=l&&r<=b){
+			lazy[k]+=x;
+			eval(k,l,r);
+		}
+		else{
+			upd(a,b,x,2*k+1,l,(l+r)/2);
+			upd(a,b,x,k*2+2,(l+r)/2,r);
+			node[k]=min(node[2*k+1],node[2*k+2]);
+		}
+	}
+	ll calc(int a,int b,int k,int l,int r){
+		eval(k,l,r);
+		if(b<=l||r<=a)return inf;
+		if(a<=l&&r<=b)return node[k];
+		ll vl=calc(a,b,k*2+1,l,(l+r)/2);
+		ll vr=calc(a,b,k*2+2,(l+r)/2,r);
+		return min(vl,vr);
+	}
+	ll get(int a,int b){
+		return calc(a,b,0,0,n);
+	}
+	void add(int a,int b,ll x){
+		return upd(a,b,x,0,0,n);
+	}
+};
+int main(){
+	int n,q;cin>>n>>q;
+	vector<ll>v(n,0);
+	RMQ rmq(v);
+	rep(i,q){
+		int Q;cin>>Q;
+		if(Q){
+			int s,t;cin>>s>>t;
+			cout<<rmq.get(s,t+1)<<endl;
+		}
+		else{
+			int s,t,x;cin>>s>>t>>x;
+			rmq.add(s,t+1,x);
+		}
+	}
+}
+

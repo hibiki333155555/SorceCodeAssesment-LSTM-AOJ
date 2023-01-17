@@ -1,0 +1,1 @@
+let h="dlroW olleH";String.prototype.r=function(){let l=this.length,r="";for(let i=0;i<l;i++)r=this.charAt(i)+r;return r;};console.log(h.r());

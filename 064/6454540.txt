@@ -1,0 +1,178 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using _T=int; //long long
+
+constexpr _T eps=0;
+constexpr long double PI=3.1415926535897932384l;
+
+template<typename T> struct point
+{
+    T x,y;
+
+    bool operator==(const point &a) const {return (abs(x-a.x)<=eps && abs(y-a.y)<=eps);}
+    bool operator<(const point &a) const {if (abs(x-a.x)<=eps) return y<a.y-eps; return x<a.x-eps;}
+    bool operator>(const point &a) const {return !(*this<a || *this==a);}
+    point operator+(const point &a) const {return {x+a.x,y+a.y};}
+    point operator-(const point &a) const {return {x-a.x,y-a.y};}
+    point operator-() const {return {-x,-y};}
+    point operator*(const T k) const {return {k*x,k*y};}
+    point operator/(const T k) const {return {x/k,y/k};}
+    T operator*(const point &a) const {return x*a.x+y*a.y;}
+    T operator^(const point &a) const {return x*a.y-y*a.x;}
+    int toleft(const point &a) const {const auto t=(*this)^a; return (t>eps)-(t<-eps);}
+    T len2() const {return (*this)*(*this);}
+    T dis2(const point &a) const {return (a-(*this)).len2();}
+    double len() const {return sqrt(len2());}
+    double dis(const point &a) const {return sqrt(dis2(a));}
+    double ang(const point &a) const {return acos(max(-1.0,min(1.0,((*this)*a)/(len()*a.len()))));}
+    point rot(const double rad) const {return {x*cos(rad)-y*sin(rad),x*sin(rad)+y*cos(rad)};}
+    point rot(const double cosr,const double sinr) const {return {x*cosr-y*sinr,x*sinr+y*cosr};}
+};
+
+using Point=point<_T>;
+
+struct argcmp
+{
+    bool operator()(const Point &a,const Point &b) const
+    {
+        const auto quad=[](const Point &a)
+        {
+            if (a.y<-eps) return 1;
+            if (a.y>eps) return 4;
+            if (a.x<-eps) return 5;
+            if (a.x>eps) return 3;
+            return 2;
+        };
+        const int qa=quad(a),qb=quad(b);
+        if (qa!=qb) return qa<qb;
+        const auto t=a^b;
+        //if (abs(t)<=eps) return a*a<b*b-eps;
+        return t>eps;
+    }
+};
+
+template<typename T> struct line
+{
+    point<T> p,v;
+
+    bool operator==(const line &a) const {return v.toleft(a.v)==0 && v.toleft(p-a.p)==0;}
+    int toleft(const point<T> &a) const {return v.toleft(a-p);}
+    point<T> inter(const line &a) const {return p+v*((a.v^(p-a.p))/(v^a.v));}
+    double dis(const point<T> &a) const {return abs(v^(a-p))/v.len();}
+    point<T> proj(const point<T> &a) const {return p+v*((v*(a-p))/(v*v));}
+    bool operator<(const line &a) const
+    {
+        if (abs(v^a.v)<=eps && v*a.v>=-eps) return toleft(a.p)==-1;
+        return argcmp()(v,a.v);
+    }
+};
+
+using Line=line<_T>;
+
+template<typename T> struct segment
+{
+    point<T> a,b;
+
+    int is_on(const point<T> &p) const
+    {
+        if (p==a || p==b) return -1;
+        return (p-a).toleft(p-b)==0 && (p-a)*(p-b)<-eps;
+    }
+
+    int is_inter(const line<T> &l) const
+    {
+        if (l.toleft(a)==0 || l.toleft(b)==0) return -1;
+        return l.toleft(a)!=l.toleft(b);
+    }
+    
+    int is_inter(const segment<T> &s) const
+    {
+        if (is_on(s.a) || is_on(s.b) || s.is_on(a) || s.is_on(b)) return -1;
+        const line<T> l{a,b-a},ls{s.a,s.b-s.a};
+        return l.toleft(s.a)*l.toleft(s.b)==-1 && ls.toleft(a)*ls.toleft(b)==-1;
+    }
+
+    double dis(const point<T> &p) const
+    {
+        if ((p-a)*(b-a)<-eps || (p-b)*(a-b)<-eps) return min(p.dis(a),p.dis(b));
+        const line<T> l{a,b-a};
+        return l.dis(p);
+    }
+
+    double dis(const segment<T> &s) const
+    {
+        if (is_inter(s)) return 0;
+        return min({dis(s.a),dis(s.b),s.dis(a),s.dis(b)});
+    }
+};
+
+using Segment=segment<_T>;
+
+template<typename T> struct polygon
+{
+    vector<point<T>> p;
+
+    size_t nxt(const size_t i) const {return i==p.size()-1?0:i+1;}
+    size_t pre(const size_t i) const {return i==0?p.size()-1:i-1;}
+
+    pair<bool,int> winding(const point<T> &a) const
+    {
+        int cnt=0;
+        for (size_t i=0;i<p.size();i++)
+        {
+            point<T> u=p[i],v=p[nxt(i)];
+            if (abs((a-u)^(a-v))<=eps && (a-u)*(a-v)<=eps) return {true,0};
+            if (abs(u.y-v.y)<=eps) continue;
+            const Line uv={u,v-u};
+            if (u.y<v.y-eps && uv.toleft(a)<=0) continue;
+            if (u.y>v.y+eps && uv.toleft(a)>=0) continue;
+            if (u.y<a.y-eps && v.y>=a.y-eps) cnt++;
+            if (u.y>=a.y-eps && v.y<a.y-eps) cnt--;
+        }
+        return {false,cnt};
+    }
+
+    double circ() const
+    {
+        double sum=0;
+        for (size_t i=0;i<p.size();i++) sum+=p[i].dis(p[nxt(i)]);
+        return sum;
+    }
+
+    T area() const
+    {
+        T sum=0;
+        for (size_t i=0;i<p.size();i++) sum+=p[i]^p[nxt(i)];
+        return sum;
+    }
+
+	bool is_cov() const {
+		int dir = 0;
+		for (int i = 0; i <= p.size() - 1; ++i)
+		{
+			int tem = (p[nxt(i)] - p[i]) ^ (p[nxt(nxt(i))] - p[nxt(i)]);
+			if (!dir)
+				dir = tem;
+			if (dir * tem < 0)
+				return 0;
+		}
+		return 1;
+	}
+};
+
+using Polygon=polygon<_T>;
+
+int main() {
+	int n;
+	scanf("%d",&n);
+	Polygon p;
+	for(int i=0;i<n;i++) {
+		int x,y;
+		scanf("%d%d",&x,&y);
+		p.p.push_back({x,y});
+	}
+	if(p.is_cov()) printf("1\n");
+	else printf("0\n");
+	return 0;
+}

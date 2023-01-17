@@ -1,0 +1,11 @@
+#include <stdio.h>
+
+int main()
+{
+	int H[2], W[2];
+	scanf("%d %d", &(H[0]), &(W[0]));
+	scanf("%d %d", &(H[1]), &(W[1]));
+	printf("%lld\n", (long long)(H[0] + H[1] - 1) / H[1] * ((long long)(W[0] + W[1] - 1) / W[1]));
+	fflush(stdout);
+	return 0;
+}

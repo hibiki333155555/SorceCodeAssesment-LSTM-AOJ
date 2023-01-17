@@ -1,0 +1,8 @@
+const x=require("fs").readFileSync("/dev/stdin","utf-8").trim("\n").split("\n");
+(inputs =>{
+    let ans = 0;
+    for(let i=0,len=inputs.length-1;i<len;i++){
+        ans = inputs[i].split(" ").sort((a,b)=>{return a-b});
+        console.log(`${ans[0]} ${ans[1]}`);
+    }
+})(x);

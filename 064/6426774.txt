@@ -1,0 +1,14 @@
+
+while True:
+    
+    H,W = map(int,input().split())
+    flg = 1    
+    for i in range(H):
+        
+        for k in range(W):
+        
+        if flg %2 == 1:
+            print("#")
+        else :
+            print(".")
+        flg = flg +1

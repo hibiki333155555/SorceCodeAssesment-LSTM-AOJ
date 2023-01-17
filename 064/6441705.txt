@@ -1,0 +1,67 @@
+#include <iostream>
+#include <queue>
+#define N 100
+#define WHITE 0
+#define GRAY 1
+#define BLACK 2
+using namespace std;
+int n,M[N][N];
+int color[N];
+int d[N];
+
+void bfs_visit(int u){
+    queue<int> Q;
+    Q.push(u);
+    d[u]=0;
+    while(!Q.empty()){
+        u=Q.front();
+        color[u]=BLACK;
+        Q.pop();
+        for(int v=0;v<n;v++){
+            if(M[u][v]==1&&color[v]==WHITE){
+                color[v]=GRAY;
+                Q.push(v);
+                d[v]=d[u]+1;
+            }
+                
+        }
+        
+    }
+}
+
+void bfs_init(){
+    for(int i=0;i<n;i++){
+        color[i]=WHITE;
+        d[i]=-1;
+    }
+    
+    bfs_visit(0);
+    
+    for(int i=0;i<n;i++){
+        cout<<i+1<<" "<<d[i]<<endl;
+    }
+}
+
+
+int main(){
+    int u,k,v;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++)M[i][j]=0;
+    }
+    
+    for(int i=0;i<n;i++){
+        cin>>u>>k;
+        u--;
+        for(int j=0;j<k;j++){
+            cin>>v;
+            v--;
+            M[u][v]=1;
+        }
+    }
+    
+    bfs_init();
+    
+    return 0;
+
+}

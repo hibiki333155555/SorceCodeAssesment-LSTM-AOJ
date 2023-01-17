@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+//#include<atcoder/all>
+//using namespace atcoder;
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+
+
+
+int main() {
+    while(1){
+        ll N;
+        cin>>N;
+        if(N==0)return 0;
+        ll an=0;
+        ll t;
+        rep(i,N){cin>>t;an+=t;}
+        cout<<an<<endl;
+    }
+}

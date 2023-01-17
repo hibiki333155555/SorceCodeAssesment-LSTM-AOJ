@@ -1,0 +1,38 @@
+def resolve(a, q)
+  q.each do |m|
+    result = check(a, m)
+    if result
+      puts 'yes'
+    else
+      puts 'no'
+    end
+  end
+end
+
+def check(arr, m)
+  arr.size.times do |i|
+    sum = arr[i]
+    arr.size.times do |j|
+      next if i == j
+      if sum == m
+        return true
+      end
+
+      break if sum > m
+      sum += arr[j]
+    end
+  end
+
+  false
+end
+
+gets
+
+a = gets.split(' ').map(&:to_i)
+
+gets
+
+q = gets.split(' ').map(&:to_i)
+
+resolve(a, q)
+

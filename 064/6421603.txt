@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int l = sc.nextInt();
+        int A[][] = new int[n][m];
+        int B[][] = new int[m][l];
+        long C[][] = new long[n][l];
+        int row;
+        int col;
+        
+        // 行列A
+        for(row=0;row<n;row++) for(col=0;col<m;col++) A[row][col] = sc.nextInt();
+        // 行列B
+        for(row=0;row<m;row++) for(col=0;col<l;col++) B[row][col] = sc.nextInt();  
+        
+        // 計算(行列C)
+        for(row=0;row<n;row++) for(col=0;col<l;col++) C[row][col] = 0;
+        
+        for(row=0;row<n;row++){
+            for(col=0;col<l;col++){
+                for(int k=0;k<m;k++){
+                    C[row][col] += A[row][k]*B[k][col];
+                }
+                if(col==l-1) System.out.printf("%d\n",C[row][col]);
+                else System.out.printf("%d ",C[row][col]);
+            }
+        }
+        
+    }
+}
+
+

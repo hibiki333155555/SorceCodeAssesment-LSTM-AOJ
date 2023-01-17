@@ -1,0 +1,62 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<queue>
+#include<algorithm>
+
+#define rep(i,N) for(int i=0;i<(N);i++)
+#define rrep(i,N) for(int i=(N)-1;i>=0;i--)
+#define For(i,a,b) for(int i=(a);i<(b);i++)
+#define all(s) s.begin(),s.end()
+#define INF 1LL<<60
+
+using namespace std;
+
+template<class T>
+bool chmax(T & a, T b) {
+	if (a < b) {
+		a = b;
+		return true;
+	}
+	return false;
+}
+
+int N, M;
+vector<vector<int>> G;
+
+int dp[100001];
+
+int func(int v) {
+	if (dp[v] != 0)return dp[v];
+	
+	int res = 0;
+	
+	rep(nv,N) {
+		if(G[v][nv]!=-1)
+			chmax(res, func(nv) + G[v][nv]);
+	}
+	return dp[v] = res;
+}
+
+int main(void) {
+	cin >> N >> M;
+	G.assign(N, vector<int>(N,-1));
+
+	
+
+	rep(i, M) {
+		int x, y, d;
+		cin >> x >> y >> d;
+		
+		G[x][y] = d;
+		
+
+	}
+	int res = 0;
+	rep(nv, N)chmax(res, func(nv));
+
+	cout << res << endl;
+	
+	
+	return 0;
+}

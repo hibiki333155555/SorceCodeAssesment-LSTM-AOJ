@@ -1,0 +1,14 @@
+a, b = map(int, input().split())
+
+def gcd(x, y):
+    z = x % y
+    if z == 0:
+        return y
+    else:
+        return gcd(y, z)
+
+if a > b:
+    print(gcd(a, b))
+else:
+    print(gcd(b, a))
+

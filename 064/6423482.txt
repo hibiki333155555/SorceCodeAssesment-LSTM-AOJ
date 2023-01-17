@@ -1,0 +1,2 @@
+R,B,W,G = map(int,input().split())
+print(R+B+W+G)

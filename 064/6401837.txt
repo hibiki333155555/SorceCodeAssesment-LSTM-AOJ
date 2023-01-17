@@ -1,0 +1,13 @@
+process.stdin.resume();
+
+let lines = [];  //標準入力から受け取ったデータを格納する配列
+let reader = require('readline').createInterface({　//readlineという機能を用いて標準入力からデータを受け取る
+  input: process.stdin,
+  output: process.stdout
+});
+reader.on('line', lines => {　//line変数には標準入力から渡された一行のデータが格納されている
+   lines.push(lines);　//ここで、lines配列に、標準入力から渡されたデータが入る
+});
+reader.on('close', () => {　//受け取ったデータを用いて処理を行う
+  console.log(+lines[0]^3)　//helloが出力される
+});

@@ -1,0 +1,65 @@
+#include <iostream>
+#include <set>
+using namespace std;
+
+const int maxq = 10000 + 10;
+const int maxl = 1000000 + 10;
+
+char txt[maxl];
+string sub[maxl];
+char pat[maxq][1024];
+bool len[1024];
+
+set <string> S[1024];
+
+int main()
+{
+    scanf("%s", txt);
+
+    int q;
+    scanf("%d", &q);
+
+    int minLen = 1000;
+    int maxLen = 0;
+    for(int i = 0; i < q; ++i)
+    {
+        scanf("%s", pat[i]);
+        int l = strlen(pat[i]);
+        len[l] = true;
+        minLen = min(minLen, l);
+        maxLen = max(maxLen, l);
+    }
+    
+    int txtLen = strlen(txt);
+
+    for(int i = 0; i < txtLen ; ++i)
+    {
+        sub[i].assign(txt+i, min(txtLen-i, maxLen));
+    }
+
+    for(int i = minLen; i <= maxLen; ++i)
+    {
+        if(len[i])
+        {
+            for(int j = 0; j < txtLen; ++j)
+            {
+                if(sub[j].length() >= i)
+                {
+                    S[i].insert(sub[j].substr(0,i));
+                    //cout << "insertring: " << sub[j].substr(0,i) << endl;
+                }
+            }
+        }
+    }
+
+
+    for(int i = 0; i < q; ++i)
+    {
+        int l = strlen(pat[i]);
+        if(S[l].find(string(pat[i])) != S[l].end())
+            printf("1\n");
+        else
+            printf("0\n");
+    }
+
+}

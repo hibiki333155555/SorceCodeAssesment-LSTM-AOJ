@@ -1,0 +1,26 @@
+from bisect import bisect_left
+from collections import defaultdict
+
+S = set()
+L = []
+while True:
+    p, s = map(int, input().split(','))
+    if p == 0 and s == 0:
+        break
+    S.add(s)
+    L.append((p, s))
+
+S = sorted(S)
+num = len(S)
+Convert = defaultdict(int)
+for p, s in L:
+    idx = bisect_left(S, s)
+    Convert[p] = num - idx
+
+while True:
+    try:
+        q = int(input())
+    except:
+        break
+    print(Convert[q])
+

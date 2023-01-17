@@ -1,0 +1,8 @@
+n=int(input())
+o=''
+for i in range(1,n+1):
+    if i%3==0:
+        o=o+' '+str(i)
+    elif '3' in str(i):
+        o=o+' '+str(i)
+print(o)

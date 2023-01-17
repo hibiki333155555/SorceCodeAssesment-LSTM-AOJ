@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define llong long long
+
+const int N = 101;
+vector<int> g[N];
+bool vis[N];
+int dis[N];
+int par[N];
+
+void bfs (int x) {
+  dis[x] = 0;
+  vis[x] = 1;
+  queue <int> q;
+  q.push(x);
+  while(!q.empty()) {
+
+    for(auto n: g[q.front()]) {
+      if(!vis[n]){
+        par[n] = q.front();
+        q.push(n);
+        vis[n] = 1;
+        dis[n] = dis[q.front()] + 1;
+      }
+    }
+
+    q.pop();
+  }
+}
+
+int32_t main () {
+  ios_base::sync_with_stdio(0);cin.tie(0);
+  
+  int n; cin >> n;
+  int p = n;
+  while (p--) {
+    int u, k;
+    cin >> u >> k;
+    while(k--) {
+      int v; cin >> v;
+      g[u].push_back(v);
+    }
+  }
+
+  bfs(1);
+
+  for (int i = 1; i <= n; i++ ) {
+    cout << i << ' ' << dis[i] << '\n';
+  }
+  // cout << 22;
+  return 0;
+} 

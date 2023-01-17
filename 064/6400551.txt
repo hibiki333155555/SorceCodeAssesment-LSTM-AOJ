@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+int main(void){
+    int a,t,i;
+    
+    scanf("%d",&a);
+    int b[a-1],c[a-1];
+    
+    for(i=1;i<=a-1;i++){
+        scanf("%d",b[a-1]);
+    }
+    for(i=0;i<a-1/2;i++){
+        t=c[i];
+        c[i]=b[a-1-i];
+        b[a-1-i]=t;
+    }
+    for(i=0;i<=a-1;i++){
+        printf(" %d",b[i]);
+    }
+    printf("\n");
+    
+}

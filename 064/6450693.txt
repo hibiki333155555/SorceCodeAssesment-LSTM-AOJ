@@ -1,0 +1,177 @@
+
+##########################
+
+
+# record=[[] for i in range(n+1)] # 変数の情報記録
+def tree_search(n,G,s,func1,func2,func3):
+    #n...頂点の数
+    #G...G[v]は頂点vから行ける頂点の配列
+    #s...sが根
+    #func1(now)...ある頂点に初めて訪れた時、その頂点のみでする処理。ない場合は0
+    #func2(now,next)...nowからnextに移動する時に行う処理。ない場合は0
+    #func3(now)...nowを去る時にする処理。なければ0
+
+    seen = [0] * (n + 1) # 場合によっては外に出す
+    ind = [0] * (n + 1) ##
+    search=[s]
+    while search:
+        now=search[-1]
+        if seen[now]==0 and func1!=0:func1(now)
+        seen[now]=1
+        if len(G[now])>ind[now]:
+            next=G[now][ind[now]]
+            ind[now]+=1
+            if seen[next]>0:continue
+            if func2!=0:func2(now,next)
+            search.append(next)
+        else:
+            if func3!=0:func3(now)
+            search.pop()
+
+#############################
+
+
+
+
+mod=998244353
+n=int(input())
+root=[[] for i in range(n)]
+G=[[] for i in range(n)]
+for i in range(n-1):
+    a,b=map(int,input().split())
+    a-=1
+    b-=1
+    root[a].append(b)
+    root[b].append(a)
+
+def f2(x,y):
+    G[x].append(y)
+
+tree_search(n,root,0,0,f2,0)
+
+##############
+N=n
+# N: 頂点数
+# G[v]: 頂点vの子頂点 (親頂点は含まない)
+
+# Euler Tour の構築
+S = []
+F = [0]*N
+depth = [0]*N
+def dfs(v, d):
+    F[v] = len(S)
+    depth[v] = d
+    S.append(v)
+    for w in G[v]:
+        dfs(w, d+1)
+        S.append(v)
+dfs(0, 0)
+
+# 存在しない範囲は深さが他よりも大きくなるようにする
+INF = (N, None)
+
+# LCAを計算するクエリの前計算
+M = 2*N
+M0 = 2**(M-1).bit_length()
+data = [INF]*(2*M0)
+for i, v in enumerate(S):
+    data[M0-1+i] = (depth[v], i)
+for i in range(M0-2, -1, -1):
+    data[i] = min(data[2*i+1], data[2*i+2])
+
+# LCAの計算 (generatorで最小値を求める)
+def _query(a, b):
+    yield INF
+    a += M0; b += M0
+    while a < b:
+        if b & 1:
+            b -= 1
+            yield data[b-1]
+        if a & 1:
+            yield data[a-1]
+            a += 1
+        a >>= 1; b >>= 1
+
+# LCAの計算 (外から呼び出す関数)
+def query(u, v):
+    fu = F[u]; fv = F[v]
+    if fu > fv:
+        fu, fv = fv, fu
+    return S[min(_query(fu, fv+1))[1]]
+
+#####################
+
+dep=[0]*n
+dp=[0]*n
+p=[-1]*n
+def f2(x,y):
+    dep[y]=dep[x]+1
+    p[y]=x
+def f3(x):
+    if len(G[x])==0:
+        dp[x]=1
+        return
+    for y in G[x]:
+        dp[x]+=dp[y]
+    dp[x]*=2
+    dp[x]+=1
+    dp[x]%=mod
+
+
+
+
+tree_search(n,root,0,0,f2,f3)
+
+
+def f(i,j):
+    return j*n+i
+
+dub=[0]*(n+1)*50
+for i in range(n):
+    dub[f(i,0)]=p[i]
+
+for j in range(1,40):
+    for i in range(n):
+
+        dub[f(i,j)]=dub[f(dub[f(i,j-1)],j-1)]
+
+
+q=int(input())
+for _ in range(q):
+    x,y=map(int,input().split())
+    x-=1
+    y-=1
+    l=query(x,y)
+    if l!=x and l!=y:
+        ans=dp[x]*dp[y]
+        ans%=mod
+        ans*=pow(2,dep[x]-dep[l],mod)*pow(2,dep[y]-dep[l],mod)
+        ans%=mod
+        print(ans)
+    else:
+        sub=-1
+        if x!=l:sub=x
+        else:sub=y
+        dist=dep[sub]-dep[l]
+        dist-=1
+        now=sub
+        for i in range(30):
+            if dist-2**i>=0:
+                now=dub[f(now,i)]
+                dist-=2**i
+
+        ans=dp[sub]*(dp[l]-2*dp[now])
+        ans%=mod
+        ans*=pow(2,dep[sub]-dep[l])
+        ans%=mod
+        ans+=dp[sub]*(pow(2,dep[l]+1,mod)-2)*pow(2,dep[sub]-dep[l],mod)
+        ans%=mod
+        print(ans)
+
+
+
+
+
+
+#query x,y-1
+

@@ -1,0 +1,78 @@
+#include <iostream>
+#include <set>
+#include <tuple>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+long long MOD=998244353;
+
+/*
+
+10^4*2^14
+
+2^5*2^6
+
+*/
+
+long long INF=10000000000000000;
+
+vector<vector<int>> G(2005);
+vector<int> a(2005);
+vector<vector<long long>> dp(2005,vector<long long>(2005));
+vector<bool> used(2005,false);
+
+void dfs(int pos){
+	used[pos]=true;
+	//cout << pos << " " << pre << endl;
+	int cnt=0;
+	for(int x:G[pos]){
+		if(!used[x]){
+			cnt++;
+			dfs(x);
+			for(int j=0;j<=2000;j++){
+				if(j-a[pos]>=0){
+					dp[pos][j]=dp[x][j-a[pos]]+dp[pos][j];	
+				}
+				dp[pos][j]%=MOD;
+			}
+		}
+	}
+	dp[pos][a[pos]]++;
+	dp[pos][0]++;
+	dp[pos][a[pos]]%=MOD;
+	dp[pos][0]%=MOD;
+
+	used[pos]=false;
+}
+
+int main() {
+	int N,K;
+	cin >> N >> K;
+	vector<int> p(N+1);
+	for(int i=1;i<=N;i++){
+		cin >> a[i];
+		dp[i][0]=1;
+	}
+	for(int i=2;i<=N;i++){
+		cin >> p[i];
+		G[i].push_back(p[i]);
+		G[p[i]].push_back(i);
+	}
+	dp[0][0]=1;
+	dfs(1);
+	//cout << ne << endl;
+	/*
+	for(int i=1;i<=N;i++){
+		for(int j=0;j<=K;j++){
+			cout << dp[i][j] << " ";
+		}
+		cout << endl;
+	}
+	*/
+	
+	cout << dp[1][K] << endl;
+}

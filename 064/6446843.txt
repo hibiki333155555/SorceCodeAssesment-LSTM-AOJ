@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+//構造体
+struct Node{
+    //初期設定
+    Node(){
+        parent = left_child = right_child = -1;
+    }
+    int parent; //親
+    int left_child;  //子1
+    int right_child;  //子2
+};
+
+void preorderPrint(vector<Node>&tree,int id){
+    cout << " " << id;
+    if (tree[id].left_child != -1) preorderPrint(tree, tree[id].left_child);
+    if (tree[id].right_child != -1) preorderPrint(tree, tree[id].right_child);
+}
+
+void inorderPrint(vector<Node>&tree,int id){
+    if (tree[id].left_child != -1) inorderPrint(tree, tree[id].left_child);
+    cout << " " << id;
+    if (tree[id].right_child != -1) inorderPrint(tree, tree[id].right_child);
+
+}
+void postorderPrint(vector<Node>&tree,int id){
+    if (tree[id].left_child != -1) postorderPrint(tree, tree[id].left_child);
+    if (tree[id].right_child != -1) postorderPrint(tree, tree[id].right_child);
+    cout << " " << id;
+}
+
+
+int main(){
+    int n,id,left,right,root_id;
+    cin >> n;
+    vector<Node>tree(n);
+    
+    //情報よりツリーを作る。
+    for (int i = 0;i < n; i++) {
+        cin >> id >> left >> right;
+        tree[id].left_child = left;
+        tree[left].parent = id;
+        tree[id].right_child = right;
+        tree[right].parent = id;
+    }
+    //root_idを求める。
+    for ( root_id = 0; root_id < n; root_id++){
+        if (tree[root_id].parent == -1) break;
+    }
+    
+    //出力
+    cout << "Preorder" << endl;
+    preorderPrint(tree,root_id);
+    cout << endl;
+    
+    cout << "Inorder" << endl;
+    inorderPrint(tree,root_id);
+    cout << endl;
+    
+    cout << "Postorder" << endl;
+    postorderPrint(tree,root_id);
+    cout << endl;
+    
+}
+
+

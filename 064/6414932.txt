@@ -1,0 +1,76 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+#define all(x) (x).begin(),(x).end()
+template<typename T1,typename T2> bool chmin(T1 &a,T2 b){if(a<=b)return 0; a=b; return 1;}
+template<typename T1,typename T2> bool chmax(T1 &a,T2 b){if(a>=b)return 0; a=b; return 1;}
+int dx[4]={0,1,0,-1}, dy[4]={1,0,-1,0};
+long double eps = 1e-9;
+long double pi = acos(-1);
+
+template< typename T > istream &operator>>(istream &is, vector< T > &v) {
+	for(T &in : v) is >> in;
+	return is;
+}
+
+template< typename T > ostream &operator<<(ostream &os, const vector< T > &v) {
+	for(int i = 0; i < (int) v.size(); i++) {
+		os << v[i] << (i + 1 != (int) v.size() ? " " : "");
+	}
+	return os;
+}
+
+
+signed main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout << fixed << setprecision(20);
+
+	ll n;
+	string s;
+	cin>>n>>s;
+	vector<ll> a(n);
+	cin>>a;
+	ll now = 0;
+	ll ans = 0;
+	priority_queue<array<ll,2>, vector<array<ll,2>>, greater<array<ll,2>>> pq;
+	for(int i=0;i<n;i++){
+		if(s[i] == '(')now++;
+		else {
+			pq.push({a[i], i});
+			now--;
+		}
+		if(now < 0) {
+			auto [c, id] = pq.top();
+			pq.pop();
+			ans += c;
+			now += 2;
+			s[id] = '(';
+		}
+	}
+	reverse(all(s));
+	for(int i=0;i<n;i++){
+		if(s[i] == ')')s[i] = '(';
+		else s[i] = ')';
+	}
+	while(pq.size()){
+		pq.pop();
+	}
+	reverse(all(a));
+	now = 0;
+	for(int i=0;i<n;i++){
+		if(s[i] == '(')now++;
+		else {
+			pq.push({a[i], i});
+			now--;
+		}
+		if(now < 0) {
+			auto [c, id] = pq.top();
+			pq.pop();
+			ans += c;
+			now += 2;
+			s[id] = '(';
+		}
+	}
+	cout << ans << endl;
+}

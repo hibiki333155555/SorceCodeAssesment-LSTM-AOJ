@@ -1,0 +1,51 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void check(char pattern, int[] cards) {
+        for (int i = 1; i < cards.length; i++) {
+            // 足りないカードを表示する
+            if (cards[i] == 0) {
+                System.out.println(pattern + " " + i);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        // トランプのカードの種類
+        int[] spade = new int[13 + 1];
+        int[] heart = new int[13 + 1];
+        int[] club = new int[13 + 1];
+        int[] diamond = new int[13 + 1];
+
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+
+        // カード情報を入力
+        for (int i = 0; i < n; i++) {
+            char pattern = sc.next().charAt(0);
+            int number = sc.nextInt();
+
+            switch (pattern) {
+                case 'S':
+                    spade[number]++;
+                    break;
+                case 'H':
+                    heart[number]++;
+                    break;
+                case 'C':
+                    club[number]++;
+                    break;
+                case 'D':
+                    diamond[number]++;
+                    break;
+            }
+        }
+
+        // 足りないカードを確認する
+        check('S', spade);
+        check('H', heart);
+        check('C', club);
+        check('D', diamond);
+    }
+}
+

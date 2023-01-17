@@ -1,0 +1,76 @@
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+#include <cmath>
+#include <string>
+using namespace std;
+
+int sheet[100][100] = { 0 };
+int rowSum[100] = { 0 };
+int columnSum[100] = { 0 };
+int totalSum = 0;
+
+int main()
+{
+	// number of rows = r, number of columns = c
+	int r; int c; cin >> r >> c;
+
+	// input
+	// i = row
+	for (int i = 0; i <= r - 1; i++)
+	{
+		// j = column
+		for (int j = 0; j <= c - 1; j++)
+		{
+			cin >> sheet[i][j];
+		}
+	}
+	
+	// row sum
+	// i = row
+	for (int i = 0; i <= r - 1; i++)
+	{
+		// j = column
+		for (int j = 0; j <= c - 1; j++)
+		{
+			rowSum[i] += sheet[i][j];
+		}
+	}
+
+	// column sum
+	// i = row
+	for (int i = 0; i <= r - 1; i++)
+	{
+		// j = column
+		for (int j = 0; j <= c - 1; j++)
+		{
+			columnSum[j] += sheet[i][j];
+		}
+	}
+
+	// total sum
+	for (int i = 0; i <= r - 1; i++)
+	{
+		totalSum += rowSum[i];
+	}
+
+	// output
+	// i = row
+	for (int i = 0; i <= r - 1; i++)
+	{
+		// j = column
+		for (int j = 0; j <= c - 1; j++)
+		{
+			cout << sheet[i][j] << ' ';
+			if (j == c - 1)
+			{
+				cout << rowSum[i] << endl;
+			}
+		}
+	}
+	for (int j = 0; j <= c - 1; j++)
+	{
+		cout << columnSum[j] << ' ';
+	}
+	cout << totalSum << endl;
+}

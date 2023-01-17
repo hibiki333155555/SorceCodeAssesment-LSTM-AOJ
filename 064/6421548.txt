@@ -1,0 +1,45 @@
+from collections import deque
+INF = 10 ** 9
+dx = (1, 0, -1, 0)
+dy = (0, 1, 0, -1)
+h, w = map(int, input().split())
+s = ['#' * (w + 2)] + ['#' + input() + '#' for _ in range(h)] + ['#' * (w + 2)]
+for i in range(h + 2):
+    for j in range(w + 2):
+        if s[i][j] == 'S':
+            sx, sy = i, j
+        elif s[i][j] == 'G':
+            gx, gy = i, j
+d = [[INF] * (w + 2) for _ in range(h + 2)]
+d[sx][sy] = 0
+q = deque([(sx, sy)])
+while q:
+    x, y = q.popleft()
+    if gx == x and gy == y:
+        print(d[x][y])
+        break
+    if s[x][y] == '.' or s[x][y] == 'S':
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if s[nx][ny] != '#' and d[nx][ny] > d[x][y] + 1:
+                d[nx][ny] = d[x][y] + 1
+                q.append((nx, ny))
+    else:
+        if s[x][y] == 'U':
+            nx = x - 1
+            ny = y
+        elif s[x][y] == 'D':
+            nx = x + 1
+            ny = y
+        elif s[x][y] == 'L':
+            nx = x
+            ny = y - 1
+        else:
+            nx = x
+            ny = y + 1
+        if s[nx][ny] != '#' and d[nx][ny] > d[x][y]:
+            d[nx][ny] = d[x][y]
+            q.appendleft((nx, ny))
+else:
+    print(-1)

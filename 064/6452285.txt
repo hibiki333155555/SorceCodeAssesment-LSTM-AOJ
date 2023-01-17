@@ -1,0 +1,19 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n; cin>>n;
+    vector<vector<int>> card(4,vector<int>(13,0));
+    vector<char> mark = {'S','H','C','D'};
+    while(n--) {
+        char suit; int rank; cin>>suit>>rank;
+        for(int i=0;i<4;i++) {
+            if(suit==mark[i]) card[i][rank-1]=1;
+        }
+    }
+    for(int i=0;i<4;i++) {
+        for(int j=0;j<13;j++) if(card[i][j]==0) cout<<mark[i]<<" "<<j+1<<endl;
+    }
+    return 0;
+}

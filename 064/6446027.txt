@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+//#define lson (rt<<1)
+//#define rson ((rt<<1)+1)
+//#define mid ((l+r)>>1)
+#define mst(a) memset(a,0,sizeof(a))
+#define cf int Tcodeforces, Tcodeforce;cin>>Tcodeforces;for(Tcodeforce = 1; Tcodeforce <= Tcodeforces; Tcodeforce++)
+typedef long long ll;
+typedef double db;
+const ll maxn = 5e2 +7;
+const ll maxm = 2e5 +7;
+const ll inf = 0x3f3f3f3f;
+const ll mod = 1e9 +7;
+
+int n;
+db p[maxn], q[maxn], dp[maxn][maxn], dpj[maxn][maxn]; // q前缀和
+db qzh[maxn];
+db rg(int i, int j) {
+    return qzh[j] - qzh[i-1] + q[i-1];
+}
+db DP(int i, int j) { // [i, j]
+    if(dp[i][j]) return dp[i][j];
+    if(i == j) return 2*(q[i]+q[i-1]) + p[i];
+    double mn = inf;
+
+    // left most root
+    db val = DP(i+1,j) + rg(i,j) + q[i-1];
+    if(val < mn) {dpj[i][j] = i;}
+    mn = min(mn, val);
+    // mid root
+    for(int k = i + 1; k <= j - 1; k++) { // who is root
+        val = DP(i, k-1) + DP(k+1,j) + rg(i,j);
+        if(val < mn) {dpj[i][j] = k;}
+        mn = min(mn, val);
+    }
+    // right most root
+    val = DP(i, j-1) + rg(i,j) + q[j];
+    if(val < mn) {dpj[i][j] = j;}
+    mn = min(mn, val);
+
+    return dp[i][j] = mn;
+}
+
+signed main() {
+    #ifdef moyi_qwq
+        freopen("D:/source file/intxt/in.txt","r",stdin);
+    #endif
+    
+    cin>>n; for(int i = 1; i <= n; i++) cin>>p[i];
+    for(int i = 0; i <= n; i++) {
+        cin>>q[i];
+        qzh[i] = q[i] + p[i];
+        if(i) qzh[i] += qzh[i-1];
+    }
+    printf("%.8lf\n",DP(1,n));
+    
+    //cerr<<"Time : "<<1000*((double)clock())/(double)CLOCKS_PER_SEC<<"ms";
+    return (0);
+}
+

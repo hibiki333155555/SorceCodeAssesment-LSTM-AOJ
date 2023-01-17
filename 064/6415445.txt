@@ -1,0 +1,52 @@
+#include<iostream>
+#include<algorithm>
+#include<queue>
+#include<cstring>
+#include<string>
+#include<cstdio>
+using namespace std;
+const int N = 500005;
+typedef long long ll;
+int n;
+ll heap[N];
+char op[100];
+
+void maxHeapify(int now) {
+	int l = now<<1;
+	int r = (now << 1) + 1;
+	int maxx = -1;
+	if(l <= n && heap[l] > heap[now])
+		maxx = l;
+	else
+		maxx = now;
+	if(r<=n && heap[r] > heap[maxx])
+		maxx = r;
+	if(maxx != now) {
+		swap(heap[maxx],heap[now]);
+		maxHeapify(maxx);
+	}
+}
+
+void buildMaxHeap() {
+	for(int i=n/2;i>=1;i--)
+		maxHeapify(i);
+}
+
+int main() {
+	while(1) {
+		ll num;
+		scanf("%s",op);
+		if(op[0] == 'i') {
+			scanf("%lld",&num);
+			heap[++n] = num;
+			buildMaxHeap();
+		}
+		else if(op[0] == 'e') {
+			swap(heap[1],heap[n]);
+			printf("%lld\n",heap[n--]);
+			buildMaxHeap();
+		}
+		else
+			break;
+	}
+}

@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    string s[102];
+    for(int i = 0; i < n; i++) cin >> s[i];
+    bool b[102]{0};
+    int k = s[0].size();
+    for(int u = 0; u < n; u++){
+        for(int v = u + 1; v < n; v++){
+            int c = 0;
+            for(int i = 0; i < k; i++){
+                if(s[u][i] != s[v][i]) c++;
+            }
+            if(c <= 1) b[u] = b[v] = true;
+        }
+    }
+    int ans = 0;
+    for(int i = 0; i < n; i++) ans += b[i];
+    cout << ans << endl;
+}
+

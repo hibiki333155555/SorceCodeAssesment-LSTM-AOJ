@@ -1,0 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CsharpforAizeOnlineJudge
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int s = Int32.Parse(Console.ReadLine());
+            int h = s / 3600;
+            s -= h * 3600;
+            int m = s / 60;
+            s -= m * 60;
+            Console.WriteLine("{0}:{1}:{2}", h, m, s);
+        }
+    }
+}
+

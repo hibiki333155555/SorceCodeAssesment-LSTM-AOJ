@@ -1,0 +1,10 @@
+#include <bits/stdc++.h>
+#define lol long long
+using namespace std;
+int main(){
+    double r;
+    cin>>r;
+    double pai=3.14;
+    cout<<pai*r*r<<" "<<2*pai*r<<"\n";
+    return 0;
+}

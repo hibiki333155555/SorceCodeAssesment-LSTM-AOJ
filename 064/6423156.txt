@@ -1,0 +1,26 @@
+#include <iostream>
+#include <math.h>
+#include <stdio.h>
+
+using namespace std;
+
+
+
+int main()
+{
+    double a, b, c;
+    double h, x;
+    double rad;
+    double PI = acos(-1);
+    cin >> a >> b >> c;
+    rad = c * PI / 180;
+    h = sin(rad) * b;
+    c = sqrt((a * a) + (b * b) - 2 * a * b * cos(rad));
+
+    printf("%.8lf\n", (a * h) / 2);
+    printf("%.8lf\n", a + b + c);
+    printf("%.8lf\n", h);
+
+    return 0;
+}
+

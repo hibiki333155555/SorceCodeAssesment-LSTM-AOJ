@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int d;
+    cin>>d;
+    int ans1=d/(60*60);
+    d-=ans1*(60*60);
+    int ans2=d/60;
+    d-=ans2*60;
+    cout<<ans1<<" "<<ans2<<" "<<d<<"\n";
+    return(0);
+}

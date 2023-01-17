@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+//Compiler version gcc  6.3.0
+
+int main()
+{
+  int a=1,x;
+  while(1){
+    scanf("%d",&x);
+    if(x==0)
+    {break;}
+    printf("Case %d: %d\n",a,x);
+    a++;
+  }
+  return 0;
+}

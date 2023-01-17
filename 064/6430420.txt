@@ -1,0 +1,19 @@
+def bubbleSort(li):
+    count=0
+    for i in range(len(li)):
+        for j in range(len(li)-i-1):
+            if li[j]>li[j+1]:
+                li[j],li[j+1]=li[j+1],li[j]
+                count+=1
+    return count,li
+
+
+n=int(input())
+li=list(map(int,input().split()))
+count,li=bubbleSort(li)
+for k in range(len(li)):
+    if k==len(li)-1:
+        print(li[k])
+    else:
+        print(li[k],end=" ")
+print(count)

@@ -1,0 +1,9 @@
+w = input()
+a = 0
+while True:
+    if input() == "END_OF_TEXT":
+        break
+    
+    line = input().lower().split(" ")
+    a += line.count(w)
+print(a)

@@ -1,0 +1,14 @@
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    int num,h,m,s;
+    cin>>num;
+    h = num/3600;
+    m = (num-3600*h)/60;
+    s =num-3600*h-60*m;
+
+    cout<<h<<":"<<m<<":"<<s<<":"<<endl;
+}
+

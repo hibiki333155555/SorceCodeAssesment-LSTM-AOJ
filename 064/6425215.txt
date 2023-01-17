@@ -1,0 +1,16 @@
+#include<bits/stdc++.h>
+using namespace std;
+    #define all v.begin(),v.end()
+    #define ll long long
+int main(){
+    int a,b,c;
+    cin>>a>>b>>c;
+    if(a==1&&b==1&&c==0){
+        cout<<"Open"<<endl;
+    }else if(a==0&&b==0&&c==1){
+        cout<<"Open"<<endl;
+    }else{
+        cout<<"Close"<<endl;
+    }
+    return(0);
+}

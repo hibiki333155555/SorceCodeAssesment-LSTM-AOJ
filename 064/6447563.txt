@@ -1,0 +1,10 @@
+n = gets.to_i
+a = n.times.map{gets.split.map(&:to_i)}
+b = []
+gara = ["S", "H", "C", "D"]
+gara.each do |g|
+    1.upto(13) do |n|
+        b << [g, n.to_s]
+    end
+end
+puts b - a

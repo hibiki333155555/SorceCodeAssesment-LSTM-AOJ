@@ -1,0 +1,29 @@
+#a = input()
+X = input().split()
+#print('原始数据',X)
+
+set_x = set(X)  #进行去重工作，注意！set不能直接用sort进行排序
+#print(type(set_x))
+list_set_x = list(set_x)  #将set转为list
+#print(type(list_set_x))
+
+int_set_list = map(int, list_set_x)  #str list转int list
+S2 = sorted(int_set_list)  #set排序
+S3 = [str(i) for i in S2]  #int list转str list
+#print('去重后且排序后',S3)
+
+
+list1 = list(map(int, X))  #str list转int list
+S = sorted(list1)  #总数据排序
+S1 = [str(i) for i in S]  #list转str
+#print('原始总数据排序', S1)
+
+
+
+d = {}
+for i in S3:
+    d[i] = X.count(i)  # 字典
+
+print(d)
+print(min(d, key=d.get))
+

@@ -1,0 +1,152 @@
+from collections import deque
+import sys
+sys.setrecursionlimit(1000000)
+mod = 998244353
+
+class SegTree:
+    """
+    init(init_val, ide_ele): 配列init_valで初期化 O(N)
+    update(k, x): k番目の値をxに更新 O(logN)
+    query(l, r): 区間[l, r)をsegfuncしたものを返す O(logN)
+    """
+    def __init__(self, init_val, segfunc, ide_ele):
+        """
+        init_val: 配列の初期値
+        segfunc: 区間にしたい操作
+        ide_ele: 単位元
+        n: 要素数
+        num: n以上の最小の2のべき乗
+        tree: セグメント木(1-index)
+        """
+        n = len(init_val)
+        self.segfunc = segfunc
+        self.ide_ele = ide_ele
+        self.num = 1 << (n - 1).bit_length()
+        self.tree = [ide_ele] * 2 * self.num
+        # 配列の値を葉にセット
+        for i in range(n):
+            self.tree[self.num + i] = init_val[i]
+        # 構築していく
+        for i in range(self.num - 1, 0, -1):
+            self.tree[i] = self.segfunc(self.tree[2 * i], self.tree[2 * i + 1])
+
+    def update(self, k, x):
+        """
+        k番目の値をxに更新
+        k: index(0-index)
+        x: update value
+        """
+        k += self.num
+        self.tree[k] = x
+        while k > 1:
+            self.tree[k >> 1] = self.segfunc(self.tree[k], self.tree[k ^ 1])
+            k >>= 1
+
+    def query(self, l, r):
+        """
+        [l, r)のsegfuncしたものを得る
+        l: index(0-index)
+        r: index(0-index)
+        """
+        res = self.ide_ele
+
+        l += self.num
+        r += self.num
+        while l < r:
+            if l & 1:
+                res = self.segfunc(res, self.tree[l])
+                l += 1
+            if r & 1:
+                res = self.segfunc(res, self.tree[r - 1])
+            l >>= 1
+            r >>= 1
+        return res
+
+n = int(input())
+edges = [[] for _ in range(n)]
+for _ in range(n-1):
+    a, b = map(lambda x: int(x)-1, input().split())
+    edges[a].append(b)
+    edges[b].append(a)
+
+def EulerTour(x, pre, cnt):
+    euler_tour.append(x)
+    for y in edges[x]:
+        if y == pre:
+            continue
+        depth[y] = cnt+1
+        EulerTour(y, x, cnt+1)
+        euler_tour.append(x)
+
+euler_tour = []
+depth = [-1]*n
+depth[0] = 0
+EulerTour(0, -1, 0)
+# print(euler_tour)
+# print(depth)
+
+first_appear = [-1]*n
+for i, x in enumerate(euler_tour):
+    if first_appear[x] == -1:
+        first_appear[x] = i
+# print(first_appear)
+
+ST = SegTree([(depth[i], i) for i in euler_tour], min, (10**9, 10**9))
+
+def dfs(x, p=-1):
+    tmp = 0
+    for y in edges[x]:
+        if visited[y]:
+            continue
+        visited[y] = True
+        tmp += dfs(y, x)
+    tmp = tmp*2+1
+    if x == 0:
+        return
+    dp[p][x] = tmp
+    return tmp
+
+
+dp = [{} for _ in range(n)]
+visited = [False]*n
+visited[0] = True
+dfs(0)
+# print(dp)
+
+DQ = deque([0])
+arrived = [False]*n
+arrived[0] = True
+while DQ:
+    x = DQ.popleft()
+    children = sorted(dp[x].keys())
+
+    acc1 = [0]
+    for c in children:
+        acc1.append(acc1[-1]+dp[x][c])
+    acc2 = [0]
+    for c in children[::-1]:
+        acc2.append(acc2[-1]+dp[x][c])
+    # print(acc1)
+    # print(acc2)
+    for i, c in enumerate(children):
+        if arrived[c]:
+            continue
+        arrived[c] = True
+        dp[c][x] = (acc1[i]+acc2[-(i+2)])*2+1
+        DQ.append(c)
+
+# print(dp)
+
+q = int(input())
+for _ in range(q):
+    x, y = map(lambda x: int(x)-1, input().split())
+    if first_appear[x] > first_appear[y]:
+        y, x = x, y
+
+    p = euler_tour[first_appear[x]+1]
+    q = euler_tour[first_appear[y]-1]
+
+    d_lca = ST.query(first_appear[x], first_appear[y])[0]
+    ans = dp[p][x] * dp[q][y] * pow(2, (depth[x]-d_lca)+(depth[y]-d_lca), mod) % mod
+
+    print(ans)

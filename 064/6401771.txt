@@ -1,0 +1,38 @@
+#include<iostream>
+#include<vector>
+
+/*
+    Nこの商品があり、商品iの価値はv[i] ,値段はp[i]円とする。
+    M円で買う商品の価値の総和を最大化せよ。
+    N<=100 , p[i] <=100
+*/
+
+int N , M;
+int v[100];
+int p[100];
+
+int main(){
+
+    std::cin >> N >> M;
+    for(int i = 0 ; i < N ; i++){
+        std::cin>> v[i] >> p[i] ;
+    }
+    std::vector<long long > dp(M+1,0);
+    
+    for(int i = 0 ; i < N ; i++){
+        for(int x = M ; x>=0;x--){
+            if(x - p[i] >= 0 && dp[x] < dp[x-p[i]]+v[i]){
+                dp[x] = dp[x-p[i]]+v[i];
+            }
+        }
+    }
+    long long  ans = 0;
+    for(long long X : dp){
+        if(ans < X)ans = X;
+    }
+    std::cout << ans << std::endl;
+
+
+    return 0;
+}
+

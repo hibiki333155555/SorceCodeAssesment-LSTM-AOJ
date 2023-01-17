@@ -1,0 +1,5 @@
+s = int(input())
+hour = s//3600
+min = (s%3600)//60
+sec = (s%3600)%60
+print(f'{hour}:{min}:{sec}')

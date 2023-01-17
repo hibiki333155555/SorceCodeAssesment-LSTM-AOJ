@@ -1,0 +1,27 @@
+#include<iostream>
+using namespace std;
+int main(){
+    int N;
+    int i, j;
+    int count = 0, minj;
+    cin >> N;
+    int arr[N];
+    for( i = 0; i < N; i++)cin >> arr[i];
+
+    for(i = 0; i < N; i++){
+        minj = i;
+        for( j = i + 1; j < N; j++){
+            if( arr[minj] > arr[j] )minj = j;
+        }
+        if(minj != i){
+            swap(arr[minj], arr[i]);
+            count++;
+        }
+    }
+
+    for(i = 0; i < N; i++){
+        if(i)cout << " ";
+        cout << arr[i];
+    }
+    cout << endl << count << endl;
+}

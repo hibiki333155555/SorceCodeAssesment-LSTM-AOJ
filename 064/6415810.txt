@@ -1,0 +1,54 @@
+N=int(input())
+A=list(map(int,input().split()))
+
+mod=998244353
+
+FACT=[1]
+for i in range(1,2*10**5+1):
+    FACT.append(FACT[-1]*i%mod)
+
+FACT_INV=[pow(FACT[-1],mod-2,mod)]
+for i in range(2*10**5,0,-1):
+    FACT_INV.append(FACT_INV[-1]*i%mod)
+
+FACT_INV.reverse()
+
+def Combi(a,b):
+    if 0<=b<=a:
+        return FACT[a]*FACT_INV[b]%mod*FACT_INV[a-b]%mod
+    else:
+        return 0
+
+B=[]
+ONE=0
+FIVE=0
+SEVEN=0
+
+for a in A:
+    if a==1:
+        ONE+=1
+    elif a==5:
+        FIVE+=1
+    elif a==7:
+        SEVEN+=1
+    else:
+        B.append(a)
+
+ANS=Combi(N,ONE)*Combi(N-ONE,N-ONE-FIVE)*Combi(N-ONE-FIVE,SEVEN)%mod
+
+TWO=0
+THREE=0
+for b in B:
+    if b==2 or b==4 or b==8:
+        TWO+=1
+    elif b==3 or b==9:
+        THREE+=1
+    else:
+        ANS*=Combi(TWO+THREE,TWO)
+        ANS%=mod
+
+        TWO=0
+        THREE=0
+
+print(ANS*Combi(TWO+THREE,TWO)%mod)
+

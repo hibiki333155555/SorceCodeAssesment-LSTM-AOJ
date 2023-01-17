@@ -1,0 +1,7 @@
+s = int(input())
+ss = str(s%60)
+m = s/60
+mm = str(m%60)
+h = m/60
+hh = str(h)
+print(hh + ":" + mm + ":" + ss)

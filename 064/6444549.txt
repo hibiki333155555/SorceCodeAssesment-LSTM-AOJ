@@ -1,0 +1,6 @@
+import math 
+x1,y1,x2,y2 = map(float,input().split())
+a = (x2 -x1)**2
+b = (y2-y1)**2
+ans = math.sqrt(a+b)
+print(ans)

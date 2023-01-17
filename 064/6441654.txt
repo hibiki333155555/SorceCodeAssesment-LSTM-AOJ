@@ -1,0 +1,11 @@
+#最大公約数を求めるアルゴリズム
+def calc_gcd(a,b):
+    if a < b:
+        a,b = b,a
+    if b == 0:
+        return a
+    return calc_gcd(b,a%b)
+
+
+A,B = map(int,input().split())
+print("%d"%(calc_gcd(A,B)))

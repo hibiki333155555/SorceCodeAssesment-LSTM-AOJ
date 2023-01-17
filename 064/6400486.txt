@@ -1,0 +1,108 @@
+use std::io;
+
+fn main() {
+    let mut line = String::new();
+    io::stdin().read_line(&mut line).unwrap();
+    let mut iter = line.split_whitespace();
+    let n: usize = iter.next().unwrap().parse::<usize>().unwrap();
+    let q: usize = iter.next().unwrap().parse::<usize>().unwrap();
+
+    let mut coms = Vec::<usize>::new();
+    let mut xes = Vec::<usize>::new();
+    let mut ys = Vec::<usize>::new();
+    for _ in 0..q {
+        let mut line = String::new();
+        io::stdin().read_line(&mut line).unwrap();
+        let mut iter = line.split_whitespace();
+        let com: usize = iter.next().unwrap().parse::<usize>().unwrap();
+        let x: usize = iter.next().unwrap().parse::<usize>().unwrap();
+        let y: usize = iter.next().unwrap().parse::<usize>().unwrap();
+        coms.push(com);
+        xes.push(x);
+        ys.push(y);
+    }
+    let mut rmq = RMQ::new(n);
+    // rmq.init(0);
+    for i in 0..n {
+        rmq.update(i, 2147483647);
+    }
+
+    for i in 0..q {
+        if coms[i] == 0 {
+            rmq.update(xes[i], ys[i]);
+        } else {
+            println!("{}", rmq.query(xes[i], ys[i]));
+        }
+    }
+}
+
+// range minimum query
+struct RMQ {
+    n: usize,
+    data: Vec<usize>,
+}
+
+const max: usize = std::usize::MAX;
+impl RMQ {
+    pub fn new(n: usize) -> Self {
+        let mut make_leaf_num = 1;
+        while make_leaf_num < n {
+            make_leaf_num *= 2;
+        }
+        let data = vec![max; 2 * make_leaf_num - 1];
+        // for i in 0..n {
+        //     data[i + n ] = i;
+        // }
+
+        RMQ {
+            n: make_leaf_num,
+            data,
+        }
+    }
+
+    // pub fn init(&mut self, idx: usize) {
+    //     if 2 * idx + 1 > 2 * self.n - 1 {
+    //         // idx is index of leaf so update parent
+    //         let pidx = idx / 2;
+    //         self.data[pidx] = std::cmp::min(self.data[2 * pidx + 1], self.data[2 * pidx + 2]);
+    //     } else {
+    //         self.init(2 * idx + 1);
+    //         self.init(2 * idx + 2);
+    //         self.data[idx] = std::cmp::min(self.data[2 * idx + 1], self.data[2 * idx + 2]);
+    //     }
+    // }
+
+    pub fn update(&mut self, ith_leaf_index: usize, value: usize) {
+        let mut i = ith_leaf_index + self.n - 1;
+        self.data[i] = value;
+        while i > 0 {
+            i = (i - 1) / 2;
+            self.data[i] = std::cmp::min(self.data[2 * i + 1], self.data[2 * i + 2]);
+        }
+    }
+
+    pub fn query(&mut self, a: usize, b: usize) -> usize {
+        return self.query_sub(a, b, 0, 0, self.n - 1);
+    }
+
+    // the minimum elemtn of [a, b]
+    pub fn query_sub(
+        &mut self,
+        fixed_l: usize,
+        fixed_r: usize,
+        k: usize,
+        l: usize,
+        r: usize,
+    ) -> usize {
+        if r < fixed_l || fixed_r < l {
+            return max;
+        } else if fixed_l <= l && r <= fixed_r {
+            return self.data[k];
+        } else {
+            let vl = self.query_sub(fixed_l, fixed_r, k * 2 + 1, l, (l + r) / 2);
+            let vr = self.query_sub(fixed_l, fixed_r, k * 2 + 2, (l + r) / 2 + 1, r);
+            return std::cmp::min(vl, vr);
+        }
+    }
+}
+

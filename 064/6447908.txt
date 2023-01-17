@@ -1,0 +1,3 @@
+a,b=map(int,input().split())
+for i in range(a):
+    print(for i in range(b)"#")

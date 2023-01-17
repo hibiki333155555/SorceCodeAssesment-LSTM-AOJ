@@ -1,0 +1,62 @@
+import sys
+import math
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def merge(a_list, left, mid, right):
+    l_list = []
+    for i in range(mid - left):
+        l_list.append(a_list[left + i])
+    l_list.append(math.inf)
+
+    r_list = []
+    for i in range(right - mid):
+        r_list.append(a_list[mid + i])
+    r_list.append(math.inf)
+
+    i = 0
+    j = 0
+    num_comparisons = 0
+    for k in range(left, right):
+        if l_list[i] <= r_list[j]:
+            a_list[k] = l_list[i]
+            i += 1
+        else:
+            a_list[k] = r_list[j]
+            j += 1
+        num_comparisons += 1
+    return num_comparisons
+
+
+def merge_sort(a_list, left, right):
+    if left + 1 < right:
+        mid = (left + right) // 2
+        num_comparisons0 = merge_sort(a_list, left, mid)
+        num_comparisons1 = merge_sort(a_list, mid, right)
+        return merge(a_list, left, mid, right) + num_comparisons0 + num_comparisons1
+
+    return 0
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    a_list = list(map(int, f.readline().split()))
+    num_comparisons = merge_sort(a_list, 0, n)
+    print(*a_list)
+    print(num_comparisons)
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

@@ -1,0 +1,16 @@
+def get_primes(n):
+  n += 1
+  p = [True]*n
+  p[:2] = [False]*2
+  for i in range(int(n**0.5)+1):
+    if p[i]:
+      j = i
+      while i*j < n:
+        p[i*j] = False
+        j += 1
+  primes = [i for i,v in enumerate(p) if v]
+  return primes
+
+values = [int(input().strip()) for _ in range(int(input().strip()))]
+primes = tuple(get_primes(max(values)))
+print(f'{len(list(filter(lambda v: v in primes, values)))}')

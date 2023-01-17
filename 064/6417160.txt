@@ -1,0 +1,15 @@
+N,Q = map(int,input().split())
+A = list(map(int,input().split()))
+XX = list(map(int,input().split()))
+
+for x in XX:
+  left = 0
+  sm = 0
+  ans = 0
+  for right in range(N):
+    sm += A[right]
+    while(sm > x):
+      sm -= A[left]
+      left += 1
+      ans += (right-left+1) # leftに対する条件を満たすパターン数
+  print(ans)

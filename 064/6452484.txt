@@ -1,0 +1,692 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+template<class T,class type_less_T=less<T>>
+class geometry_2d{
+  
+public:
+  using type=T;
+  using type_less_type=type_less_T;
+  
+  static constexpr type_less_type type_less=type_less_type();
+  
+  static int sgn(const type &a,const type &b){
+    return type_less(a,b)?-1:type_less(b,a)?1:0;
+  }
+  
+  static int sgn(const type &a){return sgn(a,type());}
+  
+protected:
+  
+  static type type_min(const type &x,const type &y){return type_less(x,y)?x:y;}
+  static type type_max(const type &x,const type &y){return type_less(x,y)?y:x;}
+  
+public:
+  
+  class point{
+    
+  public:
+    type x,y;
+    
+    point()=default;
+    
+    point(const type &_x,const type &_y):x(_x),y(_y){}
+    point(type &&_x,type &&_y):x(_x),y(_y){}
+    
+    point(const pair<type,type> &other):x(other.first),y(other.second){}
+    point(pair<type,type> &&other):x(move(other.first)),y(move(other.second)){}
+    
+    point &operator = (const pair<type,type> &other){return *this=point(other);}
+    point &operator = (pair<type,type> &&other){return *this=point(other);}
+    
+    point(const initializer_list<type> init):x(init.begin()[0]),y(init.begin()[1]){}
+    
+    point &operator = (const initializer_list<type> init){return *this=point(init);}
+    
+    explicit operator pair<type,type> ()const{return pair<type,type>(x,y);}
+    pair<type,type> make_pair()const{return pair<type,type>(x,y);}
+    
+    type *data(){return &x;}  // Maybe dangerous
+    const type *data()const{return &x;}  // Maybe dangerous
+    
+    using reference=type &;
+    using const_reference=const type &;
+    
+    reference operator [] (size_t p){return p?y:x;}
+    const_reference operator [] (size_t p)const{return p?y:x;}
+    
+    explicit operator bool ()const{return sgn(x)||sgn(y);}
+    bool operator ! ()const{return !sgn(x)&&!sgn(y);}
+    
+    friend bool operator == (const point &a,const point &b){
+      return !sgn(a.x,b.x)&&!sgn(a.y,b.y);
+    }
+    
+    friend bool operator != (const point &a,const point &b){
+      return sgn(a.x,b.x)||sgn(a.y,b.y);
+    }
+    
+    point &operator += (const point &p){x+=p.x;y+=p.y;return *this;}
+    point &operator -= (const point &p){x-=p.x;y-=p.y;return *this;}
+    point &operator *= (const type &p){x*=p;y*=p;return *this;}
+    point &operator /= (const type &p){x/=p;y/=p;return *this;}
+    point operator + ()const{return *this;}
+    point operator - ()const{return point(-x,-y);}
+    friend point operator + (const point &a,const point &b){return point(a)+=b;}
+    friend point operator - (const point &a,const point &b){return point(a)-=b;}
+    friend point operator * (const point &a,const type &b){return point(a)*=b;}
+    friend point operator * (const type &a,const point &b){return point(b)*=a;}
+    friend point operator / (const point &a,const type &b){return point(a)/=b;}
+    
+    friend type operator * (const point &a,const point &b){return a.x*b.x+a.y*b.y;}
+    friend type operator % (const point &a,const point &b){return a.x*b.y-a.y*b.x;}
+    
+    type mod2()const{return x*x+y*y;}
+    type mod()const{return sqrt(x*x+y*y);}
+    type dis2(const point &p)const{return (*this-p).mod2();}
+    type dis(const point &p)const{return (*this-p).mod();}
+    
+    point unit()const{return *this/mod();}
+    
+    type angle()const{return atan2(y,x);}
+    type angle(const point &p)const{return atan2(*this%p,*this*p);}
+    
+    point rotate(const type &th)const{
+      type s=sin(th),c=cos(th);
+      return point(c*x-s*y,s*x+c*y);
+    }
+    
+    point norm()const{return point(-y,x);}
+    
+  };
+  
+  static type dot(const point &a,const point &b){return a*b;}
+  static type cross(const point &a,const point &b){return a%b;}
+  
+  static type mod2(const point &a){return a.mod2();}
+  static type mod(const point &a){return a.mod();}
+  static type dis2(const point &a,const point &b){return a.dis2(b);}
+  static type dis(const point &a,const point &b){return a.dis(b);}
+  
+  static point unit(const point &a){return a.unit();}
+  
+  static type angle(const point &a){return a.angle();}
+  static type angle(const point &a,const point &b){return a.angle(b);}
+  
+  static point rotate(const point &a,const type &b){return a.rotate(b);}
+  static point norm(const point &a){return a.norm();}
+  
+public:
+  
+  class line;
+  class linear_equation;
+  class linear_function;
+  
+private:
+  using line_e=linear_equation;
+  using line_f=linear_function;
+  
+public:
+  
+  class line{
+    
+  public:
+    point s,t;
+    
+    line()=default;
+    
+    line(const point &_s,const point &_t):s(_s),t(_t){}
+    line(point &&_s,point &&_t):s(_s),t(_t){}
+    
+    line(const pair<point,point> &other):s(other.first),t(other.second){}
+    line(pair<point,point> &&other):s(move(other.first)),t(move(other.second)){}
+    
+    line &operator = (const pair<point,point> &other){return *this=line(other);}
+    line &operator = (pair<point,point> &&other){return *this=line(other);}
+    
+    line(const initializer_list<point> init):s(init.begin()[0]),t(init.begin()[1]){}
+    
+    line &operator = (const initializer_list<point> init){return *this=line(init);}
+    
+    explicit line(const line_e &other){
+      if (!sgn(other.a)){
+        s.x=type();t.x=type(1);
+        s.y=t.y=-other.c/other.b;
+      }else if (!sgn(other.b)){
+        s.y=type();t.y=type(1);
+        s.x=t.x=-other.c/other.a;
+      }else{
+        s=point(type(),-other.c/other.b);
+        t=point(type(1),-(other.a+other.c)/other.b);
+      }
+    }
+    
+    line &operator = (const line_e &other){return *this=line(other);}
+    
+    explicit line(const line_f &other):s(type(),other(type())),t(type(1),other(type(1))){}
+    
+    line &operator = (const line_f &other){return *this=line(other);}
+    
+    explicit operator pair<point,point> ()const{return pair<point,point>(s,t);}
+    pair<point,point> make_pair()const{return pair<point,point>(s,t);}
+    
+    point *data(){return &s;}  // Maybe dangerous
+    const point *data()const{return &s;}  // Maybe dangerous
+    
+    using reference=point &;
+    using const_reference=const point &;
+    
+    reference operator [] (size_t p){return p?t:s;}
+    const_reference operator [] (size_t p)const{return p?t:s;}
+    
+    point vec()const{return t-s;}
+    
+    type operator () (const type &x)const{return (s+(x-s.x)/(t.x-s.x)*(t-s)).y;}
+    
+    bool on(const point &k)const{return !sgn(vec()%(k-s));}
+    
+    point pro(const point &k)const{return s+(k-s)*vec()*vec()/vec().mod2();}
+    point sym(const point &k)const{return type(2)*pro(k)-k;}
+    type dis2(const point &k)const{return k.dis2(pro(k));}
+    type dis(const point &k)const{return k.dis(pro(k));}
+    
+    point _cross(const line &b)const{
+      const line &a=*this;
+      point u=a.s-b.s,v=a.vec(),w=b.vec();
+      return a.s+(w%u)/(v%w)*v;
+    }
+    
+    int para(const line &b)const{
+      const line &a=*this;
+      return sgn(a.vec()%b.vec())?0:sgn((a.s-b.s)%a.vec())?1:-1;
+    }
+    
+    friend bool operator == (const line &a,const line &b){return a.para(b)==-1;}
+    friend bool operator != (const line &a,const line &b){return a.para(b)!=-1;}
+    
+    pair<int,point> cross(const line &b)const{
+      int o=para(b);
+      return pair<int,point>(o,o?point():_cross(b));
+    }
+    
+    bool check_segment_cross(const line &b)const{
+      const line &a=*this;
+      int o=a.para(b);
+      if (o==1) return 0;
+      if (o==-1){
+        if (type_less(max(a.s.x,a.t.x),min(b.s.x,b.t.x))) return 0;
+        if (type_less(max(b.s.x,b.t.x),min(a.s.x,a.t.x))) return 0;
+        if (type_less(max(a.s.y,a.t.y),min(b.s.y,b.t.y))) return 0;
+        if (type_less(max(b.s.y,b.t.y),min(a.s.y,a.t.y))) return 0;
+        return 1;
+      }
+      if (sgn((a.s-b.s)%b.vec())*sgn((a.t-b.s)%b.vec())>0) return 0;
+      if (sgn((b.s-a.s)%a.vec())*sgn((b.t-a.s)%a.vec())>0) return 0;
+      return 1;
+    }
+    
+    vector<point> segment_cross(const line &b)const{
+      const line &a=*this;
+      int o=a.para(b);
+      if (o==1) return {};
+      if (o==-1){
+        if (type_less(max(a.s.x,a.t.x),min(b.s.x,b.t.x))) return {};
+        if (type_less(max(b.s.x,b.t.x),min(a.s.x,a.t.x))) return {};
+        if (type_less(max(a.s.y,a.t.y),min(b.s.y,b.t.y))) return {};
+        if (type_less(max(b.s.y,b.t.y),min(a.s.y,a.t.y))) return {};
+        auto max=[&](const point &a,const point &b){
+          int o=sgn(a.x,b.x);
+          return o?o==1?a:b:type_less(a.y,b.y)?b:a;
+        };
+        auto min=[&](const point &a,const point &b){
+          int o=sgn(a.x,b.x);
+          return o?o==1?b:a:type_less(a.y,b.y)?a:b;
+        };
+        return {
+          max(min(a.s,a.t),min(b.s,b.t)),
+          min(max(a.s,a.t),max(b.s,b.t))
+        };
+      }
+      if (sgn((a.s-b.s)%b.vec())*sgn((a.t-b.s)%b.vec())>0) return {};
+      if (sgn((b.s-a.s)%a.vec())*sgn((b.t-a.s)%a.vec())>0) return {};
+      return {a._cross(b)};
+    }
+    
+  };
+  
+  static point vec(const line &a){return a.vec();}
+  
+  static type value(const line &a,const type &x){return a(x);}
+  
+  static bool on(const line &a,const point &k){return a.on(k);}
+  
+  static point pro(const line &a,const point &k){return a.pro(k);}
+  static point sym(const line &a,const point &k){return a.sym(k);}
+  static type dis2(const line &a,const point &k){return a.dis2(k);}
+  static type dis(const line &a,const point &k){return a.dis(k);}
+  
+  static point _cross(const line &a,const line &b){return a._cross(b);}
+  static int para(const line &a,const line &b){return a.para(b);}
+  static pair<int,point> cross(const line &a,const line &b){return a.cross(b);}
+  
+  static bool check_segment_cross(const line &a,const line &b){return a.check_segment_cross(b);}
+  static vector<point> segment_cross(const line &a,const line &b){return a.segment_cross(b);}
+  
+  class linear_equation{
+    
+  public:
+    type a,b,c;
+    
+    linear_equation()=default;
+    
+    linear_equation(const type &_a,const type &_b,const type &_c):a(_a),b(_b),c(_c){}
+    linear_equation(type &&_a,type &&_b,type &&_c):a(_a),b(_b),c(_c){}
+    
+    linear_equation(const tuple<type,type,type> &other)
+      :a(get<0>(other)),b(get<1>(other)),c(get<2>(other)){}
+    
+    linear_equation(tuple<type,type,type> &&other)
+      :a(move(get<0>(other))),b(move(get<1>(other))),c(move(get<2>(other))){}
+    
+    line_e &operator = (const tuple<type,type,type> &other){return *this=line_e(other);}
+    line_e &operator = (tuple<type,type,type> &&other){return *this=line_e(other);}
+    
+    linear_equation(const initializer_list<type> init)
+      :a(init.begin()[0]),b(init.begin()[1]),c(init.begin()[2]){}
+    
+    line_e &operator = (const initializer_list<type> init){return *this=line_e(init);}
+    
+    explicit linear_equation(const line &other){
+      if (!sgn(other.s.x,other.t.x)){
+        a=1;b=0;c=-other.s.x;
+      }else if (!sgn(other.s.y,other.t.y)){
+        a=0;b=1;c=-other.s.y;
+      }else{
+        a=1;
+        b=(other.t.x-other.s.x)/(other.s.y-other.t.y);
+        c=-(other.s.x+b*other.s.y);
+      }
+    }
+    
+    line_e &operator = (const line &other){return *this=line_e(other);}
+    
+    explicit linear_equation(const line_f &other):a(other.k),b(-type(1)),c(other.b){}
+    
+    line_e &operator = (const line_f &other){return *this=line_e(other);}
+    
+    explicit operator tuple<type,type,type> ()const{return tuple<type,type,type>(a,b,c);}
+    tuple<type,type,type> make_tuple()const{return tuple<type,type,type>(a,b,c);}
+    
+    using reference=type &;
+    using const_reference=const type &;
+    
+    reference operator [] (size_t p){return p?p==2?c:b:a;}
+    const_reference operator [] (size_t p)const{return p?p==2?c:b:a;}
+    
+  };
+  
+  class linear_function{
+    
+  public:
+    type k,b;
+    
+    linear_function()=default;
+    
+    linear_function(const type &_k,const type &_b):k(_k),b(_b){};
+    linear_function(type &&_k,type &&_b):k(_k),b(_b){};
+    
+    linear_function(const pair<type,type> &other):k(other.first),b(other.second){}
+    linear_function(pair<type,type> &&other):k(move(other.first)),b(move(other.second)){}
+    
+    line_f &operator = (const pair<type,type> &other){return *this=line_f(other);}
+    line_f &operator = (pair<type,type> &&other){return *this=line_f(other);}
+    
+    linear_function(const initializer_list<type> init):k(init.begin()[0]),b(init.begin()[1]){}
+    
+    line_f &operator = (const initializer_list<type> init){return *this=line_f(init);}
+    
+    explicit linear_function(const line &other)
+      :k((other.t.y-other.s.y)/(other.t.x-other.s.x))
+      ,b(other.s.y-k*other.s.x){}
+    
+    line_f &operator = (const line &other){return *this=line_f(other);}
+    
+    explicit linear_function(const line_e &other):k(-other.a/other.b),b(-other.c/other.b){}
+    
+    line_f &operator = (const line_e &other){return *this=line_f(other);}
+    
+    explicit operator pair<type,type> ()const{return pair<type,type>(k,b);}
+    pair<type,type> make_pair()const{return pair<type,type>(k,b);}
+    
+    using reference=type &;
+    using const_reference=const type &;
+    
+    reference operator [] (size_t p){return p?b:k;}
+    const_reference operator [] (size_t p)const{return p?b:k;}
+    
+    type operator () (const type &x)const{return k*x+b;}
+    
+    friend bool operator == (const line_f &a,const line_f &b){
+      return !sgn(a.k,b.k)&&!sgn(a.b,b.b);
+    }
+    
+    friend bool operator != (const line_f &a,const line_f &b){
+      return sgn(a.k,b.k)||sgn(a.b,b.b);
+    }
+    
+    line_f &operator += (const line_f &p){k+=p.k;b+=p.b;return *this;}
+    line_f &operator -= (const line_f &p){k-=p.k;b-=p.b;return *this;}
+    line_f operator + ()const{return *this;}
+    line_f operator - ()const{return line_f(-k,-b);}
+    friend line_f operator + (const line_f &a,const line_f &b){return line_f(a)+=b;}
+    friend line_f operator - (const line_f &a,const line_f &b){return line_f(a)-=b;}
+    
+    line_f &operator *= (const type &p){k*=p;b*=p;return *this;}
+    line_f &operator /= (const type &p){k/=p;b/=p;return *this;}
+    friend line_f operator * (const line_f &a,const type &b){return line_f(a)*=b;}
+    friend line_f operator * (const type &a,const line_f &b){return line_f(b)*=a;}
+    friend line_f operator / (const line_f &a,const type &b){return line_f(a)/=b;}
+    
+    type min(const type &l,const type &r)const{return k*(type_less(type(),k)?l:r)+b;}
+    type max(const type &l,const type &r)const{return k*(type_less(k,type())?l:r)+b;}
+    
+    type slope(const type &x)const{return k;}
+    type area(const type &l,const type &r)const{return (k*(l+r)/type(2)+b)*(r-l);}
+    
+    type _root()const{return -b/k;}
+    
+    pair<bool,vector<type>> root()const{
+      if (!sgn(k))
+        return pair<bool,vector<type>>(!!sgn(b),{});
+      else
+        return pair<bool,vector<type>>(1,{_root()});
+    }
+    
+  };
+  
+  static type value(const line_f &a,const type &x){return a(x);}
+  
+  static type min(const line_f &a,const type &l,const type &r){return a.min(l,r);}
+  static type max(const line_f &a,const type &l,const type &r){return a.max(l,r);}
+  
+  static type slope(const line_f &a,const type &x){return a.slope(x);}
+  static type area(const line_f &a,const type &l,const type &r){return a.area(l,r);}
+  
+  static type _root(const line_f &a){return a._root();}
+  static pair<bool,vector<type>> root(const line_f &a){return a.root();}
+  
+  template<class container_T=vector<point>>
+  class polygon
+  :public container_T{
+    
+  public:
+    using container_type=container_T;
+    
+    using container_type::container_type;
+    
+    polygon(const container_type &other):container_type(other){}
+    polygon(container_type &&other):container_type(other){}
+    
+    polygon &operator = (const container_type &other){return *this=polygon(other);}
+    polygon &operator = (container_type &&other){return *this=polygon(other);}
+    
+    polygon &operator = (const initializer_list<point> init){return *this=polygon(init);}
+    
+    using container_type::size,container_type::empty;
+    using container_type::back;
+    using container_type::push_back,container_type::pop_back;
+    
+    void swap(polygon &other){container_type::swap(other);}
+    friend void swap(polygon &a,polygon &b){a.swap(b);}
+    
+  private:
+    size_t pre(size_t p)const{return p?p-1:size()-1;}
+    size_t suf(size_t p)const{return p+1==size()?0:p+1;}
+    
+  public:
+    type len2()const{
+      const polygon &a=*this;
+      type res=type();
+      for (size_t i=0;i<size();++i)
+        res+=dis2(a[i],a[suf(i)]);
+      return res;
+    }
+    
+    type len()const{
+      const polygon &a=*this;
+      type res=type();
+      for (size_t i=0;i<size();++i)
+        res+=dis(a[i],a[suf(i)]);
+      return res;
+    }
+    
+    type area2()const{
+      const polygon &a=*this;
+      type res=type();
+      for (size_t i=0;i<size();++i)
+        res+=a[i]%a[suf(i)];
+      return abs(res);
+    }
+    
+    type area()const{return area2()/type(2);}
+    
+    bool on(const point &k)const{
+      const polygon &a=*this;
+      for (size_t i=0;i<size();++i){
+        point x=a[i]-k,y=a[suf(i)]-k;
+        if (!sgn(x%y)&&!type_less(type(),x*y)) return 1;
+      }
+      return 0;
+    }
+    
+    bool in(const point &k)const{
+      const polygon &a=*this;
+      type res=type();
+      for (size_t i=0;i<size();++i){
+        point x=a[i]-k,y=a[suf(i)]-k;
+        if (!sgn(x%y)&&!type_less(type(),x*y)) return 1;
+        res+=x.angle(y);
+      }
+      return sgn(res);
+    }
+    
+    // polygon _convex_hull()const{
+      // const polygon &a=*this;
+      // polygon res;
+      // for (size_t i=0;i<size();++i){}
+      // return res;
+    // }
+    
+    // polygon convex_hull()const{
+      // polygon a=*this;
+      // sort(a.begin(),a.end(),[&](const point &a,const point &b){
+        // return type_less(a.x,b.x);
+      // });
+    // }
+    
+  };
+  
+  template<class container_type>
+  static type len2(const polygon<container_type> &a){return a.len2();}
+  
+  template<class container_type>
+  static type len(const polygon<container_type> &a){return a.len();}
+  
+  template<class container_type>
+  static type area2(const polygon<container_type> &a){return a.area2();}
+  
+  template<class container_type>
+  static type area(const polygon<container_type> &a){return a.area();}
+  
+  template<class container_type>
+  static bool on(const polygon<container_type> &a,const point &k){return a.on(k);}
+  
+  template<class container_type>
+  static bool in(const polygon<container_type> &a,const point &k){return a.in(k);}
+  
+  // template<class container_type>
+  // static polygon _convex_hull(const polygon<container_type> &a){return a._convex_hull();}
+  
+  // template<class container_type>
+  // static polygon convex_hull(const polygon<container_type> &a){return a.convex_hull();}
+  
+  class quadratic_function{
+    
+  private:
+    using quad_f=quadratic_function;
+    
+  public:
+    type a,b,c;
+    
+    quadratic_function()=default;
+    
+    quadratic_function(const type &_a,const type &_b,const type &_c):a(_a),b(_b),c(_c){};
+    quadratic_function(type &&_a,type &&_b,type &&_c):a(_a),b(_b),c(_c){};
+    
+    quadratic_function(const tuple<type,type,type> &other)
+      :a(get<0>(other)),b(get<1>(other)),c(get<2>(other)){}
+    
+    quadratic_function(tuple<type,type,type> &&other)
+      :a(move(get<0>(other))),b(move(get<1>(other))),c(move(get<2>(other))){}
+    
+    quad_f &operator = (const tuple<type,type,type> &other){return *this=quad_f(other);}
+    quad_f &operator = (tuple<type,type,type> &&other){return *this=quad_f(other);}
+    
+    quadratic_function(const initializer_list<type> init)
+      :a(init.begin()[0]),b(init.begin()[1]),c(init.begin()[2]){}
+    
+    quad_f &operator = (const initializer_list<type> init){return *this=quad_f(init);}
+    
+    explicit operator tuple<type,type,type> ()const{return tuple<type,type,type>(a,b,c);}
+    tuple<type,type,type> make_tuple()const{return tuple<type,type,type>(a,b,c);}
+    
+    using reference=type &;
+    using const_reference=const type &;
+    
+    reference operator [] (size_t p){return p?p==2?a:b:c;}
+    const_reference operator [] (size_t p)const{return p?p==2?a:b:c;}
+    
+    type operator () (const type &x)const{return (a*x+b)*x+c;}
+    
+    friend bool operator == (const quad_f &a,const quad_f &b){
+      return !sgn(a.a,b.a)&&!sgn(a.b,b.b)&&!sgn(a.c,b.c);
+    }
+    
+    friend bool operator != (const quad_f &a,const quad_f &b){
+      return sgn(a.a,b.a)||sgn(a.b,b.b)||sgn(a.c,b.c);
+    }
+    
+    quad_f &operator += (const quad_f &p){a+=p.a;b+=p.b;c+=p.c;return *this;}
+    quad_f &operator -= (const quad_f &p){a-=p.a;b-=p.b;c-=p.c;return *this;}
+    quad_f operator + ()const{return *this;}
+    quad_f operator - ()const{return quad_f(-a,-b,-c);}
+    friend quad_f operator + (const quad_f &a,const quad_f &b){return quad_f(a)+=b;}
+    friend quad_f operator - (const quad_f &a,const quad_f &b){return quad_f(a)-=b;}
+    
+    quad_f &operator *= (const type &p){a*=p;b*=p;c*=p;return *this;}
+    quad_f &operator /= (const type &p){a/=p;b/=p;c/=p;return *this;}
+    friend quad_f operator * (const quad_f &a,const type &b){return quad_f(a)*=b;}
+    friend quad_f operator * (const type &a,const quad_f &b){return quad_f(b)*=a;}
+    friend quad_f operator / (const quad_f &a,const type &b){return quad_f(a)/=b;}
+    
+    type mid()const{return -b/(type(2)*a);}
+    
+    type min(const type &l,const type &r)const{
+      int o=sgn(a);
+      if (!o) return line_f(b,c).min(l,r);
+      if (o<0) return type_min((*this)(l),(*this)(r));
+      type x=mid();
+      return (*this)(type_less(x,l)?l:type_less(r,x)?r:x);
+    }
+    
+    type max(const type &l,const type &r)const{
+      int o=sgn(a);
+      if (!o) return line_f(b,c).max(l,r);
+      if (o>0) return type_max((*this)(l),(*this)(r));
+      type x=mid();
+      return (*this)(type_less(x,l)?l:type_less(r,x)?r:x);
+    }
+    
+    type slope(const type &x)const{return type(2)*a*x+b;}
+    
+    type area(const type &l,const type &r)const{
+      quad_f t(a/type(3),b/type(2),c);
+      return r*t(r)-l*t(l);
+    }
+    
+    vector<type> _root()const{
+      type delta=b*b-type(4)*a*c;
+      switch (sgn(delta)){
+        case -1:return {};
+        case 0:return {-b/(type(2)*a)};
+        case 1:{
+          delta=sqrt(delta);
+          type t=type(2)*a;
+          return {(-b-delta)/t,(-b+delta)/t};
+        }
+      }
+      return {};
+    }
+    
+    pair<bool,vector<type>> root()const{
+      if (!sgn(a)) return line_f(b,c).root();
+      return pair<bool,vector<type>>(1,_root());
+    }
+    
+  };
+  
+private:
+  using quad_f=quadratic_function;
+  
+public:
+  static type value(const quad_f &a,const type &x){return a(x);}
+  
+  static type mid(const quad_f &a){return a.mid();}
+  static type min(const quad_f &a,const type &l,const type &r){return a.min(l,r);}
+  static type max(const quad_f &a,const type &l,const type &r){return a.max(l,r);}
+  
+  static type slope(const quad_f &a,const type &x){return a.slope(x);}
+  static type area(const quad_f &a,const type &l,const type &r){return a.area(l,r);}
+  
+  static type _root(const quad_f &a){return a._root();}
+  static pair<bool,vector<type>> root(const quad_f &a){return a.root();}
+  
+  class circle{
+    
+  public:
+    point o;
+    type r;
+    
+    
+    
+  };
+  
+};
+
+struct double_less{
+  static constexpr double eps=1e-8;
+  bool operator () (const double &x,const double &y)const{return x+eps<y;}
+};
+
+typedef geometry_2d<double,double_less> geo;
+typedef geo::point point;
+typedef geo::line line;
+typedef geo::linear_equation line_e;
+typedef geo::linear_function line_f;
+typedef geo::polygon<vector<point>> polygon;
+typedef geo::quadratic_function quad_f;
+typedef geo::circle circle;
+
+int main(){
+  line a;
+  scanf("%lf%lf%lf%lf",&a[0].x,&a[0].y,&a[1].x,&a[1].y);
+  int cq;
+  scanf("%d",&cq);
+  for (;cq--;){
+    point b;
+    scanf("%lf%lf",&b.x,&b.y);
+    point ans=a.pro(b);
+    printf("%.10lf %.10lf\n",ans.x,ans.y);
+  }
+  return 0;
+}

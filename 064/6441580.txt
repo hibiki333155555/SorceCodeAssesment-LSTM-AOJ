@@ -1,0 +1,295 @@
+#include <bits/stdc++.h>
+//#include <boost/multiprecision/cpp_int.hpp>
+//#include <atcoder/all>
+using namespace std;
+#define rep(i, a) for (int i = (int)0; i < (int)a; ++i)
+#define repl(i, a) for (long long i = (long long)0; i < (long long)a; ++i)
+#define rrep(i, a) for (int i = (int)a; i > -1; --i)
+#define REP(i, a, b) for (int i = (int)a; i < (int)b; ++i)
+#define REPL(i, a, b) for (long long i = (long long)a; i < (long long)b; ++i)
+#define RREP(i, a, b) for (int i = (int)a; i > b; --i)
+#define pb push_back
+#define eb emplace_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define popcount __builtin_popcount
+#define popcountll __builtin_popcountll
+#define fi first
+#define se second
+using ll = long long;
+constexpr ll mod = 1e9 + 7;
+constexpr ll mod_998244353 = 998244353;
+constexpr ll INF = 1LL << 60;
+
+//#pragma GCC target("avx2")
+//#pragma GCC optimize("O3")
+//#pragma GCC optimize("unroll-loops")
+
+//using lll = boost::multiprecision::cpp_int;
+template <class T>
+inline bool chmin(T &a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template <class T>
+inline bool chmax(T &a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+
+ll mypow(ll x, ll n, const ll &p = -1) {  // x^nをmodで割った余り
+
+  if (p != -1) {
+    x = (x % p + p) % p;
+  }
+  ll ret = 1;
+  while (n > 0) {
+    if (n & 1) {
+      if (p != -1)
+        ret = (ret * x) % p;
+      else
+        ret *= x;
+    }
+    if (p != -1)
+      x = (x * x) % p;
+    else
+      x *= x;
+    n >>= 1;
+  }
+  return ret;
+}
+
+template <typename T>
+struct myrand {
+  random_device seed;
+  mt19937 mt;
+  myrand() : mt(seed()) {}
+  T operator()(T a, T b) {  //[a,b)
+    uniform_int_distribution<T> dist(a, b - 1);
+    return dist(mt);
+  }
+};
+
+//using namespace atcoder;
+
+//------------------------
+//-----------------------
+//------------------------
+//------------------------
+//------------------------
+
+
+namespace geometry
+{
+  using Real = double;
+  const Real EPS = 1e-8;
+  const Real PI = acos(static_cast<Real>(-1));
+
+  inline int sign(const Real &r) { return r <= -EPS ? -1 : r >= EPS ? 1
+                                                                    : 0; }
+
+  inline bool equals(const Real &a, const Real &b) { return sign(a - b) == 0; }
+
+  using Point = complex<Real>;
+
+  istream &operator>>(istream &is, Point &p)
+  {
+    double a, b;
+    is >> a >> b;
+    p = Point(a, b);
+    return is;
+  }
+
+  ostream &operator<<(ostream &os, const Point &p)
+  {
+    return os << real(p) << " " << imag(p);
+  }
+
+  Point operator*(const Point &p, const double &d)
+  {
+    return Point(real(p) * d, imag(p) * d);
+  }
+
+  double cross(const Point &a, const Point &b)
+  { //外積
+    return real(a) * imag(b) - imag(a) * real(b);
+  }
+
+  double dot(const Point &a, const Point &b)
+  { //内積
+    return real(a) * real(b) + imag(a) * imag(b);
+  }
+
+  bool compare_x(const Point &a, const Point &b)
+  {
+    return equals(real(a), real(b)) ? imag(a) < imag(b) : real(a) < real(b);
+  }
+
+  bool compare_y(const Point &a, const Point &b)
+  {
+    return equals(imag(a), imag(b)) ? real(a) < real(b) : imag(a) < imag(b);
+  }
+
+  Point rot(const Point &p, const double &theta)
+  {
+    return Point(real(p) * cos(theta) - imag(p) * sin(theta), real(p) * sin(theta) + imag(p) * cos(theta));
+  }
+
+  using Polygon = vector<Point>;
+  using Polygons = vector<Polygon>;
+
+  Polygon convex_hull(Polygon &p, bool strict = true)
+  {
+    //凸包
+    int n = (int)p.size(), k = 0;
+    if (n <= 2){
+      return p;
+    }
+    sort(p.begin(), p.end(), compare_x);
+    Polygon ret(n * 2);
+    auto check = [&](int i)
+    {
+      return sign(cross(ret[k - 1] - ret[k - 2], p[i] - ret[k - 1])) <= -1 + strict;
+    };
+    for (int i = 0; i < n; ++i)
+    {
+      while (k >= 2 && check(i)){
+        k--;
+      }
+      ret[k++] = p[i];
+    }
+    int t = k;
+    for (int i = n - 2; i >= 0; --i)
+    {
+      while (k > t && check(i)){
+        k--;
+      }
+      ret[k++] = p[i];
+    }
+    ret.resize(k - 1);
+    return ret;
+  }
+
+  int iSP(const Point &a, const Point &b, const Point &c)
+  {
+    double res = cross(b - a, c - a);
+    if (res > 0)
+      return 1; //a->b->cが左に曲がる
+    else if (res < 0)
+      return -1; //a->b->cが右に曲がる
+    else
+    { //まっすぐ
+      if (dot(b - a, c - a) < 0)
+        return -2; //c-a-b
+      if (dot(a - b, c - b) < 0)
+        return 2; //a-b-c
+      else
+        return 0; //a-c-b
+    }
+  }
+
+  struct Line
+  { //線分
+    Point a, b;
+
+		Line(){}
+
+    Line(const Point &a, const Point &b) : a(a), b(b) {}
+
+    Line(const Real &A, const Real &B, const Real &C)
+    { //Ax+By=C
+      if (equals(A, 0))
+      { //y=C/B
+        assert(!equals(B, 0));
+        a = Point(0, C / B);
+        b = Point(1, C / B);
+      }
+      else if (equals(B, 0))
+      {
+        a = Point(C / A, 0);
+        b = Point(C / A, 1);
+      }
+      else
+      {
+        a = Point(0, C / B);
+        b = Point(C / A, 0);
+      }
+    }
+
+    friend ostream &operator<<(ostream &os, Line &l)
+    {
+      return os << l.a << "to" << l.b;
+    }
+
+    friend istream &operator>>(istream &is, Line &l)
+    {
+      return is >> l.a >> l.b;
+    }
+  };
+
+  using Lines = vector<Line>;
+
+  Point cross_point_ll(const Line &l, const Line &m)
+  {
+    Real A = cross(l.b - l.a, m.b - m.a);
+    Real B = cross(l.b - l.a, l.b - m.a);
+    if (equals(abs(A), 0) && equals(abs(B), 0))
+      return m.a;
+    return m.a + (m.b - m.a) * B / A;
+  }
+
+  Point gaisin(const Point &a, const Point &b, const Point &c)
+  {
+    Line ab((a + b) / 2.0, (a + b) / 2.0 + rot(a - b, acos(-1) / 2));
+    Line bc((b + c) / 2.0, (b + c) / 2.0 + rot(b - c, acos(-1) / 2));
+    return cross_point_ll(ab, bc);
+  }
+
+	struct Circle{
+		Point p;
+		Real r;
+
+		Circle(){};
+		Circle(const Point &p, const Real &r):p(p),r(r){}
+	};
+
+	using Circles = vector<Circle>;
+
+	Polygon cross_point_cc(const Circle &c1, const Circle &c2) {
+    Real d = abs(c1.p - c2.p), r = c1.r + c2.r;
+    if(sign(d - r) > 0 or sign(d + c1.r - c2.r) < 0) return {};
+    Real a = acos((norm(c1.r) - norm(c2.r) + norm(d)) / (2 * c1.r * d));
+    Real t = arg(c2.p - c1.p);
+    Point p = c1.p + polar(c1.r, t + a);
+    Point q = c1.p + polar(c1.r, t - a);
+    if(equals(real(p), real(q)) && equals(imag(p), imag(q))) return {p};
+    return {p, q};
+  }
+} //namespace geometry
+
+using namespace geometry;
+double x[4],y[4];
+void solve(){
+  int q;
+  cin>>q;
+  while(q--){
+  rep(i,4)cin>>x[i]>>y[i];
+  Point a(x[0],y[0]),b(x[1],y[1]),c(x[2],y[2]),d(x[3],y[3]);
+  if(iSP(a,b,c)*iSP(a,b,d)<=0 && iSP(c,d,a)*iSP(c,d,b)<=0)cout<<1<<"\n";//cout<<"Yes\n";
+  else cout<<0<<"\n";//cout<<"No\n";
+  }
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout << fixed << setprecision(15);
+  solve();
+  return 0;
+}

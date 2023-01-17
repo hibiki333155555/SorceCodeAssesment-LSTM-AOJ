@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    string s;
+    getline(cin, s);
+    map<char, int> a;
+    for(int i=0;i<s.size();i++){
+        if('A'<= s[i] && s[i]<='z'){
+            if('A'<=s[i]&&s[i]<='Z'){
+                s[i]+='a'-'A';
+            }
+            if(a.find(s[i]) == a.end()){
+                a[s[i]] = 1;
+            }else{
+                a[s[i]]++;
+            }
+        }
+    }
+    for(char i='a'; i<='z';i++){
+        cout<<i<<" : "<<a[i]<<"\n";
+    }
+    return(0);
+}
+

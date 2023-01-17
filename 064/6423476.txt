@@ -1,0 +1,16 @@
+n = int(input())
+a = list(map(int, input().split(" ")))
+count = 0
+for i in range(n):
+    minj = i
+    changed = False
+    for j in range(i+1, n):
+        if a[j] < a[minj]:
+            minj = j
+            changed = True
+    if changed:
+        a[i], a[minj] = a[minj], a[i]
+        count += 1
+
+print(" ".join(map(str, a)))
+print(count)

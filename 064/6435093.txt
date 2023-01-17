@@ -1,0 +1,20 @@
+
+data = []
+while True:
+    d = list(map(int, input().split()))
+    if d == [0, 0]:
+        break
+    data.append(d)
+
+for d in data:
+    for num1, x in enumerate(range(d[0])):
+        for num2, y in enumerate(range(d[1])):
+            if num1 == 0 or num1 == d[0] - 1:
+                print("#", end="")
+            else:
+                if num2 == 0 or num2 == d[1] - 1:
+                    print("#", end="")
+                else:
+                    print(".", end="")
+        print("")
+    print("")

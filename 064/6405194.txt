@@ -1,0 +1,70 @@
+/* 挿入ソート
+54321
+45321
+34521
+23451
+12345
+*/
+
+/* 選択ソート
+54321
+15432
+12543
+12354
+12345
+*/
+
+#include <iostream>
+using namespace std;
+
+void printArray(int a[], int n);
+
+int selectionSort(int A[], int n)
+{
+    int minIdx;
+    int sw = 0;
+    
+    for (int i = 0; i < n - 1; ++i) {      // A[0] < A[1] < ... < A[i-1]
+	minIdx = i;                        // min value at index i
+	for (int j = i + 1; j < n; ++j) {  // A[minIdx] = min{A[i], ..., A[N-1]}
+	    if (A[j] < A[minIdx])
+		minIdx = j;             
+	}
+	if (i != minIdx) {
+	    swap(A[i], A[minIdx]);
+	    ++sw;
+	}
+    }
+
+    return sw;
+}		
+    
+int main()
+{
+    int N;
+    cin >> N;
+    
+    int A[N];
+    for (int i = 0; i < N; ++i)
+	cin >> A[i];
+    
+    int sw;
+    sw = selectionSort(A, N);
+    printArray(A, N);
+    cout << sw << endl;
+
+    return 0;
+}
+	    
+
+void printArray(int a[], int n)
+{
+    for (int i = 0; i < n; ++i) {
+	cout << a[i];
+	if (i < n - 1)
+	    cout << " ";
+	else
+	    cout << endl;
+    }
+}
+

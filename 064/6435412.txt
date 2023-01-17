@@ -1,0 +1,53 @@
+import sys
+from heapq import heappush, heappop, heapify
+readline = sys.stdin.readline
+write = sys.stdout.write
+def solve():
+    S = readline().strip()
+    k = int(readline())
+
+    N = len(S)
+    data = [0]*(N+1)
+    def add(k, x):
+        while k <= N:
+            data[k] += x
+            k += k & -k
+    def get(k):
+        s = 0
+        while k > 0:
+            s += data[k]
+            k -= k & -k
+        return s
+
+    cur = min(N, k+1)
+    que = [(e, i) for i, e in enumerate(S[:cur])]
+    que1 = [(i+cur, e) for i, e in enumerate(S[cur:])]
+    heapify(que)
+    heapify(que1)
+
+    used = [0]*N
+
+    ans = []
+    for i in range(N):
+        while que:
+            c, j = heappop(que)
+            k0 = j - get(j+1)
+            if k0 <= k:
+                break
+            heappush(que1, (j, c))
+        k -= k0
+        add(j+1, 1)
+        ans.append(c)
+        used[j] = 1
+        if k == 0:
+            break
+        while que1:
+            j, c = que1[0]
+            if j - get(j+1) > k:
+                break
+            heappop(que1)
+            heappush(que, (c, j))
+    ans.extend(e for i, e in enumerate(S) if not used[i])
+    write("%s\n" % "".join(ans))
+solve()
+

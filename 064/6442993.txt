@@ -1,0 +1,26 @@
+
+def binary_search(n, S, q):
+    low = -1
+    high = n
+    while high - low > 1:
+        mid = (low + high) // 2
+        if S[mid] <= q:
+            low = mid
+        else:
+            high = mid
+    # print('[', low, high, ']', q, S)
+    if low == -1 or high == n:
+        return 0
+    return 1
+
+
+n = int(input())
+S = list(map(int, input().split()))
+q = int(input())
+Q = list(map(int, input().split()))
+
+ans = 0
+for query in Q:
+    ans += binary_search(n, S, query)
+print(ans)
+

@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int dep[100005]={0};
+
+struct pp{
+	int p,l,r;
+}i[100005];
+
+void findd(int a,int d){
+	dep[a]=d;
+	if(i[a].r!=-1) findd(i[a].r,d);
+	if(i[a].l!=-1) findd(i[a].l,d+1);
+}
+
+void print(int a){
+	cout<<"node "<<a<<": parent = "<<i[a].p<<", depth = "<<dep[a]<<", ";
+	if(i[a].p==-1) cout<<"root, ";
+	else if(i[a].l==-1) cout<<"leaf, ";
+	else cout<<"internal node, ";
+	if(i[a].l!=-1){
+		cout<<'['<<i[a].l;
+		int b=i[i[a].l].r;
+		while(b!=-1){
+			cout<<", "<<b;
+			b=i[b].r;	
+		}
+		cout<<']';
+	}else{
+		cout<<"[]";
+	}
+	cout<<endl;
+}
+
+int main()
+{
+	int n;
+	cin>>n;
+	for(int c=0;c<n;c++) i[c].l=i[c].p=i[c].r=-1;
+	for(int c=0;c<n;c++){
+		int id,k,j;
+		cin>>id>>k;
+		for(int d=0;d<k;d++){
+			int a;
+			cin>>a;
+			if(d==0) i[id].l=a;
+			else i[j].r=a;
+			j=a;
+			i[a].p=id;
+		}
+	}
+	int r;
+	for(int c=0;c<n;c++){
+		if(i[c].p==-1) r=c;
+	}
+	findd(r,0);
+	
+	for(int c=0;c<n;c++) print(c);
+}
+

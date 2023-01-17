@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+#define all(v) v.begin(), v.end()
+#define rall(v) v.rbegin(), v.rend()
+#define rep(i,n) for(int i=0;i<(int)(n);i++)
+#define drep(i,j,n) for(int i=0;i<(int)(n-1);i++)for(int j=i+1;j<(int)(n);j++)
+#define trep(i,j,k,n) for(int i=0;i<(int)(n-2);i++)for(int j=i+1;j<(int)(n-1);j++)for(int k=j+1;k<(int)(n);k++)
+#define codefor int test;scanf("%d",&test);while(test--)
+#define INT(...) int __VA_ARGS__;in(__VA_ARGS__)
+#define LL(...) ll __VA_ARGS__;in(__VA_ARGS__)
+#define yes(ans) if(ans)printf("yes\n");else printf("no\n")
+#define Yes(ans) if(ans)printf("Yes\n");else printf("No\n")
+#define YES(ans) if(ans)printf("YES\n");else printf("NO\n")
+#define popcount(v) __builtin_popcountll(v)
+#define vector2d(type,name,h,...) vector<vector<type>>name(h,vector<type>(__VA_ARGS__))
+#define vector3d(type,name,h,w,...) vector<vector<vector<type>>>name(h,vector<vector<type>>(w,vector<type>(__VA_ARGS__)))
+#define vector4d(type,name,h,w,d,...) vector<vector<vector<vector<type>>>>name(h,vector<vector<vector<type>>>(w,vector<vector<type>>(d,vector<type>(__VA_ARGS__))))
+using namespace std;
+using ll = long long;
+template<class T> using rpriority_queue = priority_queue<T, vector<T>, greater<T>>;
+const int MOD=1000000007;
+const int MOD2=998244353;
+const int INF=1<<30;
+const ll INF2=1LL<<60;
+void scan(int& a){scanf("%d",&a);}
+void scan(long long& a){scanf("%lld",&a);}
+template<class T,class L>void scan(pair<T, L>& p){scan(p.first);scan(p.second);}
+template<class T,class U,class V>void scan(tuple<T,U,V>& p){scan(get<0>(p));scan(get<1>(p));scan(get<2>(p));}
+template<class T, size_t size> void scan(array<T, size>& a){ for(auto&& i : a) scan(i);}
+template<class T> void scan(T& a){cin>>a;}
+template<class T> void scan(vector<T>& vec){for(auto&& it:vec)scan(it);}
+void in(){}
+template <class Head, class... Tail> void in(Head& head, Tail&... tail){scan(head);in(tail...);}
+void print(const int& a){printf("%d",a);}
+void print(const long long& a){printf("%lld",a);}
+void print(const double& a){printf("%.15lf",a);}
+template<class T,class L>void print(const pair<T, L>& p){print(p.first);putchar(' ');print(p.second);}
+template<class T> void print(const T& a){cout<<a;}
+template<class T> void print(const vector<T>& vec){if(vec.empty())return;print(vec[0]);for(auto it=vec.begin();++it!= vec.end();){putchar(' ');print(*it);}}
+void out(){putchar('\n');}
+template<class T> void out(const T& t){print(t);putchar('\n');}
+template <class Head, class... Tail> void out(const Head& head,const Tail&... tail){print(head);putchar(' ');out(tail...);}
+template<class T> void dprint(const T& a){cerr<<a;}
+template<class T> void dprint(const vector<T>& vec){if(vec.empty())return;cerr<<vec[0];for(auto it=vec.begin();++it!= vec.end();){cerr<<" "<<*it;}}
+void debug(){cerr<<'\n';}
+template<class T> void debug(const T& t){dprint(t);cerr<<endl;}
+template <class Head, class... Tail> void debug(const Head& head, const Tail&... tail){dprint(head);cerr<<" ";debug(tail...);}
+ll intpow(ll a, ll b){ ll ans = 1; while(b){ if(b & 1) ans *= a; a *= a; b /= 2; } return ans; }
+ll modpow(ll a, ll b, ll p){ ll ans = 1; while(b){ if(b & 1) (ans *= a) %= p; (a *= a) %= p; b /= 2; } return ans; }
+ll modinv(ll a, ll m) {ll b = m, u = 1, v = 0;while (b) {ll t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
+ll updivide(ll a,ll b){return (a+b-1)/b;}
+int msb(ll v){return 63-__builtin_clzll(v);}
+template<class T> void chmax(T &a,const T b){if(b>a)a=b;}
+template<class T> void chmin(T &a,const T b){if(b<a)a=b;}
+
+int main(){
+    INT(n,k);
+    vector<int> a(n);
+    in(a);
+    auto f=[&](int v){
+        if(v==1||v==6)return 5;
+        return 6;
+    };
+    sort(all(a));
+    int ans=0;
+    rep(i,min(k,n))ans+=max(a[i],f(a[i]));
+    for(int i=k;i<n;i++)ans+=a[i];
+    out(ans);
+}

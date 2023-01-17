@@ -1,0 +1,29 @@
+//#include<bits/stdc++.h>
+#include<iostream>
+#include<math.h>
+#include<string.h>
+#include<stdio.h>
+//using namespace std;
+//
+int main()
+{	
+	int i;
+	char s[2000];
+	
+	gets(s);
+	
+	for(i=0;i<strlen(s);i++)
+	{
+		if(s[i]>='a'&&s[i]<='z')
+			s[i]=s[i]+'A'-'a';
+		else if(s[i]>='A'&&s[i]<='Z')
+			s[i]=s[i]+'a'-'A';
+		
+		printf("%c",s[i]);
+		//cout<<s[i];
+	}
+	//cout<<endl;
+
+return 0;
+}
+

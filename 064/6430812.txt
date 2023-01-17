@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+int SelectionSort(vector <int> &a)
+{
+	int n=a.size();
+	int cnt=0;
+	for(int i=0;i<n-1;i++)
+	{
+	    int mn=a[i],mnidx=i;
+		for(int j=i;j<n;j++)
+		{
+			if(a[j]<mn)
+			{
+				mn=a[j];
+				mnidx=j;
+			}
+		}
+		swap(a[i],a[mnidx]);
+		if(i!=mnidx)
+		cnt++;
+	}
+	return cnt;
+}
+int main() {
+int n;
+cin>>n;
+vector<int>a(n);
+for(int i=0;i<n;i++)
+{
+	cin>>a[i];
+}
+int r=SelectionSort(a);
+for(int i=0;i<n;i++)
+{
+	cout<<a[i];
+	if(i!=n-1)
+	cout << " ";
+}
+cout<<endl<<r<<endl;
+}

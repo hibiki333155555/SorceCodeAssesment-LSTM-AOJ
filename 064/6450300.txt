@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+#define rep(i,n) for(ll (i)=0; (i)<(ll)(n); (i)++)
+#define FOR(i, b, e) for(ll (i)=(b); (i)<=(ll)(e); (i)++)
+#define ALL(x) (x).begin(), (x).end()
+
+const ll INF = 100100100100100100;
+
+struct edge {ll from, to, cost;};
+// sから到達可能な負閉路があれば false、正常終了で true
+bool bellman_ford(ll s, vector<edge> &G, vector<ll> &d, ll V, ll E) {
+  rep(i, V) d[i] = INF;
+  d[s] = 0;
+  rep(i, V) {
+    bool update = false;
+    rep(i, E) {
+      edge e = G[i];
+      if(d[e.from] != INF && d[e.to] > d[e.from] + e.cost) {
+        d[e.to] = d[e.from] + e.cost;
+        update = true;
+      }
+    }
+    if(!update) break;
+    if(i == V-1) return false;
+  }
+  return true;
+}
+bool is_negative_loop(vector<edge> &G, vector<ll> &d, ll V, ll E) {
+  rep(i, V) d[i] = 0;
+  rep(i, V) {
+    rep(j, E) {
+      edge e = G[j];
+      if(d[e.to] > d[e.from] + e.cost) {
+        d[e.to] = d[e.from] + e.cost;
+        if(i == V-1) return true;
+      }
+    }
+  }
+  return false;
+}
+
+int main() {
+  ll v, e, r; cin >> v >> e >> r;
+  vector<edge> g(e);
+  rep(i, e) {
+    ll s, t, d; cin >> s >> t >> d;
+    g[i] = {s, t, d};
+  }
+
+  vector<ll> d(v, 0);
+  if(!bellman_ford(r, g, d, v, e)) {
+    cout << "NEGATIVE CYCLE" << endl;
+  } else {
+    rep(i, v) {
+      if(d[i] == INF) {
+        cout << "INF" << endl;
+      } else {
+        cout << d[i] << endl;
+      }
+    }
+  }
+
+  return 0;
+}
+

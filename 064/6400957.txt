@@ -1,0 +1,29 @@
+import java.util.Scanner;
+
+public class Main {
+
+	public static final int BIG_NUM = 2000000000;
+	public static final long HUGE_NUM = 4000000000000000000L;
+
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+
+		Scanner scanner = new Scanner(System.in);
+		//BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		String base = scanner.next();
+		String line;
+		int ans = 0;
+
+		while(!(line=scanner.next()).equals("END_OF_TEXT")) {
+
+			if(line.equals(base)) {
+
+				ans++;
+			}
+		}
+
+		System.out.println(ans);
+	}
+}
+

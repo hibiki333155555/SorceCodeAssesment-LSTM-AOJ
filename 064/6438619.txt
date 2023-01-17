@@ -1,0 +1,17 @@
+l = input().split()
+n = int(l[0])
+m = int(l[1])
+A = []
+for i in range(n):
+    A.append(input())
+
+B = []
+for i in range(m):
+    B.append(int(input()))
+
+for i in range(n):
+    Aa = A[i].split()
+    sum = 0
+    for j in range(m):
+        sum += int(Aa[j])*B[j]
+    print(sum)

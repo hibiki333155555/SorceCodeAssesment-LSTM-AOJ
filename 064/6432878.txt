@@ -1,0 +1,182 @@
+#include <bits/stdc++.h>
+
+class weightless_t
+{
+};
+
+template <class T = weightless_t>
+class unionfind
+{
+private:
+    std::size_t N;
+    std::vector<std::size_t> root;
+    std::vector<std::size_t> clsize;
+    std::vector<T> weight;
+
+public:
+    unionfind(void) = default;
+    unionfind(const unionfind&) = default;
+    unionfind(unionfind&&) noexcept = default;
+    unionfind& operator=(const unionfind&) & = default;
+    unionfind& operator=(unionfind&&) & noexcept = default;
+
+    explicit unionfind(const std::size_t& n_elem)
+        : N(n_elem)
+        , root(n_elem)
+        , clsize(n_elem, 1)
+        , weight(n_elem)
+    {
+        assert(n_elem > 0);
+        std::iota(root.begin(), root.end(), 0);
+    }
+
+    std::pair<std::size_t, T> getroot(const std::size_t& i)
+    {
+        assert(i < N);
+        if (i == root[i])
+        {
+            return { i, 0 };
+        }
+        else
+        {
+            const auto [ri, cumi] = getroot(root[i]);
+            root[i] = ri;
+            weight[i] += cumi;
+            return { ri, weight[i] };
+        }
+    }
+
+    std::pair<bool, T> check(const std::size_t& i, const std::size_t& j)
+    {
+        assert(i < N);
+        assert(j < N);
+        const auto [ri, cumi] = getroot(i);
+        const auto [rj, cumj] = getroot(j);
+        return { ri == rj, cumi - cumj };
+    }
+
+    void unite(const std::size_t& i, const std::size_t& j, const T& wjmi)
+    {
+        assert(i < N);
+        assert(j < N);
+        const auto [ri, cumi] = getroot(i);
+        const auto [rj, cumj] = getroot(j);
+        if (ri != rj)
+        {
+            if (clsize[ri] > clsize[rj])
+            {
+                root[rj] = ri;
+                weight[rj] = -wjmi + cumi - cumj;
+                clsize[ri] += clsize[rj];
+                clsize[rj] = 0;
+            }
+            else
+            {
+                root[ri] = rj;
+                weight[ri] = wjmi - cumi + cumj;
+                clsize[rj] += clsize[ri];
+                clsize[ri] = 0;
+            }
+        }
+    }
+};
+
+template <>
+class unionfind<weightless_t>
+{
+private:
+    std::size_t N;
+    std::vector<std::size_t> root;
+    std::vector<std::size_t> clsize;
+
+public:
+    unionfind(void) = default;
+    unionfind(const unionfind&) = default;
+    unionfind(unionfind&&) noexcept = default;
+    unionfind& operator=(const unionfind&) & = default;
+    unionfind& operator=(unionfind&&) & noexcept = default;
+
+    explicit unionfind(const std::size_t& n_elem)
+        : N(n_elem)
+        , root(n_elem)
+        , clsize(n_elem, 1)
+    {
+        assert(n_elem > 0);
+        std::iota(root.begin(), root.end(), 0);
+    }
+
+    std::size_t getroot(const std::size_t& i)
+    {
+        assert(i < N);
+        if (i == root[i])
+        {
+            return i;
+        }
+        else
+        {
+            const std::size_t ri = getroot(root[i]);
+            root[i] = ri;
+            return ri;
+        }
+    }
+
+    bool check(const std::size_t& i, const std::size_t& j)
+    {
+        assert(i < N);
+        assert(j < N);
+        return getroot(i) == getroot(j);
+    }
+
+    void unite(const std::size_t& i, const std::size_t& j)
+    {
+        assert(i < N);
+        assert(j < N);
+        const std::size_t ri = getroot(i);
+        const std::size_t rj = getroot(j);
+        if (ri != rj)
+        {
+            if (clsize[ri] > clsize[rj])
+            {
+                root[rj] = ri;
+                clsize[ri] += clsize[rj];
+                clsize[rj] = 0;
+            }
+            else
+            {
+                root[ri] = rj;
+                clsize[rj] += clsize[ri];
+                clsize[ri] = 0;
+            }
+        }
+    }
+};
+
+int main(void)
+{
+    int n, q;
+    std::cin >> n >> q;
+    unionfind<long long> tree(n);
+    for (int iq = 0; iq < q; ++iq)
+    {
+        int c, x, y, z;
+        std::cin >> c >> x >> y;
+        if (c == 0)
+        {
+            std::cin >> z;
+            tree.unite(x, y, z);
+        }
+        else
+        {
+            auto [pred, d] = tree.check(x, y);
+            if (pred)
+            {
+                std::cout << d << std::endl;
+            }
+            else
+            {
+                std::cout << "?" << std::endl;
+            }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+const long long MOD = 998244353;
+long long modpow(long long a, long long b){
+	long long ans = 1;
+	while (b > 0){
+		if (b % 2 == 1){
+			ans *= a;
+			ans %= MOD;
+		}
+		a *= a;
+		a %= MOD;
+		b /= 2;
+	}
+	return ans;
+}
+long long modinv(long long a){
+	return modpow(a, MOD - 2);
+}
+int main(){
+  int N;
+  cin >> N;
+  vector<int> A(N * 2 - 1);
+  for (int i = 0; i < N * 2 - 1; i++){
+    cin >> A[i];
+  }
+  for (int i = N - 2; i >= 0; i--){
+    A[i] = min(A[i], A[i * 2 + 1] + A[i * 2 + 2]);
+  }
+  vector<int> cnt(N * 2 - 1);
+  vector<int> mn(N * 2 - 1), mx(N * 2 - 1);
+  for (int i = N - 1; i < N * 2 - 1; i++){
+    cnt[i] = 1;
+    mn[i] = i - (N - 1);
+    mx[i] = i - (N - 1);
+  }
+  for (int i = N - 2; i >= 0; i--){
+    cnt[i] = cnt[i * 2 + 1] + cnt[i * 2 + 2];
+    mn[i] = min(mn[i * 2 + 1], mn[i * 2 + 2]);
+    mx[i] = max(mx[i * 2 + 1], mx[i * 2 + 2]);
+  }
+  vector<bool> ok(N * 2 - 1);
+  for (int i = 0; i < N * 2 - 1; i++){
+    if (cnt[i] == mx[i] - mn[i] + 1){
+      ok[i] = true;
+    } else {
+      ok[i] = false;
+    }
+  }
+  vector<int> P(N * 2 - 1);
+  P[0] = -1;
+  for (int i = 1; i < N * 2 - 1; i++){
+    P[i] = (i - 1) / 2;
+    while (!ok[P[i]]){
+      P[i] = (P[i] - 1) / 2;
+    }
+  }
+  vector<long long> pr(N * 2 - 1, 0);
+  for (int i = 0; i < N * 2 - 1; i++){
+    if (ok[i]){
+      long long X = (long long) (mn[i] + 1) * (N - mx[i]) % MOD;
+      long long Y = (long long) N * (N + 1) / 2 % MOD;
+      pr[i] = X * modinv(Y) % MOD;
+    }
+  }
+  for (int i = N * 2 - 2; i >= 1; i--){
+    if (ok[i]){
+      pr[i] += MOD - pr[P[i]];
+      pr[i] %= MOD;
+    }
+  }
+  long long ans = 0;
+  for (int i = 0; i < N * 2 - 1; i++){
+    ans += pr[i] * A[i] % MOD;
+  }
+  ans %= MOD;
+  cout << ans << endl;
+}

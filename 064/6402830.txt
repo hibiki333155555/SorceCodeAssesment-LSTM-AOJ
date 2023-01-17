@@ -1,0 +1,6 @@
+import random
+a=list(map(random.randint,input().split()))
+b=min(random)
+c=max(random)
+d=sum(random)
+print(b,c,d)

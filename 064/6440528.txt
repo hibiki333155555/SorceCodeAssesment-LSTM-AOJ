@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Edge {
+  long long to;
+  long long cost;
+};
+using Graph = vector<vector<Edge>>;
+
+
+// 以下トポロジカルソート
+
+vector<int> topological_sort(Graph &G){
+  queue<int> q;
+  int n = (int)G.size();
+  vector<int> d(n);
+  for(int i = 0; i < n; ++i) for(auto j:G[i]) ++d[j.to];
+  for(int i = 0; i < n; ++i) if(d[i] == 0) q.push(i);
+  vector<int> ret;
+  while(!q.empty()){
+    int label = q.front();
+    q.pop();
+    ret.push_back(label);
+    for(auto i:G[label]){
+      --d[i.to];
+      if(d[i.to] == 0) q.push(i.to);
+    }
+  }
+  return ret;
+}
+
+int main(void){
+    // Your code here!
+    int n,m;
+    cin >> n >> m;
+    Graph G(n);
+    for(int i = 0; i < m; ++i){
+      int a,b;
+      cin >> a >> b;
+      Edge e;
+      e.to = b;
+      G[a].push_back(e);
+    }
+    vector<int> ans = topological_sort(G);
+    for(auto i:ans){
+        cout << i << endl;
+    }
+}
+

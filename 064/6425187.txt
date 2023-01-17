@@ -1,0 +1,16 @@
+#include<bits/stdc++.h>
+using namespace std;
+    #define all v.begin(),v.end()
+    #define ll long long
+int main(){
+    int m,f,b;
+    cin>>m>>f>>b;
+    if(m>=b){
+        cout<<"0"<<endl;
+    }else if(m+f>=b){
+        cout<<f-m<<endl;
+    }else{
+        cout<<"NA"<<endl;
+    }
+    return(0);
+}

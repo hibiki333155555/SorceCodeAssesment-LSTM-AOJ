@@ -1,0 +1,19 @@
+import java.util.Scanner;
+
+public class Main {
+	
+	@SuppressWarnings("resource")
+	public static void main(String[] args){
+		int x = 0;
+		Scanner sc = new Scanner(System.in);
+				
+		for (int i = 1; ; i++) {
+			x = sc.nextInt();
+			if (x != 0) {
+				System.out.println("Case " + i + ": " + x);
+			} else {
+				break;
+			}			
+		}
+    }
+}

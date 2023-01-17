@@ -1,0 +1,24 @@
+#include<iostream>
+#include<cmath>
+#include<stdio.h>
+using namespace std;
+int main() {
+    int n;
+    while(1) {
+        cin >> n;
+        if(n == 0) {
+            break;
+        }
+        int sum = 0;
+        int sum2 = 0;
+        for(int count = 0; count < n; count++) {
+            int point;
+            cin >> point;
+            sum += point;
+            sum2 += point * point;
+        }
+        double average = sum / n;
+        printf("%.8lf", sqrt(sum2 / n - average * average));
+        cout << endl;
+    }
+}

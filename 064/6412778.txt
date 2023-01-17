@@ -1,0 +1,36 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main() {
+    string W;
+    cin >> W;
+    int n = W.size();
+    int count = 0;
+    while(1) {
+        string T;
+        cin >> T;
+        if(T == "END_OF_TEXT") {
+            break;
+        } else if(T == W) {
+            count++;
+        } else {
+            for(int num = 0; num < T.size(); num++) {
+                if(T.size() != n) {
+                    break;
+                } else {
+                    if(isupper(T[num])) {
+                        T[num] += 32;
+                        if(T[num] != W[num]) {
+                            break;
+                        }
+                    }
+                }
+                if(T == W) {
+                    count++;
+                    break;
+                }
+            }
+        }
+    }
+    cout << count << endl;
+}

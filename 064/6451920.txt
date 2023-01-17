@@ -1,0 +1,20 @@
+def select(A, N):
+    count = 0
+    for i in range(N):
+        minj = i
+        flag = False
+        for j in range(i+1, N):
+            if A[j] < A[minj]:
+                minj = j
+                flag = True
+        if flag:
+            A[minj], A[i] = A[i], A[minj]
+            count += 1
+    A = [str(a) for a in A]
+    A = ' '.join(A)
+    print(A)
+    print(count)
+
+n = int(input())
+A = list(map(int, input().split()))
+select(A, n)

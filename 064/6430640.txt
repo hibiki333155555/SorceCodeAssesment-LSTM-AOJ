@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int swapcount(vector<int> &a){
+	int n=a.size();
+	int count=0;
+	for (int i=0;i<n-1;i++){
+		for (int j=0;j<n-1-i;j++){
+			if (a[j]>a[j+1]){
+				swap(a[j],a[j+1]);
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+int main() {
+	int n;
+	cin>>n;
+	vector<int> v(n);
+	for (int i=0;i<n;i++){
+		int m;
+		cin >>m;
+		v[i]=m;
+	}
+	int x=swapcount(v);
+	for (int i=0;i<v.size()-1;i++)cout<<v[i]<<" ";
+	cout <<v[v.size()-1];
+	cout<<"\n"<<x;
+
+	return 0;
+}

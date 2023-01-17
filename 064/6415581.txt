@@ -1,0 +1,48 @@
+//左から見ていって違反したら調整する
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <functional>
+#include <queue>
+#define rep(i, n) for(i = 0; i < n; i++)
+#define int long long
+using namespace std;
+
+int n;
+int s[200000], rs[200001];
+int a[200000];
+
+signed main() {
+	int i;
+	
+	cin >> n;
+	string tmp; cin >> tmp;
+	rep(i, n) cin >> a[i];
+	rep(i, n) {
+		if (tmp[i] == '(') s[i] = 1;
+		else s[i] = -1;
+	}
+	rep(i, n) rs[i + 1] = rs[i] + s[i];
+	
+	int ans = 0;
+	int hosei = 0;
+	priority_queue<int, vector<int>, greater<int> > que[2]; //[0]: positive, [1]: negative
+	rep(i, n) {
+		if (s[i] > 0) que[0].push(a[i]);
+		else que[1].push(a[i]);
+		
+		if (s[i] > 0 && rs[i + 1] + hosei > n - (i + 1)) { //+1 -> -1
+			ans += que[0].top();
+			que[0].pop();
+			hosei -= 2;
+		}
+		if (s[i] < 0 && rs[i + 1] + hosei < 0) {
+			ans += que[1].top();
+			que[1].pop();
+			hosei += 2;
+		}
+	}
+	
+	cout << ans << endl;
+	return 0;
+}

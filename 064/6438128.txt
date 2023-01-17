@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <set>
+#include <stack>
+using namespace std;
+using Graph = vector<vector<int> >;
+
+vector<bool> seen, finished ;
+
+//サイクル復元のための情報
+int pos = -1; // サイクル中に含まれる頂点
+stack<int> hist; //訪問履歴
+
+void dfs(const Graph &G ,int v, int p){
+   seen[v] = true;
+   hist.push(v);
+    for(auto nv : G[v]){
+        if(nv == p){//親から子には行かない(逆流しない)
+            continue;
+        }
+
+        //完全終了した頂点はスルー
+        if(finished[nv]){
+            continue;
+        }
+
+        //サイクルを検出
+        if(seen[nv] && !finished[nv]){
+            pos = nv;
+            return;
+        }
+
+        dfs(G, nv, v);
+
+        //サイクル検出したならば真っ直ぐに抜けていく
+        if(pos != -1){
+            return;
+        }
+    }
+    hist.pop();
+    finished[v] = true;
+
+}
+
+int main(){
+    int N; cin >> N;
+    
+    Graph G(N);
+
+    for(int i = 0; i < N; i++){
+        int u, v; cin >> u >> v;
+        u--; v--;
+
+        G[u].push_back(v);
+        G[v].push_back(u);        
+    }
+    
+    seen.assign(N,false), finished.assign(N,false);
+    pos = -1;
+    dfs(G,0,-1);
+
+    //サイクルを復元
+    set<int> cycle;
+    while(!hist.empty()){
+        int t = hist.top();
+        cycle.insert(t);
+        hist.pop();
+        if(t == pos){
+            break;
+        }
+    }
+
+    int Q; cin >> Q;
+    for(int i=0; i<Q; i++){
+        int a, b; cin >> a >> b;
+        a--; b--;
+
+        if(cycle.count(a) && cycle.count(b)){
+            cout << 2 << endl;
+        }else{
+            cout << 1 << endl;
+        }
+    
+    }
+
+    
+}    

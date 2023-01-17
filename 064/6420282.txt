@@ -1,0 +1,14 @@
+n = int(input())
+
+d = dict()
+for i in range(n):
+    query = input()
+    if query[:4] == 'find':
+        if query[5:] in d:
+            ans = 'yes'
+        else:
+            ans = 'no'
+        print(ans)
+
+    else:
+        d[query[7:]] = 1

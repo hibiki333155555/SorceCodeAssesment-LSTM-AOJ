@@ -1,0 +1,15 @@
+import java.util.Scanner;
+
+public class Main {
+    void solve() {
+        Scanner scanner = new Scanner(System.in);
+        int fahrenheit = scanner.nextInt();
+        int celsius = (fahrenheit - 30) / 2;
+        System.out.println(celsius);
+    }
+
+    public static void main(String[] args) {
+        new Main().solve();
+    }
+}
+

@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import math
+
+a, b = map(int, input().split())
+
+if a == 0 and b == 0:
+    print(1)
+    exit(0)
+
+if a < b:
+    a, b = b, a
+
+if a == 0:
+    maxdigit = 0
+else:
+    maxdigit = int(math.log2(a)) + 1
+if (a ^ b) == 0:
+    xordigit = 0
+else:
+    xordigit = int(math.log2(a ^ b)) + 1
+
+print(maxdigit - xordigit)
+

@@ -1,0 +1,23 @@
+#include<stdio.h>
+
+int Time_shift(int S){
+    int hour,minutes,second,surplus;
+
+    hour = S/3600;
+    surplus = S%3600;
+    minutes = surplus/60;
+    second = surplus%60;
+
+    printf("%d:%d:%d\n",hour,minutes,second);
+
+    return 0;
+}
+
+int main(void){
+    int S = 0;
+
+    scanf("%d",&S);
+    Time_shift(S);
+
+    return 0;
+}

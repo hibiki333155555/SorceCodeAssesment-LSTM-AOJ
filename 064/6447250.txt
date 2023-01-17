@@ -1,0 +1,17 @@
+#include<iostream>
+
+int main(){
+    int h,m,s;
+
+    cin >> s;
+
+    h = s/3600;
+    
+    m = (s - 3600*h) / 60;
+
+    s -= 3600*h + 60*m;
+
+    cout << h << ":" << m << ":" << s;
+
+    return o;
+}

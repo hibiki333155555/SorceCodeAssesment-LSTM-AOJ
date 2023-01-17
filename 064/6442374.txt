@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+long long so,luythua,RES;
+long long LUYTHUA(long long so, long long luythua){
+	if(luythua==0){
+		return 1;
+	}
+	RES=LUYTHUA(so,luythua/2);
+	if(luythua%2==1){
+		return ((so*RES)%1000000007*RES)%1000000007;
+	}
+	return (RES*RES)%1000000007;
+}
+int main(){
+    long long x,y;
+    cin>>x>>y;
+    cout<<LUYTHUA(x,y)<<endl;
+}
+
+
+

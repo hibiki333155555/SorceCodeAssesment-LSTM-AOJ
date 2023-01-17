@@ -1,0 +1,14 @@
+const fs=require("fs");
+
+function Main(input){
+    input=input.split(" ");
+    if(input[0]===inpu[1]){
+        console.log(input[0]+"=="+input[1]);
+    }else if(input[0]<input[1]){
+        console.log(input[0]+"<"+input[1]);
+    }else if(input[0]>input[1]){
+        console.log(input[0]+">"+input[1]);
+    }
+}
+
+Main(fs.readFileSync("/dev/stdin","utf8"));

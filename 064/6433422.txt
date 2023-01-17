@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool check(int N,vector<int> A){
+    for(int i=0;i<N-1;i++){
+        if(A.at(i)>=A.at(i+1)){
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int main(){
+    int N,Q;
+    cin >> N;
+    vector<int> A(N);
+    for(int i=0;i<N;i++){
+        cin >> A.at(i);
+    }
+    cin >> Q;
+    vector<int> x(Q),y(Q);
+    for(int i=0;i<Q;i++){
+        cin >> x.at(i) >> y.at(i);
+    }
+    for(int i=0;i<Q;i++){
+        if(check(N,A)){
+            cout << i << endl;
+            return 0;
+        }
+    }
+    cout << -1 << endl;
+    return 0;
+}

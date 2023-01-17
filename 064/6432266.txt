@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int n,t,x,i,y,q;
+    cin>>n>>q;
+    stack<int>st[n];
+    for(i=0;i<q;i++){
+        cin>>y;
+        if(y==0){
+            cin>>t>>x;
+            st[t].push(x);
+        }
+        else if(y==1){
+                cin>>t;
+             if(!st[t].empty()) cout<<st[t].top()<<endl;
+        }
+        else if(y==2){
+            cin>>t;
+            if(!st[t].empty())st[t].pop();
+        }
+    }
+
+
+
+    return 0;
+}

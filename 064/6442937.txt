@@ -1,0 +1,13 @@
+while True:
+    H, W = map(int, input().split())
+    k = 1
+    if H==W==0:
+        break
+    for i in range(H):
+        for i in range(W):
+            if k==W or k==1:
+                print('#'*W)
+                k+=1
+            else:
+                print('#'+'.'*(W-2)+'#')
+    print()

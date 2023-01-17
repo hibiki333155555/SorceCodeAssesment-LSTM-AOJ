@@ -1,0 +1,27 @@
+import java.util.*;
+
+public class Main{
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int[] counter = new int[26];
+
+        String str = scan.nextLine();
+        str = str.toLowerCase();
+
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) >= 'a' && str.charAt(i) <= 'z') {
+                counter[str.charAt(i) - 'a']++;
+            }
+        }
+
+        for (int i = 0; i < 26; i++) {
+            System.out.printf("%c : %d\n", i + 'a', counter[i]);
+
+        }
+
+        scan.close();
+
+    }
+}
+

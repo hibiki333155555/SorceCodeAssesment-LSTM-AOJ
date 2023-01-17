@@ -1,0 +1,22 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    long long int num;
+    int i = 0;
+    int sum = 0, min = 1000000, max = -1000000;
+    for (i; i < n; i++) {
+        cin >> num;
+        sum += num;
+        if (num > max) {
+            max = num;
+        }
+        else if (num < min) {
+            min = num;
+        }
+
+    }
+    cout << min << " " << max << " " << sum << endl;
+}

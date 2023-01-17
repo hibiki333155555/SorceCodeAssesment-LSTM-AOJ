@@ -1,0 +1,13 @@
+import bisect
+n = int(input())
+S = list(map(int, input().split()))
+q = int(input())
+T = list(map(int, input().split()))
+
+ans = 0
+for i in range(q):
+    cnt = bisect.bisect_right(S, T[i]) - bisect.bisect_left(S, T[i])
+    if cnt:
+        ans += 1
+
+print(ans)

@@ -1,0 +1,11 @@
+alf =[0]*26
+while True:
+    try:
+        str = input().lower()
+    except:
+        break
+    for d in str:
+        if ord('a') <= ord(d) <=ord('z'):
+            alf[ord(d) -ord('a')] +=1
+for i in range(26):
+    print("{} : {}".format("ord(97+i)",alf[i]))

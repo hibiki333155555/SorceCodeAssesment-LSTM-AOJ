@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int main(){
+	string s;
+	cin >> s;
+	int m;
+	cin >> m;
+	for(int i=0;i<m;i++){
+		string func;
+		cin >> func;
+		if(func == "print"){
+			int a,b;
+			cin >> a >> b;
+			int range = abs(b-a+1);
+			string out = s.substr(a,range);
+			cout << out << endl;
+		}else if(func == "reverse"){
+			int a,b;
+			cin >> a >> b;
+			reverse(&s.at(0)+a,&s.at(0)+b+1);
+			// cout << s << endl;
+		}else{
+			int a,b;
+			string str;
+			cin >> a >> b >> str;
+			int range = abs(b - a + 1);
+			s.replace(a,range,str);
+			// cout << s << endl;
+		}
+	}
+	return(0);
+}

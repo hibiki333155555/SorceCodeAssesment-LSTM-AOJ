@@ -1,0 +1,5 @@
+s=input()
+while s != "0":
+    print(f"Case {i}: {s}")
+    s=input()
+

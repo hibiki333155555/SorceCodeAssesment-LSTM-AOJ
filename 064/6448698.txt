@@ -1,0 +1,74 @@
+#include<stdio.h>
+#include<string.h>
+int main()
+
+{
+    char str[1000];
+    int a=0,b=0,c=0,d=0,e=0,f=0,g=0,h=0,i=0,j=0,k=0,l=0,m=0,n=0,o=0,p=0,q=0,r=0,s=0,t=0,u=0,v=0,w=0,x=0,y=0,z=0;
+    int loop=0;
+    gets(str);
+
+    while(str[loop]!='\0')
+    {
+        if(str[loop]=='A' || str[loop]=='a') a++;
+        else if(str[loop]=='B' || str[loop]=='b') b++;
+        else if(str[loop]=='C' || str[loop]=='c') c++;
+        else if(str[loop]=='D' || str[loop]=='d') d++;
+        else if(str[loop]=='E' || str[loop]=='e') e++;
+        else if(str[loop]=='F' || str[loop]=='f') f++;
+        else if(str[loop]=='G' || str[loop]=='g') g++;
+        else if(str[loop]=='H' || str[loop]=='h') h++;
+        else if(str[loop]=='I' || str[loop]=='i') i++;
+        else if(str[loop]=='J' || str[loop]=='j') j++;
+        else if(str[loop]=='K' || str[loop]=='k') k++;
+        else if(str[loop]=='L' || str[loop]=='l') l++;
+        else if(str[loop]=='M' || str[loop]=='m') m++;
+        else if(str[loop]=='N' || str[loop]=='n') n++;
+        else if(str[loop]=='O' || str[loop]=='o') o++;
+        else if(str[loop]=='P' || str[loop]=='p') p++;
+        else if(str[loop]=='Q' || str[loop]=='q') q++;
+        else if(str[loop]=='R' || str[loop]=='r') r++;
+        else if(str[loop]=='S' || str[loop]=='s') s++;
+        else if(str[loop]=='T' || str[loop]=='t') t++;
+        else if(str[loop]=='U' || str[loop]=='u') u++;
+        else if(str[loop]=='V' || str[loop]=='v') v++;
+        else if(str[loop]=='W' || str[loop]=='w') w++;
+        else if(str[loop]=='X' || str[loop]=='x') x++;
+        else if(str[loop]=='Y' || str[loop]=='y') y++;
+        else if(str[loop]=='Z' || str[loop]=='z') z++;
+        loop++;
+    }
+
+        printf("a : %d\n", a);
+        printf("b : %d\n", b);
+        printf("c : %d\n", c);
+        printf("d : %d\n", d);
+        printf("e : %d\n", e);
+        printf("f : %d\n", f);
+        printf("g : %d\n", g);
+        printf("h : %d\n", h);
+        printf("i : %d\n", i);
+        printf("j : %d\n", j);
+        printf("k : %d\n", k);
+        printf("l : %d\n", l);
+        printf("m : %d\n", m);
+        printf("n : %d\n", n);
+        printf("o : %d\n", o);
+        printf("p : %d\n", p);
+        printf("q : %d\n", q);
+        printf("r : %d\n", r);
+        printf("s : %d\n", s);
+        printf("t : %d\n", t);
+        printf("u : %d\n", u);
+        printf("v : %d\n", v);
+        printf("w : %d\n", w);
+        printf("x : %d\n", x);
+        printf("y : %d\n", y);
+        printf("z : %d\n", z);
+
+
+    return 0;
+}
+
+
+

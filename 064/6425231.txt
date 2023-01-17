@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define fol(i,s,g) for(int i=(int)(s); i<(int)(g); i++)
+#define fix(ans,k) fixed << setprecision(k) << ans
+
+int main(){
+    int a,b,x;
+    cin>>a>>b>>x;
+    int ka=(x/1000)*a, kb=(x/500)*b;
+    if(x%1000!=0){
+        if(x%1000>500){
+            ka+=min(a,b*2);
+        }else{
+            ka+=min(a,b);
+        }
+    }
+    if(x%500!=0){
+        kb+=min(a,b);
+    }
+    cout<<min(ka,kb)<<'\n';
+    return 0;
+}

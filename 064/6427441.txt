@@ -1,0 +1,14 @@
+# https://onlinejudge.u-aizu.ac.jp/courses/lesson/2/ITP1/10/ITP1_10_D
+import math
+
+n = int(input())
+xs = list(map(int, input().split()))
+ys = list(map(int, input().split()))
+diffs = [abs(xs[i]-ys[i]) for i in range(n)]
+for p in [1, 2, 3]:
+    Dxy = sum([d**p for d in diffs]) ** (1/p)
+    print(f"{Dxy:.8f}")
+
+Dxy = max(diffs)
+print(f"{Dxy:.8f}")
+

@@ -1,0 +1,8 @@
+A1,B1,A2,B2=map(str,input().split())
+def alpha2num(alpha):
+    num=0
+    for index, item in enumerate(list(alpha)):
+        num += pow(26,len(alpha)-index-1)*(ord(item)-ord('A')+1)
+    return num
+k=((abs(alpha2num(A1)-alpha2num(A2))+1)*(abs(int(B1)-int(B2))+1))
+print(k)

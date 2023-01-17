@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <unistd.h>
+
+#include <iostream>
+#include <vector>
+#define N 100000
+
+using namespace std;
+vector<vector<int> > G(N);
+
+int ok;
+
+void dfs(int from, int tar, int visited[]) {
+  visited[from] = 1;
+  for (int i = 0; i < G[from].size(); i++) {
+    int next_v = G[from][i];
+    if (visited[next_v]) {
+      continue;
+    }
+    if (next_v == tar) {
+      ok = 1;
+    } else {
+      dfs(next_v, tar, visited);
+    }
+  }
+}
+
+int main(void) {
+  int n, m;
+  cin >> n >> m;
+  int visited[n];
+  for (int i = 0; i < n; i++) {
+    visited[i] = 0;
+  }
+
+  int a, b;
+  for (int i = 0; i < m; i++) {
+    cin >> a >> b;
+    G[a].push_back(b);
+    G[b].push_back(a);
+  }
+  int q;
+  cin >> q;
+  int x, y;
+  for (int i = 0; i < q; i++) {
+    cin >> x >> y;
+    ok = 0;
+    memset(visited, 0, sizeof(visited));
+    dfs(x, y, visited);
+    if (ok) {
+      cout << "yes" << endl;
+    } else {
+      cout << "no" << endl;
+    }
+  }
+}
+

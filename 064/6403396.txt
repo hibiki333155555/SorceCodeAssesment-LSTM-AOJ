@@ -1,0 +1,12 @@
+
+while True:
+    W = str(input())
+    if W == "-":
+        break
+    m = int(input())
+    
+    tmp=W
+    for _ in range(m):
+        h = int(input())
+        tmp=tmp[h:] + tmp[:h]
+    print (tmp)

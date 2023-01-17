@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int a,b,x,y;
+    double z;
+    cin >> a >> b;
+    x = a / b;
+    y = a % b;
+    z = (double)c / d;
+
+    cout << x << ' ' << y << ' ' << fixed << z << endl;
+    
+
+       
+    return 0;
+
+}

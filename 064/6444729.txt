@@ -1,0 +1,10 @@
+class Prgram
+{
+    static void Main()
+    {
+        var getting = 0;
+        getting = int.Parse(Console.ReadLine());
+        var ans = getting % 21;
+        Console.WriteLine(ans);
+    }
+}

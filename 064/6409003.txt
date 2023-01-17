@@ -1,0 +1,141 @@
+// #pragma GCC optimize(2)
+// #pragma GCC optimize(3)
+// #pragma GCC optimize("Ofast")
+// #include<bits/stdc++.h>
+#include <iostream>
+#include <cstdio>
+#include <queue>
+#include <deque>
+#include <stack>
+#include <string>
+#include <cstring>
+#include <numeric>
+#include <functional>
+#include <cstdlib>
+#include <vector>
+#include <set>
+#include <map>
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+// using i64 = long long;
+using namespace std;
+#define lowbit(x) ((x) & -(x))
+#define endl '\n'
+#define IOS1 ios::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
+#define IOS2 ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+typedef vector<int> vi;
+typedef vector<long long> vll;
+typedef vector<char> vc;
+typedef long long ll;
+typedef long long i64;
+template<class T> T gcd(T a, T b) { return b ? gcd(b, a % b) : a; }
+template<class T> T lcm(T a, T b) { return a / gcd(a, b) * b; }
+template<class T>
+T power(T a, int b) {
+	T res = 1;
+	for (; b; b >>= 1, a = a * a) {
+		if (b & 1) {
+			res = res * a;
+		}
+	}
+	return res;
+}
+template <typename T>
+T Myabs(T a) {
+	return a >= 0 ? a : -a;
+}
+template <typename T>
+inline void read(T& x)
+{
+	x = 0; int f = 1; char ch = getchar();
+	while (!isdigit(ch)) { if (ch == '-') f = -1; ch = getchar(); }
+	while (isdigit(ch)) { x = x * 10 + ch - '0', ch = getchar(); }
+	x *= f;
+}
+const int INF = 0x3f3f3f3f;
+// const int mod = 1000000007;
+const int mod = 998244353;
+const double PI = acos(-1.0);
+const double eps = 1e-6;
+inline int sgn(double x) {
+	return x < -eps ? -1 : x > eps;
+}
+/*
+Tips:
+   1.int? long long?
+   2.don't submit wrong answer
+   3.figure out logic first, then start writing please
+   4.know about the range
+   5.check if you have to input t or not
+   6.modulo of negative numbers is not a%b, it is a%b + abs(b)
+*/
+
+int mp[15][15];
+void init() {
+	for (int i = 0; i < 15; i++) {
+		for (int j = 0; j < 15; j++) {
+			mp[i][j] = mp[j][i] = INF;
+		}
+		mp[i][i] = 0;
+	}
+}
+void floyd(int n) {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			for (int k = 0; k < n; k++) {
+				mp[j][k] = min(mp[j][k], mp[j][i] + mp[i][k]);
+			}
+		}
+	}
+}
+void solve() {
+	int n;
+	while (cin >> n) {
+		if (n == 0) {
+			return;
+		}
+		init();
+		int m = 0;
+		for (int i = 0; i < n; i++) {
+			int a, b, c;
+			cin >> a >> b >> c;
+			mp[a][b] = mp[b][a] = min(mp[a][b], c);
+			m = max(max(m, a), b);
+		}
+		floyd(m + 1);
+		int ans = INF;
+		int test = 0;
+		for (int i = 0; i < m; i++) {
+			int tp = 0;
+			for (int j = 0; j <= m; j++) {
+				if (mp[i][j] != INF) {
+					tp += mp[i][j];
+				}
+			}
+			if (tp < ans) {
+				ans = tp;
+				test = i;
+			}
+		}
+		cout << test << " " << ans << endl;
+	}
+	return;
+}
+int main() {
+	// IOS1;
+	IOS2;
+#ifdef ONLINE_JUDGE
+#else
+	freopen("in.txt", "r", stdin);
+#endif
+	int __t = 1;
+	// cin >> __t;
+	for (int _t = 1; _t <= __t; _t++) {
+		solve();
+	}
+	return 0;
+}
+/*
+
+*/

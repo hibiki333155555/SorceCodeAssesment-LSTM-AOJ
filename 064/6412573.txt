@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int n;
+  cin >> n;
+  int rmax = ceil(sqrt(n));
+  vector<bool> p(rmax+1, 1);
+  p[0] = 0;
+  p[1] = 0;
+  for(int i=2;i<=rmax;i++){
+    if(p[i]){
+      int j=2;
+      while(i*j<=rmax){
+        p[i*j] = 0;
+        j++;
+      }
+    }
+  }
+  
+  vector<int> ans;
+  int cp=n;
+  for(int i=2;i<=rmax;i++){
+    if(!p[i])continue;
+    while(cp%i==0){
+      ans.push_back(i);
+      cp/=i;
+    }
+  }
+  
+  cout << n << ":";
+  for(int i=0;i<ans.size();i++){
+    cout << " " << ans[i];
+  }
+  if(cp!=1){
+    cout << " " << cp << endl;
+  }
+  
+  return 0;
+}

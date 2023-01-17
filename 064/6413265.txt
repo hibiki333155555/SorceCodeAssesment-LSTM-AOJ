@@ -1,0 +1,14 @@
+while True:
+  h,w = map(int, input().split())
+  if h ==0 and w == 0 :
+    break
+  
+  for i in range(0,h):
+    out =""
+    for j in range(0,w):
+      if (i%2==1 and j%2==1) or (i%2==0 and j%2==0):
+        out+="#"
+      elif (i%2==1 and j%2==0) or (i%2==0 and j%2==1):
+        out+="."
+    print(out)
+  print()

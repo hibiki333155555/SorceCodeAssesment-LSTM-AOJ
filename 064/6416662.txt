@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace AOJ_ITP1_7_B
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var calcList = new Dictionary<int, List<(int, int, int)>>();
+            for (int a = 1; a <= 98; a++)
+                for (int b = a + 1; b <= 99; b++)
+                    for (int c = b + 1; c <= 100; c++)
+                    {
+                        if (calcList.ContainsKey(a + b + c))
+                            calcList[a + b + c].Add((a, b, c));
+                        else
+                            calcList[a + b + c] = new List<(int, int, int)>() { (a, b, c) };
+                    }
+
+            while (true)
+            {
+                var input = Console.ReadLine().Split().Select(i => int.Parse(i)).ToArray();
+                if (input[0] == 0 && input[1] == 0)
+                    break;
+                calcList.TryGetValue(input[1], out var output);
+                Console.WriteLine(output?.Where(o => o.Item3 <= input[0]).Count() ?? 0);
+            }
+        }
+    }
+}
+

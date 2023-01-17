@@ -1,0 +1,6 @@
+a, b = map(int, input().split())
+c = a//b 
+d = a%b 
+e = float(a/b)
+print(f"{c} {d} {e:.5f}")
+

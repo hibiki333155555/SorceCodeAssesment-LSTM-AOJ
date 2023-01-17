@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int n,q;
+  cin >> n >> q;
+  vector<vector<int>> v(n);
+  for(int i=0; i<q; i++){
+    int a;
+    cin >> a;
+    if(a==0){
+      int t,x;
+      cin >> t >> x;
+      v.at(t).push_back(x);
+    }else if(a==1){
+      int t;
+      cin >> t;
+      for(int j=0; j<v.at(t).size(); j++){
+        if(j!=0) cout << " ";
+        cout << v.at(t).at(j);
+      }
+      cout << endl;
+    }else{
+      int t;
+      cin >> t;
+      v.at(t).clear();
+    }
+  }
+  return 0;
+}

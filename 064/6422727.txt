@@ -1,0 +1,4 @@
+ret = []
+for i in range(1000):
+    ret.append('Hello World')
+print("\n".join(ret))

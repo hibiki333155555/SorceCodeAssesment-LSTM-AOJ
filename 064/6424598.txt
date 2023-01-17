@@ -1,0 +1,24 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+   int n, m;
+   cin >> n >> m;
+   vector<int> a(n);
+   vector<int> b(m);
+   for (auto &v : a)
+      cin >> v;
+   for (auto &v : b)
+      cin >> v;
+   int ans = 0;
+   for (int i = 0; i < n; ++i)
+      for (int j = 0; j < m; ++j)
+      {
+         if (a[i] <= b[j])
+            ++ans;
+      }
+   cout << ans << endl;
+   return 0;
+}

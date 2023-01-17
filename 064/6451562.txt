@@ -1,0 +1,34 @@
+#include <iostream>
+#include <string>
+#define rep(i, n) for(i = 0; i < n; i++)
+using namespace std;
+
+int n;
+string s[100];
+
+int hamming(string s, string t) {
+	int ret = 0;
+	for (int i = 0; i < s.length(); i++) {
+		if (s[i] != t[i]) ret++;
+	}
+	return ret;
+}
+
+int main() {
+	int i, j;
+	
+	cin >> n;
+	rep(i, n) cin >> s[i];
+	
+	int ans = 0;
+	rep(i, n) {
+		rep(j, n) {
+			if (j == i) continue;
+			if (hamming(s[i], s[j]) <= 1) break;
+		}
+		if (j < n) ans++;
+	}
+	
+	cout << ans << endl;
+	return 0;
+}

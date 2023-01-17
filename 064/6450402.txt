@@ -1,0 +1,24 @@
+#include<stdio.h>
+#include<string.h>
+
+int main(void){
+    int i,num,tarop = 0,hanakop = 0;
+    char trostr[101],hanakostr[101];
+    
+    scanf("%d",&num);
+    
+    for(i = 0;i < num;i++){
+        scanf("%s %s", trostr, hanakostr);
+        
+        if(strcmp(trostr,hanakostr) == 0){
+            tarop++;
+            hanakop++;
+        }
+        else if(strcmp(trostr,hanakostr) < 0) hanakop += 3;
+        else if(strcmp(trostr,hanakostr) > 0) tarop += 3;
+    }
+    
+    printf("%d %d\n",tarop,hanakop);
+    
+    return 0;
+}

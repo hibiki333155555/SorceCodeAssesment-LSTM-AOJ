@@ -1,0 +1,27 @@
+import sys
+from heapq import heappush, heappop, heapify
+n=int(sys.stdin.readline().strip())
+edge=[ [] for _ in range(n) ]
+for _ in range(n):
+    A=map(int, sys.stdin.readline().split())
+    u,k,adj=A[0],A[1],A[2:]
+    for i in range(0,2*k,2):
+        target,cost=adj[i],adj[i+1]
+        edge[u].append((target,cost))
+
+d=[float("inf")]*n
+d[0]=0
+hq=[]
+heappush(hq,(0,0))
+while hq:
+    cost,fro=heappop(hq)
+    if d[fro]<cost: continue
+    for to,add_cost in edge[fro]:
+        alt=cost+add_cost
+        if alt<d[to]:
+            d[to]=alt
+            heappush(hq,(alt,to))
+
+for i,x in enumerate(d):
+    print i,x
+

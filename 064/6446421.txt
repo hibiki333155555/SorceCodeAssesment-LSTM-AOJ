@@ -1,0 +1,36 @@
+#include <cstdio>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
+#include <algorithm>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <list>
+#include <queue>
+#include <stack>
+#include <set>
+#include <map>
+#include <bitset>
+#include <numeric>
+#include <climits>
+#include <cfloat>
+#include <functional>
+using namespace std;
+
+int main(){
+    int n;
+    cin >> n;
+    
+    for(int i=0;i<n;i++){
+        int x,y,b,p;
+        cin >> x >> y >> b >> p;
+        int ret;
+        ret=x*b+y*p;
+        ret=min(ret,(x*max(b,5)+y*max(p,2))*4/5);
+        cout << ret << endl;
+    }
+    
+    return 0;
+}

@@ -1,0 +1,21 @@
+n = int(input())
+S = sorted([int(x) for x in input().split()])
+q = int(input())
+T = [int(x) for x in input().split()]
+ans = 0
+
+for i in T:
+  left = 0
+  right = len(S) - 1
+  while left <= right:
+    mid = (left + right)//2
+    if S[mid] == i:
+      ans += 1
+      break
+      
+    elif S[mid] > i:
+      right = mid - 1
+      
+    else:
+      left = mid + 1
+print(ans)

@@ -1,0 +1,14 @@
+import sys
+
+input = sys.stdin.buffer.readline
+read = sys.stdin.buffer.read
+
+N, X = map(int, input().split())
+Ms = [int(input()) for _ in range(N)]
+
+answer = 0
+for M in Ms:
+    if M >= X:
+        answer += 1
+
+print(answer)

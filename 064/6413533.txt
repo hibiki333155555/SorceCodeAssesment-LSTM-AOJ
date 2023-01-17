@@ -1,0 +1,42 @@
+using System;
+using static System.Math; //395,396
+
+public class Program
+{
+    public static void Main()
+    {
+        var input = int.Parse(Console.ReadLine());
+        //int []numbers = new int[input];
+        int count = 0;
+        for(int i = 0; i < input; i++)
+        {
+            int number = int.Parse(Console.ReadLine());
+            if(IsPrime(number))
+            {
+                count++;
+            }
+        }
+      
+        Console.WriteLine(count);
+    }
+    public static bool IsPrime(int x)
+    {
+        if(x == 2)
+        {
+            return true;
+        }
+        if(x % 2 == 0)
+        {
+            return false;
+        }
+        for(int i = 3; i <= Sqrt(x); i += 2)
+        {
+            if(x % i == 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+

@@ -1,0 +1,29 @@
+#include<stdio.h>
+
+int main(){
+    
+    
+    int i,a;
+    
+    
+    for(i=0;;i++){
+        
+        scanf("%d",&a);
+        
+        if(a==0){
+            
+            break;
+            
+        }
+        
+        else{
+            
+            printf("Case %d: %d\n",i+1,a);
+            
+        }
+    }
+    
+    return 0;
+    
+}
+

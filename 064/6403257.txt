@@ -1,0 +1,89 @@
+
+#include <stdio.h>
+
+const int N = 100;
+const int WHITE = 0;
+const int GRAY = 1;// 通過
+const int BLACK = 2;// 完了
+
+
+int color[N];
+int M[N][N];
+int S[N];
+int d[N];
+int f[N];
+int tt;
+int n;
+
+// 再帰による深さ優先探索
+// 引数ノードを訪問し、連結ノードがあるのならば、さらにそれを訪問する
+void dfs_visit(int u)
+{
+    int v;
+    color[u] = GRAY;// IDがuの要素を訪問
+    d[u] = ++tt;// 訪問時間を格納。
+    for( v = 0; v < n; v++)
+    {// 連結ノードを訪問する
+        // 連結ノードがないならば、以下の処理をスキップ（連結ノード訪問終了）
+        if( M[u][v] == 0) continue;
+        // 連結ノードが未訪問ならば、訪問。
+        if( color [v] == WHITE)
+        {
+            dfs_visit(v);
+        }
+    }
+    // 連結ノードがないor全部訪問し終わった
+    color[u] = BLACK;// 完了
+    f[u] = ++tt;// 訪問の完了の時刻を格納
+}
+
+void dfs()
+{
+    int u;
+    // 初期化
+    for( u = 0; u < n; u++) color[u] = WHITE;
+    tt = 0;
+    
+    for( u = 0; u < n; u++)
+    {
+        // 未訪問uを始点として深さ優先探索
+        if(color[u] == WHITE) dfs_visit(u);
+    }
+    for( u = 0; u <n; u++)
+    {
+        printf("%d %d %d\n", u + 1, d[u], f[u]);
+        //std::cout << u+1 << " " << d[u] << " " << f[u] << std::endl;
+    }
+}
+
+int main()
+{
+    int u, v, k, i, j;
+    scanf("%d", &n);
+    //std::cin >> n;
+    //行列の初期化
+    for( i = 0; i < n; i++)
+    {
+        for( j = 0; j < n; j++) M[i][j] = 0;
+    }
+    //行列に入れていく
+    for( i = 0; i < n; i++)
+    {
+        // ノード番号と非連結ノード数を取得
+        scanf("%d %d", &u, &k);
+        //std::cin >> u >> k;
+        // 連結ノードを取得し、行列の該当要素を1にする
+        u--;
+        for( j = 0; j < k; j++)
+        {
+            scanf("%d", &v);
+            //std::cin >> v;
+            v--;
+            M[u][v] = 1;
+        }
+    }
+    // ノード番号　発見時刻　完了時刻　を出力
+    dfs();
+    
+    return 0;
+}

@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+// using namespace atcoder;
+
+typedef long long ll;
+typedef long double ld;
+
+const ll INF = 1LL << 61;
+const ll MOD = 998244353;
+const string NEW_LINE = "\n";
+
+inline void output_YesNo(bool x) { cout << (x ? "Yes" : "No") << endl; }
+// #include <iomanip>
+//
+// void init_output() { cout << fixed << setprecision(15); }
+
+int main() {
+    while (true) {
+        int n, m;
+        cin >> n >> m;
+        if (n == 0 && m == 0)break;
+
+        vector<vector<int>> p(m, vector<int>(n));
+        for (auto &x: p)
+            for (auto &y: x) cin >> y;
+
+        int ret = 0;
+        for (int i = 0; i < n; i++) {
+            int now = 0;
+            for (int j = 0; j < m; j++) now += p[j][i];
+            ret = max(ret, now);
+        }
+        
+        cout << ret << endl;
+    }
+    return 0;
+}
+

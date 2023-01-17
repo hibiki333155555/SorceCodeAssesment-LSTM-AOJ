@@ -1,0 +1,128 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll,ll> PP;
+//#define MOD 1000000007
+#define MOD 998244353
+#define INF 2305843009213693951
+//#define INF 810114514
+#define PI 3.141592653589
+#define setdouble setprecision
+#define REP(i,n) for(ll i=0;i<(n);++i)
+#define OREP(i,n) for(ll i=1;i<=(n);++i)
+#define RREP(i,n) for(ll i=(n)-1;i>=0;--i)
+#define ALL(v) (v).begin(), (v).end()
+#define GOODBYE do { cout << "-1" << endl; return 0; } while (false)
+#define MM <<" "<<
+#define Endl endl
+#define debug true
+#define debug2 false
+
+vector<ll> basiser(vector<ll> A){
+    vector<ll> basis;
+    for(int e : A){
+        for(int b : basis){
+            e = min(e, e^b);
+        }
+        if(e){
+            basis.push_back(e);
+        }
+    }
+    return basis;
+}
+
+int main(void){
+    
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+
+    ll K;
+    cin >> K;
+    vector<ll> N(K);
+    REP(i,K){cin >> N[i];}
+    vector<vector<ll>> A(K);
+    REP(i,K){
+        A[i].resize(N[i]);
+        REP(j,N[i]){
+            cin >> A[i][j];
+        }
+    }
+
+    vector<vector<ll>> B(K);
+    REP(i,K){
+        B[i] = basiser(A[i]);
+    }
+
+    /*REP(i,K){
+        REP(j,B[i].size()){
+            cout << B[i][j] << " ";
+        }cout << endl;
+    }*/
+
+    vector<ll> S(1<<K,0);
+
+    ll Ans = 0;
+    for(ll j=1;j<(1ll<<K);j++){
+
+        ll t = 0;
+        REP(i,K){
+            if((j>>i)%2==1)t++;
+        }
+
+        vector<ll> C;
+        REP(i,K){
+            if((j>>i)%2==1){
+                REP(k,B[i].size()){
+                    C.push_back(B[i][k]);
+                }
+            }
+        }
+
+        vector<ll> Y;
+        REP(i,K){
+            if((j>>i)%2==1)Y.push_back(i);
+        }
+
+        ll s = 0;
+        REP(k,1<<(int)(Y.size())){
+
+            ll y = 0;
+            ll w = 0;
+            REP(i,Y.size()){
+                if((k>>i)%2==1){
+                    y += (1<<Y[i]);
+                    w ++;
+                }
+            }
+
+            if((w+Y.size())%2==0){
+                s -= S[y];
+            }else{
+                s += S[y];
+            }
+
+        }
+    
+        vector<ll> D = basiser(C);
+        if(Y.size()>=2){
+            s -= D.size();
+        }else{
+            s = D.size();
+        }
+        ll r = (1<<s);
+        S[j] = s;
+
+        //cout << j MM s << endl;
+        S[j] = s;
+
+        if((K+t)%2==0)r*=-1;
+
+        Ans += r;
+
+    }
+
+    cout << Ans << endl;
+
+    return 0;
+}
+	

@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    int x = -1, y = -1;
+    int i = 0;
+    int array_x[3000], array_y[3000];
+    while (x != 0 && x !=0) {
+        scanf("%d %d", &x, &y);
+        array_x[i] = x;
+        array_y[i++] = y;
+    }
+    i = 0;
+    while (array_x[i] != 0 && array_y[i] != 0) {
+        x = array_x[i];
+        y = array_y[i];
+        if (x < y)
+            printf("%d %d\n", x, y);
+        else
+            printf("%d %d\n", y, x);
+        i++;
+    }
+    return 0;
+}

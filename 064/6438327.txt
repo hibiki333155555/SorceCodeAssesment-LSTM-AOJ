@@ -1,0 +1,14 @@
+W=input().upper
+count=0
+while True:
+    T=input()
+    if T=="END_OF_TEXT":
+        break
+    else:
+        t=T.split()
+        for i in t:
+            print(i)
+            if i.upper==W:
+                count+=1
+                print(i)
+print(count)

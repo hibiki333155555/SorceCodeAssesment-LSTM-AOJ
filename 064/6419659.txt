@@ -1,0 +1,11 @@
+a,b,c = map(int, raw_input().split())
+count = 0
+while 1:
+	if c % a == 0:
+		count += 1
+	if a == b:
+		break
+	a += 1
+
+print count
+

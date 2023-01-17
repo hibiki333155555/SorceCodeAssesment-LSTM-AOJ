@@ -1,0 +1,15 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+    int d, a, m, s;
+    cin >> d;
+
+    a = d / 3600;
+    m = d % 3600 / 60;
+    s = d % 3600 % 60;
+
+    cout << a << " " << m << " " << s << endl;
+
+    return 0;
+}

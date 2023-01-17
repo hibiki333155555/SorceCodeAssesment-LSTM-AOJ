@@ -1,0 +1,22 @@
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+    int W;
+    int H;
+    cin>>H>>W;
+    for(int i = 0; i < H; i++)
+    {
+        if(W==0&&H ==0) break;
+
+        for (int j = 0; j < W; j++)
+        {
+         cout<<"#"<<endl;
+        }
+        cout<<endl;
+    }
+    return 0;
+}
+

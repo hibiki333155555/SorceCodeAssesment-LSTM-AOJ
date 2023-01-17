@@ -1,0 +1,16 @@
+while True:
+    H, W = map(int, input().split())
+    if H == 0 and W == 0:
+        break
+    for i in range(H):
+        for k in range(W):
+            if i == 0 or i == H-1 or k == 0 or k == W-1:
+                # 枠のときだけ"#"を表示、end=""で連続で表示されるようにする
+                print("#", end="")
+            else:
+                # 枠以外は"."を表示、end=""で連続で表示されるようにする
+                print(".", end="")
+        # 横の行の区切るために、空のprint関数を記述
+        print()
+    # 各データセットの後に、１つの空行を入れてるため空のprint関数を記述
+    print()

@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n;
+double d(double c[], double p){
+    double sum=0;
+    for (int i=0;i<n;i++){
+        sum+=pow(c[i], p);
+    }
+    return pow(sum, 1/p);
+}
+
+
+int main(){
+
+    cin>>n;
+    double a[n];
+    double b[n];
+    double c[n];
+    
+    for (int i=0;i<n;i++){
+        cin>>a[i];
+    }
+    for (int i=0;i<n;i++){
+        cin>>b[i];
+    }
+    for (int i=0;i<n;i++){
+        c[i] = fabs(a[i]-b[i]);
+    }
+    cout<<fixed<<setprecision(10);
+    cout<<d(c, 1.0)<<endl;
+    cout<<d(c, 2.0)<<endl;
+    cout<<d(c,  3.0)<<endl;
+    cout<<max_element(c, c+n)<<endl;
+    return 0;
+}

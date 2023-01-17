@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(n);i++)
+#define Inf 1000000001
+
+
+int main(){
+	
+	vector<int> t;
+	rep(i,1<<20){
+		int c = 1;
+		rep(j,20){
+			if((i>>j)&1)c = lcm(c,j+1);
+		}
+		t.push_back(c);
+	}
+	sort(t.begin(),t.end());
+	t.erase(unique(t.begin(),t.end()),t.end());
+	
+	int N,M;
+	cin>>N>>M;
+	
+	vector<vector<int>> E(N);
+	vector<int> u(M),v(M),c(M);
+	rep(i,M){
+		cin>>u[i]>>v[i]>>c[i];
+		u[i]--,v[i]--;
+		E[u[i]].push_back(i);
+		//E[v[i]].push_back(i);
+	}
+	
+	vector<vector<bool>> f(N,vector<bool>(t.size(),false));
+	f[0][0] = true;
+	queue<pair<int,int>> Q;
+	Q.emplace(0,0);
+	while(Q.size()>0){
+		int x = Q.front().first;
+		int l = Q.front().second;
+		Q.pop();
+		rep(i,E[x].size()){
+			int ind = E[x][i];
+			int y = u[ind] ^ v[ind] ^ x;
+			int ll = lcm(t[l],c[ind]);
+			ll = distance(t.begin(),lower_bound(t.begin(),t.end(),ll));
+			if(f[y][ll])continue;
+			f[y][ll] = true;
+			Q.emplace(y,ll);
+		}
+	}
+	
+	int X = Inf,Y = -Inf;
+	rep(i,t.size()){
+		if(f.back()[i]==true){
+			X = min(X,t[i]);
+			Y = max(Y,t[i]);
+		}
+	}
+	if(X==Inf){
+		cout<<"IMPOSSIBLE"<<endl;
+	}
+	else{
+		cout<<X<<' '<<Y<<endl;
+	}
+	
+	
+	return 0;
+}

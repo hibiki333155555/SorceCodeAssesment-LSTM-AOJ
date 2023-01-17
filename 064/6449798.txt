@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(n);i++)
+#define Inf 1000000001
+
+
+int main(){
+	
+	vector<string> s;
+	rep(i,26)s.push_back(string(1,'A'+i));
+	rep(i,26){
+		rep(j,26){
+			string t = string(1,'A'+i);
+			t += 'A'+j;
+			s.push_back(t);
+		}
+	}
+	string x,y;
+	int xx,yy;
+	cin>>x>>xx>>y>>yy;
+	long long ans = yy-xx+1;
+	
+	rep(i,s.size()){
+		if(x==s[i])xx = i;
+		if(y==s[i])yy = i;
+	}
+	ans *= yy-xx+1;
+	cout<<ans<<endl;
+	
+	return 0;
+}

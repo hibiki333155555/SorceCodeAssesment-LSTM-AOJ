@@ -1,0 +1,9 @@
+alpha = {}
+alpha = {chr(alpha): 0 for alpha in range(ord('a'),ord('z')+1)}
+
+S = input()
+for ai in S:
+        if ai in alpha.keys():
+            alpha[ai] += 1
+for ai, cnt in alpha.items():
+    print(ai,':',cnt)

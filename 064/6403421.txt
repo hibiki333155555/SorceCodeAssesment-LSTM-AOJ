@@ -1,0 +1,57 @@
+#pragma GCC optimize("O3")
+#include<bits/stdc++.h> 
+using namespace std;
+using ll=long long;
+using P=pair<ll,ll>;
+template<class T> using V=vector<T>; 
+#define fi first
+#define se second
+#define all(v) (v).begin(),(v).end()
+const ll inf=(1e18);
+const ll mod=998244353;
+// const ll mod=1000000007;
+const vector<int> dy={-1,0,1,0},dx={0,-1,0,1};
+ll GCD(ll a,ll b) {return b ? GCD(b,a%b):a;}
+ll LCM(ll c,ll d){return c/GCD(c,d)*d;}
+struct __INIT{__INIT(){cin.tie(0);ios::sync_with_stdio(false);cout<<fixed<<setprecision(20);}} __init;
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+template<class T>void debag(const vector<T> &a){cerr<<"debag :";for(auto v:a)cerr<<v<<" ";cerr<<"\n";}
+template<class T>void print(const vector<T> &a){for(auto v:a)cout<<v<<" ";cout<<"\n";}
+void compress(string &s){
+    sort(all(s));
+    s.erase(unique(all(s)),s.end());
+}
+int main(){
+    int m;
+    cin>>m;
+    string s1,s2;
+    cin>>s1>>s2;
+    compress(s1);
+    compress(s2);
+    V<set<char>> t1(m),t2(m);
+    for(int i=0;i<m;i++){
+        string T1,T2;
+        cin>>T1>>T2;
+        for(char c:T1)t1[i].emplace(c);
+        for(char c:T2)t2[i].emplace(c);
+    }
+    for(char l:s1){
+        for(char r:s2){
+            bool ok=true;
+            for(int i=0;i<m;i++){
+                if(t1[i].count(l)&&t2[i].count(r)){
+                    ok=false;
+                    break;
+                }
+            }
+            if(ok){
+                cout<<"Yes"<<"\n";
+                cout<<l<<r<<"\n";
+                return 0;
+            }
+        }
+    }
+    cout<<"No"<<"\n";
+}
+

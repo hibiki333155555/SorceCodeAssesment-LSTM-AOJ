@@ -1,0 +1,21 @@
+#include<stdio.h>
+#include<math.h>
+int main()   {
+    int n, s;
+    int sn, sn2;
+    int i;
+    while (1)   {
+        scanf("%d", &n);
+        if (n==0)  {
+            break;
+        }
+    sn=sn2=0;
+    for (i=0; i<n; i++) {
+        scanf("%d", &s);
+        sn += s;
+        sn2 += s*s;
+        }
+        printf("%lf\n", sqrt(((double)sn2 - (double)sn*sn/n)/n));
+    }
+   return 0;
+}

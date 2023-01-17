@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+const double eps=1e-10;
+struct V{
+	double x,y;
+	V(double a=0.0,double b=0.0){x=a;y=b;}
+};
+double operator * (const V&u,const V&v){return u.x*v.x+u.y*v.y;}
+double operator ^ (const V&u,const V&v){return u.x*v.y-u.y*v.x;}//u x v 
+V operator +(const V&u,const V&v){return V(u.x+v.x,u.y+v.y);}
+V operator -(const V&u,const V&v){return V(u.x-v.x,u.y-v.y);}
+V operator *(const double&k,const V&v){return V(k*v.x,k*v.y);}
+V operator *(const V&v,const double&k){return V(k*v.x,k*v.y);}
+V operator /(const V&v,const double&k){return V(v.x/k,v.y/k);}
+V operator /(const double&k,const V&v){return V(v.x/k,v.y/k);}
+double norm(const V&v){return sqrt(v.x*v.x+v.y*v.y);}
+struct line{
+	V a,b,dir;
+	line(){}
+	line(V u, V v){a=u;b=v;dir=(v-u)/norm(v-u);}
+};
+bool Is_Parallel(line l1,line l2){
+	return abs(l1.dir^l2.dir)<eps;
+}
+bool Is_Orthogonal(line l1,line l2){
+	return abs(l1.dir*l2.dir)<eps;
+}
+int main(void){
+	ios::sync_with_stdio(false);cin.tie(0);
+	int T;cin>>T;cout<<fixed<<setprecision(12);
+	V a,b,c,d;
+	line l1,l2;
+	while(T--){
+		cin>>a.x>>a.y>>b.x>>b.y>>c.x>>c.y>>d.x>>d.y;
+		l1=line(a,b);l2=line(c,d);
+		if(Is_Parallel(l1,l2)) cout<<"2\n";
+		else if(Is_Orthogonal(l1,l2)) cout<<"1\n";
+		else cout<<"0\n";
+	}
+	return 0;
+}

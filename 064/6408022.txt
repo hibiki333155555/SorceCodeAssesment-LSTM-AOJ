@@ -1,0 +1,16 @@
+a = [0]*26
+b = [0]*26
+c = [0]*26
+s = input()
+p = input()
+for d in s:
+    a[ord(d)-97] +=1
+for d in p:
+    b[ord(d)-97] +=1
+for i in range(26):
+    int(b[i])> int(a[i]):
+        c[i] = 1
+if 1 in c:
+    print("No")
+else:
+    print("Yes")

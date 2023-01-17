@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct Edge{
+    int to,next;
+}edge[100010];
+int head[100010],dfn[10010],low[100010],vis[100010],cnt,scc_cnt,top,t;
+int g[100010];
+bool in_skt[100010];
+int m,n,root;
+void add(int a,int b){
+    edge[cnt].to=b;
+    edge[cnt].next=head[a];
+    head[a]=cnt++;
+}
+void tarjan(int u){
+    dfn[u]=low[u]=++t;
+    int col=0;
+    for(int i=head[u];i>=0;i=edge[i].next){
+        int j=edge[i].to;
+        if(dfn[j]==0){
+            col++;
+            tarjan(j);
+            low[u]=min(low[u],low[j]);
+            if((u==0&&col>1)||(u!=0&&dfn[u]<=low[j]))g[u]=1;
+        }else low[u]=min(low[u],low[j]);
+    }
+}
+int main(){
+    memset(vis,0,sizeof(vis));
+    memset(head,-1,sizeof(head));
+    memset(dfn,0,sizeof(dfn));
+    cnt=0,top=0,scc_cnt=0,t=0;
+    memset(g,0,sizeof(g));
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        add(a,b);
+        add(b,a);
+    }
+    tarjan(0);
+    for(int i=0;i<n;i++){
+        if(g[i]==1)cout<<i<<endl;
+    }
+
+    return 0;
+}
+
+

@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    string pattern, str;
+    cin >> str >> pattern;
+
+    bool matched = false;
+    for (int i = 0; i < str.length() ^ matched; i++)
+    {
+        // cout << "pattern[0]: " << pattern[0] << ", str[" << i << "]: " << str[i] << endl;
+
+        if (pattern[0] == str[i])
+        {
+            for (int j = 1; j < pattern.length(); j++)
+            {
+                int k = i + j;
+                if (k >= str.length())
+                {
+                    k -= str.length();
+                }
+                // cout << "pattern[" << j << "]: " << pattern[j] << ", str[" << k << "]: " << str[k] << endl;
+                if (pattern[j] == str[k])
+                {
+                    matched = true;
+                } else {
+                    matched = false;
+                    break;
+                }
+            }
+
+            // patternの最後の文字までpatternとstrのアスキーコードの値が一致した場合
+        }
+    }
+
+    cout << (matched ? "Yes" : "No") << endl;
+
+    return 0;
+}

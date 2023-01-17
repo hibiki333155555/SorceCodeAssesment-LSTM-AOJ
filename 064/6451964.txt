@@ -1,0 +1,8 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    cout << fixed << setprecision(20);
+    double r;
+    cin >> r;
+    cout << M_PI * r * r << " " << 2 * M_PI * r << endl;
+}

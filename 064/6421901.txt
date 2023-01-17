@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    
+    long long N,M,K,X;
+    cin >> N >> M >> K >> X;
+    vector<long long> A(N);
+    for(int i=0; i<N; i++) {
+        cin >> A[i];
+    }
+    sort(A.begin(),A.end());
+    reverse(A.begin(),A.end());
+    long long now = 0;
+    for(int i=0; i<K; i++) {
+        now += A[i]/M;
+    }
+    if(now>=X) {
+        cout << "Yes" << endl;
+        return 0;
+    }
+    cout << "No" << endl;
+    return 0;
+    
+}

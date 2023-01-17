@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int m;
+    while(1){
+        int count=0;
+        string num;
+        getline(cin,num);
+        for(auto &n:num){
+            m=n-'0';
+            count+=m;
+        }
+        if(count==0) break;
+        cout<<count<<endl;
+    }
+}
+

@@ -1,0 +1,95 @@
+import sys
+import math
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def calc_length(v):
+    length = 0
+    for element in v:
+        length += element ** 2
+    return math.sqrt(length)
+
+
+def v_diff(v0, v1):
+    dif = []
+    for i in range(len(v0)):
+        dif.append(v1[i] - v0[i])
+    return dif
+
+
+def cross_product2d(v0, v1):
+    return v0[0] * v1[1] - v0[1] * v1[0]
+
+
+def _calc_cross_point_sub(a, p0, v01):
+    cross_point = []
+    for i in range(len(p0)):
+        cross_point.append(a * v01[i] + p0[i])
+    return cross_point
+
+
+def calc_cross_point(p0, p1, p2, p3):
+    v01 = v_diff(p0, p1)
+    v20 = v_diff(p2, p0)
+    v23 = v_diff(p2, p3)
+    d01 = calc_length(v01)
+    d20 = calc_length(v20)
+    d23 = calc_length(v23)
+
+    if d20 == 0.0:
+        return p0
+
+    for i in range(len(p0)):
+        v01[i] /= d01
+        v20[i] /= d20
+        v23[i] /= d23
+
+    cp0 = -cross_product2d(v01, v20)
+    cp1 = cross_product2d(v20, v23)
+
+    if cp1 == 0.0:
+        cp2 = cross_product2d(v20, v01)
+        if cp2 == 0.0:
+            a = (p2[0] - p0[0]) / v01[0] if v01[0] != 0.0 else (p2[1] - p0[1]) / v01[1]
+            return _calc_cross_point_sub(a, p0, v01)
+        else:
+            return p0
+
+    r = cp0 / cp1
+    d = (v01[0] - r * v23[0])
+    if d != 0.0:
+        a = (p2[0] - p0[0]) / d
+    else:
+        d = (v01[1] - r * v23[1])
+        a = (p2[1] - p0[1]) / d
+
+    return _calc_cross_point_sub(a, p0, v01)
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    num_q = int(f.readline())
+    for _ in range(num_q):
+        coord_list = list(map(int, f.readline().split()))
+        p0 = (coord_list[0], coord_list[1])
+        p1 = (coord_list[2], coord_list[3])
+        p2 = (coord_list[4], coord_list[5])
+        p3 = (coord_list[6], coord_list[7])
+
+        ip = calc_cross_point(p0, p1, p2, p3)
+        print(f'{ip[0]:.8f} {ip[1]:.8f}')
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

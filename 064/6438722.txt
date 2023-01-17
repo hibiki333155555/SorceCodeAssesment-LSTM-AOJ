@@ -1,0 +1,12 @@
+while True:
+    a = list(map(int, input().split()))
+    print(a)
+    if a[0] == 0:
+        break
+    res = 0
+
+    for i in range(len(a)):
+        res += a[i]
+    print(res)
+
+

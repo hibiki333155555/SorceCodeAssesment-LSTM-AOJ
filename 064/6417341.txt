@@ -1,0 +1,17 @@
+// use proconio::input;
+use std::io;
+
+fn main() {
+    let mut buf = String::new();
+
+    // 標準入力から全部bufに読み込む
+    io::stdin().read_line(&mut buf).expect("Fail");
+    // 読み込んだStringを空白で分解する
+    let mut iter = buf.split_whitespace();
+
+    let a: i64 = iter.next().unwrap().parse().unwrap();
+    let b: i64 = iter.next().unwrap().parse().unwrap();
+
+    println!("{}", a * b);
+}
+

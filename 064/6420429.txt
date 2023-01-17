@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+#include <complex>
+#include <random>
+#include <functional>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+using vvvll = vector<vvll>;
+using vvvvll = vector<vvvll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+vvll G;
+
+
+
+int main() {
+    ll Q,W,E,R;
+    cin>>Q>>W>>E>>R;
+    cout<<(((Q-1)/E+1)*((W-1)/R+1))<<endl;
+}
+
+

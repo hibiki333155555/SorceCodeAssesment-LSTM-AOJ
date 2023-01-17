@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+	int sx, sy, sz, gx, gy, gz;
+	scanf("%d %d %d", &sx, &sy, &sz);
+	scanf("%d %d %d", &gx, &gy, &gz);
+	
+	while (sx > 1) {
+		sx -= 2;
+		sy += 2;
+	}
+	while (sx <= -1) {
+		sx += 2;
+		sy -= 2;
+	}
+	while (sy > 1) {
+		sy -= 2;
+		sz += 2;
+	}
+	while (sy <= -1) {
+		sy += 2;
+		sz -= 2;
+	}
+	if (sx == 1 && sy == 0 && sz == -1) {
+		sx = 0;
+		sy = 1;
+		sz = 0;
+	}
+	if (sx == 1 && sy == 1 && sz == -1) {
+		sx = 0;
+		sy = 0;
+		sz = 0;
+	}
+	if (sx == 0 && sy == 1 && sz == -1) {
+		sx = 1;
+		sy = 0;
+		sz = 0;
+	}
+	if (sx == 1 && sy == 1 && sz == -2) {
+		sx = 0;
+		sy = 0;
+		sz = 1;
+	}
+	while (gx > 1) {
+		gx -= 2;
+		gy += 2;
+	}
+	while (gx <= -1) {
+		gx += 2;
+		gy -= 2;
+	}
+	while (gy > 1) {
+		gy -= 2;
+		gz += 2;
+	}
+	while (gy <= -1) {
+		gy += 2;
+		gz -= 2;
+	}
+	if (gx == 1 && gy == 0 && gz == -1) {
+		gx = 0;
+		gy = 1;
+		gz = 0;
+	}
+	if (gx == 1 && gy == 1 && gz == -1) {
+		gx = 0;
+		gy = 0;
+		gz = 0;
+	}
+	if (gx == 0 && gy == 1 && gz == -1) {
+		gx = 1;
+		gy = 0;
+		gz = 0;
+	}
+	if (gx == 1 && gy == 1 && gz == -2) {
+		gx = 0;
+		gy = 0;
+		gz = 1;
+	}
+	if (sx == gx && sy == gy && sz == gz) printf("Yes\n");
+	else printf("No\n");
+	fflush(stdout);
+	return 0;
+}

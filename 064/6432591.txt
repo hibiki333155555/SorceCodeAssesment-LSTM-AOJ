@@ -1,0 +1,45 @@
+using System.Collections.Generic;
+
+namespace ExhaustiveSearch
+{
+	class Program
+	{
+		static bool solve(int i, int m, ref List<int> targetList)
+		{
+			if (m == 0)
+			{
+				return true;
+			}
+			if (i >= targetList.Count)
+			{
+				return false;
+			}
+			return solve(i + 1, m, ref targetList) || solve(i + 1, m - targetList[i], ref targetList);
+		}
+
+		static void Main(string[] args)
+		{
+			var n = System.Console.ReadLine() ?? "";
+			string a = System.Console.ReadLine() ?? "";
+			var targetNumList = new List<int>();
+			foreach (var s in a.Split(' '))
+			{
+				targetNumList.Add(int.Parse(s));
+			}
+
+			var findNumList = new List<int>();
+			var q = System.Console.ReadLine();
+			var m = System.Console.ReadLine() ?? "";
+			foreach (var s in m.Split(' '))
+			{
+				findNumList.Add(int.Parse(s));
+			}
+
+			findNumList.ForEach(x =>
+			{
+				var ret = solve(0, x, ref targetNumList) ? "yes" : "no";
+				System.Console.WriteLine(ret);
+			});
+		}
+	}
+}

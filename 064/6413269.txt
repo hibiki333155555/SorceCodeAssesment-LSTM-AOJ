@@ -1,0 +1,5 @@
+a = int(input())
+b = int(input())
+def "面識"(a,b):
+    return print(a*b)
+    

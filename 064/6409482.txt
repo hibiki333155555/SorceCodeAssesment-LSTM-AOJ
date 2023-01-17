@@ -1,0 +1,10 @@
+while True:
+    try:
+        s, w, h = input().split(',')
+    except:
+        break
+    w = float(w)
+    h = float(h)
+    if w >= 25 * h * h:
+        print(s)
+

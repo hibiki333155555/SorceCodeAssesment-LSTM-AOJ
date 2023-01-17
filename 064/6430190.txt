@@ -1,0 +1,14 @@
+#include <iostream>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int main(){
+	int s,a,b,ans=250;
+	cin >> s >> a >> b;
+	for(i=1; a+b*i < s; i++){
+	    ans += 100
+	}
+	cout << ans << endl;
+	return 0;
+}

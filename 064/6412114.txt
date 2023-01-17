@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cmath>
+#include <cstdio>
+using namespace std;
+
+int main(){
+    int n, x[100], y[100];
+    double p1 = 0, p2, p3, p = 0.0;
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        cin >> x[i];
+    }
+    for(int i = 0; i < n; i++){
+        cin >> y[i];
+    }
+    for(int i = 0; i < n; i++) p1 += fabs(x[i] - y[i]);
+    for(int i = 0; i < n; i++){
+        double y = 0.0;
+        y += pow(fabs(x[i] - y[i]), 2.0);
+    }
+    p2 = sqrt(y);
+    for(int i = 0; i < n; i++){
+        double z = 0.0;
+        z += pow(fabs(x[i] - y[i]), 3);
+    }
+    p3 = pow(z, 1.0 / 3);
+    for(int i = 0; i < n; i++){
+        p = p < fabs(x[i] - y[i])?fabs(x[i] - y[i]):p; 
+    }    
+    printf("%lf\n%lf\n%lf\n%lf\n", p1, p2, p3, p);
+    return 0;
+}

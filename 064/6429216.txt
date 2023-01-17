@@ -1,0 +1,14 @@
+#include <cstdio>
+
+int main(){
+    
+    int x,y;
+    
+    scanf("x\n");
+    
+    y = x*x*x;
+    
+    printf("y\n");
+    
+    return 0;
+}

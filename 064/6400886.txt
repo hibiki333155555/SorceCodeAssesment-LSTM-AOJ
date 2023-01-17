@@ -1,0 +1,180 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define mkp make_pair
+#define pb push_back
+#define PII pair<int, int>
+#define PLL pair<ll, ll>
+#define ls(x) ((x) << 1)
+#define rs(x) ((x) << 1 | 1)
+#define fi first
+#define se second
+double eps = 1e-12, inf = 1e15, Pi = acos(-1.0);
+const int N = 200010;
+int dcmp(double x) {
+    if(fabs(x) < eps) return 0;
+    return (x < 0) ? -1 : 1;
+}
+struct Point {
+    double x, y;
+    Point() { x = y = 0; }
+    Point(double a, double b) { x = a; y = b; }
+    friend Point operator + (Point a, Point b) { return Point(a.x + b.x, a.y + b.y); }
+    friend Point operator - (Point a, Point b) { return Point(a.x - b.x, a.y - b.y); }
+    friend Point operator * (Point a, double b) { return Point(a.x * b, a.y * b); }
+    friend Point operator / (Point a, double b) { return Point(a.x / b, a.y / b); }
+    friend bool operator == (Point a, Point b) { return (dcmp(a.x - b.x) == 0 && dcmp(a.y - b.y) == 0); }
+    bool operator < (const Point a) const {
+        return (x != a.x) ? (x < a.x) : (y < a.y);
+    }
+    Point turn(Point p0, double ang) {
+        Point p = Point(x, y);
+        Point tmp = (p - p0);
+        tmp.x = tmp.x * cos(ang) - tmp.y * sin(ang);
+        tmp.y = tmp.y * sin(ang) + tmp.y * cos(ang);
+        return p0 + tmp;
+    }
+};
+typedef Point Vector;
+struct Line {
+    //l=(1-t)A+tB=A+t(B-A)=x+ty
+    Point p; Vector v;
+    Line() { p.x = p.y = v.x = v.y = 0; }
+    Line(Point a, Point b) { p = a; v = b - a; }
+};
+double Dot(Point a, Point b) { return a.x * b.x + a.y * b.y; } 
+double Cross(Point a, Point b) { return a.x * b.y - a.y * b.x; } 
+double Len(Point a) { return sqrt(a.x * a.x + a.y * a.y); }
+
+double LineProjection(Point p, Point p1, Point p2) { return Dot(p - p1, p2 - p1) / Len(p2 - p1); }
+Point ProjectionPoint(Point p, Point p1, Point p2) { return p1 + (p2 - p1) * LineProjection(p, p1, p2) / Len(p2 - p1); }
+Point ReflectionPoint(Point p, Point p1, Point p2) { return ProjectionPoint(p, p1, p2) * 2 - p; }
+void Clockwise(Point p, Point p1, Point p2) {
+    double cr = Cross(p1 - p, p2 - p);
+    if(cr) {
+        if(cr > 0) puts("COUNTER_CLOCKWISE");
+        else puts("CLOCKWISE");
+    } else {
+        double lp = LineProjection(p, p1, p2);
+        if(lp < 0) puts("ONLINE_BACK");
+        else if(lp - Len(p2 - p1) > 0) puts("ONLINE_FRONT");
+        else puts("ON_SEGMENT");
+    }
+}
+bool isOnSegment(Point p, Point p1, Point p2) {
+    //若允许在点与端点重合
+    if(p == p1 || p == p2) return 1;
+    return (dcmp(Cross(p1 - p, p2 - p)) == 0 && dcmp(Dot(p1 - p, p2 - p)) < 0);
+    //若不允许点与端点重合
+    //return (Len(P - A) + Len(B - P) - Len(B - A) == 0);
+}
+void LinePO(Line l1, Line l2) {
+    if(Cross(l1.v, l2.v) == 0) puts("2");
+    else if(Dot(l1.v, l2.v) == 0) puts("1");
+    else puts("0");
+}
+int SegmentProperIntersection(Line l1, Line l2) {
+    Point a1 = l1.p, a2 = l1.p + l1.v, b1 = l2.p, b2 = l2.p + l2.v;
+    //若不允许在端点处相交，删去下一行
+    if(isOnSegment(a1, b1, b2) || isOnSegment(a2, b1, b2) || isOnSegment(b1, a1, a2) || isOnSegment(b2, a1, a2)) return 1;
+    double c1 = Cross(a2 - a1, b1 - a1), c2 = Cross(a2 - a1, b2 - a1);
+    double c3 = Cross(b2 - b1, a1 - b1), c4 = Cross(b2 - b1, a2 - b1);
+    //cout<<(dcmp(c1) * dcmp(c2) < 0 && dcmp(c3) * dcmp(c4) < 0)<<endl;
+    return (dcmp(c1) * dcmp(c2) < 0 && dcmp(c3) * dcmp(c4) < 0);
+}
+Point LineIntersection(Line a, Line b) {
+    Point p = a.p, q = b.p;
+    Vector v = a.v, w = b.v, u = p - q;
+    double t = Cross(w, u) / Cross(v, w);
+    return p + v * t;
+}
+double DistanceToLine(Point a, Line b) {
+    Point b1 = b.p, b2 = b.p + b.v;
+    Point t = ProjectionPoint(a, b1, b2);
+    return Len(a - t);
+}
+double DistanceToSeg(Point a, Line b) {
+    Point b1 = b.p, b2 = b.p + b.v;
+    Point t = ProjectionPoint(a, b1, b2);
+    if(!isOnSegment(t, b1, b2)) return inf;
+    return Len(a - t);
+}
+double SegmentDistance(Line a, Line b) {
+    if(SegmentProperIntersection(a, b)) return 0;
+    Point a1 = a.p, a2 = a.p + a.v, b1 = b.p, b2 = b.p + b.v;
+    double x = min(min(DistanceToSeg(a1, b), DistanceToSeg(a2, b)), min(DistanceToSeg(b2, a), DistanceToSeg(b1, a)));
+    double y = min(min(Len(a1 - b1), Len(a1 - b2)), min(Len(a2 - b1), Len(a2 - b2)));
+    return min(x, y);
+}
+double PolygonArea(int n, Point *p) {
+    double ret = 0;
+    for(int i = 2; i <= n; i++)
+        ret += Cross(p[i] - p[1], p[(i + 1 > n) ? 1 : (i + 1)] - p[1]);
+    return fabs(ret) / 2;
+}
+int isConvex(int n, Point *p) {
+    p[n + 1] = p[1]; p[n + 2] = p[2];
+    for(int i = 1; i <= n; i++)
+        if(Cross(p[i] - p[i + 1], p[i + 2] - p[i + 1]) > 0) return 0;
+    return 1;
+}
+
+int PointinPolygon(Point p0, int n, Point *p) {
+    //cout<<"calc:"<<endl;
+    p[n + 1] = p[1];
+    for(int i = 1; i <= n; i++)
+        if(isOnSegment(p0, p[i], p[i + 1])) return 1;
+    int cnt = 0;
+    for(int i = 1; i <= n; i++) {
+        Point a = p[i], b = p[i + 1];
+        if(a.y > b.y) swap(a, b);
+        if(dcmp(Cross(a - p0, b - p0)) < 0 && dcmp(a.y - p0.y) < 0 && dcmp(p0.y - b.y) <= 0)
+            cnt++;
+    }
+    if(cnt & 1) return 2;
+    return 0;
+}
+void ConvexHull(int n, Point *p, int &m, Point *q) {
+    sort(p + 1, p + n + 1);
+    m = 0;
+    for(int i = 1; i <= n; i++) {
+        while(m > 1 && Cross(p[i] - q[m], q[m - 1] - q[m]) > 0) m--;
+        q[++m] = p[i];
+    }
+    int k = m;
+    for(int i = n - 1; i >= 1; i--) {
+        while(m > k && Cross(p[i] - q[m], q[m - 1] - q[m]) > 0) m--;
+        q[++m] = p[i];
+    }
+    m--;
+    return;
+}
+double MaxDistConvex(int n, Point *p) {
+    if(n == 1) return 0;
+    if(n == 2) return Len(p[2] - p[1]); 
+    double ans = 0;
+    p[++n] = p[1];
+    int j = 3;
+    for(int i = 1; i <= n; i++) {
+        //对于边(p[i], p[i+1])
+        while(dcmp(fabs(Cross(p[j] - p[i], p[i + 1] - p[i])) - fabs(Cross(p[j + 1] - p[i], p[i + 1] - p[i]))) < 0) j = j % n + 1;
+        ans = max(ans, Len(p[i + 1] - p[i]));
+        ans = max(ans, max(Len(p[j] - p[i]), Len(p[j] - p[i + 1])));
+    }
+    return ans;
+}   
+int main(){
+    // freopen("ex.in", "r", stdin);
+    // freopen("ex.out", "w", stdout);
+    static Point p[N];
+    int n; scanf("%d", &n);
+    for(int i = 1; i <= n; i++) 
+        scanf("%lf%lf", &p[i].x, &p[i].y);
+    int m; static Point q[N << 1];
+    ConvexHull(n, p, m, q);
+    printf("%.10lf", MaxDistConvex(m, q));
+    return 0;
+}
+/*
+转过的角度应当>=Pi
+*/

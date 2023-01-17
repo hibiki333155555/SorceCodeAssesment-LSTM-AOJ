@@ -1,0 +1,12 @@
+n = gets.chomp.to_i
+array = gets.split(' ').map(&:to_i)
+max_num ||= array[0]
+min_num ||= array[0]
+sum ||= 0
+n.times do |i|
+    max_num = array[i] if max_num < array[i]
+    min_num = array[i] if min_num > array[i]
+    sum += array[i]
+end
+
+puts "#{min_num} #{max_num} #{sum}"

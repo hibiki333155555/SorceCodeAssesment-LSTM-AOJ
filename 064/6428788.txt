@@ -1,0 +1,15 @@
+ko=0
+na=0
+a=int(input())
+for i in range(a):
+   
+    a,b=map(str,input().split())
+    if(a==b):
+        ko+=1
+        na+=1
+    elif(a>b):
+        ko+=1
+    elif(a<b):
+        na+=1
+    print(ko,na)
+        

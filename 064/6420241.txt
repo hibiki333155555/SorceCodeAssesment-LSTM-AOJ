@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+using ll = int64_t;
+const int MOD = 998244353;
+
+ll modpow(ll x, ll exp, ll mod){
+    ll res = 1;
+    for(x %= mod; exp > 0; exp >>= 1){
+        if(exp & 1) res = res * x % mod;
+        x = x * x % mod;
+    }
+    return res;
+}
+
+class comb{
+    vector<ll> fact, invf;
+    public:
+
+    void init(int n){
+        fact.resize(n+1);
+        invf.resize(n+1);
+        fact[0] = 1;
+        for(int i = 1; i <= n; i++){
+            fact[i] = ll(fact[i-1]) * i % MOD;
+        }
+        invf[n] = modpow(fact[n], MOD-2, MOD);
+        for(int i = 0; i < n; i++){
+            invf[n-i-1] = ll(invf[n-i]) * (n-i) % MOD;
+        }
+    }
+
+    int nCr(int n, int r){
+        if(n < r || r < 0) return 0;
+        return ll(fact[n]) * invf[n-r] % MOD * invf[r] % MOD;
+    }
+};
+
+void solve(){
+    string N; cin >> N;
+    int M = N.size(), K; cin >> K;
+
+    vector<ll> pow2(M + 1);
+    comb cmb;
+
+    pow2[0] = 1;
+    for(int i = 1; i <= M; i++) pow2[i] = pow2[i - 1] * 2 % MOD;
+    cmb.init(M + 1);
+
+    int lbit = 0;
+    for(int i = 0; i < M; i++) if(N[i] == '1') lbit++;
+    ll dp = 0, ans = 0;
+
+    for(int i = M - 1; i >= 0; i--){
+        if(lbit == K) dp = 1;
+        if(N[i] == '1'){
+            ans = (ans + (pow2[M - i - 1] - 1) * cmb.nCr(M - i - 2, K - lbit)) % MOD;
+
+            if(M - i - 1 >= K - lbit && K - lbit >= 0){
+                ans = (ans + pow2[M - i - 1] * dp) % MOD;
+                dp = (dp + cmb.nCr(M - i - 1, K - (lbit - 1))) % MOD;
+            }
+
+            lbit--;
+        }
+    }
+
+    cout << ans << '\n';
+}
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    solve();
+    return 0;
+}
+
+

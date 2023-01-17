@@ -1,0 +1,4 @@
+N = input().split()
+S = input()
+
+print(S.replace('joi','JOI'))

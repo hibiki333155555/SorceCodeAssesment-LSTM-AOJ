@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+#define lol long long
+using namespace std;
+int main(){
+    int mi=INT_MAX,ma=-INT_MAX;
+    lol sum=0;
+    int n,a;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>a;
+        sum+=a;
+        mi = min(mi,a);
+        ma = max(ma,a);
+    }
+    cout<<mi<<" "<<ma<<" "<<sum<<"\n";
+    return 0;
+}

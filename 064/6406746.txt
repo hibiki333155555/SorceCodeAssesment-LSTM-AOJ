@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef complex<double> P;
+ 
+namespace std{
+  bool operator < (const P &a,const P &b){
+    return (a.real()<b.real()||(a.real()==b.real() && a.imag()<b.imag()));
+  }
+}
+ 
+double eps=1e-10;
+ 
+double Sqrt(double x){
+  return sqrt(max(0.0,x));
+}
+ 
+struct S{
+  P p,q;
+  S(P p,P q):p(p),q(q){}
+};
+ 
+struct C{
+  P p;
+  double r;
+  C(P p,double r):p(p),r(r){}
+  C(double x,double y,double r):p(P(x,y)),r(r){}
+};
+ 
+S getInTangent(C a,C b,double flg){
+	cout<<"in"<<flg<<endl;
+  P base=b.p-a.p;
+  double w=a.r+b.r;
+  double h=Sqrt(norm(base)-w*w);
+  P k=base*P(w,h*flg)/norm(base);
+  return S(a.p+k*a.r,b.p-k*b.r);
+}
+ 
+S getOutTangent(C a,C b,double flg){
+	cout<<"out "<<flg<<endl;
+  P base=b.p-a.p;
+  double h=b.r-a.r;
+  double w=Sqrt(norm(base)-h*h);
+  P k=base*P(w,h*flg)/norm(base)*P(0,flg);
+  return S(a.p+k*a.r,b.p+k*b.r);
+}
+ 
+vector<S> getTangent(C a,C b){
+  vector<S> res;
+  double dist=abs(a.p-b.p);
+   
+  if(dist>a.r+b.r+eps)
+    res.push_back(getInTangent(a,b,1));
+ 
+  if(dist>a.r+b.r-eps)
+    res.push_back(getInTangent(a,b,-1));
+ 
+  if(dist>abs(a.r-b.r)+eps)
+    res.push_back(getOutTangent(a,b,1));
+ 
+  if(dist>abs(a.r-b.r)-eps)
+    res.push_back(getOutTangent(a,b,-1));
+ 
+  return res;
+}
+ 
+void pr(P p){
+  printf("%.10f %.10f\n",p.real(),p.imag());
+}
+ 
+int main(){
+  double ax,ay,ar,bx,by,br;
+  cin>>ax>>ay>>ar>>bx>>by>>br;
+  vector<S> ans=getTangent(C(ax,ay,ar),C(bx,by,br));
+  vector<P> vec;
+  for(int i=0;i<(int)ans.size();i++)vec.push_back(ans[i].p);
+  sort(vec.begin(),vec.end());
+  for(int i=0;i<(int)vec.size();i++)pr(vec[i]);
+  return 0;
+}
+

@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int (i)=0;(i)<(n);(i)++)
+#define ll long long
+#define pp pair<ll,ll>
+#define ld long double
+#define all(a) (a).begin(),(a).end()
+#define mk make_pair
+#define difine define
+constexpr int inf=2000001000;
+constexpr ll INF=2e18;
+constexpr ll mod=1000000007;
+constexpr ll MOD=998244353;
+int dx[4]={1,0,-1,0},dy[4]={0,-1,0,1};
+
+ 
+// #include <atcoder/all>
+// typedef atcoder::modint1000000007 mint;
+// typedef atcoder::modint998244353 mint;
+
+int main() {
+  int n,x;
+  cin >> n >> x;
+  vector<int> a(n);
+  rep(i,n) cin >> a[i];
+  int ans=0;
+  rep(i,n){
+      if (a[i]>=x) ans++;
+  }
+  cout << ans << endl;
+}
+

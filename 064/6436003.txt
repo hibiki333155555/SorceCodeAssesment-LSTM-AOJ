@@ -1,0 +1,106 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+class Node:
+    def __init__(self, parent, key):
+        self.key = key
+        self.parent = parent
+        self.left = None
+        self.right = None
+        return
+
+
+def insert(root, i_n):
+    parent = None
+    c_n = root
+
+    while c_n is not None:
+        parent = c_n
+
+        if i_n.key < c_n.key:
+            c_n = c_n.left
+        else:
+            c_n = c_n.right
+
+    i_n.parent = parent
+    if root is None:
+        root = i_n
+    elif i_n.key < parent.key:
+        parent.left = i_n
+    else:
+        parent.right = i_n
+
+    return root
+
+
+def find(c_n, key):
+    if c_n is None:
+        return None
+
+    if c_n.key == key:
+        return c_n
+    if key < c_n.key:
+        return find(c_n.left, key)
+    else:
+        return find(c_n.right, key)
+
+
+def print_in_order(c_n):
+    if c_n is None:
+        return
+
+    print_in_order(c_n.left)
+    print(' ' + str(c_n.key), end='')
+    print_in_order(c_n.right)
+    return
+
+
+def print_pre_order(c_n):
+    if c_n is None:
+        return
+
+    print(' ' + str(c_n.key), end='')
+    print_pre_order(c_n.left)
+    print_pre_order(c_n.right)
+    return
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    m = int(f.readline())
+    root = None
+
+    for _ in range(m):
+        op = f.readline().split()
+
+        if len(op) > 1:
+            key = int(op[1])
+            if op[0] == 'insert':
+                node = Node(None, key)
+                root = insert(root, node)
+            elif op[0] == 'find':
+                if find(root, key) is not None:
+                    print('yes')
+                else:
+                    print('no')
+        else:
+            print_in_order(root)
+            print()
+            print_pre_order(root)
+            print()
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

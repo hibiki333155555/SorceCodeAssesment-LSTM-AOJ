@@ -1,0 +1,11 @@
+#include <iostream>
+using namespace std;
+#define PI  3.14159265358979323846
+
+int main() {
+  long double r;
+  cin >> r;
+  cout << PI * r * r / 1000 << " " << PI * 2 * r << endl;
+  return 0;
+}
+

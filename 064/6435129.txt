@@ -1,0 +1,15 @@
+#include <iostream>
+名前空間stdを使用します。
+
+int main（）{
+    int a、b;
+    cin >> a >> b;
+    if（a <b）{
+        cout << "a <b" << endl;
+    } else if（a> b）{
+        cout << "a> b" << endl;
+    } そうしないと {
+        cout << "a == b" << endl;
+    }
+    
+    0を返します。

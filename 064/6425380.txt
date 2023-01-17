@@ -1,0 +1,13 @@
+MOD = 10**9+7
+m, n = map(int, input().split())
+
+def power(m, n):
+    ret = 1
+    while n > 0:
+        if n & 1:
+            ret = (ret * m) % MOD
+        m = (m * m) % MOD
+        n = n >> 1
+    return ret
+
+print(power(m, n))

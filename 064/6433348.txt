@@ -1,0 +1,32 @@
+// 右利きのグループと左利きのグループを分けて並べて、
+// 不満度の小さい右利きと不満度の小さい左利きを真横に並べれば良い
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int N; cin >> N;
+    int a[N], left[N], right[N];
+    int left_num = 0, right_num = 0;
+    for (int i = 0; i < N; i++) {
+        cin >> a[i];
+    }
+    for (int i = 0; i < N; i++) {
+        if (a[i]) {
+            cin >> left[left_num++];
+        } else {
+            cin >> right[right_num++];
+        }
+    }
+    sort(left, left + left_num);
+    sort(right, right + right_num);
+
+    if (left_num == 0 || right_num == 0) {
+        cout << 0 << endl;
+    } else {
+        cout << left[0] + right[0] << endl;
+    }
+
+    return 0;
+}
+

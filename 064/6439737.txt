@@ -1,0 +1,30 @@
+#include <iostream>
+#include<string>
+using namespace std;
+
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+
+    std::string line;
+    std::getline(std::cin, line);
+
+    for (int i = 0; i < line.length(); i++)
+    {
+        char c = line[i];
+        if (line[i] >= 'a' && line[i] <= 'z')
+        {
+            c = line[i] + ('A' - 'a');
+        }
+        else if (line[i] >= 'A' && line[i] <= 'Z')
+        {
+            c = line[i] - ('A' - 'a');
+        }
+        cout << c;
+    }
+
+    cout << endl;
+    return 0;
+    return 0;
+}

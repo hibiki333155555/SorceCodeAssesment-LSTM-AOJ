@@ -1,0 +1,30 @@
+#include <iostream>
+using namespace std;
+const long long N = 100000;
+int n,k;
+int w[N];
+bool check (long long x) {
+	int cnt = 1,sum = 0;
+	for (int i = 0;i < n;i++) {
+		if (w[i] > x) return false;
+		if (sum+w[i] <= x) sum += w[i];
+		else {
+			sum = w[i];
+			cnt++;
+		}
+	}
+	return cnt <= k;
+}
+int main () {
+	cin >> n >> k;
+	for (int i = 0;i < n;i++) cin >> w[i];
+	long long l = 0,r = 100000*10000;
+	long long mid;
+	while (r-l > 1) {
+		mid = (l+r)/2;
+		if (check (mid)) r = mid;
+		else l = mid;
+	}
+	cout << r << endl;
+    return 0;
+}

@@ -1,0 +1,15 @@
+inpl = lambda oneindex=False: list(map(lambda x: int(x)-int(bool(oneindex)),input().split()))
+A, B = inpl()
+a = bin(A)[2:]
+b = bin(B)[2:]
+Na, Nb = len(a), len(b)
+N = max(Na, Nb)
+a = (N-Na)*'0' + a
+b = (N-Nb)*'0' + b
+for i in range(N):
+    if a[i] != b[i]:
+        break
+else:
+    i += 1
+print(i)
+

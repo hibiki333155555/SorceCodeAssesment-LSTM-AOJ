@@ -1,0 +1,13 @@
+A=[]
+B=[]
+while True:
+    a,b=map(int,raw_input().split())
+    if a==0 and b==0:
+        break
+    A.append(a)
+    B.append(b)
+    
+for i in range(len(A)):
+    for j in range(A[i]):
+        print("#"*B[i])
+    print ""

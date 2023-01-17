@@ -1,0 +1,13 @@
+counter = [0 for i in range(26)]
+dis = 0
+colm = 0
+for ch in str(input()):
+    if ch.isalpha():
+        num = ord(ch) - ord('a')
+        counter[num] += 1
+    else:
+        dis += 1
+for i in "abcdefghijklmnopqrstuvwxyz":
+    print("{0} : {1}".format(i, counter[colm]))
+    colm += 1
+    

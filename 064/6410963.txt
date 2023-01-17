@@ -1,0 +1,13 @@
+n = int(input())
+ta = 0
+hana = 0
+for i in range(n):
+    str1, str2 = input().split()
+    if str1 == str2:
+        ta +=1
+        hana += 1
+    if str1 < str2:
+        hana +=3
+    if str1 > str2:
+        ta +=3
+print(taro,hana)

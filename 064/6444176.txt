@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    string str;
+    getline(cin,str);
+    for(char& s : str){
+        if('a'<=s&&s<='z') s += 'A'-'a';
+        else if('A'<=s&&s<='Z') s += 'a'-'A';
+    }
+    cout << str << endl;
+}

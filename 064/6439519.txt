@@ -1,0 +1,18 @@
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+
+
+using namespace std;
+
+int main(){
+    cout << fixed << setprecision(6);
+    double r;
+    double menseki, syuu;
+    menseki = r*r*M_PI;
+    syuu = 2*r*M_PI;
+    
+
+    cout << menseki << " " << syuu << endl;
+}
+

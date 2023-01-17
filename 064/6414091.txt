@@ -1,0 +1,28 @@
+
+class BIT():
+    def __init__(self,n):
+        self.size=n
+        self.tree=[0]*(n+1)
+
+    def add(self,i,x):
+        while i<=self.size:
+            self.tree[i]+=x
+            i+=(i&-i)
+
+    def sum(self,i):
+        s = 0
+        while i>0:
+            s+=self.tree[i]
+            i-=(i&-i)
+        return s
+
+n,q = map(int,input().split())
+btree=BIT(n+1)
+for _ in range(q):
+    com,x,y=map(int,input().split())
+    if com==0:
+        #add
+        btree.add(x,y)
+    else:
+        print(btree.sum(y)-btree.sum(x-1))
+

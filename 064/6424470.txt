@@ -1,0 +1,7 @@
+mon = []
+for _ in range(10):
+    mon.append(int(input()))
+
+mon.sort(reverse=True)
+for i in range(3):
+    print(mon[i])

@@ -1,0 +1,28 @@
+def Method(num,arr,k):
+    x=0
+    y=num-1
+    res=0
+    while(x<=y):
+        mid=x+((y-x)//2)
+        if arr[mid]==k:
+            return 1
+        elif k<arr[mid]:
+            y=mid-1
+        else:
+            x=mid+1
+    return res
+
+num=int(input())
+arr=list(map(int,input().split()))
+x=int(input())
+arr1=list(map(int,input().split()))
+count=0
+for i in arr1:
+    f=Method(num,arr,i)
+    count+=f
+if count==q:
+    print(1)
+else:
+    print(0)
+
+

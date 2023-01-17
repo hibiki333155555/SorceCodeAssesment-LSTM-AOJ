@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+//#include<iostream>
+//#include<math.h>
+//#include<string.h>
+//#include<stdio.h>
+//#include<cstring>
+using namespace std;
+//
+
+int main()
+{	
+	int n,sum=0,i,j;
+	int q;
+	
+	cin>>n;
+	
+	for(i=0;i<n;i++)
+	{
+		cin>>q;
+		
+		for(j=floor(sqrt(q));j>=2;j--)
+			if(q%j==0)
+				break;
+		if(j==1)
+			sum++;
+	
+	}
+	
+	
+	
+	cout<<sum<<endl;
+	
+	
+return 0;
+}
+

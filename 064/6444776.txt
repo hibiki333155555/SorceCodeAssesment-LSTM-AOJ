@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+
+void dumpArray(std::vector<int> &ar){
+    for (size_t i = 0; i < ar.size(); ++i){
+        std::cout << (i == 0 ? "" : " ")<< ar[i];
+    }
+    std::cout << std::endl;
+    
+}
+void sortArray(std::vector<int> &ar){
+    //for j = 2 to A.length();
+    for (int j = 1; j < ar.size();++j){
+        int key = ar[j];
+        int i = j - 1;
+        while ( i >= 0 && ar[i] > key){
+            ar[i+1] = ar[i];
+            i--;
+        }
+        ar[i+1] = key;
+        dumpArray(ar);
+    }
+    
+}
+int main(void){
+    std::vector<int> ar;
+    ar.reserve(100);
+    int number = 0;
+    int size = 0;
+    std::cin >> size;
+    for (int i = 0; i < size; ++i){
+        std::cin >> number;
+        ar.push_back(number);
+    }
+    dumpArray(ar);
+    sortArray(ar);
+    return 0;
+}
+

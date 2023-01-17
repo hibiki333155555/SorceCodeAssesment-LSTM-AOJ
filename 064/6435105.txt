@@ -1,0 +1,28 @@
+
+
+
+a = int(input())
+
+
+s = input()
+
+
+list = list(s)
+
+
+length = len(set(list))
+
+
+if length>=3:
+    
+    answer = 'Yes'
+    
+    
+else:
+    
+    answer = 'No'
+    
+    
+print(answer)
+
+

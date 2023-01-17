@@ -1,0 +1,32 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+const long long mod = 998244353;
+long long N, M, A[2009];
+long long dp[2009][2009], ru[2009][2009];
+
+int main() {
+	// 入力
+	cin >> N >> M;
+	for (int i = 1; i <= M; i++) cin >> A[i];
+
+	// 動的計画法（初期化）
+	dp[0][0] = 0;
+	for (int i = 1; i <= N + 1; i++) ru[0][i] = 1;
+
+	// 動的計画法
+	for (int i = 1; i <= M; i++) {
+		for (int j = 0; j <= N; j++) {
+			int cl = max(0, j - (int)A[i]), cr = j + 1;
+			dp[i][j] = (ru[i - 1][cr] - ru[i - 1][cl] + mod) % mod;
+			ru[i][j + 1] = (ru[i][j] + dp[i][j]) % mod;
+		}
+	}
+
+	// 答えを求める
+	long long Answer = dp[M][N];
+	for (int i = 1; i <= N; i++) { Answer *= i; Answer %= mod; }
+	cout << Answer << endl;
+	return 0;
+}

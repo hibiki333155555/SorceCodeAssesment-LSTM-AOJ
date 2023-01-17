@@ -1,0 +1,30 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args){
+    	boolean judge = true;
+    	Scanner sc = new Scanner(System.in);
+    	while (judge) {
+    	int sum = 0;
+    	int x = sc.nextInt();
+    		if (x <= 1000) {
+    			List<Integer> list = toArrayReverseOrder(x);
+    			for (int temp: list) {
+    				sum += temp;
+    			}
+    			System.out.println(sum);
+    		}
+    		if (x == 0) {
+    			judge = false;
+    		}				
+    	}
+    }
+    public static List<Integer> toArrayReverseOrder(int x) {
+    	List<Integer> list = new ArrayList<>();
+    	while (x != 0) {
+    		list.add(x % 10);
+    		x /= 10;
+    	}
+    	return list;
+    }
+}

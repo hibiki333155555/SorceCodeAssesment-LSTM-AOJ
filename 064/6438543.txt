@@ -1,0 +1,7 @@
+from heapq import heapify
+
+N = input()
+H = [-x for x in map(int, input().split())]
+
+heapify(H)
+print('', *[-x for x in H])

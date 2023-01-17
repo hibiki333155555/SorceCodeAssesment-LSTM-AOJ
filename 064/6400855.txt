@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+4;
+#define d2(x,y) (x-y)*(x-y)
+#define cmax(x,y) x=max(x,y)
+#define cmin(x,y) x=min(x,y)
+typedef complex<double> P;
+const int INF=1e9+5;
+int n,ans;
+struct TREE{
+	int l;int r;int v;
+}tree;
+struct intersect{
+	P x;bool flag;bool pos;
+}in[2*N];
+bool cmp(intersect x,intersect y){
+	if(x.x.imag()==y.x.imag()) return x.x.real()<y.x.real();
+	return x.x.imag()<y.x.imag();
+}
+int main(){
+	int n;
+	int x1,x2,y1,y2,r1,r2;
+	cin>>x1>>y1>>r1;
+	cin>>x2>>y2>>r2;
+	int d=d2(x1,x2)+d2(y1,y2);
+	if(d>(r1+r2)*(r1+r2)){
+		cout<<4<<endl;
+		return 0;
+	}
+	if(d==(r1+r2)*(r1+r2)){
+		cout<<3<<endl;
+		return 0;
+	}
+	if(d==d2(r1,r2)){
+		cout<<1<<endl;
+		return 0;
+	}
+	if(d<d2(r1,r2)){
+		cout<<0<<endl;
+		return 0;
+	}
+	cout<<2<<endl;
+	return 0;
+}

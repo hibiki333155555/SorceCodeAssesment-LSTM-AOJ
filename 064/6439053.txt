@@ -1,0 +1,11 @@
+W, H, x, y, r = map(int, input().split())
+
+left_cond = x-r
+right_cond = x+r
+upper_cond = y+r
+under_cond = y-r
+
+if left_cond < 0 or right_cond > W or upper_cond > H or under_cond < 0:
+  print('No')
+else:
+  print('Yes')

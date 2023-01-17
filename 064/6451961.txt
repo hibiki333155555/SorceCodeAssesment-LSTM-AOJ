@@ -1,0 +1,3 @@
+while (x = gets.to_i) != 0
+    puts x.digits.sum
+end

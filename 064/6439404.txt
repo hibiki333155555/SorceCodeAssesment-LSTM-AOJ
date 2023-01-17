@@ -1,0 +1,18 @@
+ #include<iostream>
+ using namespace std;
+ 
+ int main(){
+     int a,b,c;
+     int i = 0;
+     int n[];
+     int count;
+     cin >> a >> b >> c;
+     for(n[0] = a;n[i]<=b;i++){
+         if(c % n[i] = 0){
+         count += 1;
+     }
+     n[i+1] = n[i]+1;
+     }
+
+     cout << c << endl;
+ }

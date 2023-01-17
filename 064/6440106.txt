@@ -1,0 +1,31 @@
+from collections import deque
+import cmath
+
+n = int(input())
+
+e = cmath.exp(1j*cmath.pi/6)
+
+deq = deque()
+deq.append((0, 100))
+for i in range(n):
+    deqnext = deque()
+    while deq:
+        p1, p2 = deq.popleft()
+        
+        s = p2/3+(2*p1)/3
+        t = (2*p2)/3+p1/3
+        u = (p2-p1)*e/(3**0.5)+p1
+        deqnext.append((p1, s))
+        deqnext.append((s, u))
+        deqnext.append((u, t))
+        deqnext.append((t, p2))
+
+
+    deq = deqnext
+
+
+while deq:
+    ans = deq.popleft()
+    print(ans[0].real, ans[0].imag)
+
+print(ans[1].real, ans[1].imag)

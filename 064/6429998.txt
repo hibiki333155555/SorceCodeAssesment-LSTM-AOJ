@@ -1,0 +1,20 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(n);i++)
+//using ll=long long;
+int main(){
+    int w,h;char c;cin>>w>>h>>c;
+    for(int i=1;i<=h;i++){
+        for(int j=1;j<=w;j++){
+            if(i==1&&j==1||i==1&&j==w||i==h&&j==1||i==h&&j==w){
+                cout<<'+';
+            }else if(i==1||j==1||i==h||j==w){
+                if(i==1||i==h)cout<<'-';
+                else cout<<'|';
+            }else if(i==h/2+1&&j==w/2+1){
+                cout<<c;
+            }else cout<<'.';
+        }
+        cout<<"\n";
+    }
+}

@@ -1,0 +1,10 @@
+l = input().split()
+n1 = int(l[0])
+n2 = int(l[1])
+def war(x,y):
+    while y != 0:
+        xtemp = y
+        y = x % y
+        x = xtemp
+    return(x)
+print(war(max(n1,n2),min(n1,n2)))

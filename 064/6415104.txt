@@ -1,0 +1,10 @@
+s = input()
+s = s + s
+
+a = input()
+
+if a in s:
+    print("Yes")
+else:
+    print('No')
+

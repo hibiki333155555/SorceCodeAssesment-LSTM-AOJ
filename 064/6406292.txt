@@ -1,0 +1,7 @@
+#include <stdio.h>
+int main(void){
+    long La,Lo;
+    scanf("%ld %ld",&La,&Lo);
+    printf("%ld %ld",La/3600,Lo/3600);
+}
+

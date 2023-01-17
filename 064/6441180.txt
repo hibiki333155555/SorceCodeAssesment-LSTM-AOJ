@@ -1,0 +1,18 @@
+def main(X, Y):
+    M = len(Y)
+    dp = [0]*(M+1)
+    for i, x in enumerate(X):
+        dp_pre = dp[:]
+        for j, y in enumerate(Y):
+            if x == y:
+                dp[j+1] = dp_pre[j] + 1
+            elif dp[j+1] < dp[j]:
+                dp[j+1] = dp[j]
+    return print(dp[M])
+
+
+for _ in range(int(input())):
+    X = input()
+    Y = input()
+    main(X, Y)
+

@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+using Int = int_fast64_t;
+
+const Int INF = 1LL << 50;
+
+int main()
+{
+	int V, E; cin >> V >> E;
+	vector<vector<vector<Int>>> C(V + 1, vector<vector<Int>>(V, vector<Int>(V, INF)));
+	for (int s = 0; s < V; ++s) C[0][s][s] = 0;
+	for (int s, t, d; --E >= 0; C[0][s][t] = d) cin >> s >> t >> d;
+	for (int i = 0; i < V; ++i) for (int s = 0; s < V; ++s) {
+		for (int t = 0; t < V; ++t) {
+			C[i + 1][s][t] = min(C[i][s][t], C[i][s][i] + C[i][i][t]);
+			if (C[i + 1][s][t] > 1LL << 35) C[i + 1][s][t] = INF;
+		}
+		if (C[i + 1][s][s] < 0) {
+			cout << "NEGATIVE CYCLE" << endl;
+			return 0;
+		}
+	}
+	for (int s = 0; s < V; ++s, cout << endl) for (int t = 0;; cout << ' ') {
+		if (C[V][s][t] > 1LL << 35) cout << "INF"; else cout << C[V][s][t];
+		if (++t >= V) break;
+	}
+	return 0;
+}
+

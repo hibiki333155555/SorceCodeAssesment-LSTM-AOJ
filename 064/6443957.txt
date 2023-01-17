@@ -1,0 +1,16 @@
+n = int(input())
+mark_list = ['S','H','C','D']
+have_list, card_list = [], []
+for i in range(n):
+    have_list = input()
+    
+for j in mark_list:
+    for k in range(1,14):
+        card_list.append(j+' '+str(k))
+
+for f in have_list:
+    if f in card_list:
+        card_list.remove(f)
+
+for h in card_list:
+    print(h)

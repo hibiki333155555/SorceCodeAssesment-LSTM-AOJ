@@ -1,0 +1,67 @@
+import sys
+sys.setrecursionlimit(2**20)
+
+
+class Node:
+    def __init__(self,
+                 parent,
+                 left,
+                 right):
+        self.parent = parent
+        self.left = left 
+        self.right = right  
+
+#先行順巡回
+def pre_parse(T: dict, u: int, pre_ls: list):
+    if u == None:
+        return
+    pre_ls.append(u)
+    pre_parse(T, T[u].left, pre_ls
+    pre_parse(T, T[u].right, pre_ls)
+
+#中間順巡回
+def in_parse(T, u, in_ls):
+    if u == None:
+        return
+    in_parse(T, T[u].left, in_ls)
+    in_ls.append(u)
+    in_parse(T, T[u].right, in_ls)
+
+#後行順巡回
+def post_parse(T, u, post_ls):
+    if u == None:
+        return
+    post_parse(T, T[u].left, post_ls)
+    post_parse(T, T[u].right, post_ls)
+    post_ls.append(u)
+
+
+#データ読み込み
+n = int(input())
+T = {key: Node(None, None, None) for key in range(n)}
+for _ in range(n):
+    tmp = [x if x != -1 else None for x in map(int, input().split())]
+    T[tmp[0]].left = tmp[1]
+    T[tmp[0]].right = tmp[2]
+    if tmp[1] is not None:
+        T[tmp[1]].parent = tmp[0]
+    if tmp[2] is not None:
+        T[tmp[2]].parent = tmp[0]
+
+#parentがないROOTを探索
+for id, node in T.items():
+    if node.parent is None:
+        ROOT = id
+
+#リストへ答えを格納
+pre_ls, in_ls, post_ls = [], [], []
+pre_parse(T, ROOT, pre_ls)
+in_parse(T, ROOT, in_ls)
+post_parse(T, ROOT, post_ls)
+
+print('Preorder')
+print('', *pre_ls)  #先行順巡回を行った節点番号の出力
+print('Inorder')
+print('', *in_ls)  #中間順巡回を行った節点番号の出力
+print('Postorder')
+print('', *post_ls)  #後行順巡回を行った節点番号の出力

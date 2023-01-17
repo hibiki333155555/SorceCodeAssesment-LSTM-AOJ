@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct dice{
+    int a,b,c,d,e,f;
+};
+dice di;
+void S(){
+    int k = di.e;
+    di.e = di.f;
+    di.f = di.b;
+    di.b=di.a;
+    di.a=k;
+    return;
+}
+void E(){
+    int k = di.d;
+    di.d = di.f;
+    di.f=di.c;
+    di.c=di.a;
+    di.a=k;
+    return;
+}
+void W(){
+    int k=di.c;
+    di.c=di.f;
+    di.f=di.d;
+    di.d=di.a;
+    di.a=k;
+    return;
+    
+}
+void N(){
+    int k=di.b;
+    di.b=di.f;
+    di.f=di.e;
+    di.e=di.a;
+    di.a=k;
+    return;
+}
+
+
+int main(){
+
+    cin>>di.a>>di.b>>di.c>>di.d>>di.e>>di.f;
+    string solve;
+    cin>>solve;
+    for (int i=0;i<solve.length();i++){
+        if (solve[i] == 'S'){
+            S();
+        }
+        else if (solve[i]=='N'){
+            N();
+        }
+        else if (solve[i]=='W'){
+            W();
+        }
+        else{
+            E();
+        }
+    }
+    cout<<di.a<<endl;
+    return 0;
+}

@@ -1,0 +1,20 @@
+# 終了条件に当てはまるまで処理を続ける
+while True:
+    # シャッフルする文字列を受け取る
+    cards = input()
+    # 文字列"-"が入力された場合にbreak文で処理を終了
+    if cards == "-":
+        break
+    # シャッフル回数である整数を受け取る
+    m = int(input())
+    # シャッフル回数であるm回for文を回す
+    for _ in range(m):
+        # シャッフルする区切りの読み込み
+        sh = int(input())
+        # 区切った前の部分を変数formerに設定
+        former = cards[:sh]
+        # 区切った後の部分を変数laterに設定
+        later = cards[sh:]
+        # 前後を入れ替える
+        cards = later+former
+    print(cards)

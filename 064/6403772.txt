@@ -1,0 +1,9 @@
+#include<iostream>
+
+int main()
+{
+    int x = 2;
+    std::cout << std::pow(x,3) << std::endl;
+    
+    return 0;
+}

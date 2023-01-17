@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int N;
+  string S;
+  cin>>N>>S;
+  int A=0,B=0,C=0,D=0,E=0,count=0;
+  for(int i=0;i<S.size();i++){
+    if(S[i]=='A'&&A==0){
+      A++;
+      count++;
+    }
+    else if(S[i]=='B'&&B==0){
+      B++;
+      count++;
+    }
+    else if(S[i]=='C'&&C==0){
+      C++;
+      count++;
+    }
+    else if(S[i]=='D'&&D==0){
+      D++;
+      count++;
+    }
+    else if(S[i]=='E'&&E==0){
+      E++;
+      count++;
+    }
+  }
+  if(count>=3){
+    cout<<"Yes"<<endl;
+  }
+  else{
+    cout<<"No"<<endl;
+  }
+}

@@ -1,0 +1,12 @@
+n = int(input())
+minv = int(input())
+maxv = None
+for i in range(n-2):
+    r = int(input())
+    if maxv is not None:
+        maxv = r-minv if maxv < r-minv else maxv
+    else:
+        maxv = r-minv
+    minv = r if r < minv else minv
+print(maxv)
+

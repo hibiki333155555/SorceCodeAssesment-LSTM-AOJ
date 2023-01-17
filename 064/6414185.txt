@@ -1,0 +1,15 @@
+while True:
+    A=list(map(int,raw_input().split()))
+    if A<1:
+        break
+D=[]
+for i in range(len(A)):
+    S=[]
+    for j in range(len(A[i])):
+        S.append(A[i][j])
+    D.append(S)
+F=[]
+for i in range(len(D)):
+    F.append(sum(D[i]))
+for i in range(len(F)):
+    print F

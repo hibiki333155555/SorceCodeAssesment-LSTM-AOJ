@@ -1,0 +1,9 @@
+rt = []
+i = 1
+n = int(input())
+rt.append(int(input().split))
+rm = rt[0]
+while i < n:
+    if rm < rt[i]:
+        rm = rt[i]
+print(rm)

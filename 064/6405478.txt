@@ -1,0 +1,4 @@
+a=int(input())
+b=int(inpur())
+print(a*b)
+print(2a+2b)

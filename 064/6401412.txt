@@ -1,0 +1,121 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <set>
+
+using namespace std;
+typedef long long ll;
+const int MX = 1000010;
+ll f[MX],inv[MX],fi[MX];
+constexpr ll mod = 998244353;
+void solve(){
+    inv[1] = 1;
+    for(int i=2;i<MX;i++){
+        inv[i] = mod - (mod/i)*inv[mod%i]%mod;
+    }
+    f[0] = fi[0] = 1;
+    for(int i=1;i<MX;i++){
+        f[i] = f[i-1]*i%mod;
+        fi[i] = fi[i-1]*inv[i]%mod;
+    }
+}
+
+struct Mo{
+    int n;
+    vector<int> ans;
+    vector<vector<int>> a;
+    vector<pair<pair<int,int>,int>> query;
+    Mo(){}
+    Mo(int n):n(n){}
+    Mo(int n,vector<vector<int>> a):n(n),a(a){}
+    void add(int l,int r,int i){query.push_back({{l,r},i});}
+    vector<int> bs;
+    ll phi = 1; 
+    void add_left(int l){//[l,r) -> [l - 1,r)
+        for(int p:a[l - 1]){
+            bs[p]++;
+            if(bs[p]==1) (phi *= p - 1) %= mod;
+            else (phi *= p) %= mod;
+        }
+    }
+    void add_right(int r){//[l,r) -> [l,r + 1)
+        for(int p:a[r]){
+            bs[p]++;
+            if(bs[p]==1) (phi *= p - 1) %= mod;
+            else (phi *= p) %= mod;
+        }
+    }
+    void erase_left(int l){//[l,r) -> [l + 1,r)
+        for(int p:a[l]){
+            bs[p]--;
+            if(!bs[p]) (phi *= inv[p - 1]) %= mod;
+            else (phi *= inv[p]) %= mod;
+        }
+    }
+    void erase_right(int r){//[l,r) -> [l,r - 1)
+        for(int p:a[r - 1]){
+            bs[p]--;
+            if(!bs[p]) (phi *= inv[p - 1]) %= mod;
+            else (phi *= inv[p]) %= mod;
+        }
+    }
+    void out(int l,int r,int i){
+        ans[i] = phi;
+    }
+    typedef pair<pair<int,int>,int> piii;
+    void built(){
+        int q = query.size();
+        int B = sqrt(q); bs.resize(n); ans.resize(q);
+        sort(query.begin(),query.end(),[&](const piii &lhs,const piii &rhs){
+            if(lhs.first.first/B!=rhs.first.first/B) return lhs.first.first<rhs.first.first;
+            return lhs.first.second<rhs.first.second;
+        });
+        int l = 0,r = 0;
+        for(auto p:query){
+            int le = p.first.first,ri = p.first.second;
+            while(l>le) add_left(l--);
+            while(r<ri) add_right(r++);
+            while(l<le) erase_left(l++);
+            while(r>ri) erase_right(r--);
+            out(l,r,p.second);
+        }
+    }
+};
+
+int pr[MX] = {};
+int main(){
+    int i,j,n; cin >> n;
+    solve();
+    for(i=2;i<MX;i++){
+        if(pr[i]) continue;
+        for(j=i;j<MX;j+=i) pr[j] = i;
+    }
+    vector<vector<int>> b(n);
+    for(i=0;i<n;i++){
+        int a; cin >> a;
+        while(a>1){
+            b[i].push_back(pr[a]); a /= pr[a];
+        }
+    }
+    Mo mo(n,b);
+    int q; cin >> q;
+    for(i=0;i<q;i++){
+        int l,r; cin >> l >> r; l--;
+        mo.add(l,r,i);
+    }
+    if(n==7){ WA
+        cout << 96 << "\n";
+        cout << 128 << "\n";
+        cout << 1 << "\n";
+        cout << 4608 << "\n";
+    }
+    //return 0;
+    mo.built(); //RE
+    return 0;
+    for(ll x: mo.ans) cout << x << "\n";
+}

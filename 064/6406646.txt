@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int V, E;
+int const INF = numeric_limits<int>::max() / 2;
+vector<vector<int>> D;
+vector<vector<pair<int, int>>> dp;
+
+pair<int, int> recur(int b, int v)
+{
+  if (dp.at(b).at(v).first != -1) {
+    return {dp.at(b).at(v).first, dp.at(b).at(v).second};
+  }
+  if (b == (1 << v)) {
+    dp.at(b).at(v).first = 0, dp.at(b).at(v).second = v;
+    return {dp.at(b).at(v).first, dp.at(b).at(v).second}; 
+  }
+  pair<int, int> res = {INF, v};
+  int pb = b & ~(1 << v);
+  for (int u = 0; u < V; u++) {
+    if ((pb & (1 << u)) && D.at(u).at(v) < INF) {
+      pair<int, int> temp = recur(pb, u);
+      if (res.first > temp.first + D.at(u).at(v)) {
+        res = {temp.first + D.at(u).at(v), temp.second};
+      }
+    }
+  }
+  return res;
+}
+
+int main()
+{
+  cin >> V >> E;
+  D.assign(V, vector<int>(V, INF));
+  for (int i = 0; i < E; i++) {
+    int s, t, d;
+    cin >> s >> t >> d;
+    D.at(s).at(t) = d;
+  }
+  int ans = INF;
+  for (int v = 0; v < V; v++) {
+    dp.assign((1 << V), vector<pair<int, int>>(V, {-1, v}));
+    pair<int, int> temp = recur((1 << V) - 1, v);
+    ans = min(ans, temp.first + D.at(v).at(temp.second));
+  }
+  if (ans >= INF)
+    ans = -1;
+  cout << ans << '\n';
+}
+

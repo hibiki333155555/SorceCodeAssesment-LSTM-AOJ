@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define N 10100
+vector<int> vec[N];
+int match[N];
+int visited[N];
+//vector<int> resu;
+bool letsFly(int u)
+{
+    for(int i=0;i<vec[u].size();i++)
+    {
+        if(!visited[vec[u][i]])
+            return false;
+        visited[vec[u][i]]=1;
+        if(match[vec[u][i]]||letsFly(match[vec[u][i]]))
+        {
+            match[vec[u][i]]==u;
+            return true;
+        }
+    }
+    return false;
+}
+int main()
+{
+    //freopen("inputA.txt","r",stdin);
+    int x,y,z,u,v,res;
+    cin>>x>>y>>z;
+    for(int i=0; i<z; i++)
+    {
+        cin>>u>>v;
+        vec[u+1].push_back(v+1);
+    }
+    /**starts from here***/
+    for(int i=1; i<=x; i++)
+    {
+        for(int j=0; j<vec[i].size(); j++)
+        {
+            if(!match[vec[i][j]])
+            {
+                match[vec[i][j]]=i;
+                res++;
+                //resu.push_back(vec[i][j]);
+                //cout<<vec[i][j]<<"extra"<<endl;
+                break;
+            }
+        }
+        //cout<<"match is "<<match[resu[i]]<<" with "<<resu[i]<<endl;
+    }
+    //for(int i=1;i<10;i++){cout<<match[i];}
+    for(int i=1; i<x; i++)
+    {
+        if(match[i])
+            continue;
+        else
+        {
+            memset(visited,0,sizeof(visited));
+            if(letsFly(i))
+                    res++;
+        }
+    }
+    cout<<res;
+    /*for(int i=1; i<10; i++)
+    {
+        cout<<visited[i];
+    }
+    /*
+    for(int i=0; i<x; i++)
+    {
+        for(int j=0; j<vec[i].size(); j++)
+        {
+            cout<<vec[i][j]<<" ";
+        }
+        cout<<endl;
+
+    }*/
+    return 0;
+}
+

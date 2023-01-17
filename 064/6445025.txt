@@ -1,0 +1,3 @@
+import math
+r=float(input())
+print(f"{float(2*r*math.pi):.6} {float(r**2*math.pi):.6}")

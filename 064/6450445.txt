@@ -1,0 +1,421 @@
+#include <bits/stdc++.h>
+
+
+#include <cassert>
+#include <vector>
+
+template <class S, S (*op)(S, S), S (*e)()>
+struct DualSegTree {
+   public:
+    DualSegTree() : DualSegTree(0) {}
+    DualSegTree(int n) : DualSegTree(std::vector<S>(n, e())) {}
+    DualSegTree(const std::vector<S> &v) : _n(int(v.size())) {
+        size = 1;
+        log = 0;
+        while (size < _n) size <<= 1, ++log;
+        d = std::vector<S>(2 * size, e());
+        for (int i = 0; i < _n; i++) d[size + i] = v[i];
+    }
+
+    S get(int p) {
+        assert(0 <= p && p < _n);
+        p += size;
+        S sum = e();
+        for (int i = 0; i <= log; i++) sum = op(sum, d[p >> i]);
+        return sum;
+    }
+
+    void prod(int l, int r, S x) {
+        assert(0 <= l && l <= r && r <= _n);
+        l += size;
+        r += size;
+
+        while (l < r) {
+            if (l & 1) d[l] = op(d[l], x), ++l;
+            if (r & 1) --r, d[r] = op(d[r], x);
+            l >>= 1;
+            r >>= 1;
+        }
+    }
+
+    void all_prod(S x) { d[1] = op(d[1], x); }
+
+   private:
+    int _n, size, log;
+    std::vector<S> d;
+};
+
+
+#include <algorithm>
+#include <cassert>
+#include <vector>
+
+template <class T>
+bool chmax(T &a, const T &b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+template <class T>
+bool chmin(T &a, const T &b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+template <class T>
+T div_floor(T a, T b) {
+    if (b < 0) a *= -1, b *= -1;
+    return a >= 0 ? a / b : (a + 1) / b - 1;
+}
+
+template <class T>
+T div_ceil(T a, T b) {
+    if (b < 0) a *= -1, b *= -1;
+    return a > 0 ? (a - 1) / b + 1 : a / b;
+}
+
+template <typename T>
+struct CoordComp {
+    std::vector<T> v;
+    bool sorted;
+
+    CoordComp() : sorted(false) {}
+
+    int size() { return v.size(); }
+
+    void add(T x) { v.push_back(x); }
+
+    void build() {
+        std::sort(v.begin(), v.end());
+
+        v.erase(std::unique(v.begin(), v.end()), v.end());
+        sorted = true;
+    }
+
+    int get_idx(T x) {
+        assert(sorted);
+        return lower_bound(v.begin(), v.end(), x) - v.begin();
+    }
+
+    T &operator[](int i) { return v[i]; }
+};
+
+
+#define For(i, a, b) for (int i = (int)(a); (i) < (int)(b); ++(i))
+#define rFor(i, a, b) for (int i = (int)(a)-1; (i) >= (int)(b); --(i))
+#define rep(i, n) For(i, 0, n)
+#define rrep(i, n) rFor(i, n, 0)
+#define fi first
+#define se second
+
+using namespace std;
+
+using lint = long long;
+using pii = pair<int, int>;
+using pll = pair<lint, lint>;
+
+constexpr lint mod = 1e9 + 7;
+constexpr lint INF = mod * mod;
+constexpr int MAX = 200010;
+
+struct SegTree_beats {
+    const lint b_INF = 1LL << 60;
+    int sz;
+    vector<lint> MAX_val, sMAX_val, MAX_cnt;
+    vector<lint> min_val, smin_val, min_cnt;
+    vector<lint> len, sum, ladd, lval;
+
+    inline void init_node(int i, lint x) {
+        MAX_val[i] = min_val[i] = sum[i] = x;
+        sMAX_val[i] = -b_INF;
+        smin_val[i] = b_INF;
+        MAX_cnt[i] = min_cnt[i] = 1;
+    }
+
+    inline void init_empty_node(int i) {
+        MAX_val[i] = sMAX_val[i] = -b_INF;
+        min_val[i] = smin_val[i] = b_INF;
+        MAX_cnt[i] = min_cnt[i] = 0;
+    }
+
+    inline void update_node_max(int i, lint x) {
+        sum[i] += (x - MAX_val[i]) * MAX_cnt[i];
+        if (MAX_val[i] == min_val[i])
+            MAX_val[i] = min_val[i] = x;
+        else if (MAX_val[i] == smin_val[i])
+            MAX_val[i] = smin_val[i] = x;
+        else
+            MAX_val[i] = x;
+        if (lval[i] != b_INF && lval[i] < x) lval[i] = x;
+    }
+
+    inline void update_node_min(int i, lint x) {
+        sum[i] += (x - min_val[i]) * min_cnt[i];
+        if (min_val[i] == MAX_val[i])
+            min_val[i] = MAX_val[i] = x;
+        else if (MAX_val[i] == smin_val[i])
+            min_val[i] = sMAX_val[i] = x;
+        else
+            min_val[i] = x;
+        if (lval[i] != b_INF && x < lval[i]) lval[i] = x;
+    }
+
+    inline void update_node_add(int i, lint x, int l, int r) {
+        MAX_val[i] += x;
+        if (sMAX_val[i] != -b_INF) sMAX_val[i] += x;
+        min_val[i] += x;
+        if (smin_val[i] != b_INF) smin_val[i] += x;
+        sum[i] += x * (r - l);
+        if (lval[i] != b_INF)
+            lval[i] += x;
+        else
+            ladd[i] += x;
+    }
+
+    inline void update_node_set(int i, lint x, int l, int r) {
+        MAX_val[i] = min_val[i] = x;
+        sMAX_val[i] = -b_INF;
+        smin_val[i] = b_INF;
+        MAX_cnt[i] = min_cnt[i] = r - l;
+        sum[i] = x * (r - l);
+        lval[i] = x;
+        ladd[i] = 0;
+    }
+
+    inline void push(int i, int l, int r) {
+        if (lval[i] != b_INF) {
+            update_node_set(i * 2 + 1, lval[i], l, (l + r) / 2);
+            update_node_set(i * 2 + 2, lval[i], (l + r) / 2, r);
+            lval[i] = b_INF;
+            return;
+        }
+        if (ladd[i] != 0) {
+            update_node_add(i * 2 + 1, ladd[i], l, (l + r) / 2);
+            update_node_add(i * 2 + 2, ladd[i], (l + r) / 2, r);
+            ladd[i] = 0;
+        }
+        if (MAX_val[i] < MAX_val[i * 2 + 1])
+            update_node_max(i * 2 + 1, MAX_val[i]);
+        if (MAX_val[i] < MAX_val[i * 2 + 2])
+            update_node_max(i * 2 + 2, MAX_val[i]);
+        if (min_val[i] > min_val[i * 2 + 1])
+            update_node_min(i * 2 + 1, min_val[i]);
+        if (min_val[i] > min_val[i * 2 + 2])
+            update_node_min(i * 2 + 2, min_val[i]);
+    }
+
+    inline void pull(int i) {
+        int s = i * 2 + 1, t = i * 2 + 2;
+        sum[i] = sum[s] + sum[t];
+
+        if (MAX_val[s] > MAX_val[t]) {
+            MAX_val[i] = MAX_val[s];
+            MAX_cnt[i] = MAX_cnt[s];
+            sMAX_val[i] = max(sMAX_val[s], MAX_val[t]);
+        } else if (MAX_val[s] < MAX_val[t]) {
+            MAX_val[i] = MAX_val[t];
+            MAX_cnt[i] = MAX_cnt[t];
+            sMAX_val[i] = max(MAX_val[s], sMAX_val[t]);
+        } else {
+            MAX_val[i] = MAX_val[s];
+            MAX_cnt[i] = MAX_cnt[s] + MAX_cnt[t];
+            sMAX_val[i] = max(sMAX_val[s], sMAX_val[t]);
+        }
+
+        if (min_val[s] < min_val[t]) {
+            min_val[i] = min_val[s];
+            min_cnt[i] = min_cnt[s];
+            smin_val[i] = min(smin_val[s], min_val[t]);
+        } else if (min_val[s] > min_val[t]) {
+            min_val[i] = min_val[t];
+            min_cnt[i] = min_cnt[t];
+            smin_val[i] = min(min_val[s], smin_val[t]);
+        } else {
+            min_val[i] = min_val[s];
+            min_cnt[i] = min_cnt[s] + min_cnt[t];
+            smin_val[i] = min(smin_val[s], smin_val[t]);
+        }
+    }
+
+    SegTree_beats(int sz_, lint x) {
+        sz = 1;
+        while (sz < sz_) sz *= 2;
+        MAX_val.resize(sz * 2 - 1);
+        sMAX_val.resize(sz * 2 - 1);
+        MAX_cnt.resize(sz * 2 - 1);
+        min_val.resize(sz * 2 - 1);
+        smin_val.resize(sz * 2 - 1);
+        min_cnt.resize(sz * 2 - 1);
+        sum.resize(sz * 2 - 1);
+        ladd.resize(sz * 2 - 1, 0);
+        lval.resize(sz * 2 - 1, b_INF);
+
+        rep(i, sz_) init_node(i + sz - 1, x);
+        For(i, sz_, sz) init_empty_node(i + sz - 1);
+        rrep(i, sz - 1) pull(i);
+    }
+
+    SegTree_beats(int sz_, vector<lint> &a) {
+        sz = 1;
+        while (sz < sz_) sz *= 2;
+        MAX_val.resize(sz * 2 - 1);
+        sMAX_val.resize(sz * 2 - 1);
+        MAX_cnt.resize(sz * 2 - 1);
+        min_val.resize(sz * 2 - 1);
+        smin_val.resize(sz * 2 - 1);
+        min_cnt.resize(sz * 2 - 1);
+        sum.resize(sz * 2 - 1);
+        ladd.resize(sz * 2 - 1, 0);
+        lval.resize(sz * 2 - 1, b_INF);
+
+        rep(i, a.size()) init_node(i + sz - 1, a[i]);
+        For(i, a.size(), sz) init_empty_node(i + sz - 1);
+        rrep(i, sz - 1) pull(i);
+    }
+
+    void update_min(int a, int b, lint x, int i = 0, int l = 0, int r = -1) {
+        if (r < 0) r = sz;
+        if (r <= a || b <= l || MAX_val[i] <= x)
+            return;
+        else if (a <= l && r <= b && sMAX_val[i] < x) {
+            update_node_max(i, x);
+        } else {
+            push(i, l, r);
+            update_min(a, b, x, i * 2 + 1, l, (l + r) / 2);
+            update_min(a, b, x, i * 2 + 2, (l + r) / 2, r);
+            pull(i);
+        }
+    }
+
+    void update_max(int a, int b, lint x, int i = 0, int l = 0, int r = -1) {
+        if (r < 0) r = sz;
+        if (r <= a || b <= l || min_val[i] >= x)
+            return;
+        else if (a <= l && r <= b && smin_val[i] > x) {
+            update_node_min(i, x);
+        } else {
+            push(i, l, r);
+            update_max(a, b, x, i * 2 + 1, l, (l + r) / 2);
+            update_max(a, b, x, i * 2 + 2, (l + r) / 2, r);
+            pull(i);
+        }
+    }
+
+    void update_add(int a, int b, lint x, int i = 0, int l = 0, int r = -1) {
+        if (r < 0) r = sz;
+        if (r <= a || b <= l)
+            return;
+        else if (a <= l && r <= b)
+            update_node_add(i, x, l, r);
+        else {
+            push(i, l, r);
+            update_add(a, b, x, i * 2 + 1, l, (l + r) / 2);
+            update_add(a, b, x, i * 2 + 2, (l + r) / 2, r);
+            pull(i);
+        }
+    }
+
+    void update_set(int a, int b, lint x, int i = 0, int l = 0, int r = -1) {
+        if (r < 0) r = sz;
+        if (r <= a || b <= l)
+            return;
+        else if (a <= l && r <= b)
+            update_node_set(i, x, l, r);
+        else {
+            push(i, l, r);
+            update_set(a, b, x, i * 2 + 1, l, (l + r) / 2);
+            update_set(a, b, x, i * 2 + 2, (l + r) / 2, r);
+            pull(i);
+        }
+    }
+
+    lint get_max(int a, int b, int i = 0, int l = 0, int r = -1) {
+        if (r < 0) r = sz;
+        if (r <= a || b <= l)
+            return -b_INF;
+        else if (a <= l && r <= b)
+            return MAX_val[i];
+        else {
+            push(i, l, r);
+            lint vl = get_max(a, b, i * 2 + 1, l, (l + r) / 2);
+            lint vr = get_max(a, b, i * 2 + 2, (l + r) / 2, r);
+            return max(vl, vr);
+        }
+    }
+
+    lint get_min(int a, int b, int i = 0, int l = 0, int r = -1) {
+        if (r < 0) r = sz;
+        if (r <= a || b <= l)
+            return b_INF;
+        else if (a <= l && r <= b)
+            return min_val[i];
+        else {
+            push(i, l, r);
+            lint vl = get_min(a, b, i * 2 + 1, l, (l + r) / 2);
+            lint vr = get_min(a, b, i * 2 + 2, (l + r) / 2, r);
+            return min(vl, vr);
+        }
+    }
+
+    lint get_sum(int a, int b, int i = 0, int l = 0, int r = -1) {
+        if (r < 0) r = sz;
+        if (r <= a || b <= l)
+            return 0;
+        else if (a <= l && r <= b)
+            return sum[i];
+        else {
+            push(i, l, r);
+            lint vl = get_sum(a, b, i * 2 + 1, l, (l + r) / 2);
+            lint vr = get_sum(a, b, i * 2 + 2, (l + r) / 2, r);
+            return vl + vr;
+        }
+    }
+};
+
+lint op(lint a, lint b) { return a + b; }
+
+lint e() { return 0; }
+
+int main() {
+    int n, m;
+    scanf("%d%d", &n, &m);
+    lint a[n];
+    int L[n], R[n];
+    rep(i, n) scanf("%lld%d%d", &a[i], &L[i], &R[i]), --L[i];
+
+    vector<lint> rightmost(m);
+    iota(rightmost.begin(), rightmost.end(), 0);
+    SegTree_beats beats(m, rightmost);
+    rep(i, n) beats.update_max(L[i], R[i], R[i]);
+    rep(i, m) rightmost[i] = beats.get_max(i, i + 1);
+
+    int q;
+    scanf("%d", &q);
+    pll p[q];
+    rep(i, q) scanf("%lld%lld", &p[i].se, &p[i].fi), --p[i].fi;
+    sort(p, p + q);
+
+    DualSegTree<lint, op, e> st(vector<lint>(m, 0));
+    rep(i, n) st.prod(L[i], R[i], a[i]);
+    lint ans = 0;
+    rep(i, q) {
+        auto [pos, power] = p[i];
+        if (st.get(pos) == 0) {
+            puts("-1");
+            return 0;
+        }
+        lint diff = power - st.get(pos);
+        if (diff > 0) {
+            ans += diff;
+            st.prod(pos, rightmost[pos], diff);
+        }
+    }
+    printf("%lld\n", ans);
+}
+

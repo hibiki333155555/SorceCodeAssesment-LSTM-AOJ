@@ -1,0 +1,24 @@
+s = str(input())
+q = int(input())
+
+def _print (s,start,end):
+    return s[start-1:end]
+
+def _reverse (s,start,end):
+    s_tmp=s[start:end]
+    return s[:start] + s_tmp[::-1] + s[end+1:]
+
+def _replace (s,start,end,r):
+    s_tmp= s[:start] + r +s[end+1:]
+    return s_tmp
+
+for _ in range(q):
+    table = input().split()
+    if table[0] == "print":
+        print (_print(s,int(table[1]),int(table[2])))
+    elif table[0] == "reverse":
+        s= (_reverse(s,int(table[1]),int(table[2])))
+    elif table[0] == "replace":
+        s= (_replace(s,int(table[1]),int(table[2]),table[3]))
+
+

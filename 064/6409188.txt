@@ -1,0 +1,13 @@
+s = input()
+q = int(input())
+for i in range(q):
+    a = input().split(" ")
+    s = int(a[1])
+    e = int(a[2])
+    if a[0] == "print":
+        print(a[s:e])
+    if a[0] == "reverse":
+        print(a[s:e][::-1]+[e:])
+    if a[0] == "replace":
+        print(a[:s]+ a[3] +[e:])
+        

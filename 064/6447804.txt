@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define fast() ios_base::sync_with_stdio(false);cin.tie(NULL)
+#define nl "\n"
+#define ll long long
+#define ull unsigned long long
+#define MAX 10001
+
+int main()
+{
+    fast();
+    //forxample starts
+
+	int n, x;
+
+	while(cin>>n>>x) {
+
+        if(n+x==0) {
+			break;
+		}
+
+        int cnt=0;
+        for(int i=1; i<=n; i++) {
+            for(int j=i+1; j<=n; j++) {
+                if(x-i-j>j && x-i-j<=n) {
+                    cnt++;
+                }
+            }
+        }
+        cout<<cnt<<nl;
+    }
+
+    return 0;
+}
+

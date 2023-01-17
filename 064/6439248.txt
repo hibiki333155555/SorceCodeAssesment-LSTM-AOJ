@@ -1,0 +1,30 @@
+#include <iostream>
+#include <stdio.h>
+#include <cctype>
+#include <string>
+using namespace std;
+
+int main(void){
+    char ch;
+
+    while (1) {
+        cin >> ch;
+
+        if (ch == '.') break;
+
+        if (isalpha(ch)) {
+            if (islower(ch)) {
+                ch = toupper(ch);
+            } else {
+                ch = tolower(ch);
+            }
+        }
+    
+
+    cout << ch ;
+    }
+    
+    cout << endl;
+
+    return 0;
+}

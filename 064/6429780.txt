@@ -1,0 +1,14 @@
+n = gets.chomp.to_i
+taro_points, hanako_points = 0,0
+n.times do
+    taro_card,hanako_card = gets.split
+    if taro_card > hanako_card
+        taro_points += 3
+    elsif taro_card == hanako_card
+        taro_points += 1
+        hanako_points += 1
+    else
+        hanako_points += 3
+    end
+end
+puts "#{taro_points} #{hanako_points}"

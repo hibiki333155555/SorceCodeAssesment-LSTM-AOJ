@@ -1,0 +1,9 @@
+while True:
+    s=input()
+    if s=="-":
+        break
+    n=int(input())
+    for i in range(n):
+        m=int(input())
+        s=s[m:]+s[0:m]
+    

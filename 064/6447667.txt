@@ -1,0 +1,17 @@
+#include <stdio.h>
+
+int main()
+{
+    const int a, b, c;
+    scanf("%d",&a);
+    scanf("%d",&b);
+    scanf("%d",&c);
+        if(a+b>c || b+c>a || a+c>b){
+            printf("YES");
+        }
+        else{
+            printf("NO");
+        }
+    return 0;
+}
+

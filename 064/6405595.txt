@@ -1,0 +1,22 @@
+#include<stdio.h>
+int main(void)
+{
+    int a;
+    scanf("%d",&a);
+    int i,k,r[a];
+    for(i = 0;i<a;i++)
+    {
+        scanf("%d",&k);
+        r[i]=k;
+    }
+    for(i = 0;i<a;i++)
+    {
+        printf("%d",r[a-1-i]);
+        if(i!=a-1)
+        {
+            printf(" ");
+        }
+    }
+    printf("\n");
+    return 0;
+}

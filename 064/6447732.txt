@@ -1,0 +1,3 @@
+l = input().split()
+l=int(l)
+print(min(l),max(l),sum(l))

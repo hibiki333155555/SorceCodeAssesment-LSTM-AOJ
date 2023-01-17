@@ -1,0 +1,26 @@
+n = gets.to_i
+G = Array.new(n) { [] }
+
+(0...n).each do |_|
+  q = gets.chomp.split.map(&:to_i)
+  q[2..].each { |u| G[q[0] - 1].push(u - 1) } if q[1].positive?
+end
+dist = Array.new(n) { 1_010_101_010_101_011_010_101_001 }
+visited = Array.new(n) { false }
+dist[0] = 0
+nxt = [0]
+
+while nxt.any?
+  root = nxt.first
+  nxt.shift
+  visited[root] = true
+
+  G[root].each do |d|
+    dist[d] = [dist[d], dist[root] + 1].min
+    nxt.push d unless visited[d]
+  end
+end
+dist.each_with_index do |d, i|
+  puts format('%d %d', i + 1, d)
+end
+

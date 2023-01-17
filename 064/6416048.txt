@@ -1,0 +1,30 @@
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+INF=float('INF')
+sys.setrecursionlimit(10**8)
+from collections import defaultdict as dd,deque
+
+
+
+N=int(input())
+
+edge=dd(list)
+for _ in range(N):
+    s,cnt,*t=map(int,input().split())
+    for tt in t:
+        edge[s].append(tt)
+
+##chkに始点1からの距離を入れていく
+chk=[INF for _ in range(N+1)]
+chk[1]=0
+q=deque()
+q.append(1)
+while len(q):
+    s=q.popleft()
+    for tt in edge[s]:
+        if chk[tt]==INF:
+            chk[tt]=chk[s]+1
+            q.append(tt)
+
+for i in range(1,N+1):
+    print(i,chk[i])

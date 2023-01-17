@@ -1,0 +1,33 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+using ll = long long;
+
+int main(){
+    int N, Q; cin >> N >> Q;
+    vector<ll> s(N+1,0);
+    for(int i=1; i<=N; ++i){
+        ll a; cin >> a;
+        s[i] = s[i-1] + a;
+    }
+
+    while(Q--){
+        ll ans = 0;
+        ll x; cin >> x;
+        for(int i=1; i<=N; ++i){
+            if(s[i] <= x){
+                ans += i; continue;
+            }
+            int l = 0, r = i, mid;
+            while(l < r){
+                mid = (l+r)/2;
+                if(s[i]-s[mid] <= x) r = mid;
+                else l = mid + 1;
+            }
+            ans += i - l;
+        }
+        cout << ans << endl;
+    }
+    return 0;
+}
+

@@ -1,0 +1,10 @@
+w = input().lower()
+cnt = 0
+while True:
+    str = input().lower().split()
+    if str == "END_OF_TEXT":
+        break
+    for d in str:
+        if d == w:
+            cnt +=1
+print(cnt)

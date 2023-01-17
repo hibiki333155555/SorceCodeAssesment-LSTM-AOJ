@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+deque<int>a;
+int main()
+{
+	int q;
+	cin>>q;
+	while(q--)
+	{
+		int num;
+		cin>>num;
+		if(num==0)
+		{
+			int d,x;
+			cin>>d>>x;
+			if(d==0)
+			{
+				a.push_front(x);
+			}
+			else
+			{
+				a.push_back(x);
+			}
+		}
+		if(num==1)
+		{
+			int y;
+			cin>>y;
+			cout<<a[y]<<endl;
+		}
+		if(num==2)
+		{
+			int c;
+			cin>>c;
+			if(c==0)
+			{
+				a.pop_front();
+			}
+			else
+			{
+				a.pop_back();
+			}
+		}
+	}
+	return 0;
+}

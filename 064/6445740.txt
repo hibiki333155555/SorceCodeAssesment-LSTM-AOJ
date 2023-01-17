@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+//#define lson (rt<<1)
+//#define rson ((rt<<1)+1)
+//#define mid ((l+r)>>1)
+#define mst(a) memset(a,0,sizeof(a))
+#define cf int Tcodeforces, Tcodeforce;cin>>Tcodeforces;for(Tcodeforce = 1; Tcodeforce <= Tcodeforces; Tcodeforce++)
+typedef long long ll;
+typedef unsigned long long ull;
+const ll maxn = 2e5 +7;
+const ll maxm = 2e5 +7;
+const ll inf = 0x3f3f3f3f;
+const ll mod = 1e9 +7;
+
+int n;
+vector<int> a;
+
+signed main() {
+    #ifdef moyi_qwq
+        freopen("D:/source file/intxt/in.txt","r",stdin);
+    #endif
+    cin>>n;
+    for(int i = 1; i <= n; i++) {
+        int t; cin>>t;
+        a.push_back(t);
+    }
+    int u, v;
+    sort(a.begin(), a.end());
+    for(int i = 0; i < n - 1; i++) {
+        u = i;
+        while(u) {
+            v = (u-1)>>1;
+            swap(a[u],a[v]);
+            u = v;
+        }
+        swap(a[0],a[i+1]);
+    }
+    for(int i = 0; i < n; i++) cout<<(i?" ":"")<<a[i]; cout<<endl;
+    
+    //cerr<<"Time : "<<1000*((double)clock())/(double)CLOCKS_PER_SEC<<"ms";
+    return (0);
+}
+

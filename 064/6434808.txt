@@ -1,0 +1,15 @@
+import java.util.Scanner;
+
+public class Main {
+    void solve() {
+        Scanner scanner = new Scanner(System.in);
+        double a = scanner.nextDouble();
+        double t = scanner.nextDouble();
+        double r = scanner.nextDouble();
+        System.out.println(t / a * r);
+    }
+
+    public static void main(String[] args) {
+        new Main().solve();
+    }
+}

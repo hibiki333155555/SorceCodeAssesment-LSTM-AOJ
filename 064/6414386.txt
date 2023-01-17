@@ -1,0 +1,13 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var line = Console.ReadLine();
+        var arry = line.Split(' ');
+        int f = int.Parse(arry[0]);
+        int a = ((f - 30) / 2);
+        Console.WriteLine(a);
+    }
+}

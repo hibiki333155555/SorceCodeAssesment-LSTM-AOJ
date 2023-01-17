@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+void print(vector<int>v){
+	for(int i=0;i<v.size();i++){
+		cout<<v[i]<<" ";
+	}
+	cout<<"\n";
+}
+void Insertion(vector<int> &arr){
+	int n=arr.size(),j,t;
+	for(int i=0;i<n;i++){
+		j=i-1;
+		t=arr[i];
+		while(j>=0 && t<arr[j]){
+			arr[j+1]=arr[j];
+			j--;
+			
+		}
+		arr[j+1]=t;
+		print(arr);
+	}
+}
+int main(){
+	int m;cin>>m;
+	vector<int>v(m);
+	for(int i=0;i<m;i++){
+		cin>>v[i];
+	}
+	Insertion(v);
+	return 0;
+}
+

@@ -1,0 +1,65 @@
+// Lab8-1.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+int x[9];
+int n = 8;
+bool col[20], diag[16], rdiag[16];
+set<int> skip;
+
+
+void dfs(int cur)
+{
+    if (cur == n)
+    {
+        // print out solution
+        bool first = true;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (j != x [i]) cout << '.';
+                else cout << 'Q';
+            }
+            cout << endl;
+        }
+        return;
+    }
+
+    if (skip.count(cur))
+    {
+        dfs(cur + 1);
+        return;
+    }
+    // find a number to put in x[cur]
+    for (int i = 0; i < n; i++)
+    {
+        if (col[i] == false && diag[i+cur] == false && rdiag[i-cur+n]==false)
+        {
+            x[cur] = i;
+            col[i] = diag[i + cur] = rdiag[i - cur + n] = true;
+            dfs(cur + 1);
+            col[i] = diag[i + cur] = rdiag[i - cur + n] = false;
+        }
+    }
+}
+
+int main()
+{
+    int t = 1;
+    int k; cin >> k;
+    int r, c;
+    while(k--)
+    {
+        cin >> r >> c;
+        x[r] = c;
+        col[c] = diag[r + c] = rdiag[c - r + n] = true;
+        skip.insert(r);
+    }
+    dfs(0);
+}
+
+

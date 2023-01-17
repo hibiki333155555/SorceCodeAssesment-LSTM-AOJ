@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+#define MOD (ll)(1E8+7)
+vector<ll> charCount(26, 0);
+vector<vector<ll>> memo;
+
+class mod_comb
+{
+    ll mod;
+    vector<ll> fact;
+    vector<vector<ll>> nckMemo;
+
+    void fill_fact(ll maxFact)
+    {
+        fact = vector<ll>(maxFact + 1);
+        fact[0] = 1;
+        for (ll i = 1; i <= maxFact; i++)
+        {
+            fact[i] = (fact[i - 1] * i) % mod;
+        }
+    }
+
+public:
+    mod_comb(ll modulo, ll maxN)
+    {
+        mod = modulo;
+        fill_fact(maxN);
+        nckMemo = vector<vector<ll>>(maxN + 1, vector<ll>(maxN + 1, -1));
+    }
+    ll inverse(ll x)
+    {
+        ll k = mod - 2, ret = 1;
+        while (k)
+        {
+            if (k & 1)
+            {
+                ret *= x;
+                ret %= mod;
+            }
+            k >>= 1;
+            x *= x;
+            x %= mod;
+        }
+        return ret;
+    }
+    ll nck(ll n, ll k)
+    {
+        if (n < 0 || k < 0 || n < k)
+            return 0;
+        if (nckMemo[n][k] == -1)
+        {
+            nckMemo[n][k] = (fact[n] * inverse((fact[n - k] * fact[k]) % mod)) % mod;
+        }
+        return nckMemo[n][k];
+    }
+};
+mod_comb mc(MOD, 1010);
+int main(){
+  ll r,c,a1,a2,b1,b2;
+cin>>r>>c>>a1>>a2>>b1>>b2;
+  ll x1=abs(b1-a1), y1=abs(b2-a2);
+  ll x2=r-x1,y2=c-y1;
+  ll ans=mc.nck(min(x1,x2)+min(y1,y2),min(x1,x2));
+  if(x1==x2){
+  ans*=2;
+  ans%=MOD;
+  }
+  if(y1==y2){
+  ans*=2;
+  ans%=MOD;
+  }
+cout<<ans<<endl;
+
+}

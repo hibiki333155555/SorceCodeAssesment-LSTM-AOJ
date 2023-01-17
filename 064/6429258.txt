@@ -1,0 +1,11 @@
+list = input().split()
+a=len(list)-1
+for i in range(a):
+    v=list[i+1]
+    if(list[i]>list[i+1]):
+        list[i+1]=list[i]
+        list[i]=v
+        for j in range(len(list)):
+            print(list[j],end=" ")
+    
+

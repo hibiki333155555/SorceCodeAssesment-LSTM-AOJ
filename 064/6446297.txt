@@ -1,0 +1,8 @@
+#include<stdio.h>
+int main(void){
+    float r;
+    double p=3.1415926535;
+    scanf("%f",&r);
+    printf("%d %d %f",p*r*r,2*p*r);
+    return 0;
+}

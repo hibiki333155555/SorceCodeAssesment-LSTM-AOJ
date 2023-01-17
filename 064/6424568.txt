@@ -1,0 +1,23 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
+int main()
+{
+   int n;
+   cin >> n;
+   vector<int> vec(n);
+   for (int &v : vec)
+      cin >> v;
+
+   auto itr = max_element(vec.begin(), vec.end());
+   int R = 0, L = 0;
+   auto diff = distance(vec.begin(), itr);
+   R = accumulate(vec.begin(), vec.begin() + diff, 0);
+   L = accumulate(vec.begin() + diff + 1, vec.end(), 0);
+   cout << R << endl
+        << L << endl;
+   return 0;
+}

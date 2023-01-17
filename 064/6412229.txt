@@ -1,0 +1,365 @@
+#include <bits/stdc++.h>
+#include <complex>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+ll mod;
+
+
+bool DEbUG=!true;
+bool GU=0;
+struct FastFourierTransform{
+    using Real = long double;
+    using C=complex<Real>;
+    const Real PI=acosl(-1);
+    int base;
+    vector<C> rts;
+    vector<int> rev;
+ 
+    FastFourierTransform():base(1){
+        rts.emplace_back(0,0);
+        rts.emplace_back(1,0);
+        rev.push_back(0);
+        rev.push_back(1);
+    }
+ 
+    void ensure_base(int nbase){
+        if(nbase<=base) return;
+        rev.resize(1<<nbase);
+        rts.resize(1<<nbase);
+        for(int i=0;i<(1<<nbase);i++) {
+            rev[i]=(rev[i>>1]>>1)+((i&1)<<(nbase-1));
+        }
+        while(base<nbase) {
+            Real angle=PI*2.0/(1<<(base+1));
+            for(int i=1<<(base-1);i<(1<<base);i++) {
+                rts[i<<1]=rts[i];
+                Real angle_i=angle*(2*i+1-(1<<base));
+                rts[(i<<1)+1]=C(cos(angle_i), sin(angle_i));
+            }
+            ++base;
+        }
+    }
+ 
+    void fft(vector<C> &a,int n){
+        //assert((n&(n-1))==0);
+        int zeros=__builtin_ctz(n);
+        ensure_base(zeros);
+        int shift=base-zeros;
+        for(int i=0;i<n;i++) if(i<(rev[i]>>shift)) swap(a[i],a[rev[i]>>shift]);
+        for(int k=1;k<n;k<<=1)for(int i=0;i<n;i+=2*k)for(int j=0;j<k;j++){
+            //バタフライ演算
+            C z=a[i+j+k]*rts[j+k];
+            a[i+j+k]=a[i+j]-z;
+            a[i+j]=a[i+j]+z;
+        }
+    }
+    
+    // C[k] = sum_i A[i] * B[k-i]
+    vector<long long> multiply(const vector<int> &a,const vector<int> &b) {
+        int need=(int)a.size()+(int)b.size()-1;
+        int nbase=1;
+        while((1<<nbase)<need) nbase++;
+        ensure_base(nbase);
+        int sz=(1<<nbase);
+        vector<C> fa(sz);
+        for(int i=0;i<sz;i++){
+            int x=(i<(int)a.size()?a[i]:0);
+            int y=(i<(int)b.size()?b[i]:0);
+            fa[i]=C(x,y);
+        }
+        fft(fa,sz);
+        C r(0,-0.25/(sz>>1)),s(0,1),t(0.5,0);
+        for(int i=0;i<=(sz>>1);i++){
+            int j=(sz-i)&(sz-1);
+            C z=(fa[j]*fa[j]-conj(fa[i]*fa[i]))*r;
+            fa[j]=(fa[i]*fa[i]-conj(fa[j]*fa[j]))*r;
+            fa[i]=z;
+        }
+        for(int i=0;i<(sz>>1);i++){
+            C A0=(fa[i]+fa[i+(sz>>1)])*t;
+            C A1=(fa[i]-fa[i+(sz>>1)])*t*rts[(sz>>1)+i];
+            fa[i]=A0+A1*s;
+        }
+        fft(fa,sz>>1);
+        vector<long long> ret(need);
+        for(int i=0;i<need;i++) ret[i]=llround(i&1?fa[i>>1].imag():fa[i>>1].real());
+        return ret;
+    }
+};
+
+
+struct Comp {
+    ll RE;
+    ll IM;
+};
+Comp MUl(Comp a, Comp b) {
+    return Comp{ (((a.RE%mod * b.RE%mod - a.IM%mod * b.IM%mod) % mod) + mod) % mod,((a.RE%mod * b.IM%mod)%mod + (a.IM%mod * b.RE%mod)%mod + mod) % mod };
+}
+Comp MUlR(Comp a, ll b) {
+    return Comp{ (a.RE%mod * b%mod) % mod,(a.IM%mod * b%mod) % mod };
+}
+ll modPow(long long a, long long n, long long p=mod) {
+    a%=p;
+    if (n == 0) return 1; // 0乗にも対応する場合
+    if (n == 1) return a % p;
+    if (n % 2 == 1) return (a * modPow(a, n - 1, p)) % p;
+    long long t = modPow(a, n / 2, p);
+    return (t * t) % p;
+}
+
+void print(Comp C){
+    cout<<C.RE<<" "<<C.IM<<endl;
+    return;
+}
+
+
+
+int main() {
+    
+    ll P, N;
+    cin >> P >> N;
+    mod = P;
+    if(GU){
+        Comp gu={1,0};
+    rep(n,N+1)rep(m,N+1){
+        if(n%P==0&&m%P==0)continue;
+        gu=MUl(gu,Comp{n,m});
+    }
+    if(DEbUG||1){
+        cout<<"gu ";
+        print(gu);
+    }
+    }
+    
+    
+    ll K = (N+1) / P;//K^2ブロック
+    N = (N+1)%P;//ゴミ
+    //cout<<N<<endl;
+    
+
+
+
+    vll pro(P + 100, 1);
+    rep(p, P + 10) {
+        pro[p + 1] = (pro[p] * (p + 1)) % mod;
+    }
+    vector<Comp> _1plusiI(P);//(1+pi)^{P-1};
+    Comp PR = { 1,0 };
+    rep(p, P) {
+        Comp t = Comp{ 1,p };
+        Comp res = Comp{ 1,0 };
+        ll n = P - 1;
+        while (n > 0) {
+            if (n % 2 == 1) {
+                res = MUl(res, t);
+
+            }
+
+            t = MUl(t, t);
+            n /= 2;
+        }
+        _1plusiI[p] = res;
+        PR = MUl(PR, res);
+        if(DEbUG){
+            cout<<p<<"res ";
+            print(res);
+            print(PR);
+        }
+    }
+    ll AP = modPow(pro[mod - 1], mod+1, mod);
+    if(DEbUG)
+    {
+        cout<<"AP "; 
+        cout<<AP<<endl;
+        cout<<"PR "; 
+        print(PR);
+    }
+    Comp AF={1,0};
+    rep(p,(P+3)%4){
+        AF=MUl(AF,Comp{0,1});
+        if(DEbUG){
+            cout<<p<<"AF"<<" ";
+            print(AF);
+        }
+    }
+    if(DEbUG){
+        cout<<"AF"<<" ";
+        print(AF);
+    }
+    PR=MUl(PR,AF);
+    if(DEbUG){
+        cout<<"PR3"<<" ";
+        print(PR);
+    }
+    //INCO:P*Pでとれる分.これのK^2乗
+    Comp INCO = MUlR(PR, AP);
+    Comp INCOK1={1,0};
+    Comp t=INCO;
+    ll n=K;
+    while(n>0){
+        if(n%2==1){
+            INCOK1=MUl(INCOK1,t);
+        }
+        t=MUl(t,t);
+        n/=2;
+    }
+    if(DEbUG){
+        cout<<"INCOK1"<<" ";
+        print(INCOK1);
+    }
+    t=INCOK1;
+    Comp INCOK2={1,0};
+    n=K;
+    while(n>0){
+        if(n%2==1){
+            INCOK2=MUl(INCOK2,t);
+        }
+        t=MUl(t,t);
+        n/=2;
+    }
+    if(DEbUG){
+        cout<<"INCOK2"<<" ";
+        print(INCOK2);
+    }
+    
+
+    Comp OUCOKRE=Comp{1,0};
+    if(N!=0){
+        OUCOKRE=Comp{pro[P-1],0};
+    }
+    Comp GGG={1,0};
+    rep(p,P){
+        GGG=MUl(GGG,Comp{1,p});
+    }///GGG=Prod(k=0,P-1){1+pi};
+    for(ll r=1;r<=N-1;r++){
+        OUCOKRE=MUl(OUCOKRE,GGG);
+        OUCOKRE=MUlR(OUCOKRE,modPow(r,P,mod));
+    }
+   
+    if(N!=0)OUCOKRE=MUl(OUCOKRE,AF);
+
+    Comp res={1,0};
+    t=OUCOKRE;
+    n=K;
+    while(n>0){
+        if(n%2==1){
+            res=MUl(res,t);
+        }
+        t=MUl(t,t);
+        n/=2;
+    }
+    OUCOKRE=res;
+    if(DEbUG){
+        cout<<"OUCOKRE ";
+        print(OUCOKRE);
+    }
+    Comp OUCOKIM=Comp{1,0};
+    if(N!=0){
+        OUCOKIM=Comp{pro[P-1],0};
+    }
+    GGG={1,0};
+    rep(p,P){
+        GGG=MUl(GGG,Comp{p,1});
+    }///GGG=Prod(k=0,P-1){p+i};
+    for(ll r=1;r<=N-1;r++){
+        OUCOKIM=MUl(OUCOKIM,GGG);
+        OUCOKIM=MUlR(OUCOKIM,modPow(r,P,mod));
+    }
+    res={1,0};
+    t=OUCOKIM;
+    n=K;
+    while(n>0){
+        if(n%2==1){
+            res=MUl(res,t);
+        }
+        t=MUl(t,t);
+        n/=2;
+    }
+    OUCOKIM=res;
+    if(DEbUG){
+        cout<<"OUCOKIM ";
+        print(OUCOKIM);
+    }
+    
+
+    
+    Comp OUCOKIMRE={1,0};
+    if(N!=0){
+    //cout<<N<<endlP
+    FastFourierTransform fft;
+    vector<int> v(P, 0);
+        //cout<<"OK";
+    for(ll i=0;i<N;i++) v[(i*i)%P]++;
+    //rep(i,mod) v[i]%=mod;
+
+    auto res2=fft.multiply(v, v);
+    vll Pnum(P);
+    //cout<<P<<endl;
+    rep(i,res2.size()){
+        if(DEbUG)cout<<i<<" "<<res2[i]<<endl;
+        Pnum[i%P]+=res2[i];
+    }
+    rep(i,N){
+        Pnum[(i*i+i*i)%P]--;
+    }
+
+    ll q=1;
+    rep(i,P){
+        if(DEbUG)cout<<i<<":"<<Pnum[i]<<endl;
+        if(Pnum[i]%2!=0)cout<<"#####"<<endl;
+        q*=modPow(i,Pnum[i]/2,P);
+        q%=P;
+    }
+    if(DEbUG){
+        cout<<"q ";
+        cout<<q<<endl;
+    }
+    
+    OUCOKIMRE=MUlR(OUCOKIMRE,q);
+
+    if(DEbUG){
+        cout<<"OUCOKIMRE1 ";
+        print(OUCOKIMRE);
+    }
+    if(DEbUG){
+        cout<<"OUCOKIMRE2 ";
+        print(OUCOKIMRE);
+    }
+    rep(i,((N*(N-1)+8)/2)%4){
+        OUCOKIMRE=MUl(OUCOKIMRE,Comp{0,1});
+        if(DEbUG)cout<<i<<" p";
+    }
+    if(DEbUG){
+        cout<<"OUCOKIMRE4 ";
+        print(OUCOKIMRE);
+    }
+
+    rep(n,N){
+        if(n!=0){
+            OUCOKIMRE=MUl(OUCOKIMRE,{n,n});
+        }
+    }
+    
+    if(DEbUG){
+        cout<<"OUCOKIMRE3 ";
+        print(OUCOKIMRE);
+    }
+    }
+
+    Comp ANS={1,0};
+    ANS=MUl(ANS,OUCOKIMRE);
+    ANS=MUl(ANS,OUCOKIM);
+    ANS=MUl(ANS,OUCOKRE);
+    ANS=MUl(ANS,INCOK2);
+
+
+
+
+    cout << ANS.RE << " " << ANS.IM << endl;
+
+}
+

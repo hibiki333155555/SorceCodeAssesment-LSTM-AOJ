@@ -1,0 +1,18 @@
+a,b = map(int,raw_input().split())
+A=[]
+U=[]
+for i in range(a):
+    B=list(map(int,raw_input().split()))
+    A.append(B)
+for i in range(a):
+    s=sum(A[i])
+    f=[str(w) for w in A[i]]
+    f=" ".join(f)
+    print f, s
+for j in range(a):
+        u=sum(A[0:][j])
+        U.append(u)
+L=sum(U)
+U=[str(y) for y in U]
+U=" ".join(U)
+print U,L

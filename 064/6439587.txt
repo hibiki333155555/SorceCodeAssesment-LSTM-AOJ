@@ -1,0 +1,6 @@
+import math
+r = float(input())
+
+print(r*r*math.pi, end=" ")
+print(2*r*math.pi)
+

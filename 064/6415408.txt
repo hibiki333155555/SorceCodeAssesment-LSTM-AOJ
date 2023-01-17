@@ -1,0 +1,172 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define REP(i,n) for(int i=0;i<(n);i++)
+#define ALL(v) v.begin(),v.end()
+#define debug(a) cerr<<#a<<":"<<a<<endl;
+#define debug2(a,b) cerr<<"("<<#a<<","<<#b<<"):("<<a<<","<<b<<")"<<endl;
+#define debug3(a,b,c) cerr<<"("<<#a<<","<<#b<<","<<#c<<"):("<<a<<","<<b<<","<<c<<")"<<endl;
+#define debug4(a,b,c,d) cerr<<"("<<#a<<","<<#b<<","<<#c<<","<<d<<"):("<<a<<","<<b<<","<<c<<","<<d<<")"<<endl;
+
+template<typename T>
+istream& operator>>(istream&is,vector<T>&v){
+  for(T&p:v)is>>p;
+  return is;
+}
+template<typename T>
+ostream& operator<<(ostream&os,const vector<T>&v){
+  if(&os==&cerr)os<<"[";
+  for(int i=0;i<v.size();i++){
+    os<<v[i];
+    if(i+1<v.size())os<<(&os==&cerr?",":" ");
+  }
+  if(&os==&cerr)os<<"]";
+  return os;
+}
+
+struct matching{
+  int n,cnt;
+  vector<vector<int>> G;
+  vector<int> match,for_ear,base; 
+  vector<bool> scanned;
+  bool checked;
+  
+  matching(int n_):n(n_),cnt(0),G(n_),match(n_),for_ear(n_),base(n_),scanned(n_,false),checked(false){ 
+    for(int i=0;i<n;i++)match[i]=for_ear[i]=base[i]=i;
+  };
+  
+  void add_edge(int u,int v){
+    G[u].push_back(v); 
+    G[v].push_back(u);
+  }
+  
+  inline int state(int v){ 
+    if(match[v]==v)return 1;//根 
+    if(for_ear[match[v]]!=match[v])return 2;//根以外の偶点 
+    if(for_ear[v]!=v)return 3;//奇点 
+    return 4;//森外 
+  }
+  
+  inline int search_even(){//まだscanしてない偶点を返す 
+    for(int i=0;i<n;i++)if(state(i)<=2&&!scanned[i])return i;
+    return -1;
+  }
+  
+  inline int neighbor(int x){//xの隣接点で 森外 or baseが異なる偶点 を返す 
+    for(int y:G[x])
+      if(state(y)==4||(state(y)<=2&&base[y]!=base[x]))
+        return y; 
+    return -1; 
+  }
+  
+  inline void reverse(int x){//xより下のmatchとfor_earの反転 
+    x=match[x]; 
+    int y=for_ear[x]; 
+    while(state(y)>1){//x:odd,y:xの下のeven 
+      match[x]=y; 
+      int tmp=match[y]; 
+      match[y]=x; 
+      x=tmp; 
+      y=for_ear[x]; 
+    } 
+    match[x]=y; 
+    match[y]=x; 
+  }
+  
+  inline void augment(int x,int y){
+    cnt++; 
+    reverse(x); 
+    reverse(y); 
+    match[x]=y;match[y]=x; 
+    for(int i=0;i<n;i++){
+      for_ear[i]=base[i]=i;
+      scanned[i]=false;
+    }
+  }
+  
+  inline int make_onpath(int x,vector<bool>&onpath){ 
+    int r=-1; 
+    while(state(x)>1){ 
+      if(r<0&&onpath[x]&&base[x]==x)r=x; 
+      int v=match[x]; 
+      onpath[x]=!onpath[x]; 
+      onpath[v]=!onpath[v]; 
+      x=for_ear[v]; 
+    } 
+    if(r<0&&onpath[x]&&base[x]==x)r=x; 
+    onpath[x]=!onpath[x]; 
+    return r; 
+  }
+  
+  inline void for_ear_match(int x,int r){ 
+    while(x!=r){ 
+      int v=match[x]; 
+      if(base[for_ear[v]]!=r)for_ear[for_ear[v]]=v; 
+      x=for_ear[v]; 
+    } 
+  }
+  
+  inline void shrink(int x,int y,int r,vector<bool>&onpath){
+    for_ear_match(x,r); 
+    for_ear_match(y,r); 
+    if(base[x]!=r)for_ear[x]=y; 
+    if(base[y]!=r)for_ear[y]=x; 
+    for(int i=0;i<n;i++)if(onpath[base[i]])base[i]=r;
+  }
+  
+  void action(){ 
+    checked=true; 
+    while(true){ 
+      int x=search_even();
+      if(x<0)return; 
+      while(true){ 
+        int y=neighbor(x); 
+        if(y<0){ 
+          scanned[x]=true; 
+          break; 
+        } 
+        if(state(y)==4)for_ear[y]=x; 
+        else{ 
+          vector<bool> onpath(n,false); 
+          make_onpath(x,onpath); 
+          int r=make_onpath(y,onpath); 
+          if(~r)shrink(x,y,r,onpath); 
+          else{ 
+            augment(x,y); 
+            break; 
+          }
+        }
+      }
+    }
+  }
+
+  int size(){
+    if(!checked)action(); 
+    return cnt; 
+  }
+};
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int n;cin>>n;
+  vector<int> a(n),b(n);
+  cin>>a;
+  cin>>b;
+  matching M(n);
+  int cnt=0;
+  REP(i,n){
+    if(a[i]>=b[i])continue;
+    cnt++;
+    REP(j,i){
+      if(a[j]>=b[j])continue;
+      if(a[i]>=a[j]&&b[i]>=b[j])M.add_edge(i,j);
+      else if(a[j]>=a[i]&&b[j]>=b[i])M.add_edge(i,j);
+    }
+  }
+  int rem=cnt-M.size()*2;
+  cout<< M.size() + (rem -rem/3) <<endl;
+}
+

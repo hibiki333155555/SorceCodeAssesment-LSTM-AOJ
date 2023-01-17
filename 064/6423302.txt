@@ -1,0 +1,22 @@
+#include<stdio.h>
+
+int main(){
+  int o,n,k,i,j;
+  int key;
+  int A[110];
+  scanf("%d",&n);
+  for(i=1;i<=n;i++)scanf("%d",&A[i]);
+
+  for(j=1;j<=n;j++)
+    {   
+	      key = A[j];		
+	      i = j-1;
+	      while(i>0 && A[i]>key)
+		{
+		  A[i+1]=A[i];  
+		  i = i-1;
+		}
+	      
+   
+  	 
+  return 0;}

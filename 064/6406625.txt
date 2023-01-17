@@ -1,0 +1,9 @@
+#include <studio>
+
+int main(void)
+{
+    int x;
+    printf("%d\n x*x*x");
+    return 0;
+}
+

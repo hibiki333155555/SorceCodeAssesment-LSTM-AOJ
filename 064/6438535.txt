@@ -1,0 +1,14 @@
+while True:
+  m=0
+  n,x=map(int,input().split())
+  if n==0 & x==0:
+    break
+  for i in range(n):
+    for j in range(n):
+      for k in range(n):
+        if i!=j & j!=k & k!=i:
+          if i+j+k+3==x:
+            m=m+1
+  m=m/6
+  print(int(m))
+

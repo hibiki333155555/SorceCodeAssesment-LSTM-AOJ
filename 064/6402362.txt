@@ -1,0 +1,13 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+int main(){
+    char s[101], p[101], ss[201];
+    cin >> s >> p;
+    strcpy(ss, s);
+    strcat(ss, ss);
+    if(strstr(ss, p) == NULL) cout << "No" << endl;
+    else cout << "Yes" << endl;
+    return 0;
+}

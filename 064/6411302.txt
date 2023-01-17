@@ -1,0 +1,81 @@
+#include"iostream"
+#include"algorithm"
+using namespace std;
+int head[100010],dep[100010],cnt,vis[100010];
+int fa[100010][25];
+struct point
+{
+    int to,next;
+}p[100010];
+void add(int u,int v)
+{
+    p[cnt].to=v;
+    p[cnt].next=head[u];
+    head[u]=cnt++;
+}
+void dfs(int x,int pre,int d)
+{
+    if(vis[x]==1) return;
+    fa[x][0]=pre;
+    vis[x]=1;
+    dep[x]=d;
+    for(int i=head[x];i!=-1;i=p[i].next)
+    {
+        dfs(p[i].to,x,d+1);
+    }
+}
+void init(int n)
+{
+    dfs(0,0,0);
+    for(int j=0;j<=20;j++){
+        for(int i=0;i<n;i++){
+            fa[i][j+1]=fa[fa[i][j]][j];
+        }
+    }
+}
+int LCA(int u,int v,int n)
+{
+    if(dep[u]>dep[v]) swap(u,v);
+    int temp=dep[v]-dep[u];
+    for(int i=0;(1<<i)<=temp;i++)      //使u,v在同一深度
+    {
+        if((1<<i)&temp)
+            v=fa[v][i];
+    }
+    if(v==u) return v;
+    for(int i=20;i>=0;i--)  //两个节点一起往上走
+    {
+        if(fa[u][i]!=fa[v][i])
+        {
+            u=fa[u][i];
+            v=fa[v][i];
+        }
+    }
+    return fa[u][0];
+}
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    for(int i=0;i<100010;i++) head[i]=-1;
+    for(int i=0;i<n;i++){
+        int k;
+        scanf("%d",&k);
+        for(int j=1;j<=k;j++){
+            int v;
+            scanf("%d",&v);
+            add(i,v);
+            add(v,i);
+        }
+    }
+    init(n);
+    int q;
+    scanf("%d",&q);
+    for (int i=1;i<=q;i++){
+        int u,v;
+        scanf("%d%d",&u,&v);
+        int ans=LCA(u,v,n);
+        printf("%d\n",ans);
+    }
+    return 0;
+}

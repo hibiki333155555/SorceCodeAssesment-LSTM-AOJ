@@ -1,0 +1,31 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        if()for(int i;;I++){
+            int a = sc.nextInt();
+            char op = sc.next().charAt(0);
+            int b = sc.nextInt();
+            
+            if(char op=='+''){
+                int r1=a+b;
+                System.out.pritnln(r1);
+            }
+            else if(char op=='-''){
+                int r2=a-b;
+                System.out.println(r2);
+            }
+            else if(char op=='*''){
+                int r3=a*b;
+                System.out.println(r3);
+            }
+            else if(char op=='/'){
+                int r4=a/b;
+                System.out.println(r4);
+            }
+            }
+        
+    }
+}
+

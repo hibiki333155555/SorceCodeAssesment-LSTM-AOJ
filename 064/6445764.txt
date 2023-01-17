@@ -1,0 +1,16 @@
+N = input()
+A = input().split()
+a = list(map(int,A))
+
+n = 1
+d = {}
+for i in range(int(N)-1):
+    if a[i] <= a[i + 1]:
+        n = n + 1
+        d[i] = n
+    elif a[i] > a[i + 1]:
+        d[i] = 0
+        n = 1
+d[N] = 0
+#print(d)
+print(max(d.values()))

@@ -1,0 +1,21 @@
+i = input().split()
+
+S = []
+
+for j in i:
+	if j == '+':
+		m = S.pop() 	
+		n = S.pop()
+		S.append(m+ n)
+	elif j == '-':
+		m = S.pop() 	
+		n = S.pop()
+		S.append(n- m)
+	elif j == '*':
+		m = S.pop() 	
+		n = S.pop()
+		S.append(m* n)
+	else:
+		S.append(int(j))
+
+print(*S)

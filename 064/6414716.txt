@@ -1,0 +1,254 @@
+import sys
+readline=sys.stdin.readline
+
+class Graph:
+    def __init__(self,V,edges=False,graph=False,directed=False,weighted=False,inf=float("inf")):
+        self.V=V
+        self.directed=directed
+        self.weighted=weighted
+        self.inf=inf
+        if graph:
+            self.graph=graph
+            self.edges=[]
+            for i in range(self.V):
+                if self.weighted:
+                    for j,d in self.graph[i]:
+                        if self.directed or not self.directed and i<=j:
+                            self.edges.append((i,j,d))
+                else:
+                    for j in self.graph[i]:
+                        if self.directed or not self.directed and i<=j:
+                            self.edges.append((i,j))
+        else:
+            self.edges=edges
+            self.graph=[[] for i in range(self.V)]
+            if weighted:
+                for i,j,d in self.edges:
+                    self.graph[i].append((j,d))
+                    if not self.directed:
+                        self.graph[j].append((i,d))
+            else:
+                for i,j in self.edges:
+                    self.graph[i].append(j)
+                    if not self.directed:
+                        self.graph[j].append(i)
+
+    def SIV_DFS(self,s,bipartite_graph=False,cycle_detection=False,directed_acyclic=False,euler_tour=False,linked_components=False,lowlink=False,parents=False,postorder=False,preorder=False,subtree_size=False,topological_sort=False,unweighted_dist=False,weighted_dist=False):
+        seen=[False]*self.V
+        finished=[False]*self.V
+        if directed_acyclic or cycle_detection or topological_sort:
+            dag=True
+        if euler_tour:
+            et=[]
+        if linked_components:
+            lc=[]
+        if lowlink:
+            order=[None]*self.V
+            ll=[None]*self.V
+            idx=0
+        if parents or cycle_detection or lowlink or subtree_size:
+            ps=[None]*self.V
+        if postorder or topological_sort:
+            post=[]
+        if preorder:
+            pre=[]
+        if subtree_size:
+            ss=[1]*self.V
+        if unweighted_dist or bipartite_graph:
+            uwd=[self.inf]*self.V
+            uwd[s]=0
+        if weighted_dist:
+            wd=[self.inf]*self.V
+            wd[s]=0
+        stack=[(s,0)] if self.weighted else [s]
+        while stack:
+            if self.weighted:
+                x,d=stack.pop()
+            else:
+                x=stack.pop()
+            if not seen[x]:
+                seen[x]=True
+                stack.append((x,d) if self.weighted else x)
+                if euler_tour:
+                    et.append(x)
+                if linked_components:
+                    lc.append(x)
+                if lowlink:
+                    order[x]=idx
+                    ll[x]=idx
+                    idx+=1
+                if preorder:
+                    pre.append(x)
+                for y in self.graph[x]:
+                    if self.weighted:
+                        y,d=y
+                    if not seen[y]:
+                        stack.append((y,d) if self.weighted else y)
+                        if parents or cycle_detection or lowlink or subtree_size:
+                            ps[y]=x
+                        if unweighted_dist or bipartite_graph:
+                            uwd[y]=uwd[x]+1
+                        if weighted_dist:
+                            wd[y]=wd[x]+d
+                    elif not finished[y]:
+                        if (directed_acyclic or cycle_detection or topological_sort) and dag:
+                            dag=False
+                            if cycle_detection:
+                                cd=(y,x)
+            elif not finished[x]:
+                finished[x]=True
+                if euler_tour:
+                    et.append(~x)
+                if lowlink:
+                    bl=True
+                    for y in self.graph[x]:
+                        if self.weighted:
+                            y,d=y
+                        if ps[x]==y and bl:
+                            bl=False
+                            continue
+                        ll[x]=min(ll[x],order[y])
+                    if x!=s:
+                        ll[ps[x]]=min(ll[ps[x]],ll[x])
+                if postorder or topological_sort:
+                    post.append(x)
+                if subtree_size:
+                    for y in self.graph[x]:
+                        if self.weighted:
+                            y,d=y
+                        if y==ps[x]:
+                            continue
+                        ss[x]+=ss[y]
+        if bipartite_graph:
+            bg=[[],[]]
+            for tpl in self.edges:
+                x,y=tpl[:2] if self.weighted else tpl
+                if uwd[x]==self.inf or uwd[y]==self.inf:
+                    continue
+                if not uwd[x]%2^uwd[y]%2:
+                    bg=False
+                    break
+            else:
+                for x in range(self.V):
+                    if uwd[x]==self.inf:
+                        continue
+                    bg[uwd[x]%2].append(x)
+        retu=()
+        if bipartite_graph:
+            retu+=(bg,)
+        if cycle_detection:
+            if dag:
+                cd=[]
+            else:
+                y,x=cd
+                cd=self.Route_Restoration(y,x,ps)
+            retu+=(cd,)
+        if directed_acyclic:
+            retu+=(dag,)
+        if euler_tour:
+            retu+=(et,)
+        if linked_components:
+            retu+=(lc,)
+        if lowlink:
+            retu=(ll,)
+        if parents:
+            retu+=(ps,)
+        if postorder:
+            retu+=(post,)
+        if preorder:
+            retu+=(pre,)
+        if subtree_size:
+            retu+=(ss,)
+        if topological_sort:
+            if dag:
+                tp_sort=post[::-1]
+            else:
+                tp_sort=[]
+            retu+=(tp_sort,)
+        if unweighted_dist:
+            retu+=(uwd,)
+        if weighted_dist:
+            retu+=(wd,)
+        if len(retu)==1:
+            retu=retu[0]
+        return retu
+
+mod=998244353
+def NTT(polynomial0,polynomial1):
+    if mod==998244353:
+        prim_root=3
+        prim_root_inve=332748118
+    else:
+        prim_root=Primitive_Root(mod)
+        prim_root_inve=MOD(mod).Pow(prim_root,-1)
+    def DFT(polynomial,n,inverse=False):
+        if inverse:
+            for bit in range(1,n+1):
+                a=1<<bit-1
+                x=pow(prim_root,mod-1>>bit,mod)
+                U=[1]
+                for _ in range(a):
+                    U.append(U[-1]*x%mod)
+                for i in range(1<<n-bit):
+                    for j in range(a):
+                        s=i*2*a+j
+                        t=s+a
+                        polynomial[s],polynomial[t]=(polynomial[s]+polynomial[t]*U[j])%mod,(polynomial[s]-polynomial[t]*U[j])%mod
+            x=pow((mod+1)//2,n,mod)
+            for i in range(1<<n):
+                polynomial[i]*=x
+                polynomial[i]%=mod
+        else:
+            for bit in range(n,0,-1):
+                a=1<<bit-1
+                x=pow(prim_root_inve,mod-1>>bit,mod)
+                U=[1]
+                for _ in range(a):
+                    U.append(U[-1]*x%mod)
+                for i in range(1<<n-bit):
+                    for j in range(a):
+                        s=i*2*a+j
+                        t=s+a
+                        polynomial[s],polynomial[t]=(polynomial[s]+polynomial[t])%mod,U[j]*(polynomial[s]-polynomial[t])%mod
+
+    l=len(polynomial0)+len(polynomial1)-1
+    n=(len(polynomial0)+len(polynomial1)-2).bit_length()
+    polynomial0=polynomial0+[0]*((1<<n)-len(polynomial0))
+    polynomial1=polynomial1+[0]*((1<<n)-len(polynomial1))
+    DFT(polynomial0,n)
+    DFT(polynomial1,n)
+    ntt=[x*y%mod for x,y in zip(polynomial0,polynomial1)]
+    DFT(ntt,n,inverse=True)
+    ntt=ntt[:l]
+    return ntt
+
+N,K=map(int,readline().split())
+A=list(map(int,readline().split()))
+edges=[]
+P=list(map(int,readline().split()))
+for i in range(1,N):
+    edges.append((i,P[i-1]-1))
+G=Graph(N,edges=edges)
+parents,tour=G.SIV_DFS(0,parents=True,postorder=True)
+mod=998244353
+dp=[[0]*(K+1) for x in range(N)]
+for x in range(N):
+    if x and len(G.graph[x])==1:
+        if A[x]<=K:
+            dp[x][A[x]]=1
+if A[0]<=K:
+    dp[0][A[0]]=1
+for x in tour:
+    if A[x]<=K:
+        dp[x][A[x]]=1
+    for y in G.graph[x]:
+        if y==parents[x]:
+            continue
+        dp[y][0]+=1
+        dp[x]=NTT(dp[x],dp[y])[:K+1]
+        dp[y][0]-=1
+ans=0
+for x in range(N):
+    ans+=dp[x][K]
+    ans%=mod
+print(ans)

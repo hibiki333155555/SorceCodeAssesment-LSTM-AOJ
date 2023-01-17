@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int top, S[1000];
+void pu(int x){
+    S[++top] = x;
+}
+
+int po(){
+    top--;
+    return S[top+1];
+}
+
+int main() {
+    int a, b;
+    top = 0;
+    char s[100];
+    while(scanf("%s", s) != EOF){
+        if(s[0] == '+'){
+            a = po();
+            b = po();
+            pu(a + b);
+        }
+        else if(s[0] == '-'){
+            a = po();
+            b = po();
+            pu(a - b);
+        }
+        else if(s[0] == '*'){
+            a = po();
+            b = po();
+            pu(a * b);
+        }
+        else{
+            pu(atoi(s));
+        }
+
+    }
+  printf("%d\n", po());
+}
+

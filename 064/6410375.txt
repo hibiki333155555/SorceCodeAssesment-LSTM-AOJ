@@ -1,0 +1,13 @@
+#include<stdio.h>
+#define pi 3.1416
+int main(){
+    float r,area,circumferen;
+    scanf("%f",&r);
+    area=pi*r*r;
+    circumferen=2*pi*r;
+    printf("%.6f %.6f\n",area,circumferen);
+
+
+return 0;
+}
+

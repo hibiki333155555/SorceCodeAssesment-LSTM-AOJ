@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+  int n,k;
+  cin>>n>>k;
+  int ans=0;
+  vector<int>T;
+  for(int i=0;i<n;i++){
+    int a;
+    cin>>a;
+    ans+=a;
+    if(a==1){
+      T.push_back(5-a);
+      T.push_back(1);
+    }
+    else T.push_back(6-a);
+  }
+  sort(T.rbegin(),T.rend());
+  for(int i=0;i<min(k,(int)T.size());i++)ans+=T[i];
+  cout<<ans<<endl;
+}

@@ -1,0 +1,8 @@
+#include<stdio.h>
+#include<math.h>
+int main(void){
+    int r;
+    scanf("%f",&r);
+    printf("%5f %5f\n",r*r*M_PI,2*r*M_PI);
+    return 0;
+}

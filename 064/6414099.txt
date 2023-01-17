@@ -1,0 +1,12 @@
+import math
+
+l = input()
+a,b,C = list(map(float, l.split()))
+
+C = math.radians(C)
+S = a * b * math.sin(C) / 2
+print(S)
+L = a + b + math.sqrt(a**2 + b**2 - 2*a*b*math.cos(C))
+print(L)
+h = b * math.sin(C)
+print(h)

@@ -1,0 +1,44 @@
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+    int num, i;
+    int min, max, sum, target;
+    string buf1, buf2;
+
+    cin >> num;
+    cin.ignore();
+    getline(cin, buf1);
+    stringstream ss(buf1);
+
+    i = 0;
+    while (getline(ss, buf2, ' ')) {
+        if (i >= num) {
+            break;
+        }
+
+        target = atoi(buf2.c_str());
+        if (i == 0) {
+            min = max = sum = target;
+            i++;
+            continue;
+        }
+        if (min > target) {
+            min = target;
+        }
+        if (max < target) {
+            max = target;
+        }
+        sum += target;
+        i++;
+    }
+
+
+    cout << min << " " << max << " " << sum << endl;
+    return 0;
+}
+

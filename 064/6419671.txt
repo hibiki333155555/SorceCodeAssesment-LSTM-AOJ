@@ -1,0 +1,41 @@
+#include <iostream>
+#include <map>
+#include <algorithm>
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    int op, e;
+    string l, r;
+    map<string, int> m;
+    while(n--){
+        cin>>op, l;
+        switch(op){
+            case 0:
+            cin>>e;
+            m[l] = e;
+            break;
+            case 1:
+            if(m.find(l) != m.end()){
+                cout << m[l] << endl;
+            }
+            else{
+                cout << 0 << endl;
+            }
+            break;
+            case 2:
+            m.erase(l);
+            break;
+            case 3:
+            cin>>r;
+            auto le = lower_bound(m.begin(), m.end(), l);
+            auto ri = upper_bound(m.begin(), m.end(), r);
+            for(auto it = le; it != ri; it++){
+                cout << it->first << " " >> it->second << endl;
+            }
+            break;
+        }
+    }
+    
+}

@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define REP(i,n) for(int i=0;i<(n);i++)
+
+int v[223456];
+stack<int> sta;
+
+int main(){
+  string s;cin>>s;
+  REP(i,s.size())
+    if(s[i]>='0'&&s[i]<='9'){
+      v[i]+=s[i]-'0';
+      sta.push(s[i]-'0');
+    }
+    else if(s[i]==')'){
+      v[i]-=sta.top();
+      sta.pop();
+    }
+  REP(i,s.size()){
+    if(s[i]>='a'&&s[i]<='z')
+      cout<<char('a'+(s[i]-'a'+v[i])%26);
+    v[i+1]+=v[i];
+  }
+  cout<<endl;
+}
+  

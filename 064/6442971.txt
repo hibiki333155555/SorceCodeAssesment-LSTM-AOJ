@@ -1,0 +1,11 @@
+while True:
+    H, W = map(int, input().split())
+    k=1
+    if H==W==0:
+        break
+    for i in range(H):
+        if k%2 != 0:
+            print('#.'*W)
+        else:
+            print('.#'*W)
+    print()

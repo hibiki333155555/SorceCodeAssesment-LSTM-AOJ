@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i=0;i<(n);i++)
+//using ll=long long;
+int main(){
+    int n;
+    cin>>n;
+    int a[n];
+    rep(i,n)cin>>a[i];
+    int max=-1,maxi,ans=1;
+    for(int i=0;i<n;i++){
+        if(max<=a[i]){
+            max=a[i];
+            maxi=i;
+        }
+    }
+    for(int i=maxi+1;i<n;i++){
+        if(a[i-1]>a[i])ans++;
+    }
+    cout<<ans<<"\n";
+}

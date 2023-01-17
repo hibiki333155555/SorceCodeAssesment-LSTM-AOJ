@@ -1,0 +1,12 @@
+rt = []
+i = 1
+n = int(input())
+while i < n:
+    x = input()
+    rt.append(int(x))
+rm = rt[0]
+while 0 < i:
+    if rm < rt[i]:
+        rm = rt[i]
+    i -= 1
+print(rm)

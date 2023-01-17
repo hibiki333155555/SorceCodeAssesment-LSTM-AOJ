@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+void print(vector<int>v)
+{
+	for(int i=0;i<v.size();i++)
+	{
+		if(i!=v.size()-1)
+		{
+		cout<<v[i]<<" ";
+		
+		}
+		else{
+		cout<<v[i];
+		}
+		}
+	cout<<"\n";
+}
+void Selection(vector<int> &arr)
+{
+	int n=arr.size();
+	int pos,count=0;
+	for(int i=0;i<n-1;i++)
+	{
+		pos=i;
+		for(int g=i+1;g<n;g++)
+		{
+			if(arr[pos]>arr[g])
+			{
+				pos=g;
+			}
+		
+		}
+		if(i!=pos)
+		{
+			swap(arr[pos],arr[i]);
+			count++;
+		}
+		}
+		print(arr);
+		cout<<count<<endl;	
+	}
+
+int main()
+{
+	int m;cin>>m;
+	vector<int>v(m);
+	for(int i=0;i<m;i++)
+	{
+		cin>>v[i];
+	}
+	Selection(v);
+	return 0;
+}
+

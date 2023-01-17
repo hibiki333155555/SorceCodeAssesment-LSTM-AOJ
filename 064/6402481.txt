@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int a , b , sum ; char s ;
+    while(cin >> a >> s >> b){
+        if(s == '?' ){
+            break ;
+        }
+        if(s == '+'){
+            sum = a + b ;
+        }
+
+        if(s == '-'){
+            sum = a - b ;
+        }
+        if(s == '*'){
+            sum = a * b ;
+        }
+        if(s == '/'){
+            sum = a / b ;
+        }
+        cout << sum << endl ;
+    }
+
+
+
+return 0 ;
+}
+
+

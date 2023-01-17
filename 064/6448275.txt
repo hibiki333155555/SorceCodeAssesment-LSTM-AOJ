@@ -1,0 +1,50 @@
+//
+// Created by 17261 on 2022/4/2.
+//
+
+#include <bits/stdc++.h>
+
+typedef long long ll;
+
+using namespace std;
+
+const int maxn=1e5+10;
+
+ll gcd(ll x,ll y){
+    if(y==0){
+        return x;
+    }else{
+        return gcd(y,x%y);
+    }
+}
+
+int n,sum;
+ll a[maxn];
+
+int main() {
+#ifdef Ac1dX
+    freopen("C:\\Users\\17261\\Desktop\\Ac1dX\\acm\\data.in", "r", stdin);
+    freopen("C:\\Users\\17261\\Desktop\\Ac1dX\\acm\\data.out", "w", stdout);
+#endif
+    while(cin>>n){
+        vector<ll> even,odd;
+        if(n==0) break;
+        sum=n*(n+1)/2;
+        for(int i=0;i<sum;i++){
+            cin>>a[i];
+            if(a[i]%2==0) even.push_back(a[i]);
+            else odd.push_back(a[i]);
+        }
+        sort(odd.begin(),odd.end());
+        sort(even.begin(),even.end());
+        ll tmp;
+        tmp=(ll)sqrt(even[0]*1.0/odd[0]*even[1])+0.5;
+        cout<<tmp<<endl;
+        for(int i=0;i<n;i++){
+            cout<<even[i]/tmp;
+            if(i!=n-1) cout<<" ";
+            else cout<<endl;
+        }
+    }
+    return 0;
+}

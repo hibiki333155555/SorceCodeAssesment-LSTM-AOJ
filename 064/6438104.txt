@@ -1,0 +1,70 @@
+#include <stdio.h>
+
+int main(void)
+{
+    int N, M;
+    char S[101];
+    int s[101][101];
+    int no, nx;
+    int no1, nx1, no2, nx2;
+    int n, m;
+    int min;
+    
+    scanf("%d%d", &M, &N);
+    nx = no = 0;
+    for (m = 0; m < M; m++){
+        scanf("%s", S);
+        for (n = 0; n < N; n++){
+            if (S[n] == 'o'){
+                s[m][n] = 1;
+                no++;
+            }
+            else {
+                s[m][n] = 0;
+                nx++;
+            }
+        }
+    }
+    
+    min = 100 * 100;
+    
+    no1 = 0;
+    for (m = 0; m < M - 1; m++){
+        for (n = 0; n < N; n++){
+            no1 += s[m][n];
+        }
+        nx1 = N * (m + 1) - no1;
+        no2 = no - no1;
+        nx2 = nx - nx1;
+//printf("<%d %d>", nx1 + no2, nx2 + no1);
+        if (min > nx1 + no2){
+            min = nx1 + no2;
+        }
+        if (min > nx2 + no1){
+            min = nx2 + no1;
+        }
+    }
+    
+    no1 = 0;
+    for (n = 0; n < N - 1; n++){
+        for (m = 0; m < M; m++){
+            no1 += s[m][n];
+        }
+        nx1 = M * (n + 1) - no1;
+        no2 = no - no1;
+        nx2 = nx - nx1;
+//printf("(%d %d)", nx1 + no2, nx2 + no1);
+        if (min > nx1 + no2){
+            min = nx1 + no2;
+        }
+        if (min > nx2 + no1){
+            min = nx2 + no1;
+        }
+    }
+
+    printf("%d\n", min);
+    
+    return (0);
+}
+
+

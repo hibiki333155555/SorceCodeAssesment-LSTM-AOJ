@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+import sys
+import math
+from functools import lru_cache
+from heapq import heappush, heappop, heappushpop
+from itertools import permutations
+from operator import itemgetter, le
+from collections import deque
+from collections import Counter
+from itertools import accumulate
+from collections import defaultdict
+from bisect import bisect_right as br
+from bisect import bisect_left as bl
+sys.setrecursionlimit(2147483647)
+mod = 10**9 + 7
+inf = float('inf')
+input=lambda: sys.stdin.readline().rstrip("\r\n")
+def I(): return int(sys.stdin.readline())
+def LI(): return list(map(int, sys.stdin.readline().split()))
+
+n, m = LI()
+edges = [[] for _ in range(n)]
+for _ in range(n-1):
+    x, y = LI()
+    edges[x-1].append(y-1)
+    edges[y-1].append(x-1)
+
+nuts = [False] * n
+can = [False] * n
+for _ in range(m):
+    a = I()
+    nuts[a-1] = True
+stack = [(0, -1, -1)]
+while stack:
+    v, p, f = stack.pop()
+    can[v] = True
+    for u in edges[v]:
+        if u == p: continue
+        if u == f or nuts[u]:
+            cnt = 0
+            for t in edges[u]:
+                if t == v: continue
+                if not nuts[t]: 
+                    stack.append((u, v, t))
+                    cnt += 1
+                    if cnt == 2: break
+        else: stack.append((u, v, -1))
+print(sum(can))
+

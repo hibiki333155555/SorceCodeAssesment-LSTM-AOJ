@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long int ull;
+#define chmin(x,y) x = min(x,y)
+#define chmax(x,y) x = max(x,y)
+#define BIG_NUM 2000000000
+#define HUGE_NUM 4000000000000000000 //オーバーフローに注意
+#define MOD 1000000007
+#define EPS 0.000000001
+
+
+
+
+int main(){
+
+	int L,N;
+	scanf("%d %d",&L,&N);
+
+	int ans = -1;
+	int tmp;
+	for(int i = 0; i < N; i++){
+
+		scanf("%d",&tmp);
+		if(ans != -1)continue;
+
+		L -= tmp;
+		if(L <= 0){
+
+			ans =i+1;
+		}
+	}
+
+	if(ans == -1){
+
+		printf("No\n");
+	}else{
+
+		printf("%d\n",ans);
+	}
+
+	return 0;
+}
+

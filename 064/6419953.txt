@@ -1,0 +1,9 @@
+n = int(input())
+ans = -10000000000000000000
+mn = 1000000000000000000
+for i in range(n):
+    p = int(input())
+    ans = max(ans, p-mn)
+    mn = min(mn, p)
+
+print(ans)

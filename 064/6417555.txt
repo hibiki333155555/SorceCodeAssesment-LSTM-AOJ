@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef unsigned long long int ull;
+typedef long long int ll;
+typedef pair<ll,ll> pll;
+typedef long double D;
+//typedef complex<D> P;
+#define F first
+#define S second
+//const ll MOD=1000000007;
+const ll MOD=998244353;
+
+template<typename T,typename U>istream & operator >> (istream &i,pair<T,U> &A){i>>A.F>>A.S; return i;}
+template<typename T>istream & operator >> (istream &i,vector<T> &A){for(auto &I:A){i>>I;} return i;}
+template<typename T,typename U>ostream & operator << (ostream &o,const pair<T,U> &A){o<<A.F<<" "<<A.S; return o;}
+template<typename T>ostream & operator << (ostream &o,const vector<T> &A){int i=A.size(); for(auto &I:A){o<<I<<(--i?" ":"");} return o;}
+template<typename T,typename U>T & chmax(T &a,const U &b){if(a<b){a=b;} return a;}
+template<typename T,typename U>T & chmin(T &a,const U &b){if(b<a){a=b;} return a;}
+
+vector<ll> cnt(1000,0);
+
+void solve(){
+  ll N,M,v,a,b;
+  cin>>N>>M>>v>>a>>b;
+  v%=M;
+  a%=M;
+  b%=M;
+  if(N>M){cout<<"Yes"<<endl; return;}
+  for(int i=0;i<M;i++){cnt[i]=0;}
+  for(int i=1;i<=N;i++){
+    if(cnt[v]){cout<<"Yes"<<endl; return;}
+    cnt[v]++;
+    v*=a; v+=b;
+    v%=M;
+  }
+  cout<<"No"<<endl;
+}
+
+int main(){
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  ll T;
+  cin>>T;
+  while(T--){solve();}
+
+
+  return 0;
+}
+

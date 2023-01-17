@@ -1,0 +1,11 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  double a;
+  cin >> a;
+  
+  cout << fixed << setprecision(6) << 3.14159265359 * a * a << " " << 2 * 3.14159265359 * a << endl;
+  
+}
+

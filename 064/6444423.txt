@@ -1,0 +1,25 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+    int a,b,c,x;
+    int d=0;
+  scanf("%d %d %d",&a,&b,&c);
+
+for ( int i = a; i<=b; i++)
+{ 
+    if (c%i==0)
+     { 
+         
+         d++;
+   
+     }
+     
+   
+}
+
+ printf("%d\n",d);
+
+    return 0;
+}
+
+

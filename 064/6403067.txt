@@ -1,0 +1,171 @@
+#include<deque>
+#include<queue>
+#include<vector>
+#include<algorithm>
+#include<iostream>
+#include<set>
+#include<cmath>
+#include<tuple>
+#include<string>
+#include<chrono>
+#include<functional>
+#include<iterator>
+#include<random>
+#include<unordered_set>
+#include<array>
+#include<map>
+#include<iomanip>
+#include<assert.h>
+#include<list>
+#include<bitset>
+#include<stack>
+#include<memory>
+#include<numeric>
+#include<complex>
+using namespace std;
+using namespace std::chrono;
+typedef long long int llint;
+typedef long double lldo;
+#define mp make_pair
+#define mt make_tuple
+#define pub push_back
+#define puf push_front
+#define pob pop_back
+#define pof pop_front
+#define fir first
+#define sec second
+#define res resize
+#define ins insert
+#define era erase
+
+/*cout<<fixed<<setprecision(20);cin.tie(0);ios::sync_with_stdio(false);*/
+const llint mod=998244353;
+const llint inf=2.19e15+1;
+const long double pai=3.141592653589793238462643383279502884197;
+const long double eps=1e-10;
+template <class T,class U>bool chmin(T& a,U b){if(a>b){a=b;return true;}return false;}
+template <class T,class U>bool chmax(T& a,U b){if(a<b){a=b;return true;}return false;}
+llint gcd(llint a,llint b){if(a%b==0){return b;}else return gcd(b,a%b);}
+llint lcm(llint a,llint b){if(a==0){return b;}return a/gcd(a,b)*b;}
+template<class T> void SO(T& ve){sort(ve.begin(),ve.end());}
+template<class T> void REV(T& ve){reverse(ve.begin(),ve.end());}
+template<class T>llint LBI(const vector<T>&ar,T in){return lower_bound(ar.begin(),ar.end(),in)-ar.begin();}
+template<class T>llint UBI(const vector<T>&ar,T in){return upper_bound(ar.begin(),ar.end(),in)-ar.begin();}
+
+  using Real = llint;
+  const Real EPS = 1e-8;
+  const Real PI = acos(static_cast< Real >(-1));
+
+  enum {
+    OUT, ON, IN
+  };
+
+  inline int sign(const Real &r) {
+    return r < 0 ? -1 : r > 0 ? 1 : 0;
+  }
+
+  inline bool equals(const Real &a, const Real &b) {
+    return sign(a - b) == 0;
+  }
+
+
+
+  using Point = complex< Real >;
+
+  istream &operator>>(istream &is, Point &p) {
+    Real a, b;
+    is >> a >> b;
+    p = Point(a, b);
+    return is;
+  }
+
+  ostream &operator<<(ostream &os, const Point &p) {
+    return os << real(p) << " " << imag(p);
+  }
+
+  Point operator*(const Point &p, const Real &d) {
+    return Point(real(p) * d, imag(p) * d);
+  }
+
+  Real cross(const Point &a, const Point &b) {
+    return real(a) * imag(b) - imag(a) * real(b);
+  }
+
+  Real dot(const Point &a, const Point &b) {
+    return real(a) * real(b) + imag(a) * imag(b);
+  }
+
+  bool compare_x(const Point &a, const Point &b) {
+    return equals(real(a), real(b)) ? imag(a) < imag(b) : real(a) < real(b);
+  }
+
+  bool compare_y(const Point &a, const Point &b) {
+    return equals(imag(a), imag(b)) ? real(a) < real(b) : imag(a) < imag(b);
+  }
+
+  using Points = vector< Point >;
+
+
+
+  using Polygon = vector< Point >;
+  using Polygons = vector< Polygon >;
+
+
+  // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A
+  Polygon convex_hull(Polygon &p, int strict = 1) {
+    int n = (int) p.size(), k = 0;
+    if(n <= 2) return p;
+    sort(begin(p), end(p), compare_x);
+    vector< Point > ch(2 * n);
+    auto check = [&](int i) {
+      return sign(cross(ch[k - 1] - ch[k - 2], p[i] - ch[k - 1])) <= -1 + strict;
+    };
+    for(int i = 0; i < n; ch[k++] = p[i++]) {
+      while(k >= 2 && check(i)) --k;
+    }
+    for(int i = n - 2, t = k + 1; i >= 0; ch[k++] = p[i--]) {
+      while(k >= t && check(i)) --k;
+    }
+    ch.resize(k - 1);
+    return ch;
+  }
+
+int main(void){
+	int n,i,j,k;cin>>n;
+	vector<int>A(n);
+	for(i=0;i<n;i++){cin>>A[i];}
+	vector<int>x(n);
+	vector<int>y(n);
+	for(i=0;i<n;i++){cin>>x[i]>>y[i];}
+	for(i=0;i<n;i++){
+		vector<Point>ps;
+		for(j=0;j<n;j++){
+			if(j==i){continue;}
+			ps.pub(Point((x[j]-x[i])*A[j],(y[j]-y[i])*A[j]));
+		}
+		//ps.pub(Point(0,0));
+		vector<Point>convex =convex_hull (ps );
+		int m=convex.size();
+		for(j=0;j<m+m;j++){convex.pub(convex[j]);}
+		
+		llint ans=0;
+		//cerr<<"de"<<endl;
+		int R=0;
+		//for(j=0;j<m;j++){cerr<<convex[j].real()<<" "<<convex[j].imag()<<endl;}
+		//マジで根本から間違えていたことが判明
+		for(int L=0;L<m;L++){
+			//Rを増やしてスコア上がるなら増やす
+			llint aaa=convex[L].real()*convex[R].imag()-convex[L].imag()*convex[R].real();
+			while(-1){
+				
+				llint bbb=convex[L].real()*convex[R+1].imag()-convex[L].imag()*convex[R+1].real();
+				//cerr<<L<<" "<<R<<" "<<aaa<<" "<<bbb<<endl;
+				if(R<L||aaa<bbb){R++;aaa=bbb;}
+				else{break;}
+			}
+			chmax(ans,abs(aaa));
+		}
+		cout<<ans*A[i]<<endl;
+	}
+	return 0;
+}

@@ -1,0 +1,50 @@
+#pragma GCC optimize("03")
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+template <typename T>
+std::vector<T> dijkstra(int s, std::vector<std::vector<std::pair<int,T>>>& g) {
+	std::vector<T> dis(g.size(), std::numeric_limits<T>::max());
+	dis[s] = 0;
+	std::priority_queue<std::pair<T,int>,std::vector<std::pair<T,int>>,std::greater<std::pair<T,int>>> que;
+	que.push({0, s});
+	while (!que.empty()) {
+		auto [v, pos] = que.top();
+		que.pop();
+		if (v < dis[pos]) continue;
+		for (auto [to, cost]: g[pos]) {
+			if (dis[to] > dis[pos]+cost) {
+				dis[to] = dis[pos]+cost;
+				que.push({dis[to], to});
+			}
+		}
+	}
+	return dis;
+}
+
+void solve() {
+	int v, e ,r;
+	cin >> v >> e >> r;
+	vector<vector<pair<int,int>>> g(v);
+	for (int i=0; i<e; i++) {
+		int s, t, d;
+		cin >> s >> t >> d;
+		g[s].push_back({t, d});
+		g[t].push_back({s, d});
+	}
+	vector<int> dis = dijkstra(r, g);
+	for (int i: dis) {
+		if (i == INT32_MAX) cout << "INF\n";
+		else cout << i << '\n';
+	}
+}
+
+int main() {
+	std::cin.tie(nullptr);
+	std::ios_base::sync_with_stdio(false);
+	std::cout << fixed << setprecision(10);
+	solve();
+	return 0;
+}
+

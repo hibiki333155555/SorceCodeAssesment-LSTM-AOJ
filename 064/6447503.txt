@@ -1,0 +1,26 @@
+r, c = map(int, input().split())
+
+arr = list()
+
+for i in range(r):
+    arr.append(list())
+    row = list(map(int, input().split()))
+    for j in range(len(row)):
+        arr[i].append(row[j])
+    arr[i].append(sum(row))
+
+arr.append(list())
+
+for k in range(c+1):
+    sum = 0
+    for l in range(r):
+        sum += arr[l][k]
+    arr[r].append(sum)
+
+for i in range(r+1):
+    for j in range(c+1):
+        if j == c:
+            print(int(arr[i][j]))
+        else:
+            print(arr[i][j], end=" ")
+

@@ -1,0 +1,2 @@
+i = sorted(input().split(" "))
+print(" ".join(i))

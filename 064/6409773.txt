@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main(void){
+
+long long cn=0;
+int A,B;
+scanf("%d %d\n",&A,&B);
+
+for(int a=1;a<=A;a++){
+    for(int b=2;b<=B;b++){
+        int p=a;
+        int q=a;
+        int r=0;
+        int odd=0;
+        int flag=0;
+        while(p>0){
+            r=(p%b);
+            if(odd%2==1 && r>0){flag=1;break;}
+            p/=b;
+            odd++;
+        }
+        if(flag==0)cn++;
+    }
+}
+printf("cn=%d\n",cn%998244353);
+return 0;
+}
+

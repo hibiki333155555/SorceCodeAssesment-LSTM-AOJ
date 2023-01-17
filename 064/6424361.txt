@@ -1,0 +1,19 @@
+#include <iostream>
+#include <stdio.h>
+#include <cmath>
+#include <string>
+
+#define ll long long
+
+using namespace std;
+
+int main(){
+    int a,b,c;
+    cin >> a >> b >> c;
+    string ans;
+    if (a<b && b < c) ans = "Yes";
+    else ans = "No";
+    cout << ans << endl;
+    //system("pause");
+    return 0;
+}

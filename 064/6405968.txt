@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main(){
+    int n, seq;
+    cin>>n>>seq;
+    
+    vector<vector<int>> v(3, vector<int>(0));
+    int op, t,x;
+    for(int i = 0; i < seq; i++){
+        cin>>op;
+        switch(op){
+        case 0:
+            cin>>t>>x;
+            v.at(t).push_back(x);
+            break;
+        case 1:
+            cin>>t;
+            for(int j = 0; j<v.at(t).size();j++){
+                cout << v.at(t).at(j) << ((j != v.at(t).size()-1) ? " " : "\n");
+            }
+            if(v.at(t).size()==0){
+                cout << endl;
+            }
+            break;
+        case 2:
+            cin>>t;
+            v.at(t).clear();
+            break;
+        }
+    }
+    
+    return 0;
+}

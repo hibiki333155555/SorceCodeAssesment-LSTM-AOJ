@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+//const long nPrime = 1000000007;
+//const long nPrime = 998244353;
+typedef long long ll;
+int main() {
+    ll n;
+    cin >> n;
+    vector<ll> viDP(n+1,0);
+    viDP[n] = 1;
+    ll nAns = 1;
+    for(ll i = n-1; i > 0; i--){
+        ll iTmp = i;
+        ll iSum = 0;
+        while(iTmp > 0){
+            iSum += iTmp%10;
+            iTmp /= 10;
+        }
+        iSum += i;
+        if(iSum > n){
+            viDP[i] = 0;
+        } else {
+            viDP[i] = viDP[iSum];
+            nAns += viDP[i];
+        }
+    }
+    cout << nAns << endl;
+    
+    return 0;
+}

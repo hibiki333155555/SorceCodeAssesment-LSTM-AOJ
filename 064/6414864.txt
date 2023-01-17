@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+
+int main(){
+    ll N;
+    cin >> N;
+    string S;
+    cin >> S;
+    vector<ll> A(N);
+    for(ll& a : A) cin >> a;
+    ll ans = 0;
+    if(count(S.begin(), S.end(), '(') * 2 > N){
+        reverse(S.begin(), S.end());
+        reverse(A.begin(), A.end());
+        for(char& s : S) s ^= 1;
+    }
+    ll k = N / 2 - count(S.begin(), S.end(), '(');
+    priority_queue<ll, vector<ll>, greater<>> lq, rq;
+    ll l = 0, r = N, lsum = 0, rsum = 0;
+    while(k--){
+        while(l < N && lsum >= 0){
+            if(S[l] == ')') lq.push(A[l]);
+            lsum += S[l] == '(' ? 1 : -1;
+            l++;
+        }
+        ans += lq.top();
+        lq.pop();
+        lsum += 2;
+    }
+    while(1){
+        while(l < N && lsum >= 0){
+            if(S[l] == ')') lq.push(A[l]);
+            lsum += S[l] == '(' ? 1 : -1;
+            l++;
+        }
+        while(r && rsum >= 0){
+            r--;
+            if(S[r] == '(') rq.push(A[r]);
+            rsum += S[r] == ')' ? 1 : -1;
+        }
+        if(l == N && r == 0) break;
+        ans += lq.top();
+        ans += rq.top();
+        lq.pop();
+        rq.pop();
+        lsum += 2;
+        rsum += 2;
+    }
+    cout << ans << endl;
+}

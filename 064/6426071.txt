@@ -1,0 +1,29 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<int> list= new ArrayList<>();
+        for(int i=0;i<n;i++){
+            int v= sc.nextInt();
+            list.add(v);
+        }
+        int max = hako[0];
+        int min = hako[0];
+        for (int i =1;i<=n;i++) {
+        int v = hako[i];
+        if (v > max) {
+        max = v;
+        }
+        if (v < min) {
+        min = v;
+        }
+        sum+=v;
+        }
+        System.out.println(min+" "+max+" "+sum);
+    }
+}
+        
+

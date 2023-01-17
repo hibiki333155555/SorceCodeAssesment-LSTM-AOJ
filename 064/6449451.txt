@@ -1,0 +1,46 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<vector>
+#include<iomanip>
+#include<tuple>
+#include<map>
+using namespace std;
+
+//実行するときは「g++ File名.cpp」 としたあと「a.exe」と出力すればいい
+
+const long long INF = 1000000000000000;
+
+
+
+int main(){
+    int N;
+    cin >> N;
+    vector<string> S(N);
+    for(int i=0;i<N;i++){
+        cin >> S[i];
+    }
+    int a=S[0].size();
+    vector<bool> A(N,false);
+    for(int i=0;i<N-1;i++){
+        for(int j=i+1;j<N;j++){
+            int score=0;
+            for(int k=0;k<a;k++){
+                if(S[i][k]!=S[j][k]){
+                    score++;
+                }
+            }
+            if(score<=1){
+                A[i]=true;
+                A[j]=true;
+            }
+        }
+    }
+    int ans=0;
+    for(int i=0;i<N;i++){
+        if(A[i]){
+            ans++;
+        }
+    }
+    cout << ans << endl;
+}

@@ -1,0 +1,318 @@
+#ifdef LOCAL
+//#define _GLIBCXX_DEBUG
+#endif
+//#pragma GCC target("avx512f,avx512dq,avx512cd,avx512bw,avx512vl")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<ll, ll> P;
+typedef pair<int, int> Pi;
+typedef vector<ll> Vec;
+typedef vector<int> Vi;
+typedef vector<string> Vs;
+typedef vector<char> Vc;
+typedef vector<P> VP;
+typedef vector<VP> VVP;
+typedef vector<Vec> VV;
+typedef vector<Vi> VVi;
+typedef vector<Vc> VVc;
+typedef vector<VV> VVV;
+typedef vector<VVV> VVVV;
+#define MAKEVV(variable, a, ...) VV variable(a, Vec(__VA_ARGS__))
+#define MAKEVVc(variable, a, ...) VVc variable(a,Vc(__VA_ARGS__))
+#define MAKEVVV(variable, a, b, ...) VVV variable(a, VV(b, Vec(__VA_ARGS__)))
+#define MAKEVVVV(variable, a, b, c, ...) VVVV variable(a, VVV(b, (VV(c, Vec(__VA_ARGS__)))))
+
+#define endl '\n'
+#define REP(i, a, b) for(ll i=(a); i<(b); i++)
+#define PER(i, a, b) for(ll i=(a); i>=(b); i--)
+#define rep(i, n) REP(i, 0, n)
+#define per(i, n) PER(i, n, 0)
+const ll INF=1e18+18;
+const ll MOD=998244353;
+#define Yes(n) cout << ((n) ? "Yes" : "No") << endl;
+#define YES(n) cout << ((n) ? "YES" : "NO") << endl;
+#define ALL(v) v.begin(), v.end()
+#define rALL(v) v.rbegin(), v.rend()
+#define pb(x) push_back(x)
+#define mp(a, b) make_pair(a,b)
+#define Each(a,b) for(auto &a :b)
+#define rEach(i, mp) for (auto i = mp.rbegin(); i != mp.rend(); ++i)
+#define SUM(a) accumulate(ALL(a),0LL)
+#ifdef LOCAL
+#define dbg(x_) cerr << #x_ << ":" << x_ << endl;
+#define dbgmap(mp) cerr << #mp << ":"<<endl; for (auto i = mp.begin(); i != mp.end(); ++i) { cerr << i->first <<":"<<i->second << endl;}
+#define dbgset(st) cerr << #st << ":"<<endl; for (auto i = st.begin(); i != st.end(); ++i) { cerr << *i <<" ";}cerr<<endl;
+#define dbgarr(n,m,arr) rep(i,n){rep(j,m){cerr<<arr[i][j]<<" ";}cerr<<endl;}
+#define dbgdp(n,arr) rep(i,n){cerr<<arr[i]<<" ";}cerr<<endl;
+#else
+#define dbg(...)
+#define dbgmap(...)
+#define dbgset(...)
+#define dbgarr(...)
+#define dbgdp(...)
+#endif
+#define out(a) cout<<a<<endl
+#define outminusone(a) cout<< ( a==INF ? -1 : a ) <<endl
+#define out2(a,b) cout<<a<<" "<<b<<endl
+#define vout(v) rep(i,v.size()){cout<<v[i]<<" ";}cout<<endl
+#define Uniq(v) v.erase(unique(v.begin(), v.end()), v.end())
+#define fi first
+#define se second
+
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return true; } return false; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return true; } return false; }
+template<class T>auto lb(T &X, ll x){return lower_bound(ALL(X),x) - X.begin();}
+template<class T>auto ub(T &X, ll x){return upper_bound(ALL(X),x) - X.begin();}
+ll floor(ll y,ll x){assert(x != 0);if(x < 0){y *= -1; x *= -1;}if(y < 0){return (y-x+1)/x;}return y/x;};
+ll ceil(ll y, ll x){assert(x != 0);if(x < 0){y *= -1; x *= -1;}if(y < 0){return y/x;}return (y+x-1)/x;};
+
+template<typename T1, typename T2>
+ostream &operator<<(ostream &s, const pair<T1, T2> &p) { return s<<"("<<p.first<<", "<<p.second<<")"; }
+
+template<typename T1, typename T2>
+istream &operator>>(istream &i, pair<T1, T2> &p) { return i>>p.first>>p.second; }
+
+template<typename T>istream& operator>>(istream&i,vector<T>&v)
+{rep(j,v.size())i>>v[j];return i;}
+
+// vector
+template<typename T>
+ostream &operator<<(ostream &s, const vector<T> &v) {
+    int len=v.size();
+    for(int i=0; i<len; ++i) {
+        s<<v[i];
+        if(i<len-1) s<<"	";
+    }
+    return s;
+}
+
+// 2 dimentional vector
+template<typename T>
+ostream &operator<<(ostream &s, const vector<vector<T> > &vv) {
+    s<<endl;
+    int len=vv.size();
+    for(int i=0; i<len; ++i) {
+        s<<vv[i]<<endl;
+    }
+    return s;
+}
+
+void vizGraphWithValue(VV &g, Vec &dp, int directed = 0, string filename = "out.png") {
+    #ifdef LOCAL
+    ofstream ofs("./out.dot");
+    ofs<<"digraph graph_name {"<<endl;
+    set<P> memo;
+    auto node = [](ll ind, ll dp)->string {
+        return '"'+to_string(dp)+"("+to_string(ind)+")"+'"';
+    };
+    rep(i, g.size()) {
+        rep(j, g[i].size()) {
+            if(!directed && (memo.count(P(i, g[i][j])) || memo.count(P(g[i][j], i)))) {
+                continue;
+            }
+            memo.insert(P(i, g[i][j]));
+            ofs<<"    "<<node(i, dp[i])<<" -> "<<node(g[i][j], dp[g[i][j]])<<(!directed ? " [arrowhead = none]" : "")
+               <<endl;
+        }
+        if(g[i].empty()){
+            ofs<<"    "<<node(i, dp[i])<<endl;
+        }
+    }
+    ofs<<"}"<<endl;
+    ofs.close();
+    system(((string) "dot -T png out.dot >"+filename).c_str());
+    #else
+    #endif
+}
+
+void vizWeightedGraph(VVP &g, int directed = 0, string filename = "out.png") {
+    #ifdef LOCAL
+    ofstream ofs("./out.dot");
+    ofs<<(directed ? "di" : "")<<"graph graph_name {"<<endl;
+    string arrow = (directed ? " -> " : " -- ");
+    set<P> used;
+    rep(i, g.size()) {
+        if(g[i].empty()){
+            ofs<<"    "<<i<<endl;
+            continue;
+        }
+        rep(j, g[i].size()) {
+            // 多重辺はないと前提
+            if(used.count(mp(i, g[i][j].fi))) continue;
+            used.insert(pair<int, int>(i, g[i][j].fi));
+            if(directed == 0) used.insert(pair<int, int>(g[i][j].fi, i));
+
+            ofs<<"    "<<i<<arrow<<g[i][j].fi;
+
+            // 重みや容量があるならそれも出力
+            ofs<<" [ label = \""<<g[i][j].se<<"\"];";
+            ofs<<endl;
+        }
+    }
+    ofs<<"}"<<endl;
+    ofs.close();
+    system(((string) "dot -T png out.dot >"+filename).c_str());
+    #else
+    #endif
+}
+
+void vizWeightedGraphWithValue(VVP &g,  Vec &dp, int directed = 0, string filename = "out.png") {
+    #ifdef LOCAL
+    ofstream ofs("./out.dot");
+    ofs<<(directed ? "di" : "")<<"graph graph_name {"<<endl;
+    string arrow = (directed ? " -> " : " -- ");
+    set<P> used;
+    auto node = [](ll ind, ll dp)->string {
+        return '"'+to_string(dp)+"("+to_string(ind)+")"+'"';
+    };
+    rep(i, g.size()) {
+        if(g[i].empty()){
+            ofs<<"    "<<i<<endl;
+            continue;
+        }
+        rep(j, g[i].size()) {
+            // 多重辺はないと前提
+            if(used.count(mp(i, g[i][j].fi))) continue;
+            used.insert(pair<int, int>(i, g[i][j].fi));
+            if(directed == 0) used.insert(pair<int, int>(g[i][j].fi, i));
+            ofs<<"    "<<node(i, dp[i])<<arrow<<node(g[i][j].fi, dp[g[i][j].fi]);
+            // 重みや容量があるならそれも出力
+            ofs<<" [ label = \""<<g[i][j].se<<"\"];";
+            ofs<<endl;
+        }
+    }
+    ofs<<"}"<<endl;
+    ofs.close();
+    system(((string) "dot -T png out.dot >"+filename).c_str());
+    #else
+    #endif
+}
+
+vector<ll> divisor(ll n) {
+    vector<ll> ret;
+    for(ll i=1; i*i<=n; i++) {
+        if(n%i==0) {
+            ret.pb(i);
+            if(i*i!=n) {
+                ret.pb(n/i);
+            }
+        }
+    }
+    sort(ALL(ret));
+    return ret;
+}
+
+vector<pair<ll,ll>> factorize(ll n) {
+    vector<pair<ll,ll>> res;
+    for (ll i = 2; i*i <= n; ++i) {
+        if (n%i) continue;
+        res.emplace_back(i,0);
+        while (n%i == 0) {
+            n /= i;
+            res.back().second++;
+        }
+    }
+    if (n != 1) res.emplace_back(n,1);
+    return res;
+}
+
+
+int solve(){
+    ll n;
+    cin>>n;
+    ll m;
+    cin>>m;
+    VVP g(n);
+    VV tmp(n);
+    rep(i,m){
+        ll u,v;
+        cin>>u>>v;
+        u--;v--;
+        ll c;
+        cin>>c;
+        g[u].emplace_back(v,c);
+    }
+    //vizWeightedGraph(g,1);
+    Vec a(20,-1);
+    a[1] = 0;
+    a[2] = 1;
+    a[4] = 2;
+    a[8] = 3;
+    a[16] = 4;
+    a[3] = 5;
+    a[9] = 6;
+    a[5] = 7;
+    a[7] = 8;
+    a[11] = 9;
+    a[13] = 10;
+    a[17] = 11;
+    a[19] = 12;
+    Vec b = {1,2,4,8,16,3,9,5,7,11,13,17,19};
+    ll sz = b.size();
+    VV dp(n, Vec(1<<sz));
+    dp[0][0] = 1;
+    queue<P> q;
+    q.emplace(0,0);
+    auto hasbit = [](ll x, ll i )->bool{return (1LL<<i) & x;};
+    auto func = [&](ll bit)->ll{
+        ll val = 1;
+        rep(i,sz){
+            if(hasbit(bit, i)){
+                val = lcm(val,b[i]);
+            }
+        }
+        return val;
+    };
+    while(!q.empty()){
+        P p = q.front();
+        q.pop();
+        auto [now, state] = p;
+        Each(e, g[now]){
+            auto [nx, c] = e;
+            ll nxstate = 0;
+            ll v = lcm(func(state),c);
+            rep(i,sz){
+                if(v % b[i] == 0){
+                    nxstate |= 1LL<<i;
+                }
+            }
+            nxstate |= 1;
+            if(!dp[nx][nxstate]){
+                dp[nx][nxstate] = 1;
+                q.emplace(nx,nxstate);
+            }
+        }
+    }
+    ll mi = INF;
+    ll ma = 0;
+    rep(bit, 1<<sz){
+        if(dp[n-1][bit]){
+            ll val = func(bit);
+            chmin(mi,val);
+            chmax(ma,val);
+        }
+    }
+    if (mi == INF){
+        cout << "IMPOSSIBLE" << endl;
+    }else{
+        out2(mi,ma);
+    }
+    return  0;
+}
+
+int main() {
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cout<<std::setprecision(10);
+//    ll T;
+//    cin>>T;
+//    while(T--)
+    solve();
+}
+

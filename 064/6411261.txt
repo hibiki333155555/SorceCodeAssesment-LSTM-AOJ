@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String suit = "SHCD";
+		boolean[] [] exist = new boolean[4] [14];
+		int a = sc.nextInt();
+		for (int i = 0; i < a; i++) {
+			String s = sc.next();
+			int num = sc.nextInt();
+			exist[suit.indexOf(s)] [num] = true;
+		}
+		for (int i = 0; i < 4; i++) {
+			for (int j = 1; j <= 13; j++) {
+				if (!exist[i] [j]) {
+					System.out.println(suit.charAt(i) + " ");
+				}
+			}
+		}
+		sc.close();
+	}
+
+}
+

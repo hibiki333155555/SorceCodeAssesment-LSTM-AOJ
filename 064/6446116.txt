@@ -1,0 +1,39 @@
+from heapq import heappush, heappop, heapify
+
+def prim(G, s=0, N=0):
+	#G = graph, s = start, N is a number of edges
+	#G looks like this
+	#G = [[(u, cost), (v, cost)], [...], ...]
+	if N==0: N = len(G)
+	GG = [[] for _ in range(N)]
+	seen = [False]*N
+	seen[s] = True
+	q = []
+	heapify(q)
+	for i, c in G[s]: heappush(q, (c, s, i))
+	while q:
+		cost, f, t = heappop(q)
+		if seen[t]: continue
+		seen[t] = True
+		GG[t].append((f, cost))
+		GG[f].append((t, cost))
+		for nt,c in G[t]:
+			if seen[nt]: continue
+			heappush(q, (c, t, nt))
+	return GG
+
+
+
+V, E = map(int, input().split())
+G = [[] for _ in range(V)]
+for i in range(E):
+	s, t, w = map(int, input().split())
+	G[s].append((t, w))
+	G[t].append((s, w))
+ans = 0
+mst = prim(G)
+for i in mst:
+	if i:
+		for j in i: ans += j[-1]
+print(ans//2)
+

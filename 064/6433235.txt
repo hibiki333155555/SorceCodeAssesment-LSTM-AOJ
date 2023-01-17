@@ -1,0 +1,9 @@
+p=int(input())
+a=set(map(int,input().split()))
+s=int(input())
+b=set(map(int,input().split()))
+result = all(elem in a  for elem in b)
+if result:
+    print("1")
+else:
+    print("0")//lkugf

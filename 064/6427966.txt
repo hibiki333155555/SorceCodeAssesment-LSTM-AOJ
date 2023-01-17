@@ -1,0 +1,34 @@
+inf = float('INF')
+n = int(input()) #頂点数
+G  = [[] for _ in range(n)]
+
+for i in range(n):
+    row = list(map(int, input().split()))
+    u, k, vs  = row[0], row[1], row[2:]
+    for v in vs:
+        G[u-1].append(v)
+
+d = [-1 for i in range(n)] #発見時刻
+f = [-1 for i in range(n)] #vの隣接リストを探索し終わった時刻
+
+visited = [0 for i in range(n)] #探索ずみかどうか
+
+def dfs(v, cnt):
+    d[v] = cnt #vに到達した時間を記録
+    visited[v] = True
+    #次のノードの探索
+    cnt += 1
+    for e in G[v]:
+        if visited[e-1] == False:
+            cnt = dfs(e-1, cnt)
+    f[v] = cnt
+    cnt += 1
+    return cnt
+
+cnt = 1
+for i in range(n):
+    if visited[i] == False:
+        cnt = dfs(i, cnt)
+
+for i in range(n):
+    print(i+1, d[i], f[i])

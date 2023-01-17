@@ -1,0 +1,14 @@
+house = [[[0 for x in range(10)] for j in range(3)] for i in range(4)]
+
+n = int(input())
+for i in range(n):
+    b, f, r, v = map(int, input().split(" "))
+    house[b-1][f-1][r-1] += v
+
+i = 0
+for x in house:
+    for y in x:
+        print(" " + " ".join(map(str, y)))
+    if i < 3:
+        print("#"*20)
+    i += 1

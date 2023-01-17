@@ -1,0 +1,42 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+#define MAXN 1005
+#define fr(n)	for(int i = 0; i < n; i++)
+int n;
+int pre[MAXN];
+int ino[MAXN];
+vector<int> v;
+int pos = 0;
+
+void findpost(int left, int right) {
+	if (left >= right) {
+		return;
+	}
+	int root = pre[pos++];
+	int m = distance(ino, find(ino, ino + n, root));
+	findpost(left, m);
+	cout << "m = " << m << "right = "<< right << endl;
+	findpost(m + 1, right);
+	v.push_back(root);
+}
+
+int main() {
+	cin >> n;
+	fr(n) {
+		scanf("%d", pre + i);
+	}
+	fr(n) {
+		scanf("%d", ino + i);
+	}
+	findpost(0, n);
+	fr(v.size()) {
+		if (i == 0)	cout << v[i];
+		else
+		{
+			cout << " " << v[i];
+		}
+	}
+	return 0;
+}

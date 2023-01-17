@@ -1,0 +1,15 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+    int a, b, C;
+    // a = base, b = leg, C = right angle
+    cin >> a >> b >> C;
+    double h = b * 1.0;
+    double S = 0.5 * (a * b);
+    double L = ((sqrt((a * a) + (b * b))) + a + b)*1.0;
+    // S = area, L = perimeter, h = height
+    cout << S << " " << L << " " << h << endl;
+}

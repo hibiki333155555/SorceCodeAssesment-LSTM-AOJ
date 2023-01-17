@@ -1,0 +1,4 @@
+area = a*b
+length = 2*(a+b)
+l = [area,length]
+print(l)

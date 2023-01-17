@@ -1,0 +1,26 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+    int n, m, a, b, A[100][100] = {}, B[100] = {};
+    cin >> n >> m;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cin >> a;
+            A[i][j] = a;
+        }
+    }
+    for(int i = 0; i < m; i++) {
+        cin >> b;
+        B[i] = b;
+    }
+    for(int i = 0; i < n; i++) {
+        int c = 0;
+        for(int j = 0; j < m; j++) {
+            c += A[i][j] * B[j];
+        }
+        cout << c << "\n";
+    }
+    return 0;
+}
+

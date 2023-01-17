@@ -1,0 +1,9 @@
+#include <bits/stdc++.h>
+#define lol long long
+using namespace std;
+int main(){
+    int a,b;
+    cin>>a>>b;
+    cout<<a/b<<" "<<a%b<<" "<<(double)a/b<<"\n";
+    return 0;
+}

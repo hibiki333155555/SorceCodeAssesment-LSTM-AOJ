@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int N;
+  cin >> N;
+  map<string,bool> Map;
+  for(int i=0;i<N;i++){
+    string S;
+    cin >> S;
+    Map[S] = true;
+  }
+  int M;
+  cin >> M;
+  for(int i=0;i<M;i++){
+    string S;
+    cin >> S;
+    if(Map[S]) cout << "Opened by ";
+    else cout << "Unknown ";
+    cout << S << endl;
+  }
+}

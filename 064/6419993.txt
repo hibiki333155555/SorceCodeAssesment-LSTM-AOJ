@@ -1,0 +1,29 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+
+using std::cin;
+using std::cout; using std::endl;
+
+int main()
+{
+    double a, b;
+    int c;
+    cin >> a >> b >> c;
+    
+    double S, L, h;
+    
+    S = a * b * sin(c) / 2;
+    
+    double other;
+    other = sqrt( a*a + b*b - 2*a*b*cos(c) );
+    L = a + b + c;
+    
+    h = b * sin(c);
+    
+    cout << std::setprecision(1024);
+         << S << L << h
+         << endl;
+    
+    return 0;
+}

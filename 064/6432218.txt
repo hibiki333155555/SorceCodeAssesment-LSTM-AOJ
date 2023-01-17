@@ -1,0 +1,24 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ALDS1_1_B
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var num = Console.ReadLine().Split().Select(n => int.Parse(n)).ToArray();
+            int x, y;
+            if (num[0] >= num[1])
+                (x, y) = (num[0], num[1]);
+            else
+                (x, y) = (num[1], num[0]);
+            Console.WriteLine(GCD(x, y));
+        }
+
+        static int GCD(int x, int y)
+        {
+            return x % y == 0 ? y : GCD(y, x % y);
+        }
+    }
+}

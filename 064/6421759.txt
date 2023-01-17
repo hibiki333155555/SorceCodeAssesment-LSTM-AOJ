@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+import sys
+import math
+from functools import lru_cache
+from heapq import heappush, heappop, heappushpop
+from itertools import permutations, accumulate
+from operator import itemgetter, le
+from collections import deque, Counter, defaultdict
+from bisect import bisect_right as br
+from bisect import bisect_left as bl
+inf = float('inf')
+input=lambda: sys.stdin.readline().rstrip("\r\n")
+def I(): return int(sys.stdin.readline())
+def LI(): return list(map(int, sys.stdin.readline().split()))
+
+
+# ref: https://qiita.com/klattimia/items/3cbe4f702e2f20761f0d
+
+"""Module for palindrome."""
+
+
+class manacher:
+    """Cache radius array of palindrome to judge in linear time."""
+
+    def __init__(self, l):
+        """Insert '&' to judge both even and odd length palindrome."""
+        self.n = len(l)
+        self.m = 2*self.n+1
+        self.d = ['&']*self.m
+        self.r = [0]*self.m
+        for i in range(self.n):
+            self.d[2*i+1] = l[i]
+        self.make_r()
+
+    def make_r(self):
+        """Make self.r[i] (radius of palindrome whose center is self.d[i])."""
+        i, j = 0, 0
+        while i < self.m:
+            while j <= i < self.m-j and self.d[i-j] == self.d[i+j]:
+                j += 1
+            self.r[i] = j
+            k = 1
+            while k <= i < self.m-k and k+self.r[i-k] < j:
+                self.r[i+k] = self.r[i-k]
+                k += 1
+            i += k
+            j -= k
+
+    def judge(self, start, end):
+        """Return 1 if l[start, end) is a palindrome."""
+        center = start+end
+        return 2*end-1 < center+self.r[center]
+
+n = I()
+s = input()
+t = manacher(s)
+ans = 0
+for i in range(0, n-1, 2):
+    if t.judge(0, i): ans += 1
+for i in range(n-2, 1, -2):
+    if t.judge(i, n): ans += 1
+print(ans)
+

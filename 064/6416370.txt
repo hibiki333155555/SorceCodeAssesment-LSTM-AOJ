@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+int main()
+
+{
+    float r;
+    float area,circum;
+    scanf("%f",&r);
+    area=3.14159265358979323846264*r*r;
+    circum=2*r*3.14159265358979323846264;
+    printf("%0.6f  %0.6f",area,circum);
+    return 0;
+
+}
+

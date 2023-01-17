@@ -1,0 +1,2 @@
+for(s='',i=''+require('fs').readFileSync(0);if(i;i%3||/3/.test(i))s+=' '+i);
+console.log(s);

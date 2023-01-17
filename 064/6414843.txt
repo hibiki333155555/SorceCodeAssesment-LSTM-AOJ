@@ -1,0 +1,7 @@
+P = 998244353
+N = int(input())
+A = sorted([i + int(a) for i, a in enumerate(input().split())])
+ans = 1
+for i, a in enumerate(A):
+    ans = ans * (a - i) % P
+print(ans)

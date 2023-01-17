@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#ifdef _RUTHEN
+#include "debug.hpp"
+#else
+#define show(...) true
+#endif
+
+using ll = long long;
+#define rep(i, n) for (int i = 0; i < (n); i++)
+template <class T> using V = vector<T>;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int N;
+    cin >> N;
+    string S;
+    cin >> S;
+    V<ll> A(N);
+    rep(i, N) cin >> A[i];
+    ll cur = 0;
+    rep(i, N) {
+        if (S[i] == '(') {
+            cur += A[i];
+            A[i] = -A[i];
+        }
+    }
+    ll s = 0;
+    priority_queue<ll, V<ll>, greater<ll>> que;
+    rep(i, N) {
+        que.push(A[i]);
+        if (i % 2 == 0) {
+            s += que.top();
+            que.pop();
+        }
+    }
+    cout << s + cur << '\n';
+    return 0;
+}
+

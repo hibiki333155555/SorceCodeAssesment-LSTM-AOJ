@@ -1,0 +1,35 @@
+import java.util.*;
+
+class Solve{
+    private Scanner sc = new Scanner(System.in);
+    private int count(int[] arr,int s,int e,int t){
+        int cnt = 0;
+        for(int i = 0, l = e-s ; i<l ; i++){
+            if(arr[s+i]==t) cnt++;
+        }
+        return cnt;
+    }
+    private void Finish(){
+        this.sc.close();
+    }
+    public void Do(){
+        int n = sc.nextInt();
+        int[] a = new int[n];
+        for(int i=0;i<n;i++){
+            a[i]=sc.nextInt();
+        }
+        int q = sc.nextInt();
+        for(int i=0;i<q;i++){
+            int b = sc.nextInt(),
+                c = sc.nextInt(),
+                k = sc.nextInt();
+            System.out.println( this.count(a,b,c,k) );
+        }
+        Finish();
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

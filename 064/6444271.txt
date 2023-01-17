@@ -1,0 +1,129 @@
+/*{{{ #include */
+#include <iostream>
+#include <algorithm>
+#include <utility>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <set>
+#include <queue>
+#include <stack>
+#include <map>
+#include <tuple>
+#include <cassert>/*}}}*/
+/*{{{ namespace ryota2357 */
+namespace ryota2357 {
+    using namespace std;
+    template<class T>
+    constexpr istream& operator >> (istream& is, vector<T>& V) noexcept {
+        for(auto& v : V) is >> v; return is;
+    }
+    template<class T1, class T2>
+    constexpr istream& operator >> (istream& is, pair<T1, T2>& P) noexcept {
+        return is >> P.first >> P.second;
+    }
+    template<class T>
+    constexpr ostream& operator << (ostream& os, const vector<T>& V) noexcept {
+        for(int i = 0; i < V.size() - 1; ++i) os << V[i] << ' ';
+        return os << V.back();
+    }
+    constexpr void IN(void) noexcept { return; }
+    template<class T, class... U> constexpr void IN(T& t, U&... u) noexcept {
+        cin >> t; IN(u...);
+    }
+    template<class T> void OUT(const T& x) noexcept {
+        cout << x << '\n';
+    }
+    template<class T> constexpr bool chmin(T& a, const T& b) {
+        if(a > b) { a = b; return 1; }
+        return 0;
+    }
+    template<class T> constexpr bool chmax(T& a, const T& b) {
+        if(a < b) { a = b; return 1; }
+        return 0;
+    }
+    template<class T = int> constexpr T read(void) {
+        T ret = 0; char c = getchar();
+        while((c < '0' || '9' < c) && c != '-') c = getchar();
+        const bool f = (c == '-') && (c = getchar());
+        while('0' <= c && c <= '9') {
+            ret = 10 * ret + c - '0';
+            c = getchar();
+        }
+        return f ? -ret : ret;
+    }
+    template<class T> constexpr T ceil_div(const T& a, const T& b) {
+        return (a + (b - 1)) / b;
+    }
+    template<class T> constexpr T max(const vector<T>& v) {
+        return *max_element(v.begin(), v.end());
+    }
+    template<class T> constexpr T min(const vector<T>& v) {
+        return *min_element(v.begin(), v.end());
+    }
+    namespace debug {
+        void Write(void) { cerr << endl; }
+        template<class T, class...U> void Write(const T& t, const U&...u) {
+            cerr << ' ' << t; Write(u...);
+        }
+        template<class T> void Write(const vector<T>& V, const int n = -1) {
+            if(n < 0) n = V.size();
+            for(int i = 0; i < n; ++i) cerr << ' ' << V[i];
+            cerr << endl;
+        }
+        template<class T, class U> void Write(const pair<T, U>& p) {
+            cerr << ' ' << '{' << p.first << ',' << p.second << '}' << endl;
+        }
+        #include <cxxabi.h>
+        template<class T> string TypeName(const T& x) {
+            return string(abi::__cxa_demangle(typeid(T).name(), 0, 0, 0));
+        }
+    }
+}/*}}}*/
+/*{{{ using */
+using namespace std;
+using namespace ryota2357;
+using ll = int_fast64_t;
+using pint = pair<int, int>;/*}}}*/
+/*{{{ #define */
+#define rep(i, a, b) for(ll i = a; i < ll(b);  ++i)
+#define repr(i, a, b) for(ll i = a; i >= ll(b); --i)
+#define each(x, v) for(auto& x : v)
+#define ALL(x) x.begin(), x.end()
+#define ALLR(x) x.rbegin(), x.rend()
+#define Unique(x) sort(x.begin(), x.end()); x.erase(unique(x.begin(), x.end()), x.end())
+#define Fill(v, n) fill(v, v+sizeof(v)/sizeof(*v), n)
+#define INF 1073741823 // 2e30-1
+#define INFL 2305843009213693951ll // 2e61-1
+#define _FASTIO_ ios::sync_with_stdio(false); cin.tie(nullptr);
+/*}}}*/
+
+// 戻り値: pairの配列 (first: 素因数(昇順), second: 指数)
+vector<pair<ll, ll>> prime_factorize(ll n) {
+    vector<pair<ll, ll>> res;
+    ll ex = 0;
+    while (n%2 == 0) {
+        ex++; n /= 2;
+    }
+    if(ex != 0) res.push_back({2, ex});
+    for(ll i = 3; i <= sqrt(n); i += 2 ){
+        ex = 0;
+        while(n % i == 0){
+            ex++; n /= i;
+        }
+        if(ex != 0) res.push_back({i, ex});
+    }
+    if(n != 1) res.push_back({n, 1});
+    return res;
+}
+
+int main() {
+    ll n = read<ll>();
+    auto res = prime_factorize(n);
+    cout << n << ':';
+    each(x, res) {
+        rep(_, 0, x.second) cout << ' ' << x.first;
+    }
+    cout << '\n';
+}
+

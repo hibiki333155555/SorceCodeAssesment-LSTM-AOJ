@@ -1,0 +1,13 @@
+import string
+
+alp = dict.fromkeys(string.ascii_lowercase, 0)
+for words fileinput.input():
+    words = words.lower()
+    for i in alp:
+        alp[i] += words.count(i)
+        
+for i in alp:
+    print("%s : %d" % (i, alp[i]))
+        
+
+

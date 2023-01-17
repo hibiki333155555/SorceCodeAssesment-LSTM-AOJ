@@ -1,0 +1,10 @@
+#include<stdio.h>
+int main(){
+	float r,c,a,PI;
+	scanf("%f",&r);
+	PI=3.141592653589;
+	c=PI*(r*2);
+	a=PI*(r*r);
+	printf("%f %f\n",a,c);//ms67
+	return 0;
+}

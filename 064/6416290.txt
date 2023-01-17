@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int INF = 1e9;
+
+bool func(){
+    int h;
+    int w;
+    cin >> h >> w;
+    vector<vector<int>> wall(h,vector<int>(w,INF));
+    int sx = 0;
+    int sy = 0;
+    int gx = 0;
+    int gy = 0;
+    
+    for(int i=0;i<h;++i){
+        for(int j=0;j<w;++j){
+            char c;
+            cin >> c;
+            if(c=='S'){
+                sx = j;
+                sy = i;
+            }else if(c=='V'){
+                gx = j;
+                gy = i;
+            }else if(c=='#'){
+                wall[i][j] = 0;
+            }else if(c=='.'){
+                
+            }else{
+                cerr << "UNKNOWN CHAR" << endl;
+                exit(1);
+            }
+        }
+    }
+
+    {
+        int q;
+        cin >> q;
+        for(int i=0;i<q;++i){
+            int y;
+            int x;
+            int t;
+            cin >> y >> x >> t;
+            --y;
+            --x;
+            wall[y][x] = t;
+        }
+    }
+
+    vector<vector<vector<int>>> fast(h,vector<vector<int>>(w,vector<int>(2,INF)));
+    using pii = pair<int,int>;
+    struct state{
+        pii p;
+        bool flag;
+        state(const state& that):p(that.p),flag(that.flag){}
+        state(pii p,bool flag):p(p),flag(flag){}
+    };
+    queue<state> que;
+    auto isin = [&](pii p){
+        return 0 <= p.first and 0 <= p.second and p.first < h and p.second < w;
+    };
+
+    auto add = [&](state s,int t){
+        if(not isin(s.p))return;
+        pii p = s.p;
+        bool &flag = s.flag;
+        if(p.first == gy and p.second == gx)flag = true;
+        if(wall[p.first][p.second] <= t)return;
+        if(fast[p.first][p.second][flag] > t){
+            fast[p.first][p.second][flag] = t;
+            que.emplace(s);
+        }
+    };
+    auto moves = [&](state s){
+        int dx[]={1,0,-1,0};
+        int dy[]={0,1,0,-1};
+        vector<state> res;
+        for(int i=0;i<4;++i){
+            res.emplace_back(pii(s.p.first+dy[i],s.p.second+dx[i]),s.flag);
+        }
+        return res;
+    };
+
+    add(state(pii(sy,sx),false),0);
+
+    while(que.size()){
+        state s = que.front();
+        que.pop();
+        for(auto ns:moves(s)){
+            add(ns,fast[s.p.first][s.p.second][s.flag] + 1);
+        }
+    }
+    return fast[sy][sx][true] < INF;
+}
+
+int main(){
+    cout << (func() ? "Yes" : "No") << endl;
+}
+

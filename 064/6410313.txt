@@ -1,0 +1,11 @@
+Word=str(input())
+poi=0
+while True:
+  T=input()
+  if T=='':
+    break
+  Ti=T.split()
+  for TT in Ti:
+    if TT==Word:
+      poi+=1  
+print(poi)

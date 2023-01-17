@@ -1,0 +1,106 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct io_setup {
+    io_setup() {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        cout << fixed << setprecision(15);
+    }
+} io_setup;
+
+template <typename T, bool directed = false>
+struct Bellman_Ford {
+    struct edge {
+        int to;
+        T cost;
+        int id;
+        edge(int to, T cost, int id) : to(to), cost(cost), id(id) {}
+    };
+
+    vector<vector<edge>> es;
+    vector<T> d;
+    vector<int> pre_v, pre_e;
+    const T INF_T = numeric_limits<T>::max() / 2;
+    const int n;
+    int m;
+
+    Bellman_Ford(int n) : es(n), d(n), pre_v(n), pre_e(n), n(n), m(0) {}
+
+    void add_edge(int from, int to, T cost) {
+        es[from].emplace_back(to, cost, m);
+        if (!directed) es[to].emplace_back(from, cost, m);
+        m++;
+    }
+
+    T shortest_path(int s, int t = 0) { // s から到達可能な負閉路を検出
+        fill(begin(d), end(d), INF_T);
+        d[s] = 0;
+        for (int i = 0; i < 2 * n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (auto &e : es[j]) {
+                    if (d[j] == INF_T) continue;
+                    if (d[j] + e.cost < d[e.to]) {
+                        d[e.to] = d[j] + e.cost;
+                        pre_v[e.to] = j, pre_e[e.to] = e.id;
+                        if (i >= n - 1) d[e.to] = -INF_T;
+                    }
+                }
+            }
+        }
+        return d[t];
+    }
+
+    bool negative_loop() { // 全ての負閉路を検出
+        fill(begin(d), end(d), 0);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (auto &e : es[j]) {
+                    if (d[j] + e.cost < d[e.to]) {
+                        d[e.to] = d[j] + e.cost;
+                        if (i == n - 1) return true;
+                    }
+                }
+            }
+        }
+    }
+
+    vector<int> restore_path(int s, int t, bool use_id = false) {
+        if (abs(d[t]) == INF_T) return {};
+        vector<int> ret;
+        for (int now = t; now != s; now = pre_v[now]) ret.push_back(use_id ? pre_e[now] : now);
+        if (!use_id) ret.push_back(s);
+        reverse(begin(ret), end(ret));
+        return ret;
+    }
+};
+
+int main() {
+    int V, E, s;
+    cin >> V >> E >> s;
+
+    Bellman_Ford<int, true> G(V);
+
+    for (int i = 0; i < E; i++) {
+        int u, v, c;
+        cin >> u >> v >> c;
+        G.add_edge(u, v, c);
+    }
+
+    const int inf = (1 << 30) - 1;
+
+    G.shortest_path(s);
+    auto d = G.d;
+
+    if (*min_element(begin(d), end(d)) == -inf) {
+        cout << "NEGATIVE CYCLE\n";
+    } else {
+        for (int i = 0; i < V; i++) {
+            if (d[i] == inf) {
+                cout << "INF\n";
+            } else {
+                cout << d[i] << '\n';
+            }
+        }
+    }
+}

@@ -1,0 +1,231 @@
+#define READ_FROM_FILE 0
+
+#if READ_FROM_FILE
+#include <fstream>
+#endif
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+const int dim = 2;
+
+
+class PointInfo {
+public:
+	int coord[dim];
+	int idx;
+
+public:
+	PointInfo() : idx(-1) {
+		return;
+	}
+
+	PointInfo(const int c[dim], int idx) :idx(idx) {
+		for(int i = 0; i < dim; i++){
+			coord[i] = c[i];
+		}
+		return;
+	}
+
+	~PointInfo() {
+		return;
+	}
+};
+
+class KdTree {
+private:
+	class Node {
+	public:
+		PointInfo location;
+		Node* l_child;
+		Node* r_child;
+		int l_most[dim];
+		int r_most[dim];
+		vector<int> idx_vec;
+
+	public:
+		Node(const PointInfo& l) : location(l), l_child(nullptr), r_child(nullptr) {
+			return;
+		}
+
+		~Node() {
+			if (l_child != nullptr) {
+				delete l_child;
+			}
+			if (r_child != nullptr) {
+				delete r_child;
+			}
+			return;
+		}
+	};
+
+private:
+	vector<PointInfo> point_vec_;
+	Node* root_;
+
+private:
+	bool does_not_intersect(const Node* cn, const int s_coord[dim], const int t_coord[dim]) {
+		for (int i = 0; i < dim; i++) {
+			if (cn->r_most[i] < s_coord[i] || t_coord[i] < cn->l_most[i]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool is_contained(const Node* cn, const int s_coord[dim], const int t_coord[dim]) {
+		for (int i = 0; i < dim; i++) {
+			if (!(s_coord[i] <= cn->l_most[i] && cn->r_most[i] <= t_coord[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	Node* create_kd_tree(int left, int right,int depth) {
+		if (left >= right) {
+			return nullptr;
+		}
+
+		if (left == right - 1) {
+			PointInfo cp = point_vec_[left];
+			Node* n_node = new Node(cp);
+			
+			for (int i = 0; i < dim; i++) {
+				n_node->l_most[i] = cp.coord[i];
+				n_node->r_most[i] = cp.coord[i];
+			}
+			n_node->idx_vec.push_back(cp.idx);
+			return n_node;
+		}
+		
+		int axis = depth % dim;
+		int mid = (left + right) / 2;
+		int n_depth = depth + 1;
+		Node* n_node = nullptr;
+
+		sort(point_vec_.begin() + left, point_vec_.begin() + right, [&, axis](const PointInfo& lh, const PointInfo& rh) { return lh.coord[axis] < rh.coord[axis]; });
+		n_node = new Node(point_vec_[mid]);
+		for (int i = left; i < right; i++) {
+			n_node->idx_vec.push_back(point_vec_[i].idx);
+		}
+
+		n_node->l_child = create_kd_tree(left, mid, n_depth);
+		n_node->r_child = create_kd_tree(mid, right, n_depth);
+
+		for (int i = 0; i < dim; i++) {
+			if(n_node->l_child != nullptr && n_node->r_child != nullptr){
+				n_node->l_most[i] = min(n_node->l_child->l_most[i], n_node->r_child->l_most[i]);
+				n_node->r_most[i] = max(n_node->l_child->r_most[i], n_node->r_child->r_most[i]);
+			}
+			else if (n_node->l_child != nullptr) {
+				n_node->l_most[i] = n_node->l_child->l_most[i];
+				n_node->r_most[i] = n_node->l_child->r_most[i];
+			}
+			else if (n_node->r_child != nullptr) {
+				n_node->l_most[i] = n_node->r_child->l_most[i];
+				n_node->r_most[i] = n_node->r_child->r_most[i];
+			}
+			else {
+				n_node->l_most[i] = n_node->location.coord[i];
+				n_node->r_most[i] = n_node->location.coord[i];
+			}
+		}
+		return n_node;
+	}
+
+	void search_kd_tree_sub(const Node* cn, const int s_coord[dim], const int t_coord[dim], vector<int>& idx_vec, int depth) {
+		if (does_not_intersect(cn, s_coord, t_coord)) {
+			return;
+		}
+		if (is_contained(cn, s_coord, t_coord)) {
+			idx_vec.insert(idx_vec.end(), cn->idx_vec.begin(), cn->idx_vec.end());
+			return;
+		}
+		if (cn->l_child == nullptr && cn->r_child == nullptr) {
+			idx_vec.push_back(cn->location.idx);
+			return;
+		}
+
+		int axis = depth % dim;
+		if (cn->l_child != nullptr && s_coord[axis] <= cn->location.coord[axis]) {
+			search_kd_tree_sub(cn->l_child, s_coord, t_coord, idx_vec, depth + 1);
+		}
+		if (cn->r_child != nullptr && cn->location.coord[axis] <= t_coord[axis]) {
+			search_kd_tree_sub(cn->r_child, s_coord, t_coord, idx_vec, depth + 1);
+		}
+		return;
+	}
+
+public:
+	KdTree(const vector<PointInfo>& point_vec) : point_vec_(point_vec), root_(nullptr) {
+		root_ = create_kd_tree(0, point_vec.size(), 0);
+		return;
+	}
+
+	~KdTree() {
+		if (root_ != nullptr) {
+			delete root_;
+		}
+		return;
+	}
+	
+	void search_kd_tree(const int s_coord[dim], const int t_coord[dim], vector<int>& idx_vec) {
+		search_kd_tree_sub(root_, s_coord, t_coord, idx_vec, 0);
+		return;
+	}
+};
+
+int main(int argc, char** argv) {
+#if READ_FROM_FILE
+	ifstream ifs("test0.txt");
+	cin.rdbuf(ifs.rdbuf());
+#endif
+	int n = -1;
+	int k = 2;
+	int x = 0;
+	int y = 0;
+	int q = -1;
+	vector<PointInfo> point_vec;
+	KdTree* kd_tree = nullptr;
+
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		PointInfo point_info;
+
+		cin >> x >> y;
+		point_info.coord[0] = x;
+		point_info.coord[1] = y;
+		point_info.idx = i;
+		point_vec.push_back(point_info);
+	}
+
+	kd_tree = new KdTree(point_vec);
+
+	cin >> q;
+	for (int i = 0; i < q; i++) {
+		int s_coord[dim];
+		int t_coord[dim];
+		vector<int> idx_vec;
+
+		cin >> x >> y;
+		s_coord[0] = x;
+		t_coord[0] = y;
+
+		cin >> x >> y;
+		s_coord[1] = x;
+		t_coord[1] = y;
+		
+		kd_tree->search_kd_tree(s_coord, t_coord, idx_vec);
+		sort(idx_vec.begin(), idx_vec.end());
+		for (const int& idx : idx_vec) {
+			cout << idx << endl;
+		}
+		cout << endl;
+	}
+	delete kd_tree;
+	return 0;
+}
+

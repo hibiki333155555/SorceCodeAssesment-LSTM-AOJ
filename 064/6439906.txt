@@ -1,0 +1,8 @@
+s = input()
+l = ""
+sum = 0
+while l != "END_OF_TEXT":
+    sum += l.count(s)
+    l = input()
+print(sum)
+

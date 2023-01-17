@@ -1,0 +1,10 @@
+n=input()
+a=map(int,raw_input().split())
+sum=0
+min=1000000
+max=-1000000
+for i in range(n):
+    sum += a[i]
+    if min>a[i]:min=a[i]
+    if max<a[i]:max=a[i]
+print"%d %d %d" % (min,max,sum)

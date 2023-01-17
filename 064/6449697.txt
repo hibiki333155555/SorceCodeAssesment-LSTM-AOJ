@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+using ld=long double;
+ll inf=10010010010010010;
+ll mod=998244353;
+int main(){
+    string s,t;
+    ll a,b;
+    cin >> s >> a >> t >> b;
+    ll memo=0;
+    ll x,y;
+    for (char i = 'A'; i <='Z'; i++)
+    {
+        string l;
+        l.push_back(i);
+        if (s==l)
+        {
+            x=memo;
+        }
+        if (t==l)
+        {
+            y=memo;
+        }
+        memo+=1;
+    }
+    for (char i = 'A'; i <='Z'; i++)
+    {
+        for (char j = 'A'; j <='Z'; j++)
+        {
+            string l;
+            l.push_back(i);
+            l.push_back(j);
+            if (s==l)
+            {
+                x=memo;
+            }
+            if (t==l)
+            {
+                y=memo;
+            }
+            memo+=1;
+        }
+    }
+    cout << (abs(x-y)+1)*(abs(a-b)+1) << endl;
+}

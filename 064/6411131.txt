@@ -1,0 +1,17 @@
+import math
+while True:
+    N = int(input())
+    if N == 0:
+        break
+    table = input().split()
+    table = [int(s) for s in table]
+
+    m=sum(table)/N
+
+    S=0
+    for i in range(N):
+        S += (table[i] - m)**2
+    S/=N
+
+    print ("%.10f"%(S**0.5))
+

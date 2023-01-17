@@ -1,0 +1,5 @@
+while True:
+  line = input()
+  if line == '0': break
+  total = sum([int(i) for i in line])
+  print(total)

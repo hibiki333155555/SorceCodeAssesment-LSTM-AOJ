@@ -1,0 +1,3 @@
+10000.times do |n|
+    puts "Case #{n+1}: gets.to_i"
+end

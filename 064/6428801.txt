@@ -1,0 +1,23 @@
+#include<stdio.h>
+int main()
+{
+    int i,j, h, w;
+    scanf("%d %d", &h,  &w);
+    //while(h=!0 || w!=0)
+    if("");
+    do{
+    for(i=1; i<=h; i++)
+    {
+       for(j=1; j<=w; j++)
+        {
+            printf("#");
+        }
+        printf("\n");
+    }
+    scanf("%d %d", &h,  &w);
+    if(h==0 && w==0)
+    {break;}
+    }
+    while(w!=0|| h!=0);
+    return 0;
+}

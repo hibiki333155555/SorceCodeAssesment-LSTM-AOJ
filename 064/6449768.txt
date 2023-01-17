@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ld = long double;
+
+#define rep(i,l,r) for(ll i=(l); i<(r); i++)
+#define rrep(i,l,r) for(ll i=(r)-1; i>=(l); i--)
+#define ALL(c) (c).begin(), (c).end()
+#define RALL(c) (c).rbegin(), (c).rend()
+#define SORT(c) sort(ALL(c))
+#define RSORT(c) sort(RALL(c))
+#define MINV(c) *min_element(ALL(c))
+#define MAXV(c) *max_element(ALL(c))
+
+using VI = vector<int>;
+using VVI = vector<VI>;
+using VL = vector<ll>;
+using VVL = vector<VL>;
+using VS = vector<string>;
+using VVS = vector<VS>;
+using VB = vector<bool>;
+using VVB = vector<VB>;
+using VC = vector<char>;
+using VVC = vector<VC>;
+using VD = vector<ld>;
+using VVD = vector<VD>;
+using P = pair<ll,ll>;
+using VP = vector<P>;
+using VVP = vector<VP>;
+const ll LINF = 2e18;
+const int INF = 2e9;
+
+
+int main(){
+  int N;
+  cin >> N;
+  VS vec(N);
+  rep(i,0,N){
+    cin >> vec[i];
+  }
+  int T = vec[0].size();
+  set<int> S;
+  rep(i,0,N){
+    rep(j,i+1,N){
+      int cnt = 0;
+      rep(k,0,T){
+        if(vec[i][k] != vec[j][k]){
+          cnt++;
+        }
+      }
+      if(cnt == 1){
+        S.insert(i);
+        S.insert(j);
+      }
+    }
+  }
+  cout << S.size() << endl;
+}

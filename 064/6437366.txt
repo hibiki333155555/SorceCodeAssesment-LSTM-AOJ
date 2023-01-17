@@ -1,0 +1,25 @@
+#include <stdio.h>
+#include <string.h>
+
+int main(){
+    char c[201],c2[201];
+    int m,h,i,j,k;
+    
+    while(1){
+        scanf("%s",c);
+        if(strcmp(c,"-")==0) break;
+        scanf("%d",&m);
+        for(i=0;i<m;i++){
+            scanf("%d",&h);
+            for(j=0;c[j+h]!='\0';j++){
+                c2[j-h]=c[j];
+            }
+            for(k=1;k<h;k++){
+                c2[j-h+k]=c[k];
+            }
+            for(j=0;c[j]!='\0';j++)
+                c2[j] = c[j];
+        }
+        printf("%s\n",c2);
+    }
+}

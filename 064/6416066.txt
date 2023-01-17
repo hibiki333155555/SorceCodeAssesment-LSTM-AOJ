@@ -1,0 +1,40 @@
+'use strict'
+
+function main(lins) {
+    //let [a, b, c] = lins[0].split(' ').map(Number);
+    //let a = [...Array(n)].map(_ => Array(m).fill(0));
+    //for(let i=0; i<n; i++){a[i] = lins[i+1].split(' ').map(Number);}
+    //let al = "abcdefghijklmnopqrstuvwxyz".split('');
+    //let dc = {}; for(let i=0; i < al.length; i++) dc[al[i]] = 0;
+    const n = Number(lins[0]);
+    const a = lins[1].split(' ').map(Number);
+
+    let v, j=0;
+    for(let i=0; i<n; i++){
+        v = a[i];
+        j = i-1;
+        while(j >= 0 && a[j] > v){
+            a[j+1] = a[j];
+            j--;
+            a[j+1] = v;
+        }
+        console.log(a.join(" "));
+    }
+    //console.log(n.toFixed(12))
+    //s =  s.substring(h) + s.slice(0, h);
+    //cnt = lins.join('\n').split(/ |\n/).filter(e => e.toLowerCase() === w).length
+    //ss.includes(p)
+    //ln.replace(/[a-z]/gi, c => dc[c.toLowerCase()]++)
+    //ln.split('').map(c => c.match(/[a-z]/gi) ? dc[c.toLowerCase()]++ : c)
+    //al.forEach( a => console.log( a + " : " + dc[a] ) )
+    //let sm = s.reduce((ac, v) => ac + v);
+    //console.table(p);
+    //process.stdout.write(n);
+}
+const lines = []
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
+readline.on('line', line => lines.push(line))
+readline.on('close', () => main(lines))

@@ -1,0 +1,23 @@
+#include <iostream>
+#include <algorithm>
+#define N 200005
+
+using namespace std;
+
+int main() {
+    int num[N];
+    int n = 0;
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> num[i];
+    }
+    int minV = num[0];
+    int maxV = -2000000000;
+    for (int i = 1; i < n; i++) {
+        maxV = max(maxV, num[i] - minV);
+        minV = min(minV, num[i]);
+    }
+    cout << maxV << endl;
+    return 0;
+}
+

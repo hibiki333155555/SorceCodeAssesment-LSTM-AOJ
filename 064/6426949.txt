@@ -1,0 +1,12 @@
+#include <iostream>
+// #include "comp.h"
+using namespace std;
+
+int main()
+{
+    cout << "Hello World!" << endl;
+    double x = 34234223;
+    dump(x);
+    return 0;
+}
+

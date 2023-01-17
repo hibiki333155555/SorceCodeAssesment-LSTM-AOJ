@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    //vector<int>:: iterator it;
+    //it=A.begin();
+    int x,q,t,a,p,n;
+    cin>>n>>q;
+    vector<vector<int>>A(q);//row number
+    for(int i=1; i<=q; i++)
+    {
+
+        cin>>a;
+        if(a==0)
+        {
+            cin>>t>>x;
+            A[t].push_back(x);
+        }
+        else if(a==1)
+        {
+            cin>>t;
+            if(!A[t].empty())
+            {//cout<<"osidjsidji ";
+
+                for(int i = 0; i < (int)A[t].size(); i++)
+                {
+                    cout << A[t][i] ;
+                    if(i<(A[t].size())-1)
+                    {
+                        cout<<" ";
+                    }
+                }
+                cout<<endl;
+            }
+            else if(A[t].empty())
+            {
+
+                cout<<endl;
+            }
+
+        }
+        else if (a==2)
+        {
+            cin>>t;
+            if(!A[t].empty())
+            {
+                A[t].clear();
+                // vector<int>::iterator it;
+            }
+        }
+    }
+
+}
+

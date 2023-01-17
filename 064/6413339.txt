@@ -1,0 +1,10 @@
+n = int(input())
+numbers = list(map(int, input().split()))
+
+numbers.reverse()
+for i in range(0,n):
+  if i < n-1:
+    print(numbers[i],end=' ')
+  else:
+    print(numbers[i])
+

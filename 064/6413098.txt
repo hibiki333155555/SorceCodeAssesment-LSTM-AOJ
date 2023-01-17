@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Dice{
+public:
+    vector<int> state;
+    vector<int> score;
+
+    Dice(vector<int>& value);
+    void init_state(vector<int>& state);
+    void cmd(char ch, vector<int>& state);
+
+};
+
+
+Dice::Dice(vector<int>& value){
+    score = value; //値コピー
+    state = {0,1,2,3,4,5,6};
+}
+
+void Dice::init_state(vector<int>& state){
+    state = {0,1,2,3,4,5,6};
+}
+
+
+void Dice::cmd(char ch, vector<int>& state){
+    vector<int> st = state;
+    if (ch == 'E'){
+        state[1] = st[4];
+        state[3] = st[1];
+        state[6] = st[3];
+        state[4] = st[6];
+    } else if (ch == 'W'){
+        state[1] = st[3];
+        state[3] = st[6];
+        state[6] = st[4];
+        state[4] = st[1];            
+    } else if (ch == 'S'){
+        state[1] = st[5];
+        state[5] = st[6];
+        state[6] = st[2];
+        state[2] = st[1];            
+    } else if (ch == 'N'){
+        state[1] = st[2];
+        state[5] = st[1];
+        state[6] = st[5];
+        state[2] = st[6];               
+    }
+}
+
+
+//上面にするラベルを上面へ移動
+//if (pos == 1) no rotate
+//if (pos == 4,2,3,5) E,N,W,S
+//if (pos == 6) N*N
+//上面へ移動後、側面4,2,3,5の位置のラベルを順に確認しorderに格納
+//前面ラベルがorderのどこにあるか確認し右隣(右隣が端ならば先頭)が解答のラベル
+
+int main(){
+    vector<int> value(7);
+    for (int i=1; i < 7; i++) cin >> value[i];
+    Dice dice(value);
+
+    int q;
+    int a, b;
+    int id1, id2, ans = -1;
+    cin >> q;
+    for (int i=0; i < q; i++){
+        //Dice dice(value);
+        cin >> a >> b;
+        for (int j=1; j < 7; j++){
+            if (a == value[j]){
+                id1 = j;
+                break;
+            }
+        }
+        if (id1 == 4) dice.cmd('E', dice.state);
+        else if (id1 == 2) dice.cmd('N', dice.state);
+        else if (id1 == 3) dice.cmd('W', dice.state);
+        else if (id1 == 5) dice.cmd('S', dice.state);
+        else if (id1 == 6) {
+            dice.cmd('N', dice.state);
+            dice.cmd('N', dice.state);
+        }
+        vector<int> order{dice.state[4], dice.state[2], dice.state[3], dice.state[5]};
+        //for (int x: order) cout << x << " ";
+        //cout << endl;
+        for (int j=0; j < 4;j++){
+            if (b == dice.score[order[j]]){
+                id2 = j;
+                break;
+            }
+        }
+        //cout << "id2= " << id2 << endl;
+        if (id2 == 3) ans = dice.score[order[0]];
+        else ans = dice.score[order[id2 + 1]];
+        cout << ans << endl;
+        dice.init_state(dice.state);
+    }
+
+}

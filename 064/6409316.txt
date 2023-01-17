@@ -1,0 +1,32 @@
+seg_len = 1<<18
+seg = [0] * seg_len * 2
+def add(i, x):
+    i += seg_len
+    seg[i] += x
+    while 1:
+        i //= 2
+        if i <= 0:break
+        seg[i] = seg[2*i] + seg[2*i+1]
+    return
+
+def get_sum(l, r):
+    l += seg_len
+    r += seg_len
+    res = 0
+    while l < r:
+        if l&1:
+            res += seg[l]
+            l += 1
+        l //= 2
+        if r&1:
+            res += seg[r-1]
+            r -= 1
+        r //= 2
+    return res
+
+N, Q = map(int, input().split())
+for _ in range(Q):
+    com, x, y = map(int, input().split())
+    if com == 0:add(x, y)
+    else:print(get_sum(x, y+1))
+

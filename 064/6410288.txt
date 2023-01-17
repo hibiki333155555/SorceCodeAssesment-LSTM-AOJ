@@ -1,0 +1,30 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main(){
+    int n,e;
+    cin>>n;
+    vector<int> v;
+    while(n--){
+        cin>>e;
+        v.push_back(e);
+    }
+    auto result = unique(v.begin(), v.end());
+    
+    bool first = true;
+    for(auto it = v.begin(); it != result; it++){
+        if(first){
+            first = false;
+            cout << *it;
+        }
+        else{
+            cout << " " << *it;
+        }
+    }
+    cout << endl;
+    
+    return 0;
+}

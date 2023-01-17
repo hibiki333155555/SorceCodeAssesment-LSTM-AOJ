@@ -1,0 +1,22 @@
+import java.util.*;
+
+class Solve{
+    private Scanner sc = new Scanner(System.in);
+    private int i = 1;
+    private void Finish(){
+        this.sc.close();
+    }
+    public void Do(){
+        while(true){
+            int x=sc.nextInt();
+            if( x == 0 ) break;
+            System.out.println( "Case "+ (this.i++) +": "+ x );
+        }
+        Finish();
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

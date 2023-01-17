@@ -1,0 +1,52 @@
+import java.util.Scanner;
+
+class NumberArray {
+    // サイズは10000を超えないものとする
+    private int[] array = new int[10000];
+
+    public void setArray(int[] array) {
+        this.array = array;
+    }
+
+    public void setArray(int number, int value) {
+        array[number] = value;
+    }
+
+    public void showArray() {
+        for (int value : array) {
+            System.out.println(value);
+        }
+    }
+
+    // Case i: array[i]のような構文で表示する
+    public void showArrayWithCase() {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == 0) {
+                break;
+            }
+            System.out.println("Case " + (i + 1) + ": " + array[i]);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // クラスを宣言
+        NumberArray numberArray = new NumberArray();
+
+        // データを挿入
+        for (int i = 0; ; i++) {
+            int tmp = sc.nextInt();
+            if (tmp == 0) {
+                break;
+            } else {
+                numberArray.setArray(i, tmp);
+            }
+        }
+
+        numberArray.showArrayWithCase();
+    }
+}
+

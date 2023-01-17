@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+long long N, M, S, A[1 << 19], B[1 << 19], C[1 << 19];
+long long dist[1 << 19];
+bool used[1 << 19];
+vector<pair<int, long long>> G[1 << 19];
+priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> Q;
+
+int main() {
+	cin >> N >> M >> S;
+	for (int i = 1; i <= M; i++) {
+		cin >> A[i] >> B[i] >> C[i];
+		G[A[i]].push_back(make_pair(B[i], C[i]));
+	}
+	for (int i = 0; i < N; i++) dist[i] = (1LL << 60);
+	dist[S] = 0; Q.push(make_pair(0, S));
+
+	while (!Q.empty()) {
+		int pos = Q.top().second; Q.pop();
+		if (used[pos] == true) continue;
+		used[pos] = true;
+		for (pair<int, long long> i : G[pos]) {
+			int to = i.first; long long cost = i.second;
+			if (dist[to] > dist[pos] + cost) {
+				dist[to] = dist[pos] + cost;
+				Q.push(make_pair(dist[to], to));
+			}
+		}
+	}
+
+	for (int i = 0; i < N; i++) {
+		if (dist[i] == (1LL << 60)) cout << "INF" << endl;
+		else cout << dist[i] << endl;
+	}
+	return 0;
+}
+

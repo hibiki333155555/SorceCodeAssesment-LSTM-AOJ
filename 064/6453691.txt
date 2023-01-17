@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    string str; cin>>str;
+    int q; cin>>q;
+    while(q--) {
+        string cmd; int a,b; cin >> cmd >> a >> b;
+        if(cmd=="print") {
+            cout<<str.substr(a,b-a+1)<<endl;
+        }else if(cmd=="reverse") {
+            string::iterator f = str.begin()+a;
+            string::iterator s = str.end()-str.size()+b+1;
+            reverse(f,s);
+        }else {
+            string p; cin>>p;
+            str.replace(a,b-a+1,p);
+        }
+    }
+    return 0;
+}

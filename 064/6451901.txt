@@ -1,0 +1,15 @@
+n, m, l = gets.split.map(&:to_i)
+a_ar = n.times.map{gets.split.map(&:to_i)}
+b_ar = m.times.map{gets.split.map(&:to_i)}
+a_ar.each do |a|
+    o_ar = []
+    l.times do |k|
+        box = 0
+        m.times do |j|
+            box += a[j] * b_ar[j][k]
+        end
+        o_ar << box
+    end
+    puts o_ar.join(" ")
+end
+

@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int bubbleSort(int A[], int N) {
+    bool flag = true;
+    int count = 0;
+    while(flag) {
+        flag = false;
+        for(int j = N - 1; j >= 1;j--) {
+            if(A[j] < A[j - 1]) {
+                swap(A[j],A[j-1]);
+                flag = true;
+                count++;
+            }
+        }
+    }
+    // for(int i = 0;i < N-1;i++) {
+    //     cout << A[i] << " ";
+    // }
+    // cout << A[N-1] << endl;
+    // cout << count  << endl;
+    return count;
+}
+
+int main() {
+    int n,a[n],count = 0;cin >> n;
+    for(int i = 0;i < n; i++) cin >> a[i];
+    count = bubbleSort(a,n);
+
+    for(int i = 0;i < n;i++) {
+        cout << a[i];
+        if(i == n-1) {
+            cout << endl;
+        }else {
+            cout << " ";
+        }
+    }
+    cout << count << endl;
+}

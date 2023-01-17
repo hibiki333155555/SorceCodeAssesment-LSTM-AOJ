@@ -1,0 +1,633 @@
+#line 2 "/home/hotman/vscode/kyopro/library/cpplib/util/template.hpp"
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("unroll-loops")
+#pragma GCC target("avx2")
+#include<bits/stdc++.h>
+using namespace std;
+#line 1 "/home/hotman/vscode/kyopro/library/cpplib/util/ioutil.hpp"
+// template <class Head,class... Args>
+// std::ostream& output(std::ostream& out,const Head& head,const Args&... args){
+//     out>>head;
+//     return output(head,args...);
+// }
+// template <class Head>
+// std::ostream& output(std::ostream& out,const Head& head){
+//     out>>head;
+//     return out;
+// }
+
+template<typename T,typename E>
+std::ostream& operator<<(std::ostream& out,std::pair<T,E>v){
+    out<<"("<<v.first<<","<<v.second<<")";return out;
+}
+
+// template <class... Args>
+// ostream& operator<<(ostream& out,std::tuple<Args...>v){
+//     std::apply(output,v);
+//     return out;
+// }
+#line 8 "/home/hotman/vscode/kyopro/library/cpplib/util/template.hpp"
+struct __INIT__{__INIT__(){cin.tie(0);ios::sync_with_stdio(false);cout<<fixed<<setprecision(15);}}__INIT__;
+typedef long long lint;
+#define INF (1LL<<60)
+#define IINF (1<<30)
+#define EPS (1e-10)
+#define endl ('\n')
+typedef vector<int> vec;
+typedef vector<vector<int>> mat;
+typedef vector<vector<vector<lint>>> mat3;
+typedef vector<string> svec;
+typedef vector<vector<string>> smat;
+template<typename T>using V=vector<T>;
+template<typename T>using VV=V<V<T>>;
+template<typename T>inline void output(T t){bool f=0;for(auto i:t){cout<<(f?" ":"")<<i;f=1;}cout<<endl;}
+template<typename T>inline void output2(T t){for(auto i:t)output(i);}
+template<typename T>inline void debug(T t){bool f=0;for(auto i:t){cerr<<(f?" ":"")<<i;f=1;}cerr<<endl;}
+template<typename T>inline void debug2(T t){for(auto i:t)debug(i);}
+#define loop(n) for(long long _=0;_<(long long)(n);++_)
+#define _overload4(_1,_2,_3,_4,name,...) name
+#define __rep(i,a) repi(i,0,a,1)
+#define _rep(i,a,b) repi(i,a,b,1)
+#define repi(i,a,b,c) for(long long i=(long long)(a);i<(long long)(b);i+=c)
+#define rep(...) _overload4(__VA_ARGS__,repi,_rep,__rep)(__VA_ARGS__)
+#define _overload3_rev(_1,_2,_3,name,...) name
+#define _rep_rev(i,a) repi_rev(i,0,a)
+#define repi_rev(i,a,b) for(long long i=(long long)(b)-1;i>=(long long)(a);--i)
+#define rrep(...) _overload3_rev(__VA_ARGS__,repi_rev,_rep_rev)(__VA_ARGS__)
+
+// #define rep(i,...) for(auto i:range(__VA_ARGS__)) 
+// #define rrep(i,...) for(auto i:reversed(range(__VA_ARGS__)))
+// #define repi(i,a,b) for(lint i=lint(a);i<(lint)(b);++i)
+// #define rrepi(i,a,b) for(lint i=lint(b)-1;i>=lint(a);--i)
+// #define irep(i) for(lint i=0;;++i)
+// inline vector<long long> range(long long n){if(n<=0)return vector<long long>();vector<long long>v(n);iota(v.begin(),v.end(),0LL);return v;}
+// inline vector<long long> range(long long a,long long b){if(b<=a)return vector<long long>();vector<long long>v(b-a);iota(v.begin(),v.end(),a);return v;}
+// inline vector<long long> range(long long a,long long b,long long c){if((b-a+c-1)/c<=0)return vector<long long>();vector<long long>v((b-a+c-1)/c);for(int i=0;i<(int)v.size();++i)v[i]=i?v[i-1]+c:a;return v;}
+// template<typename T>inline T reversed(T v){reverse(v.begin(),v.end());return v;}
+#define all(n) begin(n),end(n)
+template<typename T,typename E>bool chmin(T& s,const E& t){bool res=s>t;s=min<T>(s,t);return res;}
+template<typename T,typename E>bool chmax(T& s,const E& t){bool res=s<t;s=max<T>(s,t);return res;}
+const vector<lint> dx={1,0,-1,0,1,1,-1,-1};
+const vector<lint> dy={0,1,0,-1,1,-1,1,-1};
+#define SUM(v) accumulate(all(v),0LL)
+#if __cplusplus>=201703L
+    template<typename T,typename ...Args>auto make_vector(T x,int arg,Args ...args){if constexpr(sizeof...(args)==0)return vector<T>(arg,x);else return vector(arg,make_vector<T>(x,args...));}
+#endif
+#define extrep(v,...) for(auto v:__MAKE_MAT__({__VA_ARGS__}))
+#define bit(n,a) ((n>>a)&1)
+vector<vector<long long>> __MAKE_MAT__(vector<long long> v){if(v.empty())return vector<vector<long long>>(1,vector<long long>());long long n=v.back();v.pop_back();vector<vector<long long>> ret;vector<vector<long long>> tmp=__MAKE_MAT__(v);for(auto e:tmp)for(long long i=0;i<n;++i){ret.push_back(e);ret.back().push_back(i);}return ret;}
+using graph=vector<vector<int>>;
+template<typename T>using graph_w=vector<vector<pair<int,T>>>;
+
+#if __cplusplus>=201703L
+    constexpr inline long long powll(long long a,long long b){long long res=1;while(b--)res*=a;return res;}
+#endif
+
+template<typename T,typename E>pair<T,E>& operator+=(pair<T,E>&s,const pair<T,E>&t){s.first+=t.first;s.second+=t.second;return s;}
+template<typename T,typename E>pair<T,E>& operator-=(pair<T,E>&s,const pair<T,E>&t){s.first-=t.first;s.second-=t.second;return s;}
+template<typename T,typename E>pair<T,E> operator+(const pair<T,E>&s,const pair<T,E>&t){auto res=s;return res+=t;}
+template<typename T,typename E>pair<T,E> operator-(const pair<T,E>&s,const pair<T,E>&t){auto res=s;return res-=t;}
+#define BEGIN_STACK_EXTEND(size) void * stack_extend_memory_ = malloc(size);void * stack_extend_origin_memory_;char * stack_extend_dummy_memory_ = (char*)alloca((1+(int)(((long long)stack_extend_memory_)&127))*16);*stack_extend_dummy_memory_ = 0;asm volatile("mov %%rsp, %%rbx\nmov %%rax, %%rsp":"=b"(stack_extend_origin_memory_):"a"((char*)stack_extend_memory_+(size)-1024));
+#define END_STACK_EXTEND asm volatile("mov %%rax, %%rsp"::"a"(stack_extend_origin_memory_));free(stack_extend_memory_);
+#line 5 "/home/hotman/vscode/kyopro/library/cpplib/math/mod_int.hpp"
+
+/**
+ * @brief ModInt
+ */
+
+template<int MOD>
+struct mod_int {
+    using mint=mod_int<MOD>;
+    using u64 = std::uint_fast64_t;
+    u64 a;
+    constexpr mod_int(const long long x = 0)noexcept:a(x>=0?x%get_mod():get_mod()-(-x)%get_mod()){}
+    constexpr u64 &value()noexcept{return a;}
+    constexpr const u64 &value() const noexcept {return a;}
+    constexpr mint operator+(const mint rhs)const noexcept{return mint(*this) += rhs;}
+    constexpr mint operator-(const mint rhs)const noexcept{return mint(*this)-=rhs;}
+    constexpr mint operator*(const mint rhs) const noexcept {return mint(*this) *= rhs;}
+    constexpr mint operator/(const mint rhs) const noexcept {return mint(*this) /= rhs;}
+    constexpr mint &operator+=(const mint rhs) noexcept {
+        a += rhs.a;
+        if (a >= get_mod())a -= get_mod();
+        return *this;
+    }
+    constexpr mint &operator-=(const mint rhs) noexcept {
+        if (a<rhs.a)a += get_mod();
+        a -= rhs.a;
+        return *this;
+    }
+    constexpr mint &operator*=(const mint rhs) noexcept {
+        a = a * rhs.a % get_mod();
+        return *this;
+    }
+    constexpr mint operator++(int) noexcept {
+        a += 1;
+        if (a >= get_mod())a -= get_mod();
+        return *this;
+    }
+    constexpr mint operator--(int) noexcept {
+        if (a<1)a += get_mod();
+        a -= 1;
+        return *this;
+    }
+    constexpr mint &operator/=(mint rhs) noexcept {
+        u64 exp=get_mod()-2;
+        while (exp) {
+            if (exp % 2) {
+                *this *= rhs;
+            }
+            rhs *= rhs;
+            exp /= 2;
+        }
+        return *this;
+    }
+    constexpr bool operator==(mint x) const{
+        return a==x.a;
+    }
+    constexpr bool operator!=(mint x) const{
+        return a!=x.a;
+    }
+    constexpr bool operator<(mint x) const{
+        return a<x.a;
+    }
+    constexpr bool operator>(mint x) const{
+        return a>x.a;
+    }
+    constexpr bool operator<=(mint x) const{
+        return a<=x.a;
+    }
+    constexpr bool operator>=(mint x) const{
+        return a>=x.a;
+    }
+    constexpr static int root(){
+        mint root = 2;
+        while(root.pow((get_mod()-1)>>1).a==1)root++;
+        return root.a;
+    }
+    constexpr mint pow(long long n)const{
+        long long x=a;
+        mint ret = 1;
+        while(n>0) {
+            if(n&1)(ret*=x);
+            (x*=x)%=get_mod();
+            n>>=1;
+        }
+        return ret;
+    }
+    constexpr mint inv(){
+        return pow(get_mod()-2);
+    }
+    static std::vector<mint> fac;
+    static std::vector<mint> ifac;
+    static bool init;
+    constexpr static int mx=10000001;
+    void build()const{
+        init=0;
+        fac.resize(mx);
+        ifac.resize(mx);
+        fac[0]=1,ifac[0]=1;
+        for(int i=1;i<mx;i++)fac[i]=fac[i-1]*i;
+        ifac[mx-1]=fac[mx-1].inv();
+        for(int i=mx-2;i>=0;i--)ifac[i]=ifac[i+1]*(i+1);
+    }
+    mint comb(long long b){
+        if(init)build();
+        if(a<0||b<0)return 0;
+        if(a==0&&b==0)return 1;
+        if((long long)a<b)return 0;
+        return fac[a]*ifac[a-b]*ifac[b];
+    }
+    mint fact()const{
+        if(init)build();
+        return fac[a];
+    }
+    mint fact_inv()const{
+        if(init)build();
+        return ifac[a];
+    }
+    friend std::ostream& operator<<(std::ostream& lhs, const mint& rhs) noexcept {
+        lhs << rhs.a;
+        return lhs;
+    }
+    friend std::istream& operator>>(std::istream& lhs,mint& rhs) noexcept {
+        lhs >> rhs.a;
+        return lhs;
+    }
+    constexpr static bool is_static=true;
+    constexpr static u64 get_mod(){
+        return MOD;
+    }
+};
+template<int MOD>std::vector<mod_int<MOD>> mod_int<MOD>::fac;
+template<int MOD>std::vector<mod_int<MOD>> mod_int<MOD>::ifac;
+template<int MOD>bool mod_int<MOD>::init=1;
+#line 3 "/home/hotman/vscode/kyopro/library/cpplib/math/mod_int998244353.hpp"
+using mint=mod_int<998'244'353>;
+
+/**
+ * @brief ModInt(998'244'353)
+ */
+#line 3 "/home/hotman/vscode/kyopro/library/cpplib/graph_tree/reroot.hpp"
+
+/**
+ * @brief 全方位木DP
+ */
+
+template<typename T,typename F,typename Fix>
+struct reroot{
+    std::vector<std::vector<int>>g;
+    std::vector<int>p_list;
+    std::vector<T>p_table;
+    std::vector<bool>p_checked;
+    std::vector<map<int,T>>table;
+    std::vector<T>ans;
+    T e;
+    F f;
+    Fix fix;
+    reroot(const std::vector<std::vector<int>>& g,T e,F f=F(),Fix fix=Fix()):g(g),e(e),f(f),fix(fix){
+        int n=g.size();
+        p_list.resize(n,-1);
+        p_checked.resize(n,0);
+        table.resize(n);
+        p_table.resize(n,e);
+        ans.resize(n,e);
+        dfs1(0,-1);
+        for(int i=0;i<n;++i)ans[i]=dfs2(i,-1);
+    }
+    T dfs1(int n,int p){
+        p_list[n]=p;
+        T tmp1=e,tmp2=e;
+        std::vector<T>tmp(g[n].size());
+        rep(i,g[n].size()){
+            int t=g[n][i];
+            if(t==p)continue;
+            table[n][t]=tmp1;
+            tmp1=f(tmp1,tmp[i]=dfs1(t,n));
+        }
+        for(int i=g[n].size()-1;i>=0;--i){
+            int t=g[n][i];
+            if(t==p)continue;
+            table[n][t]=f(table[n][t],tmp2);
+            tmp2=f(tmp[i],tmp2);
+        }
+        return fix(table[n][p]=tmp1,n,p);
+    }
+    T dfs2(int n,int p){
+        if(n==-1){
+            return e;
+        }
+        if(!p_checked[n]){
+            p_checked[n]=1;
+            p_table[n]=dfs2(p_list[n],n);
+        }
+        if(p==-1){
+            return f(table[n][p_list[n]],p_table[n]);
+        }else{
+            if(p_list[n]==-1)return fix(table[n][p],n,p);
+            else return fix(f(table[n][p],p_table[n]),n,p);
+        }
+    }
+    vector<T>query(){
+        return ans;
+    }
+};
+#line 5 "/home/hotman/vscode/kyopro/library/cpplib/graph_tree/graph_template.hpp"
+/**
+ * @brief グラフテンプレート
+ */
+
+using graph=std::vector<std::vector<int>>;
+template<typename T>
+using graph_w=std::vector<std::vector<std::pair<int,T>>>;
+
+graph load_graph(int n,int m){graph g(n);for(int i=0;i<m;++i){int s,t;std::cin>>s>>t;--s;--t;g[s].push_back(t);g[t].push_back(s);}return g;}
+graph load_digraph(int n,int m){graph g(n);for(int i=0;i<m;++i){int s,t;std::cin>>s>>t;--s;--t;g[s].push_back(t);}return g;}
+graph load_graph0(int n,int m){graph g(n);for(int i=0;i<m;++i){int s,t;std::cin>>s>>t;g[s].push_back(t);g[t].push_back(s);}return g;}
+graph load_digraph0(int n,int m){graph g(n);for(int i=0;i<m;++i){int s,t;std::cin>>s>>t;g[s].push_back(t);}return g;}
+graph load_tree(int n){graph g(n);for(int i=0;i<n-1;++i){int s,t;std::cin>>s>>t;--s;--t;g[s].push_back(t);g[t].push_back(s);}return g;}
+graph load_tree0(int n){graph g(n);for(int i=0;i<n-1;++i){int s,t;std::cin>>s>>t;g[s].push_back(t);g[t].push_back(s);}return g;}
+graph load_treep(int n){graph g(n);for(int i=0;i<n-1;++i){int t;std::cin>>t;g[i+1].push_back(t);g[t].push_back(i+1);}return g;}
+template<typename T>graph_w<T> load_graph_weight(int n,int m){graph_w<T> g(n);for(int i=0;i<m;++i){int s,t;T u;std::cin>>s>>t>>u;--s;--t;g[s].emplace_back(t,u);g[t].emplace_back(s,u);}return g;}
+template<typename T>graph_w<T> load_digraph_weight(int n,int m){graph_w<T> g(n);for(int i=0;i<m;++i){int s,t;T u;std::cin>>s>>t>>u;--s;--t;g[s].emplace_back(t,u);}return g;}
+template<typename T>graph_w<T> load_graph0_weight(int n,int m){graph_w<T> g(n);for(int i=0;i<m;++i){int s,t;T u;std::cin>>s>>t>>u;g[s].emplace_back(t,u);g[t].emplace_back(s,u);}return g;}
+template<typename T>graph_w<T> load_digraph0_weight(int n,int m){graph_w<T> g(n);for(int i=0;i<m;++i){int s,t;T u;std::cin>>s>>t>>u;g[s].emplace_back(t,u);}return g;}
+template<typename T>graph_w<T> load_tree_weight(int n){graph_w<T> g(n);for(int i=0;i<n-1;++i){int s,t;T u;std::cin>>s>>t>>u;--s;--t;g[s].emplace_back(t,u);g[t].emplace_back(s,u);}return g;}
+template<typename T>graph_w<T> load_tree0_weight(int n){graph_w<T> g(n);for(int i=0;i<n-1;++i){int s,t;T u;std::cin>>s>>t>>u;g[s].emplace_back(t,u);g[t].emplace_back(s,u);}return g;}
+template<typename T>graph_w<T> load_treep_weight(int n){graph_w<T> g(n);for(int i=0;i<n-1;++i){int t;T u;std::cin>>t>>u;g[i+1].emplace_back(t,u);g[t].emplace_back(i+1,u);}return g;}
+#line 5 "/home/hotman/vscode/kyopro/library/cpplib/graph_tree/depth.hpp"
+
+/**
+ * @brief 根からの深さ
+ */
+
+std::vector<int> depth(const graph& g,int start){
+	std::vector<int>memo(g.size());
+	auto f=[&](auto f,int v,int p)->int{
+		int mx=0;
+		for(auto t:g[v]){
+			if(t==p)continue;
+			mx=std::max(mx,f(f,t,v));
+		}
+		return memo[v]=mx+1;
+	};
+	f(f,start,-1);
+	return memo;
+}
+#line 1 "/home/hotman/vscode/kyopro/library/cpplib/graph_tree/distance.hpp"
+std::vector<int> distance(const graph& G,int start){
+    std::vector<int>memo(G.size());
+    auto f=[&](auto f,int v,int p,int i)->void{
+        for(auto t:G[v]){
+            if(t==p)continue;
+            f(f,t,v,i+1);
+        }
+        memo[v]=i;
+    };
+    f(f,start,-1,0);
+    return memo;
+}
+#line 3 "/home/hotman/vscode/kyopro/library/cpplib/data_structure/small_rmq.hpp"
+
+/**
+ * RMQ(small) &amp;lt;O(N),O(1)&amp;gt;(N<=64)
+ */
+
+template<typename T>
+class small_rmq{
+    using u64=unsigned long long;
+    std::vector<u64>table;
+    std::vector<T> v;
+    public:
+    small_rmq(std::vector<T> v):v(v){
+        assert(v.size()<=64);
+        std::vector<int>tmp(v.size());
+        table.resize(v.size(),0);
+        std::stack<T>stk;
+        for(int i=0;i<(int)v.size();++i){
+            tmp.resize(v.size());
+            while(!stk.empty()&&v[stk.top()]>=v[i]){
+                stk.pop();
+            }
+            tmp[i]=stk.empty()?-1:stk.top();
+            stk.emplace(i);
+        }
+        for(int i=0;i<(int)v.size();++i){
+            if(tmp[i]!=-1)table[i]=table[tmp[i]]|(1ULL<<(tmp[i]));
+        }
+    }
+    T query(int l,int r){
+        assert(l!=r);
+        const u64 tmp=table[r-1]&~((1ULL<<l)-1);
+        if(tmp==0)return r-1;
+        else return __builtin_ctzll(tmp);
+    }
+};
+#line 3 "/home/hotman/vscode/kyopro/library/cpplib/alga/maybe.hpp"
+
+/**
+ * @brief Maybe
+ * @see https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%8A%E3%83%89_(%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0)#Maybe%E3%83%A2%E3%83%8A%E3%83%89
+ */
+
+template<typename T>
+struct maybe{
+    bool _is_none;
+    T val;
+    maybe():_is_none(true){}
+    maybe(T val):_is_none(false),val(val){}
+    T unwrap()const{
+        assert(!_is_none);
+        return val;
+    }
+    T unwrap_or(T e)const{
+        return _is_none?e:val;
+    }
+    bool is_none()const{return _is_none;}
+    bool is_some()const{return !_is_none;}
+};
+
+template<typename T,typename F>
+auto expand(F op){
+    return [&op](const maybe<T>& __s,const maybe<T>& __t)->maybe<T>{
+        if(__s.is_none())return __t;
+        if(__t.is_none())return __s;
+        return maybe<T>(op(__s.unwrap(),__t.unwrap()));
+    };
+}
+#line 7 "/home/hotman/vscode/kyopro/library/cpplib/data_structure/sparse_table.hpp"
+/**
+ * @brief SparseTable
+ */
+
+template<typename T,typename F>
+class sparse_table{
+    F f;
+    std::vector<std::vector<T>>data;
+    public:
+    sparse_table(std::vector<T> v,F f=F()):f(f){
+        int n=v.size(),log=log2(n)+1;
+        data.resize(n,std::vector<T>(log));
+        for(int i=0;i<n;i++)data[i][0]=v[i];
+        for(int j=1;j<log;j++)for(int i=0;i+(1<<(j-1))<n;i++){
+            data[i][j]=f(data[i][j-1],data[i+(1<<(j-1))][j-1]);
+        }
+    }
+    maybe<T> get(int l,int r){
+        if(l==r)return maybe<T>();
+        if(r<l)std::swap(l,r);
+        int k=std::log2(r-l);
+        return maybe<T>(f(data[l][k],data[r-(1<<k)][k]));
+    }
+};
+#line 3 "/home/hotman/vscode/kyopro/library/cpplib/functional/argmin.hpp"
+
+/**
+ * @brief 最小値とその位置
+ */
+
+template<typename T,typename E>
+struct argmin{
+    std::pair<T,E> operator()(const std::pair<T,E>& s,const std::pair<T,E>& t){
+        return s.second<=t.second?s:t;
+    }
+};
+#line 11 "/home/hotman/vscode/kyopro/library/cpplib/data_structure/arg_rmq.hpp"
+
+/**
+ * @brief RangeArgminQuery &amp;lt;O(N),O(1)&amp;gt;
+ * @see https://noshi91.hatenablog.com/entry/2018/08/16/125415
+ */
+
+template<typename T>
+class arg_rmq{
+    constexpr static int b=64;
+    std::vector<T>v;
+    std::vector<small_rmq<T>*>backet;
+    sparse_table<std::pair<int,T>,argmin<int,T>>* st=0;
+    public:
+    arg_rmq(std::vector<T>v):v(v){
+        std::vector<std::pair<int,T>>tmp2;
+        for(int i=0;i<(int)v.size();i+=b){
+            std::vector<T>tmp;
+            T mn=std::numeric_limits<T>::max();
+            int idx=-1;
+            for(int j=0;i+j<(int)v.size()&&j<b;j++){
+                tmp.push_back(v[i+j]);
+                if(mn>v[i+j]){
+                    mn=v[i+j];
+                    idx=i+j;
+                }
+            }
+            tmp2.emplace_back(idx,mn);
+            backet.push_back(new small_rmq<T>(tmp));
+        }
+        st=new sparse_table<std::pair<int,T>,argmin<int,T>>(tmp2);
+    }
+    maybe<std::pair<int,T>> query(int s,int t){
+        if(s==t)return maybe<std::pair<int,T>>();
+        if(s/b==t/b){
+            int idx=s/b*b+backet[s/b]->query(s%b,t%b);
+            return maybe<std::pair<int,T>>(std::make_pair(idx,v[idx]));
+        }
+        std::pair<int,T> res=std::make_pair(-1,std::numeric_limits<T>::max());
+
+        {
+            int idx=s/b*b+backet[s/b]->query(s%b,b);
+            res=argmin<int,T>()(res,std::make_pair(idx,v[idx]));
+        }
+
+        if(s/b+1!=t/b)res=argmin<int,T>()(res,st->get(s/b+1,t/b).unwrap());
+
+        if(t%b!=0){
+            int idx=t/b*b+backet[t/b]->query(0,t%b);
+            res=argmin<int,T>()(res,std::make_pair(idx,v[idx]));
+        }
+
+        return maybe<std::pair<int,T>>(res);
+    }
+};
+#line 9 "/home/hotman/vscode/kyopro/library/cpplib/graph_tree/lca.hpp"
+
+/**
+ * @brief LCA &amp;lt;O(N),O(1)&amp;gt;(HL分解と同等の速さ)
+ */
+
+class lca{
+    std::vector<int>data;
+    std::vector<int>comp_data;
+    std::vector<int>start;
+    arg_rmq<int>*st;
+    std::vector<int> __dist;
+    public:
+    lca(){}
+    lca(std::vector<std::vector<int>>v,int s){
+        data.resize(v.size()*2-1);
+        comp_data.resize(v.size()*2-1);
+        start.resize(v.size());
+        int i=0;
+        __dist=distance(v,s);
+        auto f=[&](auto f,int n,int p)->void{
+            start[n]=i;
+            data[i]=n;
+            comp_data[i++]=__dist[n];
+            for(int t:v[n]){
+                if(t==p)continue;
+                f(f,t,n);
+                data[i]=n;
+                comp_data[i++]=__dist[n];
+            }
+        };
+        f(f,s,-1);
+        st=new arg_rmq<int>(comp_data);
+    }
+    int query(int p,int q){
+        return data[st->query(std::min(start[p],start[q]),std::max(start[p],start[q])+1).unwrap().first];
+    }
+    int dist(int p,int q){
+        return __dist[p]+__dist[q]-2*__dist[query(p,q)];
+    }
+};
+#line 3 "/home/hotman/vscode/kyopro/library/cpplib/graph_tree/level_ancestor.hpp"
+
+struct la{
+    graph g;
+    std::vector<std::vector<int>>table;
+    la(graph g,int st=0):g(g){
+        int n=g.size();
+        table.resize(30,std::vector<int>(n,st));
+        dfs(st,-1);
+        for(int i=1;i<30;++i){
+            for(int j=0;j<n;++j){
+                table[i][j]=table[i-1][table[i-1][j]];
+            }
+        }
+    }
+    void dfs(int now,int p){
+        for(auto e:g[now]){
+            if(e==p)continue;
+            table[0][e]=now;
+            dfs(e,now);
+        }
+    }
+    int up(int s,int k){
+        for(int i=0;i<30;++i){
+            if(k>>i&1){
+                s=table[i][s];
+            }
+        }
+        return s;
+    }
+};
+#line 6 "main.cpp"
+
+int main(){
+    auto f=[&](mint s,mint t){
+        return s+t;
+    };
+    auto g=[&](mint x,lint n,lint p){
+        return x*2+1;
+    };
+    lint n;
+    cin>>n;
+    mat v(n);
+    rep(i,n-1){
+        lint s,t;
+        cin>>s>>t;
+        s--;t--;
+        v[s].emplace_back(t);
+        v[t].emplace_back(s);
+    }
+    reroot<mint,decltype(f),decltype(g)>t(v,0,f,g);
+    auto ans=t.query();
+    lint q;
+    cin>>q;
+    vector<mint>ans2(n);
+    auto dfs=[&](auto dfs,lint now,lint p)->mint{
+        mint res=1;
+        for(auto e:v[now]){
+            if(e==p)continue;
+            res+=dfs(dfs,e,now)*2;
+        }
+        return ans2[now]=res;
+    };
+    dfs(dfs,0,-1);
+    lca lc(v,0);
+    la l(v,0);
+    while(q--){
+        lint s,t;
+        cin>>s>>t;
+        s--;t--;
+        lint u=lc.query(s,t);
+        if(u==t){
+            swap(s,t);
+        }
+        if(u==s){
+            auto d=lc.dist(s,t);
+            auto sch=l.up(t,d-1);
+            cout<<(ans[s]*2+1-ans2[sch]*2)*ans2[t]*(mint(2).pow(d))<<endl;
+        }else{
+            cout<<mint(2).pow(lc.dist(s,t))*ans2[s]*ans2[t]<<endl;
+        }
+    }
+}

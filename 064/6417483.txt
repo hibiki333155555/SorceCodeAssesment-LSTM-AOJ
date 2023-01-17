@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    int N,K; cin >> N >> K;
+    vector<int> A(7);
+    rep(i,N) {
+        int a; cin >> a;
+        A[a]++;
+    }
+
+    // 1 -> 5 -> 6: d = 4
+    // 2 -> 6: d = 4
+    // 3 -> 6: d = 3
+    // 4 -> 6: d = 2
+    // 5 -> 6: d = 1
+    int ans = A[1] + A[2] * 2 + A[3] * 3 + A[4] * 4 + A[5] * 5 + A[6] * 6;
+    while(K--) {
+        if(A[1] > 0) {
+            A[1]--; A[5]++; ans += 4;
+        } else if(A[2] > 0) {
+            A[2]--; A[6]++; ans += 4;
+        } else if(A[3] > 0) {
+            A[3]--; A[6]++; ans += 3;
+        } else if(A[4] > 0) {
+            A[4]--; A[6]++; ans += 2;
+        } else if(A[5] > 0) {
+            A[5]--; A[6]++; ans += 1;
+        } else {
+            break;
+        }
+    }
+
+    cout << ans << endl;
+}

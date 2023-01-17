@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+#define rrep(i, n) for (int i = (int)(n - 1); i >= 0; i--)
+#define all(x) (x).begin(), (x).end()
+#define sz(x) int(x.size())
+using namespace std;
+using ll = long long;
+const int INF = 1e9;
+const ll LINF = 1e18;
+template <class T>
+bool chmax(T& a, const T& b) {
+    if (a < b) {
+        a = b;
+        return 1;
+    }
+    return 0;
+}
+template <class T>
+bool chmin(T& a, const T& b) {
+    if (b < a) {
+        a = b;
+        return 1;
+    }
+    return 0;
+}
+template <class T>
+vector<T> make_vec(size_t a) {
+    return vector<T>(a);
+}
+template <class T, class... Ts>
+auto make_vec(size_t a, Ts... ts) {
+    return vector<decltype(make_vec<T>(ts...))>(a, make_vec<T>(ts...));
+}
+template <typename T>
+istream& operator>>(istream& is, vector<T>& v) {
+    for (int i = 0; i < int(v.size()); i++) {
+        is >> v[i];
+    }
+    return is;
+}
+template <typename T>
+ostream& operator<<(ostream& os, const vector<T>& v) {
+    for (int i = 0; i < int(v.size()); i++) {
+        os << v[i];
+        if (i < int(v.size()) - 1) os << ' ';
+    }
+    return os;
+}
+int main() {
+    vector<ll> ls;
+    rep(bit, 1 << 20) {
+        ll l = 1;
+        rep(i, 20) if (bit >> i & 1) l = lcm(l, ll(i + 1));
+        ls.push_back(l);
+    }
+    sort(all(ls));
+    ls.erase(unique(all(ls)), ls.end());
+
+    int n, m;
+    cin >> n >> m;
+    vector<vector<pair<int, int>>> g(n);
+    rep(i, m) {
+        int a, b;
+        ll c;
+        cin >> a >> b >> c;
+        a--, b--;
+        g[a].emplace_back(b, c);
+    }
+
+    auto get_id = [n](int u, int i) -> int { return i * n + u; };
+
+    vector<int> d(n * 1000, INF);
+    d[get_id(0, 0)] = 0;
+    queue<int> q;
+    q.push(0);
+    while (sz(q)) {
+        int pos = q.front();
+        q.pop();
+        int v = pos % n, l = ls[pos / n];
+        for (auto [u, c] : g[v]) {
+            ll nl = lcm(l, c);
+            int ni = lower_bound(all(ls), nl) - ls.begin();
+            int nxt = get_id(u, ni);
+            if (d[nxt] < INF) continue;
+            d[nxt] = d[pos] + 1;
+            q.push(nxt);
+        }
+    }
+
+    ll mn = LINF, mx = -LINF;
+    rep(i, sz(ls)) {
+        if (d[get_id(n - 1, i)] < INF) {
+            chmin(mn, ls[i]);
+            chmax(mx, ls[i]);
+        }
+    }
+    if (mn < LINF) {
+        cout << mn << ' ' << mx << '\n';
+    } else {
+        cout << "IMPOSSIBLE\n";
+    }
+}

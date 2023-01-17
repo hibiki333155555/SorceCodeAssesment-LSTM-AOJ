@@ -1,0 +1,10 @@
+w = input()
+count = 0
+while True:
+    str = input().split()
+    if str == 'END_OF_TEXT':
+        break
+    for ch in str:
+        if w == ch:
+            count += 1
+print(count)

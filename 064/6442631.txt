@@ -1,0 +1,18 @@
+#include <stdio.h>
+
+int main(void) { 
+    int a,b;
+    a>=-1000;
+    b<=1000;
+    scanf("%d%d\n",&a,&b);
+    if(a<b){
+          printf("a<b");
+    }
+    if(a>b){
+        printf("a>b");
+    }
+    if(a==b){
+        printf("a==b\n");
+    }
+	return 0;
+}

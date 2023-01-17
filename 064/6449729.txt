@@ -1,0 +1,39 @@
+from sys import stdin
+input=lambda :stdin.readline()[:-1]
+
+n,m=map(int,input().split())
+query=[[] for i in range(m+1)]
+for _ in range(n):
+  a,b,c=map(int,input().split())
+  query[b].append((c,a))
+
+q=int(input())
+for _ in range(q):
+  d,e=map(int,input().split())
+  query[e].append((d,-1))
+
+cum=[0]*(m+10)
+mx=0
+ans=0
+for i in range(1,m+1):
+  cum[i]+=cum[i-1]
+  sm=0
+  for x,y in query[i]:
+    if y!=-1:
+      cum[i]+=y
+      cum[x+1]-=y
+      mx=max(mx,x)
+    else:
+      sm+=x
+  if sm>0:
+    if sm<=cum[i]:continue
+    else:
+      if mx<i:
+        print(-1)
+        exit()
+      else:
+        cum[x+1]-=sm-cum[i]
+        ans+=sm-cum[i]
+        cum[i]=sm
+
+print(ans)

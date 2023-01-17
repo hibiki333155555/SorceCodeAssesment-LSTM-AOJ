@@ -1,0 +1,5 @@
+a = int(input('数値を入力'))
+b = int(input('数値を入力'))
+area = a*b
+length = (a+b)*2
+print(area, ,length)

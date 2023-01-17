@@ -1,0 +1,5 @@
+let x = require(`fs`).readFileSync(`/dev/stdin`, `utf-8`).split(`\n`);
+for (let i=0; i<x.length; i++) {
+    console.log(`Case ${i+1}: ${x[i]}`);
+}
+//console.log(x.map((item, index) => `Case ${index+1}: ${item}`).join(`\n`));

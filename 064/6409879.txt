@@ -1,0 +1,23 @@
+seg_len = 1<<18
+seg = [(1<<31)-1] * seg_len * 2
+def update(i, x):
+    i += seg_len
+    seg[i] = x
+    i //= 2
+    while i:
+        seg[i] = min(seg[2*i], seg[2*i+1])
+        i //= 2
+    return
+
+def get_min(ql, qr, l=0, r=1<<18, pos=1):
+    if qr <= l or r <= ql:return (1<<31)-1
+    if ql <= l and r <= qr:return seg[pos]
+    mid = (l+r)//2
+    return min(get_min(ql, qr, l, mid, pos*2), get_min(ql, qr, mid, r, pos*2+1))
+
+N, Q = map(int, input().split())
+for _ in range(Q):
+    com, x, y = map(int, input().split())
+    if com == 0:update(x, y)
+    else:print(get_min(x, y+1))
+

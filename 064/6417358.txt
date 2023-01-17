@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int n;
+  cin >> n;
+
+  vector<int> a(n);
+
+  int max,min,tmp = 0;
+  long long sum = 0;
+
+  for(int i = 1;i <= n;i++){
+    cin >> a[i];
+    sum = sum + a[i];
+  }
+
+  for(int j = 2;j <= n;j++){
+    if(a[1] < a[j]){
+      tmp = a[1];
+      a[1] = a[j];
+      a[j] = tmp;
+    }
+  }
+  max = a[1];
+
+  for(int k = 2;k <= n;k++){
+    if(a[1] > a[k]){
+      tmp = a[1];
+      a[1] = a[k];
+      a[k] = tmp;
+    }
+  }
+  min = a[1];
+
+
+  cout << min << " " << max << " " << sum << endl;
+  return 0;
+}

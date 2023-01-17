@@ -1,0 +1,130 @@
+#include <algorithm>
+#include <cassert>
+#include <climits>
+#include <cmath>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <random>
+#include <complex>
+#include <bitset>
+#include <iomanip>
+#include <memory>
+#include <functional>
+
+#define rep(i, n, s) for (int i = (s); i < int(n); i++)
+#define per(i, n, s) for (int i = (n) - 1; i >= int(s); i--)
+#define MM << " " <<
+#define all(x) begin(x), end(x)
+#define rall(x) rbegin(x), rend(x)
+
+template <class T>
+using MinHeap = std::priority_queue<T, std::vector<T>, std::greater<T>>;
+template <class T>
+using MaxHeap = std::priority_queue<T>;
+
+using ll = long long;
+using Pii = std::pair<int, int>;
+using Pll = std::pair<ll, ll>;
+using Pdd = std::pair<double, double>;
+
+template <class T>
+bool chmin(T &a, const T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+bool chmax(T &a, const T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+void vdeb(const std::vector<T> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) {
+        if (i == n - 1)
+            std::cout << da[i];
+        else
+            std::cout << da[i] << " ";
+    }
+    std::cout << std::endl;
+}
+template<class T>
+void vdeb(const std::vector<std::vector<T>> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) {
+        // std::cout << i << " : ";
+        vdeb(da[i]);
+    }
+    std::cout << std::endl;
+}
+
+template <>
+void vdeb(const std::vector<std::string> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) { std::cout << da[i] << std::endl; }
+}
+using namespace std;
+
+int main() {
+    int n, m; cin >> n >> m;
+    vector<Pii> kari(n);
+    vector<ll> ss(m+1);
+    rep(i,n,0) {
+        int a, b, c; cin >> a >> b >> c;
+        kari[i] = {b-1, c};
+        ss[b-1] += a;
+        ss[c] -= a;
+    }
+    rep(i,m,0) ss[i+1] += ss[i];
+    int q; cin >> q;
+    rep(i,q,0) {
+        int d, e; cin >> d >> e;
+        --e;
+        ss[e] -= d;
+    }
+    ll ans = 0;
+    sort(all(kari));
+    vector<ll> rv(m+1);
+    // vdeb(rv);
+    MaxHeap<int> pq;
+    int id = 0;
+    ll pw = 0;
+    bool flg = true;
+    rep(i,m,0) {
+        while(id != n && kari[id].first == i) {
+            pq.push(kari[id].second);
+            id++;
+        }
+        // st.erase(i);
+        pw -= rv[i];
+        ss[i] += pw;
+        if(ss[i] < 0) {
+            pw -= ss[i];
+            if(pq.empty() || pq.top() <= i) {
+                flg = false;
+            } else {
+                rv[pq.top()] -= ss[i];
+                ans -= ss[i];
+            }
+        }
+    }
+    if(flg) cout << ans << endl;
+    else cout << -1 << endl;
+}

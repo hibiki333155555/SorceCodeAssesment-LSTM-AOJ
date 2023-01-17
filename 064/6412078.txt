@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n;
+    while(1){
+        double m=0,squ=0;
+        cin>>n;
+        if(n==0) break;
+        else {
+            vector<int> vec(n);
+            for(int i=0; i<n; i++){
+                cin>>vec[i];
+            }
+            m=accumulate(vec.begin(),vec.end(),0)/n;
+            for(int i=0; i<n; i++){
+                squ+=pow(vec[i]-m,2);
+            }
+            printf("%.8f\n",sqrt(squ/n));
+        }
+    }
+}

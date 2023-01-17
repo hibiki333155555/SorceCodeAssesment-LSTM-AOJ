@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct card{char suit, value;};
+
+void bubble(card A[], int N){
+        bool flag=1;
+        string A1="", B1="";
+        for(int i=0;flag;i++){
+                flag=0;
+                for(int j=N-1;j>i;j--){
+                        if(A[j].value<A[j-1].value){
+                                flag=1;
+                                swap(A[j],A[j-1]);
+                        }
+                }
+        }
+
+}
+
+void select(card B[], int N){
+        int minnum=0;
+        for(int i=0;i<N-1;i++){
+                minnum=i;
+                for(int j=1+i;j<N;j++){
+                        if(B[j].value<B[minnum].value){
+                                minnum=j;
+                        }
+                }
+                if(minnum!=i){
+                        swap(B[i],B[minnum]);
+                }
+        }
+
+}
+
+void print(struct card C[], int N){
+        for(int i=0;i<N;i++){
+                if(i) cout<<" ";
+                cout<<C[i].suit<<C[i].value;
+        }
+}
+
+bool sta(struct card A[], struct card B[], int N){
+        for(int i=0;i<N;i++){
+                if(A[i].suit!=B[i].suit) return false;
+        }
+        return true;
+}
+
+int main(){
+        int N; cin>>N;
+        card A[36], B[36];
+        for(int i=0;i<N;i++) cin>>A[i].suit>>A[i].value;
+        for(int i=0;i<N;i++) B[i]=A[i];
+
+        bubble(A, N);
+        select(B,N);
+
+        print(A,N);
+        cout<<endl;
+        cout<<"Stable"<<endl;
+        print(B,N);
+        cout<<endl;
+        if(sta(A,B,N)){
+                cout<<"Stable"<<endl;
+        }else{
+                cout<<"Not stable"<<endl;
+        }
+
+
+        return 0;
+}

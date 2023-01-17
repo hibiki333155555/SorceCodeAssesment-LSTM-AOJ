@@ -1,0 +1,8 @@
+n = int(input())
+A = set(map(int, input().split()))
+m = int(input())
+B = set(map(int, input().split()))
+
+if len(A.union(B)) > 0:
+    for i in sorted(A.difference(B)):
+        print(i)

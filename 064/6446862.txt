@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for (int i = 0; i < (n); ++i)
+
+const int MAX = 100;
+
+int main() {
+    int D[MAX][MAX];
+    int n;
+    cin >> n;
+    rep(i, n) rep(j, n) D[i][j] = 0;
+    rep(i, n) {
+        int k, u;
+        cin >> u >> k;
+        u--;
+        rep(j, k){
+            int x;
+            cin >> x;
+            x--;
+            D[u][x] = 1;
+        }
+    }
+
+    rep(i, n) {
+        rep(j, n){
+        if(j) cout << " ";
+        cout << D[i][j];
+        }
+        cout << endl;
+    }
+    return 0;
+}

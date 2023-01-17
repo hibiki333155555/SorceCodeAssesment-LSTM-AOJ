@@ -1,0 +1,121 @@
+class Node:
+    def __init__(self, parent, key):
+        self.key = key
+        self.parent = parent
+        self.left = None
+        self.right = None
+
+
+def insert(tree_root, node):
+    parent = None
+    root = tree_root
+
+    while root is not None:
+        parent = root
+
+        if node.key < root.key:
+            root = root.left
+        else:
+            root = root.right
+
+    node.parent = parent
+
+    if tree_root is None:
+        tree_root = node
+    elif node.key < parent.key:
+        parent.left = node
+    else:
+        parent.right = node
+
+    return tree_root
+
+
+def search(root, key):
+    if root is None:
+        return None
+
+    if root.key == key:
+        return root
+    if key < root.key:
+        return search(root.left, key)
+    else:
+        return search(root.right, key)
+
+
+def search_successor(node):
+    node = node.right
+
+    while node.left is not None:
+        node = node.left
+
+    return node.key
+
+
+def delete(root, key):
+    if root is None:
+        return None
+
+    if key < root.key:
+        root.left = delete(root.left, key)
+    elif key > root.key:
+        root.right = delete(root.right, key)
+    else:
+        if root.left is None and root.right is None:
+            root = None
+        elif root.left is not None and root.right is None:
+            root = root.left
+        elif root.left is None and root.right is not None:
+            root = root.right
+        else:
+            root.key = search_successor(root)
+            root.right = delete(root.right, root.key)
+
+    return root
+
+
+def print_in_order(root):
+    if root is None:
+        return
+
+    print_in_order(root.left)
+    print(' ' + str(root.key), end='')
+    print_in_order(root.right)
+
+    return
+
+
+def print_pre_order(root):
+    if root is None:
+        return
+
+    print(' ' + str(root.key), end='')
+    print_pre_order(root.left)
+    print_pre_order(root.right)
+
+    return
+
+
+
+
+m = int(input())
+tree_root = None
+
+for _ in range(m):
+    im = list(map(int,input().split()))
+           
+    if im[0] == 'insert':
+        node = Node(None, im[1])
+        tree_root = insert(tree_root, node)
+    elif im[0] == 'find':
+        if search(tree_root, im[1]) is not None:
+            print('yes')
+        else:
+            print('no')
+    elif im[0] == 'delete':
+        tree_root = delete(tree_root, im[1])
+    else:
+            print_in_order(tree_root)
+            print('')
+            print_pre_order(tree_root)
+            print('')
+

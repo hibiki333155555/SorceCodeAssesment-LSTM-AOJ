@@ -1,0 +1,6 @@
+N = int(input())
+S = input()
+
+for s in range(S):
+    if i == J:
+        print(S[i],sep='')

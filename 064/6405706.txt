@@ -1,0 +1,9 @@
+'2 2\n3 3\n0 0'.split`
+`.map(l=>{
+    if(l==='0 0') return;
+    
+    [H,W]=l.split` `.map(n=>+n);
+    for(;H;) console.log(((--H+W)%2? '#.' : '.#').repeat(W).substr(0,W));
+    console.log();
+    return;
+})

@@ -1,0 +1,9 @@
+a = int(input())
+b = int(input())
+c = int(input())
+d = 250
+while (b + c) <= a:
+    d = d + 100
+    b = b + c
+
+print(d)

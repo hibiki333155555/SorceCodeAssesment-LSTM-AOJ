@@ -1,0 +1,29 @@
+/* Copyright 2022 © Abdullah AL Shohag */
+
+#include <iostream>
+#include <string>
+#include <queue>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<queue<long long int>> arrays(n);
+    for(int i = 0; i < q; i++) {
+        int c, t;
+        cin >> c >> t;
+        if (c == 0) {
+            string inputs;
+            getline(cin, inputs);
+            long long int x = stoi(inputs);
+            arrays.at(t).push(x);
+        } else if (c == 1) {
+            if (!arrays.at(t).empty()) cout << arrays.at(t).front() << endl;
+        } else if(c == 2) {
+            if (!arrays.at(t).empty()) arrays.at(t).pop();
+        }
+    }
+    return 0;
+}

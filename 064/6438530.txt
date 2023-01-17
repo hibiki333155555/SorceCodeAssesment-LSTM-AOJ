@@ -1,0 +1,441 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+import java.util.function.*;
+public class Main implements Runnable {
+	static boolean DEBUG;
+	public static void main(String[] args) {
+		DEBUG = args.length > 0 && args[0].equals("-DEBUG");
+		Thread.setDefaultUncaughtExceptionHandler((t, e) -> { e.printStackTrace(); System.exit(1); });
+		new Thread(null, new Main(), "", 1 << 31).start();
+	}
+
+	public void run() { Solver solver = new Solver(); solver.solve(); solver.exit(); }
+
+	static class FastScanner {
+		private final InputStream in = System.in;
+		private final byte[] buffer = new byte[1024];
+		private int pointer = 0;
+		private int buflen = 0;
+		private boolean hasNextByte() {
+			if(pointer < buflen) return true;
+			else {
+				pointer = 0;
+				try { buflen = in.read(buffer);
+				}catch (IOException e) { e.printStackTrace(); }
+				return buflen > 0;
+			}
+		}
+		private int readByte() { if(hasNextByte()) return buffer[pointer ++]; else return -1; }
+		private boolean isPrintableChar(int c) { return isPrintableChar(c, false); }
+		private boolean isPrintableChar(int c, boolean includingSpace) { return (includingSpace ? 32 : 33) <= c && c <= 126; }
+		private void skipUnprintable() { skipUnprintable(false); }
+		private void skipUnprintable(boolean includingSpace) { while(hasNextByte() && !isPrintableChar(buffer[pointer], includingSpace)) pointer ++; }
+		private boolean hasNext() { return hasNext(false); }
+		private boolean hasNext(boolean includingSpace) { skipUnprintable(includingSpace); return hasNextByte(); }
+		private StringBuilder sb = new StringBuilder();
+		public String next() { return next(false); }
+		public String next(boolean includingSpace) {
+			if(!hasNext(includingSpace)) throw new NoSuchElementException();
+			sb.setLength(0);
+			int b = readByte();
+			while(isPrintableChar(b, includingSpace)) { sb.appendCodePoint(b); b = readByte(); }
+			return sb.toString();
+		}
+		public long nextLong() {
+			if(!hasNext()) throw new NoSuchElementException();
+			long n = 0;
+			boolean minus = false;
+			int b = readByte();
+			if(b == '-') { minus = true; b = readByte(); }
+			if(b < '0' || '9' < b) throw new NumberFormatException();
+			while(true) {
+				if('0' <= b && b <= '9') n = n * 10 + b - '0';
+				else if(b == -1 || !isPrintableChar(b)) return minus ? - n : n;
+				else throw new NumberFormatException();
+				b = readByte();
+			}
+		}
+	}
+
+	static class Solver {
+		final FastScanner sc = new FastScanner();
+		public Solver() { }
+
+		final String ns() { return ns(false); }
+		final String ns(boolean includingSpace) { return sc.next(includingSpace); }
+		final String[] ns(int n) { return ns(n, false); }
+		final String[] ns(int n, boolean includingSpace) { String a[] = new String[n]; for(int i = 0; i < n; i ++) a[i] = ns(includingSpace); return a; }
+		final String[][] ns(int n, int m) { return ns(n, m, false); }
+		final String[][] ns(int n, int m, boolean includingSpace) { String a[][] = new String[n][m]; for(int i = 0; i < n; i ++) a[i] = ns(m, includingSpace); return a; }
+		final char nc() { return ns().charAt(0); }
+		final char[] nc(int n) {
+			String str = ns();
+			if(n < 0) n = str.length();
+			char a[] = new char[n];
+			for(int i = 0; i < n; i ++) a[i] = str.charAt(i);
+			return a;
+		}
+		final char[][] nc(int n, int m) { char a[][] = new char[n][m]; for(int i = 0; i < n; i ++) a[i] = nc(m); return a; }
+		final boolean[] nb(int n, char t) {
+			char c[] = nc(-1);
+			if(n < 0) n = c.length;
+			boolean a[] = new boolean[n];
+			for(int i = 0; i < n; i ++) a[i] = c[i] == t;
+			return a;
+		}
+		final boolean[][] nb(int n, int m, char t) { boolean a[][] = new boolean[n][m]; for(int i = 0; i < n; i ++) a[i] = nb(m, t); return a; }
+		final int ni() { return Math.toIntExact(sc.nextLong()); }
+		final int[] ni(int n) { int a[] = new int[n]; for(int i = 0; i < n; i ++) a[i] = ni(); return a; }
+		final int[][] ni(int n, int m) { int a[][] = new int[n][m]; for(int i = 0; i < n; i ++) a[i] = ni(m); return a; }
+		final long nl() { return sc.nextLong(); }
+		final long[] nl(int n) { long a[] = new long[n]; for(int i = 0; i < n; i ++) a[i] = nl(); return a; }
+		final long[][] nl(int n, int m) { long a[][] = new long[n][m]; for(int i = 0; i < n; i ++) a[i] = nl(m); return a; }
+		final double nd() { return Double.parseDouble(sc.next()); }
+		final double[] nd(int n) { double a[] = new double[n]; for(int i = 0; i < n; i ++) a[i] = nd(); return a; }
+		final double[][] nd(int n, int m) { double a[][] = new double[n][m]; for(int i = 0; i < n; i ++) a[i] = nd(m); return a; }
+
+		final String booleanToString(boolean b) { return b ? "#" : "."; }
+
+		final PrintWriter out = new PrintWriter(System.out);
+		final PrintWriter err = new PrintWriter(System.err);
+		final StringBuilder sb4prtln = new StringBuilder();
+		final void prt() { out.print(""); }
+		final <T> void prt(T a) { out.print(a); }
+		final void prtln() { out.println(""); }
+		final <T> void prtln(T a) { out.println(a); }
+		final void prtln(int... a) { sb4prtln.setLength(0); for(int ele : a) { sb4prtln.append(ele); sb4prtln.append(" "); } prtln(sb4prtln.toString().trim()); }
+		final void prtln(long... a) { sb4prtln.setLength(0); for(long ele : a) { sb4prtln.append(ele); sb4prtln.append(" "); } prtln(sb4prtln.toString().trim()); }
+		final void prtln(double... a) { sb4prtln.setLength(0); for(double ele : a) { sb4prtln.append(ele); sb4prtln.append(" "); } prtln(sb4prtln.toString().trim()); }
+		final void prtln(String... a) { sb4prtln.setLength(0); for(String ele : a) { sb4prtln.append(ele); sb4prtln.append(" "); } prtln(sb4prtln.toString().trim()); }
+		final void prtln(char... a) { sb4prtln.setLength(0); for(char ele : a) sb4prtln.append(ele); prtln(sb4prtln.toString()); }
+		final void prtln(boolean... a) { sb4prtln.setLength(0); for(boolean ele : a) sb4prtln.append(booleanToString(ele)); prtln(sb4prtln.toString()); }
+		final void prtlns(int... a) { sb4prtln.setLength(0); for(int ele : a) { sb4prtln.append(ele); sb4prtln.append("\n"); } prt(sb4prtln.toString()); }
+		final void prtlns(long... a) { sb4prtln.setLength(0); for(long ele : a) { sb4prtln.append(ele); sb4prtln.append("\n"); } prt(sb4prtln.toString()); }
+		final void prtlns(double... a) { sb4prtln.setLength(0); for(double ele : a) { sb4prtln.append(ele); sb4prtln.append("\n"); } prt(sb4prtln.toString()); }
+		final void prtlns(String... a) { sb4prtln.setLength(0); for(String ele : a) { sb4prtln.append(ele); sb4prtln.append("\n"); } prt(sb4prtln.toString()); }
+		final void prtlns(char... a) { sb4prtln.setLength(0); for(char ele : a) { sb4prtln.append(ele); sb4prtln.append("\n"); } prt(sb4prtln.toString()); }
+		final void prtlns(boolean... a) { sb4prtln.setLength(0); for(boolean ele : a) { sb4prtln.append(booleanToString(ele)); sb4prtln.append("\n"); } prt(sb4prtln.toString()); }
+		final void prtln(int[][] a) { for(int[] ele : a) prtln(ele); }
+		final void prtln(long[][] a) { for(long[] ele : a) prtln(ele); }
+		final void prtln(double[][] a) { for(double[] ele : a) prtln(ele); }
+		final void prtln(String[][] a) { for(String[] ele : a) prtln(ele); }
+		final void prtln(char[][] a) { for(char[] ele : a) prtln(ele); }
+		final void prtln(boolean[][] a) { for(boolean[] ele : a) prtln(ele); }
+
+		final String errconvert(int a) { return isINF(a) ? "_" : String.valueOf(a); }
+		final String errconvert(long a) { return isINF(a) ? "_" : String.valueOf(a); }
+		final void errprt(int a) { if(DEBUG) err.print(errconvert(a)); }
+		final void errprt(long a) { if(DEBUG) err.print(errconvert(a)); }
+		final void errprt() { if(DEBUG) err.print(""); }
+		final <T> void errprt(T a) { if(DEBUG) err.print(a); }
+		final void errprt(boolean a) { if(DEBUG) errprt(booleanToString(a)); }
+		final void errprtln() { if(DEBUG) err.println(""); }
+		final void errprtln(int a) { if(DEBUG) err.println(errconvert(a)); }
+		final void errprtln(long a) { if(DEBUG) err.println(errconvert(a)); }
+		final <T> void errprtln(T a) { if(DEBUG) err.println(a); }
+		final void errprtln(boolean a) { if(DEBUG) errprtln(booleanToString(a)); }
+		final void errprtln(int... a) { if(DEBUG) { sb4prtln.setLength(0); for(int ele : a) { sb4prtln.append(errconvert(ele)); sb4prtln.append(" "); } errprtln(sb4prtln.toString().trim()); } }
+		final void errprtln(long... a) { if(DEBUG) { sb4prtln.setLength(0); for(long ele : a) { sb4prtln.append(errconvert(ele)); sb4prtln.append(" "); } errprtln(sb4prtln.toString().trim()); } }
+		final void errprtln(double... a) { if(DEBUG) { sb4prtln.setLength(0); for(double ele : a) { sb4prtln.append(ele); sb4prtln.append(" "); } errprtln(sb4prtln.toString().trim()); } }
+		final void errprtln(String... a) { if(DEBUG) { sb4prtln.setLength(0); for(String ele : a) { sb4prtln.append(ele); sb4prtln.append(" "); } errprtln(sb4prtln.toString().trim()); } }
+		final void errprtln(char... a) { if(DEBUG) { sb4prtln.setLength(0); for(char ele : a) sb4prtln.append(ele); errprtln(sb4prtln.toString()); } }
+		final void errprtln(boolean... a) { if(DEBUG) { sb4prtln.setLength(0); for(boolean ele : a) sb4prtln.append(booleanToString(ele)); errprtln(sb4prtln.toString()); } }
+		final void errprtlns(int... a) { if(DEBUG) { sb4prtln.setLength(0); for(int ele : a) { sb4prtln.append(errconvert(ele)); sb4prtln.append("\n"); } errprt(sb4prtln.toString()); } }
+		final void errprtlns(long... a) { if(DEBUG) { sb4prtln.setLength(0); for(long ele : a) { sb4prtln.append(errconvert(ele)); sb4prtln.append("\n"); } errprt(sb4prtln.toString()); } }
+		final void errprtlns(double... a) { if(DEBUG) { sb4prtln.setLength(0); for(double ele : a) { sb4prtln.append(ele); sb4prtln.append("\n"); } errprt(sb4prtln.toString()); } }
+		final void errprtlns(String... a) { if(DEBUG) { sb4prtln.setLength(0); for(String ele : a) { sb4prtln.append(ele); sb4prtln.append("\n"); } errprt(sb4prtln.toString()); } }
+		final void errprtlns(char... a) { if(DEBUG) { sb4prtln.setLength(0); for(char ele : a) { sb4prtln.append(ele); sb4prtln.append("\n"); } errprt(sb4prtln.toString()); } }
+		final void errprtlns(boolean... a) { if(DEBUG) { sb4prtln.setLength(0); for(boolean ele : a) { sb4prtln.append(booleanToString(ele)); sb4prtln.append("\n"); } errprt(sb4prtln.toString()); } }
+		final void errprtln(Object[] a) { if(DEBUG) for(Object ele : a) errprtln(ele); }
+		final void errprtln(int[][] a) { if(DEBUG) for(int[] ele : a) errprtln(ele); }
+		final void errprtln(long[][] a) { if(DEBUG) for(long[] ele : a) errprtln(ele); }
+		final void errprtln(double[][] a) { if(DEBUG) for(double[] ele : a) errprtln(ele); }
+		final void errprtln(String[][] a) { if(DEBUG) for(String[] ele : a) errprtln(ele); }
+		final void errprtln(char[][] a) { if(DEBUG) for(char[] ele : a) errprtln(ele); }
+		final void errprtln(boolean[][] a) { if(DEBUG) for(boolean[] ele : a) errprtln(ele); }
+		final void errprtln(Object[][] a) { if(DEBUG) for(Object ele : a) { errprtln(ele); errprtln(); } }
+
+		final void reply(boolean b) { prtln(b ? "Yes" : "No"); }
+		final void REPLY(boolean b) { prtln(b ? "YES" : "NO"); }
+
+		final void flush() { out.flush(); if(DEBUG) err.flush(); }
+		final void assertion(boolean b) { if(!b) { flush(); throw new AssertionError(); } }
+		final <T> void assertion(boolean b, T a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, int... a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, long... a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, double... a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, String... a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, char... a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, boolean... a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, int[][] a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, long[][] a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, double[][] a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, String[][] a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, char[][] a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void assertion(boolean b, boolean[][] a) { if(!b) { errprtln(a); flush(); throw new AssertionError(); } }
+		final void inclusiveRangeCheck(int i, int max) { inclusiveRangeCheck(i, 0, max); }
+		final void inclusiveRangeCheck(int i, int min, int max) { rangeCheck(i, min, max + 1); }
+		final void inclusiveRangeCheck(long i, long max) { inclusiveRangeCheck(i, 0, max); }
+		final void inclusiveRangeCheck(long i, long min, long max) { rangeCheck(i, min, max + 1); }
+		final void rangeCheck(int i, int max) { rangeCheck(i, 0, max); }
+		final void rangeCheck(int i, int min, int max) { if(i < min || i >= max) throw new IndexOutOfBoundsException(String.format("Index %d out of bounds for length %d", i, max)); }
+		final void rangeCheck(long i, long max) { rangeCheck(i, 0, max); }
+		final void rangeCheck(long i, long min, long max) { if(i < min || i >= max) throw new IndexOutOfBoundsException(String.format("Index %d out of bounds for length %d", i, max)); }
+		final void nonNegativeCheck(long x) { nonNegativeCheck(x, "the argument"); }
+		final void nonNegativeCheck(long x, String attribute) { if(x < 0) throw new IllegalArgumentException(String.format("%s %d is negative", attribute, x)); }
+		final void positiveCheck(long x) { positiveCheck(x, "the argument"); }
+		final void positiveCheck(long x, String attribute) { if(x <= 0) throw new IllegalArgumentException(String.format("%s %d is negative", attribute, x)); }
+
+		final void exit() { flush(); System.exit(0); }
+		final <T> void exit(T a) { prtln(a); exit(); }
+		final void exit(int... a) { prtln(a); exit(); }
+		final void exit(long... a) { prtln(a); exit(); }
+		final void exit(double... a) { prtln(a); exit(); }
+		final void exit(String... a) { prtln(a); exit(); }
+		final void exit(char... a) { prtln(a); exit(); }
+		final void exit(boolean... a) { prtln(a); exit(); }
+		final void exit(int[][] a) { prtln(a); exit(); }
+		final void exit(long[][] a) { prtln(a); exit(); }
+		final void exit(double[][] a) { prtln(a); exit(); }
+		final void exit(String[][] a) { prtln(a); exit(); }
+		final void exit(char[][] a) { prtln(a); exit(); }
+		final void exit(boolean[][] a) { prtln(a); exit(); }
+
+
+		final long INF = (long)1e18 + 7;
+		final boolean isPlusINF(long a) { return a > INF / 10; }
+		final boolean isMinusINF(long a) { return isPlusINF(- a); }
+		final boolean isINF(long a) { return isPlusINF(a) || isMinusINF(a); }
+		final int I_INF = (int)1e9 + 7;
+		final boolean isPlusINF(int a) { return a > I_INF / 10; }
+		final boolean isMinusINF(int a) { return isPlusINF(- a); }
+		final boolean isINF(int a) { return isPlusINF(a) || isMinusINF(a); }
+
+
+		final int min(int a, int b) { return Math.min(a, b); }
+		final long min(long a, long b) { return Math.min(a, b); }
+		final double min(double a, double b) { return Math.min(a, b); }
+		final <T extends Comparable<T>> T min(T a, T b) { return a.compareTo(b) <= 0 ? a : b; }
+		final int min(int... x) { int min = x[0]; for(int val : x) min = min(min, val); return min; }
+		final long min(long... x) { long min = x[0]; for(long val : x) min = min(min, val); return min; }
+		final double min(double... x) { double min = x[0]; for(double val : x) min = min(min, val); return min; }
+		final int max(int a, int b) { return Math.max(a, b); }
+		final long max(long a, long b) { return Math.max(a, b); }
+		final double max(double a, double b) { return Math.max(a, b); }
+		final <T extends Comparable<T>> T max(T a, T b) { return a.compareTo(b) >= 0 ? a : b; }
+		final int max(int... x) { int max = x[0]; for(int val : x) max = max(max, val); return max; }
+		final long max(long... x) { long max = x[0]; for(long val : x) max = max(max, val); return max; }
+		final double max(double... x) { double max = x[0]; for(double val : x) max = max(max, val); return max; }
+		final <T extends Comparable<T>> T max(T[] x) { T max = x[0]; for(T val : x) max = max(max, val); return max; }
+		final int max(int[][] a) { int max = a[0][0]; for(int[] ele : a) max = max(max, max(ele)); return max; }
+		final long max(long[][] a) { long max = a[0][0]; for(long[] ele : a) max = max(max, max(ele)); return max; }
+		final double max(double[][] a) { double max = a[0][0]; for(double[] ele : a) max = max(max, max(ele)); return max; }
+		final <T extends Comparable<T>> T max(T[][] a) { T max = a[0][0]; for(T[] ele : a) max = max(max, max(ele)); return max; }
+		final long sum(int... a) { long sum = 0; for(int ele : a) sum += ele; return sum; }
+		final long sum(long... a) { long sum = 0; for(long ele : a) sum += ele; return sum; }
+		final double sum(double... a) { double sum = 0; for(double ele : a) sum += ele; return sum; }
+		final long sum(boolean... a) { long sum = 0; for(boolean ele : a) sum += ele ? 1 : 0; return sum; }
+		final long[] sums(int[] a) { long sum[] = new long[a.length + 1]; sum[0] = 0; for(int i = 0; i < a.length; i ++) sum[i + 1] = sum[i] + a[i]; return sum; }
+		final long[] sums(long[] a) { long sum[] = new long[a.length + 1]; sum[0] = 0; for(int i = 0; i < a.length; i ++) sum[i + 1] = sum[i] + a[i]; return sum; }
+		final double[] sums(double[] a) { double sum[] = new double[a.length + 1]; sum[0] = 0; for(int i = 0; i < a.length; i ++) sum[i + 1] = sum[i] + a[i]; return sum; }
+		final long[] sums(boolean[] a) { long sum[] = new long[a.length + 1]; sum[0] = 0; for(int i = 0; i < a.length; i ++) sum[i + 1] = sum[i] + (a[i] ? 1 : 0); return sum; }
+
+		final int constrain(int x, int l, int r) { return min(max(x, min(l, r)), max(l, r)); }
+		final long constrain(long x, long l, long r) { return min(max(x, min(l, r)), max(l, r)); }
+		final double constrain(double x, double l, double r) { return min(max(x, min(l, r)), max(l, r)); }
+		final int abs(int x) { return x >= 0 ? x : - x; }
+		final long abs(long x) { return x >= 0 ? x : - x; }
+		final double abs(double x) { return x >= 0 ? x : - x; }
+		final int signum(int x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+		final int signum(long x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+		final int signum(double x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+		final long round(double x) { return Math.round(x); }
+		final long floor(double x) { return round(Math.floor(x)); }
+		final int divfloor(int a, int b) { return signum(a) == signum(b) ? a / b : - divceil(abs(a), abs(b)); }
+		final long divfloor(long a, long b) { return signum(a) == signum(b) ? a / b : - divceil(abs(a), abs(b)); }
+		final long ceil(double x) { return round(Math.ceil(x)); }
+		final int divceil(int a, int b) { return a >= 0 && b > 0 ? (a + b - 1) / b : a < 0 && b < 0 ? divceil(abs(a), abs(b)) : - divfloor(abs(a), abs(b)); }
+		final long divceil(long a, long b) { return a >= 0 && b > 0 ? (a + b - 1) / b : a < 0 && b < 0 ? divceil(abs(a), abs(b)) : - divfloor(abs(a), abs(b)); }
+		final boolean mulGreater(long a, long b, long c) { return b == 0 ? c < 0 : b < 0 ? mulLess(a, - b, - c) : a > divfloor(c, b); } // a * b > c
+		final boolean mulGreaterEquals(long a, long b, long c) { return b == 0 ? c <= 0 : b < 0 ? mulLessEquals(a, - b, - c) : a >= divceil(c, b); } // a * b >= c
+		final boolean mulLess(long a, long b, long c) { return !mulGreaterEquals(a, b, c); } // a * b < c
+		final boolean mulLessEquals(long a, long b, long c) { return !mulGreater(a, b, c); } // a * b <= c
+		final double sqrt(int x) { return Math.sqrt((double)x); }
+		final double sqrt(long x) { return Math.sqrt((double)x); }
+		final double sqrt(double x) { return Math.sqrt(x); }
+		final long fact(int n) { long ans = 1; for(int i = 1; i <= n; i ++) ans = Math.multiplyExact(ans, i); return ans; }
+		final long naiveP(long n, long r) { long ans = 1; for(int i = 0; i < r; i ++) ans = Math.multiplyExact(ans, n - i); return ans; }
+		final long naiveC(long n, long r) { long ans = 1; for(int i = 0; i < r; i ++) { ans = Math.multiplyExact(ans, n - i); ans /= (i + 1); } return ans; }
+		final double pow(double x, double y) { return Math.pow(x, y); }
+		final long pow(long x, long y) {
+			long ans = 1;
+			while(true) {
+				if((y & 1) != 0) ans = Math.multiplyExact(ans, x);
+				y >>= 1;
+				if(y <= 0) return ans;
+				x = Math.multiplyExact(x, x);
+			}
+		}
+		final double pow(double x, long y) {
+			double ans = 1;
+			while(true) {
+				if((y & 1) != 0) ans *= x;
+				y >>= 1;
+				if(y <= 0) return ans;
+				x *= x;
+			}
+		}
+		final int gcd(int a, int b) { while(true) { if(b == 0) return a; int tmp = a; a = b; b = tmp % b; } }
+		final long gcd(long a, long b) { while(true) { if(b == 0) return a; long tmp = a; a = b; b = tmp % b; } }
+		final long lcm(long a, long b) { return a / gcd(a, b) * b; }
+		final int gcd(int... a) { int gcd = 0; for(int i = 0; i < a.length; i ++) gcd = gcd(gcd, a[i]); return gcd; }
+		final long gcd(long... a) { long gcd = 0; for(int i = 0; i < a.length; i ++) gcd = gcd(gcd, a[i]); return gcd; }
+		final double random() { return Math.random(); }
+		final int random(int max) { return (int)floor(random() * max); }
+		final long random(long max) { return floor(random() * max); }
+		final double random(double max) { return random() * max; }
+		final int random(int min, int max) { return random(max - min) + min; }
+		final long random(long min, long max) { return random(max - min) + min; }
+		final double random(double min, double max) { return random(max - min) + min; }
+
+
+		final void fill(int[] a, int x) { Arrays.fill(a, x); }
+		final void fill(long[] a, long x) { Arrays.fill(a, x); }
+		final void fill(double[] a, double x) { Arrays.fill(a, x); }
+		final void fill(char[] a, char x) { Arrays.fill(a, x); }
+		final void fill(boolean[] a, boolean x) { Arrays.fill(a, x); }
+		final void fill(int[][] a, int x) { for(int[] ele : a) fill(ele, x); }
+		final void fill(long[][] a, long x) { for(long[] ele : a) fill(ele, x); }
+		final void fill(double[][] a, double x) { for(double[] ele : a) fill(ele, x); }
+		final void fill(char[][] a, char x) { for(char[] ele : a) fill(ele, x); }
+		final void fill(boolean[][] a, boolean x) { for(boolean[] ele : a) fill(ele, x); }
+		final void fill(int[][][] a, int x) { for(int[][] ele : a) fill(ele, x); }
+		final void fill(long[][][] a, long x) { for(long[][] ele : a) fill(ele, x); }
+		final void fill(double[][][] a, double x) { for(double[][] ele : a) fill(ele, x); }
+		final void fill(char[][][] a, char x) { for(char[][] ele : a) fill(ele, x); }
+		final void fill(boolean[][][] a, boolean x) { for(boolean[][] ele : a) fill(ele, x); }
+
+		final int[] resize(int[] a, int m, int x) { nonNegativeCheck(m); int resized[] = new int[m]; for(int i = max(0, - x); i < a.length && i + x < m; i ++) resized[i + x] = a[i]; return resized; }
+		final long[] resize(long[] a, int m, int x) { nonNegativeCheck(m); long resized[] = new long[m]; for(int i = max(0, - x); i < a.length && i + x < m; i ++) resized[i + x] = a[i]; return resized; }
+		final double[] resize(double[] a, int m, int x) { nonNegativeCheck(m); double resized[] = new double[m]; for(int i = max(0, - x); i < a.length && i + x < m; i ++) resized[i + x] = a[i]; return resized; }
+		final char[] resize(char[] a, int m, int x) { nonNegativeCheck(m); char resized[] = new char[m]; for(int i = max(0, - x); i < a.length && i + x < m; i ++) resized[i + x] = a[i]; return resized; }
+		final boolean[] resize(boolean[] a, int m, int x) { nonNegativeCheck(m); boolean resized[] = new boolean[m]; for(int i = max(0, - x); i < a.length && i + x < m; i ++) resized[i + x] = a[i]; return resized; }
+		final Object[] resize(Object[] a, int m, int x) { nonNegativeCheck(m); Object resized[] = new Object[m]; for(int i = max(0, - x); i < a.length && i + x < m; i ++) resized[i + x] = a[i]; return resized; }
+
+
+public void solve() {
+	int n = ni();
+	int l = ni();
+	Long a[] = new Long[n];
+	for(int i = 0; i < n; i ++) a[i] = nl();
+	PairII p[] = new PairII[n - l + 1];
+	Swag<Long> swag = new Swag<>(a, () -> INF, (ele1, ele2) -> min(ele1, ele2));
+	long ans[] = new long[n - l + 1];
+	for(int i = 0; i < n - l + 1; i ++) ans[i] = swag.fold(i, i + l);
+	prtln(ans);
+}
+
+		final PairII npii() { return new PairII(ni(), ni()); }
+		final PairII[] npii(int n) { PairII a[] = new PairII[n]; for(int i = 0; i < n; i ++) a[i] = npii(); return a; }
+		final PairII[][] npii(int n, int m) { PairII a[][] = new PairII[n][m]; for(int i = 0; i < n; i ++) a[i] = npii(m); return a; }
+		class PairII implements Comparable<PairII> {
+			int a; int b;
+			PairII() { }
+			PairII(int a, int b) { this.a = a; this.b = b; }
+			@Override public String toString() { return "("+a+", "+b+")"; }
+			@Override public int hashCode() { return Objects.hash(a, b); }
+			@Override
+			public boolean equals(Object obj) {
+				if(this == obj) return true;
+				if(obj == null) return false;
+				if(this.getClass() != obj.getClass()) return false;
+				PairII that = (PairII) obj;
+				if(this.a != that.a || this.b != that.b) return false;
+				return true;
+			}
+			@Override public int compareTo(PairII that) { int c = Integer.compare(this.a, that.a); if(c == 0) c = Integer.compare(this.b, that.b); return c; }
+		}
+
+
+		class TupleIII implements Comparable<TupleIII> {
+			int a; int b; int c;
+			TupleIII() {  }
+			TupleIII(int a, int b, int c) { this.a = a; this.b = b; this.c = c; }
+			@Override public String toString() { return "("+a+", "+b+", "+c+")"; }
+			@Override public int hashCode() { return Objects.hash(a, b, c); }
+			@Override
+			public boolean equals(Object obj) {
+				if(this == obj) return true;
+				if(obj == null || this.getClass() != obj.getClass()) return false;
+				TupleIII that = (TupleIII) obj;
+				if(this.a != that.a || this.b != that.b || this.c != that.c) return false;
+				return true;
+			}
+			@Override public int compareTo(TupleIII that) { int c = Integer.compare(this.a, that.a); if(c == 0) c = Integer.compare(this.b, that.b); if(c == 0) c = Integer.compare(this.c, that.c); return c; }
+		}
+
+class Swag<T> {
+	int n;
+	T val[];
+	Supplier<T> eSupplier;
+	BinaryOperator<T> f;
+
+	T front;
+	Deque<T> back = new ArrayDeque<>();
+	int l = 0;
+	int r = 0;
+
+	Swag(T[] val, Supplier<T> eSupplier, BinaryOperator<T> f) {
+		n = val.length;
+		this.val = val;
+		this.eSupplier = eSupplier;
+		this.f = f;
+		front = eSupplier.get();
+	}
+
+	// O(N + QlogQ)
+	@SuppressWarnings("unchecked")
+	T[] query(PairII[] p) {
+		TupleIII t[] = new TupleIII[p.length];
+		for(int i = 0; i < p.length; i ++) t[i] = new TupleIII(p[i].a, p[i].b, i);
+		Arrays.sort(t);
+		T ans[] = (T[]) new Object[p.length];
+		for(int i = 0; i < p.length; i ++) ans[t[i].c] = fold(p[t[i].c]);
+		return ans;
+	}
+	// O(N + Q)
+	// p is sorted
+	@SuppressWarnings("unchecked")
+	T[] sortedQuery(PairII[] p) {
+		T ans[] = (T[]) new Object[p.length];
+		for(int i = 0; i < p.length; i ++) ans[i] = fold(p[i]);
+		return ans;
+	}
+
+	// return fold [i, j)
+	T fold(PairII p) { return fold(p.a, p.b); }
+	T fold(int i, int j) {
+		rangeCheck(i, n);
+		inclusiveRangeCheck(j, n);
+		assertion(i >= l && j >= r);
+		while(r < j) front = f.apply(front, val[r ++]);
+		while(l < i) {
+			if(back.isEmpty()) {
+				T tmp = eSupplier.get();
+				for(int u = r - 1; u >= l; u --) {
+					tmp = f.apply(val[u], tmp);
+					back.addLast(tmp);
+				}
+				front = eSupplier.get();
+			}
+			back.removeLast();
+			l ++;
+		}
+		return back.isEmpty() ? front : f.apply(back.getLast(), front);
+	}
+}
+
+	}
+}
+

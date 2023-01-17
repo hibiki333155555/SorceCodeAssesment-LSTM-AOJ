@@ -1,0 +1,99 @@
+import java.util.Scanner;
+
+// サイコロのクラス
+class Dice {
+    private int[] dice;
+
+    public Dice(int[] dice) {
+        this.dice = dice;
+    }
+
+    public int[] getDice() {
+        return dice;
+    }
+
+    public void setDice(int[] dice) {
+        this.dice = dice;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    // 左に転がす
+    public void rollLeft() {
+        int[] tmpDice = dice.clone();
+        dice[0] = tmpDice[2];
+        dice[2] = tmpDice[5];
+        dice[3] = tmpDice[0];
+        dice[5] = tmpDice[3];
+    }
+
+    // 右に転がす
+    public void rollRight() {
+        int[] tmpDice = dice.clone();
+        dice[0] = tmpDice[3];
+        dice[2] = tmpDice[0];
+        dice[3] = tmpDice[5];
+        dice[5] = tmpDice[2];
+    }
+
+    // 上に転がす
+    public void rollup() {
+        int[] tmpDice = dice.clone();
+        dice[0] = tmpDice[1];
+        dice[1] = tmpDice[5];
+        dice[4] = tmpDice[0];
+        dice[5] = tmpDice[4];
+    }
+
+    // 下に転がす
+    public void rollUnder() {
+        int[] tmpDice = dice.clone();
+        dice[0] = tmpDice[4];
+        dice[1] = tmpDice[0];
+        dice[4] = tmpDice[5];
+        dice[5] = tmpDice[1];
+
+    }
+
+    public void showTopDice() {
+        System.out.println(dice[0]);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[] tmpDice = new int[6];
+        for (int i = 0; i < 6; i++) {
+            tmpDice[i] = sc.nextInt();
+        }
+
+        Dice dice = new Dice(tmpDice);
+
+        // 命令
+        String order = sc.next();
+        for (int i = 0; i < order.length(); i++) {
+            char c = order.charAt(i);
+            switch (c) {
+                case 'E':
+                    dice.rollRight();
+                    break;
+                case 'W':
+                    dice.rollLeft();
+                    break;
+                case 'S':
+                    dice.rollup();
+                    break;
+                case 'N':
+                    dice.rollUnder();
+                    break;
+            }
+        }
+
+        dice.showTopDice();
+    }
+}
+

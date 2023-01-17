@@ -1,0 +1,12 @@
+#include <iostream>
+#include <bitset>
+
+using namespace std;
+
+int main(){
+    unsigned int a,b;
+    cin>>a,b;
+    cout << bitset<32>(a&b) << endl;
+    cout << bitset<32>(a|b) << endl;
+    cout << bitset<32>(a^b) << endl;
+}

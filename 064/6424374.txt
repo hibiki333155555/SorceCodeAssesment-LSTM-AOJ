@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(void) {
+    const int INF = INT_MAX;
+    
+    int V, E, r;
+    cin >> V >> E >> r;
+    
+    // 图读取
+    int s, t, d;
+    vector<pair<int, int> > Graph[V];
+    for (int i = 0; i < E; i++) {
+        cin >> s >> t >> d;
+        Graph[s].push_back(make_pair(t, d));
+    }
+    
+    // 设置两个集合，一个保存已经确定为最短路径，一个保存待定的节点
+    set<int> s1;
+    set<int> s2;
+    for (int i = 0; i < V; i++) {
+        s2.insert(i);
+    }
+    
+    // 初始化路径长度
+    int node_path[V];
+    for (int i = 0; i < V; i++) {
+        node_path[i] = INF;   
+    }
+    
+    // 准备开始，对起点进行特殊处理
+    node_path[r] = 0;
+    
+    // 退出循环的条件有两个，一个是找不到路径了，一个是所有的路径都已经处理完成了，后者作为基础判断，前者作为特殊判断条件放到循环里
+    int min_path_value;
+    int min_path_node;
+    while (!s2.empty()) {
+        min_path_value = INF;
+        // 遍历 s2 寻找最小的
+        for (auto it = s2.begin(); it != s2.end(); it++) {
+            if (node_path[*it] < min_path_value) {
+                min_path_value = node_path[*it];
+                min_path_node = *it;
+            }
+        }
+        // 判断是否找到了，要是没有找到的话就可以退出了
+        if (min_path_value == INF) {
+            break;
+        }
+        // 将最小的从 s2 集合转移到 s1 集合中
+        s1.insert(min_path_node);
+        s2.erase(min_path_node);
+        // 更新其他节点的距离
+        for (auto it = Graph[min_path_node].begin(); it != Graph[min_path_node].end(); it++) {
+            if (min_path_value + (*it).second < node_path[(*it).first]) {
+                node_path[(*it).first] = min_path_value + (*it).second;
+            }
+        }
+    }
+    for (int i = 0; i < V; i++) {
+        if (node_path[i] == INF) {
+            cout << "INF" << endl;
+        } else {
+            cout << node_path[i] << endl;
+        }
+    }
+}
+

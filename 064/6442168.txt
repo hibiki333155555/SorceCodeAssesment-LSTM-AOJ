@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+//const long nPrime = 1000000007;
+//const long nPrime = 998244353;
+typedef long long ll;
+int main() {
+    ll nAns = 0;
+    for(ll i = 0; i < 10; i++){
+        ll x;
+        cin >> x;
+        nAns += x;
+    }
+    cout << nAns << endl;
+    
+    return 0;
+}

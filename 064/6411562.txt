@@ -1,0 +1,14 @@
+def insertion_sort(a, n):
+    for i in range(1, n):
+        v = a[i]
+        j = i-1
+        print(" ".join(a))
+        while j >= 0 and a[j] > v:
+            a[j+1] = a[j]
+            j -= 1
+        a[j+1] = v
+    print("".join(a))
+
+num = int(input())
+ary = input().split(" ")
+insertion_sort(ary, num)

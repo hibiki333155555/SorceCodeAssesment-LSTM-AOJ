@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+#ifdef MY_DEBUG
+  #include "dprint.cpp"
+  # define dprint(a, ...);                 \
+      do {                                 \
+          printf("line : %d, func : %s\n", \
+                __LINE__, __func__);       \
+          dprint(#a,a,##__VA_ARGS__ );     \
+      } while (0)
+#else
+  #define dprint(a,...) 
+#endif
+using namespace std;
+
+int main() {
+  int N;
+  cin >>N;
+  
+  vector<int> vec(N+1);
+  vec[0]=1;
+  vec[1]=1;
+  for (int i = 2; i <= N; i++)
+  {
+    vec[i]=vec[i-1]+vec[i-2];
+  }
+  
+  cout << vec[N] << endl;
+return 0;
+}

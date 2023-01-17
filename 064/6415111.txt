@@ -1,0 +1,60 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<set>
+using namespace std;
+int N;
+int H[1<<17];
+int Lt[1<<17],Rt[1<<17];
+int main()
+{
+	cin>>N;
+	vector<pair<int,int> >Hi(N);
+	for(int i=0;i<N;i++)
+	{
+		cin>>H[i];
+		Hi[i]=make_pair(H[i],i);
+		Lt[i]=Rt[i]=-1;
+	}
+	sort(Hi.begin(),Hi.end());
+	reverse(Hi.begin(),Hi.end());
+	int ans=0;
+	set<int>S;
+	for(pair<int,int>p:Hi)
+	{
+		int id=p.second;
+		int l=-1,r=N;
+		auto it=S.lower_bound(id);
+		if(it!=S.end())r=*it;
+		if(it!=S.begin())
+		{
+			it--;
+			l=*it;
+		}
+		S.insert(id);
+		if(l>=0)
+		{
+			int i=Lt[l];
+			if(i==-1)Lt[id]=l;
+			else
+			{
+				if((long)(H[i]-H[id])*(id-l)>=(long)(H[l]-H[id])*(id-i))Lt[id]=i;
+				else Lt[id]=l;
+			}
+			ans=max(ans,id-Lt[id]);
+		}
+		if(r<N)
+		{
+			int i=Rt[r];
+			if(i==-1)Rt[id]=r;
+			else
+			{
+				if((long)(H[i]-H[id])*(r-id)>=(long)(H[r]-H[id])*(i-id))Rt[id]=i;
+				else Rt[id]=r;
+			}
+			ans=max(ans,Rt[id]-id);
+		}
+	}
+	cout<<ans<<endl;
+}
+

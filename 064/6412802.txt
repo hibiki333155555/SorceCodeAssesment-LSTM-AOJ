@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define for_(i, a, b) for(int i = (a);i < (b);++i)
+#define rfor_(i, a, b) for(int i = (b)-1;i >= (a);--i)
+#define rep(i, n) for_(i, 0, n)
+#define rrep(i, n) rfor_(i, 0, n)
+
+/* accelration */
+// 高速バイナリ生成
+#pragma GCC target("avx")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+// cin cout の結びつけ解除, stdioと同期しない(入出力非同期化)
+// cとstdの入出力を混在させるとバグるので注意
+struct Fast {Fast() {std::cin.tie(0); ios::sync_with_stdio(false);}} fast;
+
+/* define short */
+#define all(obj) (obj).begin(), (obj).end()
+
+template<class T>bool chmax(T& a, const T& b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T>bool chmin(T& a, const T& b) { if (b < a) { a = b; return 1; } return 0; }
+
+
+int main() {
+    vector<int> Ns;
+    vector<int> xs;
+    int N = -1;
+    int x = -1;
+    while (true) {
+        cin >> N >> x;
+
+        if (N != 0 || x != 0) {
+            Ns.push_back(N);
+            xs.push_back(x);
+        }
+        else break;
+    }
+
+    int itr_num = Ns.size();
+    vector<int> ans_vec;
+    rep(i, itr_num) {
+        int ans_num = 0;
+        //cout << xs[i] << endl;
+        for_(num1, 1, Ns[i]-1) {
+            for_(num2, num1+1, Ns[i]) {
+                for_(num3, num2+1, Ns[i]+1) {
+                    //cout << num1 << " " << num2 << " " << num3 << endl;
+                    if (num1 + num2 + num3 == xs[i]) {
+                        ans_num++;
+                        //cout << "ohoho" << endl;
+                    }
+                }
+            }
+        }
+
+        ans_vec.push_back(ans_num);
+    }
+
+    rep(i, itr_num) cout << ans_vec[i] << endl;
+}

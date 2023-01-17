@@ -1,0 +1,6 @@
+S=int(input())
+h=S//3600
+m=int((S-h*60)//60)
+s=int(S-h-m)
+print(f'{h}:{m}:{s}')
+

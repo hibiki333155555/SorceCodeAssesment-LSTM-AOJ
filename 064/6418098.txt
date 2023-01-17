@@ -1,0 +1,66 @@
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+
+#include <boost/multiprecision/cpp_int.hpp>
+using cint = boost::multiprecision::cpp_int;
+
+
+// {{{ Templates
+
+// clang-format off
+
+// Macros
+#define over_load_(_1,_2,_3,_4,NAME,...) NAME
+#define rep(...) over_load_(__VA_ARGS__, rep4, rep3, rep2)(__VA_ARGS__)
+#define rep2(i, r) for ( int i = 0; i < static_cast<int>(r); (i) += 1)
+#define rep3(i, l, r) for ( int i = static_cast<int>(l); i < static_cast<int>(r); (i) += 1)
+#define rep4(i, l, r, stride) for ( int i = static_cast<int>(l); i < static_cast<int>(r); (i) += (stride))
+#define rrep(...) over_load_(__VA_ARGS__, rrep4, rrep3, rrep2)(__VA_ARGS__)
+#define rrep2(i, r) for ( int i = static_cast<int>(r) - 1; i >= 0; (i) -= 1)
+#define rrep3(i, l, r) for ( int i = static_cast<int>(r) - 1; i >= static_cast<int>(l); (i) -= 1)
+#define rrep4(i, l, r, stride) for ( int i = static_cast<int>(r) - 1; i >= static_cast<int>(l); (i) -= (stride))
+
+const char newl = '\n';
+
+// clang-format on
+
+// }}} Templates
+
+
+void solve() {
+  int n, m, v, a, b;
+  cin >> n >> m >> v >> a >> b;
+
+  if (n > m + 10) {
+    cout << "Yes" << newl;
+    return;
+  }
+
+  set<int> v_set = { v };
+  cint vi = v;
+  bool found = false;
+  rep(i, n - 1) {
+    vi = a * v + b;
+    v = int(vi % m);
+    if (v_set.count(v) >= 1) {
+      found = true;
+      break;
+    }
+    v_set.insert(v);
+  }
+
+  cout << (found ? "Yes" : "No") << newl;
+
+  return;
+}
+
+
+int main() {
+  int t;
+  cin >> t;
+
+  rep(i, t) { solve(); }
+}

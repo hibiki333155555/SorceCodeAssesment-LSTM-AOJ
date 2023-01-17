@@ -1,0 +1,191 @@
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <stack>
+#include <cstring>
+
+using namespace std;
+//#define int long long
+using ll = long long;
+int const INF = 0x3f3f3f3f;
+int const MOD = 1e9 + 7;
+
+inline int read() {
+    int x(0), sgn(1);
+    char ch(getchar());
+    for (; !isdigit(ch); ch = getchar()) if (ch == '-') sgn = -1;
+    for (; isdigit(ch); ch = getchar()) x = (x * 10) + (ch ^ 48);
+    return x * sgn;
+}
+
+int const N = 5;
+string a;
+queue<pair<int, string> > q;
+set<string> st;
+string ed = "123456789!@#$%^0";
+int ans = 0;
+int limit = 0;
+
+int bfs() {
+    q.emplace(0, a);
+    while (!q.empty()) {
+        int d = q.front().first;
+        auto t = q.front().second;
+        q.pop();
+        if (t == ed) {
+            return d;
+        }
+        bool flag = true;
+        if (st.find(t) != st.end()) {
+            continue;
+        }
+        st.insert(t);
+        int pos = -1;
+        for (int i = 0; i < (int) t.size(); i++)
+            if (t[i] == '0') {
+                pos = i;
+                break;
+            }
+        for (int i = 0; i < 4; i++) {
+            if (i == 0) {
+                int now = pos / 4;
+                if (now != 0) {
+                    swap(t[pos], t[pos - 4]);
+                    q.emplace(d + 1, t);
+                    swap(t[pos], t[pos - 4]);
+                }
+            } else if (i == 1) {
+                int now = pos / 4;
+                if (now != 3) {
+                    swap(t[pos], t[pos + 4]);
+                    q.emplace(d + 1, t);
+                    swap(t[pos], t[pos + 4]);
+                }
+            } else if (i == 2) {
+                int now = pos % 4;
+                if (now != 0) {
+                    swap(t[pos], t[pos - 1]);
+                    q.emplace(d + 1, t);
+                    swap(t[pos], t[pos - 1]);
+                }
+            } else if (i == 3) {
+                int now = pos % 4;
+                if (now != 3) {
+                    swap(t[pos], t[pos + 1]);
+                    q.emplace(d + 1, t);
+                    swap(t[pos], t[pos + 1]);
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+int goal[16][2] = {{3, 3},
+                   {0, 0},
+                   {0, 1},
+                   {0, 2},//0 1 2 3
+                   {0, 3},
+                   {1, 0},
+                   {1, 1},
+                   {1, 2},//4 5 6 7
+                   {1, 3},
+                   {2, 0},
+                   {2, 1},
+                   {2, 2},//8 9 10 11
+                   {2, 3},
+                   {3, 0},
+                   {3, 1},
+                   {3, 2}};//12 13 14 15
+int map1[4][4];
+
+int hv(int a[][4])//估价函数,曼哈顿距离,小于等于实际总步数
+{
+    int cost = 0;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            int w = map1[i][j];
+            if (w != 0) cost += abs(i - goal[w][0]) + abs(j - goal[w][1]);//不算0
+        }
+    }
+    return cost;
+}
+
+void output() {
+    printf("%d\n", ans);
+    exit(0);
+}
+
+void dfs(string t, int d, int pos) {
+    if (t == ed) {
+        ans = d;
+        output();
+    }
+    if (d >= limit) return;
+    if (st.find(t) != st.end()) {
+        return;
+    }
+    st.insert(t);
+    for (int i = 0; i < 4; i++) {
+        if (i == 0) {
+            int now = pos / 4;
+            if (now != 0) {
+                if (st.find(t) != st.end()) {
+                    swap(t[pos], t[pos - 4]);
+                    dfs(t, d + 1, pos - 4);
+                    swap(t[pos], t[pos - 4]);
+                }
+            }
+        } else if (i == 1) {
+            int now = pos / 4;
+            if (now != 4) {
+                if (st.find(t) != st.end()) {
+                    swap(t[pos], t[pos + 4]);
+                    dfs(t, d + 1, pos + 4);
+                    swap(t[pos], t[pos + 4]);
+                }
+            }
+        } else if (i == 2) {
+            int now = pos % 4;
+            if (now != 0) {
+                if (st.find(t) != st.end()) {
+                    swap(t[pos], t[pos - 1]);
+                    dfs(t, d + 1, pos - 1);
+                    swap(t[pos], t[pos - 1]);
+                }
+            }
+        } else if (i == 3) {
+            int now = pos % 4;
+            if (now != 4) {
+                if (st.find(t) != st.end()) {
+                    swap(t[pos], t[pos + 1]);
+                    dfs(t, d + 1, pos + 1);
+                    swap(t[pos], t[pos + 1]);
+                }
+            }
+        }
+    }
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    for (int i = 0, t; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            t = read();
+            map1[i][j] = read();
+            if (t == 0) a += '0';
+            else if (t >= 1 && t <= 9) a += char(t + '0');
+            else a += char(ed[t - 1]);
+        }
+    }
+    limit = hv(map1);
+    while (limit++) dfs(a, 0, 15);
+//    ans = bfs();
+//    printf("%d\n", ans);
+    return 0;
+}

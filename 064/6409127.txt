@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+int main(void){
+    int n;
+    int x, i;
+    
+    scanf("%d", &n);
+    
+    i = 1;
+    do {
+        x = i;
+        // CHECK_NUM
+        if(x % 3 == 0){
+            printf(" %d", x);
+            continue;
+        }
+        // INCLUDE3
+        do {
+            if(x % 10 == 3){
+                printf(" %d", x);
+                break;
+            }
+            x /= 10;
+        } while(x);
+        
+    } while(++i <= n);
+}

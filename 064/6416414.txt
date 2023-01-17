@@ -1,0 +1,112 @@
+from sys import stdin 
+input = stdin.readline 
+
+class Element:
+    def __init__(self, val):
+        self.val = val
+        self.prev = None
+        self.next = None
+    
+    
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        
+        
+    def append(self, element):
+        if self.head is None:
+            self.head = element
+            self.tail = element 
+        else:
+            self.tail.next = element 
+            element.prev = self.tail 
+            self.tail = element 
+            
+            
+    def get(self, index):
+        ptr = self.head 
+        for _ in range(index):
+            ptr = ptr.next 
+        return ptr 
+    
+    
+    def find(self, key):
+        ptr = self.head 
+        while ptr is not None:
+            if ptr.val == key:
+                return ptr
+            ptr = ptr.next 
+            
+    
+    def insert(self, index, element):
+        ptr = self.get(index)
+        
+        if ptr is None:
+            self.append(element)
+        else:
+            element.prev = ptr.prev 
+            element.next = ptr 
+            if ptr.prev is None:
+                self.head = element 
+            else:
+                ptr.prev.next = element 
+            ptr.prev = element 
+            
+            
+    def appendleft(self, element):
+        self.insert(0, element)
+            
+            
+    def delete(self, element):
+        if element.prev is None:
+            self.head = element.next 
+        else:
+            element.prev.next = element.next 
+            
+        if element.next is None:
+            self.tail = element.prev 
+        else:
+            element.next.prev = element.prev 
+            
+            
+    def remove(self, key):
+        element = self.find(key)
+        if element is not None:
+            self.delete(element)
+            
+            
+    def deleteFirst(self):
+        self.delete(self.head)
+        
+    
+    def deleteLast(self):
+        self.delete(self.tail)
+            
+    
+    def to_string(self):
+        res = ''
+        ptr = self.head 
+        while ptr:
+            res = res + f'{str(ptr.val)} '
+            ptr = ptr.next 
+        res = res.strip()
+        return res
+    
+    
+n = int(input())
+que = DoublyLinkedList()
+for _ in range(n):
+    command = input().split()
+    if command[0] == 'insert':
+        x = int(command[1])
+        que.appendleft(Element(x))
+    elif command[0] == 'delete':
+        x = int(command[1])
+        que.remove(x)
+    elif command[0] == 'deleteFirst':
+        que.deleteFirst()
+    elif command[0] == 'deleteLast':
+        que.deleteLast()
+
+print(que.to_string())

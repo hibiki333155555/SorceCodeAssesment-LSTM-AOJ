@@ -1,0 +1,112 @@
+#include<deque>
+#include<queue>
+#include<vector>
+#include<algorithm>
+#include<iostream>
+#include<set>
+#include<cmath>
+#include<tuple>
+#include<string>
+#include<chrono>
+#include<functional>
+#include<iterator>
+#include<random>
+#include<unordered_set>
+#include<array>
+#include<map>
+#include<iomanip>
+#include<assert.h>
+#include<list>
+#include<bitset>
+#include<stack>
+#include<memory>
+#include<numeric>
+#include<complex>
+using namespace std;
+using namespace std::chrono;
+typedef long long int llint;
+typedef long double lldo;
+#define mp make_pair
+#define mt make_tuple
+#define pub push_back
+#define puf push_front
+#define pob pop_back
+#define pof pop_front
+#define fir first
+#define sec second
+#define res resize
+#define ins insert
+#define era erase
+
+/*cout<<fixed<<setprecision(20);cin.tie(0);ios::sync_with_stdio(false);*/
+const llint mod=1000000007;
+const llint inf=2.19e15+1;
+const long double pai=3.141592653589793238462643383279502884197;
+const long double eps=1e-10;
+template <class T,class U>bool chmin(T& a,U b){if(a>b){a=b;return true;}return false;}
+template <class T,class U>bool chmax(T& a,U b){if(a<b){a=b;return true;}return false;}
+llint gcd(llint a,llint b){if(a%b==0){return b;}else return gcd(b,a%b);}
+llint lcm(llint a,llint b){if(a==0){return b;}return a/gcd(a,b)*b;}
+template<class T> void SO(T& ve){sort(ve.begin(),ve.end());}
+template<class T> void REV(T& ve){reverse(ve.begin(),ve.end());}
+template<class T>llint LBI(const vector<T>&ar,T in){return lower_bound(ar.begin(),ar.end(),in)-ar.begin();}
+template<class T>llint UBI(const vector<T>&ar,T in){return upper_bound(ar.begin(),ar.end(),in)-ar.begin();}
+
+int main(void){
+	while(-1){
+		int i,j,n;cin>>n;
+		if(n==0){break;}
+		static int masu[1002][1002]={};
+		static int tate[1002][1002]={};
+		static int yoko[1002][1002]={};
+		for(i=0;i<=1001;i++){
+			for(j=0;j<=1001;j++){
+				masu[i][j]=mod;
+				tate[i][j]=0;
+				yoko[i][j]=0;
+			}
+		}
+		int sx,sy,gx,gy;cin>>sx>>sy>>gx>>gy;
+		bool xrev=false,yrev=false;
+		if(sx>gx){
+			xrev=1;
+			sx=1000-sx;
+			gx=1000-gx;
+		}
+		if(sy>gy){
+			yrev=1;
+			sy=1000-sy;
+			gy=1000-gy;
+		}
+		int stc=0;
+		while(n--){
+			int x,y,r;cin>>x>>y>>r;
+			if(xrev){x=1000-x;}
+			if(yrev){y=1000-y;}
+			if(abs(x-sx)<=r&&abs(y-sy)<=r){stc++;}
+			else{
+				tate[max(0,x-r)][max(0,y-r)]++;
+				tate[min(1001,x+r+1)][max(0,y-r)]--;
+				yoko[max(0,x-r)][max(0,y-r)]++;
+				yoko[max(0,x-r)][min(1001,y+r+1)]--;
+			}
+		}
+		for(i=0;i<=1000;i++){
+			for(j=0;j<=1000;j++){
+				tate[i+1][j]+=tate[i][j];
+				yoko[i][j+1]+=yoko[i][j];
+			}
+		}
+		masu[sx][sy]=stc;
+		for(i=sx;i<=gx;i++){
+			for(j=sy;j<=gy;j++){
+				chmin(masu[i+1][j],masu[i][j]+yoko[i+1][j]);
+				chmin(masu[i][j+1],masu[i][j]+tate[i][j+1]);
+				//cerr<<masu[i][j]<<" "<<i<<j<<endl;
+			}
+		}
+		cout<<masu[gx][gy]<<endl;
+	}
+	return 0;
+}
+

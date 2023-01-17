@@ -1,0 +1,10 @@
+import java.util.Scanner;
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+    	int d = sc.nextInt();
+    	double c ;
+    	c = d *0.25;
+    	System.out.printf("%.0f\n",c);
+    }
+    }

@@ -1,0 +1,63 @@
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <iterator>
+#include <cmath>
+#include <map>
+#include <climits>
+#include <string.h>
+#include <algorithm>
+#include <set>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+using vl = vector<long long>;
+
+int main()
+{
+  
+  long long q; cin >> q;
+  map<string, long long>m;
+  map<string, long long>::iterator itr1, itr2;
+  itr2 = m.end();
+  while(q--)
+  {
+    long long f; cin >> f;
+    string key;
+    long long x;
+
+    switch(f)
+    {
+      case 0:
+        cin >> key >> x;
+        m.insert(pair<string, long long>(key, x));
+        break;
+      case 1:
+        cin >> key;
+        if(m[key])cout << m[key] << endl;
+        else cout << 0 << endl;
+        break;
+      case 2:
+        cin >> key;
+        if(m[key])m.erase(key);
+        break;
+      case 3:
+        string l, r; cin >> l >> r;
+        itr1 = m.lower_bound(l);
+        
+        //cout << itr1->first << " " << itr2->first << endl;
+        for (; itr1 != itr2 && itr1->first.compare(l) >= 0 && itr1->first.compare(r) <= 0; itr1++)
+        {
+          cout << itr1->first << " " << itr1->second << endl;
+        }
+        
+        break;
+
+    }
+
+  }
+  
+  return 0;
+}

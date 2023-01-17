@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include<iostream>
+using namespace std;
+
+int main(){
+    int a, b, r;
+    char op;
+    cin >> a >> b >> op >> r;
+    
+    while (op=='?') {
+        if (op=='+'){
+            r=a+b;
+        } else if (op == '-'){
+            r=a-b;
+        } else if (op == '*'){
+            r=a*b;
+        } else{
+            r=a/b;
+        }
+        printf("%d", r);
+    }
+    
+    // cout << c << " " << d << " " << e << endl;
+
+    return 0;
+}
+
+

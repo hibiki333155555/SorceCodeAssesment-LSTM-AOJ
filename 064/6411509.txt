@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+
+#pragma region snippet
+// prefix: binaryindexedtree
+
+template <typename T>
+struct BinaryIndexedTree {
+   public:
+    BinaryIndexedTree(int n) {
+        assert(0 <= n && n <= 1e7);
+        _n = n + 1;
+        data.assign(_n, 0);
+    }
+
+    void add(int i, T val) {
+        assert(0 <= i && i < _n - 1);
+        i++;
+        for (int idx = i; idx < _n; idx += (idx & -idx)) {
+            data[idx] += val;
+        }
+    }
+
+    T sum(int i) {
+        T res = 0;
+        assert(0 <= i && i < _n);
+        for (int idx = i; idx > 0; idx -= (idx & -idx)) {
+            res += data[idx];
+        }
+        return res;
+    }
+
+    T get(int i) {
+        assert(0 <= i && i < _n - 1);
+        return sum(i + 1) - sum(i);
+    }
+
+    int lower_bound(T val) {
+        if (val <= 0) {
+            return 0;
+        } else {
+            int x = 0, r = 1;
+            while (r < _n) r = r << 1;
+            for (int len = r; len > 0; len = len >> 1) {
+                if (x + len < _n && data[x + len] < val) {
+                    val -= data[x + len];
+                    x += len;
+                }
+            }
+            return x;
+        }
+    }
+
+    void show() {
+        for (int i = 0; i < _n - 1; i++) {
+            std::cout << get(i) << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    int size() { return _n - 1; }
+
+   private:
+    int _n;
+    std::vector<T> data;
+};
+
+#pragma endregion
+
+using namespace std;
+int main() {
+    int N, Q;
+    cin >> N >> Q;
+    BinaryIndexedTree<long long> bit(N);
+
+    for (int i = 0; i < Q; i++) {
+        int q;
+        cin >> q;
+        if (q == 0) {
+            int x, y;
+            cin >> x >> y;
+            bit.add(x - 1, y);
+        } else {
+            int x, y;
+            cin >> x >> y;
+            cout << bit.sum(y) - bit.sum(x - 1) << endl;
+        }
+    }
+}

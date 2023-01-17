@@ -1,0 +1,13 @@
+taro=0
+hanako=0
+n=int(input())
+for i in range(n):
+    s,t=input().split()
+    if s==t:
+        taro+=1
+        hanako+=1
+    elif s>t:
+        taro+=3
+    else:
+        hanako+=3
+print(taro,hanako)

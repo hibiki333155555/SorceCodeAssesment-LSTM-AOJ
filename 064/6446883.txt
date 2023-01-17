@@ -1,0 +1,15 @@
+import Control.Applicative ((<$>))
+import Text.Printf (printf)
+main :: IO ()
+main = do
+  [r,c] <- map read . words <$> getLine
+  xss <- map (map read . words) . lines <$> getContents
+  mapM_ putStrLn (solve r c xss)
+
+solve :: Foldable t => p -> Int -> t [Int] -> [String]
+solve r c = reverse
+  . (\(acc,ss) -> printf "%s %d" (unwords $ map show acc) (sum acc) : ss)
+  . foldl (\(acc,ss) xs -> (zipWith (+) acc xs, f xs:ss))
+  (replicate c 0, [])
+f :: [Int] -> String
+f xs = printf "%s %d" (unwords $ map show xs) (sum xs)

@@ -1,0 +1,13 @@
+n=int(input())
+A=list(map(int,input().split()))
+def maxheapify(a,i):
+    triad={j:a[j]  if j < n else -float("inf") for j in [i,2*i+1, 2*i+2]}
+    i_max=max(triad, key=triad.get)
+    if i_max != i:
+        a[i], a[i_max]=a[i_max], a[i]
+        maxheapify(a,i_max)
+
+for i in reversed(range(n//2)):
+    maxheapify(A,i)
+
+print("",*A)

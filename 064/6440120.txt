@@ -1,0 +1,56 @@
+x=list(map(int,raw_input().split()))
+X=[]
+a=["N","N","N","W","E","E"]
+for i in range(len(a)):
+	if a[i]=="S":
+		x[0],x[1] = x[1],x[0]
+		x[4],x[5] = x[5],x[4]
+		x[0],x[5] = x[5],x[0]
+		X.append(x[:])
+		for s in range(3):
+			x[1],x[2] = x[2],x[1]
+			x[3],x[4] = x[4],x[3]
+			x[2],x[3] = x[3],x[2]
+			X.append(x[:])
+	elif a[i]=="W":
+		x[0],x[2] = x[2],x[0]
+		x[3],x[5] = x[5],x[3]
+		x[2],x[3] = x[3],x[2]
+		X.append(x[:])
+		for w in range(3):
+			x[1],x[2] = x[2],x[1]
+			x[3],x[4] = x[4],x[3]
+			x[2],x[3] = x[3],x[2]
+			X.append(x[:])
+	elif a[i]=="N":
+		x[0],x[1] = x[1],x[0]
+		x[4],x[5] = x[5],x[4]
+		x[1],x[4] = x[4],x[1]
+		X.append(x[:])
+		for n in range(3):
+			x[1],x[2] = x[2],x[1]
+			x[3],x[4] = x[4],x[3]
+			x[2],x[3] = x[3],x[2]
+			X.append(x[:])
+	elif a[i]=="E":
+		x[0],x[2] = x[2],x[0]
+		x[3],x[5] = x[5],x[3]
+		x[0],x[5] = x[5],x[0]
+		X.append(x[:])
+		for e in range(3):
+			x[1],x[2] = x[2],x[1]
+			x[3],x[4] = x[4],x[3]
+			x[2],x[3] = x[3],x[2]
+			X.append(x[:])
+N=[]
+G=[]
+s = input()
+for i in range(s):
+	n=list(map(int,raw_input().split()))
+	N.append(n)
+for i in range(s):
+	for j in  range(len(X)):
+		if N[i][0]==X[j][0] and N[i][1]==X[j][1]:
+			G.append(X[j][2])
+for i in range(s):
+	print G[i]

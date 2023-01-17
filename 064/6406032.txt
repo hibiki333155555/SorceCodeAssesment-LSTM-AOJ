@@ -1,0 +1,21 @@
+taro = 0
+hanako = 0
+
+rank = "abcdefghijklmnopqrstuvwxyz"
+
+n = int(input())
+
+for i in range(n):
+    t,h = map(str,input().split())
+    t1 = rank.find(t[0])
+    h1 = rank.find(h[0])
+    
+    if t1 == h1:
+        taro += 1
+        hanako += 1
+    elif t1 > h1:
+        taro += 3
+    else:
+        hanako += 3
+print(taro,hanako)
+

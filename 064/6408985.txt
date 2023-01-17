@@ -1,0 +1,8 @@
+sss=str(input())
+for i in sss:
+  if i.islower()==True:
+    print(i.upper(), end='')
+  elif i.isupper()==True:
+    print(i.lower(), end='')
+  else:
+    print(i, end='')

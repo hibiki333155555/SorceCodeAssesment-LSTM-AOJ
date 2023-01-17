@@ -1,0 +1,37 @@
+import sys
+sys.setrecursionlimit(10**8)
+mod = 998244353
+n, k = map(int, input().split())
+a = list(map(int, input().split()))
+p = list(map(int, input().split()))
+
+edges = [[] for _ in range(n)]
+for i in range(n-1):
+    edges[p[i]-1].append(i+1)
+
+def dfs(v, p):
+    if a[v] > k: return [0]*(k+1)
+    dp = [0]*(k+1)
+    dp[0] = 1    
+    for u in edges[v]:
+        if u == p: continue
+        tmp = dfs(u, v)
+        ndp = dp[:]
+        for i in range(k+1):
+            if dp[i]:
+                for j in range(k+1):
+                    if i+j > k: break
+                    ndp[i+j] += tmp[j]
+                    ndp[i+j] %= mod
+        dp = ndp[:]
+    ndp = [0]*(k+1)
+    for i in range(k+1):
+        if i+a[v] > k: break
+        if dp[i]:
+            ndp[i+a[v]] += dp[i]
+            ndp[i+a[v]] %= mod
+    return ndp
+
+dp = dfs(0, -1)
+print(dp[k])
+

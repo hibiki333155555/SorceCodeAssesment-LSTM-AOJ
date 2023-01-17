@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+
+typedef vector<int> vi;
+typedef vector<ll> vl;
+typedef vector<vector<int>> vvi;
+typedef vector<vector<ll>> vvl;
+
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+typedef vector<pii> vpii;
+typedef vector<pll> vpll;
+
+#define FOR(i, a, b) for(ll i=(a); i<(b); ++i)
+#define REP(i, n) FOR(i, 0, n)
+#define NREP(i, n) FOR(i, 1, n+1)
+
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+
+int main(void){
+    ll a, b, c; cin >> a >> b >> c;
+    ll d, e, f; cin >> d >> e >> f;
+    
+    ll x = abs(a - d), y = abs(b - e), z = abs(c - f);
+    ll t = x + y + z;
+    
+    string res = "Yes";
+    if(x % 2 != y % 2) {res = "No";}
+    if(y % 2 != z % 2) {res = "No";}
+    
+    cout << res << endl;
+    
+    return 0;
+}

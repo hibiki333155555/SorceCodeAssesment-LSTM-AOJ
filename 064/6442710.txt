@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+
+int main(){
+    int n,i,p;
+    double x[1001],y[1001];
+    double dis1,dis2,dis3,disinf;
+    
+    scanf("%d",&n);
+    for(i=0;i<n;i++){
+        scanf("%lf",&x[i]);
+    }
+    for(i=0;i<n;i++){
+        scanf("%lf",&y[i]);
+    }
+    
+    for(i=0;i<n;i++){
+        
+    dis1+=abs(x[i]-y[i]);
+    dis2+=pow(abs(x[i]-y[i]),2.0);
+    dis3+=pow(abs(x[i]-y[i]),3.0);
+    if(disinf<abs(x[i]-y[i]))disinf=abs(x[i]-y[i]);
+    
+    }
+    printf("%lf\n%lf\n%lf\n%lf\n",dis1,sqrt(dis2),pow(dis3,1.0/3.0),disinf);
+    
+}

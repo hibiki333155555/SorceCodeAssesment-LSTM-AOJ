@@ -1,0 +1,3 @@
+r=input()
+import math
+print(2*math.pi*r, math.pi*r^2)

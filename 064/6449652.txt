@@ -1,0 +1,549 @@
+#line 1 "library/template/template.hpp"
+//#pragma GCC target("avx")
+//#pragma GCC optimize("O3")
+//#pragma GCC optimize("unroll-loops")
+#include<bits/stdc++.h>
+#define overload4(a,b,c,d,e,...) e
+#define overload3(a,b,c,d,...) d
+#define rep1(a) for(ll i=0;i<(ll)(a);i++)
+#define rep2(i,a) for(ll i=0;i<(ll)(a);i++)
+#define rep3(i,a,b) for(ll i=(ll)(a);i<(ll)(b);i++)
+#define rep4(i,a,b,c) for(ll i=(ll)(a);i<(ll)(b);i+=(ll)(c))
+#define rep(...) overload4(__VA_ARGS__, rep4, rep3, rep2, rep1)(__VA_ARGS__)
+#define rrep1(a) for(ll i=(ll)(a)-1;i>=0;i--)
+#define rrep2(i,a) for(ll i=(ll)(a)-1;i>=0;i--)
+#define rrep3(i,a,b) for(ll i=(ll)(b)-1;i>=(ll)(a);i--)
+#define rrep(...) overload3(__VA_ARGS__,rrep3,rrep2,rrep1)(__VA_ARGS__)
+#define fore(...) for (auto&& __VA_ARGS__)
+#define all1(i) begin(i),end(i)
+#define all2(i,a) begin(i),begin(i)+a
+#define all3(i,a,b) begin(i)+a,begin(i)+b
+#define all(...) overload3(__VA_ARGS__,all3,all2,all1)(__VA_ARGS__)
+#define rall(n) (n).rbegin(),(n).rend()
+#define INT(...) int __VA_ARGS__;scan(__VA_ARGS__)
+#define LL(...) ll __VA_ARGS__;scan(__VA_ARGS__)
+#define STR(...) string __VA_ARGS__;scan(__VA_ARGS__)
+#define CHR(...) char __VA_ARGS__;scan(__VA_ARGS__)
+#define DBL(...) double __VA_ARGS__;scan(__VA_ARGS__)
+#define LD(...) ld __VA_ARGS__;scan(__VA_ARGS__)
+#define pb push_back
+#define eb emplace_back
+#define END(...) {print(__VA_ARGS__);return;}
+using namespace std;
+using ll=long long;
+using ull=unsigned long long;
+using ld=long double;
+using vl=vector<ll>;
+using vi=vector<int>;
+using vs=vector<string>;
+using vc=vector<char>;
+using vvl=vector<vl>;
+using pi=pair<int,int>;
+using pl=pair<ll,ll>;
+using vvc=vector<vc>;
+using vd=vector<double>;
+using vp=vector<pl>;
+using vb=vector<bool>;
+const int dx[8]={1,0,-1,0,1,-1,-1,1};
+const int dy[8]={0,1,0,-1,1,1,-1,-1};
+const ll MOD=1000000007;
+const ll mod=998244353;
+const ld EPS=1e-8;
+const ld PI=3.1415926535897932384626;
+template<typename T,typename U>
+ostream &operator<<(ostream&os,const pair<T,U>&p){os<<p.first<<" "<<p.second;return os;}
+template<typename T,typename U>
+istream &operator>>(istream&is,pair<T,U>&p){is>>p.first>>p.second;return is;}
+template<typename T>
+ostream &operator<<(ostream&os,const vector<T>&v){for(auto it=v.begin();it!=v.end();){os<<*it<<((++it)!=v.end()?" ":"");}return os;}
+template<typename T>
+istream &operator>>(istream&is,vector<T>&v){for(T &in:v){is>>in;}return is;}
+void scan(){}
+template<class Head,class... Tail>
+void scan(Head&head,Tail&... tail){cin>>head;scan(tail...);}
+template<class T>
+void print(const T &t){cout<<t<<'\n';}
+template<class Head, class... Tail>
+void print(const Head &head, const Tail &... tail){cout<<head<<' ';print(tail...);}
+template<class... T>
+void fin(const T &... a){print(a...);exit(0);}
+template<typename T,typename U>
+inline bool chmax(T&a,U b){return a<b&&(a=b,true);}
+template<typename T,typename U>
+inline bool chmin(T&a,U b){return a>b&&(a=b,true);}
+template<typename T>
+class infinity{
+  public:
+  static const T MAX=numeric_limits<T>::max();
+  static const T MIN=numeric_limits<T>::min();
+  static const T value=numeric_limits<T>::max()/2;
+  static const T mvalue=numeric_limits<T>::min()/2;
+};
+#if __cplusplus <= 201402L
+template<class T>const T infinity<T>::value;
+template<class T>const T infinity<T>::mvalue;
+template<class T>const T infinity<T>::MAX;
+template<class T>const T infinity<T>::MIN;
+#endif
+template<typename T>const T INF=infinity<T>::value;
+const long long inf=INF<ll>;
+inline int popcnt(ull x){
+#if __cplusplus>=202002L
+return popcount(x);
+#endif
+x=(x&0x5555555555555555)+((x>>1)&0x5555555555555555);x=(x&0x3333333333333333)+((x>>2)&0x3333333333333333);x=(x&0x0f0f0f0f0f0f0f0f)+((x>>4)&0x0f0f0f0f0f0f0f0f);x=(x&0x00ff00ff00ff00ff)+((x>>8)&0x00ff00ff00ff00ff);x=(x&0x0000ffff0000ffff)+((x>>16)&0x0000ffff0000ffff);return (x&0x00000000ffffffff)+((x>>32)&0x00000000ffffffff);
+}
+template<typename T,typename=void>
+struct is_specialize:false_type{};
+template<typename T>
+struct is_specialize<T,typename conditional<false,typename T::iterator, void>::type>:true_type{};
+template<typename T>
+struct is_specialize<T,typename conditional<false,decltype(T::first),void>::type>:true_type{};
+template<typename T>
+struct is_specialize<T,enable_if_t<is_integral<T>::value,void>>:true_type{};
+void dump(const char&t){cerr<<t;}
+void dump(const string&t){cerr<<t;}
+void dump(const bool&t){cerr<<(t?"true":"false");}
+template <typename T,enable_if_t<!is_specialize<T>::value,nullptr_t> =nullptr>
+void dump(const T&t){cerr<<t;}
+template<typename T>
+void dump(const T&t,enable_if_t<is_integral<T>::value>* =nullptr){string tmp;if(t==infinity<T>::value||t==infinity<T>::MAX)tmp="inf";if(t==infinity<T>::mvalue||t==infinity<T>::MIN)tmp="-inf";if(tmp.empty())tmp=to_string(t);cerr<<tmp;}
+template <typename T>
+void dump(const T&t,enable_if_t<!is_void<typename T::iterator>::value>* =nullptr){cerr<<"{";for(auto it=t.begin();it!=t.end();){dump(*it);cerr<<(++it==t.end()?"":",");}cerr<<"}";}
+template<typename T,typename U>
+void dump(const pair<T,U>&t){cerr<<"(";dump(t.first);cerr<<",";dump(t.second);cerr<<")";}
+void trace(){cerr<<endl;}
+template<typename Head,typename... Tail>
+void trace(Head&&head,Tail&&... tail){dump(head);if(sizeof...(tail))cerr<<",";trace(forward<Tail>(tail)...);}
+#ifdef ONLINE_JUDGE
+#define debug(...) (void(0))
+#else
+#define debug(...) do{cerr<<#__VA_ARGS__<<"=";trace(__VA_ARGS__);}while(0)
+#endif
+struct IOSetup{IOSetup(){cin.tie(nullptr);ios::sync_with_stdio(false);cout.tie(0);cout<<fixed<<setprecision(12);cerr<<fixed<<setprecision(12);}};
+/**
+ * @brief Template(テンプレート)
+*/
+#line 2 "library/Math/modular/modint.hpp"
+template<long long m>
+struct modint{
+  long long x;
+  modint():x(0){}
+  modint(long long y){
+    if(y<0){
+      y%=m;
+      if(y==0)x=y;
+      else x=m+y;
+    }
+    else if(y<m)x=y;
+    else x=y%m;
+  }
+  modint inv()const{
+    long long a=x,b=m,u=1,v=0,t;
+    while(b){
+      t=a/b;
+      swap(a-=t*b,b);
+      swap(u-=t*v,v);
+    }
+    return modint(u);
+  }
+  modint &operator+=(const modint&p){if((x+=p.x)>=m)x-=m;return *this;}
+  modint &operator-=(const modint&p){if((x+=m-p.x)>=m)x-=m;return *this;}
+  modint &operator*=(const modint&p){x=x*p.x;if(x>=m)x%=m;return *this;}
+  modint &operator/=(const modint&p){*this*=p.inv();return *this;}
+  modint operator-()const{return modint(-x); }
+  modint operator+(const modint&p)const{return modint(*this)+=p; }
+  modint operator-(const modint&p)const{return modint(*this)-=p; }
+  modint operator*(const modint&p)const{return modint(*this)*=p; }
+  modint operator/(const modint&p)const{return modint(*this)/=p; }
+  bool operator==(const modint&p)const{return x==p.x;}
+  bool operator!=(const modint&p)const{return x!=p.x;}
+  modint pow(long long n)const{
+    modint ret(1),mul(x);
+    while(n){
+      if(n&1)ret*=mul;
+      mul*=mul;
+      n>>=1;
+    }
+    return ret;
+  }
+  friend ostream &operator<<(ostream &os,const modint&p) {
+    return os<<p.x;
+  }
+  friend istream &operator>>(istream &is, modint &a) {
+    long long t;
+    is>>t;
+    a=modint<m>(t);
+    return (is);
+  }
+  static long long get_mod(){return m;}
+};
+/**
+ * @brief modint
+*/
+#line 3 "library/Math/others/combinatorics.hpp"
+template<long long m>
+struct combination{
+  using mint=modint<m>;
+  vector<mint>dat,idat;
+  long long mx;
+  combination(long long mx_=300000):dat(mx_+1,1),idat(mx_+1,1),mx(mx_){
+    for(long long i=1;i<=mx;i++)dat[i]=dat[i-1]*mint(i);
+    idat[mx]/=dat[mx];
+    for(long long i=mx;i>0;i--)idat[i-1]=idat[i]*mint(i);
+  }
+  mint com(long long n,long long k){
+    if(n<0||k<0||n<k)return mint(0);
+    return dat[n]*idat[k]*idat[n-k];
+  }
+  mint fac(long long n){
+    if(n<0)return mint(0);
+    return dat[n];
+  }
+  mint finv(long long n){
+    if(n<0)return mint(0);
+    return idat[n];
+  }
+  mint hom(long long n,long long k){
+    return com(n+k-1,k);
+  }
+  mint per(long long n,long long k){
+    if(k<0||k>n)return mint(0);
+    return dat[n]*idat[n-k];
+  }
+};
+template<long long p>
+struct COMB{
+  vector<vector<modint<p>>>comb;
+  COMB(){
+    comb.assign(p,vector<modint<p>>(p));
+    comb[0][0]=1;
+    for(int i=1;i<p;i++){
+      comb[i][0]=1;
+      for(int j=i;j>0;j--)comb[i][j]=comb[i-1][j-1]+comb[i-1][j];
+    }
+  }
+  modint<p>com(int n,int k){
+    modint<p>ret=1;
+    while(n>0||k>0){
+      int ni=n%p,ki=k%p;
+      ret*=comb[ni][ki];
+      n/=p;k/=p;
+    }
+    return ret;
+  }
+};
+/**
+ * @brief Combinatorics(組み合わせ)
+*/
+#line 3 "library/Math/convolution/ntt.hpp"
+template<long long m>
+struct NTT{
+  using mint=modint<m>;
+  static modint<m> g;
+  static int limit;
+  static vector<modint<m>>root,inv_root;
+  static mint primitive_root(const long long&mo){
+    if(mo==167772161)return mint(3);
+    if(mo==469762049)return mint(3);
+    if(mo==754974721)return mint(11);
+    if(mo==998244353)return mint(3);
+    if(mo==1224736769)return mint(3);
+    return mint(0);
+  }
+  static void init(){
+    if(root.empty()){
+      g=primitive_root(m);
+      long long now=m-1;
+      while(!(now&1))now>>=1,limit++;
+      root.resize(limit+1,1),inv_root.resize(limit+1,1);
+      root[limit]=g.pow(now);
+      inv_root[limit]/=root[limit];
+      for(int i=limit-1;i>=0;i--){
+        root[i]=root[i+1]*root[i+1];
+        inv_root[i]=inv_root[i+1]*inv_root[i+1];
+      }
+    }
+  }
+  NTT(){};
+  static void dft(vector<mint>&a,int inv){
+    init();
+    const int sz=a.size();
+    if(sz==1)return;
+    const int mask=sz-1;
+    vector<mint>b(sz);
+    for(int i=sz>>1;i>=1;i>>=1){
+      int e=__builtin_ffsll(sz/i)-1;
+      mint w=1,z=(inv==1?root[e]:inv_root[e]);
+      for(int j=0;j<sz;j+=i){
+        for(int k=0;k<i;k++)b[j+k]=a[((j<<1)&mask)+k]+w*a[(((j<<1)+i)&mask)+k];
+        w*=z;
+      }
+      swap(a,b);
+    }
+  }
+  static vector<mint>multiply(vector<mint>a,vector<mint>b){
+    int sz=1;
+    const int mxsiz=a.size()+b.size()-1;
+    while(sz<mxsiz)sz<<=1;
+    a.resize(sz),b.resize(sz);
+    dft(a,1),dft(b,1);
+    for(int i=0;i<sz;i++)a[i]*=b[i];
+    dft(a,-1);
+    mint iz=mint(sz).inv();
+    for(int i=0;i<mxsiz;i++)a[i]*=iz;
+    a.resize(mxsiz);
+    return a;
+  }
+  template<typename T,std::enable_if_t<is_integral<T>::value>* = nullptr>
+  static vector<T>multiply(const vector<T>&a,const vector<T>&b){
+    using mint=modint<m>;
+    vector<mint>a2(a.size()),b2(b.size());
+    for(int i=0;i<(int)a.size();i++)a2[i]=a[i];
+    for(int i=0;i<(int)b.size();i++)b2[i]=b[i];
+    auto c2=multiply(a2,b2);
+    vector<T>c(c2.size());
+    for(int i=0;i<(int)c.size();i++)c[i]=c2[i].x;
+    return c;
+  }
+};
+template<long long m>
+int NTT<m>::limit=0;
+template<long long m>
+vector<modint<m>>NTT<m>::root=vector<modint<m>>();
+template<long long m>
+vector<modint<m>>NTT<m>::inv_root=vector<modint<m>>();
+template<long long m>
+modint<m>NTT<m>::g=modint<m>();
+/**
+ * @brief Number Theoretic Transform(数論変換)
+*/
+#line 3 "library/Math/fps/fps.hpp"
+template<long long Mod>
+struct FPS:vector<modint<Mod>>{
+  using mint=modint<Mod>;
+  using vector<mint>::vector;
+  using vector<mint>::operator=;
+  void shrink(){while(!(*this).empty()&&(*this).back()==mint(0))(*this).pop_back();}
+  FPS inv(int d=-1)const{
+    NTT<Mod>ntt;
+    const int n=(*this).size();
+    if(d==-1)d=n;
+    FPS res{(*this)[0].inv()};
+    for(int m=1;m<d;m<<=1){
+      FPS f((*this).begin(),(*this).begin()+min(n,2*m));
+      FPS g(res);
+      f.resize(2*m),g.resize(2*m);
+      ntt.dft(f,1),ntt.dft(g,1);
+      for(int i=0;i<2*m;i++)f[i]*=g[i];
+      ntt.dft(f,-1);
+      f.erase(f.begin(),f.begin()+m);
+      f.resize(2*m);ntt.dft(f,1);
+      for(int i=0;i<2*m;i++)f[i]*=g[i];
+      ntt.dft(f,-1);
+      mint iz=mint(2*m).inv();iz*=-iz;
+      for(int i=0;i<m;i++)f[i]*=iz;
+      res.insert(res.end(),f.begin(),f.begin()+m);
+    }
+    res.resize(d);
+    return res;
+  }
+  FPS operator+(const mint&r)const{return FPS(*this)+=r;}
+  FPS operator-(const mint&r)const{return FPS(*this)-=r;}
+  FPS operator*(const mint&r)const{return FPS(*this)*=r;}
+  FPS operator/(const mint&r)const{return FPS(*this)/=r;}
+  FPS operator+(const FPS&r)const{return FPS(*this)+=r;}
+  FPS operator-(const FPS&r)const{return FPS(*this)-=r;}
+  FPS operator<<(const int&d)const{return FPS(*this)<<=d;}
+  FPS operator>>(const int&d)const{return FPS(*this)>>=d;}
+  FPS operator*(const FPS&r)const{return FPS(*this)*=r;}
+  FPS operator/(const FPS&r)const{return FPS(*this)/=r;}
+  FPS operator%(const FPS&r)const{return FPS(*this)%=r;}
+  FPS operator-()const{
+    FPS ret(*this);
+    for(auto &i:ret)i=-i;
+    return ret;
+  }
+  FPS &operator+=(const mint&r){
+    if((*this).empty())(*this).resize(1);
+    (*this)[0]+=r;
+    return *this;
+  }
+  FPS &operator-=(const mint&r){
+    if((*this).empty())(*this).resize(1);
+    (*this)[0]-=r;
+    return *this;
+  }
+  FPS &operator*=(const mint&r){
+    for(auto &i:*this)i*=r;
+    return *this;
+  }
+  FPS &operator/=(const mint&r){
+    (*this)*=r.inv();
+    return *this;
+  }
+  FPS &operator+=(const FPS&r){
+    const int n=(*this).size(),m=r.size();
+    (*this).resize(max(n,m));
+    for(int i=0;i<m;i++)(*this)[i]+=r[i];
+    return *this;
+  }
+  FPS &operator-=(const FPS&r){
+    const int n=(*this).size(),m=r.size();
+    (*this).resize(max(n,m));
+    for(int i=0;i<m;i++)(*this)[i]-=r[i];
+    return *this;
+  }
+  FPS &operator<<=(const long long&d){
+    (*this).insert((*this).begin(),d,mint(0));
+    return *this;
+  }
+  FPS &operator>>=(const long long&d){
+    (*this).erase((*this).begin(),(*this).begin()+d);
+    return *this;
+  }
+  FPS &operator*=(const FPS&r){
+    (*this)=NTT<Mod>::multiply((*this),r);
+    return *this;
+  }
+  FPS &operator/=(FPS r){
+    const int n=(*this).size(),m=r.size();
+    if(n<m){
+      (*this).clear();
+      return *this;
+    }
+    const int sz=n-m+1;
+    reverse((*this).begin(),(*this).end());
+    reverse(r.begin(),r.end());
+    (*this).resize(sz);
+    (*this)*=r.inv(sz);
+    (*this).resize(sz);
+    reverse((*this).begin(),(*this).end());
+    return (*this);
+  }
+  FPS &operator%=(const FPS&r){
+    const int n=(*this).size(),m=r.size();
+    if(n<m)return (*this);
+    (*this)-=(*this)/r*r;
+    (*this).resize(m-1);
+    shrink();
+    return (*this);
+  }
+  pair<FPS,FPS>div_mod(const FPS&r){
+    FPS p=*this/r,q=*this-p*r;
+    q.shrink();
+    return {p,q};
+  }
+  mint operator()(const mint&x)const{
+    mint ret(0),w(1);
+    for(auto &e:*this){
+      ret+=e*w;
+      w*=x;
+    }
+    return ret;
+  }
+  FPS diff()const{
+    const int n=(*this).size();
+    FPS ret(max(0,n-1));
+    for(int i=1;i<n;i++)ret[i-1]=(*this)[i]*mint(i);
+    return ret;
+  }
+  FPS integral()const{
+    const int n=(*this).size();
+    vector<mint>inv(n+1);
+    inv[1]=mint(1);
+    for(int i=2;i<=n;i++)inv[i]=-inv[Mod%i]*mint(Mod/i);
+    FPS ret(n+1);
+    for(int i=0;i<n;i++)ret[i+1]=(*this)[i]*inv[i+1];
+    return ret;
+  }
+  FPS log(int d=-1)const{
+    const int n=(*this).size();
+    if(d==-1)d=n;
+    FPS res=diff()*inv(d);
+    res.resize(d-1);
+    return res.integral();
+  }
+  FPS exp(int d=-1)const{
+    const int n=(*this).size();
+    if(d==-1)d=n;
+    FPS f={mint(1)+(*this)[0],(*this)[1]},res{1,1<n?(*this)[1]:0};
+    for(int m=2;m<d;m<<=1){
+      f.insert(f.end(),(*this).begin()+min(m,n),(*this).begin()+min(n,2*m));
+      if((int)f.size()<2*m)f.resize(2*m);
+      res=res*(f-res.log(2*m));
+      res.resize(2*m);
+    }
+    res.resize(d);
+    return res;
+  }
+  FPS pow(long long k,int d=-1)const{
+    const int n=(*this).size();
+    if(d==-1)d=n;
+    for(int i=0;i<n;i++){
+      if((*this)[i]!=mint()){
+        mint rev=(*this)[i].inv();
+        if(i*k>d)return FPS(d,mint(0));
+        FPS ret=(((*this*rev)>>i).log(d)*k).exp(d)*((*this)[i].pow(k));
+        ret=(ret<<(i*k));
+        ret.resize(d);
+        return ret;
+      }
+    }
+    return FPS(d,mint(0));
+  }
+  FPS sqrt(int d=-1,const function<mint(mint)>&get_sqrt=[](mint){return mint(1);})const{
+    const int n=(*this).size();
+    if(d==-1)d=n;
+    if((*this)[0]==mint(0)){
+      for(int i=1;i<n;i++){
+        if((*this)[i]!=mint(0)){
+          if(i&1)return {};
+          if(d-i/2<=0)break;
+          auto ret=(*this>>i).sqrt(d-i/2,get_sqrt);
+          if(ret.empty())return {};
+          ret=ret<<(i/2);
+          if((int)ret.size()<d)ret.resize(d);
+          return ret;
+        }
+      }
+      return FPS(d);
+    }
+    auto sqr=get_sqrt((*this)[0]);
+    if(sqr*sqr!=(*this)[0])return {};
+    FPS ret{sqr};
+    mint inv2=mint(2).inv();
+    FPS f={(*this)[0]};
+    for(int i=1;i<d;i<<=1){
+      if(i<n)f.insert(f.end(),(*this).begin()+i,(*this).begin()+min(n,i<<1));
+      if((int)f.size()<(i<<1))f.resize(i<<1);
+      ret=(ret+f*ret.inv(i<<1))*inv2;
+    }
+    ret.resize(d);
+    return ret;
+  }
+};
+/**
+ * @brief Formal Power Series(形式的冪級数)
+*/
+#line 4 "code.cpp"
+combination<mod>c;
+int main(){
+  LL(n,m);
+  vl a(m);
+  scan(a);
+  queue<FPS<mod>>q;
+  rep(i,m){
+    FPS<mod>f(a[i]+1,1);
+    q.push(f);
+  }
+  while(q.size()>1){
+    auto f=q.front();q.pop();
+    auto g=q.front();q.pop();
+    auto h=f*g;
+    if((int)h.size()>n+1)h.resize(n+1);
+    q.emplace(h);
+  }
+  print(q.front()[n]*c.fac(n));
+}
+

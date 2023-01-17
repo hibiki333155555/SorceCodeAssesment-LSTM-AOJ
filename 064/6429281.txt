@@ -1,0 +1,73 @@
+//
+// Created by TangQihui on 2022/3/24.
+//
+#include "iostream"
+#include "vector"
+using namespace std;
+#define N 100000
+typedef struct node{
+    int parents;
+    int depth;
+    unsigned cn;
+    vector<int> Children;
+}Node;
+Node T[N];
+void init(int n){
+    for (int i = 0; i < n; ++i) {
+        T[i].depth=-1;
+        T[i].parents = -1;
+        T[i].cn = 0;
+    }
+}
+void print(int n){
+    for (int i = 0; i < n; ++i) {
+        cout<<"node "<<i<<": parent = "<<T[i].parents<<", depth = "<<T[i].depth<<", ";
+        if (T[i].parents==-1){
+            cout<<"root";
+        }else if(T[i].cn==0){
+            cout<<"leaf";
+        }else{
+            cout<<"internal node";
+        }
+        cout<<", [";
+        for (int j = 0; j < T[i].cn; ++j) {
+            cout<<T[i].Children[j];
+            if (j!=T[i].cn-1){
+                cout<<", ";
+            }
+        }
+        cout<<"]"<<endl;
+    }
+}
+void getDepth(int u){
+    int d = 0,i=u;
+    while(T[i].parents!=-1){
+        i = T[i].parents;
+        d++;
+    }
+    T[u].depth = d;
+}
+int main(){
+    int n;
+    cin>>n;
+    init(n);
+    int x,cn,cid;
+    for (int i = 0; i < n; ++i) {
+        cin>>x>>cn;
+        if (i==0){
+            T[x].parents = -1;
+        }
+        T[x].cn = cn;
+        for (int j = 0; j < cn; ++j) {
+            cin>>cid;
+            T[cid].parents = x;
+            (T[x]).Children.push_back(cid);
+        }
+    }
+    for (int i = 0; i < n; ++i) {
+        getDepth(i);
+    }
+    print(n);
+    return 0;
+}
+

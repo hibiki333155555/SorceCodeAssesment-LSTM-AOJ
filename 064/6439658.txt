@@ -1,0 +1,64 @@
+/*
+mi完成
+*/
+
+#include <iostream>
+#include <vector>
+#include <utility>
+
+using namespace std;
+
+std::vector<int> InputNNumbers(int N)
+{
+    std::vector<int> A;
+    for (int i = 0; i < N; i++)
+    {
+        int number;
+        std::cin >> number;
+        A.push_back(number);
+    }
+    return A;
+}
+
+void ShowNNumbers(std::vector<int> A)
+{
+    int N = A.size();
+    for (int i = 0; i < N; i++)
+    {
+        std::cout << A[i];
+        if (i < N - 1)
+        {
+            std::cout << ' ';
+        }
+    }
+    std::cout << std::endl;
+}
+
+int SelectionSort(std::vector<int> A, int N)
+{
+    int change_count = 0;
+    for (int i = 0; i < N - 1; i++)
+    {
+        int min_unsorted = i;
+        for (int j = 0; j < N - 1; j++)
+        {
+            if (A[j] < A[min_unsorted])
+            {
+                min_unsorted = j;
+            }
+        }
+        std::swap(A[i], A[min_unsorted]);
+        change_count++;
+    }
+    return change_count;
+}
+int main(void)
+{
+    int N;
+    std::cin >> N;
+    std::vector<int> A = InputNNumbers(N);
+    int change_count = SelectionSort(A, N);
+    ShowNNumbers(A);
+    std::cout << change_count << std::endl;
+    return 0;
+}

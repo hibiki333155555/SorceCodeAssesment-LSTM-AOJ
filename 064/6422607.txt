@@ -1,0 +1,1 @@
+#include<iostream>using namespace std;int main(){int a[9],i,s;for(i=1;i<9;i++){cin>>a[i];if(!(i%2)){s=i-1;if(a[s]==1)cout<<6000*a[i]<<endl;if(a[s]==2)cout<<4000*a[i]<<endl;if(a[s]==3)cout<<3000*a[i]<<endl;if(a[s]==4)cout<<2000*a[i]<<endl;}}}

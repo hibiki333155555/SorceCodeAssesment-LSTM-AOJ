@@ -1,0 +1,14 @@
+numbers=input().split()
+a=int(numbers[0])
+b=int(numbers[1])
+c=int(numbers[2])
+divisors=[]
+for n in range(1,c+1):
+    if c % n==0:
+        divisors.append(n)
+quantity=len(divisors)
+result=[]
+for m in range(1,quantity+1):
+    if int(divisors[m])>=a and int(divisors[m])<=b:
+        result.append(m)
+print(len(result))

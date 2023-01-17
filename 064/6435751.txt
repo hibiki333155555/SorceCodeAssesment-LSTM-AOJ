@@ -1,0 +1,74 @@
+import io
+import sys
+_INPUT = """\
+insert 8
+insert 2
+extract
+insert 10
+extract
+insert 11
+extract
+extract
+end
+"""
+# sys.stdin = io.StringIO(_INPUT)
+
+
+class PriorityQueue():
+
+    def __init__(self) -> None:
+        self.A = []
+
+    def insert(self, key):
+        A = self.A
+        self.A.append(key)
+        key_idx = len(A) - 1
+        exchange = True
+        while exchange:
+            parent_idx = key_idx // 2
+            if A[key_idx] > A[parent_idx]:
+                A[key_idx], A[parent_idx] = A[parent_idx], A[key_idx]
+                key_idx = parent_idx
+            else:
+                exchange = False
+
+    def extractMax(self):
+        A = self.A
+        if not A:
+            return -1
+        ans = A[0]
+        tmp = A.pop()
+        if A:
+            A[0]=tmp
+        else:
+            A.append(tmp)
+        key_idx = 1
+        exchange = True
+        while exchange:
+            largest = key_idx
+            left = key_idx * 2
+            right = key_idx * 2 + 1
+            if left <= len(A) and A[left - 1] > A[key_idx - 1]:
+                largest = left
+            if right <= len(A) and A[right - 1] > A[largest - 1]:
+                largest = right
+            if largest != key_idx:
+                A[key_idx - 1], A[largest - 1] = A[largest - 1], A[key_idx - 1]
+                key_idx=largest
+            else:
+                exchange=False
+        return ans
+
+
+input = sys.stdin.readline
+pq = PriorityQueue()
+while True:
+    ls = input().split()
+    if ls[0] == "insert":
+        key = int(ls[1])
+        pq.insert(key)
+    elif ls[0] == "extract":
+        print(pq.extractMax())
+    elif ls[0] == "end":
+        break
+

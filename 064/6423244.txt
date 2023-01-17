@@ -1,0 +1,23 @@
+xs = []
+i = 0
+while True:
+    i += 1
+    x = input()
+    if not x:
+        break
+    else:
+        a, op, b = map(str, x.split())
+        a, b = int(a), int(b)
+        if op == '?':
+            break
+        xs.append([a, op, b])
+
+for x in xs:
+    if x[1] == '+':
+        print(x[0] + x[2])
+    elif x[1] == '-':
+        print(x[0] - x[2])
+    elif x[1] == '*':
+        print(x[0] * x[2])
+    elif x[1] == '/':
+        print(x[0] // x[2])

@@ -1,0 +1,17 @@
+a,b,c = map(int,input().split())
+t = a
+if a>b:
+    a=b
+    b=t
+t=b
+if b>c:
+    b=c
+    c=t
+t=a
+if a>b:
+    a=b
+    b=t
+
+print(a,b,c)
+    
+

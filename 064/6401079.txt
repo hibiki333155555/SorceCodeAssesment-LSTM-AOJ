@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+ll gcd(ll(a), ll(b)) {
+	ll c = a;
+	while (a % b != 0) {
+		c = a % b;
+		a = b;
+		b = c;
+	}
+	return b;
+}
+
+vll dx={1,-1,0,0,0,0};
+vll dy={0,0,1,-1,0,0};
+vll dz={0,0,0,0,1,-1};
+int main() {
+   ll A,B,C,N;
+   cin>>A>>B>>C>>N;
+   ll an=2*(A*B+B*C+C*A);
+   set<tuple<ll,ll,ll>> S;
+   rep(i,N){
+      ll x,y,z;
+      cin>>x>>y>>z;
+      ll k=0;
+      rep(d,6){
+         ll nx=x+dx[d];
+         ll ny=y+dy[d];
+         ll nz=z+dz[d];
+         if(S.count({nx,ny,nz})){
+            k--;
+         }
+         else if(nx<0||ny<0||nz<0||nx>=A||ny>=B||nz>=C){
+            k--;
+         }
+         else{
+            k++;
+         }
+         
+      }
+      S.insert({x,y,z});
+      an+=k;
+   }
+   cout<<an<<endl;
+
+
+}
+

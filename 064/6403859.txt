@@ -1,0 +1,552 @@
+#line 2 "library/bits/stdc++.h"
+
+// C
+#ifndef _GLIBCXX_NO_ASSERT
+#include <cassert>
+#endif
+#include <cctype>
+#include <cerrno>
+#include <cfloat>
+#include <ciso646>
+#include <climits>
+#include <clocale>
+#include <cmath>
+#include <csetjmp>
+#include <csignal>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+
+#if __cplusplus >= 201103L
+#include <ccomplex>
+#include <cfenv>
+#include <cinttypes>
+#include <cstdbool>
+#include <cstdint>
+#include <ctgmath>
+#include <cwchar>
+#include <cwctype>
+#endif
+
+// C++
+#include <algorithm>
+#include <bitset>
+#include <complex>
+#include <deque>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iosfwd>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <new>
+#include <numeric>
+#include <ostream>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <stdexcept>
+#include <streambuf>
+#include <string>
+#include <typeinfo>
+#include <utility>
+#include <valarray>
+#include <vector>
+
+#if __cplusplus >= 201103L
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <forward_list>
+#include <future>
+#include <initializer_list>
+#include <mutex>
+#include <random>
+#include <ratio>
+#include <regex>
+#include <scoped_allocator>
+#include <system_error>
+#include <thread>
+#include <tuple>
+#include <typeindex>
+#include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+#endif
+#line 2 "Source.cpp"
+using namespace std;
+
+typedef string::const_iterator State;
+#define eps 1e-8L
+#define MAX_MOD 1000000007LL
+#define GYAKU 500000004LL
+#define MOD 998244353LL
+#define pb push_back
+#define mp make_pair
+typedef long long ll;
+typedef long double ld;
+#define REP(a, b) for (long long(a) = 0; (a) < (b); ++(a))
+#define ALL(x) (x).begin(), (x).end()
+
+#line 2 "library/kotamanegi/geometry.hpp"
+#define _USE_MATH_DEFINES
+using namespace std;
+
+typedef long double ld;
+typedef complex<ld> Point;
+typedef pair<Point, Point> Segment;
+typedef Segment Line;
+typedef vector<Point> Polygon;
+
+const ld EPS = 1e-10;
+
+ld abs(Line x)
+{
+  return abs(x.second - x.first);
+}
+
+// dot = |a||b| cos(theta)
+ld dot(Point a, Point b)
+{
+  return a.real() * b.real() + a.imag() * b.imag();
+}
+
+// cross = |a||b| sin(theta)
+ld cross(Point a, Point b)
+{
+  return a.real() * b.imag() - a.imag() * b.real();
+}
+
+// 射影: 直線sと点pから引いた垂線の交点
+Point projection(Line s, Point p)
+{
+  Point base = s.second - s.first;
+  ld r = dot(p - s.first, base) / norm(base);
+  return s.first + base * r;
+}
+
+// 反射: 点pを直線sと線対称に移動した点
+Point reflection(Line s, Point p)
+{
+  return p + (projection(s, p) - p) * Point{2.0, 0.0};
+}
+
+Line vertical_bisector(Line x)
+{
+  Point now = (x.first + x.second) * Point{0.5, 0};
+  return Line(now, now + (x.second - x.first) * Point{0, M_PI_2});
+}
+
+enum class Position
+{
+  COUNTER_CLOCKWISE, // 反時計回り
+  CLOCKWISE,         // 時計回り
+  ON_LINE_BACK,      // Lineの始点側に点がある
+  ON_LINE_FRONT,     // Lineの終点側に点がある
+  ON_SEGMENT         // Line上に点がある
+};
+
+// ccw: 線分sと点pの位置関係を示す
+Position ccw(Line s, Point p)
+{
+  Point a = s.second - s.first, b = p - s.first;
+  if (cross(a, b) > eps)
+    return Position::COUNTER_CLOCKWISE;
+  if (cross(a, b) < -eps)
+    return Position::CLOCKWISE;
+  if (dot(a, b) < -eps)
+    return Position::ON_LINE_BACK;
+  if (norm(a) < norm(b))
+    return Position::ON_LINE_FRONT;
+  return Position::ON_SEGMENT;
+}
+
+// 平行判定
+bool is_parallel(Point a, Point b) { return abs(cross(a, b)) < EPS; }
+bool is_parallel(Line a, Line b) { return is_parallel(a.second - a.first, b.second - b.first); }
+
+// 直交判定
+bool is_orthogonal(Point a, Point b) { return abs(dot(a, b)) < EPS; }
+bool is_orthogonal(Line a, Line b) { return is_orthogonal(a.second - a.first, b.second - b.first); }
+
+// 交差判定
+bool is_intersect_line(Line s1, Segment s2)
+{
+  if (cross(s1.second - s1.first, s2.first - s1.first) * cross(s1.second - s1.first, s2.second - s1.first) > eps)
+  {
+    return false;
+  }
+  if (ccw(s1, s2.first) == Position::ON_LINE_BACK and ccw(s1, s2.second) == Position::ON_LINE_BACK)
+  {
+    return false;
+  }
+  if (ccw(s1, s2.first) == Position::ON_LINE_FRONT and ccw(s1, s2.second) == Position::ON_LINE_FRONT)
+  {
+    return false;
+  }
+  return true;
+}
+
+bool is_intersect(Segment s1, Segment s2)
+{
+  for (int i = 0; i < 2; ++i)
+  {
+    if (!is_intersect_line(s1, s2))
+    {
+      return false;
+    }
+    swap(s1, s2);
+  }
+  return true;
+}
+
+bool is_intersect(Polygon s1, Polygon s2)
+{
+  for (int i = 0; i < s1.size(); ++i)
+  {
+    for (int q = 0; q < s2.size(); ++q)
+    {
+      if (is_intersect(Segment{s1[i], s1[(i + 1) % s1.size()]}, Segment{s2[q], s2[(q + 1) % s2.size()]}))
+        return true;
+    }
+  }
+  return false;
+}
+
+// 交差点
+Point intersection_point(Line s1, Line s2)
+{
+  ld s, t;
+  ld deno = cross(s1.second - s1.first, s2.second - s2.first) + eps;
+  s = cross(s2.first - s1.first, s2.second - s2.first) / deno;
+  return s1.first + s * (s1.second - s1.first);
+}
+
+//線分と点の距離
+ld distance(Segment s, Point p)
+{
+  if (dot(s.second - s.first, p - s.first) < eps)
+    return abs(p - s.first);
+  if (dot(s.first - s.second, p - s.second) < eps)
+    return abs(p - s.second);
+  return abs(cross(s.second - s.first, p - s.first)) / abs(s);
+}
+
+//線分と線分の距離
+ld distance(Segment s1, Segment s2)
+{
+  if (is_intersect(s1, s2))
+  {
+    return 0;
+  }
+  return min({distance(s1, s2.first), distance(s1, s2.second), distance(s2, s1.first), distance(s2, s1.second)});
+}
+//多角形の面積
+ld area(Polygon poly)
+{
+  ld ans = 0;
+  for (int i = 0; i < poly.size(); ++i)
+  {
+    Point a = poly[i], b = poly[(i + 1) % poly.size()];
+    ans += cross(a, b);
+  }
+  ans /= 2.0L;
+  return abs(ans);
+}
+
+//凸多角形か判定
+bool is_convex(Polygon poly)
+{
+  for (int i = 0; i < poly.size(); ++i)
+  {
+    Line a = {poly[i], poly[(i + 1) % poly.size()]};
+    if (ccw(a, poly[(i + 2) % poly.size()]) == Position::CLOCKWISE)
+      return false;
+  }
+  return true;
+}
+
+//多角形上に点があるか判定
+bool is_on_polygon(Polygon poly, Point p)
+{
+  for (int i = 0; i < poly.size(); ++i)
+  {
+    Line a = {poly[i], poly[(i + 1) % poly.size()]};
+    if (ccw(a, p) == Position::ON_SEGMENT)
+      return true;
+  }
+  return false;
+}
+
+//多角形内に点があるか判定
+bool is_inside_polygon(Polygon poly, Point p)
+{
+  if (is_on_polygon(poly, p))
+    return true;
+  const int n = poly.size();
+  int wn = 0;
+  for (int i = 0; i < n; ++i)
+  {
+    ld vt = (p.imag() - poly[i].imag()) / (poly[(i + 1) % n].imag() - poly[i].imag());
+    if (p.real() < (poly[i].real() + vt * (poly[(i + 1) % n].real() - poly[i].real())))
+    {
+      if ((poly[i].imag() <= p.imag()) and (poly[(i + 1) % n].imag() > p.imag()))
+      {
+        wn++;
+      }
+      else if ((poly[i].imag() > p.imag()) and (poly[(i + 1) % n].imag() <= p.imag()))
+      {
+        wn--;
+      }
+    }
+  }
+  if (wn != 0)
+    return true;
+  return false;
+}
+
+// 凸包
+Polygon convex_hull(Polygon poly)
+{
+  if (poly.size() <= 1)
+    return poly;
+  sort(ALL(poly), [](auto &l, auto &r)
+       {
+    if(l.real() != r.real()) return l.real() < r.real();
+    return l.imag() < r.imag(); });
+  Polygon ans;
+  ans.push_back(poly[0]);
+  ans.push_back(poly[1]);
+  for (int i = 2; i < poly.size(); ++i)
+  {
+    while (ans.size() >= 2)
+    {
+      Point x = ans[ans.size() - 2];
+      Point y = ans[ans.size() - 1];
+      if (ccw({x, y}, poly[i]) == Position::COUNTER_CLOCKWISE)
+      {
+        ans.pop_back();
+      }
+      else
+        break;
+    }
+    ans.push_back(poly[i]);
+  }
+
+  Polygon reversed_ans;
+  reversed_ans.push_back(poly[0]);
+  reversed_ans.push_back(poly[1]);
+  for (int i = 2; i < poly.size(); ++i)
+  {
+    while (reversed_ans.size() >= 2)
+    {
+      Point x = reversed_ans[reversed_ans.size() - 2];
+      Point y = reversed_ans[reversed_ans.size() - 1];
+      if (ccw({x, y}, poly[i]) == Position::CLOCKWISE)
+      {
+        reversed_ans.pop_back();
+      }
+      else
+        break;
+    }
+    reversed_ans.push_back(poly[i]);
+  }
+  for (int q = reversed_ans.size() - 2; q >= 1; --q)
+  {
+    ans.push_back(reversed_ans[q]);
+  }
+  return ans;
+}
+
+// 凸多角形の直径
+ld diameter(Polygon poly)
+{
+  ld ans = 0;
+  int itr = 0;
+  REP(i, poly.size())
+  {
+    if (abs(poly[i] - poly[0]) > abs(poly[itr] - poly[0]))
+    {
+      itr = i;
+    }
+  }
+  REP(i, poly.size())
+  {
+    while (abs(poly[(itr + 1) % poly.size()] - poly[i]) > abs(poly[itr] - poly[i]))
+    {
+      itr++;
+      itr %= poly.size();
+    }
+    ans = max(ans, abs(poly[itr] - poly[i]));
+  }
+  return ans;
+}
+
+// 凸多角形の切断
+Polygon convex_cut(Polygon poly, Line l)
+{
+  Polygon ans;
+  for (int i = 0; i < poly.size(); ++i)
+  {
+    Point now = poly[i];
+    Point nxt = poly[(i + 1) % poly.size()];
+    if (ccw(l, now) != Position::CLOCKWISE)
+    {
+      ans.push_back(now);
+    }
+    if (is_intersect_line(l, {now, nxt}))
+    {
+      ans.push_back(intersection_point(l, {now, nxt}));
+    }
+  }
+  return ans;
+}
+
+struct vec3
+{
+  ld x, y, z;
+  vec3() {}
+  vec3(ld _x, ld _y, ld _z)
+  {
+    x = _x;
+    y = _y;
+    z = _z;
+  }
+
+  vec3 operator+(const vec3 &v) const
+  {
+    return vec3(x + v.x, y + v.y, z + v.z);
+  }
+  vec3 operator-(const vec3 &v) const
+  {
+    return vec3(x - v.x, y - v.y, z - v.z);
+  }
+  vec3 operator*(ld v) const
+  {
+    return vec3(x * v, y * v, z * v);
+  }
+
+  vec3 operator/(ld v) const
+  {
+    return vec3(x / v, y / v, z / v);
+  }
+  vec3 operator-() const
+  {
+    return vec3(-x, -y, -z);
+  }
+};
+
+ld dot(const vec3 &a, const vec3 &b)
+{
+  return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+ld norm(const vec3 &v)
+{
+  return sqrt(dot(v, v));
+}
+
+vec3 normalize(const vec3 &v)
+{
+  return v / norm(v);
+}
+
+vec3 reflectVector(const vec3 &rayDirection, const vec3 &hitPoint, const vec3 &sphereCenter)
+{
+  vec3 normal = normalize(hitPoint - sphereCenter);
+  return normalize((normal * -dot(rayDirection, normal) + rayDirection) * 2.0 - rayDirection);
+}
+
+ld collisionTime(const vec3 &rayPosition, const vec3 &rayDirection, const vec3 &sphereCenter, double sphereRadius)
+{
+  vec3 s = rayPosition - sphereCenter;
+  ld a = dot(rayDirection, rayDirection);
+  ld b = dot(rayDirection, s);
+  ld c = dot(s, s) - sphereRadius * sphereRadius;
+  ld d = b * b - a * c;
+  if (d < 0.0)
+  {
+    return 1e18;
+  }
+  ld t = (-b - sqrt(d)) / a;
+  if (t > -EPS)
+    return t;
+  return 1e18;
+}
+#line 17 "Source.cpp"
+
+#define int long long
+void solve()
+{
+  int n;
+  cin >> n;
+  if (n == 0)
+    exit(0);
+  ld a, b, c;
+  cin >> a >> b >> c;
+
+  vec3 rayDirection(a, b, c);
+  vector<pair<vec3, ld>> inputs;
+  REP(i, n)
+  {
+    ld d;
+    cin >> a >> b >> c >> d;
+    inputs.push_back({{a, b, c}, d});
+  }
+  vec3 rayPosition(0, 0, 0);
+  while (true)
+  {
+    ld minT = 1e18;
+    int reflect = -1;
+    REP(i, n)
+    {
+      ld t = collisionTime(rayPosition, rayDirection, inputs[i].first, inputs[i].second);
+      if (t < minT)
+      {
+        reflect = i;
+        minT = t;
+      }
+    }
+    if (reflect == -1)
+    {
+      cout << rayPosition.x << " " << rayPosition.y << " " << rayPosition.z << endl;
+      return;
+    }
+
+    rayPosition = rayPosition + rayDirection * minT;
+    rayDirection = reflectVector(rayDirection, rayPosition, inputs[reflect].first);
+  }
+}
+#undef int
+
+// generated by oj-template v4.7.2
+// (https://github.com/online-judge-tools/template-generator)
+int main()
+{
+  // Fasterize input/output script
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout << fixed << setprecision(10);
+  // scanf/printf user should delete this fasterize input/output script
+
+  int t = 10000;
+  // cin >> t; // comment out if solving multi testcase
+  for (int testCase = 1; testCase <= t; ++testCase)
+  {
+    solve();
+  }
+  return 0;
+}
+

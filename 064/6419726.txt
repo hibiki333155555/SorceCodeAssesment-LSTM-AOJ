@@ -1,0 +1,11 @@
+n,q=map(int,input().split())
+A=[2**31-1]*n
+
+for i in range(q):
+    com,x,y=map(int,input().split())
+    #print(com,x,y)
+    if com==0:
+        A[x]=y
+        #print(A)
+    else:
+        print(min(A[x:y+1]))

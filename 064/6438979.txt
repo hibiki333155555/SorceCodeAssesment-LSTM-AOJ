@@ -1,0 +1,22 @@
+import sys
+texts=sys.stdin.read()
+# 全て小文字に変換する
+texts=texts.lower()
+# カウント用の配列
+cnt=[0]*26
+
+# a~zの26文字を用意。これをfor文で回し、一致する文字をカウントする
+letters='abcdefghijklmnopqrstuvwxyz'
+# 入力した文字を一文字ずつ取り出す
+for x in texts:
+    i=0
+    # a~zの26文字を一文字ずつ取り出す
+    for y in letters:
+        # 入力した文字と一致するときに+1カウントする
+        if x==y:
+            cnt[i]+=1
+        # iをカウントアップ
+        i+=1
+for i in range(26):
+    # a~zのi番目の文字数cnt[i]を表示
+    print(letters[i]+" : "+str(cnt[i]))

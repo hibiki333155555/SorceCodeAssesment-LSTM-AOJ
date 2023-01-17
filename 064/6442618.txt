@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(){
+    int i,n;
+    double data[1000],ave=0,total=0,cnt=0,subtotal2=0,bun,total2,hyou;
+    
+    while(1){
+        
+    total=0;cnt=0;total2=0;subtotal2=0;
+    scanf("%d",&n);
+    
+    if(n==0)break;
+    
+    for(i=0;i<n;i++){
+        scanf("%lf",&data[i]);
+        total+=data[i];
+        cnt++;
+    }
+    ave=total/cnt;
+    for(i=0;i<n;i++){
+        subtotal2=data[i]-ave;
+        total2+=pow(subtotal2,2);
+    }
+    bun=total2/(double)n;
+    hyou=sqrt(bun);
+    
+    printf("%.8lf\n",hyou);
+    
+    }
+}

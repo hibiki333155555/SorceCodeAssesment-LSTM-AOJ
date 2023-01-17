@@ -1,0 +1,3 @@
+pi = 3.141592653589
+r = float(input())
+print('{} {}}'.format(pi*r**2, pi*2*r))

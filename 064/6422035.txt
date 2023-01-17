@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+#define rep(i, n) for (int i=0; i<(int)(n); ++(i))
+#define rep3(i, m, n) for (int i=(m); (i)<(int)(n); ++(i))
+#define repr(i, n) for (int i=(int)(n)-1; (i)>=0; --(i))
+#define rep3r(i, m, n) for (int i=(int)(n)-1; (i)>=(int)(m); --(i))
+#define all(x) (x).begin(), (x).end()
+
+const int INF = (int)(1e9);
+
+class SegmentTree {
+    int n;
+    vector<int> node;
+public:
+    SegmentTree(vector<int> a) {
+        int n_ = a.size();
+        n = 1;
+        while (n < n_) n *= 2;
+        node.resize(n*2-1, INF);
+        for (int i=0; i<n_; ++i) node[n+i-1] = a[i];
+        for (int i=n-2; i>=0; --i) node[i] = min(node[i*2+1], node[i*2+2]);
+    }
+    int rmq(int a, int b, int k=0, int l=0, int r=0) {
+        if (l==0 && r==0) r = n;
+        if (r<=a || b<=l) return INF;
+        if (a<=l && r<=b) return node[k];
+        int vl = rmq(a, b, k*2+1, l, (l+r)/2);
+        int vr = rmq(a, b, k*2+2, (l+r)/2, r);
+        return min(vl, vr);
+    }
+    void update(int k, int v) {
+        k += n-1;
+        node[k] = v;
+        while (k > 0) {
+            k = (k-1) / 2;
+            node[k] = min(node[k*2+1], node[k*2+2]);
+        }
+    }
+};
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    SegmentTree st(vector<int>(n, (int)((1LL<<31)-1)));
+    rep(i, q) {
+        int c, x, y;
+        cin >> c >> x >> y;
+        if (c == 0) st.update(x, y);
+        else cout << st.rmq(x, y+1) << endl;
+    }
+    return 0;
+}
+

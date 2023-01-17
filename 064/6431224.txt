@@ -1,0 +1,22 @@
+import java.util.*;
+
+class Solve{
+    private Scanner sc = new Scanner(System.in);
+    private void Finish(){
+        this.sc.close();
+    }
+    public void Do(){
+        while(true){
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            if( x==0 && y==0 ) break;
+            System.out.println( (x<=y?x:y)+" "+(x<=y?y:x) );
+        }
+        Finish();
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

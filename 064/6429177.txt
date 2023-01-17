@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  // 3要素の配列で初期化
+  vector<int> vec(3);
+ 
+  // 3個の入力を受け取る
+  for (int i = 0; i < 3; i++) {
+    cin >> vec.at(i);
+  }
+  sort(vec.begin(), vec.end());
+  
+  cout << vec.at(0) << " " << vec.at(1) << " " << vec.at(2) << endl;
+  
+}

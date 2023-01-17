@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Tools;
+
+internal class Program
+{
+    public static void Main()
+    {
+        Console.ReadLine();
+        var sequence = Console.ReadLine().Split().Select(s => s.ParseInt()).ToArray();
+        var count = SelectionSort(sequence);
+        Console.WriteLine(sequence.StringJoin(" "));
+        Console.WriteLine(count);
+    }
+
+    static int SelectionSort(int[] seq)
+    {
+        var counter = 0;
+        for (int i = 0; i < seq.Length; i++)
+        {
+            var minIndex = i;
+            for (int j = i; j < seq.Length; j++)
+            {
+                if (seq[j] < seq[minIndex])
+                {
+                    minIndex = j;
+                }
+            }
+            if (minIndex != i)
+            {
+                Swap(ref seq[minIndex], ref seq[i]);
+                counter++;
+            }
+        }
+        return counter;
+    }
+}
+
+internal class Tools
+{
+    public static void Swap<T>(ref T a, ref T b)
+    {
+        var t = a;
+        a = b;
+        b = t;
+    }
+}
+
+internal static class Extensions
+{
+    public static int ParseInt(this string s) => int.Parse(s);
+    public static double ParseDouble(this string s) => double.Parse(s);
+    public static string StringJoin<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+}

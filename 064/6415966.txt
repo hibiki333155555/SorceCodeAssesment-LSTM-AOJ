@@ -1,0 +1,4 @@
+a,b=map(int,input().split())
+d=a/b
+r=a%b
+print(f"{d:.int} {r} {d:.5f}")

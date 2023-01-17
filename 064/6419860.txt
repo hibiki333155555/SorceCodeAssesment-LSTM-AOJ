@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n;
+    while (cin>>n&&n!=0){
+        double a[n];
+        double sum=0;
+        for (int i=0;i<n;i++){
+            cin>>a[i];
+            sum+=a[i];
+        }
+        double mean = sum/n;
+        double ans = 0;
+        for (int i=0;i<n;i++){
+            ans+=(a[i]-mean)*(a[i]-mean);
+        }
+        cout<<fixed<<setprecision(10);
+        cout<<sqrt(ans/n)<<endl;
+        
+    }
+    
+    return 0;
+}
+

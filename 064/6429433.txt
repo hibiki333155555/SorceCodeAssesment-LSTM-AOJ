@@ -1,0 +1,92 @@
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Seg {
+  int l, r;
+};
+
+int getD(int t, int x, int y, int w, int d) { 
+  if (t == 0) {
+    return x + y;
+  } else if (t == 1) {
+    int tag = y - x + w;
+    if (tag <= d) return d + w + (d - tag);
+    return d + w - (tag - d);
+  } else if (t == 2) {
+    int tag = y + x - w;
+    if (tag <= 0) return 2*d + w - tag;
+    return d + w + (d - tag);
+  } else {
+    int tag = y - x;
+    if (tag >= 0) return tag;
+    return 2*d + 2*w + tag;
+  }
+}
+
+int haveP(int l, int r, int d, int tot) {
+  if (l <= r) return d >= l && d <= r;
+  if (d < tot && d >= l) return 1;
+  if (d <= r) return 1;
+  return 0;
+}
+
+int cal(int u, int v, int tot) {
+  if (v >= u) return v - u;
+  return v - u + tot; 
+}
+
+int main() {
+  int n, w, d;
+  scanf("%d%d%d", &n, &w, &d);
+  vector<Seg> a;
+  for (int i = 0; i < n; i++) {
+    int x, y;
+    char s[5];
+    scanf("%d%d%s", &x, &y, s);
+    int l = -1, r = -1;
+    if (s[0] == 'W') {
+      l = getD(3, x, y, w, d);
+      r = getD(0, x, y, w, d);
+    }
+    if (s[0] == 'E') {
+      l = getD(1, x, y, w, d);
+      r = getD(2, x, y, w, d);
+    }
+    if (s[0] == 'N') {
+      l = getD(0, x, y, w, d);
+      r = getD(1, x, y, w, d);
+    }
+    if (s[0] == 'S') {
+      l = getD(2, x, y, w, d);
+      r = getD(3, x, y, w, d);
+    }
+    a.push_back(Seg{l, r});
+  }
+  int tot = 2*d + 2*w;
+  int ans = -1;
+  for (int i = 0; i < n; i++) {
+    int st = a[i].r;
+    vector<Seg> b;
+    for (auto cur: a) {
+      if (!haveP(cur.l, cur.r, st, tot)) {
+        b.push_back(Seg{cal(st, cur.l, tot), cal(st, cur.r, tot)});
+      }
+    }
+    sort(b.begin(), b.end(), [](auto u, auto v) {
+      return u.r < v.r;
+    });
+    int lst = 0;
+    int take = 1;
+    for (auto cur: b) {
+      if (cur.l > lst) {
+        take++;
+        lst = cur.r;
+      }
+    }
+    if (ans == -1 || ans > take) ans = take;
+  }
+  printf("%d\n", ans);
+  return 0; 
+}

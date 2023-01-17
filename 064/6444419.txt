@@ -1,0 +1,26 @@
+#include <iostream>
+#include <iomanip>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+   int m, f, r;
+
+   while(true) {
+      char grade;
+      cin >> m >> f >> r;
+      int sum = m + f;
+
+      if(m==-1 && f==-1 && r==-1) break;
+      else if(m==-1 || f==-1) grade = 'F';
+      else if(sum>=80) grade = 'A';
+      else if(sum>=65) grade = 'B';
+      else if(sum>=50) grade = 'C';
+      else if(sum>=30) {
+         if(r>=50) grade = 'C';
+         else grade = 'D';
+      }else grade = 'F';
+
+      cout << grade << "\n";
+   }
+}

@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+
+#define ll long long
+#define ld long double
+#define rep(i,a,b) for (int i = a; i < b; i++)
+#define irep(i,a,b) for (int i = a; i > b; i--)
+
+using namespace std;
+
+int main(){
+    int m,f,r;
+    int sum = 0;
+    string s;
+    while(true){
+        cin >> m >> f >> r;
+        sum = 0;
+        if (m == -1 && f == -1 && r == -1) break;
+        sum = m + f;
+        if (m==-1 || f == -1) s = "F";
+        else if (sum >= 80) s = "A";
+        else if (sum >= 65) s = "B";
+        else if (sum >= 50) s = "C";
+        else if (sum >= 30 && r >= 50) s = "C";
+        else if (sum >= 30) s = "D";
+        else s = "F";
+        cout << s << endl;
+    }
+    //system("pause");
+    return 0;
+}

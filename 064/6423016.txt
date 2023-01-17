@@ -1,0 +1,10 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    int x;
+    x = 2 * 32;
+    
+    cout << x << endl;
+    
+}

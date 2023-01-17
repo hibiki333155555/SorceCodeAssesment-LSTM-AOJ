@@ -1,0 +1,30 @@
+#include <iostream>
+using namespace std;
+int selectionSort(int A[], int N){
+    int x = 0;
+    for(int i = 0; i < N - 1; i++){
+        int n;
+        for(int j = i; j < N; j++){
+            int minj = A[i];
+            if(A[j] < minj) {
+                minj = A[j], n = j;
+            }
+        }
+        swap(A[n], A[i]);
+        if(n != i) x++;
+    }
+    return x;
+}
+int main(){
+    int N, A[100];
+    cin >> N;
+    for(int i = 0; i < N; i++) cin >> A[i];
+    int x = selectionSort(A, N);
+    for(int i = 0; i < N; i++){
+        if(i) cout << " ";
+        cout << A[i];
+    }
+    cout << endl;
+    cout << x << endl;
+    return 0;
+}

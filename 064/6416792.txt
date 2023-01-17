@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int r;
+  cin >> r;
+
+  double pi = acos(-1);
+
+  cout << fixed << setprecision(5) << pi * r * r << " " << fixed << setprecision(5) << 2 * pi * r; 
+  
+  return 0;
+}

@@ -1,0 +1,17 @@
+import math
+n=input()
+x=list(map(float,raw_input().split()))
+y=list(map(float,raw_input().split()))
+d1,d2,d3,d4 = 0.0,0.0,0.0,0.0
+for i in range(0,n):
+	d1 += abs(x[i]-y[i])
+	d2 += abs(x[i]-y[i])**2.0
+	d3 += abs(x[i]-y[i])**3.0
+	if d4 < abs(x[i]-y[i]):
+		d4 = abs(x[i]-y[i])
+print d1,d2,d3,d4
+print d1
+print math.sqrt(d2)
+print d3**(1.0/3)
+print d4
+

@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+	char input[100];
+	char output[100];
+	for (int i = 0; i < 100; i++)
+	{
+		input[i] = '\0';
+		output[i] = '\0';
+	}
+
+	while (EOF != scanf("%s", &input))
+	{
+
+
+		int j = 0;
+		for (; input[j] != '\0';)
+		{
+			if (input[j] == '@')
+			{
+				j++;
+				for (int k = 0; k < input[j] - 49; k++)
+				{
+					printf("%c", input[j + 1]);
+				}
+				j++;
+			}
+			else
+			{
+				printf("%c", input[j]);
+				j++;
+			}
+		}
+		printf("\n");
+		for (int i = 0; i < 100; i++)
+		{
+			input[i] = '\0';
+			output[i] = '\0';
+		}
+	}
+
+
+
+}

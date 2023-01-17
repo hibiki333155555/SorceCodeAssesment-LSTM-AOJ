@@ -1,0 +1,13 @@
+import sys
+sys.setrecursionlimit(10**9) 
+from statistics import mean, median, harmonic_mean, mode
+from math import gcd, log2, log10, pi, sin, cos, tan, asin, acos, atan
+from collections import Counter, deque, defaultdict
+from heapq import heappush, heappop, heappushpop, heapify, heapreplace, merge
+from bisect import bisect_left, bisect_right, bisect, insort_left, insort_right, insort
+from itertools import accumulate, product, permutations, combinations
+from functools import reduce, partial
+import operator
+
+n,m=map(int,input().split())
+print(pow(n,m,10**9+7))

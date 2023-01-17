@@ -1,0 +1,13 @@
+N,M = int(input().split())
+A,B = 0,0
+for i in range(N):
+    A = list(input().split())
+for i in range(M):
+    B = set(input().split())
+
+ans = 0
+for a in A:
+    for b in B:
+        if a == b:
+            ans += 1
+print(ans)

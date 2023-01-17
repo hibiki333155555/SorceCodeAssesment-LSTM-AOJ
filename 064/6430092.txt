@@ -1,0 +1,35 @@
+#include <stdio.h>
+
+int main(void){
+    int i,j,n,r,a[3];
+    
+    scanf("%d",&r);
+    for(i=0;i<r;i++){
+        a[1]=0;
+        a[2]=0;
+        for(j=0;j<10;j++){
+            scanf("%d",&n);
+            if(n>=a[1]&&n>=a[2]){
+                if(a[1]>=a[2]){
+                    a[1]=n;
+                }
+                else{
+                    a[2]=n;
+                }
+            }
+            else if(n>=a[1]&&n<a[2]){
+                a[1]=n;
+            }
+            else if(n<a[1]&&n>=a[2]){
+                a[2]=n;
+            }
+            else break;
+            
+            //printf("%d %d %d %d\n",j,n,a[1],a[2]);
+        }
+        if(j==10){puts("YES");}
+        else{puts("NO");}
+    }
+    
+    return 0;
+}

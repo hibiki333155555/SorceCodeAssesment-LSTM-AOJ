@@ -1,0 +1,71 @@
+#include<stdio.h>
+#define MAX 100005
+#define NIL -1
+
+typedef struct Node{
+  int p; //親
+  int l; //一番左の子
+  int r; //すぐ右の子
+}Node;
+
+Node T[MAX];
+int n, D[MAX];
+
+void print(int i){
+  printf("node %d: ", i);
+  printf("parent = %d, ", T[i].p);
+  printf("depth = %d, ", D[i]);
+  if(T[i].p == NIL) printf("root, ");
+  else if(T[i].l == NIL) printf("leaf, ");
+  else printf("internal node, ");
+
+  int c = T[i].l;
+
+  printf("[");
+  while(c != NIL){
+    printf("%d", c);
+    c = T[c].r;
+    if(c != NIL){
+      printf(", ");
+    }
+  }
+  printf("]");
+  printf("\n");
+}
+
+void rec(int u, int p){
+  D[u] = p;
+  if(T[u].r != NIL) rec(T[u].r, p);
+  if(T[u].l != NIL) rec(T[u].l, p + 1);
+}
+
+int main()
+{
+  int k, id, c, l, r;
+  scanf("%d", &n);
+
+  for(int i = 0; i < n; i++ ){
+    T[i].p = NIL;
+    T[i].l = NIL;
+    T[i].r = NIL;
+  }
+
+  for(int i = 0; i < n; i++ ){
+    scanf("%d %d", &id, &k);
+    for(int j = 0; j < k; j++ ){
+      scanf("%d", &c);
+      if(j == 0) T[id].l = c;
+      else T[l].r = c;
+      l = c;
+      T[c].p = id;
+    }
+  }
+
+  for(int i = 0; i < n; i++ ){
+    if(T[i].p == NIL) r = i;
+  }
+
+  rec(r, 0);
+
+  for(int i = 0; i < n; i++ ) print(i);
+}

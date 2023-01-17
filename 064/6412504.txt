@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    double xy[2][n];
+    for(int i=0; i<2; i++){
+        for(int j=0; j<n; j++){
+            cin>>xy[i][j];
+        }
+    }
+    double count=0;
+    int i=1;
+    while(i<4){
+        if(i==1){
+            for(int j=0; j<n; j++){
+                count+=sqrt(pow(xy[0][j]-xy[1][j],2));
+            }
+            printf("%f\n",count);
+            i++;
+        }
+        else if(i==2){
+            for(int j=0; j<n; j++){
+                count+=pow(xy[0][j]-xy[1][j],2);
+            }
+            printf("%f\n",sqrt(count));
+            i++;
+        }
+        else if(i==3){
+            for(int j=0; j<n; j++){
+                count+=pow(sqrt(pow(xy[0][j]-xy[1][j],2)),3);
+            }
+            printf("%f\n",pow(count,1.0/3.0));
+            i++;
+        }
+        count=0;
+    }
+    double max=sqrt(pow(xy[0][0]-xy[1][0],2));
+    for(int j=1; j<n; j++){
+        if(sqrt(pow(xy[0][j]-xy[1][j],2))>max) max=sqrt(pow(xy[0][j]-xy[1][j],2));
+    }
+        printf("%f\n",max);
+}

@@ -1,0 +1,79 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+
+        ArrayList list = new ArrayList(4);
+        int[][] n1 = new int[3][10];
+        int[][] n2 = new int[3][10];
+        int[][] n3 = new int[3][10];
+        int[][] n4 = new int[3][10];
+
+        list.add(n1);
+        list.add(n2);
+        list.add(n3);
+        list.add(n4);
+
+        for (int i = 0; i < n; i++) {
+            int b = scanner.nextInt();
+            int f = scanner.nextInt();
+            int r = scanner.nextInt();
+            int v = scanner.nextInt();
+            int[][] arr = (int[][]) list.get(b - 1);
+            arr[f-1][r-1] = v;
+        }
+
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 10; j++) {
+                System.out.print(" " + n1[i][j]);
+            }
+            System.out.println();
+        }
+
+        for (int i = 0; i < 20; i++) {
+            System.out.print("#");
+        }
+        System.out.println();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 10; j++) {
+                System.out.print(" " + n2[i][j]);
+            }
+            System.out.println();
+        }
+
+        for (int i = 0; i < 20; i++) {
+            System.out.print("#");
+        }
+        System.out.println();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 10; j++) {
+                System.out.print(" " + n3[i][j]);
+            }
+            System.out.println();
+        }
+
+        for (int i = 0; i < 20; i++) {
+            System.out.print("#");
+        }
+        System.out.println();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 10; j++) {
+                System.out.print(" " + n4[i][j]);
+            }
+            System.out.println();
+        }
+
+        for (int i = 0; i < 20; i++) {
+            System.out.print("#");
+        }
+
+    }
+}

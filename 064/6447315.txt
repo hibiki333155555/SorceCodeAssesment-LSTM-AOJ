@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+vector<int> k_3;
+vector<int> k_4;
+vector<int> dp;
+vector<int> nk_4;
+vector<int> ndp;
+
+int main() {
+    k_3.push_back(0);
+    for (int i = 1; i < 10 * 10 * 10 * 10 * 10; i++) {
+        k_3.push_back(k_3[i - 1] + i);
+    }
+    k_3.pop_back();
+
+    k_4.push_back(0);
+    for (int i = 0; i < 10 * 10 * 10 * 10 * 10; i++) {
+        k_4.push_back(k_4[i] + k_3[i]);
+    }
+    k_4.pop_back();
+    k_4.pop_back();
+
+    dp.push_back(0);
+    for (int i = 1; i < 10 * 10 * 10 * 10 * 10; i++) {
+        dp.push_back(1e9);
+        for (int j = k_4.size() - 1; j >= 0; j--) {
+            if (k_4[j] > i) {
+                break;
+            }
+            dp[i] = min(dp[i], dp[i - k_4[j]] + 1);
+        }
+    }
+    dp.pop_back();
+
+    nk_4.clear();
+    for (int i = 0; i < k_4.size(); i++) {
+        if (k_4[i] % 2 == 1) {
+            nk_4.push_back(k_4[i]);
+        }
+    }
+
+    ndp.push_back(0);
+    for (int i = 1; i < 10 * 10 * 10 * 10 * 10; i++) {
+        ndp.push_back(1e9);
+        for (int j = nk_4.size() - 1; j >= 0; j--) {
+            if (nk_4[j] > i) {
+                break;
+            }
+            ndp[i] = min(ndp[i], ndp[i - nk_4[j]] + 1);
+        }
+    }
+    ndp.pop_back();
+
+    while (true) {
+        int n;
+        cin >> n;
+        if (n == 0) {
+            break;
+        }
+        cout << dp[n] << " " << ndp[n] << endl;
+    }
+}

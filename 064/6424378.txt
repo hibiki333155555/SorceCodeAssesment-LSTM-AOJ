@@ -1,0 +1,75 @@
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string.h>
+using namespace std;
+
+#define mx 210
+
+vector<int> g[mx];
+int visited[mx], check[mx];
+
+bool dfs(int u){
+    visited[u] = 1;
+
+    for(int i = 0; i < g[u].size(); i++){
+        int v = g[u][i];
+        int w = check[v];
+
+        if(w < 0 || !visited[w] && dfs(w)){
+            check[v] = u;
+            check[u] = v;
+
+            return true;
+        }
+
+    }
+
+return false;
+}
+
+
+
+int main(){
+    int x , y , e;
+    cin >> x >> y >> e;
+
+    for(int i = 0; i < e; i++){
+        int u, v;
+        cin >> u >> v;
+
+        g[u].push_back(v + x);
+        g[v + x].push_back(u);
+    }
+
+    int v = x + y, cnt = 0;
+
+    memset(check, -1, sizeof(check));
+
+    for(int i = 0; i < v; i++){
+        if(check[i] < 0){
+            memset(visited, 0, sizeof(visited));
+
+            if(dfs(i)){
+               cnt++;
+            }
+        }
+    }
+cout << cnt << "\n";
+return 0;
+}
+
+/*
+3 4 6
+0 0
+0 2
+0 3
+1 1
+2 1
+2 3
+
+3
+*/
+//C: Namyn
+

@@ -1,0 +1,6 @@
+a, b = map(int, input().split())
+while not a=b = 0:
+    if a>b:
+        print(f'{b} {a}')
+    else:
+        print(f'{a} {b}')

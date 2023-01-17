@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner t = new Scanner(System.in);
+        int n = t.nextInt();
+        int[] num = new int[n];
+        int max = -1000001;
+        int min = 1000001;
+        long sum=0;
+        int r;
+        for(int i=0;i<num.length;i++){
+            num[i]=t.nextInt();
+            sum+=num[i];
+        }
+        for(int j=0;j<num.length;j++){
+           if(max<num[j]){
+               max = num[j];
+           }
+           if(min>num[j]){
+               min=num[j];
+           }
+        }
+        System.out.println(min+" "+max+" "+sum);
+    }
+}

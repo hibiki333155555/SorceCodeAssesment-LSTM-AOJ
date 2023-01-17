@@ -1,0 +1,7 @@
+s=input()*2
+p=input()
+#s+=s
+if p in s: 
+    print("Yes")
+else: 
+    print("No")

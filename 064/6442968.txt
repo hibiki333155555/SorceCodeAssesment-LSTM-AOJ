@@ -1,0 +1,4 @@
+reader.on('line', (line) => {
+  input_lines = line.split(" ")
+});
+console.log(line);

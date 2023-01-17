@@ -1,0 +1,139 @@
+#include "iostream"
+#include "climits"
+#include "list"
+#include "queue"
+#include "stack"
+#include "set"
+#include "functional"
+#include "algorithm"
+#include "string"
+#include "map"
+#include "unordered_map"
+#include "unordered_set"
+#include "iomanip"
+#include "cmath"
+#include "random"
+#include "bitset"
+#include "cstdio"
+#include "numeric"
+#include "cassert"
+#include "ctime"
+
+using namespace std;
+
+//constexpr long long int MOD = 1000000007;
+constexpr long long int MOD = 998244353;
+constexpr double EPS = 1e-8;
+
+//int N, M, K, T, H, W, L, R;
+long long int N, M, K, T, H, W, L, R;
+
+vector<vector<bool>>matrix_product(vector<vector<bool>>a, vector<vector<bool>>b) {
+	int sz = a.size();
+	vector<vector<bool>>ret(sz, vector<bool>(sz));
+	vector<bitset<1100>>yoko(sz);
+	vector<bitset<1100>>tate(sz);
+	for (int i = 0; i < sz; i++) {
+		for (int j = 0; j < sz; j++) {
+			if (a[i][j]) {
+				yoko[i].flip(j);
+			}
+			if (b[i][j]) {
+				tate[j].flip(i);
+			}
+		}
+	}
+	for (int i = 0; i < sz; i++) {
+		for (int j = 0; j < sz; j++) {
+			if ((yoko[i] & tate[j]).any())ret[i][j] = true;
+		}
+	}
+	return ret;
+}
+
+vector<bitset<100>>matrix_product(vector<vector<bool>>a, vector<bitset<100>>b) {
+	int sz = a.size();
+	vector<bitset<100>>ret(sz);
+	for (int i = 0; i < sz; i++) {
+		for (int j = 0; j < sz; j++) {
+			if (a[i][j]) {
+				ret[i] |= b[j];
+			}
+		}
+	}
+	return ret;
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	cin >> N >> K;
+	vector<int>u;
+	vector<int>v;
+	vector<int>d;
+	vector<int>dmax(N);
+	vector<vector<int>>two(N);
+	for (int i = 0; i < N; i++) {
+		cin >> M;
+		while (M--) {
+			cin >> L >> R;
+			L--;
+			u.push_back(i);
+			v.push_back(L);
+			d.push_back(R);
+			dmax[i] = max(dmax[i], d.back());
+			if (R > 1) {
+				two[i].push_back(L);
+			}
+		}
+	}
+	M = u.size();
+	vector<vector<int>>nx(N);
+	int cnt = 0;
+	for (int i = 0; i < N; i++) {
+		nx[i].push_back(cnt++);
+	}
+	for (int i = 0; i < N; i++) {
+		for (int j = 1; j < dmax[i]; j++) {
+			nx[i].push_back(cnt++);
+		}
+	}
+	vector<bitset<100>>bs(cnt);
+	for (int i = 0; i < N; i++) {
+		bs[i].flip(i);
+	}
+	vector<vector<bool>>by(cnt, vector<bool>(cnt));
+	vector<vector<bool>>box(cnt, vector<bool>(cnt));
+	for (int i = 0; i < cnt; i++) {
+		by[i][i] = true;
+	}
+	for (int i = 0; i < M; i++) {
+		if (d[i] == 1) {
+			box[v[i]][u[i]] = true;
+		}
+		else {
+			box[v[i]][nx[u[i]][d[i] - 1]] = true;
+			box[nx[u[i]][1]][u[i]] = true;
+		}
+	}
+	for (int i = 0; i < N; i++) {
+		for (int j = 2; j < dmax[i]; j++) {
+			box[nx[i][j]][nx[i][j - 1]] = true;
+		}
+	}
+	for (int i = 0; i < 30; i++) {
+		if (K >> i & 1) {
+			by = matrix_product(box, by);
+		}
+		box = matrix_product(box, box);
+	}
+	bs = matrix_product(by, bs);
+	vector<int>ans;
+	for (int i = 0; i < N; i++) {
+		if (bs[i].count() == N)ans.push_back(i);
+	}
+	cout << ans.size() << endl;
+	for (auto i : ans)cout << i + 1 << " ";
+	cout << endl;
+}

@@ -1,0 +1,25 @@
+import java.util.Scanner;
+import java.lang.Math;
+
+class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n= sc.nextInt();
+        int a[]=new int [n] ;
+        for(int i=0;i<n;i++){
+            int a[i]=sc.nextInt();
+        }
+        int mi=-1000001;
+        int ma=1000001;
+        long sum=0;
+        for(int i=0;i<n;i++){
+            ma=Math.max(ma, a[i]);
+            mi=Math.min(mi, a[i]);
+            sum+=a[i];
+        }
+        System.out.println(mi+" "+ma+" "+sum);
+    }
+}
+
+
+

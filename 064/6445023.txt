@@ -1,0 +1,2 @@
+r=float(input())
+print(f"{float(2*r*PI):.6} {float(r**2*PI):.6}")

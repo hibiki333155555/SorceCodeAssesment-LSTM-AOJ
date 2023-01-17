@@ -1,0 +1,111 @@
+#include <bits/stdc++.h>
+ 
+typedef long long ll;
+ 
+using namespace std;
+ 
+const int inf=0x7fffffff;
+ 
+struct node{
+    int l,r;
+    int MIN;
+};
+ 
+int R,C,q;
+int r1,r2,c1,c2;
+vector<vector<int> > a;
+vector<vector<node> > t;
+int x;
+ 
+void push_up(int rt,int id){
+    t[id][rt].MIN=min(t[id][rt<<1].MIN,t[id][rt<<1|1].MIN);
+}
+ 
+void build(int rt,int l,int r,int id){
+    int mid=(l+r)/2;
+    t[id][rt].l=l;
+    t[id][rt].r=r;
+    if(l==r) {
+        t[id][rt].MIN=a[id][l];
+        return ;
+    }
+    build(rt<<1,l,mid,id);
+    build(rt<<1|1,mid+1,r,id);
+    push_up(rt,id);
+}
+ 
+void build2(int rt,int l,int r,int id){
+    int mid=(l+r)/2;
+    t[id][rt].l=l;
+    t[id][rt].r=r;
+    if(l==r) {
+        t[id][rt].MIN=a[l][id];
+        return ;
+    }
+    build2(rt<<1,l,mid,id);
+    build2(rt<<1|1,mid+1,r,id);
+    push_up(rt,id);
+}
+ 
+int query_MIN(int rt,int l,int r,int id){
+    int mid=(t[id][rt].l+t[id][rt].r)>>1;
+    if(l<=t[id][rt].l&&r>=t[id][rt].r){
+        return t[id][rt].MIN;
+    }
+    int ans=inf;
+    if(l<=mid){
+        ans=min(ans, query_MIN(rt<<1,l,r,id));
+    }
+    if(r>mid){
+        ans=min(ans, query_MIN(rt<<1|1,l,r,id));
+    }
+    return ans;
+}
+ 
+int main() {
+#ifdef Ac1dX
+    freopen("C:\\Users\\17261\\Desktop\\Ac1dX\\acm\\data.in", "r", stdin);
+    freopen("C:\\Users\\17261\\Desktop\\Ac1dX\\acm\\data.out", "w", stdout);
+#endif
+ 
+    while(cin>>R>>C>>q){
+        if(R==0&&C==0&&q==0) break;
+        a=vector<vector<int > > (R+1,vector<int > (C+1));
+        for(int i=0;i<R;i++){
+            //a[i].clear();
+            for(int j=0;j<C;j++){
+                scanf("%d",&a[i][j]);
+            }
+        }
+        if(R>C){
+            t=vector<vector<node> > (C,vector<node>(4*(R)));
+            for(int i=0;i<C;i++){
+                build2(1,0,R-1,i);
+            }
+            while(q--){
+                cin>>r1>>c1>>r2>>c2;
+                int MIN=inf;
+                for(int id=c1;id<=c2;id++){
+                    MIN=min(MIN,query_MIN(1,r1,r2,id));
+                }
+                cout<<MIN<<endl;
+            }
+        }
+        else{
+ 
+            t=vector<vector<node> > (R,vector<node>(4*(C)));
+            for(int i=0;i<R;i++){
+                build(1,0,C-1,i);
+            }
+            while(q--){
+                cin>>r1>>c1>>r2>>c2;
+                int MIN=inf;
+                for(int id=r1;id<=r2;id++){
+                    MIN=min(MIN,query_MIN(1,c1,c2,id));
+                }
+                cout<<MIN<<endl;
+            }
+        }
+    }
+    return 0;
+}

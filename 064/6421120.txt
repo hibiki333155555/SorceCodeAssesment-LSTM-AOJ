@@ -1,0 +1,76 @@
+// #pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+// #pragma GCC optimize("unroll-loops")
+#include<bits/stdc++.h>
+using namespace std;
+
+using P = pair<int, int>;
+const int M = 1000000007;
+
+int dd[] = { 0, 1, 0, -1 };
+
+
+int solve(int h, int w, const vector<vector<int>>& tl, const P& s, const P& g, int st) {
+    vector<vector<int>> dist(h, vector<int>(w, M));
+    queue<P> q;
+    dist[s.first][s.second] = st;
+    q.emplace(s);
+    while (!q.empty()) {
+        P p = q.front();
+        q.pop();
+        for (int k = 0; k < 4; ++k) {
+            int ti = p.first + dd[k];
+            int tj = p.second + dd[k ^ 1];
+            if (0 <= ti && ti < h && 0 <= tj && tj < w && tl[ti][tj] > dist[p.first][p.second] + 1  && dist[ti][tj] > dist[p.first][p.second] + 1) {
+                dist[ti][tj] = dist[p.first][p.second] + 1;
+                q.emplace(ti, tj);
+            }
+        }
+    }
+    return dist[g.first][g.second];
+}
+
+int main() {
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    int h, w;
+    cin >> h >> w;
+    vector<string> s(h);
+    vector<vector<int>> tl(h, vector<int>(w, M));
+    int si, sj, vi, vj;
+    for (int i = 0; i < h; ++i) {
+        cin >> s[i];
+        for (int j = 0; j < w; ++j) {
+            if (s[i][j] == 'S') {
+                si = i;
+                sj = j;
+            }
+            if (s[i][j] == 'V') {
+                vi = i;
+                vj = j;
+            }
+            if (s[i][j] == '#') {
+                tl[i][j] = 0;
+            }
+        }
+    }
+    int m;
+    cin >> m;
+    for (int i = 0; i < m; ++i) {
+        int a, b, t;
+        cin >> a >> b >> t;
+        --a;
+        --b;
+        tl[a][b] = t;
+    }
+    int tt = solve(h, w, tl, P(si, sj), P(vi, vj), 0);
+    if (tt == M) {
+        cout << "No" << '\n';
+    }
+    tt = solve(h, w, tl, P(vi, vj), P(si, sj), tt);
+    cout << (tt == M ? "No" : "Yes") << '\n';
+
+
+    return 0;
+}
+

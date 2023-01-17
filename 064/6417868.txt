@@ -1,0 +1,33 @@
+
+pub fn read<T: std::str::FromStr>() -> T {
+    let mut s = String::new();
+    std::io::stdin().read_line(&mut s).ok();
+    s.trim().parse().ok().unwrap()
+}
+
+pub fn read_vec<T: std::str::FromStr>() -> Vec<T> {
+    read::<String>()
+        .split_whitespace()
+        .map(|e| e.parse().ok().unwrap())
+        .collect()
+}
+
+fn main() {
+    let n: usize = read();
+    let mut a = read_vec::<i32>();
+    
+    for i in 0..n {
+        let v: i32 = a[i];
+        let mut j: i32 = i as i32 -1;
+        while j >= 0 && a[j as usize ] > v {
+            a[(j+1) as usize] = a[j as usize];
+            j -= 1;
+        }
+        a[(j+1) as usize] = v;
+        let s: Vec<String> = a.iter().map(|x| x.to_string()).collect();
+        println!("{}", s.join(" "));
+    }
+    //println!("{:?}", a);
+    //println!("{:.10}", d3);   println!("{:.*}", 10, dc);
+}
+

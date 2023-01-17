@@ -1,0 +1,21 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+
+int main()
+{
+        int a,b;
+        int d,r;
+        float f;
+        
+        cin >> a >> b;
+        
+        d = a / b;
+        r = a % b;
+        f = (float)a / (float)b;
+        
+        printf("%d %d %.6lf", d, r, f);
+        return 0;
+}
+
+

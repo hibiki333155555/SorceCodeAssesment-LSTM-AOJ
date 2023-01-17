@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+#define FOR(i, a, b) for(ll i = (a); i < (b); ++i)
+#define FORR(i, a, b) for(ll i = (a); i > (b); --i)
+#define REP(i, n) for(ll i = 0; i < (n); ++i)
+#define REPR(i, n) for(ll i = n; i >= 0; i--)
+#define FOREACH(x, a) for(auto &(x) : (a))
+#define dump(x) cout << #x << " = " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define SP << " " <<
+using namespace std;
+using ll = long long;
+using P = pair<ll, ll>;
+
+#define int long long
+
+int n;
+vector<int> nodes;
+
+int parent(int i) { return i / 2; }
+int left(int i) { return 2 * i; }
+int right(int i) { return 2 * i + 1; }
+
+void max_heapify(int i) {
+  int l = left(i);
+  int r = right(i);
+  // 左の子、自分、右の子で値が最大のノードを選ぶ
+  int largest;
+  if(l <= n && nodes[l] > nodes[i]) {
+    largest = l;
+  } else {
+    largest = i;
+  }
+  if(r <= n && nodes[r] > nodes[largest]) { largest = r; }
+
+  if(largest == i) { return; }
+
+  swap(nodes[i], nodes[largest]);
+  max_heapify(largest);
+}
+
+signed main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  cin >> n;
+
+  nodes.resize(n + 1); // 1-origin
+  REP(i, n) {
+    int v;
+    cin >> v;
+    nodes[i + 1] = v;
+  }
+
+  for(int i = n / 2; i > 0; i--) {
+    max_heapify(i);
+  }
+
+  for(int i = 1; i < n + 1; i++) {
+    cout << " " << nodes[i];
+  }
+  cout << endl;
+
+  return 0;
+}
+

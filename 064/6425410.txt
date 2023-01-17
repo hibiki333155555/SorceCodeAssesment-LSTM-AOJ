@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define endl "\n"
+#define ll long long
+#define fix(ans,x) fixed << setprecision(x)<<ans
+int main(){
+    double n;
+    int sum=0;
+    double ans;
+    cin>>n;
+        int x=n;
+    while(sum==0){
+        ans=pow(2,n);
+        if(ans<=x){
+            sum=ans;
+        }
+        n--;
+    }
+    cout<<sum<<endl;
+    return 0;
+}
+

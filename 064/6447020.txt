@@ -1,0 +1,13 @@
+const x = require('fs').readFileSync('/dev/stdin', 'utf8');
+const arr = x.split(' ').map(Number);
+if(arr[0] < arr[1]){
+    ans = `${arr[0].toString()} < ${arr[1].toString()}`
+}else if(arr[0] > arr[1]){
+    ans = `${arr[0].toString()} > ${arr[1].toString()}`
+}else if(arr[0] == arr[1]){
+    ans = `${arr[0].toString()} == ${arr[1].toString()}`
+}
+else{
+    return -1;
+}
+console.log(ans);

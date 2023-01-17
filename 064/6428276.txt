@@ -1,0 +1,121 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define rep(i, s, t) for (int i = (int)(s); i < (int)(t); ++i)
+#define revrep(i, t, s) for (int i = (int)(t)-1; i >= (int)(s); --i)
+#define all(x) begin(x), end(x)
+template <typename T> bool chmax(T& a, const T& b) { return a < b ? (a = b, 1) : 0; }
+template <typename T> bool chmin(T& a, const T& b) { return a > b ? (a = b, 1) : 0; }
+
+template <int mod>
+class Modint {
+    using mint = Modint;
+    static_assert(mod > 0, "Modulus must be positive");
+
+public:
+    static constexpr int get_mod() noexcept { return mod; }
+
+    constexpr Modint(long long y = 0) noexcept : x(y >= 0 ? y % mod : (y % mod + mod) % mod) {}
+
+    constexpr int value() const noexcept { return x; }
+
+    constexpr mint& operator+=(const mint& r) noexcept { if ((x += r.x) >= mod) x -= mod; return *this; }
+    constexpr mint& operator-=(const mint& r) noexcept { if ((x += mod - r.x) >= mod) x -= mod; return *this; }
+    constexpr mint& operator*=(const mint& r) noexcept { x = static_cast<int>(1LL * x * r.x % mod); return *this; }
+    constexpr mint& operator/=(const mint& r) noexcept { *this *= r.inv(); return *this; }
+
+    constexpr mint operator-() const noexcept { return mint(-x); }
+
+    constexpr mint operator+(const mint& r) const noexcept { return mint(*this) += r; }
+    constexpr mint operator-(const mint& r) const noexcept { return mint(*this) -= r; }
+    constexpr mint operator*(const mint& r) const noexcept { return mint(*this) *= r; }
+    constexpr mint operator/(const mint& r) const noexcept { return mint(*this) /= r; }
+
+    constexpr bool operator==(const mint& r) const noexcept { return x == r.x; }
+    constexpr bool operator!=(const mint& r) const noexcept { return x != r.x; }
+
+    constexpr mint inv() const noexcept {
+        int a = x, b = mod, u = 1, v = 0;
+        while (b > 0) {
+            int t = a / b;
+            std::swap(a -= t * b, b);
+            std::swap(u -= t * v, v);
+        }
+        return mint(u);
+    }
+
+    constexpr mint pow(long long n) const noexcept {
+        mint ret(1), mul(x);
+        while (n > 0) {
+            if (n & 1) ret *= mul;
+            mul *= mul;
+            n >>= 1;
+        }
+        return ret;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const mint& r) {
+        return os << r.x;
+    }
+
+    friend std::istream& operator>>(std::istream& is, mint& r) {
+        long long t;
+        is >> t;
+        r = mint(t);
+        return is;
+    }
+
+private:
+    int x;
+};
+
+template <typename T>
+class Combination {
+public:
+    Combination() = default;
+    Combination(int n) : fact_(n + 1), fact_inv_(n + 1) {
+        fact_[0] = 1;
+        for (int i = 1; i <= n; ++i) fact_[i] = fact_[i - 1] * i;
+        fact_inv_[n] = T(1) / fact_[n];
+        for (int i = n; i > 0; --i) fact_inv_[i - 1] = fact_inv_[i] * i;
+    }
+
+    T perm(int n, int r) const {
+        if (r < 0 || n < r) return 0;
+        return fact_[n] * fact_inv_[n - r];
+    }
+
+    T comb(int n, int r) const {
+        if (r < 0 || n < r) return 0;
+        return fact_[n] * fact_inv_[r] * fact_inv_[n - r];
+    }
+
+    T fact(int n) const { return fact_[n]; }
+    T fact_inv(int n) const { return fact_inv_[n]; }
+
+private:
+    std::vector<T> fact_, fact_inv_;
+};
+
+
+using mint = Modint<998244353>;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout << fixed << setprecision(15);
+
+    int N, K;
+    cin >> N >> K;
+    if (K == 1) {
+        cout << 1 << endl;
+    } else if (K == 2) {
+        Combination<mint> comb(N);
+        mint cnt = 0;
+        rep(i,(N+1)/2,N+1) cnt += comb.comb(N,i);
+        cnt += N % 2;
+        cout << cnt << endl;
+    } else {
+        cout << mint(2).pow(N) << endl;
+    }
+}

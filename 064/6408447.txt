@@ -1,0 +1,19 @@
+id = 0
+while True:
+    i = input()
+    if i == "-":
+        break
+    
+    if id == 0:
+        s = i
+        id = 1
+        continue
+    if id == 1:
+        n = int(i)
+        id = 2
+        continue
+    if id == 2:
+        for x in range(n):
+            s = s[i:]+s[:i]
+        continue
+    print(s)

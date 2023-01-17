@@ -1,0 +1,701 @@
+ bool TEST = false;
+
+using namespace std;
+#include<bits/stdc++.h>
+#include<fstream>
+
+#define rep(i,n) for(ll (i)=0;(i)<(ll)(n);i++)
+#define rrep(i,n) for(ll (i)=(ll)(n)-1;(i)>=0;i--)
+#define range(i,start,end,step) for(ll (i)=start;(i)<(ll)(end);(i)+=(step))
+#define rrange(i,start,end,step) for(ll (i)=start;(i)>(ll)(end);(i)+=(step))
+
+#define dump(x)  cerr << "Line " << __LINE__ << ": " <<  #x << " = " << (x) << "\n";
+#define spa << " " <<
+#define fi first
+#define se second
+#define all(a)  (a).begin(),(a).end()
+#define allr(a)  (a).rbegin(),(a).rend()
+
+using ld = long double;
+using ll = long long;
+using ull = unsigned long long;
+using pii = pair<int, int>;
+using pll = pair<ll, ll>;
+using pdd = pair<ld, ld>;
+ 
+template<typename T> using V = vector<T>;
+template<typename T> using VV = V<V<T>>;
+template<typename T, typename T2> using P = pair<T, T2>;
+template<typename T, typename T2> using M = map<T, T2>;
+template<typename T> using S = set<T>;
+template<typename T, typename T2> using UM = unordered_map<T, T2>;
+template<typename T> using PQ = priority_queue<T, V<T>, greater<T>>;
+template<typename T> using rPQ = priority_queue<T, V<T>, less<T>>;
+template<class T>vector<T> make_vec(size_t a){return vector<T>(a);}
+template<class T, class... Ts>auto make_vec(size_t a, Ts... ts){return vector<decltype(make_vec<T>(ts...))>(a, make_vec<T>(ts...));}
+template<class SS, class T> ostream& operator << (ostream& os, const pair<SS, T> v){os << "(" << v.first << ", " << v.second << ")"; return os;}
+template<typename T> ostream& operator<<(ostream &os, const vector<T> &v) { for (auto &e : v) os << e << ' '; return os; }
+template<class T> ostream& operator<<(ostream& os, const vector<vector<T>> &v){ for(auto &e : v){os << e << "\n";} return os;}
+struct fast_ios { fast_ios(){ cin.tie(nullptr); ios::sync_with_stdio(false); cout << fixed << setprecision(20); }; } fast_ios_;
+ 
+template <class T> void UNIQUE(vector<T> &x) {sort(all(x));x.erase(unique(all(x)), x.end());}
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+void fail() { cout << -1 << '\n'; exit(0); }
+inline int popcount(const int x) { return __builtin_popcount(x); }
+inline int popcount(const ll x) { return __builtin_popcountll(x); }
+template<typename T> void debug(vector<vector<T>>&v){for(ll i=0;i<v.size();i++)
+{cerr<<v[i][0];for(ll j=1;j<v[i].size();j++)cerr spa v[i][j];cerr<<"\n";}};
+template<typename T> void debug(vector<T>&v){if(v.size()!=0)cerr<<v[0];
+for(ll i=1;i<v.size();i++)cerr spa v[i];
+cerr<<"\n";};
+template<typename T> void debug(priority_queue<T>&v){V<T> vals; while(!v.empty()) {cerr << v.top() << " "; vals.push_back(v.top()); v.pop();} cerr<<"\n"; for(auto val: vals) v.push(val);}
+template<typename T, typename T2> void debug(map<T,T2>&v){for(auto [k,v]: v) cerr << k spa v << "\n"; cerr<<"\n";}
+template<typename T, typename T2> void debug(unordered_map<T,T2>&v){for(auto [k,v]: v) cerr << k spa v << "\n";cerr<<"\n";}
+V<int> listrange(int n) {V<int> res(n); rep(i,n) res[i]=i; return res;}
+
+template<typename T> P<T,T> divmod(T a, T b) {return make_pair(a/b, a%b);}
+
+const ll INF = (1ll<<62);
+// const ld EPS   = 1e-10;
+// const ld PI    = acos(-1.0);
+
+
+
+template< typename Mint >
+struct NumberTheoreticTransformFriendlyModInt {
+
+  static vector< Mint > dw, idw;
+  static int max_base;
+  static Mint root;
+
+  NumberTheoreticTransformFriendlyModInt() = default;
+
+  static void init() {
+    if(dw.empty()) {
+      const unsigned mod = Mint::get_mod();
+      assert(mod >= 3 && mod % 2 == 1);
+      auto tmp = mod - 1;
+      max_base = 0;
+      while(tmp % 2 == 0) tmp >>= 1, max_base++;
+      root = 2;
+      while(root.pow((mod - 1) >> 1) == 1) root += 1;
+      assert(root.pow(mod - 1) == 1);
+      dw.resize(max_base);
+      idw.resize(max_base);
+      for(int i = 0; i < max_base; i++) {
+        dw[i] = -root.pow((mod - 1) >> (i + 2));
+        idw[i] = Mint(1) / dw[i];
+      }
+    }
+  }
+
+  static void ntt(vector< Mint > &a) {
+    init();
+    const int n = (int) a.size();
+    assert((n & (n - 1)) == 0);
+    assert(__builtin_ctz(n) <= max_base);
+    for(int m = n; m >>= 1;) {
+      Mint w = 1;
+      for(int s = 0, k = 0; s < n; s += 2 * m) {
+        for(int i = s, j = s + m; i < s + m; ++i, ++j) {
+          auto x = a[i], y = a[j] * w;
+          a[i] = x + y, a[j] = x - y;
+        }
+        w *= dw[__builtin_ctz(++k)];
+      }
+    }
+  }
+
+  static void intt(vector< Mint > &a, bool f = true) {
+    init();
+    const int n = (int) a.size();
+    assert((n & (n - 1)) == 0);
+    assert(__builtin_ctz(n) <= max_base);
+    for(int m = 1; m < n; m *= 2) {
+      Mint w = 1;
+      for(int s = 0, k = 0; s < n; s += 2 * m) {
+        for(int i = s, j = s + m; i < s + m; ++i, ++j) {
+          auto x = a[i], y = a[j];
+          a[i] = x + y, a[j] = (x - y) * w;
+        }
+        w *= idw[__builtin_ctz(++k)];
+      }
+    }
+    if(f) {
+      Mint inv_sz = Mint(1) / n;
+      for(int i = 0; i < n; i++) a[i] *= inv_sz;
+    }
+  }
+
+  static vector< Mint > multiply(vector< Mint > a, vector< Mint > b) {
+    int need = a.size() + b.size() - 1;
+    int nbase = 1;
+    while((1 << nbase) < need) nbase++;
+    int sz = 1 << nbase;
+    a.resize(sz, 0);
+    b.resize(sz, 0);
+    ntt(a);
+    ntt(b);
+    Mint inv_sz = Mint(1) / sz;
+    for(int i = 0; i < sz; i++) a[i] *= b[i] * inv_sz;
+    intt(a, false);
+    a.resize(need);
+    return a;
+  }
+};
+
+template< typename Mint >
+vector< Mint > NumberTheoreticTransformFriendlyModInt< Mint >::dw = vector< Mint >();
+template< typename Mint >
+vector< Mint > NumberTheoreticTransformFriendlyModInt< Mint >::idw = vector< Mint >();
+template< typename Mint >
+int NumberTheoreticTransformFriendlyModInt< Mint >::max_base = 0;
+template< typename Mint >
+Mint NumberTheoreticTransformFriendlyModInt< Mint >::root = Mint();
+
+
+template< typename T >
+struct FormalPowerSeriesFriendlyNTT : vector< T > {
+  using vector< T >::vector;
+  using P = FormalPowerSeriesFriendlyNTT;
+  using NTT = NumberTheoreticTransformFriendlyModInt< T >;
+
+  P pre(int deg) const {
+    return P(begin(*this), begin(*this) + min((int) this->size(), deg));
+  }
+
+  P rev(int deg = -1) const {
+    P ret(*this);
+    if(deg != -1) ret.resize(deg, T(0));
+    reverse(begin(ret), end(ret));
+    return ret;
+  }
+
+  void shrink() {
+    while(this->size() && this->back() == T(0)) this->pop_back();
+  }
+
+  P operator+(const P &r) const { return P(*this) += r; }
+
+  P operator+(const T &v) const { return P(*this) += v; }
+
+  P operator-(const P &r) const { return P(*this) -= r; }
+
+  P operator-(const T &v) const { return P(*this) -= v; }
+
+  P operator*(const P &r) const { return P(*this) *= r; }
+
+  P operator*(const T &v) const { return P(*this) *= v; }
+
+  P operator/(const P &r) const { return P(*this) /= r; }
+
+  P operator%(const P &r) const { return P(*this) %= r; }
+
+  P &operator+=(const P &r) {
+    if(r.size() > this->size()) this->resize(r.size());
+    for(int i = 0; i < r.size(); i++) (*this)[i] += r[i];
+    return *this;
+  }
+
+  P &operator-=(const P &r) {
+    if(r.size() > this->size()) this->resize(r.size());
+    for(int i = 0; i < r.size(); i++) (*this)[i] -= r[i];
+    return *this;
+  }
+
+  // https://judge.yosupo.jp/problem/convolution_mod
+  P &operator*=(const P &r) {
+    if(this->empty() || r.empty()) {
+      this->clear();
+      return *this;
+    }
+    auto ret = NTT::multiply(*this, r);
+    return *this = {begin(ret), end(ret)};
+  }
+
+  P &operator/=(const P &r) {
+    if(this->size() < r.size()) {
+      this->clear();
+      return *this;
+    }
+    int n = this->size() - r.size() + 1;
+    return *this = (rev().pre(n) * r.rev().inv(n)).pre(n).rev(n);
+  }
+
+  P &operator%=(const P &r) {
+    *this -= *this / r * r;
+    shrink();
+    return *this;
+  }
+
+  // https://judge.yosupo.jp/problem/division_of_polynomials
+  pair< P, P > div_mod(const P &r) {
+    P q = *this / r;
+    P x = *this - q * r;
+    x.shrink();
+    return make_pair(q, x);
+  }
+
+  P operator-() const {
+    P ret(this->size());
+    for(int i = 0; i < this->size(); i++) ret[i] = -(*this)[i];
+    return ret;
+  }
+
+  P &operator+=(const T &r) {
+    if(this->empty()) this->resize(1);
+    (*this)[0] += r;
+    return *this;
+  }
+
+  P &operator-=(const T &r) {
+    if(this->empty()) this->resize(1);
+    (*this)[0] -= r;
+    return *this;
+  }
+
+  P &operator*=(const T &v) {
+    for(int i = 0; i < this->size(); i++) (*this)[i] *= v;
+    return *this;
+  }
+
+  P dot(P r) const {
+    P ret(min(this->size(), r.size()));
+    for(int i = 0; i < ret.size(); i++) ret[i] = (*this)[i] * r[i];
+    return ret;
+  }
+
+  P operator>>(int sz) const {
+    if(this->size() <= sz) return {};
+    P ret(*this);
+    ret.erase(ret.begin(), ret.begin() + sz);
+    return ret;
+  }
+
+  P operator<<(int sz) const {
+    P ret(*this);
+    ret.insert(ret.begin(), sz, T(0));
+    return ret;
+  }
+
+  T operator()(T x) const {
+    T r = 0, w = 1;
+    for(auto &v : *this) {
+      r += w * v;
+      w *= x;
+    }
+    return r;
+  }
+
+  P diff() const {
+    const int n = (int) this->size();
+    P ret(max(0, n - 1));
+    for(int i = 1; i < n; i++) ret[i - 1] = (*this)[i] * T(i);
+    return ret;
+  }
+
+  P integral() const {
+    const int n = (int) this->size();
+    P ret(n + 1);
+    ret[0] = T(0);
+    for(int i = 0; i < n; i++) ret[i + 1] = (*this)[i] / T(i + 1);
+    return ret;
+  }
+
+  // https://judge.yosupo.jp/problem/inv_of_formal_power_series
+  // F(0) must not be 0
+  P inv(int deg = -1) const {
+    assert(((*this)[0]) != T(0));
+    const int n = (int) this->size();
+    if(deg == -1) deg = n;
+    P res(deg);
+    res[0] = {T(1) / (*this)[0]};
+    for(int d = 1; d < deg; d <<= 1) {
+      P f(2 * d), g(2 * d);
+      for(int j = 0; j < min(n, 2 * d); j++) f[j] = (*this)[j];
+      for(int j = 0; j < d; j++) g[j] = res[j];
+      NTT::ntt(f);
+      NTT::ntt(g);
+      f = f.dot(g);
+      NTT::intt(f);
+      for(int j = 0; j < d; j++) f[j] = 0;
+      NTT::ntt(f);
+      for(int j = 0; j < 2 * d; j++) f[j] *= g[j];
+      NTT::intt(f);
+      for(int j = d; j < min(2 * d, deg); j++) res[j] = -f[j];
+    }
+    return res;
+  }
+
+  // https://judge.yosupo.jp/problem/log_of_formal_power_series
+  // F(0) must be 1
+  P log(int deg = -1) const {
+    assert((*this)[0] == T(1));
+    const int n = (int) this->size();
+    if(deg == -1) deg = n;
+    return (this->diff() * this->inv(deg)).pre(deg - 1).integral();
+  }
+
+  // https://judge.yosupo.jp/problem/sqrt_of_formal_power_series
+  P sqrt(int deg = -1, const function< T(T) > &get_sqrt = [](T) { return T(1); }) const {
+    const int n = (int) this->size();
+    if(deg == -1) deg = n;
+    if((*this)[0] == T(0)) {
+      for(int i = 1; i < n; i++) {
+        if((*this)[i] != T(0)) {
+          if(i & 1) return {};
+          if(deg - i / 2 <= 0) break;
+          auto ret = (*this >> i).sqrt(deg - i / 2, get_sqrt);
+          if(ret.empty()) return {};
+          ret = ret << (i / 2);
+          if(ret.size() < deg) ret.resize(deg, T(0));
+          return ret;
+        }
+      }
+      return P(deg, 0);
+    }
+    auto sqr = T(get_sqrt((*this)[0]));
+    if(sqr * sqr != (*this)[0]) return {};
+    P ret{sqr};
+    T inv2 = T(1) / T(2);
+    for(int i = 1; i < deg; i <<= 1) {
+      ret = (ret + pre(i << 1) * ret.inv(i << 1)) * inv2;
+    }
+    return ret.pre(deg);
+  }
+
+  P sqrt(const function< T(T) > &get_sqrt, int deg = -1) const {
+    return sqrt(deg, get_sqrt);
+  }
+
+  // https://judge.yosupo.jp/problem/exp_of_formal_power_series
+  // F(0) must be 0
+  P exp(int deg = -1) const {
+    if(deg == -1) deg = this->size();
+    assert((*this)[0] == T(0));
+
+    P inv;
+    inv.reserve(deg + 1);
+    inv.push_back(T(0));
+    inv.push_back(T(1));
+
+    auto inplace_integral = [&](P &F) -> void {
+      const int n = (int) F.size();
+      auto mod = T::get_mod();
+      while((int) inv.size() <= n) {
+        int i = inv.size();
+        inv.push_back((-inv[mod % i]) * (mod / i));
+      }
+      F.insert(begin(F), T(0));
+      for(int i = 1; i <= n; i++) F[i] *= inv[i];
+    };
+
+    auto inplace_diff = [](P &F) -> void {
+      if(F.empty()) return;
+      F.erase(begin(F));
+      T coeff = 1, one = 1;
+      for(int i = 0; i < (int) F.size(); i++) {
+        F[i] *= coeff;
+        coeff += one;
+      }
+    };
+
+    P b{1, 1 < (int) this->size() ? (*this)[1] : 0}, c{1}, z1, z2{1, 1};
+    for(int m = 2; m < deg; m *= 2) {
+      auto y = b;
+      y.resize(2 * m);
+      NTT::ntt(y);
+      z1 = z2;
+      P z(m);
+      for(int i = 0; i < m; ++i) z[i] = y[i] * z1[i];
+      NTT::intt(z);
+      fill(begin(z), begin(z) + m / 2, T(0));
+      NTT::ntt(z);
+      for(int i = 0; i < m; ++i) z[i] *= -z1[i];
+      NTT::intt(z);
+      c.insert(end(c), begin(z) + m / 2, end(z));
+      z2 = c;
+      z2.resize(2 * m);
+      NTT::ntt(z2);
+      P x(begin(*this), begin(*this) + min< int >(this->size(), m));
+      inplace_diff(x);
+      x.push_back(T(0));
+      NTT::ntt(x);
+      for(int i = 0; i < m; ++i) x[i] *= y[i];
+      NTT::intt(x);
+      x -= b.diff();
+      x.resize(2 * m);
+      for(int i = 0; i < m - 1; ++i) x[m + i] = x[i], x[i] = T(0);
+      NTT::ntt(x);
+      for(int i = 0; i < 2 * m; ++i) x[i] *= z2[i];
+      NTT::intt(x);
+      x.pop_back();
+      inplace_integral(x);
+      for(int i = m; i < min< int >(this->size(), 2 * m); ++i) x[i] += (*this)[i];
+      fill(begin(x), begin(x) + m, T(0));
+      NTT::ntt(x);
+      for(int i = 0; i < 2 * m; ++i) x[i] *= y[i];
+      NTT::intt(x);
+      b.insert(end(b), begin(x) + m, end(x));
+    }
+    return P{begin(b), begin(b) + deg};
+  }
+
+  // https://judge.yosupo.jp/problem/pow_of_formal_power_series
+  P pow(int64_t k, int deg = -1) const {
+    const int n = (int) this->size();
+    if(deg == -1) deg = n;
+    for(int i = 0; i < n; i++) {
+      if((*this)[i] != T(0)) {
+        T rev = T(1) / (*this)[i];
+        P ret = (((*this * rev) >> i).log() * k).exp() * ((*this)[i].pow(k));
+        if(i * k > deg) return P(deg, T(0));
+        ret = (ret << (i * k)).pre(deg);
+        if(ret.size() < deg) ret.resize(deg, T(0));
+        return ret;
+      }
+    }
+    return *this;
+  }
+
+  P mod_pow(int64_t k, P g) const {
+    P modinv = g.rev().inv();
+    auto get_div = [&](P base) {
+      if(base.size() < g.size()) {
+        base.clear();
+        return base;
+      }
+      int n = base.size() - g.size() + 1;
+      return (base.rev().pre(n) * modinv.pre(n)).pre(n).rev(n);
+    };
+    P x(*this), ret{1};
+    while(k > 0) {
+      if(k & 1) {
+        ret *= x;
+        ret -= get_div(ret) * g;
+        ret.shrink();
+      }
+      x *= x;
+      x -= get_div(x) * g;
+      x.shrink();
+      k >>= 1;
+    }
+    return ret;
+  }
+
+  // https://judge.yosupo.jp/problem/polynomial_taylor_shift
+  P taylor_shift(T c) const {
+    int n = (int) this->size();
+    vector< T > fact(n), rfact(n);
+    fact[0] = rfact[0] = T(1);
+    for(int i = 1; i < n; i++) fact[i] = fact[i - 1] * T(i);
+    rfact[n - 1] = T(1) / fact[n - 1];
+    for(int i = n - 1; i > 1; i--) rfact[i - 1] = rfact[i] * T(i);
+    P p(*this);
+    for(int i = 0; i < n; i++) p[i] *= fact[i];
+    p = p.rev();
+    P bs(n, T(1));
+    for(int i = 1; i < n; i++) bs[i] = bs[i - 1] * c * rfact[i] * fact[i - 1];
+    p = (p * bs).pre(n);
+    p = p.rev();
+    for(int i = 0; i < n; i++) p[i] *= rfact[i];
+    return p;
+  }
+};
+
+template< int mod >
+struct ModInt {
+  int x;
+
+  ModInt() : x(0) {}
+
+  ModInt(int64_t y) : x(y >= 0 ? y % mod : (mod - (-y) % mod) % mod) {}
+
+  ModInt &operator+=(const ModInt &p) {
+    if((x += p.x) >= mod) x -= mod;
+    return *this;
+  }
+
+  ModInt &operator-=(const ModInt &p) {
+    if((x += mod - p.x) >= mod) x -= mod;
+    return *this;
+  }
+
+  ModInt &operator*=(const ModInt &p) {
+    x = (int) (1LL * x * p.x % mod);
+    return *this;
+  }
+
+  ModInt &operator/=(const ModInt &p) {
+    *this *= p.inverse();
+    return *this;
+  }
+
+  ModInt operator-() const { return ModInt(-x); }
+
+  ModInt operator+(const ModInt &p) const { return ModInt(*this) += p; }
+
+  ModInt operator-(const ModInt &p) const { return ModInt(*this) -= p; }
+
+  ModInt operator*(const ModInt &p) const { return ModInt(*this) *= p; }
+
+  ModInt operator/(const ModInt &p) const { return ModInt(*this) /= p; }
+
+  bool operator==(const ModInt &p) const { return x == p.x; }
+
+  bool operator!=(const ModInt &p) const { return x != p.x; }
+
+  ModInt inverse() const {
+    int a = x, b = mod, u = 1, v = 0, t;
+    while(b > 0) {
+      t = a / b;
+      swap(a -= t * b, b);
+      swap(u -= t * v, v);
+    }
+    return ModInt(u);
+  }
+
+  ModInt pow(int64_t n) const {
+    ModInt ret(1), mul(x);
+    while(n > 0) {
+      if(n & 1) ret *= mul;
+      mul *= mul;
+      n >>= 1;
+    }
+    return ret;
+  }
+
+  friend ostream &operator<<(ostream &os, const ModInt &p) {
+    return os << p.x;
+  }
+
+  friend istream &operator>>(istream &is, ModInt &a) {
+    int64_t t;
+    is >> t;
+    a = ModInt< mod >(t);
+    return (is);
+  }
+
+  static int get_mod() { return mod; }
+};
+
+const int mod = 998244353;
+using MOD = ModInt<mod>;
+
+using FPS = FormalPowerSeriesFriendlyNTT< MOD >;
+
+
+
+const int _B = 500500;
+MOD g1[_B];
+MOD g2[_B];
+MOD inverse[_B];
+void prepare() {
+  g1[0] = g1[1] = g2[0] = g2[1] = 1;
+  inverse[0] = 0;
+  inverse[1] = 1;
+  range(i,2,_B,1) {
+    g1[i] = g1[i-1]*i;
+    inverse[i] = -inverse[mod%i]*(mod/i);
+    g2[i] = g2[i-1]*inverse[i];
+  }
+}
+template<typename T>
+MOD cmb(T n, T r) {
+  assert(g1[0]==1);
+  if (r<0 || r>n) return 0;
+  r = min(r, n-r);
+  return g1[n]*g2[r]*g2[n-r];
+}
+template<typename T>
+MOD perm(T n, T r) {
+  if (r<0 || r>n) return 0;
+  return g1[n]*g2[n-r];
+}
+
+
+// usage: 
+// FPS f, g;
+// f.reserve(s+1);
+// g.reserve(s+1);
+// rep(j,s+1) {
+//     f.emplace_back(dpa[i][j]);
+//     g.emplace_back(dpb[n-i][j]);
+// }
+// auto h = f*g;
+
+// multiply functions
+// V<FPS> fs;
+// using PI = P<int,int>;
+// priority_queue<PI, V<PI>, greater<PI>> q;
+// while (q.size()>=2) {
+//     auto [s,i] = q.top();
+//     q.pop();
+//     auto [t,j] = q.top();
+//     q.pop();
+//     fs[i] = fs[i] * fs[j];
+//     q.push(make_pair(fs[i].size(), i));
+//     // cout << i spa j spa fs[i].size() << endl;
+// }
+// auto [ss,ii] = q.top();
+// auto f = fs[ii];
+
+void Main(){
+    prepare();
+    ll n,m;
+    cin >> n >> m;
+    V<ll> a(m);
+    ll total;
+    rep(i,m) {
+        cin >> a[i];
+        total += a[i];
+    }
+    MOD ans;
+    if (total<n) ans = 0;
+    else {
+      V<MOD> dp(n+1,0);
+      dp[0] = 1;
+      rep(i,m) {
+        V<MOD> ndp(n+1,0);
+        MOD cum = 0;
+        V<MOD> vals(n+2);
+        rep(k,n+1) {
+          vals[k] = cum;
+          cum += dp[k] * g1[n-k];
+        }
+        vals[n+1] = cum;
+        rep(k,n+1) {
+          MOD val = vals[k+1];
+          if (k-a[i]>=0) val -= vals[k-a[i]];
+          ndp[k] = (val) * g2[n-k];
+        }
+        // rep(j,n+1) {
+        //   auto val = dp[j];
+        //   if (val==0) continue;
+        //   rep(k,a[i]+1) {
+        //     if (j+k>n) break;
+        //     ndp[j+k] += dp[j] * g1[n-j] * g2[n-j-k]; //cmb(n-j,k) * g1[k];
+        //   }
+        // }
+        swap(dp,ndp);
+        // debug(dp);
+      }
+      ans = dp[n];
+    }
+    cout << ans << "\n";
+}
+
+int main(void){
+    std::ifstream in("tmp_in");
+    if (TEST) {
+        std::cin.rdbuf(in.rdbuf());
+        std::cout << std::fixed << std::setprecision(15);
+    } else {
+        std::cin.tie(nullptr);
+        std::ios_base::sync_with_stdio(false);
+        std::cout << std::fixed << std::setprecision(15);
+    }
+    Main();
+}
+

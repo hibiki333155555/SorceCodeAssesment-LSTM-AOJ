@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <limits.h>
+
+struct work
+{
+	char *name;
+	int time;
+	int divq;
+	int extq;
+	int adtime;
+	
+}	;
+
+int	ft_isspace(int c)
+{
+	return (('\t' <= c && c <= '\r') || c == ' ');
+}
+
+int	ft_atoi(const char *str)
+{
+	int			minus;
+	long		number;
+
+	number = 0;
+	minus = 0;
+	while (ft_isspace(*str))
+		str++;
+	if (*str == '+' || *str == '-')
+		minus = (*str++ == '-');
+	while ('0' <= *str && *str <= '9')
+	{
+		number = 10 * number + (*str++ - '0');
+		if (number < LONG_MIN || LONG_MAX < number)
+		{
+			if (minus)
+				number = 0;
+			else
+				number = -1;
+			return (number);
+		}
+	}
+	if (minus)
+		number = -number;
+	return ((int)number);
+}
+
+void qw (struct work *a, struct work *res, int n, int q)
+{
+	int i;
+	int j;
+	int k;
+	int time;
+
+	i = -1;
+	j = -1;
+	time = 0;
+	while (++i >= 0 && n > 0)
+	{
+		if (a[i % 1000].divq == 0)
+		{
+			time += a[i % 1000].extq;
+			a[i % 1000].extq = 0;
+		}
+		else
+		{
+			time += q;
+			a[i % 1000].divq -= 1;
+		}
+		if (a[i % 1000].divq == 0 && a[i % 1000].extq == 0 && ++j >= 0)
+		{
+			a[i % 1000].adtime = time;
+			res[j] = a[i % 1000];
+			--n;
+		}
+		else
+			a[(i + n) % 1000] = a[i % 1000];
+	}
+}
+
+int main(void)
+{
+	int i;
+	int j;
+	char c[100003][11];
+	int n;
+	int q;
+	int swap;
+	struct work a[100003];
+	struct work res[100003];
+
+	scanf("%d%d", &n, &q);
+	i = -1;
+	j = 0;
+	while (++i < n * 2)
+	{
+		scanf("%s", c[i]);
+		if ((i % 2) == 0)
+			a[j].name = c[i];
+		else
+		{
+			a[j].time = ft_atoi(c[i]);
+			a[j].divq = a[j].time / q;
+			a[j].extq = a[j].time % q;
+			++j;
+		}
+	}
+	qw(a, res, n, q);
+	i = -1;
+	while (++i < n)
+		printf("%s %d\n", res[i].name, res[i].adtime);
+	return (0);
+
+}
+

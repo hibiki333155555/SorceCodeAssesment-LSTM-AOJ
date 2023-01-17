@@ -1,0 +1,87 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+const int N = 1200;
+
+bool dp[51][N][N];
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    int n;
+    while(cin >> n,n){
+        vector<int> a(n);
+        for(int i=0;i<n;i++){
+            cin >> a[i];
+        }
+        int sum = 0;
+        for(int i=0;i<=n;i++){
+            if(i<n)sum += a[i];
+            for(int j=0;j<=min(N-1,sum);j++){
+                for(int k=0;k<=j;k++){
+                    dp[i][j][k] = false;
+                }
+            }
+        }
+        int s = 0;
+        dp[0][0][0] = 1;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<=min(N-1,s);j++){
+                for(int k=0;k<=j and k+j<=s;k++){
+                    if(dp[i][j][k]){
+                        dp[i+1][j][k] = true;
+                        if(j+a[i] < N){
+                            dp[i+1][j+a[i]][k] = true;
+                        }
+                        if(k+a[i] < N){
+                            dp[i+1][max(j,a[i]+k)][min(j,a[i]+k)] = true;
+                        }
+                    }
+                }
+            }
+            s += a[i];
+        }
+        int res = 0;
+        for(int i=0;i<=min(N-1,s);i++){
+            for(int j=0;j<=i;j++){
+                if(dp[n][i][j]){
+                    res = max(res,min({i,j,s-i-j}));
+                }
+            }
+        }
+        cout << res << "\n";
+    }
+}
+

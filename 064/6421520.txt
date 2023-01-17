@@ -1,0 +1,147 @@
+
+
+#include <bits/stdc++.h>
+#include <iostream>
+#include <limits>
+#include <numeric>
+#include <type_traits>
+#include <bitset>
+#include <map>
+#include <unordered_map>
+#include <set>
+
+using namespace std;
+
+#define rep(i,n,m) for(ll (i)=(n);(i)<(m);(i)++)
+#define rrep(i,n,m) for(ll (i)=(n);(i)>(m);(i)--)
+using ll = long long;
+const ll mod = 1000000007;//998244353;
+const ll inf = 1e9;
+const ll INF = 1e18;
+
+
+void pline(vector<ll> lis){
+    rep(i,0,lis.size()){
+        printf ("%lld",lis[i]);
+        if (i != lis.size()-1) printf(" ");
+        else printf("\n");
+    }
+}
+
+/*
+void pmap(map<ll,mint>& lis){
+    for (auto p : lis){
+        printf ("%lld:%lld ,",p.first,p.second.val());
+    }
+    printf ("\n");
+}*/
+
+/*
+void setxor(set<ll>& a,set<ll>& b){ // a ^= b
+    for (ll x : b){
+        if (a.count(x) > 0) a.erase(x);
+        else a.insert(x);
+    }
+}
+
+set<ll> setmin(set<ll> a,set<ll> b){
+
+    auto aitr = a.begin();
+    auto bitr = b.begin();
+
+    while (aitr != a.end() && bitr != b.end()){
+        if (*aitr < *bitr) return a;
+        else if (*aitr > *bitr) return b;
+        aitr++;
+        bitr++;
+    }
+
+    if (*aitr == a.end()) return a;
+    return b;
+
+}
+*/
+
+
+int main(){
+
+    ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    ll N;
+    cin >> N;
+
+    vector<ll> A(N);
+    rep(i,0,N) cin >> A[i];
+
+    vector<ll> B(N); //写像
+    rep(i,0,N) B[i] = i;
+
+    vector<pair<ll,ll>> stk(0);
+    ll Q;
+    cin >> Q;
+
+    vector<vector<ll>> db(30,vector<ll> (N));
+
+    rep(loop,0,Q){
+
+        ll ty;
+        cin >> ty;
+
+        if (ty == 1){
+            ll x,y;
+            cin >> x >> y;
+            x--;y--;
+            swap(B[x],B[y]);
+            stk.push_back(make_pair(x,y));
+        }else if (ty == 2){
+            auto xy = stk[stk.size()-1];
+            stk.pop_back();
+            swap(B[xy.first],B[xy.second]);
+        }else{
+
+            //ダブリング
+            rep(i,0,N){
+                db[0][i] = B[i];
+            }
+
+            rep(r,1,30){
+                rep(v,0,N){
+                    db[r][v] = db[r-1][db[r-1][v]];
+                }
+            }
+
+            ll k;
+            cin >> k;
+            //k回立った時の写像を求める
+
+            rep(i,0,30){
+                if (0 < ((1<<i) & k)){
+                    vector<ll> newA(N);
+                    rep(j,0,N){
+                        newA[j] = A[ db[i][j] ];
+                    }
+                    A = newA;
+                }
+            }
+
+        }
+
+    }
+
+    pline(A);
+
+}
+
+/*
+
+J:
+前半と後半で分ける？
+いんや
+Manacherだな
+
+K:
+クエリ処理はダブリング
+1000xlogなので何とかなる
+
+*/

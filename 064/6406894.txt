@@ -1,0 +1,42 @@
+//
+// Created by TangQihui on 2022/3/6.
+//
+
+#include "iostream"
+#include "stdio.h"
+#include "list"
+using namespace std;
+#define MAX 100000
+int W[MAX];
+int n,k;
+int check(long long p){
+    int j = 0;
+    for (int i = 0; i < k; ++i) {
+        long long sum = 0;
+        while(sum + W[j]<=p){
+            sum += W[j];
+            j++;
+            if (j==n)return n;
+        }
+    }
+    return j;
+}
+long long solve(){
+    long long  left = 0,right = (100000)*(10000)+1;
+    long long mid;
+    while(left<right){
+        mid = (left+right)/2;
+        int v = check(mid);
+        if (v>=n)right = mid;
+        else left = mid+1;
+    }
+    return right;
+}
+int main(){
+    cin>>n>>k;
+    for (int i = 0; i < n; ++i) {
+        cin>>W[i];
+    }
+    cout<<solve()<<endl;
+    return 0;
+}

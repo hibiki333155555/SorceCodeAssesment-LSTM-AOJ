@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct _node{
+    int value_;
+    _node* prev_;
+    _node* next_;
+};
+
+class _list{
+public:
+    _node* nil;
+    _list(){
+        nil = new _node;
+        nil->prev_ = nil;
+        nil->next_ = nil;
+    }
+    _node* begin(){
+        return nil->next_;
+    }
+    _node* end(){
+        return nil;
+    }
+    _node insert(int x){
+        _node* n = new _node;
+        n->value_ = x;
+        n->next_ = nil->next_;
+        n->prev_ = nil;
+        nil->next_ = n;
+        n->next_->prev_ = n;
+        return *n;
+    }
+    void deleteNode(_node* n){
+        if(n == nil) return;
+        n->prev_->next_ = n->next_;
+        n->next_->prev_ = n->prev_;
+        delete n;
+    }
+    void deleteKey(int x){
+        for(_node* n = begin(); n != end(); n = n->next_){
+            if(n->value_ != x) continue;
+            deleteNode(n);
+            break;
+        }
+    }
+    void deleteFirst(){
+        deleteNode(begin());
+    }
+    void deleteLast(){
+        deleteNode(end()->prev_);
+    }
+};
+
+int main(){
+    int n;
+    cin>>n;
+
+    string op;
+    _list l;
+    while(cin>>op){
+        if(op == "insert"){
+            cin>>n;
+            l.insert(n);
+        }
+        else if (op == "delete"){
+            cin>>n;
+            l.deleteKey(n);
+        }
+        else if (op == "deleteFirst"){
+            l.deleteFirst();
+        }
+        else if (op == "deleteLast"){
+            l.deleteLast();
+        }
+    }
+    bool first = true;
+    for(_node* n = l.begin(); n != l.end(); n = n->next_){
+        if(first) first = false;
+        else cout << " ";
+        cout << n->value_;
+    }
+    cout << endl;
+    return 0;
+}

@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+from collections import defaultdict
+import sys
+import random
+from math import gcd
+readline=sys.stdin.readline
+class Rolling_Hash:
+    def __init__(self,lst,base,mod):
+        assert gcd(base,mod)==1
+        self.N=len(lst)
+        self.base=base
+        self.mod=mod
+        self.rolling_hash=[None]*(self.N+1)
+        self.rolling_hash[0]=0
+        x=1
+        for i in range(1,self.N+1):
+            self.rolling_hash[i]=self.rolling_hash[i-1]+x*lst[i-1]
+            self.rolling_hash[i]%=self.mod
+            x*=self.base
+            x%=self.mod
+        x=pow(x,mod-2,mod)
+        self.base_reverse=[None]*(self.N+1)
+        self.base_reverse[self.N]=x
+        for i in range(self.N-1,-1,-1):
+            self.base_reverse[i]=self.base_reverse[i+1]*self.base%self.mod
+
+    def __getitem__(self,i):
+        if type(i)==int:
+            a,b=i,i+1
+        else:
+            a,b=i.start,i.stop
+            if a==None or a<-self.N:
+                a=0
+            elif self.N<=a:
+                a=self.N
+            elif a<0:
+                a+=self.N
+            if b==None or self.N<=b:
+                b=self.N
+            elif b<-self.N:
+                b=0
+            elif b<0:
+                b+=self.N
+        return (self.rolling_hash[b]-self.rolling_hash[a])*self.base_reverse[a]%self.mod
+N=int(readline())
+random_number=[random.randint(1<<50,1<<60) for i in range(26)]
+base=random.randint(1<<50,1<<60)
+RH=[Rolling_Hash([random_number[ord(s)-97] for s in readline().rstrip()],(1<<61)-1,base) for i in range(N)]
+illegal=[False]*N
+M=RH[0].N
+for j in range(M):
+    cnt=defaultdict(int)
+    for i in range(N):
+        cnt[(RH[i][:j],RH[i][j+1:])]+=1
+    for i in range(N):
+        if cnt[(RH[i][:j],RH[i][j+1:])]>=2:
+            illegal[i]=True
+ans=illegal.count(True)
+print(ans)

@@ -1,0 +1,8 @@
+while True:
+    x,y = map(int,input().split())
+    if x <= y:
+        print("%d %d" %(x,y)
+    elif x >= y:
+        print("%d %d" %(y,x)
+    else x,y ==0:
+        break

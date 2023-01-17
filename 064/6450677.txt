@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+#include <vector> 
+using namespace std;
+
+void printingA(vector<int> A, int n) {
+    for (int k=0; k<n ; k++){
+        if (k==n-1) {
+            cout << A.at(k) << endl; 
+        }
+        else {
+            cout << A.at(k) << " "; 
+        }
+    }
+}
+
+void printingCount(int count) {
+    cout << count << endl;
+}
+
+
+void selectionSort(vector<int>& A, int n, int& count) { 
+    for (int i=0; i<n; i++) {
+        for (int j=i+1; j<n; j--) {
+            int min = A.at(i);
+            bool change_flag = false; 
+            if (A.at(j) < min) {
+                min = A.at(j);
+                change_flag = true; 
+            }
+        }
+        
+        if change_flag {
+            count++;
+        }
+    } 
+}
+
+int main () {
+    int n;
+    cin >> n;
+    vector<int> A(n);
+    for (int i = 0; i < n; i++) {
+        cin >> A.at(i);
+    }
+    int count = 0;
+    selectionSort(A, n, count);
+    printingA(A, n);
+    printingCount(count);
+    return 0;
+}

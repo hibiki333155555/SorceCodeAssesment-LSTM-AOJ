@@ -1,0 +1,169 @@
+// ---------- begin SegmentTree Range update Point query ----------
+mod segment_tree {
+    pub struct RUPQ<T, F> {
+        size: usize,
+        bit: usize,
+        data: Vec<T>,
+        e: T,
+        op: F,
+    }
+    impl<T, F> RUPQ<T, F>
+    where
+        T: Clone,
+        F: Fn(&T, &T) -> T,
+    {
+        pub fn new(size: usize, e: T, op: F) -> Self {
+            let size = size.next_power_of_two();
+            let bit = size.trailing_zeros() as usize;
+            Self {
+                size,
+                bit,
+                data: vec![e.clone(); 2 * size],
+                e,
+                op,
+            }
+        }
+        pub fn find(&self, x: usize) -> T {
+            assert!(x < self.size);
+            let mut x = x + self.size;
+            let mut ans = self.data[x].clone();
+            while x > 1 {
+                x >>= 1;
+                ans = (self.op)(&ans, &self.data[x]);
+            }
+            ans
+        }
+        fn propagate(&mut self, x: usize) {
+            let f = std::mem::replace(&mut self.data[x], self.e.clone());
+            self.data[2 * x] = (self.op)(&self.data[2 * x], &f);
+            self.data[2 * x + 1] = (self.op)(&self.data[2 * x + 1], &f);
+        }
+        pub fn update(&mut self, l: usize, r: usize, f: T) {
+            assert!(l <= r && r <= self.size);
+            if l == r {
+                return;
+            }
+            let mut l = l + self.size;
+            let mut r = r + self.size;
+            for i in (1..=self.bit).rev() {
+                if (l >> i) << i != l {
+                    self.propagate(l >> i);
+                }
+                if (r >> i) << i != r {
+                    self.propagate((r - 1) >> i);
+                }
+            }
+            while l < r {
+                if l & 1 == 1 {
+                    self.data[l] = (self.op)(&self.data[l], &f);
+                    l += 1;
+                }
+                if r & 1 == 1 {
+                    r -= 1;
+                    self.data[r] = (self.op)(&self.data[r], &f);
+                }
+                l >>= 1;
+                r >>= 1;
+            }
+        }
+    }
+}
+// ---------- end SegmentTree Range update Point query ----------
+// ---------- begin input macro ----------
+// reference: https://qiita.com/tanakh/items/0ba42c7ca36cd29d0ac8
+macro_rules! input {
+    (source = $s:expr, $($r:tt)*) => {
+        let mut iter = $s.split_whitespace();
+        input_inner!{iter, $($r)*}
+    };
+    ($($r:tt)*) => {
+        let s = {
+            use std::io::Read;
+            let mut s = String::new();
+            std::io::stdin().read_to_string(&mut s).unwrap();
+            s
+        };
+        let mut iter = s.split_whitespace();
+        input_inner!{iter, $($r)*}
+    };
+}
+
+macro_rules! input_inner {
+    ($iter:expr) => {};
+    ($iter:expr, ) => {};
+    ($iter:expr, $var:ident : $t:tt $($r:tt)*) => {
+        let $var = read_value!($iter, $t);
+        input_inner!{$iter $($r)*}
+    };
+}
+
+macro_rules! read_value {
+    ($iter:expr, ( $($t:tt),* )) => {
+        ( $(read_value!($iter, $t)),* )
+    };
+    ($iter:expr, [ $t:tt ; $len:expr ]) => {
+        (0..$len).map(|_| read_value!($iter, $t)).collect::<Vec<_>>()
+    };
+    ($iter:expr, chars) => {
+        read_value!($iter, String).chars().collect::<Vec<char>>()
+    };
+    ($iter:expr, bytes) => {
+        read_value!($iter, String).bytes().collect::<Vec<u8>>()
+    };
+    ($iter:expr, usize1) => {
+        read_value!($iter, usize) - 1
+    };
+    ($iter:expr, $t:ty) => {
+        $iter.next().unwrap().parse::<$t>().expect("Parse error")
+    };
+}
+// ---------- end input macro ----------
+
+use std::io::Write;
+use std::collections::*;
+
+type Map<K, V> = BTreeMap<K, V>;
+type Set<T> = BTreeSet<T>;
+type Deque<T> = VecDeque<T>;
+
+fn run() {
+    input! {
+        n: usize,
+        m: usize,
+        p: [(i64, usize1, usize); n],
+        q: usize,
+        ask: [(i64, usize1); q],
+    }
+    let mut need = vec![0; m];
+    for (v, x) in ask {
+        need[x] = v.max(need[x]);
+    }
+    let mut g = vec![vec![]; m];
+    for (a, b, c) in p {
+        g[b].push((c, a));
+    }
+    let mut ans = 0;
+    let mut right = 0;
+    let mut seg = segment_tree::RUPQ::new(m, 0, |a, b| *a + *b);
+    for i in 0..m {
+        for &(c, a) in g[i].iter() {
+            seg.update(i, c, a);
+            right = right.max(c);
+        }
+        if need[i] > seg.find(i) {
+            if right <= i {
+                println!("-1");
+                return;
+            }
+            let v = need[i] - seg.find(i);
+            seg.update(i, right, v);
+            ans += v;
+        }
+    }
+    println!("{}", ans);
+}
+
+fn main() {
+    run();
+}
+

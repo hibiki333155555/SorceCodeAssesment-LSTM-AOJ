@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 1 + 1e5;
+const int INF = 1 + 1e9;
+int n;
+long long a[10],ans;
+void prob(){
+    cin >> n;
+    for (int i=0 ; i<n ; i++) cin >> a[i];
+    ans=a[0];
+    for (int i=1 ; i<n ; i++) {
+        ans = (ans*a[i])/__gcd(ans, a[i]);
+    }
+    cout << ans << endl;
+}
+int main(int argc, char* argv[]) {
+#define TASKNAME "standard"
+    ios_base::sync_with_stdio (0);
+    cin.tie (0);
+    if ( fopen( TASKNAME".inp", "r" ) ) {
+        freopen (TASKNAME".inp", "r", stdin);
+        freopen (TASKNAME".out", "w", stdout);
+    }
+    prob();
+    return 0;
+}
+

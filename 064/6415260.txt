@@ -1,0 +1,719 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+#define all(x) (x).begin(),(x).end()
+template<typename T1,typename T2> bool chmin(T1 &a,T2 b){if(a<=b)return 0; a=b; return 1;}
+template<typename T1,typename T2> bool chmax(T1 &a,T2 b){if(a>=b)return 0; a=b; return 1;}
+int dx[4]={0,1,0,-1}, dy[4]={1,0,-1,0};
+long double eps = 1e-9;
+long double pi = acos(-1);
+
+template< typename T > istream &operator>>(istream &is, vector< T > &v) {
+	for(T &in : v) is >> in;
+	return is;
+}
+
+template< typename T > ostream &operator<<(ostream &os, const vector< T > &v) {
+	for(int i = 0; i < (int) v.size(); i++) {
+		os << v[i] << (i + 1 != (int) v.size() ? " " : "");
+	}
+	return os;
+}
+
+template< int mod = 1000000007 >
+struct ModInt {
+	int x;
+	ModInt() : x(0) {}
+	ModInt(int64_t y) : x(y >= 0 ? y % mod : (mod - (-y) % mod) % mod) {}
+	ModInt &operator+=(const ModInt &p) {
+		if((x += p.x) >= mod) x -= mod;
+		return *this;
+	}
+	ModInt &operator-=(const ModInt &p) {
+		if((x += mod - p.x) >= mod) x -= mod;
+		return *this;
+	}
+	ModInt &operator*=(const ModInt &p) {
+		x = (int) (1LL * x * p.x % mod);
+		return *this;
+	}
+	ModInt &operator/=(const ModInt &p) {
+		*this *= p.inverse();
+		return *this;
+	}
+
+	ModInt operator-() const { return ModInt(-x); }
+	ModInt operator+(const ModInt &p) const { return ModInt(*this) += p; }
+	ModInt operator-(const ModInt &p) const { return ModInt(*this) -= p; }
+	ModInt operator*(const ModInt &p) const { return ModInt(*this) *= p; }
+	ModInt operator/(const ModInt &p) const { return ModInt(*this) /= p; }
+	bool operator==(const ModInt &p) const { return x == p.x; }
+	bool operator!=(const ModInt &p) const { return x != p.x; }
+
+	ModInt inverse() const {
+		int a = x, b = mod, u = 1, v = 0, t;
+		while(b > 0) {
+			t = a / b;
+			swap(a -= t * b, b);
+			swap(u -= t * v, v);
+		}
+		return ModInt(u);
+	}
+
+	ModInt pow(int64_t n) const {
+		ModInt ret(1), mul(x);
+		while(n > 0) {
+			if(n & 1) ret *= mul;
+			mul *= mul;
+			n >>= 1;
+		}
+		return ret;
+	}
+
+	friend ostream &operator<<(ostream &os, const ModInt &p) {
+		return os << p.x;
+	}
+
+	friend istream &operator>>(istream &is, ModInt &a) {
+		int64_t t;
+		is >> t;
+		a = ModInt< mod >(t);
+		return (is);
+	}
+
+	static int get_mod() { return mod; }
+};
+
+// const int mod = 1000000007;
+const int mod = 998244353;
+using mint = ModInt< mod >;
+const int MAX = 5100005;
+
+mint fac[MAX], finv[MAX], inv[MAX], beki[MAX];
+
+// テーブルを作る前処理
+void COMinit() {
+	fac[0] = fac[1] = 1;
+	finv[0] = finv[1] = 1;
+	inv[1] = 1;
+	beki[0] = 1;
+	for (int i = 1; i < MAX; i++){
+		fac[i] = fac[i - 1] * i;
+		beki[i] = beki[i - 1] * 2;
+	}
+	finv[MAX-1] = fac[MAX-1].inverse();
+	for(int i=MAX-2;i>=1;i--){
+		finv[i] = finv[i+1]*(i+1);
+		inv[i+1] = fac[i]*finv[i+1];
+	}
+}
+
+// 二項係数計算
+mint COM(int n, int k){
+	if (n < k) return 0;
+	if (n < 0 || k < 0) return 0;
+	return fac[n] * (finv[k] * finv[n - k]);
+}
+
+/*
+正規版
+メモ
+norm(P) Pの絶対値の2乗 abs(P)の2乗
+abs(P) Pの絶対値
+arg(P)の戻り値の範囲は[-π, π]
+polar(長さ,角度(ラジアン))でPointができる
+int(-2.2+0.5)=-1
+*/
+
+// #include <bits/stdc++.h>
+// using namespace std;
+// template<class T,class U>constexpr bool chmin(T&a,const U b){if(a<=b)return false;a=b;return true;}
+// template<class T,class U>constexpr bool chmax(T&a,const U b){if(a>=b)return false;a=b;return true;}
+// template<class T,class U>constexpr bool bitUP(const T n,const U k){return (n>>k)&1;}
+
+
+
+////////////////////////////
+// マクロや型
+////////////////////////////
+
+using DD=long double;
+
+const DD EPS=1e-9;
+const DD INF=1e50;
+const DD PI=acosl(-1.0);
+#define EQ(a,b) (abs( (a) - (b) )<EPS) //a==b
+#define LS(a,b) ( (a)+EPS<(b) ) //a<b
+#define GR(a,b) ( (a)>(b)+EPS ) //a>b
+#define LE(a,b) ( (a)<(b)+EPS ) //a<=b
+#define GE(a,b) ( (a)>(b)-EPS ) //a>=b
+
+#define X real()
+#define Y imag()
+
+
+//点
+using Point=complex<DD>;
+istream &operator>>(istream &is, Point &p) {
+  DD x,y;
+  is>>x>>y;
+  p=Point(x,y);
+  return is;
+}
+
+//点a→点bの線分
+//aとbが等しい時、色々バグるから注意!
+struct Segment{
+	Point a,b;
+	Segment()=default;
+	Segment(Point a,Point b) :a(a),b(b){}
+	Segment(DD ax,DD ay,DD bx,DD by):a(ax,ay),b(bx,by){}
+	Segment(DD r,Point a) :a(a),b(a+polar((DD)1.0,r)){} 
+};
+using Line=Segment;
+
+//円
+struct Circle{
+	Point p;
+	DD r;
+	Circle()=default;
+	Circle(Point p,DD r):p(p),r(r){}
+};
+
+
+
+////////////////////////////
+// 基本計算
+////////////////////////////
+
+//度→ラジアン
+inline DD torad(const DD deg){return deg*PI/180;}
+//ラジアン→度
+inline DD todeg(const DD rad){return rad*180/PI;}
+//内積 |a||b|cosθ
+inline DD dot(const Point &a,const Point &b){return (conj(a)*b).X;}
+//外積 |a||b|sinθ
+inline DD cross(const Point &a,const Point &b){return (conj(a)*b).Y;}
+//ベクトルpを反時計回りにtheta(ラジアン)回転
+Point rotate(const Point &p,const DD theta){return p*Point(cos(theta),sin(theta));}
+
+//余弦定理 cos(角度abc(ラジアン))を返す
+//長さの対応に注意 ab:辺abの長さ
+//verify:https://codeforces.com/gym/102056/problem/F
+DD cosine_formula(const DD ab,const DD bc,const DD ca){
+	return (ab*ab+bc*bc-ca*ca)/(2*ab*bc);
+}
+
+inline bool xy_sort(const Point &a,const Point &b){
+	if(a.X+EPS<b.X) return true;
+	if(EQ(a.X,b.X) && a.Y+EPS<b.Y) return true;
+	return false;
+}
+inline bool yx_sort(const Point &a,const Point &b){
+	if(a.Y+EPS<b.Y) return true;
+	if(EQ(a.Y,b.Y) && a.X+EPS<b.X) return true;
+	return false;
+}
+
+
+////////////////////////////
+// 平行や直交
+////////////////////////////
+
+bool isOrthogonal(const Point &a,const Point &b){
+	return EQ(dot(a,b),0.0);
+}
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_A
+bool isOrthogonal(const Segment &s,const Segment &t){
+	return EQ(dot(s.a-s.b,t.a-t.b),0.0);
+}
+bool isParallel(const Point &a,const Point &b){
+	return EQ(cross(a,b),0.0);
+}
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_A
+bool isParallel(const Segment &s,const Segment &t){
+	return EQ(cross(s.a-s.b,t.a-t.b),0);
+}
+//線分a→bに対して点cがどの位置にあるか
+//反時計回り:1　時計回り:-1 直線上(a,b,c:-2 a,c,b:0 c,a,b:2)
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C
+//線分a→bの端点にcがあるなら0と判定されるはず
+int ccw(const Point &a,Point b,Point c){
+	if(EQ(abs(b-c),0) or EQ(abs(a-c),0)) return 0;
+	b-=a;c-=a;
+	if(cross(b,c)>EPS) return 1;
+	if(cross(b,c)<-EPS) return -1;
+	if(dot(b,c)<-EPS) return 2;
+	if(LS(norm(b),norm(c))) return -2;
+	return 0;
+}
+
+////////////////////////////
+// 射影と反射
+////////////////////////////
+
+//射影
+//直線lに点pから垂線を引いたときの交点
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_A
+Point project(const Point &p,const Line &l){
+	Point base=l.b-l.a;
+	DD r=dot(p-l.a,base)/norm(base);
+	return l.a+base*r;
+}
+//反射
+//直線lに対して点pと対称な点
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_B
+Point reflect(const Point &p,const Line &l){
+	return p+(project(p,l)-p)*(DD)2.0;
+}
+
+////////////////////////////
+// 点との距離
+////////////////////////////
+
+//点と直線の距離
+DD DistPL(const Point &p,const Line &l){
+	return abs(cross(l.b-l.a,p-l.a))/abs(l.b-l.a);
+}
+//点と線分の距離
+DD DistPS(const Point &p,const Segment &s){
+	if( dot(s.b-s.a,p-s.a)<0.0 ) return abs(p-s.a);
+	if( dot(s.a-s.b,p-s.b)<0.0 ) return abs(p-s.b);
+	return DistPL(p,s);
+}
+
+////////////////////////////
+// 線分と直線
+////////////////////////////
+
+//線分a-b,c-dは交差するか?
+//接する場合も交差すると判定
+//接する場合は交差しないとするなら<=を<に変換
+bool intersect(const Point &a,const Point &b,const Point &c,const Point &d){
+	return(ccw(a,b,c)*ccw(a,b,d)<=0 && ccw(c,d,a)*ccw(c,d,b)<=0);
+}
+//線分s,tは交差するか？
+//接する場合も交差すると判定
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_B&lang=ja
+//接する場合は交差しないとするならintersectの<=を<に変換
+bool intersect(const Segment &s,const Segment &t){
+	return intersect(s.a,s.b,t.a,t.b);
+}
+// 2直線の交点
+// 線分の場合はintersectをしてから使う
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_C&lang=ja
+Point crossPoint(const Line &s,const Line &t){
+	Point base=t.b-t.a;
+	DD d1=cross(base,t.a-s.a);
+	DD d2=cross(base,s.b-s.a);
+	if(EQ(d1,0) and EQ(d2,0)) return s.a; //同じ直線
+	if(EQ(d2,0)) assert(false); //交点がない
+	return s.a+d1/d2*(s.b-s.a);
+}
+//線分と線分の距離
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_2_D&lang=ja
+DD Dist(const Segment &s,const Segment &t){
+	if(intersect(s,t)) return 0.0;
+	return min(min(DistPS(t.a,s),DistPS(t.b,s)),min(DistPS(s.a,t),DistPS(s.b,t)) );
+}
+
+////////////////////////////
+// 円
+////////////////////////////
+//直線lと円Cの交点
+//l.aにより近い方がindexが小さい
+//veirfy:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_D
+vector<Point> crossPointLC(const Line &l,const Circle &c){
+	vector<Point> ret;
+	if(GR(DistPL(c.p,l),c.r)) return ret; //交点がないとき、空ベクトルを返す
+	Point pr=project(c.p,l);
+	Point e=(l.b-l.a)/(abs(l.b-l.a));
+	DD base=sqrt(c.r*c.r-norm(pr-c.p));
+	ret.push_back(pr-e*base);
+	ret.push_back(pr+e*base);
+	if(EQ(DistPL(c.p,l),c.r)) ret.pop_back(); //接するとき
+	return ret;
+}
+//線分sと円cの交点
+//交点がないときは空ベクトルを返す
+//線分の端が交わる場合も交点とみなす
+//s.aにより近い方がindexが小さい
+vector<Point> crossPointSC(const Segment &s,const Circle &c){
+	vector<Point> ret;
+	if(DistPS(c.p,s)>c.r+EPS) return ret;
+	auto koho=crossPointLC(s,c);
+	for(auto p:koho){
+		if(ccw(s.a,s.b,p)==0 or EQ(abs(p-s.a),0) or EQ(abs(p-s.b),0)) ret.push_back(p);
+	}
+	return ret;
+}
+
+//円aと円bの共通接線の数
+//離れている:4 外接:3 交わる:2 内接:1 内包:0
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_A
+int intersect(const Circle &a,const Circle &b){
+	DD d=abs(a.p-b.p);
+	if(GR(d,a.r+b.r)) return 4;
+	if(EQ(d,a.r+b.r)) return 3;
+	if(EQ(d,abs(a.r-b.r))) return 1;
+	if(LS(d,abs(a.r-b.r))) return 0;
+	return 2;
+}
+
+//円aと円bの交点
+//交点がないときは空ベクトルを返す
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_E
+vector<Point> crossPoint(const Circle &a,const Circle &b){
+	vector<Point> ret;
+	if(GR(abs(a.p-b.p),a.r+b.r)) return ret;
+	DD d=abs(a.p-b.p);
+	DD s=acosl((a.r*a.r+d*d-b.r*b.r)/(2*a.r*d)); //0~π
+	DD t=arg(b.p-a.p);
+	if(EQ(a.r+b.r,d)) ret.push_back(a.p+polar(a.r,t));
+	else ret.push_back(a.p+polar(a.r,t+s)),ret.push_back(a.p+polar(a.r,t-s));
+	return ret;
+}
+
+//点pから円cに接線を引いたときの接点
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_F&lang=ja
+vector<Point> TanLine(const Point &p,const Circle &c){
+	vector<Point> ret;
+	DD d=abs(p-c.p);
+	if(LS(d,c.r)) return ret; //pがcの内部にある場合
+	if(EQ(d,c.r)){
+		ret.push_back(p);
+		return ret; //円の線上にある場合
+	} 
+	return crossPoint(c,Circle(p,sqrt(d*d-c.r*c.r)));
+}
+
+//円a,bの共通接線
+//https://www.slideshare.net/kujira16/ss-35861169
+//Line.aは円aと接線の交点
+//(接線と円bの交点)と(接線と円aの交点)が違う場合はLine.bは(接線と円bの交点)
+//一致する場合は円aの中心からLine.aに向かうベクトルを反時計回りに90度回転したものを
+//Line.aに足したもの
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_G
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2201
+vector<Line> TanLine(const Circle &a,const Circle &b){
+	DD d=abs(a.p-b.p);
+	vector<Line> ret;
+	//外接線
+	if(intersect(a,b)>=2){
+		if(EQ(a.r,b.r)){
+			Point up=polar(a.r,arg(b.p-a.p)+PI/2);
+			ret.emplace_back(a.p+up,b.p+up);
+			ret.emplace_back(a.p-up,b.p-up);
+		}else{
+			Point q=(a.p*b.r-b.p*a.r)/(b.r-a.r);
+			auto as=TanLine(q,a);
+			auto bs=TanLine(q,b);
+			assert(as.size()==2 and bs.size()==2);
+			for(int i=0;i<2;i++){
+				ret.emplace_back(as[i],bs[i]);
+			}
+		}
+	}else if(intersect(a,b)==1){ //内接する場合
+		Point dir;
+		if(a.r>b.r) dir=polar(a.r,arg(b.p-a.p));
+		else dir=polar(a.r,arg(a.p-b.p));
+		ret.emplace_back(a.p+dir,a.p+dir+rotate(dir,PI/2));
+	}
+	//内接線
+	if(GR(abs(a.p-b.p),a.r+b.r)){ //円が離れている場合
+		Point q=a.p+(b.p-a.p)*a.r/(a.r+b.r);
+		auto as=TanLine(q,a);
+		auto bs=TanLine(q,b);
+		assert(as.size()==2 and bs.size()==2);
+		for(int i=0;i<2;i++){
+			ret.emplace_back(as[i],bs[i]);
+		}
+	}else if(EQ(d,a.r+b.r)){ //円が接している場合
+		Point dir=polar(a.r,arg(b.p-a.p));
+		ret.emplace_back(a.p+dir,a.p+dir+rotate(dir,PI/2));
+	}
+	return ret;
+}
+
+////////////////////////////
+// 三角形
+////////////////////////////
+
+//ヘロンの公式　三角形の面積を返す
+//三角形が成立するか(平行ではないか)を忘れずに
+DD Heron(const DD ad,const DD bd,const DD cd){
+	DD s=(ad+bd+cd)/2;
+	return sqrt(s*(s-ad)*(s-bd)*(s-cd));
+}
+//三角形の外接円
+//isParallel()を使って三角形が成立するか(平行ではないか)を忘れずに
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_C
+Circle CircumscribedCircle(const Point &a,const Point &b,const Point &c){
+	Point bc=(b+c)/(DD)2.0;
+	Line aa(bc,bc+rotate(c-b,PI/2));
+	Point ab=(a+b)/(DD)2.0;
+	Line cc(ab,ab+rotate(b-a,PI/2));
+	Point p=crossPoint(aa,cc);
+	return Circle(p,abs(a-p));
+}
+//三角形の内接円
+//isParallel()を使って三角形が成立するか(平行ではないか)を忘れずに
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_B
+Circle InCircle(const Point &a,const Point &b,const Point &c){
+	Line aa(a,a+polar((DD)1.0,(arg(b-a)+arg(c-a))/(DD)2.0));
+	Line bb(b,b+polar((DD)1.0,(arg(a-b)+arg(c-b))/(DD)2.0));
+	Point p=crossPoint(aa,bb);
+	return Circle(p,DistPL(p,Line(a,b)));
+}
+
+////////////////////////////
+// 多角形
+////////////////////////////
+
+//点pが多角形gに対してどの位置にあるか
+//中:2 辺上:1 外:0
+//凸多角形である必要ない
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_3_C
+int contains(const Point &p,const vector<Point> &g){
+	int n=(int)g.size();
+	int x=false;
+	for(int i=0;i<n;i++){
+		Point a=g[i]-p,b=g[(i+1)%n]-p;
+		if(EQ(cross(a,b),0) && dot(a,b)<EPS) return 1;
+		if(a.Y>b.Y) swap(a,b);
+		if(a.Y<EPS && EPS<b.Y && cross(a,b)>EPS) x=!x;
+	}
+	return (x?2:0);
+}
+//凸性判定
+//多角形gは凸か？
+//gは反時計回りでも時計回りでもいい
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_3_B
+bool isConvex(const vector<Point> &g){
+	int n=(int)g.size();
+	if(n<=3) return true;
+	int flag=0;
+	int t;
+	for(int i=0;i<n;i++){
+		Point a(g[(i+1)%n]-g[i]),b(g[(i+2)%n]-g[i]);
+		if(cross(a,b)>EPS) t=1;
+		else if(cross(a,b)<-EPS) t=-1;
+		else continue;
+		if(flag==-t) return false;
+		flag=t;
+	}
+	return true;
+}
+
+//凸包　アンドリューのアルゴリズム
+//O(NlogN)
+//反時計回りの多角形を返す
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A
+vector<Point> ConvexHull(vector<Point> s, const bool on_edge){
+	int j;
+	if(on_edge) j=-1;
+	else j=1;
+	int sz=(int)s.size();
+	if(sz<3) return s;
+	sort(s.begin(),s.end(),yx_sort);
+
+	int n=0;
+	vector<Point> res(2*sz);
+	for(int i=0;i<sz;i++){
+		while(n>=2 && cross(res[n-1]-res[n-2],s[i]-res[n-2])<EPS*j){
+			n--;
+		}
+		res[n]=s[i];
+		n++;
+	}
+	int t=n+1;
+	for(int i=sz-2;i>=0;i--){
+		while(n>=t && cross(res[n-1]-res[n-2],s[i]-res[n-2])<EPS*j){
+			n--;
+		}
+		res[n]=s[i];
+		n++;
+	}
+	res.resize(n-1);
+	return res;
+}
+
+//多角形g(凸でなくてもいい)の符号付き面積
+//反時計回りの多角形なら正の値を返す　時計回りなら負
+//O(N)
+//https://imagingsolution.net/math/calc_n_point_area/
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_3_A
+DD Area(const vector<Point> &g){
+	DD ret=0.0;
+	int n=(int)g.size();
+	for(int i=0;i<n;i++){
+		ret+=cross(g[i],g[(i+1)%n]);
+	}
+	return ret/2.0;
+}
+
+//凸多角形gを直線lで切断
+//直線の左側(向きを考慮)にできる凸多角形を返す
+//多角形gが反時計回りならば、反時計回りで返す(時計回りなら時計回り)
+//直線上の頂点を含む線分の交点は含めてない
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_C
+vector<Point> ConvexCut(const vector<Point> &g,const Line &l){
+	vector<Point> ret;
+	int gz=(int)g.size();
+	for(int i=0;i<gz;i++){
+		Point now=g[i],next=g[(i+1)%gz];
+		if(ccw(l.a,l.b,now)!=-1) ret.push_back(now);
+		if(EQ(DistPL(now,l),0) or EQ(DistPL(next,l),0)) continue;
+		if(ccw(l.a,l.b,now)*ccw(l.a,l.b,next)<0){
+			ret.push_back(crossPoint(Line(now,next),l));
+		}
+	}
+	return ret;
+}
+//部品
+inline DD calc(const Point &a,const Point &b,const DD &r,const bool triangle){
+	if(triangle) return cross(a,b);
+	else return r*r*arg(b/a);
+}
+//部品
+DD calcArea(const DD &r,const Point &a,const Point &b){
+	if(EQ(abs(a-b),0)) return 0;
+	bool ina=(abs(a)<r+EPS);
+	bool inb=(abs(b)<r+EPS);
+	if(ina && inb) return cross(a,b);
+	auto cr=crossPointSC(Segment(a,b),Circle(Point(0,0),r));
+	if(cr.empty()) return calc(a,b,r,false);
+	auto s=cr[0],t=cr.back();
+	return calc(s,t,r,true)+calc(a,s,r,ina)+calc(t,b,r,inb);
+}
+//円と多角形の共通部分の面積
+//多角形が反時計回りならば正の値を返す
+//凸多角形でなくても大丈夫
+//http://drken1215.hatenablog.com/entry/2020/02/02/091000
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_7_H&lang=ja
+DD Area(const Circle &c,const vector<Point> &g){
+	DD ret=0.0;
+	int gz=g.size();
+	if(gz<=2) return ret;
+	for(int i=0;i<gz;i++){
+		ret+=calcArea(c.r,g[i]-c.p,g[(i+1)%gz]-c.p);
+	}
+	return ret/2.0;
+}
+
+//点と多角形の距離
+//点が多角形の中にあるなら0
+DD Dist(const Point &a,const vector<Point> &b){
+	if(b.size()==1) return abs(a-b[0]);
+	if(contains(a,b)>=1) return 0.0L;
+	DD ret=INF;
+	for(int i=0;i<(int)b.size();i++){
+		chmin(ret,DistPS(a,Segment(b[i],b[(i+1)%b.size()])));
+	}
+	return ret;
+}
+
+//多角形と多角形の距離
+//どちらかが内側に入っていたら0
+//全ての線分の組み合わせの距離を求めて、その最小が答え
+//O(size(a)*size(b))
+//sizeが1の時は点との距離になる
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2827
+DD Dist(const vector<Point> &a,const vector<Point> &b){
+	DD ret=INF;
+	if(a.size()==1) return Dist(a[0],b);
+	if(b.size()==1) return Dist(b[0],a);
+
+	if(contains(a[0],b)>=1) return 0.0L;
+	if(contains(b[0],a)>=1) return 0.0L;
+
+	for(int i=0;i<(int)a.size();i++){
+		for(int j=0;j<(int)b.size();j++){
+			Segment sa(a[i],a[(i+1)%a.size()]);
+			Segment sb(b[j],b[(j+1)%b.size()]);
+			chmin(ret,Dist(sa,sb));
+		}
+	}
+	return ret;
+}
+
+////////////////////////////
+// 最近(遠)点間距離
+////////////////////////////
+//部品
+DD RecClosetPair(const vector<Point>::iterator it,const int n){
+	if(n<=1) return INF;
+	int m=n/2;
+	DD x=it[m].X;
+	DD d=min(RecClosetPair(it,m),RecClosetPair(it+m,n-m));
+	inplace_merge(it,it+m,it+n,yx_sort);
+	vector<Point> v;
+	for(int i=0;i<n;i++){
+		if(abs(it[i].X-x)>=d) continue;
+		for(int j=0;j<(int)v.size();j++){
+			DD dy=it[i].Y-v[(int)v.size()-1-j].Y;
+			if(dy>=d) break;
+			DD dx=it[i].X-v[(int)v.size()-1-j].X;
+			d=min(d,sqrt(dx*dx+dy*dy));
+		}
+		v.push_back(it[i]);
+	}
+	return d;
+}
+//最近点対の距離
+//点が1つのときINFを返す
+//O(NlogN)
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_5_A
+DD ClosetPair(vector<Point> g){
+	sort(g.begin(),g.end(),xy_sort);
+	return RecClosetPair(g.begin(),g.size());
+}
+
+//最遠頂点間
+//verify:http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_B
+DD Diameter(vector<Point> g){
+	g=ConvexHull(g,1);
+	int gz=g.size();
+	int m=0,M=0;
+	for(int i=1;i<gz;i++){
+		if(g[i].Y<g[m].Y) m=i;
+		if(g[i].Y>g[M].Y) M=i;
+	}
+	DD ret=0;
+	int sm=m,sM=M;
+	while(m!=sM || M!=sm){
+		ret=max(ret,norm(g[m]-g[M]));
+		if(cross(g[(m+1)%gz]-g[m],g[(M+1)%gz]-g[M])<0) m=(m+1)%gz;
+		else M=(M+1)%gz;
+	}
+	return sqrt(ret);
+}
+
+
+signed main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout << fixed << setprecision(20);
+
+	int n;
+	cin>>n;
+	vector<Point> p(n);
+	for(int i=0;i<n;i++){
+		ll h;
+		cin>>h;
+		p[i] = Point(i+1, h);
+	}
+	vector<Point> h = ConvexHull(p,0);
+	int ans = 0;
+	vector<array<ll,2>> v;
+	for(int i=0;i<(int)h.size();i++){
+		v.push_back({(ll)h[i].real(), (ll)h[i].imag()});
+		// cerr << h[i] << endl;
+	}
+	sort(all(v));
+	for(int i=1;i<(int)v.size();i++){
+		chmax(ans, v[i][0] - v[i-1][0]);
+	}
+	cout << ans << endl;
+
+}

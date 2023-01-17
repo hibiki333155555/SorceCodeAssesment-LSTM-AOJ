@@ -1,0 +1,38 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define REP(i,n) for(int i=0;i<(n);i++)
+#define ALL(v) v.begin(),v.end()
+#define debug(a) cerr<<#a<<":"<<a<<endl;
+#define debug2(a,b) cerr<<"("<<#a<<","<<#b<<"):("<<a<<","<<b<<")"<<endl;
+#define debug3(a,b,c) cerr<<"("<<#a<<","<<#b<<","<<#c<<"):("<<a<<","<<b<<","<<c<<")"<<endl;
+#define debug4(a,b,c,d) cerr<<"("<<#a<<","<<#b<<","<<#c<<","<<d<<"):("<<a<<","<<b<<","<<c<<","<<d<<")"<<endl;
+
+template<typename T>
+istream& operator>>(istream&is,vector<T>&v){
+  for(T&p:v)is>>p;
+  return is;
+}
+template<typename T>
+ostream& operator<<(ostream&os,const vector<T>&v){
+  if(&os==&cerr)os<<"[";
+  for(int i=0;i<v.size();i++){
+    os<<v[i];
+    if(i+1<v.size())os<<(&os==&cerr?",":" ");
+  }
+  if(&os==&cerr)os<<"]";
+  return os;
+}
+using ll=long long;
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  ll n,m,k,x;cin>>n>>m>>k>>x;
+  vector<ll> v(n);
+  cin>>v;
+  sort(ALL(v));
+  if(k*(v.back())>=x*m)cout<<"Yes"<<endl;
+  else cout<<"No"<<endl;
+}

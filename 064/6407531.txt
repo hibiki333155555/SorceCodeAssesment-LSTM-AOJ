@@ -1,0 +1,12 @@
+while True:
+    try:
+        A = list(map(int, list(input())))
+    except:
+        break
+    for i in range(9):
+        B = []
+        for j in range(10 - i - 1):
+            B.append((A[j] + A[j + 1]) % 10)
+        A = B[:]
+    print(A[0])
+

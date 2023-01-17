@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int a,b;
+    while(1){
+    cin>>a>>b;
+    if(b>a){
+        cout<<b<<" "<<a<<endl;
+    }else{
+        cout<<a<<" "<<b<<endl;
+    }
+    }
+}
+

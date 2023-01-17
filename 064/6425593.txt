@@ -1,0 +1,41 @@
+#include<stdio.h>
+#include<string.h>
+
+int main(void)
+{
+    char str[1001],p[1001],m[8],sub[1001];
+    int a,b,c,q,i,x,y;
+    scanf("%s\n%d",str,&q);
+    for(c=0;str[c]!='\0';c++)
+    {
+        sub[c]=str[c];
+    }
+    for(i=0;i<q;i++)
+    {
+        scanf("%s %d %d",m,a,b);
+        if(strcmp(m,"print")==0)
+        {
+            printf("%s\n",str);
+        }
+        else if(strcmp(m,"reverse")==0)
+        {
+            for(x=a,y=b;x<=b;x++,y--)
+            {
+                sub[y]=str[x];
+            }
+            for(c=0;str[c]!='\0';c++)
+            {
+                str[c]=sub[c];
+            }
+        }
+        else if(strcmp(m,"replace")==0)
+        {
+            scanf("%s",p);
+            for(x=a;x<=b;x++)
+            {
+                str[x]=p[x-a];
+            }
+        }
+    }
+    return 0;
+}

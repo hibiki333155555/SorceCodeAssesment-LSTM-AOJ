@@ -1,0 +1,201 @@
+#include <bits/stdc++.h>
+#include <unordered_set>
+
+#define rep(i,n) for(int i=0;i<(int)(n);i++)
+#define FOR(i,n,m) for(int i=(int)(n); i<=(int)(m); i++)
+#define RFOR(i,n,m) for(int i=(int)(n); i>=(int)(m); i--)
+#define ITR(x,c) for(__typeof(c.begin()) x=c.begin();x!=c.end();x++)
+#define RITR(x,c) for(__typeof(c.rbegin()) x=c.rbegin();x!=c.rend();x++)
+#define setp(n) fixed << setprecision(n)
+
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+
+#define ll long long
+#define vll vector<ll>
+#define vi vector<int>
+#define pll pair<ll,ll>
+#define pi pair<int,int>
+
+#define all(a) (a.begin()),(a.end())
+#define rall(a) (a.rbegin()),(a.rend())
+#define fi first
+#define se second
+#define pb push_back
+#define ins insert
+
+#define debug(a) cerr<<(a)<<endl
+#define dbrep(a,n) rep(_i,n) cerr<<(a[_i])<<" "; cerr<<endl
+#define dbrep2(a,n,m) rep(_i,n){rep(_j,m) cerr<<(a[_i][_j])<<" "; cerr<<endl;}
+
+using namespace std;
+
+template<class A, class B>
+ostream &operator<<(ostream &os, const pair<A,B> &p){return os<<"("<<p.fi<<","<<p.se<<")";}
+template<class A, class B>
+istream &operator>>(istream &is, pair<A,B> &p){return is>>p.fi>>p.se;}
+
+template<class T>
+vector<T> make_vec(size_t a){
+	return vector<T>(a);
+}
+template<class T, class... Ts>
+auto make_vec(size_t a, Ts... ts){
+	return vector<decltype(make_vec<T>(ts...))>(a, make_vec<T>(ts...));
+}
+
+/* Some Libraries */
+
+//-------------------------------------------------
+
+const int dx[] = {1,0,-1,0};
+const int dy[] = {0,1,0,-1};
+
+int main(void)
+{
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+	int N,M; cin>>N>>M;
+
+	vector<string> f(N);
+	rep(i,N) cin>>f[i];
+
+	int sx,sy;
+	int gx,gy;
+	rep(i,N)rep(j,M){
+		if (f[i][j] == 'S') sy=i, sx=j;
+		if (f[i][j] == 'G') gy=i, gx=j;
+	}
+	
+	struct Inst{int type, to;};
+	vector<Inst> insts;
+
+	auto state = [&](int y, int x, int pc, int dir){
+		return y + x*N + pc*N*M + dir*N*M*5;
+	};
+
+	auto simulate = [&]()->bool{
+		bool ret = false;
+
+		int dir = 1; // down
+		int len = insts.size();
+		int pc = 0;
+		int y = sy, x = sx;
+		unordered_set<int> used;
+		while(!used.count(state(y, x, pc, dir))){
+			if (pc >= len) return false;
+			used.ins(state(y, x, pc, dir));
+			auto &inst = insts[pc];
+			if (inst.type == 0){
+				// GO
+				pc = inst.to;
+			}else if (inst.type == 1){
+				// IF OPEN
+				int ty = y+dy[dir];
+				int tx = x+dx[dir];
+				if (0<=ty&&ty<N&&0<=tx&&tx<M && f[ty][tx]!='#'){
+					pc = inst.to;
+				}else{
+					pc++;
+					if (pc == len) pc = 0;
+				}
+			}else if (inst.type == 2){
+				// FORWARD
+				int ty = y+dy[dir];
+				int tx = x+dx[dir];
+				if (0<=ty&&ty<N&&0<=tx&&tx<M && f[ty][tx]!='#'){
+					y = ty, x = tx;
+				}
+				pc++;
+				if (pc == len) pc = 0;
+			}else if (inst.type == 3){
+				// LEFT
+				dir--;
+				if (dir < 0) dir = 3;
+				pc++;
+				if (pc == len) pc = 0;
+			}else if (inst.type == 4){
+				// RIGHT
+				dir++;
+				if (dir > 3) dir = 0;
+				pc++;
+				if (pc == len) pc = 0;
+			}
+			if (y == gy && x == gx){
+				ret = true;
+				break;
+			}
+		}
+		return ret;
+	};
+
+	vector<Inst> ans;
+	auto dfs = [&](auto &dfs, int idx)->void{
+		if (idx >= 1){
+			// simulation
+			if (simulate()){
+				if (ans.empty() || insts.size() < ans.size()){
+					ans = insts;
+				}
+				return;
+			}
+	
+			if (idx == 4) return;
+		}
+
+		rep(i,4){
+			if (i == idx) continue;
+			insts.pb(Inst{0,i});
+			dfs(dfs, idx+1);
+			insts.pop_back();
+		}
+		
+		rep(i,4){
+			if (i == idx) continue;
+			insts.pb(Inst{1,i});
+			dfs(dfs, idx+1);
+			insts.pop_back();
+		}
+
+		insts.pb(Inst{2,0});
+		dfs(dfs, idx+1);
+		insts.pop_back();
+		
+		insts.pb(Inst{3,0});
+		dfs(dfs, idx+1);
+		insts.pop_back();
+		
+		insts.pb(Inst{4,0});
+		dfs(dfs, idx+1);
+		insts.pop_back();
+	};
+
+	dfs(dfs, 0);
+
+	if (ans.empty()){
+		ans.pb(Inst{3, 0});
+		ans.pb(Inst{1, 4});
+		ans.pb(Inst{4, 0});
+		ans.pb(Inst{0, 1});
+		ans.pb(Inst{2, 0});
+	}
+	int L = ans.size();
+
+	cout << L << "\n";
+	rep(i,L){
+		if (ans[i].type == 0){
+			cout << "GOTO " << ans[i].to+1 << "\n";
+		}else if(ans[i].type == 1){
+			cout << "IF-OPEN " << ans[i].to+1 << "\n";
+		}else if(ans[i].type == 2){
+			cout << "FORWARD\n";
+		}else if(ans[i].type == 3){
+			cout << "LEFT\n";
+		}else{
+			cout << "RIGHT\n";
+		}
+	}
+
+    return 0;
+}
+

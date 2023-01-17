@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll=long long;
+int main(){
+    int n;
+    cin>>n;
+    map<ll,set<pair<ll,ll>>> mp;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            ll aij;
+            cin>>aij;
+            mp[aij].insert({i+1,j+1});
+        }
+    }
+    int q;
+    cin>>q;
+    while(q--){
+        ll t;
+        cin>>t;
+        if(mp[t].size()==0) cout<<-1<<endl;
+        auto itr=mp[t].begin();
+        auto [i,j]=*itr;
+        cout<<i<<" "<<j<<endl;
+    }
+}

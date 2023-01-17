@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+constexpr ll INF = 1001001001001001001LL;
+
+struct edge {
+    int to; ll cost;
+};
+
+ll lcm(ll a, ll b) {
+    return a / __gcd(a, b) * b;
+}
+
+int main() {
+    int n, m; cin >> n >> m;
+    vector<vector<edge>> g(n);
+    for(int i = 0; i < m; i++) {
+        int a, b; ll c; cin >> a >> b >> c; a--; b--;
+        g[a].push_back({b, c});
+    }
+    vector<set<ll>> reach(n);
+    reach[0].insert(1);
+    stack<pair<int, ll>> stk;
+    stk.push({0, 1});
+    while(!stk.empty()) {
+        pair<int, ll> top = stk.top(); stk.pop();
+        for(edge e : g[top.first]) {
+            ll new_cost = lcm(top.second, e.cost);
+            if(reach[e.to].count(new_cost)) continue;
+            reach[e.to].insert(new_cost);
+            stk.push({e.to, new_cost});
+        }
+    }
+    ll mn = INF, mx = 0;
+    for(ll cost : reach[n - 1]) {
+        mn = min(mn, cost);
+        mx = max(mx, cost);
+    }
+    if(mx == 0) cout << "IMPOSSIBLE\n";
+    else cout << mn << ' ' << mx << '\n';
+}
+

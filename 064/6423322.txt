@@ -1,0 +1,25 @@
+import java.util.Scanner;
+import java.util.Formatter;
+
+class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int a= sc.nextInt();
+        int b= sc.nextInt();
+        int d=a/b;
+        int r=a%b;
+        double f=1.0*a/b;
+        System.out.println(d+" "+r+" "+f);
+    }
+    public static String format(double f){
+        if(f == (int) f){
+            return String.format("%d",(int)f);
+            
+        }
+        else{
+            return String.format("%s",f);
+            
+        }
+    }
+}
+

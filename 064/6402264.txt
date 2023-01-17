@@ -1,0 +1,6 @@
+while True:
+    x = str(input())
+    if x == '0':
+        break
+    y = sum(int(i) for i in x)
+    print(y)

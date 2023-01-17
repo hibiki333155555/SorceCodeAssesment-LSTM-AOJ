@@ -1,0 +1,26 @@
+#include <iostream>
+#include <iomanip>
+#include <complex>
+
+using namespace std;
+
+complex<double> in()
+{
+	double x, y;
+	cin >> x >> y;
+	return {x, y};
+}
+
+int main()
+{
+	int q;
+	for (cin >> q; q > 0; --q) {
+		complex<double> p0 = in(), p1 = in(), p2 = in(), p3 = in(), p;
+		auto p01 = p1 - p0, p02 = (p2 - p0) / p01, p03 = (p3 - p0) / p01;
+		p = {p02.real() - (p03.real() - p02.real()) * p02.imag() / (p03.imag() - p02.imag()), 0};
+		p = p * p01 + p0;
+		cout << fixed << setprecision(8) << p.real() << ' ' << p.imag() << endl;
+	}
+	return 0;
+}
+

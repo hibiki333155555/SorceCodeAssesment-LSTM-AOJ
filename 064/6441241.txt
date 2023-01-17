@@ -1,0 +1,168 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define REP(a, b) for (int a = 0; a < b; ++a)
+
+#define int long long
+const int mod = 998244353;
+
+vector<int> vertexs[200000];
+int dist[200000];
+int dp[200000] = {};
+int backs[30][200000] = {};
+int back_cost[200000] = {};
+void dfs(int now)
+{
+    for (auto x : vertexs[now])
+    {
+        if (x == backs[0][now])
+            continue;
+        backs[0][x] = now;
+        dist[x] = dist[now] + 1;
+        dfs(x);
+    }
+}
+
+int second_dfs(int now)
+{
+    dp[now] = 1;
+    for (auto x : vertexs[now])
+    {
+        if (x == backs[0][now])
+            continue;
+        dp[now] += second_dfs(x) * 2;
+        dp[now] %= mod;
+    }
+    return dp[now];
+}
+
+void third_dfs(int now, int costs)
+{
+    back_cost[now] = costs;
+    for (auto x : vertexs[now])
+    {
+        if (x == backs[0][now])
+            continue;
+        third_dfs(x, (costs + dp[now] - dp[x] * 2 + mod) * 2 % mod);
+    }
+}
+
+int n;
+void builds()
+{
+    REP(i, 25)
+    {
+        REP(q, n)
+        {
+            backs[i + 1][q] = backs[i][backs[i][q]];
+        }
+    }
+}
+
+int lca(int a, int b)
+{
+    if (dist[a] > dist[b])
+    {
+        swap(a, b);
+    }
+    for (int q = 25; q >= 0; --q)
+    {
+        if ((dist[b] - dist[a]) >= (1 << q))
+        {
+            b = backs[q][b];
+        }
+    }
+    if (a == b)
+        return a;
+    for (int q = 25; q >= 0; --q)
+    {
+        if (backs[q][a] != backs[q][b])
+        {
+            a = backs[q][a];
+            b = backs[q][b];
+        }
+    }
+    return backs[0][a];
+}
+
+#undef int
+int main()
+{
+    iostream::sync_with_stdio(false);
+    cin >> n;
+    REP(i, n - 1)
+    {
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        vertexs[a].push_back(b);
+        vertexs[b].push_back(a);
+    }
+
+    backs[0][0] = 0;
+    dfs(0);
+    second_dfs(0);
+    third_dfs(0, 0);
+    builds();
+
+    int query;
+    cin >> query;
+    REP(i, query)
+    {
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        int dir = 0;
+        long long cnter[2] = {};
+        int FinalMove = lca(a, b);
+        REP(t, 2)
+        {
+            int target;
+            if (FinalMove == a)
+            {
+                int now_b = b;
+                int steps = dist[b] - dist[a] - 1;
+                for (int q = 0; q < 25; ++q)
+                {
+                    if ((1LL << q) & steps)
+                    {
+                        now_b = backs[q][now_b];
+                    }
+                }
+                target = now_b;
+            }
+            else
+            {
+                target = backs[0][a];
+            }
+            dir = dist[a] + dist[b] - dist[FinalMove] * 2;
+            if (backs[0][a] == target)
+            {
+                cnter[t] = dp[a];
+            }
+            else
+            {
+                cnter[t] = dp[a] + back_cost[a] - dp[target] * 2 + 2 * mod;
+                cnter[t] %= mod;
+            }
+            swap(a, b);
+        }
+        long long tmp = cnter[0] * cnter[1] % mod;
+        long long hoge = 2;
+        while (dir != 0)
+        {
+            if (dir % 2)
+            {
+                tmp *= hoge;
+                tmp %= mod;
+            }
+            dir /= 2;
+            hoge *= hoge;
+            hoge %= mod;
+        }
+        cout << tmp << "\n";
+    }
+    return 0;
+}
+

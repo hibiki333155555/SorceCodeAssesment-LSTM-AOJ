@@ -1,0 +1,12 @@
+while True:
+    n, m = map(int, input().split())
+    if n == 0 and m == 0:
+        break
+    L = [i for i in range(1, n + 1)]
+    ind = n - 1
+    while len(L) > 1:
+        ind = (ind + m) % len(L)
+        L.pop(ind)
+        ind -= 1
+    print(L[0])
+

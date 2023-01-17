@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+import math
+
+INF = 1001001001001001001
+
+def lcm(a, b):
+    return a // math.gcd(a, b) * b
+
+n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    a -= 1
+    b -= 1
+    graph[a].append((b, c))
+reach = [set() for _ in range(n)]
+reach[0].add(1)
+stk = [(0, 1)]
+while len(stk) > 0:
+    top = stk.pop()
+    for e in graph[top[0]]:
+        new_cost = lcm(top[1], e[1])
+        if(new_cost in reach[e[0]]):
+            continue
+        reach[e[0]].add(new_cost)
+        stk.append((e[0], new_cost))
+mn = INF
+mx = 0
+for cost in reach[n - 1]:
+    mn = min(mn, cost)
+    mx = max(mx, cost)
+if mx == 0:
+    print('IMPOSSIBLE')
+else:
+    print(mn, mx)
+

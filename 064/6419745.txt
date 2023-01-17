@@ -1,0 +1,36 @@
+#include <iostream>
+
+int main()
+{
+    int a,b=0;
+    std::cin >> a >> b;
+
+    for (int i =0 ;i<a; i++) {
+        if (i % 2 == 0) {
+            for (int j = 1; j < b + 1; j++) {
+                if (j % 2 == 0) {
+                    std::cout << "." ;
+                }
+                else {
+                    std::cout << "#";
+
+                }
+            }
+        }
+        else {
+            for (int j = 1; j < b + 1; j++) {
+                if (j % 2 == 0) {
+                    std::cout << "#";
+                }
+                else {
+                    std::cout << ".";
+                }
+            }
+        }
+        std::cout << "\n";
+       
+       
+    }
+    
+}
+

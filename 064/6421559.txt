@@ -1,0 +1,60 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 1000000007
+
+def main():
+    def swap(p,k):
+        h = k.bit_length()+1
+        ps = [[None]*n for _ in range(h)]
+        ps[0] = p[:]
+        for i in range(h-1):
+            p = ps[i]
+            ps[i+1] = [p[p[j]] for j in range(n)]
+        res = list(range(n))
+        for i in reversed(range(h)):
+            if (k>>i)&1:
+                p = ps[i]
+                res = [p[j] for j in res]
+        return res
+
+    n = I()
+    a = LI()
+    q = I()
+    stack = []
+    order = list(range(n))
+    for _ in range(q):
+        query = LI()
+        if query[0] == 1:
+            x,y = query[1:]
+            x -= 1
+            y -= 1
+            stack.append((x,y))
+        elif query[0] == 2:
+            stack.pop()
+        else:
+            k = query[1]
+            p = list(range(n))
+            for x,y in stack:
+                p[x],p[y] = p[y],p[x]
+            res = swap(p,k)
+            a = [a[i] for i in res]
+    print(*a)
+    return
+
+
+if __name__ == "__main__":
+    main()
+

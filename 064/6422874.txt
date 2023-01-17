@@ -1,0 +1,230 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+constexpr ll mod = 998244353;
+
+struct YPC{
+    // 出力/繰り返し回数
+    vector<pair<ll,ll>> output;
+    vector<ll> value;
+
+    YPC(){value.resize(26);}
+
+    // 単純に式の評価だけする
+    ll expression(string &s, int &idx){
+        ll res = 0;
+        ll sign = 1;
+        assert(idx < s.size());
+        while(s[idx] == '+' or s[idx] == '-'){
+            if(s[idx] == '-') sign *= -1;
+            idx++;
+        }
+        assert(idx < s.size());
+        if('a' <= s[idx] and s[idx] <= 'z'){
+            int x = s[idx]-'a';
+            res = sign*value[x];
+            idx++;
+        }
+        else{
+            while(idx<s.size() and '0' <= s[idx] and s[idx] <= '9'){
+                res = res*10 + s[idx]-'0';
+                if(res >= mod) res %= mod;
+                idx++;
+            }
+            res *= sign;
+        }
+        if(idx < s.size() and s[idx] != ')'){
+            res += expression(s, idx);
+        }
+        res %= mod;
+        if(res < 0) res += mod;
+        return res;
+    }
+
+    // 変数Xのassignment
+    // X = aX+b の形で、{a,b}を返す
+    pair<ll,ll> expression(string &s, int &idx, int X){
+        pair<ll, ll> res;
+        res = {0,0};
+        ll sign = 1;
+        assert(idx < s.size());
+        while(s[idx] == '+' or s[idx] == '-'){
+            if(s[idx] == '-') sign *= -1;
+            idx++;
+        }
+        assert(idx < s.size());
+
+        if('a' <= s[idx] and s[idx] <= 'z'){
+            int x = s[idx]-'a';
+            if(x == X){
+                res.first += sign;
+            }
+            else{
+                res.second += sign*value[x];
+            }
+            idx++;
+        }
+        else{
+            while(idx<s.size() and '0' <= s[idx] and s[idx] <= '9'){
+                res.second = res.second*10 + s[idx]-'0';
+                if(res.second >= mod) res.second %= mod;
+                idx++;
+            }
+            res.second *= sign;
+        }
+        if(idx < s.size() and s[idx] != ')'){
+            auto p = expression(s, idx, X);
+            res.first += p.first;
+            res.second += p.second;
+        }
+        res.first %= mod;
+        res.second %= mod;
+        if(res.first < 0) res.first += mod;
+        if(res.second < 0) res.second += mod;
+        return res;
+    }
+
+    void declaration(string &s){
+        int x = s[0]-'a';
+        value[x] = 0;
+    }
+
+    void assignment(string &s, int &idx){
+        int x = s[idx]-'a';
+        idx += 3;
+        ll ex = expression(s, idx);
+        value[x] = ex;
+    }
+
+    void _print(string &s, int &idx, ll rep){
+        idx += 6;
+        ll r = expression(s, idx);
+        if(rep>0)output.push_back({r,rep});
+        assert(s[idx] == ')');
+    }
+
+    void eval(string s){
+        if(s.size() == 1 and 'a' <= s[0] and s[0] <= 'z'){
+            declaration(s); return;
+        }
+        else if(s.size() >= 3 and 'a' <= s[0] and s[0] <= 'z' and s[1] == '<' and s[2] == '-'){
+            int i = 0;
+            assignment(s, i);
+        }
+        else if(s.size() >= 5 and s.substr(0,5) == "print"){
+            int i=0;
+            _print(s, i, 1);
+        }
+        else if(s.size() >= 3 and s.substr(0,3) == "for"){
+            int idx = 0;
+            ll rep = 1;
+            while(idx+2 < s.size() and s.substr(idx,3) == "for"){
+                idx += 4;
+                ll r = expression(s, idx);
+                assert(s[idx] == ')');
+                idx++;
+                rep *= r;
+            }
+            //  <print>
+            if(idx+4 < s.size() and s.substr(idx,5) == "print"){
+                _print(s, idx, rep);
+            }
+            // <assignment>
+            else{
+                int x = s[idx]-'a';
+                idx += 3;
+                auto p = expression(s, idx, x);
+                // ダブリング
+                vector<pair<ll,ll>> d(30);
+                d[0] = p;
+                for(int i=1;i<30;i++){
+                    d[i].first = d[i-1].first*d[i-1].first%mod;
+                    d[i].second = (d[i-1].first*d[i-1].second+d[i-1].second)%mod;
+                }
+                ll r = value[x];
+                for(int i=0;i<30;i++){
+                    if((1<<i)&rep){
+                        r = (r*d[i].first+d[i].second)%mod;
+                    }
+                }
+                value[x] = r;
+                // cout << x << " " << p.first << " " << p.second << endl;
+            }
+        }
+        else assert(0);
+    }
+
+    // 出力をランレングス圧縮
+    vector<pair<ll,ll>> out(){
+        vector<pair<ll,ll>> res;
+        for(auto p:output){
+            if(res.size() and res.back().first == p.first){
+                res.back().second += p.second;
+            }
+            else{
+                res.push_back(p);
+            }
+        }
+        return res;
+    }
+};
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    int n,m;
+    while(cin >> n >> m,n+m){
+        YPC S,T;
+        for(int i=0;i<n;i++){
+            string x; cin >> x;
+            S.eval(x);
+        }
+        for(int i=0;i<m;i++){
+            string x; cin >> x;
+            T.eval(x);
+        }
+        auto r1 = S.out();
+        auto r2 = T.out();
+        if(r1 == r2){
+            cout << "Yes" << "\n";
+        }
+        else{
+            cout << "No" << "\n";
+        }
+    }
+}
+
+
+

@@ -1,0 +1,70 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+#define MAX 10000
+
+int n,rank[MAX],T[MAX];
+
+int find(int x){
+	int r=rank[x],m,a=x;
+	while(r>1){
+		m=T[a];
+		a=m;
+		r--;
+	}
+	r=rank[x];
+	int b=x;
+	while(r>1){
+		T[b]=a;
+		b=T[b];
+		r--;
+	}
+	return a;
+}
+
+void setrank(int x){
+	for(int i=0;i<n;i++){
+		if(T[i]==x)
+			rank[i]++;
+	}
+}
+
+void unite(int x,int y){
+	if(rank[x]==rank[y]){
+		int a=find(y),b=find(x); 
+		T[a]=b;
+		setrank(b);
+	}
+	else{
+		int rs=min(rank[x],rank[y]),ts;
+		ts=rank[rs]==rank[x]?x:y;
+		int  rl=max(rank[x],rank[y]),tl;
+		tl=rank[rl]==rank[x]?x:y;
+		int a=find(rs),b=find(rl);
+		T[a]=b;
+		setrank(b);
+	}
+}
+
+void same(int x,int y){
+	if(find(x)==find(y)) cout<<1<<endl;
+	else cout<<0<<endl;
+}
+
+int main(){
+	int q,i,cmd,x,y;
+	cin>>n>>q;
+	for(i=0;i<n;i++){
+		rank[i]=1;
+		T[i]=i;
+	}
+	for(i=0;i<q;i++){
+		cin>>cmd>>x>>y;
+		if(!cmd)
+			unite(x,y);
+		else 
+			same(x,y);
+	}
+	return 0;
+}

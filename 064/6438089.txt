@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <string>
+// #include "comp.h"
+using namespace std;
+
+// #define DEBUG
+#define FOR(i, a, b) for (int i = (int)(a); i < (int)(b); ++i)
+#define rep(i, n) for (int i = 0; i < (int)(n); ++i)
+
+void is_factor(int a, int b, int N)
+{
+    int c = 0;
+    int tmp;
+    if (N == 1)
+    {
+        if (a == 1)
+        {
+            cout << 1;
+            return;
+        }
+        else
+        {
+            cout << 0;
+            return;
+        }
+    }
+    for (int i = 2; i * i <= N; ++i)
+    {
+        if (N % i == 0)
+        {
+            if (a <= i && i <= b)
+            {
+                c++;
+            }
+            tmp = N / i;
+            if (a <= tmp && tmp <= b)
+            {
+                c++;
+            }
+        };
+    }
+    cout << c << endl;
+    return;
+}
+
+int main()
+{
+
+#ifndef DEBUG
+    int a, b, c;
+    cin >> a >> b >> c;
+    is_factor(a, b, c);
+
+#else
+
+#endif
+}
+

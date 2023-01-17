@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+  int min = INT_MAX;
+  int n;
+  int max_sub = -1 * INT_MAX;
+  scanf("%d", &n);
+  int tmp;
+  for (int i = 0; i < n; i++) {
+    scanf("%d", &tmp);
+    if (tmp - min > max_sub) max_sub = tmp - min;
+    if (tmp < min) min = tmp;
+  }
+
+  cout << max_sub << endl;
+}

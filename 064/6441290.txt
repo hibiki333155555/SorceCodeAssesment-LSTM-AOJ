@@ -1,0 +1,18 @@
+A, B, X = map(int, input().split())
+if A <= B:
+    if X % 1000 == 0:
+        print(A*X//1000)
+    else:
+        print(A*X//1000 + A)
+elif A >= 2*B:
+    if X % 500 == 0:
+        print(B*X//500)
+    else:
+        print(B*X//500 + B)
+else:
+    if X % 1000 == 0:
+        print(A*X//1000)
+    elif X % 1000 <= 500:
+        print(A*X//1000 + B+1)
+    else:
+        print(A*X//1000 + A)

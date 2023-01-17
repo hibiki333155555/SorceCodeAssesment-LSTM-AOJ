@@ -1,0 +1,16 @@
+import math
+
+N = int(input())
+vs = [int(input()) for _ in range(N)]
+
+tp = -math.inf
+for i in range(N):
+    if tp != -math.inf and vs[i] > tp:
+        continue
+    for j in range(i+1, N):
+        p = vs[j] - vs[i]
+        if p > tp:
+            tp = p
+
+print(tp)
+

@@ -1,0 +1,23 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int maxProfit(vector<int>& A, int N){
+  int maxProfit = -2000000000;
+  int minR = A[0];
+  for (int i=1;i<N;i++){
+      maxProfit = max(maxProfit, A[i] - minR);
+      minR = min(minR, A[i]);
+  }
+  return maxProfit;
+}
+
+int main(){
+ int N;
+ cin>>N;
+ vector<int> A(N);
+ for(int i =0; i <N; i++) cin>>A[i];
+
+ int sw = maxProfit(A,N);
+ cout<<sw<<endl;
+}

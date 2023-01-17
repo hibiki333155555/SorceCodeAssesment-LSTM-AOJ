@@ -1,0 +1,63 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+// p2与p0重合?
+struct P
+{
+    double x, y;
+}p0, p1;
+
+void cal(P p2)
+{
+    if((p2.y-p0.y)*(p1.x-p0.x)==(p1.y-p0.y)*(p2.x-p0.x))
+    {
+         if((p1.x-p0.x)*(p2.x-p0.x)+(p1.y-p0.y)*(p2.y-p0.y)<0)
+         {
+            cout << "ONLINE_BACK" << endl;
+         }
+         else
+         {
+            if((p1.x-p0.x)*(p1.x-p0.x)+(p1.y-p0.y)*(p1.y-p0.y)>=(p2.x-p0.x)*(p2.x-p0.x)+(p2.y-p0.y)*(p2.y-p0.y))
+            {
+                cout << "ON_SEGMENT" << endl;
+            }
+            else
+            {
+                cout << "ONLINE_FRONT" << endl;
+            }
+         }
+    }
+    else
+    {
+        if((p1.x-p0.x)*(p2.y-p0.y)-(p2.x-p0.x)*(p1.y-p0.y)<0)
+        {
+            cout << "CLOCKWISE" << endl;
+        }
+        else
+        {
+            cout << "COUNTER_CLOCKWISE" << endl;
+        }
+    }
+}
+
+
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    P x;
+    int q;
+    cin >> p0.x >> p0.y >> p1.x >> p1.y;
+    cin >> q;
+    for (int i = 0; i < q; ++i)
+    {
+        cin >> x.x >> x.y;
+        cal(x);
+    }
+    return 0;
+}
+

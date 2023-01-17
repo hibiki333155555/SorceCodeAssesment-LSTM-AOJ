@@ -1,0 +1,17 @@
+
+
+
+
+a,b = map(int,input().split())
+
+
+
+flag = (a!=0) and (b!=0)
+
+
+while flag:
+    
+    print(b,a)
+    
+    
+

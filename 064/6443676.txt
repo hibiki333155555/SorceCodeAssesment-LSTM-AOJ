@@ -1,0 +1,17 @@
+n = int(input())
+maxd = 0
+maxr = 0
+minr = ""
+for i in range(n):
+    x = int(input())
+    if i == 0:
+        maxr = x
+        minr = x
+    if maxr < x:
+        maxr = x
+    if minr > x:
+        minr = x
+        maxr = 0
+    if maxd  < maxr-minr:
+        maxd = maxr-minr
+print(maxd)

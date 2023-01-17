@@ -1,0 +1,13 @@
+a = int(input())
+l1 = []
+for i in range(0,a):
+	a1 = int(input())
+	l1.append(a1)
+#print(l1)
+cnt = 0
+for i in range(0,len(l1)):
+	for j in range(2,l1[i]):
+		if l1[i] % j == 0:
+			cnt += 1
+print(cnt)
+	

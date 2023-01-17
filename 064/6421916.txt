@@ -1,0 +1,11 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+	int a, b;
+	cin >> a >> b;
+	cout << a / b << " ";
+	cout << a % b << " ";
+	cout << 1.000000000 * a / b << endl;
+}

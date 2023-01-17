@@ -1,0 +1,29 @@
+using System;
+
+namespace ConsoleApp3
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = Array.ConvertAll(Console.ReadLine().Split(),k =>int.Parse(k));
+            if (arr[0]>arr[1])
+            {
+                Console.WriteLine("a>b");
+            }
+            else if(arr[0]<arr[1])
+            {
+                Console.WriteLine("a<b");
+            }
+            else
+            {
+                Console.WriteLine("a == b");
+            }
+
+
+
+
+        }
+    }
+}
+

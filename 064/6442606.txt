@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+int main(void) { 
+    int a;
+	int b;
+	int s;
+	int c;
+	scanf("%d %d",&a,&b);
+	c=a*2+b*2;
+	s=a*b;
+	if(a>=1 && b<=100);
+	printf("%d %d\n",s,c);
+	return 0;
+}

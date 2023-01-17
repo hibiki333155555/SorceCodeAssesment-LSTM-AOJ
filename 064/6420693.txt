@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+#include <complex>
+#include <random>
+#include <functional>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+using vvvll = vector<vvll>;
+using vvvvll = vector<vvvll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+vvll G;
+
+
+
+int main() {
+    ll N;
+    cin>>N;
+    map<ll,vector<pair<ll,ll>>> M;
+    rep(i,N)rep(j,N){
+        ll A;
+        cin>>A;
+        M[A].push_back({i+1,j+1});
+    }
+    ll Q;
+    cin>>Q;
+    rep(q,Q){
+        ll T;
+        cin>>T;
+        if(M.count(T)){
+            cout<<M[T][0].first<<" "<<M[T][0].second<<endl;
+        }
+        else cout<<-1<<endl;
+    }
+}
+
+

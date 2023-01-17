@@ -1,0 +1,20 @@
+N = int(input())
+A = list(map(int, input().split()))
+print(*A)
+
+def insert_sort(A):
+    B = A[::]
+    n = len(B)
+    for i in range(1, n):
+        v = B[i]
+        j = i - 1
+        while (j >= 0) and (B[j] > v):
+            B[j + 1] = B[j]
+            j -= 1
+        B[j + 1] = v
+        
+        print(*B)
+        
+    return B
+
+B = insert_sort(A)

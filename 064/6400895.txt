@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+double r;
+
+int main(){
+  cin >> r;
+  cout << fixed << M_PI * r * r << endl;
+  cout << fixed << 2 * r * M_PI << endl;
+}
+

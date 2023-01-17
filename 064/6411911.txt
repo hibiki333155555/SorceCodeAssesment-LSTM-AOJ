@@ -1,0 +1,6 @@
+class Main{
+    public static int main(int x){
+        answer = x**3;
+        System.out.println(answer);
+    }
+}

@@ -1,0 +1,14 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int main(){
+    double a,b,c,d;
+    cin >> a >> b >> c >> d;
+    double rangeX,rangeY;
+    rangeX = (a < c?c-a:a-c);
+    rangeY = (b < d?d-b:b-d);
+    double ans = sqrt(rangeX * rangeX + rangeY * rangeY);
+    cout <<fixed<<setprecision(15)<< ans << endl;
+    return(0);
+}

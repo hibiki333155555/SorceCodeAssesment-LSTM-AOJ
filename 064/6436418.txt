@@ -1,0 +1,39 @@
+import java.util.*;
+
+public class Main {
+    static int top;
+    public static void push(int x,int[] c){
+        c[++top] = x;
+    }
+    
+    public static int pop(int[] c){
+        top--;
+        return c[top+1];
+    }
+    
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int a,b;
+        int[] c = new int[1000];
+        while(sc.hasNext()){
+            String s = sc.next();
+            if(s.equals("+")){
+                a = pop(c);
+                b = pop(c);
+                push(a+b,c);
+            }else  if(s.equals("-")){
+                a = pop(c);
+                b = pop(c);
+                push(b-a,c);
+            }else  if(s.equals("*")){
+                a = pop(c);
+                b = pop(c);
+                push(a*b,c);
+            }else{
+                push(Integer.parseInt(s),c);
+            }
+        }
+        
+        System.out.println(pop(c));
+    }
+}

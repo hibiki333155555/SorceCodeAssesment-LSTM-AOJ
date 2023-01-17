@@ -1,0 +1,167 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace _20220321_AOJ
+{
+    class AhoCorasick
+    {
+        const int ALPHABET_SIZE = 62, root = 0;
+        int size;
+        public List<Node> nodes;
+
+        public AhoCorasick(int maxNodes)
+        {
+            size = 1;
+            nodes = new List<Node>(maxNodes);
+            nodes.Add(new Node());
+            nodes[root].link = root;
+            nodes[root].parent = -1;
+        }
+
+        int Index(char ch)
+        {
+            if (char.IsUpper(ch)) return ch - 'A';
+            if (char.IsLower(ch)) return 26 + ch - 'a';
+            if (char.IsDigit(ch)) return 52 + ch - '0';
+
+            return -1;
+        }
+
+        public class Node
+        {
+            public int parent, link;
+            public int[] child;
+            public int[] next;
+            public char ch;
+            public bool leaf;
+
+            public Node()
+            {
+                link = -1;
+                ch = '\0';
+                child = Enumerable.Repeat<int>(-1, ALPHABET_SIZE).ToArray();
+                next = Enumerable.Repeat<int>(-1, ALPHABET_SIZE).ToArray();
+            }
+        }
+
+        public void Add(string s)
+        {
+            int cur = 0, sl = s.Length;
+            for (int i = 0; i < sl; i++)
+            {
+                char ch = s[i];
+                int c = Index(ch);
+                if (nodes[cur].child[c] == -1)
+                {
+                    nodes.Add(new Node());
+                    nodes[size].parent = cur;
+                    nodes[size].ch = ch;
+                    nodes[cur].child[c] = size++;
+                }
+                cur = nodes[cur].child[c];
+            }
+            nodes[cur].leaf = true;
+        }
+
+        int Failure(int id)
+        {
+            Node node = nodes[id];
+            if (node.link == -1)
+            {
+                if (node.parent == 0) node.link = root;
+                else node.link = Go(Failure(node.parent), node.ch);
+            }
+            return node.link;
+        }
+
+        public int Go(int id, char ch)
+        {
+            int c = Index(ch);
+            Node node = nodes[id];
+            if (node.next[c] == -1)
+            {
+                if (node.child[c] != -1) node.next[c] = node.child[c];
+                else if (id == 0) node.next[c] = root;
+                else node.next[c] = Go(Failure(id), ch);
+            }
+            return node.next[c];
+        }
+    }
+
+    class ALDS1_14D
+    {
+        static int[] ReadIntArr(char dlm = ' ') { return Console.ReadLine().Split(dlm).Select(x => int.Parse(x)).ToArray(); }
+        static string[] ReadStringArr(char dlm = ' ') { return Console.ReadLine().Split(dlm).ToArray(); }
+
+
+        static void Main(string[] args)
+        {
+            int bufferSize = 1000002;
+            Stream inputStream = Console.OpenStandardInput(bufferSize);
+            Console.SetIn(new StreamReader(inputStream, Encoding.Default, false, bufferSize));
+
+            string line = Console.ReadLine();
+            int q = int.Parse(Console.ReadLine());
+            string[] p = new string[q];
+
+            for (int i = 0; i < q; i++)
+            {
+                p[i] = Console.ReadLine();
+            }
+
+            int[] found = Search(line, p);
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var v in found)
+            {
+                sb.AppendLine(v > 0 ? "1" : "0");
+            }
+            Console.Write(sb);
+        }
+            
+
+        static int[] Search(string T, string[] pattern)
+        {
+            AhoCorasick aho = new AhoCorasick(500000);
+
+            // パターンを行ごとに区切り、パターンマッチングオートマトンを生成
+            for (int i = 0; i < pattern.Length; i++) aho.Add(pattern[i]);
+
+            int node = 0;
+            // パターンの終状態を保持
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+            for (int i = 0; i < pattern.Length; i++)
+            {
+                node = 0;
+                for (int j = 0; j < pattern[i].Length; j++)
+                {
+                    node = aho.Go(node, pattern[i][j]);
+                    if (j == pattern[i].Length - 1 &&
+                        aho.nodes[node].leaf &&
+                        !dict.ContainsKey(node))
+                    {
+                        dict.Add(node, i);
+                    }
+                }
+            }
+
+            // テキストをオートマトンに流し込む。
+            int[] found = new int[pattern.Length];
+            node = 0;
+            for (int j = 0; j < T.Length; j++)
+            {
+                node = aho.Go(node, T[j]);
+                if (dict.ContainsKey(node))
+                {
+                    found[dict[node]] = j + 1;
+                }
+            }
+
+            return found;
+        }
+    }
+}
+

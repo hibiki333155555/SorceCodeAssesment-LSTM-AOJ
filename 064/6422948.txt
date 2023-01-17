@@ -1,0 +1,7 @@
+a,b = map(int,input().split())
+
+ans1 = a//b
+ans2 = a%b
+ans3 = a/b
+
+print("{0} {1} {2:.5f}".format(ans1,and2,ans3))

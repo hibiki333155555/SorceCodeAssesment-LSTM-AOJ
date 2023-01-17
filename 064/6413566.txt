@@ -1,0 +1,72 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<cstdio>
+using namespace std;
+const int MAX = 500000;
+const int maxnum = 1000000010;
+//int L[MAX/2 + 2], R[MAX/2 + 2];
+//int A[MAX], n;
+int cnt = 0;
+
+void  merge(int a[], int tmpArray[], int  leftPos, int  rightPos, int  rightEnd);
+
+//template < typename  Comparable>
+//void  mergeSort(vector<Comparable>& a)
+//{
+//    vector<Comparable>  tmpArray(a.size());
+//    mergeSort(a, tmpArray, 0, a.size() - 1);
+//}
+
+//template<typename Comparable>
+//void  mergeSort(vector<int>  & a, vector<int>  & tmpArray, int  left, int right)
+void  mergeSort(int  a[], int  tmpArray[], int  left, int right)
+{
+    if (left < right)
+    {
+        int  center = (left + right)/2;
+        mergeSort(a, tmpArray, left, center);
+        mergeSort(a, tmpArray, center + 1, right);
+        merge(a, tmpArray, left, center + 1, right);
+    }
+}
+
+//template<typename Comparable>
+//void  merge(vector<int>  &a, vector<int>  &tmpArray, int  leftPos, int  rightPos, int  rightEnd)
+
+void  merge(int a[], int tmpArray[], int  leftPos, int  rightPos, int  rightEnd)
+{
+    int  leftEnd = rightPos - 1;
+    int  tmpPos = leftPos;
+    int  numElements = rightEnd - leftPos + 1;
+    while (leftPos <= leftEnd && rightPos <= rightEnd){
+        if (a[leftPos] <= a[rightPos]){
+				    cnt++; 
+            tmpArray[tmpPos++] = a[leftPos++];
+        } 
+        else
+            tmpArray[tmpPos++] = a[rightPos++];
+    }
+    while(leftPos <= leftEnd)  //复制前半部分的剩余元素
+        tmpArray[tmpPos++] = a[leftPos++];
+    while(rightPos <= rightEnd) //复制后半部分的剩余元素
+        tmpArray[tmpPos++] = a[rightPos++];
+    for (int i = 0; i < numElements; ++i,--rightEnd)
+        a[rightEnd] = tmpArray[rightEnd];
+}
+int main() {
+    int A[MAX];
+    int Array[MAX];
+	  int n;
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {    
+		  cin >> A[i];
+		}; 
+
+    mergeSort(A, Array, 0, n);
+    for (int i = 0; i < n; i++)
+    {    printf("%d%c", A[i], i == n - 1 ? '\n' : ' ');} 
+    printf("%d\n", cnt);
+    return 0;
+}

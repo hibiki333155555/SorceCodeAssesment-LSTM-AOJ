@@ -1,0 +1,32 @@
+//
+// Created by TangQihui on 2022/3/23.
+//
+#include "iostream"
+using namespace std;
+#define N 2000001
+#define K 10000
+int C[K+1],A[N],B[N+1];
+int main(){
+    int n;
+    cin>>n;
+    for (int i = 0; i < K; ++i) {
+        C[i] = 0;
+    }
+    for (int i = 0; i < n; ++i) {
+        cin>>A[i];
+        C[A[i]]++;
+    }
+    for (int i = 1; i < K; ++i) {
+        C[i] += C[i-1];
+    }
+    for (int i = 0; i < n; ++i) {
+        B[C[A[i]]] = A[i];
+        C[A[i]]--;
+    }
+    for (int i = 1; i < n+1; ++i) {
+        cout<<B[i]<<' ';
+    }
+    cout<<endl;
+    return 0;
+}
+

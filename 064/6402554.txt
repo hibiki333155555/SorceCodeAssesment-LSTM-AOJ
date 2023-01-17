@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void BubbleSort(vector<string>& deck, int N) {
+    for (int i = 1; i < N; i++) {
+        for (int j = i; j >= 1; j--) {
+            if (deck[j-1][1] > deck[j][1]) swap(deck[j-1], deck[j]);
+        }
+    }
+}
+
+void SelectSort(vector<string>& deck, int N) {
+    for (int i = 0; i < N; i++) {
+        int j_min = i;
+        for (int j = i; j < N; j++) {
+            if (deck[j_min][1] > deck[j][1]) j_min = j;
+        }
+        swap(deck[i], deck[j_min]);
+    }
+}
+
+int main() {
+    int N;
+    cin >> N;
+    vector<string> deck(N), Bsorted, Ssorted;
+    for (int i = 0; i < N; i++) cin >> deck[i];
+    Bsorted = deck;
+    BubbleSort(Bsorted, N);
+    Ssorted = deck;
+    SelectSort(Ssorted, N);
+
+    for (int i = 0; i < N; i++) {
+        cout << Bsorted[i];
+        if (i < N - 1) cout << " ";
+    }
+    cout << endl;
+    cout << "Stable" << endl;
+    for (int i = 0; i < N; i++) {
+        cout << Ssorted[i];
+        if (i < N - 1) cout << " ";
+    }
+    cout << endl;
+
+    for (int i = 0; i < N; i++) {
+        if (Bsorted[i] != Ssorted[i]) {
+            cout << "Not stable" << endl;
+            return 0;
+        }
+    }
+    cout << "Stable" << endl;
+}
+
+

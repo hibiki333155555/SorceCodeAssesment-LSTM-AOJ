@@ -1,0 +1,7 @@
+H,W=map(int,input().split())
+t=0
+for i in range(H):
+    while t!=W:
+        print("huhu")
+        t+=1
+    

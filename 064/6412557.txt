@@ -1,0 +1,50 @@
+//code goes here
+#include <iostream>
+#include <vector>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	// your code goes here
+	int r,c;cin>>r>>c;
+	int a;int ro=0;
+	vector<vector<int> > v1;
+	vector<vector<int> > v2;
+	for(int i=0;i<r;i++)
+	{
+		vector<int> k;
+		ro=0;
+		for(int j=0;j<c;j++)
+		{
+			cin>>a;
+			ro=ro+a;
+			k.push_back(a);
+		}
+		k.push_back(ro);
+		v1.push_back(k);
+	}
+	for(int i=0;i<v1.size();i++)
+	{
+		for(int j=0;j<v1[0].size();j++)
+		{
+			cout<<v1[i][j];
+			if(j!=v1[0].size()-1)
+				cout<<" ";
+		}
+		cout<<"\n";
+	}
+	for(int j=0;j<v1[0].size();j++)
+	{
+		int csum = 0;
+		for(int i=0;i<v1.size();i++)
+		{
+		
+			csum+=v1[i][j];
+		}
+		cout<<csum;
+		if(j!=v1[0].size()-1)
+			cout<<" ";
+	}
+	cout<<"\n";
+	return 0;
+}

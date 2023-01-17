@@ -1,0 +1,20 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var line = Console.ReadLine().Split(' ');
+        int ippiki = int.Parse(line[0]);
+        int nihiki = int.Parse(line[1]);
+        if(ippiki > nihiki)
+        {
+            Console.WriteLine(ippiki - nihiki);
+        }
+        else
+        {
+            Console.WriteLine(nihiki - ippiki);
+        }
+        
+    }
+}

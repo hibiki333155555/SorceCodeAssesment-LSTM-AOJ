@@ -1,0 +1,112 @@
+
+mod = 998244353
+n = int(input())
+edges = [[] for i in range(n)]
+for i in range(n-1):
+    a,b = map(lambda x:int(x)-1, input().split())
+    edges[a].append(b)
+    edges[b].append(a)
+
+depth = [None] * n
+mother = [[] for i in range(n)] + [[-1]]
+child = [[] for i in range(n)]
+mother[0].append(-1)
+depth[0] = 0
+s = [0]
+while s:
+    ns = []
+    for i in s:
+        for j in edges[i]:
+            if depth[j] is not None:
+                continue
+            ns.append(j)
+            mother[j].append(i)
+            depth[j] = depth[i] + 1
+            child[i].append(j)
+    s = ns
+for i in range(17):
+    mother[-1].append(-1)
+    for j in range(n):
+        mother[j].append(mother[mother[j][i]][i])
+
+dp_btm = [0] * n
+dp_btm[0] = 1
+cnt = [0] * n
+s = []
+for i in range(1,n):
+    if len(edges[i]) == 1:
+        s.append(i)
+while s:
+    i = s.pop()
+    if i == 0:
+        continue
+    # print(i, dp_btm)
+    m = mother[i][0]
+    dp_btm[i] = (dp_btm[i] + 1) % mod
+    dp_btm[m] = (dp_btm[m] + dp_btm[i]*2) % mod
+    cnt[m] += 1
+    if cnt[m] == len(edges[m]) - 1:
+        s.append(m)
+
+dp_top = [0] * n
+dp_top[0] = dp_btm[0] * 4
+s = [0]
+while s:
+    i = s.pop()
+    dp_top[i] = (dp_top[i] - 4 * dp_btm[i]) % mod
+    for j in child[i]:
+        s.append(j)
+        dp_top[j] = (dp_top[j] + (dp_top[i] + dp_btm[i]) * 2) % mod
+for i in range(n):
+    dp_top[i] += 1
+
+# print(dp_top, dp_btm)
+
+q = int(input())
+for test_i in range(q):
+    x,y = map(lambda x:int(x)-1, input().split())
+    dx, dy = depth[x], depth[y]
+    if dx > dy:
+        x,y = y,x
+        dx,dy = dy,dx
+    iy = y
+    dd = dy - dx
+    i = 0
+    while dd:
+        if dd % 2 == 1:
+            iy = mother[iy][i]
+        dd //= 2
+        i += 1
+    if x == iy:
+        d = dy - dx
+        dd = d-1
+        ans = dp_btm[y]
+        iy = y
+        i = 0
+        while dd:
+            if dd % 2 == 1:
+                iy = mother[iy][i]
+            dd //= 2
+            i += 1
+        # print(ans)
+        ans = ans * (dp_top[x] + dp_btm[x] - 2*dp_btm[iy] - 1) % mod
+        # print(ans)
+        print(ans * pow(2, d, mod) % mod)
+        continue
+    else:
+        ix = x
+        for i in range(17, -1, -1):
+            iix, iiy = mother[ix][i], mother[iy][i]
+            if iix != iiy:
+                ix, iy = iix, iiy
+        
+        dst = depth[x] + depth[y] - 2 * depth[ix] + 2
+        print(dp_btm[x] * dp_btm[y] * pow(2, dst, mod) % mod)
+        
+
+
+
+
+
+
+

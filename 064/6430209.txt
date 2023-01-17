@@ -1,0 +1,9 @@
+#include <stdio.h>
+
+int main(void){
+    double v,y;
+    
+    scanf("%lf",&v);
+    y=4.9*v*v/9.8/9.8;
+    printf("%.0lf\n",ceil(y/5)+1);
+}

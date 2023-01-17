@@ -1,0 +1,33 @@
+#include <iostream>
+
+using namespace std;
+
+int main () {
+    int m, f, r;
+    
+    cin >> m >> f >> r;
+    
+    while(m != -1 || f != -1 || r != -1) {
+        if(m == -1|| f == -1) cout << "F" << endl;
+        else if(m + f >= 80) cout << "A" << endl;
+        else if(m + f >= 65) cout << "B" << endl;
+		else if(m + f >= 50) cout << "C" << endl;
+		else if(m + f < 30) cout << "F" << endl;
+		else if(m + f >= 30)
+          if(r >= 50) cout << "C" << endl;
+          else cout << "D" << endl;
+        else cout << "F" << endl;
+    		
+        cin >> m >> f >> r;    
+    }
+    
+}
+
+/*
+中間試験、期末試験のいずれかを欠席した場合成績は F。
+中間試験と期末試験の合計点数が 80 以上ならば成績は A 。
+中間試験と期末試験の合計点数が 65 以上 80 未満ならば成績は B。
+中間試験と期末試験の合計点数が 50 以上 65 未満ならば成績は C。
+中間試験と期末試験の合計点数が 30 以上 50 未満ならば成績は D。 ただし、再試験の点数が 50 以上ならば成績は C。
+中間試験と期末試験の合計点数が 30 未満ならば成績は F
+*/

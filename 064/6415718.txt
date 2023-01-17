@@ -1,0 +1,13 @@
+str = input()
+for c in str:
+  if c.islower():
+    c = c.upper()
+    print(c, end = "")
+  elif c.isupper():
+    c = c.lower()
+    print(c, end = "")
+  else:
+    print(c, end = "")
+print()
+    
+

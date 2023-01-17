@@ -1,0 +1,16 @@
+
+loop{
+a,b,c=gets.split
+
+if b == "+"
+    puts a.to_i + c.to_i
+elsif b == "-"
+    puts a.to_i - c.to_i
+elsif b == "*"
+    puts a.to_i*c.to_i
+elsif b == "/"
+    puts a.to_i/c.to_i
+elsif b == "?"
+    break
+end
+}

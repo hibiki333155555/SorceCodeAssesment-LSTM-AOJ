@@ -1,0 +1,434 @@
+/// A 2D-geometry library
+pub mod geometry2d {
+    use std::{
+        mem::swap,
+        ops::{Add, Div, Sub},
+    };
+
+    use crate::cecho;
+    const EPS: f64 = 1e-8;
+    #[derive(Debug, Clone, Copy, Default)]
+    pub struct Point2d {
+        pub x: f64,
+        pub y: f64,
+    }
+    impl Point2d {
+        /// Makes a `Point2d` from (x, y)
+        pub fn new<T: Into<f64>>(x: T, y: T) -> Self {
+            Point2d {
+                x: x.into(),
+                y: y.into(),
+            }
+        }
+        /// Returns a cross product
+        /// a x b
+        pub fn cross(&self, b: &Point2d) -> f64 {
+            self.x * b.y - self.y * b.x
+        }
+        /// Returns a dot producet
+        /// a ・ b
+        pub fn dot(&self, b: &Point2d) -> f64 {
+            self.x * b.x + self.y * b.y
+        }
+        pub fn norm(&self) -> f64 {
+            self.x * self.x + self.y * self.y
+        }
+    }
+
+    impl Add<Point2d> for Point2d {
+        type Output = Point2d;
+        fn add(self, rhs: Point2d) -> Self::Output {
+            Point2d {
+                x: self.x + rhs.x,
+                y: self.y + rhs.y,
+            }
+        }
+    }
+    impl Sub<Point2d> for Point2d {
+        type Output = Point2d;
+        fn sub(self, rhs: Point2d) -> Self::Output {
+            Point2d {
+                x: self.x - rhs.x,
+                y: self.y - rhs.y,
+            }
+        }
+    }
+    impl Div<f64> for Point2d {
+        type Output = Point2d;
+        fn div(self, rhs: f64) -> Self::Output {
+            Point2d {
+                x: self.x / rhs,
+                y: self.y / rhs,
+            }
+        }
+    }
+    impl PartialEq for Point2d {
+        fn eq(&self, other: &Self) -> bool {
+            (*self - *other).norm().abs() < EPS
+        }
+    }
+    impl Eq for Point2d {}
+    impl Ord for Point2d {
+        fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+            if (self.x - other.x).abs() < EPS {
+                self.y.partial_cmp(&other.y).unwrap()
+            } else {
+                self.x.partial_cmp(&other.x).unwrap()
+            }
+        }
+    }
+    impl PartialOrd for Point2d {
+        fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+            Some(self.cmp(other))
+        }
+    }
+    pub type Polygon = Vec<Point2d>;
+    #[derive(Debug, Clone, Copy, Default)]
+    pub struct Circle {
+        center: Point2d,
+        radius: f64,
+    }
+
+    impl Circle {
+        /// Makes a `Radius` from (x, y, radius)
+        pub fn new<T: Into<f64>>(x: T, y: T, radius: T) -> Self {
+            Circle {
+                center: Point2d::new(x, y),
+                radius: radius.into(),
+            }
+        }
+
+        /// Returns points of intersection with circle if exists.
+        /// The number of intersection must be one or two.
+        pub fn intersection_with_circle(&self, other: &Circle) -> Option<Vec<Point2d>> {
+            let (p1, p2) = (self.center, other.center);
+            let (r1, r2) = (self.radius, other.radius);
+            let dist = (p1 - p2).norm().sqrt();
+            // same point
+            if dist < EPS {
+                return None;
+            }
+            // separeted
+            if dist - (r1 + r2) > EPS {
+                return None;
+            }
+
+            // inclusion
+            if EPS < (r1 - r2).abs() - dist {
+                return None;
+            }
+
+            let rcos = (dist * dist + r1 * r1 - r2 * r2) / (2. * dist);
+            let rsin = (r1 * r1 - rcos * rcos).sqrt();
+            let e = (p2 - p1) / dist;
+
+            let mut points = Vec::with_capacity(2);
+            // rotate and scale
+            // |r*cos, -r*sin| |e.x|
+            // |r*sin,  r*cos| |e.y|
+            let rotate_and_scale = |e: Point2d, rcos: f64, rsin: f64| -> Point2d {
+                Point2d::new(e.x * rcos - e.y * rsin, e.x * rsin + e.y * rcos)
+            };
+            let cp1 = p1 + rotate_and_scale(e, rcos, rsin);
+            let cp2 = p1 + rotate_and_scale(e, rcos, -rsin);
+            points.push(cp1);
+            if !cp1.eq(&cp2) {
+                points.push(cp2);
+            }
+            Some(points)
+        }
+    }
+
+    #[derive(Debug, Clone, Copy)]
+    /// `Position` represents that a given point is
+    /// `PolygonOut` the outside of `Polygon`
+    /// `PolygonIn`  in `Polygon`
+    /// `PolygonOn`  on the segment of `Polygon`
+    pub enum Position {
+        PolygonOut,
+        PolygonIn,
+        PolygonOn,
+    }
+    /// Returns an enum `Position` indicating a point is (in|on) points(`Polygon`) or not.
+    pub fn contains(points: &Polygon, point: Point2d) -> Position {
+        let mut contain = false;
+        let n = points.len();
+        for i in 0..n {
+            let mut a = points[i] - point;
+            let mut b = points[(i + 1) % n] - point;
+            if a.y > b.y {
+                swap(&mut a, &mut b);
+            }
+            if a.y <= 0.0 && 0.0 < b.y && a.cross(&b) < 0.0 {
+                contain = !contain;
+            }
+            if a.cross(&b) == 0.0 && a.dot(&b) <= 0.0 {
+                return Position::PolygonOn;
+            }
+        }
+        if contain {
+            Position::PolygonIn
+        } else {
+            Position::PolygonOut
+        }
+    }
+    /// Returns a boolean whether a `points` is convex or not.
+    pub fn is_convex(points: &Polygon) -> bool {
+        let n = points.len();
+        for i in 0..n {
+            let p0 = points[(i + n - 1) % n];
+            let p1 = points[i];
+            let p2 = points[(i + 1) % n];
+            if ccw(p0, p1, p2) == Ccw::Clockwise {
+                return false;
+            }
+        }
+        true
+    }
+    /// Returns a convex hull.
+    /// Supposed that all points are unique and the number of points is greater than 2
+    pub fn convex_hull(points: &Polygon) -> Polygon {
+        let n = points.len();
+        assert!(n >= 3);
+        let mut points = points.clone();
+        points.sort_by(|a, b| {
+            if (a.x - b.x).abs() < EPS {
+                a.y.partial_cmp(&b.y).unwrap()
+            } else {
+                a.x.partial_cmp(&b.x).unwrap()
+            }
+        });
+        let mut qs = Polygon::with_capacity(2 * n);
+        for &point in points.iter() {
+            while qs.len() >= 2
+                && (qs[qs.len() - 1] - qs[qs.len() - 2]).cross(&(point - qs[qs.len() - 1])) < EPS
+            {
+                qs.pop();
+            }
+            qs.push(point);
+        }
+        let t = qs.len();
+        for i in (0..=n - 2).rev() {
+            while qs.len() > t
+                && (qs[qs.len() - 1] - qs[qs.len() - 2]).cross(&(points[i] - qs[qs.len() - 1]))
+                    < EPS
+            {
+                qs.pop();
+            }
+            qs.push(points[i]);
+        }
+        qs.pop();
+        qs
+    }
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    /// `Ccw` represents five positions for three points.
+    /// https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C
+    ///    Counter Clockwise      Clockwise         Online back      Online front    On Segment
+    ///                                                                     c              b
+    ///        b     c             c     b                b                /              /
+    ///         \   /               \   /                /                b              c
+    ///          \ /                 \ /                /                /              /
+    ///           a                   a                a                a              a
+    ///                                               /
+    ///                                              c
+    pub enum Ccw {
+        CounterClockwise,
+        Clockwise,
+        OnlineBack,
+        OnlineFront,
+        OnSegment,
+    }
+    /// Returns a counter-clockwise result from given three points
+    pub fn ccw(a: Point2d, b: Point2d, c: Point2d) -> Ccw {
+        let b = b - a;
+        let c = c - a;
+        if b.cross(&c) > EPS {
+            Ccw::CounterClockwise
+        } else if b.cross(&c) < -EPS {
+            Ccw::Clockwise
+        } else if b.dot(&c) < -EPS {
+            Ccw::OnlineBack
+        } else if b.norm() < c.norm() {
+            Ccw::OnlineFront
+        } else {
+            Ccw::OnSegment
+        }
+    }
+}
+
+
+use geometry2d::Circle;
+
+#[allow(unused_imports)]
+use crate::gap_traits::*;
+#[allow(clippy::module_inception)]
+pub mod utils {
+    const DYX: [(isize, isize); 8] = [
+        (0, 1),
+        (1, 0),
+        (0, -1),
+        (-1, 0),
+        (1, 1),
+        (-1, 1),
+        (1, -1),
+        (-1, -1),
+    ];
+    pub fn try_adj(y: usize, x: usize, dir: usize, h: usize, w: usize) -> Option<(usize, usize)> {
+        let ny = y as isize + DYX[dir].0;
+        let nx = x as isize + DYX[dir].1;
+        if ny >= 0 && nx >= 0 && ny < h as isize && nx < w as isize {
+            Some((ny as usize, nx as usize))
+        } else {
+            None
+        }
+    }
+}
+#[derive(Default)]
+/// NOTE
+/// declare variables to reduce the number of parameters for dp and dfs etc.
+pub struct Solver {}
+impl Solver {
+    pub fn solve(&mut self) {
+        let stdin = std::io::stdin();
+        #[allow(unused_mut, unused_variables)]
+        let mut scn = fastio::Scanner::new(stdin.lock());
+        let circles = (0..2).map(|_| {
+            let x: f64 = scn.read();
+            let y: f64 = scn.read();
+            let r: f64 = scn.read();
+            Circle::new(x, y, r)
+        }).collect::<Vec<_>>();
+        cecho!(&circles);
+        if let Some(mut points) = circles[0].intersection_with_circle(&circles[1]) {
+
+            if points.len() == 1 {
+                points.push(points[0]);
+            }            
+            points.sort();
+            for p in points {
+                print!("{:.10} {:.10} ", p.x, p.y);
+            }
+        }
+    }
+
+}
+#[allow(clippy::module_inception)]
+pub mod fastio {
+    use std::collections::VecDeque;
+    use std::io::BufWriter;
+    use std::io::Write;
+    pub struct Writer<W: std::io::Write> {
+        writer: std::io::BufWriter<W>,
+    }
+    impl<W: std::io::Write> Writer<W> {
+        pub fn new(write: W) -> Writer<W> {
+            Writer {
+                writer: BufWriter::new(write),
+            }
+        }
+        pub fn flush(&mut self) {
+            self.writer.flush().unwrap();
+        }
+        pub fn write<S: std::string::ToString>(&mut self, s: S) {
+            self.writer.write_all(s.to_string().as_bytes()).unwrap();
+        }
+        pub fn writeln<S: std::string::ToString>(&mut self, s: S) {
+            self.write(s);
+            self.write('\n');
+        }
+    }
+    pub struct Scanner<R> {
+        stdin: R,
+        buffer: VecDeque<String>,
+    }
+    impl<R: std::io::BufRead> Scanner<R> {
+        pub fn new(s: R) -> Scanner<R> {
+            Scanner {
+                stdin: s,
+                buffer: VecDeque::new(),
+            }
+        }
+        pub fn read<T: std::str::FromStr>(&mut self) -> T {
+            while self.buffer.is_empty() {
+                let line = self.read_line();
+                for w in line.split_whitespace() {
+                    self.buffer.push_back(String::from(w));
+                }
+            }
+            self.buffer.pop_front().unwrap().parse::<T>().ok().unwrap()
+        }
+        pub fn read_line(&mut self) -> String {
+            let mut line = String::new();
+            let _ = self.stdin.read_line(&mut line);
+            line.trim_end().to_string()
+        }
+        pub fn vec<T: std::str::FromStr>(&mut self, n: usize) -> Vec<T> {
+            (0..n).map(|_| self.read()).collect()
+        }
+        pub fn chars(&mut self) -> Vec<char> {
+            self.read::<String>().chars().collect()
+        }
+    }
+}
+#[allow(clippy::module_inception)]
+pub mod macros {
+    #[macro_export]
+    #[allow(unused_macros)]
+    macro_rules ! max {($ x : expr ) => ($ x ) ; ($ x : expr , $ ($ y : expr ) ,+ ) => {std :: cmp :: max ($ x , max ! ($ ($ y ) ,+ ) ) } }
+    #[macro_export]
+    #[allow(unused_macros)]
+    macro_rules ! min {($ x : expr ) => ($ x ) ; ($ x : expr , $ ($ y : expr ) ,+ ) => {std :: cmp :: min ($ x , min ! ($ ($ y ) ,+ ) ) } }
+    #[macro_export]
+    #[allow(unused_macros)]
+    /// Display a line of variables
+    macro_rules ! echo {() => {{use std :: io :: {self , Write } ; writeln ! (io :: stderr () , "{}:" , line ! () ) . unwrap () ; } } ; ($ e : expr , $ ($ es : expr ) ,+ $ (, ) ? ) => {{use std :: io :: {self , Write } ; write ! (io :: stderr () , "{}:" , line ! () ) . unwrap () ; write ! (io :: stderr () , " {} = {:?}" , stringify ! ($ e ) , $ e ) . unwrap () ; $ (write ! (io :: stderr () , " {} = {:?}" , stringify ! ($ es ) , $ es ) . unwrap () ; ) + writeln ! (io :: stderr () ) . unwrap () ; } } ; ($ e : expr ) => {{use std :: io :: {self , Write } ; let result = $ e ; writeln ! (io :: stderr () , "{}: {} = {:?}" , line ! () , stringify ! ($ e ) , result ) . unwrap () ; result } } ; }
+    #[macro_export]
+    #[allow(unused_macros)]
+    /// Display a line of variables with colors
+    macro_rules ! cecho {() => {{use std :: io :: {self , Write } ; writeln ! (io :: stderr () , "\x1b[31;1m{}\x1b[m:" , line ! () ) . unwrap () ; } } ; ($ e : expr , $ ($ es : expr ) ,+ $ (, ) ? ) => {{use std :: io :: {self , Write } ; write ! (io :: stderr () , "\x1b[31;1m{}\x1b[m:" , line ! () ) . unwrap () ; write ! (io :: stderr () , " \x1b[92;1m{}\x1b[m = {:?}" , stringify ! ($ e ) , $ e ) . unwrap () ; $ (write ! (io :: stderr () , " \x1b[92;1m{}\x1b[m = {:?}" , stringify ! ($ es ) , $ es ) . unwrap () ; ) + writeln ! (io :: stderr () ) . unwrap () ; } } ; ($ e : expr ) => {{use std :: io :: {self , Write } ; let result = $ e ; writeln ! (io :: stderr () , "\x1b[31;1m{}\x1b[m: \x1b[92;1m{}\x1b[m = {:?}" , line ! () , stringify ! ($ e ) , result ) . unwrap () ; result } } ; }
+}
+#[allow(clippy::module_inception)]
+/// These traits provides almost same methods that mordern Rust compiler provides and fill the gap between them.
+pub mod gap_traits {
+    /// We don't need this trait if we can use mordern rust compiler greater than equal to 1.50.
+    pub trait BoolToOption {
+        fn then_some<T>(self, t: T) -> Option<T>;
+        fn then<T, F: FnOnce() -> T>(self, f: F) -> Option<T>;
+    }
+    impl BoolToOption for bool {
+        /// Returns `Some(t)` if the `bool` is `true`, or `None` otherwise.
+        /// # Examples
+        /// ```
+        /// assert_eq!(false.then_some(0), None);
+        /// assert_eq!(true.then_some(0), Some(0));
+        /// ```
+        fn then_some<T>(self, t: T) -> Option<T> {
+            if self {
+                Some(t)
+            } else {
+                None
+            }
+        }
+        /// Returns `Some(f())` if the `bool` is `true`, or `None` otherwise.
+        /// # Examples
+        /// ```
+        /// assert_eq!(false.then(|| 0), None);
+        /// assert_eq!(true.then(|| 0), Some(0));
+        /// ```
+        fn then<T, F: FnOnce() -> T>(self, f: F) -> Option<T> {
+            if self {
+                Some(f())
+            } else {
+                None
+            }
+        }
+    }
+}
+fn main() {
+    std::thread::Builder::new()
+        .stack_size(64 * 1024 * 1024)
+        .spawn(|| Solver::default().solve())
+        .unwrap()
+        .join()
+        .unwrap();
+}

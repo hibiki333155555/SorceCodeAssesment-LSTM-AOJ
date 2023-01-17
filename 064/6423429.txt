@@ -1,0 +1,15 @@
+import java.util.Scanner;
+import java.util.Formatter;
+
+
+class Main {
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        double r= sc.nextDouble();
+        double S=3.14*r*r;
+        double L=3.14*2*r;
+        System.out.println(String.format("%.8f", S+" "+"%.8f",L));
+    }
+}
+
+

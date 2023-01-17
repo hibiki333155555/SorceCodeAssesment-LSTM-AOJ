@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define fol(i,s,g) for(int i=(int)(s); i<(int)(g); i++)
+#define fix(ans,k) fixed << setprecision(k) << ans
+
+int main(){
+    int w,h;
+    char c;
+    cin>>w>>h>>c;
+    fol(i,0,h){
+        fol(j,0,w){
+            if((i==0&&j==0)||(i==0&&j==w-1)||(i==h-1&&j==0)||(i==h-1&&j==w-1)){
+                cout<<'+';
+            }else if(i==0||i==h-1){
+                cout<<'-';
+            }else if(j==0||j==w-1){
+                cout<<'|';
+            }else if(i==h/2&&j==w/2){
+                cout<<c;
+            }else{
+                cout<<'.';
+            }
+        }
+        cout<<'\n';
+    }
+    return 0;
+}

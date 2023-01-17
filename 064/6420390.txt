@@ -1,0 +1,5 @@
+from collections import Counter
+N = int(input())
+S = list(input())
+C = Counter(S).keys()
+print(len(C))

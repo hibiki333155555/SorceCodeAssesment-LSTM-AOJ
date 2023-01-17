@@ -1,0 +1,8 @@
+d = set()
+
+for _ in range(int(input())):
+  command, s = input().split()
+  if command == "find":
+    print("yes" if s in d else "no")
+  else: #insert命令
+    d.add(s)

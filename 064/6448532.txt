@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    while(true){
+        int n;
+        cin>>n;
+        if(n == 0){
+            break;
+        }
+        int s[n];
+        int sum = 0;
+        for(int i=0;i<n;i++){
+            cin>>s[i];
+            sum += s[i];
+        }
+        double m = sum / n;
+        double a = 0;
+        for(int i=0;i<n;i++){
+            a += (s[i] - m) * (s[i] - m);
+        }
+        a /= n;
+        a = abs(sqrt(a));
+        cout << fixed << setprecision(11) << a<<"\n";
+    }
+    return(0);
+}
+

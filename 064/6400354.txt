@@ -1,0 +1,28 @@
+#include <cstdio>
+
+int main(void){
+    int n, i;
+    int min, max, sum;
+    int num;
+    
+    scanf("%d", &n);
+    scanf("%d", &num);
+    min = num;
+    max = num;
+    sum = num;
+    
+    for(i=0;i<n;i++){
+        scanf("%d", &num);
+        if(min>num){
+            min=num;
+        }
+        if(max<num){
+            max=num;
+        }
+        sum = sum+num;
+    }
+    
+    printf("%d %d %d", min, max, sum);
+    
+    return 0;
+}

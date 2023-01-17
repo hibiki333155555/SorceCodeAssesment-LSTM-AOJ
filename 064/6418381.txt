@@ -1,0 +1,8 @@
+N,M = map(int,input().split())
+A = list(map(int,input().split()))
+B = list(map(int,input().split()))
+
+for s in A:
+  if s in B:
+    print(s,sep='')
+  

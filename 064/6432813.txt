@@ -1,0 +1,19 @@
+#include<iostream>
+#include<map>
+using namespace std;
+int main(){
+    map<int,int>edges;
+    for(int i=0;i<12;i++){
+        int tmp;
+        cin>>tmp;
+        edges[tmp]++;
+    }
+    for(auto itr=edges.begin();itr!=edges.end();itr++){
+        if((itr->second%4)){
+            cout<<"no"<<endl;
+            return 0;
+        }
+    }
+    cout<<"yes"<<endl;
+    return 0;
+}

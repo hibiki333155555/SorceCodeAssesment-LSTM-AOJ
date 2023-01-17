@@ -1,0 +1,15 @@
+N,S = int(input()),input()
+ct = 0
+for i in S:
+  if i == 'I' and ct == 0:
+    ct += 1
+  if i == 'O' and ct == 1:
+    ct += 1
+  if i == 'I' and ct == 2:
+    ct += 1
+  if ct == 3:
+    print('Yes')
+    break
+if ct <= 2:
+  print('No')
+

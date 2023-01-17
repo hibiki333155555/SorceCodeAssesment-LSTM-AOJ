@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define REP(a, b) for (int a = 0; a < b; ++a)
+
+const vector<int> kouho = {2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19};
+vector<pair<int, int>> vertexs[2000];
+bool dp[2000][(1 << 12)];
+
+long long gcd(long long a, long long b)
+{
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    REP(i, m)
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        int now = 0;
+        REP(q, kouho.size())
+        {
+            if (c % kouho[q] == 0)
+            {
+                now |= (1 << q);
+            }
+        }
+        a--;
+        b--;
+        vertexs[a].push_back({b, now});
+    }
+    dp[0][0] = true;
+    queue<pair<int, int>> next;
+    next.push({0, 0});
+    while (!next.empty())
+    {
+        pair<int, int> now = next.front();
+        next.pop();
+        for (auto x : vertexs[now.first])
+        {
+            int A = x.first;
+            int B = x.second | now.second;
+            if (!dp[A][B])
+            {
+                dp[A][B] = true;
+                next.push({A, B});
+            }
+        }
+    }
+    long long now_min = 1e18;
+    long long now_max = 0;
+    REP(i, (1 << kouho.size()))
+    {
+        if (!dp[n - 1][i])
+            continue;
+        long long tmp = 1;
+        REP(q, kouho.size())
+        {
+            if (i & (1 << q))
+            {
+                tmp = tmp / gcd(tmp, kouho[q]) * (long long)kouho[q];
+            }
+        }
+        now_min = min(now_min, tmp);
+        now_max = max(now_max, tmp);
+    }
+    if (now_max == 0)
+    {
+        cout << "IMPOSSIBLE" << endl;
+    }
+    else
+    {
+        cout << now_min << " " << now_max << endl;
+    }
+}
+

@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+//long long はいいぞぉ^^
+
+
+long long gcd(long long a, long long b) {
+	while (a >= 1 && b >= 1) {
+		if (a < b) b = b % a;
+		else a = a % b;
+	}
+	if (a >= 1) return a;
+	else return b;
+}
+
+int main() {
+	long long n;
+	cin >> n;
+	vector<long long>a(n);
+	
+	for (int i = 0; i < n; ++i) {
+		cin >> a.at(i);
+	}
+	int ans = a.at(0);
+	for (int i = 1; i < n; ++i) {
+		ans = gcd(a.at(i), ans);
+	}
+	int as=1;
+  	for (int i=0;i<n;++i){
+  	    as*=a.at(i)/ans;
+  	}
+  	cout<<as<<endl;
+  	return 0;
+}
+
+
+

@@ -1,0 +1,54 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int main(){
+    int N, M;
+    cin >> N >> M;
+    vector<long long> A(N);
+    vector<int> B(N), C(N);
+    for(int i = 0; i < N; ++i){
+        cin >> A[i] >> B[i] >> C[i];
+    }
+    int Q;
+    cin >> Q;
+    vector<long long> D(Q);
+    vector<int> E(Q);
+    for(int i = 0; i < Q; ++i){
+        cin >> D[i] >> E[i];
+    }
+    vector<long long> demonStrength(M+2, 0LL);
+    for(int i = 0; i < Q; ++i){
+        demonStrength[E[i]] += D[i];
+    }
+    vector<long long> slayerStrength(M+2, 0);
+    vector<vector<int>> slayerPositions(M+2);
+    for(int i = 0; i < N; ++i){
+        slayerStrength[B[i]] += A[i];
+        slayerStrength[C[i] + 1] -= A[i];
+        slayerPositions[B[i]].push_back(i);
+    }
+    for(int i = 0; i < M+1; ++i){
+        slayerStrength[i+1] += slayerStrength[i];
+    }
+    long long ans = 0;
+    long long totalDopingStrength = 0;
+    int maxC = 0;
+    vector<long long> dopingStrength(M+2, 0);
+    for(int i = 1; i <= M; ++i){
+        totalDopingStrength -= dopingStrength[i];
+        for(int slayerId : slayerPositions[i]){
+            maxC = max(maxC, C[slayerId]);
+        }
+        long long necessaryDoping = demonStrength[i] - slayerStrength[i] - totalDopingStrength;
+        if(necessaryDoping <= 0) continue;
+        if(slayerStrength[i] == 0){
+            cout << -1 << endl;
+            return 0;
+        }
+        ans += necessaryDoping;
+        totalDopingStrength += necessaryDoping;
+        dopingStrength[maxC + 1] += necessaryDoping;
+    }
+    cout << ans << endl;
+}

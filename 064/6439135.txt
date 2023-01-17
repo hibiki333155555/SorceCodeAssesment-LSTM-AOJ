@@ -1,0 +1,4 @@
+a,b=map(int, input().split())
+l1=[a//b, a%b, '{:.05f}'.format(a/b)]
+x,y,z=[str(i)+' ' for i in l1]
+print(x+y+z)

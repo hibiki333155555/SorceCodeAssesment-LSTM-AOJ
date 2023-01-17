@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main(void){
+    //点 p の x 座標が 0 未満 点 p の x 座標が W より大きい 点pのy座標が0未満 点pのy座標がHより大きい
+    int x, y, W, H, r;
+    
+    scanf("%d%d%d%d%d", &W, &H, &x, &y, &r);
+    
+    if(x-r>=0 && y-r>=0 && x+r<=W && y+r<=H){
+        printf("Yes");
+    }
+    else printf("No");
+    return 0;
+}

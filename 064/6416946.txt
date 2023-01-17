@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+#include <math.h>
+
+using namespace std;
+
+int main ()
+{
+	double r, pi = acos(-1);
+	cin >> r;
+	double area, circum;
+	area = (pi * r * r);
+	circum = (2 * pi * r);
+	
+	cout << fixed << setprecision (8) << area << " " << circum << endl;
+	
+	return 0;
+}

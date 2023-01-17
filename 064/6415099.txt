@@ -1,0 +1,354 @@
+// #include <bits/stdc++.h>
+#include <algorithm>
+#include <array>
+#include <bitset>
+#include <cassert>
+#include <climits>
+#include <cmath>
+#include <deque>
+#include <functional>
+#include <iomanip>
+#include <iostream> 
+#include <iterator>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <stack>
+#include <string>
+#include <utility>
+#include <vector>
+using namespace std;
+// #include <boost/multiprecision/cpp_int.hpp>
+// using bint = boost::multiprecision::cpp_int;
+using ll = long long;
+using vl = vector<ll>;
+using vvl = vector<vl>;
+using pll = pair<ll, ll>;
+#define rep(i, s, n) for (ll i = (ll)(s); i < (ll)(n); i++)
+#define repr(i, n, s) for (ll i = (ll)(n); (ll)(s) < i; i--)
+#define fore(e, a) for (auto&& e: (a))
+#define len(a) (ll)(a).size()
+#define all(a) (a).begin(), (a).end()
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+#define sqrt(x) sqrtl(x)
+#define End(...) do{ print(__VA_ARGS__); return 0; }while(0)
+/*********       P R I N T       **********/
+template<class T> void print(const T& e);
+template<class T> void print(const vector<T>& v);
+template<class T> void print(const vector<vector<T>>& vv);
+template<class H, class... T> void print(const H& h, const T&... t);  // スペース区切り
+/*********       D E B U G       **********/
+#ifdef __LOCAL
+#define debug(...) if(DEBUG) do{cout << '[' << #__VA_ARGS__ << "] ";debug_(__VA_ARGS__);}while(0)
+#else
+#define debug(...)
+#endif
+template<class T> void debug_(const T& e);
+template<class T> void debug_(const vector<T>& v);
+template<class T> void debug_(const vector<vector<T>>& vv);
+template<class T, class U> void debug_(const map<T, U>& mp);
+template<class T, class U> void debug_(const vector<map<T, U>>& vm);
+template<class T> void debug_(const set<T>& st);
+template<class T> void debug_(const multiset<T>& st);
+template<class T> void debug_(const vector<set<T>>& vs);
+template<class T> void debug_(const vector<multiset<T>>& vs);
+template<class H, class... T> void debug_(const H& h, const T&... t);  // 改行区切り
+/*********       M  O  D       **********/
+// #include <atcoder/modint>  // https://atcoder.github.io/ac-library/production/document_ja/
+// using namespace atcoder;
+// using mint = modint1000000007;     // modint998244353;
+// const long long MOD = 1000000007;  // 998244353;
+// using vm = vector<mint>;
+// using vvm = vector<vm>;
+// void print_(const mint& e){cout << e.val();}
+// void dbg_(const mint& e){cout << e.val();}
+/*********       O T H E R S       **********/
+template<class T, class U> inline bool chmin(T& a, U b) {if (a > b) {a = b; return true;} return false;}  // bは値渡し!
+template<class T, class U> inline bool chmax(T& a, U b) {if (a < b) {a = b; return true;} return false;}
+template<class T> inline T Sum(vector<T>& v) {T r=0; fore(e, v) r+=e; return r; }
+template<class T> inline vector<T> Cumsum(vector<T> v) {rep(i, 1, len(v)) v[i]+=v[i-1]; return v; }  // 1D
+template<class T, class U> inline auto Mod(const T& a, const U& m) {return (a % m + m) % m;}  // 負もOK
+template<class T, class U> inline auto Ceil(const T& x, const U& y) {return x < 0 ? x/y : (x + y - 1) / y;}  // 負もOK
+template<class T, class U> inline auto Floor(const T& x, const U& y) {return -(Ceil(-x, y)); }  // 負もOK
+template<class T> using min_priority_queue = priority_queue<T, vector<T>, greater<T>>;
+const long long INF64 = LONG_LONG_MAX / 2 - 10000LL;  // 4,611,686,018,427,377,903  ~= 4.6e+18, 19桁
+const double PI = acos(-1);
+const bool DEBUG = true;
+
+
+// けんちょんさんのコードを一部改変
+// https://github.com/drken1215/book_algorithm_solution/blob/master/codes/chap16/code_16_1.cpp
+// AOJでverify済
+// https://onlinejudge.u-aizu.ac.jp/problems/GRL_6_A
+
+
+// グラフを表す構造体
+struct Graph {
+    // 辺を表す構造体
+    // rev: 逆辺 (to, from) が G[to] の中で何番目の要素か
+    // cap: 辺 (from, to) の容量
+    struct Edge {
+        ll rev, to, cap;
+        Edge(ll r, ll t, ll c) :
+            rev(r), to(t), cap(c) {}
+    };
+    vector<vector<Edge>> lst;
+
+    // N: 頂点数
+    Graph(ll N = 0) : lst(N) { }
+
+    // グラフの頂点数取得
+    ll siz() {
+        return len(lst);
+    }
+    
+    // Graph インスタンスを G として，
+    // G.lst[v] を G[v] と書けるようにしておく
+    vector<Edge>& operator [](ll i) {
+        return lst[i];
+    }
+
+    // 辺 e = (u, v) の逆辺 (v, u) を取得する
+    Edge& redge(const Edge& e) {
+        return lst[e.to][e.rev];
+    }
+
+    // 辺 e = (u, v) に流量 f のフローを流す
+    // e = (u, v) の流量が f だけ減少する
+    // このとき逆辺 (v, u) の流量を増やす
+    void run_flow(Edge& e, ll f) {
+        e.cap -= f;
+        redge(e).cap += f;
+    }
+
+    // 頂点 from から頂点 to へ容量 cap、頂点 to から頂点 from へ容量 0 の辺を張る
+    void addedge(ll from, ll to, ll cap) {
+        ll fromrev = len(lst[from]);
+        ll torev = len(lst[to]);
+        lst[from].eb(torev, to, cap);
+        lst[to].eb(fromrev, from, 0);
+    }
+};
+
+struct FordFulkerson {
+    vector<bool> seen;
+    FordFulkerson() { }
+
+    // 残余グラフ上で s-t パスを見つける (深さ優先探索)
+    // 返り値は s-t パス上の容量の最小値 (見つからなかったら 0)
+    // f: s から v へ到達した過程の各辺の容量の最小値
+    ll dfs(Graph& G, ll v, ll t, ll f) {
+        if (v == t) return f;
+        seen[v] = true;
+
+        fore(e, G[v]) {
+            if (seen[e.to] || e.cap == 0) continue;
+            // s-t パスを探す。見つかったら flow はパス上の最小容量。見つからなかったら f = 0
+            ll flow = dfs(G, e.to, t, min(f, e.cap));
+            // s-t パスが見つからなかったら次辺を試す
+            if (flow == 0) continue;
+            // 辺 e に容量 flow のフローを流す
+            G.run_flow(e, flow);
+            // s-t パスを見つけたらパス上最小容量を返す
+            return flow;
+        }
+        // s-t パスが見つからなかったことを示す
+        return 0;
+    }
+
+    // グラフ G の s-t 間の最大流量を求める。ただしリターン時に G は残余グラフになる
+    ll solve(Graph& G, ll s, ll t) {
+        ll res = 0;
+        // 残余グラフに s-t パスがなくなるまで反復
+        while(1) {
+            seen.assign(G.siz(), false);
+            ll flow = dfs(G, s, t, INF64);
+            // s-t パスが見つからなかったら終了
+            if (flow == 0) break;
+            res += flow;
+        }
+        return res;
+    }
+};
+
+int main() {
+    ll N, M;
+    cin >> N >> M;
+    Graph G(N);
+    rep(i, 0, M) {
+        ll u, v, c;
+        cin >> u >> v >> c;
+        // u--; v--;
+        // 容量 c の辺 (u, v) を張る
+        G.addedge(u, v, c);
+    }
+    // フォード・ファルカーソン法
+    FordFulkerson ff;
+    ll s = 0, t = N - 1;
+    ll ans = ff.solve(G, s, t);
+    print(ans);
+}
+
+
+
+/*********       P R I N T       **********/
+// mint, pairの場合と処理を分けるために定義
+template<class T> void print_(const T& e){
+    cout << e;
+}
+
+// pairの入れ子やvector<pll>に対応しているが、vector<pll>はpllごとに改行しないので注意
+template<class T, class U> void print_(const pair<T, U>& p){
+    print_(p.first);
+    cout << ' ';
+    print_(p.second);
+}
+
+template<class T> void print(const T& e){
+    print_(e);
+    cout << '\n';
+}
+
+template<class T> void print(const vector<T>& v){
+    if (v.size()) {
+        auto iter = v.begin();
+        print_(*iter++);
+        for(; iter != v.end(); ++iter) {
+            cout << ' ';
+            print_(*iter);
+        }
+    }
+    cout << '\n';
+}
+
+template<class T> void print(const vector<vector<T>>& vv){
+    for(auto&& v : vv){
+        print(v);
+    }
+}
+
+// スペース区切りで出力。引数にpairやvectorは不可。
+template<class H, class... T> void print(const H& h, const T&... t) {
+    cout << h << ' ';
+    print(t...);
+}
+
+/*********       D E B U G       **********/
+void dbg_(const long long& e){
+    if (e >= INF64) cout << "INF";
+    else if (e <= -INF64) cout << "-INF";
+    else cout << e;
+}
+
+template<class T> void dbg_(const T& e){
+    cout << e;
+}
+
+// 再帰によりpairの入れ子を出力
+template<class T, class U> void dbg_(const pair<T, U>& p) {
+    cout << '(';
+    dbg_(p.first);
+    cout << ' ';
+    dbg_(p.second);
+    cout << ')';
+}
+
+template<class T> void debug_(const T& e) {
+    dbg_(e);
+    cout << '\n';
+}
+
+template<class T> void debug_(const vector<T>& v){
+    if (v.size()) {
+        auto iter = v.begin();
+        dbg_(*iter++);
+        for(; iter != v.end(); ++iter) {
+            cout << ' ';
+            dbg_(*iter);
+        }
+    }
+    cout << '\n';
+}
+
+template<class T> void debug_(const vector<vector<T>>& vv){
+    cout << '\n';
+    ll cnt = 0;
+    for(auto&& v : vv){
+        cout << cnt++ << ": ";
+        debug_(v);
+    }
+}
+
+template<class T, class U> void debug_(const map<T, U>& mp){
+    if (mp.size()) {
+        auto iter = mp.begin();
+        dbg_(*iter++);
+        for(; iter != mp.end(); ++iter) {
+            cout << ' ';
+            dbg_(*iter);
+        }
+    }
+    cout << '\n';
+}
+
+template<class T, class U> void debug_(const vector<map<T, U>>& vm){
+    cout << '\n';
+    ll cnt = 0;
+    for(auto&& mp : vm){
+        cout << cnt++ << ": ";
+        debug_(mp);
+    }
+}
+
+template<class T> void debug_(const set<T>& st){
+    if (st.size()) {
+        auto iter = st.begin();
+        dbg_(*iter++);
+        for(; iter != st.end(); ++iter) {
+            cout << ' ';
+            dbg_(*iter);
+        }
+    }
+    cout << '\n';
+}
+
+template<class T> void debug_(const multiset<T>& st){
+    if (st.size()) {
+        auto iter = st.begin();
+        dbg_(*iter++);
+        for(; iter != st.end(); ++iter) {
+            cout << ' ';
+            dbg_(*iter);
+        }
+    }
+    cout << '\n';
+}
+
+template<class T> void debug_(const vector<set<T>>& vs){
+    cout << '\n';
+    ll cnt = 0;
+    for(auto&& st : vs){
+        cout << cnt++ << ": ";
+        debug_(st);
+    }
+}
+
+template<class T> void debug_(const vector<multiset<T>>& vs){
+    cout << '\n';
+    ll cnt = 0;
+    for(auto&& st : vs){
+        cout << cnt++ << ": ";
+        debug_(st);
+    }
+}
+
+// 改行区切りで出力。引数にpairやvectorもOK。
+template<class H, class... T> void debug_(const H& h, const T&... t) {
+    debug_(h);
+    debug_(t...);
+}
+

@@ -1,0 +1,23 @@
+#include <iostream>
+// #include "comp.h"
+using namespace std;
+
+int main()
+{
+    int a[3];
+    cin >> a[1] >> a[2] >> a[3];
+    int tmp;
+
+    if (a[1] > a[2]) {
+        tmp = a[2];
+        a[2] = a[1];
+        a[1] = tmp;
+    }
+    if (a[2] > a[3]) {
+        tmp = a[2];
+        a[2] = a[3];
+        a[3] = tmp;
+    }
+    cout << a[1] << " " << a[2] << " " << a[3] << endl;
+}
+

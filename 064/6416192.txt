@@ -1,0 +1,27 @@
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+using ll = long long;
+
+int main() {
+  ll n, m, k, x;
+  cin >> n >> m >> k >> x;
+
+  vector<ll> as(n);
+  for (auto &a: as) {
+    cin >> a;
+  }
+
+  ll max_a = *max_element(as.begin(), as.end());
+
+  if (max_a * k >= x * m) {
+    cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
+  }
+
+  return 0;
+}
+

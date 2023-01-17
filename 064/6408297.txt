@@ -1,0 +1,5 @@
+i = input().lower()
+a = "abcdefghijklmnopqrstuvwxyz"
+for s in a:
+    print(s, ":", i.count(s))
+    

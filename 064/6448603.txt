@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> vec(n);
+    for (int i = 0; i < n; i++) {
+        cin >> vec.at(i);   
+    }
+    int min_val = vec.at(i);
+    int max_error = -1000000000;
+    int flag = 1;
+    for (int i = 1; i < n; i++) {
+
+        max_error = max(max_error, vec.at(i) - min_val);
+        min_val = min(min_val, vec.at(i))
+    }
+    cout << max_error << endl;
+    return 0;
+}

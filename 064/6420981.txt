@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+
+#define rep(i, n) for(int i = 0; i < (n); i++)
+#define all(x) x.begin(), x.end()
+
+using ll = long long;
+using namespace std;
+
+int main() {
+    int n; cin >> n;
+    vector<vector<ll>> a(n, vector<ll>(n));
+    rep(i, n) rep(j, n) cin >> a[i][j];
+
+    map<ll, pair<int, int>> mp;
+     rep(i, n) rep(j, n) {
+        if (mp.find(a[i][j]) == mp.end()) {
+            mp[a[i][j]] = pair{j, i};
+        }
+     }
+
+    ll q; cin >> q;
+    rep(i, q) {
+        ll t; cin >> t;
+        if (mp.find(t) == mp.end()) {
+            cout << "-1" << "\n";
+        } else {
+            cout << mp[t].second + 1 << " " << mp[t].first + 1 << "\n";
+        }
+    }
+
+}

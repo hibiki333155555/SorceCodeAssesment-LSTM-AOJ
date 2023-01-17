@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int x1, x2, y1, y2;
+  cin >> x1 >> y1 >> x2 >> y2;
+  int ans = pow(x1 - x2, 2) + pow(y1 - y2, 2) ;
+  double ans2 = sqrt(ans);
+  cout << fixed << setprecision(5);
+  cout << ans2  << endl;
+
+}

@@ -1,0 +1,41 @@
+#include<iostream>
+#include<cstdio>
+#include<string>
+using namespace std;
+int main() {
+    int dice[6];
+    for(int n = 0; n < 6; n++) {
+        cin >> dice[n];
+    }
+    string dir;
+    cin >> dir;
+    for(int num = 0; num < dir.size(); num++) {
+        int stock;
+        if(dir[num] == 'N') {
+            stock = dice[0];
+            dice[0] = dice[1];
+            dice[1] = dice[5];
+            dice[5] = dice[4];
+            dice[4] = stock;
+        } else if(dir[num] == 'E') {
+            stock = dice[0];
+            dice[0] = dice[3];
+            dice[3] = dice[5];
+            dice[5] = dice[2];
+            dice[2] = stock;
+        } else if(dir[num] == 'S') {
+            stock = dice[0];
+            dice[0] = dice[4];
+            dice[4] = dice[5];
+            dice[5] = dice[1];
+            dice[1] = stock;
+        } else if(dir[num] == 'W') {
+            stock = dice[0];
+            dice[0] = dice[2];
+            dice[2] = dice[5];
+            dice[5] = dice[3];
+            dice[3] = stock;
+        }
+    }
+    cout << dice[0] << endl;
+}

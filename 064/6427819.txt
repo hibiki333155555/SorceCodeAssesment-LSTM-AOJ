@@ -1,0 +1,12 @@
+
+#include<stdio.h>
+int main(){
+    int a,b,c,cnt=0;
+    scanf("%d %d %d",&a,&b,&c);
+    int i=a;
+    while(i<=b){
+        if (c%i==0) cnt++; i++;
+    }
+    printf("%d",cnt);
+    return 0;}
+

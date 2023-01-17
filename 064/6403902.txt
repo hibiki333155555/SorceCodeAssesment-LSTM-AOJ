@@ -1,0 +1,13 @@
+let number = +require(`fs`).readFileSync(`/dev/stdin`, `utf-8`);
+let out = [];
+
+function hasThree(num) {
+    return Array.from(String(num)).includes(`3`);
+}
+
+for (let i=1; i<number+1; i++) {
+    if (i % 3 == 0 || hasThree(i)) {
+        out.push(i);
+    }
+}
+console.log(` ` + out.join(` `));

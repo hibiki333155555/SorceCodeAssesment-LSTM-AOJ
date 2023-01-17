@@ -1,0 +1,738 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Globalization;
+using System.Threading;
+using System.Diagnostics;
+
+using static System.Math;
+
+namespace FertiLib.Contest.A
+{
+	public class Solver
+	{
+		Scanner sr;
+		StreamWriter sw;
+
+		bool isMultipleTestCases = false;
+
+		public void Solve()
+		{
+			var n = sr.ReadInt();
+			var a = new int[n - 1];
+			var b = new int[n - 1];
+			
+			for (int i = 0; i < n - 1; i++)
+			{
+				a[i] = sr.ReadInt() - 1;
+				b[i] = sr.ReadInt() - 1;
+			}
+			var g = new Graph.UndirectedGraph(n, a, b);
+			var lca = new Graph.LowestCommonAncestor(g);
+			var kidp = new Rerooting<ModInt>(n, a, b, new ModInt(1), (i, j) => i + j, (i, j) => 2 * i);
+			var q = sr.ReadInt();
+			for (int i = 0; i < q; i++)
+			{
+				var x = sr.ReadInt() - 1;
+				var y = sr.ReadInt() - 1;
+				var len = lca.Depth(x) + lca.Depth(y) - 2 * lca.Depth(lca.Query(x, y));
+				var ans = ModInt.Pow(2, len);
+				ans *= kidp.SubQuery(x, y);
+			}
+		}
+
+		public Solver(Scanner cin, StreamWriter cout)
+		{
+			this.sr = cin;
+			this.sw = cout;
+		}
+
+		public void Start()
+		{
+			int _t = 1;
+			if (isMultipleTestCases) _t = sr.ReadInt();
+			while (_t-- > 0) Solve();
+		}
+
+		public static void YESNO(bool condition) => Console.WriteLine(condition ? "YES" : "NO");
+		public static void YesNo(bool condition) => Console.WriteLine(condition ? "Yes" : "No");
+		public static void yesno(bool condition) => Console.WriteLine(condition ? "yes" : "no");
+
+		public static T SignOutput<T>(int x, T pos, T zero, T neg) => x == 0 ? zero : (x > 0 ? pos : neg);
+
+		public static T[] CreateArray<T>(int n, Func<int, T> func) => Enumerable.Range(0, n).Select(p => func(p)).ToArray();
+		public static T[][] CreateArray<T>(int h, int w, Func<int, int, T> func) => Enumerable.Range(0, h).Select(i => Enumerable.Range(0, w).Select(j => func(i, j)).ToArray()).ToArray();
+	}
+
+	public class HeavyLightDecomposition
+	{
+		// Graph.UndirectedGraph tree;
+		int[] parent;
+		int[] subtreeSize;
+
+		int[] index;
+		int[] leader;
+		int[] depth;
+		List<int> revIndex;
+
+		public int Index(int x) => index[x];
+
+		public HeavyLightDecomposition(Graph.UndirectedGraph tree, int root = 0)
+		{
+			parent = new int[tree.NodeCount];
+			subtreeSize = new int[tree.NodeCount];
+			index = new int[tree.NodeCount];
+			leader = new int[tree.NodeCount];
+			depth = new int[tree.NodeCount];
+			revIndex = new List<int>();
+
+			Dfs(root, -1);
+			Decompose(root, root, 0);
+
+			int Dfs(int cur, int par)
+			{
+				int ret = 1;
+				parent[cur] = par;
+				foreach (var next in tree.Next(cur))
+				{
+					if (next == par) continue;
+					ret += Dfs(next, cur);
+				}
+				return subtreeSize[cur] = ret;
+			}
+
+			void Decompose(int cur, int leader, int depth)
+			{
+				index[cur] = revIndex.Count;
+				revIndex.Add(cur);
+				this.leader[cur] = leader;
+				this.depth[cur] = depth;
+
+				var maxVertex = -1;
+				var maxSize = 0;
+				foreach (var next in tree.Next(cur))
+				{
+					if (next == parent[cur]) continue;
+					if (maxSize < subtreeSize[next])
+					{
+						maxSize = subtreeSize[next];
+						maxVertex = next;
+					}
+				}
+
+				if (maxVertex == -1) return;
+
+				Decompose(maxVertex, leader, depth + 1);
+				foreach (var next in tree.Next(cur))
+				{
+					if (next == maxVertex) continue;
+					if (next == parent[cur]) continue;
+					Decompose(next, next, depth + 1);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns the segments where the path u-v passes.
+		/// </summary>
+		/// <returns>List of segments [l, r]. Note that the segments are provided as closed sections.</returns>
+		public List<Tuple<int, int>> Query(int u, int v)
+		{
+			var ret = new List<Tuple<int, int>>();
+			while (leader[u] != leader[v])
+			{
+				if (Index(u) > Index(v))
+				{
+					var z = u;
+					u = v;
+					v = z;
+				}
+				ret.Add(new Tuple<int, int>(Index(leader[v]), Index(v)));
+				v = parent[leader[v]];
+			}
+
+			var x = Index(u);
+			var y = Index(v);
+			if (x > y)
+			{
+				var z = x;
+				x = y;
+				y = z;
+			}
+			ret.Add(new Tuple<int, int>(x, y));
+			return ret;
+		}
+	}
+
+	public class Rerooting<T>
+	{
+		public int NodeCount { get; private set; }
+
+		T Identity;
+		Func<T, T, T> Merge;
+		Func<T, int, T> AddNode;
+
+		int[][] adjacents, indexAdjacents;
+
+		T[] res;
+		T[][] subtreeRes;
+		// subtreeRes[i][j] := the results of the subtree, with the vertex i its parent and the vertex adjacents[i][j] its root
+		Dictionary<int, int>[] dic;
+
+		public Rerooting(int nodeCount, int[]u, int[]v, T identity, Func<T, T, T> merge, Func<T, int, T> addNode)
+		{
+			NodeCount = nodeCount;
+			Identity = identity;
+			Merge = merge;
+			AddNode = addNode;
+
+			var adjacents = Enumerable.Repeat(0, NodeCount).Select(_ => new List<int>()).ToArray();
+			var indexAdjacents = Enumerable.Repeat(0, NodeCount).Select(_ => new List<int>()).ToArray();
+
+			// elements in edges should be 0-indexed
+			for (int i = 0; i < u.Length; i++)
+			{
+				indexAdjacents[u[i]].Add(adjacents[v[i]].Count);
+				indexAdjacents[v[i]].Add(adjacents[u[i]].Count);
+				adjacents[u[i]].Add(v[i]);
+				adjacents[v[i]].Add(u[i]);
+			}
+
+			for (int i = 0; i < nodeCount; i++)
+			{
+				for (int j = 0; j < adjacents[i].Count; j++)
+				{
+					dic[i].Add(adjacents[i][j], j);
+				}
+			}
+
+			this.adjacents = adjacents.Select(p => p.ToArray()).ToArray();
+			this.indexAdjacents = indexAdjacents.Select(p => p.ToArray()).ToArray();
+
+			res = new T[nodeCount];
+			subtreeRes = Enumerable.Range(0, NodeCount).Select(i => new T[adjacents[i].Count]).ToArray();
+
+			if (NodeCount > 1) Init();
+			else res[0] = Identity;
+		}
+
+		public T Query(int node) => res[node];
+		public T SubQuery(int node, int parent) => subtreeRes[node][dic[node][parent]];
+
+		private void Init()
+		{
+			var par = new int[NodeCount];
+			var order = new int[NodeCount];
+
+			int count = 0;
+			var stack = new Stack<int>();
+			stack.Push(0);
+			par[0] = -1;
+			while (stack.Count > 0)
+			{
+				var cur = stack.Pop();
+				order[count++] = cur;
+				foreach (var e in adjacents[cur])
+				{
+					if (e == par[cur]) continue;
+					par[e] = cur;
+					stack.Push(e);
+				}
+			}
+
+			for (var i = NodeCount - 1; i >= 1; i--)
+			{
+				var node = order[i];
+				var res = Identity;
+				var parent = par[node];
+				var parIndex = -1;
+				for (var j = 0; j < adjacents[node].Length; j++)
+				{
+					if (adjacents[node][j] == parent)
+					{
+						parIndex = j;
+						continue;
+					}
+					res = Merge(res, subtreeRes[node][j]);
+				}
+
+				subtreeRes[parent][indexAdjacents[node][parIndex]] = AddNode(res, node);
+			}
+
+			for (var i = 0; i < NodeCount; i++)
+			{
+				var node = order[i];
+				var accum = Identity;
+				var accumRev = new T[adjacents[node].Length];
+				accumRev[adjacents[node].Length - 1] = Identity;
+				for (var j = adjacents[node].Length - 1; j >= 1; j--)
+				{
+					accumRev[j - 1] = Merge(accumRev[j], subtreeRes[node][j]);
+				}
+				for (var j = 0; j < adjacents[node].Length; j++)
+				{
+					var res = AddNode(Merge(accum, accumRev[j]), node);
+					subtreeRes[adjacents[node][j]][indexAdjacents[node][j]] = res;
+					accum = Merge(accum, subtreeRes[node][j]);
+				}
+				res[node] = AddNode(accum, node);
+			}
+		}
+	}
+
+	public static partial class Graph
+	{
+		public interface IEdge
+		{
+			int To { get; }
+		}
+
+		public interface IWeightedEdge : IEdge
+		{
+			long Weight { get; }
+		}
+
+		public interface IGraph<TEdge> where TEdge : IEdge
+		{
+			public List<TEdge> this[int index] { get; }
+			public int NodeCount { get; }
+			public List<TEdge> Next(int x);
+		}
+
+		public interface IWeightedGraph<TEdge> : IGraph<TEdge> where TEdge : IWeightedEdge { }
+
+		public struct BasicEdge : IEdge
+		{
+			public int To { get; private set; }
+
+			public BasicEdge(int to)
+			{
+				this.To = to;
+			}
+
+			public override string ToString() => $"{To}";
+			public static implicit operator BasicEdge(int edge) => new BasicEdge(edge);
+			public static implicit operator int(BasicEdge edge) => edge.To;
+		}
+
+		public struct WeightedEdge : IWeightedEdge
+		{
+			public int To { get; private set; }
+			public long Weight { get; private set; }
+
+			public WeightedEdge(int to, long weight)
+			{
+				To = to;
+				Weight = weight;
+			}
+
+			public WeightedEdge(int to) : this(to, 1) { }
+
+			public override string ToString() => $"[{Weight}] -> {To}";
+			public void Deconstruct(out int to, out long weight) => (to, weight) = (To, Weight);
+		}
+
+		public class UndirectedGraph : IGraph<BasicEdge>
+		{
+			public readonly List<List<BasicEdge>> g;
+
+			public List<BasicEdge> this[int index] => g[index];
+			public int NodeCount => g.Count;
+
+			public UndirectedGraph(int nodeCount) => g = Enumerable.Repeat(0, nodeCount).Select(_ => new List<BasicEdge>()).ToList();
+
+			public UndirectedGraph(int nodeCount, int[] u, int[] v) : this(nodeCount)
+			{
+				if (u.Length != v.Length) throw new ArgumentException($"The arrays {nameof(u)} and {nameof(v)} must have the same length.");
+				for (var i = 0; i < u.Length; i++)
+				{
+					AddEdge(u[i], v[i]);
+				}
+			}
+
+			public void AddEdge(int u, int v)
+			{
+				g[u].Add(v);
+				g[v].Add(u);
+			}
+
+			public void AddNode() => g.Add(new List<BasicEdge>());
+			public List<BasicEdge> Next(int x) => g[x];
+		}
+
+		public class DirectedGraph : IGraph<BasicEdge>
+		{
+			public readonly List<List<BasicEdge>> g;
+
+			public List<BasicEdge> this[int index] => g[index];
+			public int NodeCount => g.Count;
+
+			public DirectedGraph(int nodeCount) => g = Enumerable.Repeat(0, nodeCount).Select(_ => new List<BasicEdge>()).ToList();
+
+			public DirectedGraph(int nodeCount, int[] from, int[] to) : this(nodeCount)
+			{
+				if (from.Length != to.Length) throw new ArgumentException($"The arrays {nameof(from)} and {nameof(to)} must have the same length.");
+				for (var i = 0; i < from.Length; i++)
+				{
+					AddEdge(from[i], to[i]);
+				}
+			}
+
+			public void AddEdge(int from, int to) => g[from].Add(to);
+			public void AddNode() => g.Add(new List<BasicEdge>());
+			public List<BasicEdge> Next(int x) => g[x];
+		}
+
+		public class UndirectedWeightedGraph : IWeightedGraph<WeightedEdge>
+		{
+			public readonly List<List<WeightedEdge>> g;
+
+			public List<WeightedEdge> this[int index] => g[index];
+			public int NodeCount => g.Count;
+
+			public UndirectedWeightedGraph(int nodeCount) => g = Enumerable.Repeat(0, nodeCount).Select(_ => new List<WeightedEdge>()).ToList();
+
+			public UndirectedWeightedGraph(int nodeCount, int[] u, int[] v, long[] weight) : this(nodeCount)
+			{
+				if (u.Length != v.Length) throw new ArgumentException($"The arrays {nameof(u)} and {nameof(v)} must have the same length.");
+				if (u.Length != weight.Length) throw new ArgumentException($"The arrays {nameof(u)} and {nameof(weight)} must have the same length.");
+				if (weight.Length != v.Length) throw new ArgumentException($"The arrays {nameof(v)} and {nameof(weight)} must have the same length.");
+				for (var i = 0; i < u.Length; i++)
+				{
+					AddEdge(u[i], v[i], weight[i]);
+				}
+			}
+
+			public void AddEdge(int u, int v, long w)
+			{
+				g[u].Add(new WeightedEdge(v, w));
+				g[v].Add(new WeightedEdge(u, w));
+			}
+			public void AddNode() => g.Add(new List<WeightedEdge>());
+			public List<WeightedEdge> Next(int x) => g[x];
+		}
+
+		public class DirectedWeightedGraph : IWeightedGraph<WeightedEdge>
+		{
+			public readonly List<List<WeightedEdge>> g;
+
+			public List<WeightedEdge> this[int index] => g[index];
+			public int NodeCount => g.Count;
+
+			public DirectedWeightedGraph(int nodeCount) => g = Enumerable.Repeat(0, nodeCount).Select(_ => new List<WeightedEdge>()).ToList();
+
+			public DirectedWeightedGraph(int nodeCount, int[] from, int[] to, long[] weight) : this(nodeCount)
+			{
+				if (from.Length != to.Length) throw new ArgumentException($"The arrays {nameof(from)} and {nameof(to)} must have the same length.");
+				if (from.Length != weight.Length) throw new ArgumentException($"The arrays {nameof(from)} and {nameof(weight)} must have the same length.");
+				if (weight.Length != to.Length) throw new ArgumentException($"The arrays {nameof(to)} and {nameof(weight)} must have the same length.");
+				for (var i = 0; i < from.Length; i++)
+				{
+					AddEdge(from[i], to[i], weight[i]);
+				}
+			}
+
+			public void AddEdge(int from, int to, long w)
+			{
+				g[from].Add(new WeightedEdge(to, w));
+			}
+			public void AddNode() => g.Add(new List<WeightedEdge>());
+			public List<WeightedEdge> Next(int x) => g[x];
+		}
+	}
+
+	public static partial class Graph
+	{
+		public class LowestCommonAncestor
+		{
+			private readonly UndirectedGraph tree;
+			private readonly int[,] ancestors;
+			private readonly int[] depths;
+			private int logDepth;
+
+			public LowestCommonAncestor(UndirectedGraph tree, int root = 0)
+			{
+				if (tree.NodeCount == 0) throw new ArgumentException($"{nameof(tree)} must have at least 1 node.");
+				this.tree = tree;
+				logDepth = BitOperations.Log2((uint)(tree.NodeCount - 1)) + 1;
+				ancestors = new int[tree.NodeCount, logDepth];
+				for (var i = 0; i < tree.NodeCount; i++)
+				{
+					for (var j = 0; j < logDepth; j++)
+					{
+						ancestors[i, j] = -1;
+					}
+				}
+				depths = Enumerable.Repeat(-1, tree.NodeCount).ToArray();
+				Dfs(root, -1, 0);
+				Init();
+			}
+
+			private void Dfs(int cur, int par, int depth)
+			{
+				ancestors[cur, 0] = par;
+				depths[cur] = depth;
+				foreach (var next in tree[cur])
+				{
+					if (next == par) continue;
+					Dfs(next, cur, depth + 1);
+				}
+			}
+
+			public int Depth(int node) => depths[node];
+
+			private void Init()
+			{
+				for (var i = 1; i < logDepth; i++)
+				{
+					for (var j = 0; j < tree.NodeCount; j++)
+					{
+						if (ancestors[j, i - 1] < 0) ancestors[j, i] = -1;
+						else ancestors[j, i] = ancestors[ancestors[j, i - 1], i - 1];
+					}
+				}
+			}
+
+			public int Query(int u, int v)
+			{
+				if (depths[u] < depths[v]) return Query(v, u);
+				var diff = depths[u] - depths[v];
+				if (diff > 0)
+				{
+					var x = 1;
+					int p = 0;
+					while (x <= diff)
+					{
+						if ((diff & x) > 0)
+						{
+							diff -= x;
+							u = ancestors[u, p];
+						}
+						x <<= 1;
+						p++;
+					}
+				}
+				Debug.Assert(depths[u] == depths[v]);
+				if (u == v) return u;
+				for (var i = logDepth - 1; i >= 0; i--)
+				{
+					if (ancestors[u, i] != ancestors[v, i])
+					{
+						u = ancestors[u, i];
+						v = ancestors[v, i];
+					}
+				}
+				Debug.Assert(u != v);
+				Debug.Assert(ancestors[u, 0] == ancestors[v, 0]);
+				return ancestors[u, 0];
+			}
+		}
+	}
+
+	public struct ModInt : IEquatable<ModInt>
+	{
+		public static long MOD = 998244353;
+		public static bool isModPrime { get; set; }
+
+		private readonly long num;
+
+		public ModInt(long n) { num = n; isModPrime = true; }
+
+		public override string ToString() => num.ToString();
+
+		public static ModInt operator +(ModInt l, ModInt r)
+		{
+			long x = l.num + r.num;
+			if (x >= MOD) x -= MOD;
+			return new ModInt(x);
+		}
+		public static ModInt operator -(ModInt l, ModInt r)
+		{
+			long x = l.num - r.num;
+			if (x < 0) x += MOD;
+			return new ModInt(x);
+		}
+		public static ModInt operator *(ModInt l, ModInt r) => new ModInt((l.num * r.num) % MOD);
+		public static ModInt operator /(ModInt l, ModInt r) => l * r.Inverse();
+
+		public static ModInt operator ++(ModInt x)
+		{
+			var tmp = x + new ModInt(1);
+			return tmp;
+		}
+		public static ModInt operator --(ModInt x)
+		{
+			var tmp = x - new ModInt(1);
+			return tmp;
+		}
+
+		public static bool operator ==(ModInt l, ModInt r) => l.Equals(r);
+		public static bool operator !=(ModInt l, ModInt r) => !l.Equals(r);
+
+		public static implicit operator long(ModInt x) => x.num;
+		public static implicit operator ModInt(long n)
+		{
+			n %= MOD;
+			if (n < 0) n += MOD;
+			return new ModInt(n);
+		}
+
+		public ModInt Inverse() => Inverse(this, MOD);
+		public static ModInt Inverse(ModInt x) => Inverse(x.num, MOD);
+		public static long Inverse(long x, long m)
+		{
+			if (x % m == 0) throw new DivideByZeroException();
+			long a = x, b = m, u = 1, v = 0;
+			while (b > 0)
+			{
+				long t = a / b;
+
+				a -= t * b;
+				long p = a; a = b; b = p;   // swap(a, b);
+
+				u -= t * v;
+				p = u; u = v; v = p;        // swap(u, v);
+			}
+			u %= m;
+			if (u < 0) u += m;
+			return u;
+		}
+
+		public ModInt Pow(long n) => Pow(this, n);
+
+		public static ModInt Pow(long x, long n)
+		{
+			if (n < 0) return Pow(x, -n).Inverse();
+			x %= MOD;
+			long now = 1;
+			if (isModPrime) n %= MOD - 1;
+			for (; n > 0; n /= 2, x = x * x % MOD)
+			{
+				if (n % 2 == 1) now = now * x % MOD;
+			}
+			return new ModInt(now);
+		}
+
+		public bool Equals(ModInt x) => num == x.num;
+
+		public override bool Equals(object obj) => obj is ModInt m && num == m.num;
+
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(num);
+		}
+
+	}
+
+	public static class Program
+	{
+		public static void Main(string[] args)
+		{
+			var sw = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = false };
+			Console.SetOut(sw);
+			var cin = new Scanner();
+			var solver = new Solver(cin, sw);
+			solver.Start();
+			Console.Out.Flush();
+		}
+	}
+
+	public static class Extention
+	{
+		public static string Join<T>(this IEnumerable<T> x, string separator = "") => string.Join(separator, x);
+
+		public static int UpperBound<T>(this IList<T> list, T value) => list.BinarySearch(value, true, 0, list.Count, Comparer<T>.Default);
+		public static int LowerBound<T>(this IList<T> list, T value) => list.BinarySearch(value, false, 0, list.Count, Comparer<T>.Default);
+		public static int BinarySearch<T>(this IList<T> list, T value, bool isUpperBound, int index, int length, Comparer<T> comparer)
+		{
+			var ng = index - 1;
+			var ok = index + length;
+			while (ok - ng > 1)
+			{
+				var mid = ng + (ok - ng) / 2;
+				var res = comparer.Compare(list[mid], value);
+				if (res < 0 || (isUpperBound && res == 0)) ng = mid;
+				else ok = mid;
+			}
+			return ok;
+		}
+	}
+
+	public class Scanner
+	{
+		string[] s;
+		int i;
+
+		char[] separator = new char[] { ' ' };
+
+		public Scanner()
+		{
+			s = new string[0];
+			i = 0;
+		}
+
+		public string Read() => ReadString();
+
+		public string ReadString()
+		{
+			if (i < s.Length) return s[i++];
+			string st = Console.ReadLine();
+			while (st == "") st = Console.ReadLine();
+			s = st.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+			if (s.Length == 0) return ReadString();
+			i = 0;
+			return s[i++];
+		}
+
+		public string[] ReadStringArray(int N)
+		{
+			string[] Array = new string[N];
+			for (int i = 0; i < N; i++)
+			{
+				Array[i] = ReadString();
+			}
+			return Array;
+		}
+
+		public int ReadInt() => int.Parse(ReadString());
+
+		public int[] ReadIntArray(int N, int add = 0)
+		{
+			int[] Array = new int[N];
+			for (int i = 0; i < N; i++)
+			{
+				Array[i] = ReadInt() + add;
+			}
+			return Array;
+		}
+
+		public long ReadLong() => long.Parse(ReadString());
+
+		public long[] ReadLongArray(int N, long add = 0)
+		{
+			long[] Array = new long[N];
+			for (int i = 0; i < N; i++)
+			{
+				Array[i] = ReadLong() + add;
+			}
+			return Array;
+		}
+
+		public double ReadDouble() => double.Parse(ReadString());
+
+		public double[] ReadDoubleArray(int N, double add = 0)
+		{
+			double[] Array = new double[N];
+			for (int i = 0; i < N; i++)
+			{
+				Array[i] = ReadDouble() + add;
+			}
+			return Array;
+		}
+	}
+}
+

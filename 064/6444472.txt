@@ -1,0 +1,17 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+    double r;
+    double area, circ;
+    
+    cin >> r;
+    
+    area = M_PI * pow( r, 2.0);
+    circ = 2 * M_PI * r;
+    
+    cout << area << " " << circ << endl;
+    return 0;
+}

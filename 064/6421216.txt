@@ -1,0 +1,26 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct{
+    char name[10];
+    int time;
+}task;
+task *tasks;
+int head=0,tail;
+int main(){
+    int n,q,now=0,flag=1,num=100000000;
+    scanf("%d %d\n",&n,&q);
+    tail=n;
+    tasks=(task *)malloc(sizeof(task)*num);
+    for(int i=0;i<n;i++)scanf("%s %d\n",tasks[i].name,&tasks[i].time);
+    while(head!=tail){
+        //0以下になった場合headを進めるtailそのまま
+        //耐えた場合headとtail進める
+        //もしhead
+        tasks[head].time-=q;
+        if(tasks[head].time<=0){
+            printf("%s %d\n",tasks[head].name,now);
+            head++;
+        }else tasks[tail++]=tasks[head++];
+    }
+    return 0;
+}

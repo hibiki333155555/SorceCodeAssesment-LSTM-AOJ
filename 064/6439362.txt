@@ -1,0 +1,22 @@
+def countingosrt(A, K):
+    n = len(A)
+    C = [0]*(K+1)
+    for i in range(n):
+        C[A[i]] += 1
+    
+    for i in range(K):
+        C[i+1] += C[i]
+
+    B = [None]*(n+1) 
+    for j in range(n-1, -1, -1):
+        B[C[A[j]]] = A[j]
+        C[A[j]] -= 1
+        
+    return B[1:]
+
+
+n = int(input())
+K = 10000
+A = list(map(int, input().split()))
+B = countingosrt(A, K)
+print(*B)

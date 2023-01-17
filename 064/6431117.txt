@@ -1,0 +1,3 @@
+r=float(input())
+p=3.14159265
+print "%.5f %.5f" % (p*r**2,2*p*r)

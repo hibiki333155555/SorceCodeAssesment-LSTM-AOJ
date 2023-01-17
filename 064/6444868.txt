@@ -1,0 +1,17 @@
+#include<stdio.h>
+
+int main(void){
+int n,a;
+int max = -100000;
+int min = 100000;
+long long sum;
+scanf("%d\n", &n);
+while (--n >0){
+scanf("%d\n", &a);
+if a > max (max = a);
+if a < min (min = a);
+sum += a;
+}
+printf("%d %d %d\n", min, max, sum);
+return 0;
+}

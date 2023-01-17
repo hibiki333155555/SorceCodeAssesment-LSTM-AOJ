@@ -1,0 +1,25 @@
+#include <iostream>
+#include <map>
+using namespace std;
+// Yamete Kudasai
+int main()
+{
+    string str;
+    getline(cin, str);
+    map<int, int> mp;
+    for (char i = 'a'; i <= 'z'; i++)
+    {
+        mp[i] = 0;
+    }
+    for (int i = 0; i < str.size(); i++)
+    {
+        if (isupper(str[i]))
+            str[i] = tolower(str[i]);
+        mp[str[i]] += 1;
+    }
+    for (char i = 'a'; i <= 'z'; i++)
+    {
+        cout << i << " : " << mp[i] << endl;
+    }
+    return 0;
+}

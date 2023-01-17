@@ -1,0 +1,10 @@
+n=int(input())
+for i in range(1,n+1):
+    b=False
+    if i%3==0:b=True
+    cop=i
+    while cop>0:
+        if cop%10==3:b=True
+        cop//=10
+    if b:print(' ',i,sep='',end='')
+print()

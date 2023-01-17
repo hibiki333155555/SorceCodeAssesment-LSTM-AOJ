@@ -1,0 +1,105 @@
+N = 10001
+
+def count_bit(val)
+  return val.to_s(2).count("1")
+end  
+
+def cover?(big, small)
+  bx1, by1, bx2, by2 = big
+  sx1, sy1, sx2, sy2 = small
+  return bx1 <= sx1 && bx2 >= sx2 &&
+         by1 <= sy1 && by2 >= sy2
+end
+
+def read_sheets(n)
+  sheets = []
+  n.times{
+    sheets << gets.split.map(&:to_i)
+  }
+  sheets.sort_by!{|x1, y1, x2, y2| (x2-x1)*(y2-y1) }
+
+  selected_sheets = []
+  loop{
+    big = sheets.pop
+    break if big.nil?
+
+    new_sheets = []
+    sheets.each{|small|
+      if ! cover?(big, small)
+        new_sheets << small
+      end
+    }
+    selected_sheets << big
+    sheets = new_sheets
+  }
+  return selected_sheets
+end
+
+loop{
+  n, r = gets.chomp.split.map(&:to_i)
+  break if n == 0 && r == 0
+
+  sheets = read_sheets(n)
+
+  img = Array.new(N, 0)
+  sheets.each{|x1, y1, x2, y2|
+    ones = x2-x1
+    or_val = ((1 << ones)-1) << x1
+    y = y1
+    while y < y2
+      yval = img[y]
+      val = or_val | yval
+
+      loc_y = y+1
+      loc_y += 1 while loc_y < y2 && img[loc_y] == yval
+      img[y...loc_y] = Array.new(loc_y-y, val)
+
+      y = loc_y
+    end
+  }
+
+  area = 0
+  y = 0
+  while y < N-1
+    count = count_bit(img[y])
+    loc_y = y+1
+    while loc_y < N-1 && img[y] == img[loc_y]
+      area += count
+      loc_y += 1
+    end
+    area += count
+    y = loc_y
+  end
+  puts area
+
+  if r == 2
+    contour = 0
+    y = 0
+    while y < N-1
+      val_y = img[y]
+      val_yp = img[y+1]
+      val_ym = img[y-1]
+      contour += count_bit((val_y | val_ym) ^ val_ym)
+      contour += count_bit((val_y | val_yp) ^ val_yp)
+      # contour += count_bit(val_y & (~ val_ym))
+      # contour += count_bit(val_y & (~ val_yp))
+      # contour += count_bit(val_y ^ (val_y << 1))
+      y += 1
+    end
+
+    y = 0
+    while y < N-1
+      val_y = img[y]
+      row_count = count_bit(val_y ^ (val_y << 1))
+      loc_y = y+1
+      while loc_y < N-1 && img[loc_y] == val_y
+        contour += row_count
+        loc_y += 1
+      end
+      contour += row_count
+      y = loc_y
+    end
+    puts contour
+  end
+}
+

@@ -1,0 +1,37 @@
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <string>
+#include <vector>
+using namespace std;
+
+
+int main()
+{
+    int n;
+    cin >> n;
+    istream_iterator<int> isi(cin), eof;
+    vector<int> vec(isi, eof);
+
+    copy(vec.cbegin(), --vec.cend(), ostream_iterator<int>(cout, " "));
+    cout << vec.back() << endl;
+    for(int i = 1, key, j; i < n; i++)
+    {
+        key = vec[i];
+        j = i-1;
+        while(j >= 0 && vec[j] > key)
+        {
+            vec[j+1] = vec[j];
+            j--;
+        }
+        vec[j+1] = key;
+
+        copy(vec.cbegin(), --vec.cend(), ostream_iterator<int>(cout, " "));
+        cout << vec.back() << endl;
+    }
+    
+    return 0;
+}

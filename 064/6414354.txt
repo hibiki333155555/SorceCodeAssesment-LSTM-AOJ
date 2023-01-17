@@ -1,0 +1,14 @@
+A=[]
+while True:
+    try:
+        a=map(str,raw_input().split())
+        A.append(a)
+    except EOFError:
+        break
+B=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+for i in range(len(B)):
+    C=[]
+    for j in range(len(A)):
+        for k in range(len(A[j])):
+            C.append(A[j][k].lower().count(B[i]))
+    print (str(B[i])+" : "+str(sum(C)))

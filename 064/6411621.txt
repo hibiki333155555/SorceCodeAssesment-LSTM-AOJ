@@ -1,0 +1,31 @@
+#include<stdio.h>
+int main(){
+
+
+int w,h,x,y,r;
+scanf("%d %d %d %d %d",&w,&h,&x,&y,&r);
+if(r<w && r<h){
+if((w-x)>0 && (h-y)>0){
+
+
+    printf("Yes\n");}
+   // else if((w-x)>0 && (h-y)>=0){
+
+    //printf("Yes\n");
+   // }
+
+else if((w-x)>0 && (h-y)==0){
+
+    printf("No\n");
+}
+else if ((w-x) ==0 && (h-y) >0){
+
+    printf("No\n");
+}
+else  {
+
+    printf("No\n");
+}}
+return 0;
+}
+

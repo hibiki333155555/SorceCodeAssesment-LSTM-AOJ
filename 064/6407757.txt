@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main(){
+    int a,i;
+    scanf("%d",&a);
+    
+    int hai[a];
+    for(i=0;i<a;i++){
+        scanf("%d ",&hai[i]);
+    }
+    for(i=a;i>0;i--){
+        printf("%d ",hai[i-1]);
+    }
+    prinf("\n");
+    
+    return 0;
+}
+

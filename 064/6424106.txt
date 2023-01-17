@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define rep(i, s, t) for (int i = (int)(s); i < (int)(t); ++i)
+#define revrep(i, t, s) for (int i = (int)(t)-1; i >= (int)(s); --i)
+#define all(x) begin(x), end(x)
+template <typename T> bool chmax(T& a, const T& b) { return a < b ? (a = b, 1) : 0; }
+template <typename T> bool chmin(T& a, const T& b) { return a > b ? (a = b, 1) : 0; }
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout << fixed << setprecision(15);
+
+    int M, N;
+    cin >> M >> N;
+    vector<string> S(M);
+    for (auto& s : S) cin >> s;
+    int ans = 1e9;
+    rep(k,1,M) {
+        vector<int> cnto(2), cntx(2);
+        rep(i,0,k) rep(j,0,N) {
+            if (S[i][j] == 'o') ++cnto[0];
+            else ++cntx[0];
+        }
+        rep(i,k,M) rep(j,0,N) {
+            if (S[i][j] == 'o') ++cnto[1];
+            else ++cntx[1];
+        }
+        chmin(ans, cnto[0]+cntx[1]);
+        chmin(ans, cnto[1]+cntx[0]);
+    }
+    rep(k,1,N) {
+        vector<int> cnto(2), cntx(2);
+        rep(i,0,M) rep(j,0,k) {
+            if (S[i][j] == 'o') ++cnto[0];
+            else ++cntx[0];
+        }
+        rep(i,0,M) rep(j,k,N) {
+            if (S[i][j] == 'o') ++cnto[1];
+            else ++cntx[1];
+        }
+        chmin(ans, cnto[0]+cntx[1]);
+        chmin(ans, cnto[1]+cntx[0]);
+    }
+    cout << ans << endl;
+}

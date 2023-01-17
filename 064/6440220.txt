@@ -1,0 +1,17 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int x1 = scan.nextInt();
+        int y1 = scan.nextInt();
+        int x2 = scan.nextInt();
+        int y2 = scan.nextInt();
+
+        int dis1 = Math.abs(x2 - x1);
+        int dis2 = Math.abs(y2 - y1);
+
+        double dis = Math.sqrt(dis1 * dis1 + dis2 * dis2);
+        System.out.println(dis);
+    }
+}

@@ -1,0 +1,6 @@
+w,h,x,y,r = map(int, input().split())
+
+if (x and y == r) and (w and h <= 2*r):
+    print("Yes")
+else:
+    print("No")

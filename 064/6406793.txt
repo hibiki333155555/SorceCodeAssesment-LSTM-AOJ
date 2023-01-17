@@ -1,0 +1,11 @@
+ #include<stdio.h>
+#include<math.h>
+
+main() {
+	double PI = acos(-1);
+	double r, area,circu;
+	scanf("%lf",&r);
+	area = (PI*(r*r));
+	circu =(PI*(2*r));
+	printf("%.6lf %.6lf\n",area, circu);
+}

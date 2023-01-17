@@ -1,0 +1,16 @@
+while True:
+    H, W = map(int, input().split())
+    k=1
+    if H==W==0:
+        break
+    for i in range(H):
+        for j in range(W):
+            if (i+j)%2!=0:
+                print('.',end='')
+                k+=1
+            else:
+                print('#',end='')
+                k+=1
+        print('')
+    print()
+

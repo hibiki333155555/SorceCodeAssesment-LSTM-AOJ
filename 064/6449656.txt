@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
+int main() {
+    int N;
+    cin >> N;
+    vector<string> report(N);
+    for (int i = 0; i < N; i++) cin >> report.at(i);
+
+    // length of a string
+    int len = report.at(0).size();
+
+    // 0: legal 1:illegal
+    vector<int> check(N, 0);
+
+    for (int i = 0; i < N; i++) {
+        for (int j = i; j < N; j++) {
+            int cnt = 0;
+            for (int k = 0; k < len; k++) {
+                if (report[i][k] != report[j][k]) {
+                    cnt++;
+                }
+            }
+            if (cnt == 1) {
+                check.at(i) = 1;
+                check.at(j) = 1;
+            }
+        }
+    }
+    int ans = accumulate(check.begin(), check.end(), 0);
+    cout << ans << endl;
+    return 0;
+}

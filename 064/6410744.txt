@@ -1,0 +1,6 @@
+a,b,c = map(float,input().split())
+c = math.radians(c)
+h = b * math.sin(c)
+S = a*b / 2
+L = a + b + math.sqrt(a**2 + b**2 - 2*a*b*math.cos(c))
+print(S,L,h,sep='\n')

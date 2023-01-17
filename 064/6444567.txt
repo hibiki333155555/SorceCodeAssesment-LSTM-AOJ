@@ -1,0 +1,44 @@
+import java.util.LinkedHashMap;
+import java.util.Scanner;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class Main {
+    static String str;
+    static int[] dx={1,4,-1,-4};
+    static LinkedHashMap<String,Integer> map;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        map=new LinkedHashMap<>();
+        map.put("01234567",0);
+        while(sc.hasNext()){
+            str=sc.nextLine().replaceAll(" ","");
+            bfs();
+            System.out.println(map.get(str));
+        }
+    }
+
+    private static void bfs() {
+        LinkedBlockingQueue<String> que=new LinkedBlockingQueue<>();
+        que.add("01234567");
+        while(!que.isEmpty()){
+            String p=que.poll();
+            int pos=p.indexOf('0');
+            for(int i=0;i<4;i++){
+                int tpos=pos+dx[i];
+                if(tpos<0||tpos>=8||(tpos==4&&i==0)||(tpos==3&&i==2))continue;
+                String str1=p;
+                if(i<=1){
+                    str1=str1.replace(p.charAt(tpos),p.charAt(pos));
+                    str1=str1.replaceFirst(String.valueOf(p.charAt(pos)),String.valueOf(p.charAt(tpos)));
+                }else{
+                    str1=str1.replace(p.charAt(pos),p.charAt(tpos));
+                    str1=str1.replaceFirst(String.valueOf(p.charAt(tpos)),String.valueOf(p.charAt(pos)));
+                }
+                if(!map.containsKey(str1)){
+                    map.put(str1,map.get(p)+1);
+                    que.add(str1);
+                }
+            }
+        }
+    }
+}

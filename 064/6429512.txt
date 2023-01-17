@@ -1,0 +1,19 @@
+N = int(input())
+
+# 辞書
+D = dict()
+
+for i in range(N):
+    key, str = list(map(str, input().strip))
+
+    if key == 'insert':
+        D[str] = 1
+    else:
+        if str in D:
+            print('yes')
+        else:
+            print('no')
+
+
+
+

@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+
+int a,b;
+cin>> a >> b;
+int d = a/b;
+int r = a%b;
+double c = b;
+double f = a/c;
+cout<< d << " " << r << " " << fixed<<setprecision(5)<< f <<endl;
+}
+

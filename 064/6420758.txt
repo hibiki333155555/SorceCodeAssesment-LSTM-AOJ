@@ -1,0 +1,45 @@
+#include<iostream>
+#include<cstdio>
+#include<stack>
+#include<string>
+#include<sstream>
+int toint(std::string str){
+    std::istringstream iss(str);
+    int res;
+    iss>>res;
+    return res;
+}
+
+void reversePolishNotation(){
+    std::stack<int>oprands;
+    int opd;
+    char opr;
+    std::string str;
+    while(std::cin>>str){
+        if(isdigit(str[0])){
+            oprands.push(toint(str));
+        }
+        else {
+            int op2=oprands.top();
+            oprands.pop();
+            int op1=oprands.top();
+            oprands.pop();
+            if(str=="+"){
+                opd=op1+op2;
+            }
+            else if(str=="-"){
+                opd=op1-op2;
+            }
+            else if(str=="*"){
+                opd=op1*op2;
+            }
+            oprands.push(opd);
+        }
+    }
+    std::cout<<oprands.top()<<std::endl;
+}
+
+
+int main(){
+    reversePolishNotation();
+}

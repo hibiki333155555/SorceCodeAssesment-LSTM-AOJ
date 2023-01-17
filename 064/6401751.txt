@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<iostream>
+#define ll long long
+const int  inf=0x3f3f3f3f;
+using namespace std;
+const int N=100010;
+int f[N], mark[N];
+pair<int,int> Q[N];
+int fa(int k, int id)
+{
+	return mark[k] < id ? k : f[k] = fa(f[k], id);
+}
+int solve()
+{
+	int n, q;
+	while(~scanf("%d %d", &n, &q),n + q)
+	{
+        for(int i = 2; i <= n; i++)
+		{
+			scanf("%d", &f[i]);
+			mark[i] = inf;
+		}
+		int cnt = 0,x;
+		char c[10];
+		for(int i = 1; i <= q; i++)
+		{
+			scanf("%s %d", c, &x);
+			if(c[0]== 'Q')    Q[cnt++] = make_pair(i, x);
+			else    mark[x] = min(mark[x], i);
+		}
+		ll ans = 0;
+		for(int i = cnt - 1; i >= 0; i--)   {ans += fa(Q[i].second, Q[i].first);
+        }
+		printf("%lld\n", ans);
+	}
+ 	return 0;
+}

@@ -1,0 +1,76 @@
+class Deque {
+    constructor() {
+        this.v = new Array(100)
+        this.s = 50
+        this.e = 50
+    }
+
+    get(i) {
+        return this.v[this.s + i]
+    }
+
+    push(x) {
+        if (this.e >= this.v.length) {
+            this.v = this.v.concat(new Array(this.v.length))
+        }
+        this.v[this.e++] = x
+    }
+
+    unshift(x) {
+        if (this.s <= 0) {
+            const n = this.v.length
+            this.v = new Array(n).concat(this.v)
+            this.s += n
+            this.e += n
+        }
+        this.v[--this.s] = x
+    }
+
+    pop() {
+        this.e--
+    }
+
+    shift() {
+        this.s++
+    }
+}
+
+function* main() {
+    const v = new Deque()
+    const q = Number(yield 0)
+    for (let i = 0; i < q; i++) {
+        const ps = (yield 0).split(' ')
+        const qq = Number(ps[0])
+        if (qq === 0) {
+            const d = Number(ps[1])
+            const x = Number(ps[2])
+            if (d === 0) {
+                v.unshift(x)
+            } else {
+                v.push(x)
+            }
+        } else if (qq === 1) {
+            const n = v.get(Number(ps[1]))
+            process.stdout.write(String(n) + '\n')
+        } else if (qq === 2) {
+            const d = Number(ps[1])
+            if (d === 0) {
+                v.shift()
+            } else {
+                v.pop()
+            }
+        }
+    }
+}
+
+const m = main()
+m.next()
+
+const reader = require('readline').createInterface({
+    input: process.stdin
+})
+
+reader.on('line', (line) => {
+    m.next(line)
+})
+

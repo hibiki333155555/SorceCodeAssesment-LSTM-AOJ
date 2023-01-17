@@ -1,0 +1,11 @@
+#include<stdio.h>
+#include<math.h>
+int main(){
+    double r,a,c;
+scanf("%lf",&r);
+a=3.141592653589*r*r;
+c=2*3.141592653589*r;
+printf("%.10lf %.10lf",a,c);
+    
+    return 0;
+}

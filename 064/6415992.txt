@@ -1,0 +1,15 @@
+s = []
+for c in input().strip().split():
+  if c.isdigit():
+    s.append(int(c))
+  else:
+    v1,v2 = s[-2],s[-1]
+    del s[-2:]
+    if c == '+':
+      v = v1 + v2
+    elif c == '-':
+      v = v1 - v2
+    elif c == '*':
+      v = v1 * v2
+    s.append(v)
+print(s.pop())

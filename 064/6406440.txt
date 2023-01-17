@@ -1,0 +1,12 @@
+#include<iostream>
+using namespace std;
+main()
+{
+  int S;
+  cin >> S;
+  cout << S / 3600 << ":";
+  S %= 3600;
+  cout << S / 60 << ":" << S % 60 << '\n';
+
+}
+

@@ -1,0 +1,14 @@
+strList = list(input())
+n = int(input())
+
+for i in range(n):
+    cmd = input().split()
+    s = int(cmd[1])
+    e = int(cmd[2]) + 1 # from から to まで置き換えなので to を含ませるために+1
+    if cmd[0] == "replace":
+        strList[s:e] = cmd[3]
+    elif cmd[0] == "reverse":
+        strList[s:e] = reversed(strList[s:e])
+    else:
+        print(f"{''.join(strList[s:e])}")
+        

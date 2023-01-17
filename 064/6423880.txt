@@ -1,0 +1,9 @@
+# 08-B
+while True:
+    inp = input()
+    if int(inp) == 0:
+        break
+    else:
+        summary = sum(map(int, inp))
+        print(summary)
+

@@ -1,0 +1,24 @@
+import math
+
+N = int(input())
+
+def is_prime_number(x):
+    if x == 2:
+        return True
+    if x % 2 == 0:
+        return False
+    i = 3
+    j = int(math.sqrt(x))
+    while i <= j:
+        if x % i == 0:
+            return False
+        i += 2
+    return True
+
+i = 0
+for _ in range(N):
+    v = int(input())
+    if is_prime_number(v):
+        i += 1
+
+print(i)

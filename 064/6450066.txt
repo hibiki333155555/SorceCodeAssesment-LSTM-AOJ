@@ -1,0 +1,183 @@
+#include <algorithm>
+#include <cassert>
+#include <climits>
+#include <cmath>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <random>
+#include <complex>
+#include <bitset>
+#include <iomanip>
+#include <memory>
+#include <functional>
+
+#define rep(i, n, s) for (int i = (s); i < int(n); i++)
+#define per(i, n, s) for (int i = (n) - 1; i >= int(s); i--)
+#define MM << " " <<
+#define all(x) begin(x), end(x)
+#define rall(x) rbegin(x), rend(x)
+
+template <class T>
+using MinHeap = std::priority_queue<T, std::vector<T>, std::greater<T>>;
+template <class T>
+using MaxHeap = std::priority_queue<T>;
+
+using ll = long long;
+using Pii = std::pair<int, int>;
+using Pll = std::pair<ll, ll>;
+using Pdd = std::pair<double, double>;
+
+template <class T>
+bool chmin(T &a, const T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+bool chmax(T &a, const T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+template <class T>
+void vdeb(const std::vector<T> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) {
+        if (i == n - 1)
+            std::cout << da[i];
+        else
+            std::cout << da[i] << " ";
+    }
+    std::cout << std::endl;
+}
+template<class T>
+void vdeb(const std::vector<std::vector<T>> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) {
+        // std::cout << i << " : ";
+        vdeb(da[i]);
+    }
+    std::cout << std::endl;
+}
+
+template <>
+void vdeb(const std::vector<std::string> &da) {
+    auto n = da.size();
+    for (size_t i = 0; i < n; i++) { std::cout << da[i] << std::endl; }
+}
+using namespace std;
+
+/*
+2 3 5 7 11 13 17 19
+4 2 1 1 1  1  1  1
+5 3 2 2 2 2 2 2
+64 * 15 = 920
+*/
+
+int pr[8] = {2, 3, 5, 7, 11, 13, 17, 19};
+int mx[8] = {4, 2, 1, 1,  1,  1,  1,  1};
+
+// int main() {
+//     int n, m; cin >> n >> m;
+//     vector<vector<Pii>> da(n, vector<Pii>(0));
+//     rep(i,m,0) {
+//         int a, b, c; cin >> a >> b >> c;
+//         --a; --b;
+//         da[a].emplace_back(b, c);
+//         da[b].emplace_back(a, c);
+//     }
+//     auto solve = [&](vector<bool> &&ok) -> bool {
+//         vector<bool> used(n);
+//         queue<int> q;
+//         q.push(0);
+//         while(!q.empty()) {
+//             auto now = q.front();
+//             q.pop();
+//             for(auto &i : da[now]) {
+//                 if(ok[i.second] && !used[i.first]) {
+//                     used[i.first] = true;
+//                     q.push(i.first);
+//                 }
+//             }
+//         }
+//         return used.back();
+//     };
+//     ll ma = 0, mi = 1e18;
+//     auto search = [&](auto &&f, vector<int> &now, int cnt) -> void {
+//         if(cnt == 8) {
+//             vector<bool> ok(21);
+//             rep(i,21,1) {
+//                 int s = i;
+//                 rep(j,8,0) {
+//                     rep(k,now[j],0) {
+//                         if(s % pr[j] == 0) s/= pr[j];
+//                     }
+//                 }
+//                 ok[i] = (s == 1);
+//             } 
+//             if(solve(move(ok))) {
+//                 ll val = 1;
+//                 rep(i,8,0) rep(k,now[i],0) val *= pr[i];
+//                 chmax(ma, val);
+//                 chmin(mi, val);
+//             }
+//         } else {
+//             rep(i,mx[cnt]+1,0) {
+//                 now[cnt] = i;
+//                 f(f, now, cnt+1);
+//             }
+//         }
+//     };
+//     vector<int> now(8);
+//     search(search, now, 0);
+//     if(ma == 0) cout << "IMPOSSIBLE" << endl;
+//     else cout << mi MM ma << endl;
+// }
+
+int main() {
+    int n, m; cin >> n >> m;
+    vector<vector<Pii>> da(n, vector<Pii>(0));
+    rep(i,m,0) {
+        int a, b, c; cin >> a >> b >> c;
+        --a; --b;
+        da[a].emplace_back(b, c);
+        // da[b].emplace_back(a, c);
+    }
+    vector<set<int>> dp(n);
+    queue<Pll> q;
+    q.emplace(0, 1);
+    while(!q.empty()) {
+        auto now = q.front(); q.pop();
+        for(auto &i : da[now.first]) {
+            auto nxt = lcm(now.second, i.second);
+            if(!dp[i.first].count(nxt)) {
+                dp[i.first].insert(nxt);
+                q.emplace(i.first, nxt);
+            }
+        }
+    }
+    // for(auto &i : dp) {
+    //     for(auto &j : i) cout << j << " ";
+    //     cout << endl;
+    // }
+    if(dp.back().empty()) {
+        cout << "IMPOSSIBLE" << endl;
+    } else {
+        cout << *begin(dp.back()) MM *rbegin(dp.back()) << endl;
+    }
+}

@@ -1,0 +1,22 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    
+    int x = sc.nextInt();
+    int y = sc.nextInt();
+    
+    int z = x % y;
+    int v = z;
+    
+    while (v > 0){
+      if (y % v == 0 && z % v == 0){
+        break;
+      }
+      v--;
+    }
+    System.out.print(v);
+  }
+}

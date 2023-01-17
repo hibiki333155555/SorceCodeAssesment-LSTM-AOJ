@@ -1,0 +1,18 @@
+while True:
+    try:
+        L = list(input())
+    except:
+        break
+    n = len(L)
+    ANS = ''
+    i = 0
+    while i < n:
+        if L[i] == '@':
+            m = int(L[i + 1])
+            ANS += L[i + 2] * m
+            i += 3
+        else:
+            ANS += L[i]
+            i += 1
+    print(ANS)
+

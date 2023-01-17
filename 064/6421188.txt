@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+import sys
+import math
+from functools import lru_cache
+from heapq import heappush, heappop, heappushpop
+from itertools import permutations, accumulate
+from operator import itemgetter, le
+from collections import deque, Counter, defaultdict
+from bisect import bisect_right as br
+from bisect import bisect_left as bl
+inf = float('inf')
+input=lambda: sys.stdin.readline().rstrip("\r\n")
+def I(): return int(sys.stdin.readline())
+def LI(): return list(map(int, sys.stdin.readline().split()))
+
+h, w = LI()
+c = [input() for _ in range(h)]
+dp = [[inf]*w for _ in range(h)]
+for i in range(h):
+    for j in range(w):
+        if c[i][j] == 'S': sy, sx = i, j
+        if c[i][j] == 'G': gy, gx = i, j
+
+dist = {'U': (-1, 0), 'D': (1, 0), 'L': (0, -1), 'R': (0, 1)}
+dp[sy][sx] = 0
+que = deque([(sy, sx)])
+while que:
+    y, x = que.popleft()
+    if y == gy and x == gx: 
+        print(dp[gy][gx])
+        break
+    if c[y][x] in dist.keys():
+        dy, dx = dist[c[y][x]]
+        ny, nx = y+dy, x+dx
+        if 0 <= ny < h and 0 <= nx < w:
+            if c[ny][nx] == '#': continue
+            if dp[ny][nx] > dp[y][x]:
+                dp[ny][nx] = dp[y][x]
+                que.appendleft((ny, nx))
+    else:
+        for dy, dx in zip([-1, 1, 0, 0], [0, 0, -1, 1]):
+            ny, nx = y+dy, x+dx
+            if 0 <= ny < h and 0 <= nx < w:
+                if c[ny][nx] == '#': continue
+                if dp[ny][nx] > dp[y][x]+1:
+                    dp[ny][nx] = dp[y][x]+1
+                    que.append((ny, nx))
+else:
+    print(-1)
+

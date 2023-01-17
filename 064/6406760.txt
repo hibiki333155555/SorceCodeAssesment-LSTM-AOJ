@@ -1,0 +1,27 @@
+class Transformation:
+    def __init__(self,sequence):
+        self.sequence=sequence
+    def Print(self,a,b):
+        return print(self.sequence[a:b+1])
+    def Reverse(self,a,b):
+        if (a==0)&(b==len(self.sequence)):
+            self.sequence=self.sequence[::-1]
+        elif a==0:
+            self.sequence=self.sequence[b::-1]+self.sequence[b+1:]
+        elif b==len(self.sequence):
+            self.sequence=self.sequence[:a]+self.sequence[:a:-1]
+        else:
+            self.sequence=self.sequence[:a]+self.sequence[b:a-1:-1]+self.sequence[b+1:]
+    def Replace(self,a,b,p):
+        self.sequence=self.sequence[:a]+p+self.sequence[b+1:]
+
+TF=Transformation(input())
+n=int(input())
+for i in range(n):
+    command=list(input().split())
+    if command[0]=='print':
+        TF.Print(int(command[1]),int(command[2]))
+    elif command[0]=='reverse':
+        TF.Reverse(int(command[1]),int(command[2]))
+    elif command[0]=='replace':
+        TF.Replace(int(command[1]),int(command[2]),command[3])

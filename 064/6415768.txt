@@ -1,0 +1,32 @@
+
+v,e=map(int,input().split())
+inf=float('inf')
+g=[[inf] * v for _ in range(v)]
+for _ in range(e):
+    s,t,d=map(int,input().split())
+    g[s][t]=d
+
+for k in range(v):
+    for i in range(v):
+        for j in range(v):
+            g[i][j]=min(g[i][j],g[i][k]+g[k][j])
+
+for i in range(v):
+    if g[i][i]<0:
+        print('NEGATIVE CYCLE')
+        exit()
+
+for i in range(v):
+    g[i][i]=0
+
+
+for row in g:
+    ans = []
+    for v in row:
+        if v==inf:
+            
+            ans.append('INF')
+        else:
+            ans.append(v)
+    print(*ans)
+

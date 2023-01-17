@@ -1,0 +1,18 @@
+#include<iostream>
+#include<cmath>
+#include<stdio.h>
+using namespace std;
+int main() {
+    double PI = acos(-1);
+    double a, b;
+    int C;
+    cin >> a >> b;
+    cin >> C;
+    double rad = C * PI / 180;
+    printf("%.8lf", a * b * sin(rad) / 2);
+    cout << " ";
+    printf("%.8lf", a + b + sqrt(a*a + b*b -2 * a * b * cos(rad)));
+    cout << " ";
+    printf("%.8lf", b * sin(rad));
+    cout << endl;
+}

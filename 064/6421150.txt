@@ -1,0 +1,33 @@
+import sys
+from string import digits, ascii_lowercase
+from functools import lru_cache
+
+sys.setrecursionlimit(10 ** 6)
+
+S = input()
+
+
+@lru_cache(None)
+def f(S, n=0):
+    if S[0] in digits:
+        cnt = 1
+        for i in range(2, len(S)):
+            if S[i] == '(':
+                cnt += 1
+            if S[i] == ')':
+                cnt -= 1
+            if cnt == 0:
+                break
+        if i == len(S) - 1:
+            return f(S[2:-1], (n + int(S[0])) % 26)
+        return f(S[2:i], (n + int(S[0])) % 26) + f(S[i + 1:], n)
+    else:
+        ret = ''
+        for s in S:
+            idx = (ord(s) - ord('a') + n) % 26
+            ret += ascii_lowercase[idx]
+        return ret
+
+
+print(f(S))
+

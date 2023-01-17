@@ -1,0 +1,44 @@
+import java.util.*;
+
+class Solve{
+    private Scanner sc = new Scanner(System.in);
+    private int n;
+    private int m;
+    private int[][] A;
+    private int[] b;
+    private int calcC(int i){
+        int c = 0;
+        for(int j = 0 ; j < m ; j++){
+            c += A[i][j] * b[j];
+        }
+        return c;
+    }
+    public void Do(){
+        n = sc.nextInt();
+        m = sc.nextInt();
+        sc.nextLine();
+        A = new int[n][m];
+        b = new int[m];
+        // A
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ; j < m ; j++){
+                A[i][j] = sc.nextInt();
+            }
+            sc.nextLine();
+        }
+        // b
+        for(int i = 0 ; i < m ; i++){
+            b[i] = sc.nextInt();
+            sc.nextLine();
+        }
+        // output (c)
+        for(int i = 0 ; i < n ; i++){
+            System.out.println( calcC(i) );
+        }
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

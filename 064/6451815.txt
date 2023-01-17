@@ -1,0 +1,23 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	var scanner = bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanWords)
+	scanner.Scan()
+	t := scanner.Text()
+	p := scanner.Text()
+	sizeP := len(p)
+
+	for i := 0; i < len(t)-sizeP+1; i++ {
+		if p == t[i:(i+sizeP)] {
+			fmt.Println(i)
+		}
+	}
+}
+

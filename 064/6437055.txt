@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+
+    vector<long long> v(n+1, 0);
+    for (int i = 1; i <= n; i++) {
+        int a;
+        cin >> a;
+        v[i] = v[i-1] + a;
+    }
+
+    long long result = -20000;
+    for (int i = n; i >= k; i--) {
+        result = max(result, v[i] - v[i-k]);
+    }
+
+    cout << result << endl;
+
+    return 0;
+}

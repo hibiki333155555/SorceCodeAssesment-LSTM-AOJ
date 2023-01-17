@@ -1,0 +1,25 @@
+#include<cstdio>
+#include <cmath>
+using namespace std;
+
+int main() {
+    while(true) {
+        int n;
+        cin >> n;
+        if (n == 0) {
+            break;
+        }
+        int a[1000] = {};
+        double sum = 0;
+        for (int i=0;i<n;n++) {
+            scanf("%d", &a[i]);
+            sum += a[i];
+        }
+        double average = sum/(double)n;
+        double aru = 0;
+        for (int i=0;i<n;i++) {
+          aru += pow((a[i]-average), 2);
+        }
+        printf("%.7f\n", sqrt(aru/(double)n));
+    }
+}

@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(ll i = 0; i < (ll)(n); ++i)
+#define sz(x) (ll)x.size()
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+int main()
+{
+  ll n;
+  cin >> n;
+  vl a(n);
+  rep(i,n) cin >> a[i];
+  ll q;
+  cin >> q;
+  ll ans = 0;
+  auto f = [&](ll x, ll y){
+    if(a[x]>=y) return true;
+    else return false;
+  };
+  rep(i,q){
+    ll t;
+    cin >> t;
+    ll l = -1, r = sz(a);
+    while(abs(r-l)>1){
+      ll m = l + (r-l) / 2;
+      if(f(m,t)) r = m;
+      else l = m;
+    }
+    if(r >= sz(a)) continue;
+    if(a[r] == t) ans++;
+  }
+  cout << ans << '\n';
+}

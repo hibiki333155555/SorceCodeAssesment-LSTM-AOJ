@@ -1,0 +1,19 @@
+#include<iostream>
+#include<cctype>
+using namespace std;
+
+int main()
+{
+    char ch;
+
+    while(1){
+        cin>>ch;
+        if('a'<=ch && ch<='z')cout<<char(ch-32);
+        else if('A'<=ch && ch<='Z')cout<<char(ch+32);
+        else cout<<ch;
+
+        if(ch=='\n')break;
+    }
+
+    return 0;
+}

@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+int main(){
+    int n,c;
+    cin>>n>>c;
+    int ck[c],s=0;
+    for(int i=0;i<c;i++){
+        cin>>ck[i];
+        s+=ck[i];
+    }
+    int ans=0;
+    n++;
+    if(s<n){
+        cout<<"1\n";
+    }else{
+        for(int i=0;i<c;i++){
+            if(ck[i]%n!=0){
+                ans+=(ck[i]/n)+1;
+            }else{
+                ans++;
+            }
+        }
+        cout<<ans<<endl;
+    }
+    return 0;
+}

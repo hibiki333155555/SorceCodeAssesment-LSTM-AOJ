@@ -1,0 +1,18 @@
+import java.util.*;
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int a = sc.nextInt();
+    int num = 0;
+    HashSet<Integer> meow = new HashSet<>(); 
+    for(int c = 0; c<a; c++){
+      num = sc.nextInt();
+      meow.add(num);
+    }
+    int b = sc.nextInt();
+    for(int d = 0; d<b; d++){
+      num = sc.nextInt();
+      if(meow.contains(num)){System.out.println(num);}
+    }
+  }
+}

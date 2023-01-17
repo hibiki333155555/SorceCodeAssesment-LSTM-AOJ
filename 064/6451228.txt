@@ -1,0 +1,28 @@
+#include <iostream>
+#include <complex>
+
+using namespace std;
+
+int main()
+{
+	pair<complex<double>, double> c1, c2;
+	double x, y;
+	cin >> x >> y >> c1.second;
+	c1.first = {x, y};
+	cin >> x >> y >> c2.second;
+	c2.first = {x, y};
+	if (c1.second < c2.second) swap(c1, c2);
+	if (abs(c1.first - c2.first) > c1.second + c2.second) {
+		cout << 4 << endl;
+	} else if (abs(c1.first - c2.first) == c1.second + c2.second) {
+		cout << 3 << endl;
+	} else if (abs(c1.first - c2.first) > c1.second - c2.second) {
+		cout << 2 << endl;
+	} else if (abs(c1.first - c2.first) == c1.second - c2.second) {
+		cout << 1 << endl;
+	} else {
+		cout << 0 << endl;
+	}
+	return 0;
+}
+

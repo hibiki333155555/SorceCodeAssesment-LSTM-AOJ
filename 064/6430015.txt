@@ -1,0 +1,18 @@
+count = [[[0 for i in range(10)] for j in range(3)] for k in range(4)]
+N = int(input())
+
+for i in range(N):
+  b,f,r,v = map(int,input().split())
+  N[b-1][f-1][r-1] += v
+
+x = 0
+
+for i in range(4):
+  if x != 0:
+    print('#'*20)
+  x += 1
+
+  for a in range(3):
+    for b in range(10):
+      print(' %d' %N[i][a][b],sep='')
+    print()

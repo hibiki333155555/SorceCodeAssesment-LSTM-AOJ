@@ -1,0 +1,9 @@
+n=int(input())
+ns=input().split()
+for i in range(len(ns)):
+	ns[i]=int(ns[i])
+asum=sum(ns)
+amin=min(ns)
+amax=max(ns)
+print(amin,amax,asum)
+

@@ -1,0 +1,4 @@
+[n,a,...b]=require('fs').readFileSync(0,'utf8').split(/ |\n/g).map(x=>+x);
+x=y=z=a;
+b.map(k=>{k<x&&x=k});
+console.log(`${x} ${y} ${z}`)

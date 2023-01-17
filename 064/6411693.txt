@@ -1,0 +1,12 @@
+import heapq
+l=[]
+while True:
+    cmd,*key=input().split()
+    if cmd=="insert":
+        heapq.heappush(l,-int(*key))
+        continue
+    if cmd=="extract":
+        print(-heapq.heappop(l))
+        continue
+    break
+

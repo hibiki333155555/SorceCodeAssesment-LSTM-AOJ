@@ -1,0 +1,45 @@
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <numeric>
+#include <string>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+inline double square(double num)
+{
+    return num*num;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    int *arr1 = new int[n], *arr2 = new int[n];
+    
+    for(int i = 0;i<n;i++)
+        cin >> arr1[i];
+    for(int i = 0;i<n;i++)
+        cin >> arr2[i];
+
+    double eud = 0, manh=0, cheb=0, diff, p3 = 0;
+    for(int i=0;i<n;i++)
+    {
+        diff = abs(arr1[i]-arr2[i]);
+        manh += diff;
+        eud += diff*diff;
+        p3 += diff*diff*diff;
+        cheb = diff > cheb ? diff : cheb;
+    }
+
+    printf("%.8f\n", manh);
+    printf("%.8f\n", sqrt(eud));
+    printf("%.8f\n", pow(p3, 1.0/3));
+    printf("%.8f\n", cheb);
+
+    delete [] arr1;
+    delete [] arr2;
+    return 0;
+}

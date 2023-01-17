@@ -1,0 +1,11 @@
+#include<iostream> 
+
+using namespace std;
+
+int main()
+{
+	double a,r,t;
+	cin>>a>>r>>t;
+	cout<<r/a*t<<endl;
+	return 0; 
+	} 

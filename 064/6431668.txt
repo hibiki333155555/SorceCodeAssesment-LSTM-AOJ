@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+#include <vector>
+
+using namespace std;
+
+int main(){
+    int n,e;
+    cin>>n>>e;
+    vector<int> src;
+    while(n--){
+        cin>>e;
+        src.push_back(e);
+    }
+    cin>>n;
+    int count = 0;
+    while(n--){
+        cin>>e;
+        //bin search
+        int begin = 0;
+        int end = src.size();
+        while(begin != end){
+            int look = (begin + end)>>1;
+            if(e == src.at(look)){
+                count++;
+                break;
+            }
+            if(e < src.at(look){
+                end = look;
+            }
+            if(e > src.at(look)){
+                begin = look + 1;
+            }
+        }
+    }
+    cout << count << endl;
+}

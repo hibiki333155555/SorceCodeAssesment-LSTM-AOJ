@@ -1,0 +1,11 @@
+#include<stdio.h>
+
+int main()
+{
+int a,b,c;
+scanf("%d%d%d", &a,&b,&c);
+for(int x=a;x<=b && c%x==0;x++){
+printf("%d\n", x);}
+    
+    return 0;
+}

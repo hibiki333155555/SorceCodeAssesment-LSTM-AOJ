@@ -1,0 +1,4 @@
+a, b, c =map(int,input().split())
+for i in range(a,b):
+    i % c == o:
+        print(i)

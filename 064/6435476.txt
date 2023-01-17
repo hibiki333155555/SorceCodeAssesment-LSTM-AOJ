@@ -1,0 +1,11 @@
+#include<stdio.h>
+#include<iostream>
+using namespace std;
+
+int main() {
+    double r, PI = 3.141592653589;
+    cin >> r;
+    printf("%lf %lf\n", PI*r*r, 2*PI*r);
+    return 0;
+}
+

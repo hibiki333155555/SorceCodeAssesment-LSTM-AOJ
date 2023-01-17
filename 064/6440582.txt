@@ -1,0 +1,31 @@
+N = int(input())
+S = input()
+
+numa = 0
+numb = 0
+numc = 0
+numd = 0
+nume = 0
+
+numA = S.count('A')
+numB = S.count('B')
+numC = S.count('C')
+numD = S.count('D')
+numE = S.count('E')
+
+if numA > 0:
+    numa = 1
+if numB > 0:
+    numb = 1
+if numC > 0:
+        numc = 1
+if numD > 0:
+    numd = 1
+if numE > 0:
+    nume = 1
+
+if (numa + numb + numc + numd + nume) >= 3:
+    print('Yes')
+else:
+    print('No')
+

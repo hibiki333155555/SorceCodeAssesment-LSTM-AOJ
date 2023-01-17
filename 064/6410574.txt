@@ -1,0 +1,10 @@
+w = input()
+cnt = 0
+while True:
+    try:
+        str = input()
+    except:
+        break
+if w in str:
+    cnt += 1
+print(cnt)

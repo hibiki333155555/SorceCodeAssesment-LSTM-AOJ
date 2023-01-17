@@ -1,0 +1,7 @@
+#include <stdio.h>
+
+int main(){
+    int X = 2
+    printf(X^3);
+    return 0;
+}

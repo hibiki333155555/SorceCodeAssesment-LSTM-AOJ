@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+char change_UL(char x){
+  if('a' <= x && x <= 'z'){
+    x += 'A'-'a';
+  }else if('A' <= x && x <= 'Z'){
+    x -= 'A'-'a';
+  }
+  return x;
+}
+
+string change_string(string s){
+  for(int i=0; i<s.size(); i++){
+    s.at(i) = change_UL(s.at(i));
+  }
+  return s;
+}
+                       
+
+int main(){
+  vector<string> s_list;
+  string s;
+  while(cin >> s){
+    s_list.push_back(change_string(s));
+  }
+  
+  for(int i=0; i<s_list.size(); i++){
+    cout << s_list.at(i);
+    if(i<s_list.size()-1) cout << " ";
+    else cout << endl;
+  }
+  return 0;
+}

@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+
+  int n;
+  cin >> n;
+  int a, b, c = -1000000000;
+  cin >> a;
+  for (int i = 0; i < n - 1; i++) {
+    cin >> b;
+    c = max(c, b - a);
+    a = min(a, b);
+  }
+  cout << c << endl;
+}

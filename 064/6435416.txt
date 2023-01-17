@@ -1,0 +1,29 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+int main(){
+    int count;
+    string word,text;
+    cin>>word;
+    string check="END_OF_TEXT"; 
+
+    while(cin>>text){
+
+        if(text==check)
+            break;
+        else{
+            for(int i=0;i<text.length();i++){
+                if(text[i]>=65 && text[i]<=90)
+                    text[i]+=32;
+                // else
+                //     text[i]=text[i];
+            }
+            if(word==text)
+                count++;
+        }
+    }
+    std::cout<<count<<std::endl;
+
+    return 0;
+}

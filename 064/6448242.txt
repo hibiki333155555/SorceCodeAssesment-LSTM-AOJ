@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+public class  Main {
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        int W = scanner.nextInt();
+        int H = scanner.nextInt();
+        int x = scanner.nextInt();
+        int y = scanner.nextInt();
+        int r = scanner.nextInt();
+        boolean flag = true;
+
+        if (x-r < 0) flag = false;
+        if (x+r > W) flag = false;
+        if (y-r < 0) flag = false;
+        if (y+r > H) flag = false;
+
+        if (flag == true) System.out.println("Yes");
+        else System.out.println("No");
+    }
+}

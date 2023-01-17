@@ -1,0 +1,13 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var line = Console.ReadLine().Split(' ');
+        int ippiki = int.Parse(line[0]);
+        int nihiki = int.Parse(line[1]);
+        
+        Console.WriteLine(ippiki - nihiki);
+    }
+}

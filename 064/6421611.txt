@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+const ll mod=998244353;
+map<ll,ll> mp;
+ll modpow(ll x,ll n) {
+  if(mp[n*1000000000+x]){
+    return mp[n*1000000000+x];
+  }
+    ll ret=1;
+    x%=mod;
+    while(n>0){
+        if(n&1)ret*=x;
+        x*=x;
+        n>>=1;
+        ret%=mod;
+        x%=mod;
+    }
+  mp[n*1000000000+x]=ret;
+    return ret;
+}//繰り返し二乗法
+//(*>_<*)
+#define k_max 1000000
+vector<ll> inv_fac(k_max);
+void setC(ll mod){
+    ll fac=1;
+	for(ll i=2;i<k_max;i++){
+		fac*=i;
+		fac%=mod;
+	}
+	inv_fac[k_max-1]=modpow(fac,mod-2);
+	for (ll i=k_max-2;i>=0;i--){
+		inv_fac[i]=inv_fac[i+1]*(i+1)%mod;
+	}
+}//前計算
+map<ll,ll> cm;
+ll C(ll n,ll k){
+  if(cm[n*100000000+k]){
+    return cm[n*100000000+k];
+  }
+	k=min(k,n-k);
+	ll res=1;
+	for(ll i=1;i<=k;i++){
+		res*=n-k+i;
+		res%=mod;
+	}
+  cm[n*100000000+k]=res;
+	return res*inv_fac[k]%mod;
+}//kが小さいときの二項係数
+ll f(ll n,ll k,ll y){
+  if(n<k||k<=0) return 0;
+  return (C(n,k)*k%mod*modpow(n,mod-2)%mod*(modpow(2,n)-1+mod)%mod+C(n,k)*y%mod)%mod;
+}
+int main(){
+  setC(998244353);
+  string s;
+  ll k;
+  cin>>s>>k;
+  s='0'+s;
+  ll ans=0;
+  bool g=1;
+  ll count=0;
+  ll y=0;
+  for(int i=1;i<s.size();i++){
+    //if(s[i]=='1') count++;
+    if(s[i]!=s[i-1]){
+      if(g) ans+=f(s.size()-i,k-count,y);
+      else ans-=f(s.size()-i,k-count,y);
+      ans+=mod;
+      ans%=mod;
+      g=!g;
+    }
+    if(s[i]=='1'){
+      count++;
+      y+=modpow(2,s.size()-i-1);
+      y%=mod;
+    }
+    //cout<<ans<<endl;
+  }
+  cout<<ans<<endl;
+}

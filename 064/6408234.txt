@@ -1,0 +1,31 @@
+n = int(input())
+
+
+g = [tuple(map(int, input().split())) for _ in range(n)]
+start = [0] * n
+end = [0] * n
+visited = [0] * n
+
+
+def dfs(u, idx):
+    if visited[u-1] != 0:
+        return idx
+
+    idx += 1
+    start[u-1] = idx
+    visited[u-1] = 1
+
+    for v in range(g[u-1][1]):
+        idx = dfs(g[u-1][v+2], idx)
+
+    idx += 1
+    end[u-1] = idx
+
+    return idx
+
+
+dfs(1, 0)
+
+for i, s, e in zip(range(1, n+1), start, end):
+    print(i, s, e)
+

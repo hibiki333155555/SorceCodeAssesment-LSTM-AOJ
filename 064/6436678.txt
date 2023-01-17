@@ -1,0 +1,26 @@
+#include <iostream>
+
+using namespace std;
+
+int main(){
+
+	while(1){
+		int x,y;
+		cin >> x >> y;
+
+		if(x == 0 && y == 0) break;
+
+		int tmp;
+		if(x > y){
+			tmp = y;
+			y = x;
+			x = tmp;
+		}
+
+		cout << x << " " << y << endl;
+	}
+
+
+	return 0;
+}
+

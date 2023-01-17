@@ -1,0 +1,43 @@
+#include<stdio.h>
+#include<string.h>
+#include<math.h>
+int main()  {
+    int i, Dice[6], len, tmp;
+    char ord[100];
+    for (i=0;i<6;i++) {
+        scanf("%d", &Dice[i]);
+    }
+  scanf("%s", ord);
+  len = strlen(ord);
+  for (i=0;i<len;i++)  {
+      tmp = Dice[0];
+      switch(ord[i]) {
+         case 'N':
+          Dice[0] = Dice[1];
+          Dice[1] = Dice[5];
+          Dice[5] = Dice[4];
+          Dice[4] = tmp;
+          break;
+         case 'E':
+          Dice[0] = Dice[3];
+          Dice[3] = Dice[5];
+          Dice[5] = Dice[2];
+          Dice[2] = tmp;
+          break;
+         case 'S':
+          Dice[0] = Dice[4];
+          Dice[4] = Dice[5];
+          Dice[5] = Dice[1];
+          Dice[1] - tmp;
+          break;
+         case 'W': 
+          Dice[0] = Dice[2];
+          Dice[2] = Dice[5];
+          Dice[5] = Dice[3];
+          Dice[3] = tmp;
+          break;
+                 }
+              }
+            printf("%d\n", Dice[0]);
+            return 0;
+}

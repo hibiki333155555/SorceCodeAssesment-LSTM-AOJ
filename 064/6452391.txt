@@ -1,0 +1,45 @@
+nums = list(map(int, input().split()))
+str = input()
+
+list = [0]*6  # サイコロの目を入れる仮のリストを作成（0で初期化）
+
+for ch in str:
+    if ch == "S":
+        list = [0]*6
+        list[0] = nums[4]
+        list[1] = nums[0]
+        list[2] = nums[2]
+        list[3] = nums[3]
+        list[4] = nums[5]
+        list[5] = nums[1]
+        nums = list
+    if ch == "N":
+        list = [0]*6
+        list[0] = nums[1]
+        list[1] = nums[5]
+        list[2] = nums[2]
+        list[3] = nums[3]
+        list[4] = nums[0]
+        list[5] = nums[4]
+        nums = list
+    if ch == "W":
+        list = [0]*6
+        list[0] = nums[2]
+        list[1] = nums[1]
+        list[2] = nums[5]
+        list[3] = nums[0]
+        list[4] = nums[4]
+        list[5] = nums[3]
+        nums = list
+    if ch == "E":
+        list = [0]*6
+        list[0] = nums[3]
+        list[1] = nums[1]
+        list[2] = nums[0]
+        list[3] = nums[5]
+        list[4] = nums[4]
+        list[5] = nums[2]
+        nums = list
+
+print(nums)
+

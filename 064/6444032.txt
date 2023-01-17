@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define MAX 100005
+#define NIL -1
+struct Node {
+  int parent = NIL, left = NIL, right = NIL, sibling = NIL, depth = 0;
+  string type;
+}; // parent = 親、left = 左の子、right = 右の子
+struct Node T[MAX];
+vector<int> H(MAX);
+
+int setHeight(int u) {
+  int h1 = 0, h2 = 0;
+  if (T[u].right != NIL) {
+    h1 = setHeight(T[u].right) + 1;
+  }
+  if (T[u].left != NIL) {
+    h2 = setHeight(T[u].left) + 1;
+  }
+
+  return H[u] = max(h1, h2);
+}
+int setDepth(int u) {
+  // depth set
+  if (T[u].right != NIL)
+  {
+    T[T[u].right].depth = T[u].depth + 1;
+    setDepth(T[u].right);
+  }
+  if (T[u].left != NIL)
+  {
+    T[T[u].left].depth = T[u].depth + 1;
+    setDepth(T[u].left);
+  }
+}
+
+int main()
+{
+  int n;
+  cin >> n;
+
+  for (int i = 0; i < n; i++)
+  {
+    int id;
+    cin >> id;
+    cin >> T[id].left;
+    cin >> T[id].right;
+    if (T[id].right != NIL) {
+      T[T[id].right].parent = id;
+      T[T[id].right].sibling = T[id].left;
+    }
+    if (T[id].left != NIL) {
+      T[T[id].left].parent = id;
+      T[T[id].left].sibling = T[id].right;
+    }
+  }
+  int rootIndex;
+  for (int i = 0; i < n; i++) {
+    if (T[i].parent == NIL) {
+      rootIndex = i;
+      break;
+    }
+  }
+  setHeight(rootIndex);
+
+  for (int i = 0; i < n; i++)
+  {
+    // type
+    if (T[i].parent == NIL) {
+      T[i].type = "root";
+    } else if (T[i].left != NIL || T[i].right != NIL) {
+      T[i].type = "internal node";
+    } else {
+      T[i].type = "leaf";
+    }
+    // degree
+    int degree = 0;
+    degree += T[i].right == NIL ? 0 : 1;
+    degree += T[i].left == NIL ? 0 : 1;
+
+    cout << "node " << i << ": parent =" << T[i].parent << ", sibling = " << T[i].sibling << ", degree = " << degree << ", depth = " <<  T[i].depth << ", height = " <<  H[i] << ", " << T[i].type << endl;
+  }
+  return 0;
+}

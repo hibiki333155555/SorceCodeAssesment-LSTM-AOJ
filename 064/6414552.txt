@@ -1,0 +1,16 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        
+        var line = Console.ReadLine();
+        var arry = line.Split(' ');
+        int x1 = int.Parse(arry[0]);
+        int x2 = int.Parse(arry[1]);
+        int a = (x1 - x2);
+        Console.WriteLine(a);
+        
+    }
+}

@@ -1,0 +1,13 @@
+n = gets.to_i
+A = []
+n.times do
+    type, num = gets.chomp.split(' ').map(&:to_i)
+    case type
+    when 0
+        A.push(num) 
+    when 1
+        puts A[num]
+    when 2
+        A.pop
+    end
+end

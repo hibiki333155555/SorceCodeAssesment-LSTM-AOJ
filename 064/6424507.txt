@@ -1,0 +1,11 @@
+whilel True:
+    w = str(input())
+    t = str(input().split())
+    if t == "END_OF_TEXT":
+        break
+    cnt = 0
+    for i in t:
+        if w in t:
+            cnt += 1
+    print(cnt)
+

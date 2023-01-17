@@ -1,0 +1,11 @@
+from heapq import heappop, heappush
+
+heap = []
+while True:
+  op, *key = input().split()
+  if op == "end":
+    break
+  if op == "extract":
+    print(-heappop(heap))
+  else: #insert
+    heappush(heap, -int(*key))

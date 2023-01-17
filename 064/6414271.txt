@@ -1,0 +1,14 @@
+A=[]
+while True:
+    a=input()
+    if a<1:
+        break
+    b=str(a)
+    A.append(b)
+S=[]
+for i in range(len(A)):
+    C=[]
+    for j in range(len(A[i])):
+        c=int(A[i][j])
+        C.append(c)
+    print sum(C)

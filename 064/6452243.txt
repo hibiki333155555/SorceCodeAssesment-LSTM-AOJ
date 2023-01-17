@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+//#include<atcoder/all>
+
+using namespace std;
+//using namespace atcoder;
+using ll = long long;
+
+int main() {
+    int n, m; cin >> n >> m;
+    vector<ll> imos(m + 1), r(m, -1);
+    for (int i = 0; i < n; ++i) {
+        ll a, b, c; cin >> a >> b >> c; --b; --c;
+        imos[b] =-a;
+        imos[c + 1] = a;
+        r[b] = max(r[b], c);
+    }
+    for (int i = 0; i < m; ++i) {
+        imos[i + 1] += imos[i];
+    }
+
+    int q; cin >> q;
+    for (int i = 0; i < q; ++i) {
+        ll d, e; cin >> d >> e; --e;
+        imos[e] += d;
+    }
+
+    ll ans = 0, rM = -1, now = 0;
+    vector<ll> dec(m + 1);
+    for (int i = 0; i < m; ++i) {
+        rM = max(rM, r[i]);
+        now += dec[i];
+        if (imos[i] > now) {
+            if (rM < i) {
+                cout << -1 << endl;
+                return 0;
+            }
+            ans += imos[i] - now;
+            now += imos[i];
+            dec[rM + 1] += -(imos[i] - now);
+        }
+    }
+
+    cout << ans << endl;
+    return 0;
+}

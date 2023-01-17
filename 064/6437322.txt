@@ -1,0 +1,110 @@
+#pragma region template
+#pragma clang diagnostic ignored "-Wno-deprecated"
+#pragma clang diagnostic ignored "-Werror"
+// cpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
+#include <bits/stdc++.h>
+using namespace std;
+using std::cout; using std::cin;
+using std::endl; using std::string;
+using std::vector; using std::istringstream;
+using std::ios;
+using std::stringstream;
+using ll = long long; using ld = long double;
+using ull = unsigned long long; using str = string;
+using bl = bool; using db = double;
+using ch = char; using sh = short;
+typedef vector<ll> vl;
+typedef vector<ld> vd;
+typedef set<ll> sl;
+typedef unordered_set<ll> usl;
+typedef vector<vector<ll>> vl2;
+typedef vector<str> vs;
+typedef vector<ch> vc;
+typedef map<ll, str> mls;
+typedef map<str, str> mss;
+typedef map<ll, ll> mll;
+typedef map<str, ll> msl;
+typedef map<ch, ll> mcl;
+typedef stack<ll> stl;
+typedef queue<ll> ql;
+typedef deque<ll> dq;
+typedef priority_queue<ll> pq;
+#define tc \
+  ll t = get();  \
+  while (t--)
+#define tcin \
+  ll t;\
+  cin >> t;\
+  while(t--)
+#define setup ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+const str alphabet = "abcdefghijklmnopqrstuvwxyz";
+const str upAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const ll Mod = 998244353;
+const ll Mod2 = pow(10, 9) + 7;
+const ll Mod3 = pow(10, 9);
+const ld EPS = 1e-9;
+const ld PI = 2 * acos(0.0);
+const ll pow5Len = pow(10, 5) + 1;
+const ll pow11Len = pow(10, 10) + 1;
+ll gcd(ll a, ll b) {
+    while (b) b ^= a ^= b ^= a %= b;
+    return a;
+}
+ll lcm(ll a, ll b) { return (a / gcd(a, b)) * b; }
+ll search(ll x, ll t[], ll len) {
+    ll* base = t;
+    while (len > 1) {
+        int half = len / 2;
+        base = (base[half] < x ? &base[half] : base);
+        len -= half;
+    }
+    return *(base + (*base < x));
+}
+ll ascSum(ll n) { return n * (n + 1) / 2; }
+ll fib(ll num) { const ld f = sqrt(5); return (pow(1 + f, num) - pow(1 - f, num)) / (pow(2, num) * f); }//1,1,2,3,5,8,13,21,34,55,...
+ll vColSum(vl2 v, ll col) { ll sum = 0; for (const auto& x : v)sum += x[col]; return sum; }
+ll mapMaxElement(mll x) { mll::iterator best = max_element(x.begin(), x.end(), [](const pair<ll, ll>& a, const pair<ll, ll>& b)->bool { return a.second < b.second; }); return best->second; }
+ll mapMaxElement(msl x) { msl::iterator best = max_element(x.begin(), x.end(), [](const pair<str, ll>& a, const pair<str, ll>& b)->bool { return a.second < b.second; }); return best->second; }
+bl isPrime(ll n) { if (n == 1)return 0; for (ll i = 2; i <= sqrt(n); i++) if (!(n % i))return 0; return 1; }
+vl eratosthenesSieve(ll limit){ vl prime(limit + 1);for (ll i = 2; i <= limit; i++)prime[i] = 1;for (ll p = 2; p * p <= limit; p++)if (prime[p])for (ll i = p * p; i <= limit; i += p)prime[i] = 0; return prime;}
+str factorial(ll n){str result = "";ll res[1000];res[0] = 1;ll res_size = 1;for (ll x = 2; x <= n; x++) res_size = mul(x, res, res_size);for (ll i = res_size - 1; i >= 0; i--)result += toStr(res[i]);return result;}
+ll mul(ll x, ll res[], ll res_size){ll carry = 0;for (ll i = 0; i < res_size; i++){ll prod = res[i] * x + carry;res[i] = prod % 10;carry = prod / 10;}while (carry){res[res_size] = carry % 10;carry = carry / 10;res_size++;}return res_size;}
+ld squareRoot(ld n) {
+    ld x = 1;
+    while (abs(x * x - n) > EPS) x = (x + n / x) / 2;
+    return x;
+}
+auto multiply = [](ll n, ll n2) {ll result = 0; while (n2 > 0) { if (n2 & 1)  result += n; n = n << 1; n2 = n2 >> 1; } return result; };
+//fastInput, fastOutput and BigInt provided by GeeksForGeeks
+inline ll get(void){ ch t = getchar();ll x = 0, neg = 0; while ((t < 48 || t>57) && t != '-') t = getchar(); if (t == '-') { neg = 1; t = getchar(); } while (t >= 48 && t <= 57){ x = (x << 3) + (x << 1) + t - 48; t = getchar(); } if (neg) x = -x; return x;}
+inline void out(ll x, ll mode = 1) { ch a[20]; a[0] = '0'; ll i = 0, j; if (x < 0) { putchar('-'); x = -x; }if (x == 0) putchar('0'); while (x) { a[i++] = x % 10 + 48; x /= 10; } for (j = i - 1; j >= 0; j--) putchar(a[j]); putchar(mode ? '\n' : ' '); }
+//fastPow provided by rookiesLab
+ull fastPow(ull b, ull power) {
+    ull result = 1;
+    while (power > 0) {
+        if (power % 2 == 1) result = (result * b) % 1;
+        b = (b * b) % 1;
+        power /= 2;
+    }
+    return result;
+}
+
+#pragma endregion
+auto leetCode(vl v) {
+    return v;
+}
+int main(void) {
+    setup;//cerr << leetcode() << '\n';
+    ull n = get();
+    out(fastPow(n, 3));
+    stop;
+}
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

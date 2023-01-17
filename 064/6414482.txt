@@ -1,0 +1,100 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+int solve(size_t index, const vector<int>& w_list) {
+   if (index == w_list.size()) {
+      return 0;
+   }
+
+   if (index == 0) {
+      return solve(index + 1, w_list);
+   }
+
+   int max_count = 0;
+
+   int w0 = w_list[index - 1];
+   int w1 = w_list[index];
+
+   if (abs(w0 - w1) <= 1) {
+      // 消せる場合
+      vector<int> child;
+
+      for (int j = 0; j < w_list.size(); j++) {
+         if (j == index || j == index - 1) {
+            continue;
+         }
+
+         child.emplace_back(w_list[j]);
+      }
+
+      int count = solve(index - 1, child);
+      count += 2;
+
+      max_count = max(max_count, count);
+   }
+
+   // 消せない場合
+   int count = solve(index + 1, w_list);
+   max_count = max(max_count, count);
+
+   return max_count;
+}
+
+int dfs(const vector<int>& w_list) {
+   int max_count = 0;
+
+   for (int i = 1; i < w_list.size(); i++) {
+      int w0 = w_list[i - 1];
+      int w1 = w_list[i];
+
+      if (abs(w0 - w1) > 1) {
+         continue;
+      }
+
+      vector<int> child;
+
+      for (int j = 0; j < w_list.size(); j++) {
+         if (j == i || j == i - 1) {
+            continue;
+         }
+
+         child.emplace_back(w_list[j]);
+      }
+
+      int count = dfs(child);
+      count += 2;
+
+      max_count = max(max_count, count);
+   }
+
+   return max_count;
+}
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   while (true) {
+      int n;
+      cin >> n;
+
+      if (n == 0) {
+         break;
+      }
+
+      vector<int> w_list;
+
+      for (int i = 0; i < n; i++) {
+         int w;
+         cin >> w;
+
+         w_list.emplace_back(w);
+      }
+
+      cout << solve(1, w_list) << endl;
+   }
+
+   return 0;
+}
+

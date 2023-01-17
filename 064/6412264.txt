@@ -1,0 +1,34 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        
+        int a = sc.nextInt();
+        int b = sc.nextInt();
+        int c = sc.nextInt();
+        int tmp;
+        
+        if(b<a){
+            tmp = a;
+            a = b;
+            b = tmp;
+        }
+        
+        if(c<b){
+            if(c<a){
+                tmp = c;
+                c = b;
+                b = a;
+                a = tmp;
+            }
+            else{
+                tmp = b;
+                b = c;
+                c = tmp;
+            }
+        }
+        System.out.printf("%d %d %d",a,b,c);
+        System.out.println("");
+    }
+}

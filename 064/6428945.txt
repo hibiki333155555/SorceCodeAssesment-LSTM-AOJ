@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int main(void) {
+	int a, b;
+	
+	/*入力*/
+	scanf("%d %d", &a, &b);
+	
+	/*出力*/
+	if (a < b) {
+		printf("%d < %d\n", a, b);
+	} else if (a > b) {
+		printf("%d > %d\n", a, b);
+	} else {
+		printf("%d == %d\n", a, b);
+	}
+	
+	return 0;
+}

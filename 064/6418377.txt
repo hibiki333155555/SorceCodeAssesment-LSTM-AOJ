@@ -1,0 +1,127 @@
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args){
+		Dice dice = new Dice();
+		dice.getDice();
+		dice.getRollDirection();
+		dice.roll();
+		dice.printUp();
+	}
+}
+
+class Dice{
+	Scanner sc = new Scanner(System.in);
+	String RollDirection;
+	int[] diceNum = new int[6]; 
+	
+	Dice(){
+	}
+	
+	void getDice(){
+		for(int i = 0; i < 6; i++){
+			this.diceNum[i] = sc.nextInt();
+		}
+	}
+	
+	void getRollDirection(){
+		this.RollDirection = sc.next();
+	}
+	
+	void roll(){
+		for(int i = 0; i < this.RollDirection.length(); i++){
+			char dir = this.RollDirection.charAt(i);
+			
+			if(dir == 'N'){
+				rollN();
+			}else if(dir == 'W'){
+				rollW();
+			}else if(dir == 'E'){
+				rollE();
+			}else if(dir == 'S'){
+				rollS();
+			}
+		}
+	}
+	
+	void rollN(){
+		int temp = this.diceNum[0];
+		this.diceNum[0] = this.diceNum[1];
+		this.diceNum[1] = this.diceNum[5];
+		this.diceNum[5] = this.diceNum[4];
+		this.diceNum[4] = temp;
+	}
+	
+	void rollW(){
+		int temp = this.diceNum[0];
+		this.diceNum[0] = this.diceNum[2];
+		this.diceNum[2] = this.diceNum[5];
+		this.diceNum[5] = this.diceNum[3];
+		this.diceNum[3] = temp;
+	}
+	
+	void rollE(){
+		int temp = this.diceNum[0];
+		this.diceNum[0] = this.diceNum[3];
+		this.diceNum[3] = this.diceNum[5];
+		this.diceNum[5] = this.diceNum[2];
+		this.diceNum[2] = temp;
+	}
+	
+	void rollS(){
+		int temp = this.diceNum[0];
+		this.diceNum[0] = this.diceNum[4];
+		this.diceNum[4] = this.diceNum[5];
+		this.diceNum[5] = this.diceNum[1];
+		this.diceNum[1] = temp;
+	}
+	
+	void rotate(){
+		int temp = diceNum[1];
+		this.diceNum[1] = this.diceNum[3];
+		this.diceNum[3] = this.diceNum[4];
+		this.diceNum[4] = this.diceNum[2];
+		this.diceNum[2] = temp;
+	}
+	
+	void question(){
+		int q = sc.nextInt();
+		for(int i = 0; i < q; i++){
+			int top = sc.nextInt();
+			int front = sc.nextInt();
+			
+			if(top == this.diceNum[1]){
+				rollN();
+			}else if(top == this.diceNum[2]){
+				rollW();
+			}else if(top == this.diceNum[3]){
+				rollE();
+			}else if(top == this.diceNum[4]){
+				rollS();
+			}else if(top == this.diceNum[5]){
+				rollN();
+				rollN();
+			}
+			
+			if(front == this.diceNum[2]){
+				rotate();
+				rotate();
+				rotate();
+			}else if(front == this.diceNum[4]){
+				rotate();
+				rotate();
+			}else if(front == this.diceNum[3]){
+				rotate();
+			}
+			
+			System.out.println(this.diceNum[2]);
+			
+		}
+	}
+	
+	void printUp(){
+		System.out.println(this.diceNum[0]);
+	}
+	
+}
+

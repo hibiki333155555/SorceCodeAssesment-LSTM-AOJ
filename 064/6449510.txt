@@ -1,0 +1,19 @@
+#include <algorithm>
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+  string c1, c2;
+  int r1, r2;
+  cin >> c1 >> r1 >> c2 >> r2;
+  vector<string> C;
+  for(char i = 'A'; i <= 'Z'; ++i)
+    C.emplace_back(1,i);
+  for(char i = 'A'; i <= 'Z'; ++i)
+    for(char j = 'A'; j <= 'Z'; ++j)
+      C.push_back(string(1,i)+string(1,j));
+  auto cc1 = find(C.begin(),C.end(),c1), cc2 = find(C.begin(),C.end(),c2);
+  cout << (cc2-cc1+1)*(r2-r1+1) << endl;
+}
+

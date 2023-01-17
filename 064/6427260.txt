@@ -1,0 +1,91 @@
+#include <stdio.h>
+
+void solve(int N, int S, int A[][4])
+{
+	int i, j, num[4] = {};
+	for (i = 1; i <= N; i++) for (j = 0; j < 4; j++) num[A[i][j]]++;
+	if (num[2] == num[3] - 4) {
+		printf("2 2 2 2\n");
+		return;
+	} else if (num[2] == num[3] + 4) {
+		printf("3 3 3 3\n");
+		return;
+	} else if (num[2] == num[3] - 3) {
+		printf("1 2 2 2\n");
+		return;
+	} else if (num[2] == num[3] + 3) {
+		printf("1 3 3 3\n");
+		return;
+	}
+	
+	int k, l;
+	for (i = 1, k = 0; i <= N; i++) {
+		for (j = 0, l = 0; j < 4; j++) if (A[i][j] == 1) l++;
+		if (l == 3) k++;
+	}
+	if (k > 0) {
+		if (k == 1) {
+			if (num[2] == num[3] - 1) printf("1 1 1 2\n");
+			else if (num[2] == num[3] + 1) printf("1 1 1 3\n");
+		} else {
+			if (num[2] == num[3] - 2) printf("1 2 1 2\n");
+			else if (num[2] == num[3]) printf("1 2 1 3\n");
+			else if (num[2] == num[3] + 2) printf("1 3 1 3\n");
+		}
+		return;
+	}
+	
+	for (i = 1, k = 0; i <= N; i++) {
+		for (j = 0, l = 0; j < 4; j++) if (A[i][j] == 1) l++;
+		if (l == 2) k++;
+	}
+	if (k == 3) {
+		if (num[2] == num[3] - 2) printf("1 1 2 2\n");
+		else if (num[2] == num[3]) printf("1 1 2 3\n");
+		else if (num[2] == num[3] + 2) printf("1 1 3 3\n");
+		return;
+	}
+	
+	for (i = 1, k = 0; i <= N; i++) {
+		for (j = 0, l = 0; j < 4; j++) if (A[i][j] == 1) l++;
+		if (l == 1) k++;
+	}
+	if (k % 2 == 0) {
+		if (num[2] == num[3] - 2) printf("2 2 2 3\n");
+		else if (num[2] == num[3]) {
+			if (S == 0) printf("2 2 3 3\n");
+			else printf("2 3 2 3\n");
+		} else if (num[2] == num[3] + 2) printf("2 3 3 3\n");
+		return;
+	}
+	
+	for (i = 1, k = 0; i <= N; i++) {
+		for (j = 0, l = 0; j < 4; j++) if (A[i][j] == 1) l++;
+		if (l >= 1) {
+			for (j = 0; j < 4; j++) {
+				if (l == 1 && A[i][(j+2)%4] == 1) continue;
+				if (A[i][j] == 2) k++;
+				else if (A[i][j] == 3) k--;
+			}
+		}
+	}
+	if (k == -2) printf("1 2 3 2\n");
+	else if (k == 0) {
+		if (num[2] == num[3] - 1) printf("1 2 2 3\n");
+		else if (num[2] == num[3] + 1) printf("1 2 3 3\n");
+	} else if (k == 2) printf("1 3 2 3\n");
+}
+
+
+int main()
+{
+	int i, t, T, N, S, A[200001][4];
+	scanf("%d", &T);
+	for (t = 1; t <= T; t++) {
+		scanf("%d %d", &N, &S);
+		for (i = 1; i <= N; i++) scanf("%d %d %d %d", &(A[i][0]), &(A[i][1]), &(A[i][2]), &(A[i][3]));
+		solve(N, S, A);
+	}
+	fflush(stdout);
+	return 0;
+}

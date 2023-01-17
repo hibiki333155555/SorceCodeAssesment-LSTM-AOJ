@@ -1,0 +1,55 @@
+import java.util.*;
+
+public class Main{
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int r = scan.nextInt();
+        int c = scan.nextInt();
+
+        int[][] a = new int[101][101];
+        int r_sum = 0, c_sum = 0;
+        int[] _r = new int[101];
+        int[] _c = new int[101];
+
+        int C = 0;
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                a[i][j] = scan.nextInt();
+            }
+        }
+
+        System.out.println();
+        for (int i = 0; i < r + 1; i++) {
+            for (int j = 0; j < c; j++) {
+                c_sum += a[i][j];
+                r_sum += a[j][i];
+
+                if (i != r)
+                    System.out.print(a[i][j] + " ");
+            }
+            _r[i] = r_sum;
+            _c[i] = c_sum;
+            C += _c[i];
+            if (i != r) {
+                System.out.print(c_sum);
+                System.out.println();
+            }
+
+            c_sum = 0;
+            r_sum = 0;
+        }
+
+        for (int i = 0; i <= c; i++) {
+            if (i == c) {
+                _r[i] = C;
+            }
+            if (i > 0)
+                System.out.print(" ");
+            System.out.print(_r[i]);
+        }
+
+        scan.close();
+    }
+}
+

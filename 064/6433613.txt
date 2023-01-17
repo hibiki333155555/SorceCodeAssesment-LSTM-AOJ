@@ -1,0 +1,65 @@
+#include<iostream>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    int a[300000];
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+    }
+
+    //trueならソートされてない。
+    bool flags[300000];
+    int diff=0;
+    for(int i=0;i<n-1;i++){
+        flags[i]=(a[i]>a[i+1]);
+        //cout<<flags[i]<<" "<<a[i]<<" "<<a[i+1]<<endl;
+        if(flags[i])
+            diff++;
+    }
+    int q;
+    cin>>q;
+    if(!diff){
+        cout<<0<<endl;
+        return 0;
+    }
+    for(int i=0;i<q;i++){
+        int x,y;
+        cin>>x>>y;
+        x--;y--;
+        int temp=a[x];
+        a[x]=a[y];
+        a[y]=temp;
+
+        /*
+        x->o diff--
+        o->x diff++
+
+        flagsは今正しいかどうかに依存
+        */
+
+        if(x!=0){
+            diff-=(flags[x-1]-(a[x-1]>a[x]));
+            flags[x-1]=(a[x-1]>a[x]);
+        }
+        if(x!=n-1){
+            diff-=(flags[x]-(a[x]>a[x+1]));
+            flags[x]=(a[x]>a[x+1]);
+        }
+        if(y!=0){
+            diff-=(flags[y-1]-(a[y-1]>a[y]));
+            flags[y-1]=(a[y-1]>a[y]);
+        }
+        if(y!=n-1){
+            diff-=(flags[y]-(a[y]>a[y+1]));
+            flags[y]=(a[y]>a[y+1]);
+        }
+
+        if(!diff){
+            cout<<i+1<<endl;
+            return 0;
+        }
+    }
+    cout<<-1<<endl;
+    return 0;
+}

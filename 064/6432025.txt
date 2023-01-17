@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+
+
+    int n,q;
+    cin>>n>>q;
+    vector<int>a[n];
+    int p,t,x;
+    for(int i=0; i<q; i++)
+    {
+        cin>>p;
+        if(p==0)
+        {
+            cin>>t>>x;
+            a[t].push_back(x);
+        }
+        else if(p==1)
+        {
+            cin>>t;
+            int l=a[t].size();
+            if(l==0)
+            {
+                cout<<endl;
+            }
+            else
+            {
+                for(int j=0; j<l; j++)
+                {
+                    if(j==l-1)cout<<a[t][j];
+                    else
+                    cout<<a[t][j]<<" ";
+
+                }
+                cout<<endl;
+
+            }
+
+        }
+        else
+        {
+            cin>>t;
+            a[t].clear();
+        }
+    }
+
+
+
+
+
+
+    return 0;
+}
+

@@ -1,0 +1,16 @@
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+using namespace std;
+
+int a[3],p,q,r;
+int main(){
+    while(true){
+        cin>>a[0]>>a[1]>>a[2];
+        sort(a, a+3);  
+        if(a[0]+a[1]<=a[2]) {cout << p+q+r << '  ' << p << ' ' << q << ' ' << r << endl; break;}
+        if(a[0]*a[0]+a[1]*a[1]==a[2]*a[2]){p++}
+        if(a[0]*a[0]+a[1]*a[1]>a[2]*a[2]){q++}
+        if(a[0]*a[0]+a[1]*a[1]<a[2]*a[2]){r++}
+    }
+}

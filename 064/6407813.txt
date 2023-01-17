@@ -1,0 +1,24 @@
+
+#include <stdio.h>
+
+int main(void)
+{
+    int i, n, j;
+    scanf("%d", &n);
+    int num[n], revNum[n];
+    j = n - 1;
+    for(i = 0; i < n; i++){
+        scanf("%d", &num[i]);
+    }
+    for(i = 0; i < n; i++){
+        revNum[i] = num[j--];
+        printf("%d", revNum[i]);
+        if(n - 1 == i){
+            break;
+        }
+        else{
+            printf(" ");
+        }
+    }
+    return 0;
+}

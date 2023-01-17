@@ -1,0 +1,209 @@
+#pragma GCC optimize("O3")
+#include<bits/stdc++.h> 
+using namespace std;
+using ll=long long;
+using P=pair<ll,ll>;
+template<class T> using V=vector<T>; 
+#define fi first
+#define se second
+#define all(v) (v).begin(),(v).end()
+const ll inf=(1e18);
+const ll mod=998244353;
+// const ll mod=1000000007;
+const vector<int> dy={-1,0,1,0},dx={0,-1,0,1};
+struct __INIT{__INIT(){cin.tie(0);ios::sync_with_stdio(false);cout<<fixed<<setprecision(15);}} __init;
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+template<class T>void debag(const vector<T> &a){cerr<<"debag :";for(auto v:a)cerr<<v<<" ";cerr<<"\n";}
+template<class T>void print(const vector<T> &a){for(auto v:a)cout<<v<<" ";cout<<"\n";}
+struct mint{
+using ull=unsigned long long int;
+ull v;
+mint(ll vv=0){s(vv%mod+mod);}
+mint& s(ull vv){
+v=vv<mod?vv:vv-mod;
+return *this;
+}
+//オーバーロード
+mint operator-()const{return mint()-*this;}//mint型にキャスト
+mint&operator+=(const mint&val){return s(v+val.v);}
+mint&operator-=(const mint&val){return s(v+mod-val.v);}
+mint&operator*=(const mint&val){
+v=ull(v)*val.v%mod;
+return *this;
+}
+mint&operator/=(const mint&val){return *this*=val.inv();}
+mint operator+(const mint&val){return mint(*this)+=val;}
+mint operator-(const mint&val){return mint(*this)-=val;}
+mint operator*(const mint&val){return mint(*this)*=val;}
+mint operator/(const mint&val){return mint(*this)/=val;}
+mint pow(ll n)const{
+mint res(1),x(*this);
+while(n){
+if(n&1)res*=x;
+x*=x;
+n>>=1ll;
+}
+return res;
+}
+mint inv()const{return pow(mod-2);}
+//拡張ユークリッドの互除法
+/* mint inv()const{
+int x,y;
+int g=extgcd(v,mod,x,y);
+assert(g==1);
+if(x<0)x+=mod;
+return mint(x);
+}*/
+friend ostream& operator<<(ostream&os,const mint&val){
+return os<<val.v;
+}//出力
+bool operator<(const mint&val)const{return v<val.v;}
+bool operator==(const mint&val)const{return v==val.v;}
+bool operator>(const mint&val)const{return v>val.v;}
+};
+template<typename G>
+struct HLD{
+    G &g;
+    vector<int> sz,in,out,head,rev,par,d;
+    bool built;
+    HLD(G &g,int s=0,bool Auto_build=true):g(g),sz(g.size()),in(g.size()),out(g.size()),head(g.size()),rev(g.size()),par(g.size()),d(g.size()),built(false){
+         if(Auto_build)build(s);
+    };
+    HLD(){}
+
+    void dfs_sz(int idx,int p){
+        par[idx]=p;
+        sz[idx]=1;
+        if(g[idx].size()&&g[idx][0]==p)swap(g[idx][0],g[idx].back());
+        for(auto &to:g[idx]){
+            if(to==p)continue;
+            d[to]+=d[idx]+1;
+            dfs_sz(to,idx);
+            sz[idx]+=sz[to];
+            if(sz[g[idx][0]]<sz[to])swap(g[idx][0],to);
+        }
+    }
+
+    void dfs_hld(int idx,int p,int &times){
+        in[idx]=times++;
+        rev[in[idx]]=idx;
+        for(auto &to:g[idx]){
+              if(to==p)continue;
+              head[to]=(g[idx][0]==to?head[idx]:to);
+              dfs_hld(to,idx,times);
+        }
+        out[idx]=times;
+    }
+
+
+    void build(int s){
+        dfs_sz(s,-1);
+        int t=0;
+        dfs_hld(s,-1,t);
+        built=true;
+    }
+
+    //頂点vから頂点0へk個だけ遡った頂点
+    int la(int v,int k){
+          while(1){
+              int u=head[v];
+              if(in[v]-k>=in[u])return rev[in[v]-k];
+              k-=in[v]-in[u]+1;
+              v=par[u];
+          }
+          assert(false);
+          return 0;
+    }
+    
+    int lca(int u,int v){
+        for(;;v=par[head[v]]){
+            if(in[u]>in[v])swap(u,v);
+            if(head[u]==head[v])return u;
+        }
+        assert(false);
+        return 0;
+    }
+
+    template<typename T,typename Q,typename F>
+    T query(int u,int v,const T& ti,const Q &q,const F &f,bool e=false){
+        T l=ti,r=ti;
+        for(;;v=par[head[v]]){
+              if(in[u]>in[v]){
+                    swap(u,v);
+                    swap(l,r);
+              }
+              if(head[u]==head[v])break;
+              l=f(q(in[head[v]],in[v]+1),l);
+        }
+        return f(f(q(in[u]+e,in[v]+1),l),r);
+    }
+
+    template<typename Q>
+    void add(int u,int v,const Q &q,bool e=false){
+          for(;;v=par[head[v]]){
+              if(in[u]>in[v])swap(u,v);
+              if(head[u]==head[v])break;
+              q(in[head[v]],in[v]+1);
+          }
+          q(in[u]+e,in[v]+1);
+    }
+
+    int dist(int u,int v){
+          return d[u]+d[v]-2*d[lca(u,v)];
+    }
+};
+int main(){
+    int n;
+    cin>>n;
+    V<V<int>> g(n);
+    for(int i=0;i<n-1;i++){
+        int a,b;
+        cin>>a>>b;
+        --a;--b;
+        g[a].emplace_back(b);
+        g[b].emplace_back(a);
+    }
+    V<mint> res(n,mint(1));
+    auto dfs1=[&](auto &&self,int cur,int par)->void{
+        mint sum=mint(0);
+        for(int v:g[cur]){
+            if(v==par)continue;
+            self(self,v,cur);
+            sum+=res[v];
+        }
+        res[cur]+=sum*mint(2);
+    };
+    dfs1(dfs1,0,-1);
+    V<mint> cp=res;
+    V<mint> res2(n,mint(0));
+    auto dfs2=[&](auto &&self,int cur,int par)->void{
+        res2[cur]=cp[cur];
+        for(int v:g[cur]){
+            if(v==par)continue;
+            mint tmp=(cp[cur]-cp[v]*mint(2))*mint(2);
+            cp[v]+=tmp;
+            self(self,v,cur);
+            cp[v]-=tmp;
+        }
+    };
+    dfs2(dfs2,0,-1);
+    HLD<V<V<int>>> hld(g);
+    int q;
+    cin>>q;
+    for(int i=0;i<q;i++){
+        int x,y;
+        cin>>x>>y;
+        x--;y--;
+        int v=hld.lca(x,y);
+        int dist=hld.dist(x,y);
+        if(x!=v&&y!=v){
+            cout<<res[x]*res[y]*mint(2).pow(dist)<<"\n";
+        }else{
+            if(x==v)swap(x,y);
+            int u=x;
+            if(dist>1)u=hld.la(x,dist-1);
+            cout<<res[x]*(res2[y]-(res[u]*mint(2)))*mint(2).pow(dist)<<"\n";
+        }
+    }
+}

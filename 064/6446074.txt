@@ -1,0 +1,9 @@
+str=input().split()
+a=int(str[0])
+op=str[1]
+b=int(str[2])
+while True:
+    if op!=?:
+        print(a op b)
+    else:
+        break

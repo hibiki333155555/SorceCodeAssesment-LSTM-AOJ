@@ -1,0 +1,3 @@
+r=float.input()
+import math
+print(round(math.pi*pow(r, 2), 5), round(2*math.pi*r, 5))

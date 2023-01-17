@@ -1,0 +1,23 @@
+#include<stdio.h>
+int main(void)
+{
+    int a,b,c,swap;
+    scanf("%d %d %d",&a,&b,&c);
+    for(int i = 0;i< 9;i++)
+    {
+        if(b<a)
+        {
+            swap = b;
+            b = a;
+            a = swap;
+        }
+        if(c<b)
+        {
+            swap = c;
+            c = b;
+            b = swap;
+        }
+    }
+    printf("%d %d %d\n",a,b,c);
+    return 0;
+}

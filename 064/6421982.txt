@@ -1,0 +1,3 @@
+n = int(input())
+l = int(input().split())
+print(l)

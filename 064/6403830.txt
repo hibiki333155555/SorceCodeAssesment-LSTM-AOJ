@@ -1,0 +1,53 @@
+#include<iostream>
+using namespace std;
+int main(void){
+	long int n, N, c = 0, D;
+	long int m, j;
+	long int a[200000], b[200000];
+	cin >> m;
+for(n = 0; n < m; n++){
+	cin >> a[n];
+	b[n] = a[n];
+}
+	for(n = 0; n < m - 1; n++){
+		if(a[n] > b[n + 1]){
+			continue;
+		}
+		if(a[n < b[n + 1]]){
+			c = b[n + 1] - a[n];
+			N = n;
+			for(n; n < m - 1; n++){
+				if(a[n] < b[n + 1]){
+					D = b[n + 1] - a[N];
+					if(c < D){
+						c = D;
+					}
+				} 
+				if(a[N] > b[n + 1]){
+					N = n + 1;
+				}
+			}
+		}
+	}
+	if (c == 0){
+		N = a[m - 1];
+		j = m - 1;
+		for(n = m - 1; n > 0; n--){
+			if(N > a[n - 1]){
+			
+			N = a[n - 1];
+			j = n - 1;
+		}
+		} 
+		D = b[j - 1];
+		for(n = j - 1; n > 0; n--){
+			if(D > b[n - 1]){
+				D = b[n - 1];
+			}
+			
+		}
+		c = N - D;
+	}
+	cout << c;
+	return 0;
+} 

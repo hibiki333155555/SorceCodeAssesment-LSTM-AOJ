@@ -1,0 +1,127 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(int i = 0; i < (int)n; i++)
+using ll = long long;
+constexpr ll mod = 998244353;
+
+struct mint {
+  ll x;
+  mint(ll _x = 0) {if((_x %= mod) < 0) _x += mod; x = _x;}
+  bool operator==(const mint a) {return x == a.x;}
+  mint operator-() const {return mint(-x);}
+  mint& operator+=(const mint a) {
+    if((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) {
+    (x *= a.x) %= mod;
+    return *this;
+  }
+  mint operator+(const mint a) const {
+    mint res(*this);
+    return res+=a;
+  }
+  mint operator-(const mint a) const {
+    mint res(*this);
+    return res-=a;
+  }
+  mint operator*(const mint a) const {
+    mint res(*this);
+    return res*=a;
+  }
+  mint pow(ll t) const {
+    if(!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if(t&1) a *= *this;
+    return a;
+  }
+  // for prime mod
+  mint inv() const {return pow(mod-2);}
+  mint& operator/=(const mint a) {return (*this) *= a.inv();}
+  mint operator/(const mint a) const {
+    mint res(*this);
+    return res/=a;
+  }
+  ll val() {return x;}
+};
+
+struct LCA {
+  const vector<vector<int>>& g; vector<vector<int>> parent; vector<int> depth; int k;
+
+  LCA(const vector<vector<int>>& g) : g(g) {
+    int x = 1; k = 0;
+    while(x <= g.size()) {x *= 2, k++;}
+    parent.assign(g.size(),vector<int>(k,-1)); depth.assign(g.size(),0);
+    dfs(0,-1,0);
+    rep(i,k-1) rep(v,g.size()) parent[v][i+1] = (parent[v][i] < 0 ? -1 : parent[parent[v][i]][i]);
+  }
+
+  void dfs(int v, int p, int d) {
+    parent[v][0] = p; depth[v] = d;
+    for(auto to : g[v]) if(to != p) dfs(to,v,d+1);
+  }
+
+  int lca(int u, int v) {
+    if(depth[u] > depth[v]) swap(u,v);
+    rep(i,k) if((depth[v] - depth[u]) & (1<<i)) v = parent[v][i];
+    if(u == v) return u;
+    for(int i = k-1; i >= 0; i--) if(parent[u][i] != parent[v][i]) u = parent[u][i], v = parent[v][i];
+    return parent[u][0];
+  }
+
+  int dist(int u, int v) {return depth[u] + depth[v] - 2*depth[lca(u,v)];}
+};
+
+int main(){
+  int n;
+  cin >> n;
+  vector<vector<int>> g(n);
+  rep(i,n-1) {
+    int a, b;
+    cin >> a >> b;
+    a--; b--;
+    g[a].push_back(b);
+    g[b].push_back(a);
+  }
+  vector<mint> dp1(n), dp2(n);
+  auto dfs1 = [&](auto&& self, int u, int p) -> void {
+    dp1[u] = 1;
+    for(auto to : g[u]) if(to != p) {
+      self(self,to,u);
+      dp1[u] += dp1[to]*mint(2);
+    }
+  };
+  dfs1(dfs1,0,-1);
+  auto dfs2 = [&](auto&& self, int u, int p, mint val) -> void {
+    dp2[u] = val+1;
+    for(auto to : g[u]) if(to != p) dp2[u] += dp1[to]*2; 
+    for(auto to : g[u]) if(to != p) self(self,to,u,(dp2[u]-dp1[to]*2)*2);
+  };
+  dfs2(dfs2,0,-1,0);
+  LCA lca(g);
+  int q;
+  cin >> q;
+  vector<mint> ans(q);
+  rep(i,q) {
+    int x, y;
+    cin >> x >> y;
+    x--; y--;
+    int z = lca.lca(x,y);
+    int d = lca.dist(x,y);
+    if(z == y) swap(x,y);
+    if(z == x) {
+      int cur = y;
+      int dm = d-1;
+      rep(j,lca.k) if(dm & (1<<j)) cur = lca.parent[cur][j];
+      ans[i] = mint(2).pow(d)*(dp2[x]-dp1[cur]*2)*dp1[y];
+    } else ans[i] = dp1[x]*dp1[y]*mint(2).pow(d);
+  } 
+  rep(i,q) cout << ans[i].val() << endl;
+  return 0;
+}
+

@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+template < class T >
+pair< vector<vector<int>>, int > cartesian_tree(vector< T > &a) {
+    int n = a.size();
+    vector<vector<int>> graph(n);
+    vector<int> p(n, -1), st;
+    st.reserve(n);
+    for(int i = 0; i < n; i++) {
+        int prev = -1;
+        while(!st.empty() && a[i] < a[st.back()]) {
+            prev = st.back();
+            st.pop_back();
+        }
+        if(prev != -1) p[prev] = i;
+        if(!st.empty()) p[i] = st.back();
+        st.push_back(i);
+    }
+
+    int root = -1;
+    for(int i = 0; i < n; i++) {
+        if(p[i] == -1) root = i;
+        else graph[p[i]].push_back(i);
+    }
+    return {graph, root};
+}
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    int n; cin >> n;
+    vector<int> h(n);
+    rep(i,n) cin >> h[i], h[i]--;
+    vector<int> g = h;
+    rep(i,n) g[i] = (n - 1) - g[i];
+    auto [tree, root] = cartesian_tree(g);
+    vector<vector<int>> rev_tree(n);
+    rep(i,n)for(int to : tree[i]) rev_tree[to].push_back(i);
+
+    queue<int> q;
+    vector<int> height(n, -1), deg(n, -1);
+    rep(i,n) {
+        deg[i] = tree[i].size();
+        if(deg[i] == 0) {
+            height[i] = 0;
+            q.push(i);
+        }
+    }
+    while(!q.empty()) {
+        int v = q.front(); q.pop();
+        for(int to : rev_tree[v]) {
+            height[to] = max(height[to], height[v] + 1);
+            deg[to]--;
+            if(deg[to] == 0) q.push(to);
+        }
+    }
+
+    vector<int> diameter(n, -1);
+    deg = vector<int>(n, -1);
+    rep(i,n) {
+        deg[i] = tree[i].size();
+        if(deg[i] == 0) {
+            diameter[i] = 0;
+            q.push(i);
+        }
+    }
+    while(!q.empty()) {
+        int v = q.front(); q.pop();
+        if(tree[v].size() == 2) {
+            diameter[v] = max(diameter[v], height[tree[v][0]] + height[tree[v][1]] + 2);
+        }
+        for(int to : rev_tree[v]) {
+            diameter[to] = max(diameter[to], diameter[v] + 1);
+            deg[to]--;
+            if(deg[to] == 0) q.push(to);
+        }
+    }
+
+    cout << diameter[root] << endl;
+}

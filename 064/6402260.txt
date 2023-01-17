@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int N,W;
+  cin >> N >> W;
+  vector<int> v(N),w(N);
+  for(int i=0; i<N; i++) cin >> v.at(i) >> w.at(i);
+  
+  vector<vector<int>> dp(N+1,vector<int>(W+1));
+  map<int,int> wv;
+  for(int i=0; i<N; i++){
+    wv[w.at(i)] = max(wv[w.at(i)],v.at(i));
+  }
+  int i=0;
+  dp.at(0).at(0) = 0;
+  for(pair<int,int> p : wv){
+    int tw=p.first, tv=p.second;
+    for(int j=0; j<=W; j++){
+      if(j < tw){
+        dp.at(i+1).at(j) = dp.at(i).at(j);
+      }else{
+        int m=dp.at(i).at(j),n=j/w.at(i);
+        for(int k=1; k<=j/tw; k++){
+          m = max(m, dp.at(i).at(j-k*tw) + k*tv);
+        }
+        dp.at(i+1).at(j) = m;
+      }
+    }
+    i++;
+  }
+  
+  cout << dp.at(i).at(W) << endl;
+
+  return 0;
+}

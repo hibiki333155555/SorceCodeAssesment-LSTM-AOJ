@@ -1,0 +1,5 @@
+x = int(input())
+h = x//3600 
+m = x%3600//60
+s = m%60
+print(str(h) + ":" + str(m) + ":" + str(s))

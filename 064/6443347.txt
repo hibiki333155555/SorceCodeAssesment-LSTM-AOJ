@@ -1,0 +1,42 @@
+#include <iostream>
+#include <iomanip>
+#include <bits/stdc++.h>
+using namespace std;
+
+int check(int x, int n) {
+   if(++x > n) return 1;
+}
+
+int main() {
+   int n, i=1;
+   cin >> n;
+
+   while(true) {
+      int x = i;
+      int m = 0;
+
+      if(x % 3 == 0) {
+         cout << " " << i;
+         if(check(i, n) == 1) {
+            cout << "\n";
+            break;
+         }else i++;
+      }else{
+         while(x!=0) {
+            if(x % 10 == 3) {
+               cout << " " << i;
+               m = 1;
+               if(check(i, n) == 1) {
+                  cout << "\n";
+                  break;
+               }else i++;
+            }
+            x /= 10;
+         }
+         if(check(i, n) == 1) {
+            cout << "\n";
+            break;
+         }else if(m == 0) i++;
+      }
+   }
+}

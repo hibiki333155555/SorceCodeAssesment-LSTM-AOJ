@@ -1,0 +1,2 @@
+x=input(int())
+print(str(x**3))

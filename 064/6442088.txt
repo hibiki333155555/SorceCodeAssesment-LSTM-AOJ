@@ -1,0 +1,23 @@
+N, M = map(int, input().split())
+cost = [[float("inf") for _ in range(N)] for _ in range(N)]
+for i in range(N):cost[i][i]=0
+
+for _ in range(M):
+    a, b ,d= map(int, input().split())
+    cost[a][b]=d
+
+for k in range(N):
+    for i in range(N):
+        for j in range(N):
+            cost[i][j]=min(cost[i][j],cost[i][k]+cost[k][j])
+
+for i in range(N):
+    if cost[i][i]<0:exit(print("NEGATIVE CYCLE"))
+
+for i in range(N):
+    for j in range(N):
+        if cost[i][j]==float("inf"):cost[i][j]="INF"
+
+for i in range(N):
+    print(*cost[i])
+

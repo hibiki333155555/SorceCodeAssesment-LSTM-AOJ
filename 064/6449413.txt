@@ -1,0 +1,31 @@
+#include "utilitys.hpp"
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ALL(x) (x).begin(), (x).end()
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+
+int main() {
+    i64 A, B;
+    cin >> A >> B;
+    if (A==0 and B==0) {
+        cout<<1<<endl;
+        return 0;
+    }
+    bitset<40> a(A), b(B);
+    string sa = a.to_string(), sb = b.to_string();
+    while (sa[0] == '0' and sb[0] == '0') {
+        sa.erase(sa.begin());
+        sb.erase(sb.begin());
+    }
+    int ans = 0;
+    REP(i, len(sa)) if (sa[i] == sb[i]) { ++ans; }
+    else {
+        break;
+    }
+    cout << ans << endl;
+}

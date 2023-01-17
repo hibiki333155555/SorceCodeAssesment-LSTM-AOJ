@@ -1,0 +1,14 @@
+def shuffle(s1, m1):
+    front = s1[:m1]
+    back = s1[m1:]
+    return back + front
+s = input()
+while True:
+    n = int(input())
+    for i in range(n):
+        m = int(input())
+        s = shuffle(s,m)
+    print(s)
+    s = input()
+    if s == "-":
+        break

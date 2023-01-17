@@ -1,0 +1,18 @@
+scores = []
+while True:
+  line = input()
+  m, f, r = map(int, line.split())
+  if m == -1 and f == -1 and r == -1: break
+  scores.append((m, f, r))
+
+for (m, f, r) in scores:
+  total = m + f
+  if total >= 80: ret = 'A'
+  elif total >= 65: ret = 'B'
+  elif total >= 50: ret = 'C'
+  elif total >= 30:
+    if r >= 50: ret = 'C'
+    else: ret = 'D'
+  else: ret = 'F'
+  print(ret)
+

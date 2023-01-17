@@ -1,0 +1,7 @@
+w,h,x,y,r = map(int, input().split())
+
+#x,yは， (r,r)と(w-r,h-r)の間でYes
+if x<=w-r and r<=x and y<=h-r and r<=y:
+  print("Yes")
+else:
+  print("No")

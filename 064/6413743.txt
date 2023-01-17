@@ -1,0 +1,3 @@
+import math
+r = int(input())
+print(r*r*math.PI(), 2*r*math.PI())

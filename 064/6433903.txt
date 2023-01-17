@@ -1,0 +1,10 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int f, c;
+    cin >> f;
+    c = (f-30) / 2;
+    cout << c << endl;
+    return 0;
+}

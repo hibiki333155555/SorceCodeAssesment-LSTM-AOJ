@@ -1,0 +1,29 @@
+#include <stdio.h>
+
+int main(void)
+{
+    int L, N;
+    int a;
+    int n;
+    int i;
+    
+    scanf("%d%d", &L, &N);
+    n = -1;
+    for (i = 0; i < N; i++){
+        scanf("%d", &a);
+        L -= a;
+        if (L <= 0 && n == -1){
+            n = i + 1;
+        }
+    }
+    
+    if (n == -1){
+        printf("No\n");
+    }
+    else {
+        printf("%d\n", n);
+    }
+    
+    return (0);
+}
+

@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+
+class unionfind
+{
+private:
+    long long N;
+    std::vector<long long> root;
+    std::vector<long long> clsize;
+
+public:
+    explicit unionfind(const long long& n_elem)
+        : N(n_elem)
+        , root(n_elem)
+        , clsize(n_elem, 1)
+    {
+        std::iota(root.begin(), root.end(), 0);
+    }
+
+    long long getroot(const long long& i)
+    {
+        assert(0 <= i && i < N);
+        if (i == root[i])
+        {
+            return i;
+        }
+        else
+        {
+            const long long ri = getroot(root[i]);
+            root[i] = ri;
+            return ri;
+        }
+    }
+
+    bool check(const long long& i, const long long& j)
+    {
+        assert(0 <= i && i < N);
+        assert(0 <= j && j < N);
+        return getroot(i) == getroot(j);
+    }
+
+    void unite(const long long& i, const long long& j)
+    {
+        assert(0 <= i && i < N);
+        assert(0 <= j && j < N);
+        const long long ri = getroot(i);
+        const long long rj = getroot(j);
+        if (clsize[ri] > clsize[rj])
+        {
+            root[rj] = ri;
+            clsize[ri] += clsize[rj];
+            clsize[rj] = 0;
+        }
+        else
+        {
+            root[ri] = rj;
+            clsize[rj] += clsize[ri];
+            clsize[ri] = 0;
+        }
+    }
+};
+
+int main(void)
+{
+    int n, q;
+    std::cin >> n >> q;
+    unionfind tree(n);
+    for (int i = 0; i < q; ++i)
+    {
+        int c, x, y;
+        std::cin >> c >> x >> y;
+        if (c == 0)
+        {
+            tree.unite(x, y);
+        }
+        else if (tree.check(x, y))
+        {
+            std::cout << 1 << std::endl;
+        }
+        else
+        {
+            std::cout << 0 << std::endl;
+        }
+    }
+    return 0;
+}

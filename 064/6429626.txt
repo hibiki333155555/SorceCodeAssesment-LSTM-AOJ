@@ -1,0 +1,11 @@
+num_list = []
+while True:
+    try:
+        num_list.append(int(input()))
+    except:
+        break
+    
+for index, number in enumerate(num_list):
+    if number == 0:
+        break
+    print(f"Case {index+1}: {number}")

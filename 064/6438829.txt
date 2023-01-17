@@ -1,0 +1,25 @@
+#include<iostream>
+#include<string>
+using namespace std;
+ 
+int main (){
+int a,b,c,n;
+if (a==n){
+cout << ”はい”<<endl;
+}
+ 
+else if (n=<b){
+cout << ”いいえ” <<endl;
+}
+
+else if( n=<c){
+cout << "いいえ”<< endl;
+}
+ 
+else {
+cout "いいえ” << endl;
+}
+}
+
+
+

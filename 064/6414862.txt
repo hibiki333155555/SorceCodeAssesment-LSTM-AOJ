@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+using R = pair<int, int>;
+map<R, int> memo;
+
+// 区間[l, r)の最大回数を求める
+int solve(int l, int r, const vector<int>& w_list) {
+   R l_r(l, r);
+
+   if (r - l <= 1) {
+      return 0;
+   }
+
+   if (memo.count(l_r)) {
+      return memo[l_r];
+   }
+
+   int max_count = 0;
+
+   // 両端以外を消せる場合
+   int inner = solve(l + 1, r - 1, w_list);
+
+   if (inner == r - l - 2) {
+      int w_l = w_list[l];
+      int w_r = w_list[r - 1];
+
+      if (abs(w_l - w_r) <= 1) {
+         // 間が全部消せて両端の差が1以下
+         memo[l_r] = r - l;
+         return r - l;
+      } else {
+         max_count = r - l - 2;
+      }
+   }
+
+   for (int k = l + 1; k < r; k++) {
+      // 区間[l, k), [k, r)に分割して解く
+      int count1 = solve(l, k, w_list);
+      int count2 = solve(k, r, w_list);
+
+      max_count = max(max_count, count1 + count2);
+   }
+
+   memo[l_r] = max_count;
+   return max_count;
+}
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   while (true) {
+      int n;
+      cin >> n;
+
+      if (n == 0) {
+         break;
+      }
+
+      vector<int> w_list;
+
+      for (int i = 0; i < n; i++) {
+         int w;
+         cin >> w;
+
+         w_list.emplace_back(w);
+      }
+
+      memo.clear();
+      cout << solve(0, n, w_list) << endl;
+   }
+
+   return 0;
+}
+

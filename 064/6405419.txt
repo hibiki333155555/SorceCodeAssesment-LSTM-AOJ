@@ -1,0 +1,2 @@
+require('fs').readFileSync(0,'utf8').split`
+`.map(l=>{[H,W]=l.split` `.map(n=>+n),S=H*W;for(;S--;)console.log(S%2==0?'.':'#')});

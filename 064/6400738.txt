@@ -1,0 +1,14 @@
+while True:
+    H, W = map(int, input().split())
+    if H+W == 0:
+        break
+    for h in range(H):
+        print('#', end='')
+        if h == 0 or h == H-1:
+            for w in range(W-2):
+                print(#, end='')
+        else:
+            for w in range(W-2):
+                print('.', end='')
+        print('#')
+    print()

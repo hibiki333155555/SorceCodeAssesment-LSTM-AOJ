@@ -1,0 +1,87 @@
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+using namespace std;
+#define EPS (1e-10)
+#define equal(a,b) (abs(a-b)<EPS)
+
+class Point {
+public:
+	double x, y;
+	/*构造函数*/
+	Point() {}
+	Point(double x, double y) :x(x), y(y) {}
+	/*针对加法的重载*/
+	Point operator + (Point& p) { return Point(x + p.x, y + p.y); }
+	Point operator - (Point& p) { return Point(x - p.x, y - p.y); }
+	Point operator * (double a) { return Point(a * x, a * y); }
+	Point operator / (double a) { return Point(x / a, y / a); }
+
+	/*返回向量的模*/
+	double abs() { return(sqrt(x * x + y * y)); }
+};
+
+/*写成大写防止和vector冲突*/
+typedef Point Vector;
+
+/*这里用Line表示线段*/
+class Line {
+public:
+	Point p1, p2;
+	Line() {}
+	Line(Point p1, Point p2) :p1(p1), p2(p2) {}
+	/*获取直线的方向向量*/
+	Vector GetVector() { return Point(p2.x - p1.x, p2.y - p1.y); }
+};
+
+/*计算两个向量的内积*/
+double dot(Vector v1, Vector v2)
+{
+	return v1.x * v2.x + v1.y * v2.y;
+}
+
+/*计算两个向量的外积 v1积v2*/
+double cross(Vector v1, Vector v2)
+{
+	return v1.x * v2.y - v1.y * v2.x;
+}
+
+/*判断三个点的顺逆时针关系*/
+void judge(Line l, Point p)
+{
+	double crosss = cross(l.GetVector(), p - l.p1);
+	if (equal(crosss, 0))
+	{
+		int fuyi = -1;
+		double dott = dot(l.GetVector(), p - l.p1) / l.GetVector().abs() / (p - l.p1).abs();
+		if (equal(dott,fuyi))
+			cout << "ONLINE_BACK" << endl;
+		else if (equal(dott, 1))
+		{
+			if (p.x > l.p1.x && p.x > l.p2.x || p.x < l.p1.x && p.x < l.p2.x)
+				cout << "ONLINE_FRONT" << endl;
+			else
+				cout << "ON_SEGMENT" << endl;
+		}
+		else if(equal(p.x,l.p1.x)||equal(p.x,l.p2.x))
+			cout << "ON_SEGMENT" << endl;
+	}
+	else if (crosss > 0)
+		cout << "COUNTER_CLOCKWISE" << endl;
+	else
+		cout << "CLOCKWISE" << endl;
+}
+
+int main()
+{
+	Line l;
+	cin >> l.p1.x >> l.p1.y >> l.p2.x >> l.p2.y;
+	int q; cin >> q;
+	for (int i = 0; i < q; i++)
+	{
+		Point p;
+		cin >> p.x >> p.y;
+		judge(l, p);
+	}
+	return 0;
+}

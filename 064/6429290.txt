@@ -1,0 +1,23 @@
+while True:
+    n = int(input())
+    if n == 0:
+        break
+    w = list(map(int, input().split()))
+    dp = [[-float("inf")] * (n + 1) for _ in range(n)]
+    for i in range(n):
+        dp[i][i] = 0
+    for width in range(2, n + 1):
+        for i in range(n - width + 1):
+            if abs(w[i] - w[i + width - 1]) <= 1:
+                dp[i][i + width] = max(dp[i][i + width], dp[i + 1][i + width - 1] + 2)
+            for j in range(i + 1, i + width):
+                dp[i][i + width] = max(dp[i][i + width], dp[i][j] + dp[j][i + width])
+
+    ans_dp = [[0] * (n + 1) for _ in range(n)]
+    for width in range(2, n + 1):
+        for i in range(n - width + 1):
+            for j in range(i + 1, i + width):
+                ans_dp[i][i + width] = max(dp[i][i + width], ans_dp[i][i + width], ans_dp[i][j] + ans_dp[j][i + width])
+
+    print(ans_dp[0][n])
+

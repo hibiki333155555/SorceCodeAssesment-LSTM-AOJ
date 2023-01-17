@@ -1,0 +1,14 @@
+let [, ...inputArr] = require(`fs`).readFileSync(`/dev/stdin`, `utf8`).split(`\n`);
+let count = 0;
+
+function isPrime(x) {
+    if (x == 2) return true;
+    if (x > 2 && x % 2 === 0) return false;
+    for (let i=3; i<Math.floor(Math.sqrt(x)) + 1; i = i + 2) {
+        if (x % i === 0) return false;
+    }
+    count++;
+}
+
+inputArr.map(isPrime);
+console.log(count);

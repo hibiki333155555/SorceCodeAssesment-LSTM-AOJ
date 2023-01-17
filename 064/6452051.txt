@@ -1,0 +1,14 @@
+nm = gets.chomp.split(' ').map(&:to_i)
+a = gets.chomp.split(' ').map(&:to_i)
+b = gets.chomp.split(' ').map(&:to_i)
+keys = a & b
+open = 0
+keys.each do |key| 
+  a.each do |tre|
+    if tre == key
+      open += 1
+    end
+  end
+end
+
+puts open

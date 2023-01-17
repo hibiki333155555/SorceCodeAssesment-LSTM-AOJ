@@ -1,0 +1,10 @@
+using System;
+class program
+{
+    static void Main()
+    {
+        int r = int.Parse(Console.ReadLine());
+        decimal t =(int) r;
+        Console.WriteLine(r * r * 3.141592653589 + " " + 2 * r * 3.141592653589);
+    }
+}

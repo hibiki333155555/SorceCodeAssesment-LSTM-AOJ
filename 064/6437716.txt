@@ -1,0 +1,13 @@
+n = int(input())
+l = input().split()
+min = 1000000
+max = -1000000
+sum = 0
+for i in range(n):
+    a = int(l[i])
+    sum += a
+    if min > a:
+        min = a
+    if max < a:
+        max = a
+print(min, max, sum)

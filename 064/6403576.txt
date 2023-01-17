@@ -1,0 +1,23 @@
+V, E = map(int, input().split())
+G = [[float('inf')]*V for _ in range(V)]
+for _ in range(E):
+    s, t, d = map(int, input().split())
+    G[s][t] = d
+      
+D = [[float('inf')]*V for _ in range(1 << V)]
+D[0][0] = 0 #サイクルができるので、始点は固定してよい。
+    
+for n in range(1 << V):
+    for i in range(V):
+        for j in range(V):
+            if i == j: #同じ頂点
+                continue
+            if (1 << j) & n: #jを訪問済み
+                continue
+            D[n | (1 << j)][j] = min(D[n | (1 << j)][j], D[n][i] + G[i][j])
+                
+ans = D[-1][0]
+if ans < float('inf'):
+    print(ans)
+else:
+    print(-1)

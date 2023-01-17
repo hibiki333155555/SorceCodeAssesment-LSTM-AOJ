@@ -1,0 +1,20 @@
+# cook your dish here
+import itertools
+def countsubsum(a,n,s):
+    # x=itertools.combinations(a,n,s)
+    ind=list(range(n+1))
+    l=[]
+    for i,j in itertools.combinations(ind,2):
+        l.append(a[i:j])
+    c=0
+    for i in l:
+        if sum(i)<=s:
+            c=c+1
+    return c
+  
+n,q=map(int,input().split())
+a=list(map(int,input().split()))
+b=list(map(int,input().split()))
+for i in b:
+    print(countsubsum(a,n,i))
+

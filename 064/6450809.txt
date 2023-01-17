@@ -1,0 +1,70 @@
+#!usr/bin/env python3
+from collections import defaultdict, deque
+from heapq import heappush, heappop
+from itertools import permutations, accumulate
+import sys
+import math
+import bisect
+def LI(): return [int(x) for x in sys.stdin.readline().split()]
+def I(): return int(sys.stdin.readline())
+def IR(n):
+    return [I() for _ in range(n)]
+def LIR(n):
+    return [LI() for _ in range(n)]
+
+sys.setrecursionlimit(1000000)
+mod = 1000000007
+
+def main():
+    def gcd(a,b):
+        while a:
+            a,b = b%a,a
+        return b
+
+    def lcm(a,b):
+        return a*b//gcd(a,b)
+
+
+    n,m = LI()
+    v = [[] for _ in range(n)]
+    for _ in range(m):
+        a,b,c = LI()
+        a -= 1
+        b -= 1
+        v[a].append((b,c-1))
+
+    dp = defaultdict(lambda : 0)
+    dp[(0,0)] = 1
+    q = deque([(0,0)])
+    lis = []
+    while q:
+        x,b = q.popleft()
+        if x+1 == n:
+            lis.append(b)
+        for y,c in v[x]:
+            nb = b|(1<<c)
+            if not dp[(y,nb)]:
+                dp[(y,nb)] = 1
+                q.append((y,nb))
+
+    if not lis:
+        print("IMPOSSIBLE")
+        return
+    min_ = float("inf")
+    max_ = 0
+    for b in lis:
+        l = 1
+        for i in range(20):
+            if (b>>i)&1:
+                l = lcm(l,i+1)
+        if l < min_:
+            min_ = l
+        if max_ < l:
+            max_ = l
+    print(min_,max_)
+    return
+
+
+if __name__ == "__main__":
+    main()
+

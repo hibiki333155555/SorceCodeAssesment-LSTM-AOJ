@@ -1,0 +1,64 @@
+H,W,N = map(int,input().split())
+sx,sy,gx,gy = map(int,input().split())
+grid = [[0]*W for i in range(H)] 
+import sys
+input = sys.stdin.readline
+for i in range(N):
+    mx,my,k = map(int,input().split())
+    mx-=1
+    my -=1
+    grid[my][mx] = 1
+    y = my+k
+    x = mx
+    for i in range(k):
+        grid[y][x] = 1
+        y-=1
+        x+=1
+    y = my
+    x = mx+k
+    for i in range(k):
+        grid[y][x] = 1
+        y-=1
+        x-=1
+    y = my-k
+    x = mx
+    for i in range(k):
+        grid[y][x] = 1
+        y+=1
+        x-=1
+    y = my
+    x = mx-k
+    for i in range(k):
+        grid[y][x] = 1
+        y+=1
+        x+=1
+from collections import deque
+d = deque()
+d.append((sx-1,sy-1))
+already = set()
+while len(d)!=0:
+    x,y = d.popleft()
+    if x == gx-1 and y == gy-1:
+        print("Yes")
+        exit()
+    if x+1<W:
+        if grid[y][x+1] == 0:
+            if (x+1,y) not in already: 
+                d.append((x+1,y))
+                already.add((x+1,y))
+    if x-1>=0:
+        if grid[y][x-1] == 0:
+            if (x-1,y) not in already: 
+                d.append((x-1,y))
+                already.add((x-1,y))
+    if y-1>=0:
+        if grid[y-1][x] == 0:
+            if (x,y-1) not in already: 
+                d.append((x,y-1))
+                already.add((x,y-1))
+    if y+1<H:
+        if grid[y+1][x] == 0:
+            if (x,y+1) not in already: 
+                d.append((x,y+1))
+                already.add((x,y+1))
+print("No")

@@ -1,0 +1,60 @@
+#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <vector>
+#include <numeric>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <random>
+#include <array>
+#include <climits>
+#include <map>
+#include <cassert>
+#include <stack>
+#include <iomanip>
+#include <cfloat>
+#include <bitset>
+#include <fstream>
+#include <chrono>
+
+
+constexpr int MOD = 1'000'000'007;
+std::vector<std::vector<std::vector<long long int>>> cache;
+long long int solve_rec(const int size, const int head, const int toe, const std::vector<std::pair<int, int>>& puppets) {
+	if (size == 0) return (head == 0 && toe == 0) ? 1 : 0;
+	if (head <= 0 || toe < 0 || size < head) return 0;
+	if (cache[size][head][toe] >= 0) return cache[size][head][toe];
+	const auto [min, max] = puppets[size - 1];
+	long long int result{ 0 };
+	if (min <= 0 && 0 <= max) {
+		const auto add_top = solve_rec(size - 1, head - 1, toe, puppets);
+		const auto add_child = solve_rec(size - 1, head, toe + 1, puppets) * (toe + 1);
+		result += add_top + add_child;
+	}
+	if (min <= 1 && 1 <= max) {
+		const auto add_top = solve_rec(size - 1, head - 1, toe - 1, puppets) * 2;
+		const auto add_child = solve_rec(size - 1, head, toe, puppets) * toe * 2;
+		result += add_top + add_child;
+	}
+	if (min <= 2 && 2 <= max) {
+		const auto add_top_rr = solve_rec(size - 1, head - 1, toe - 2, puppets);
+		const auto add_top_lr = solve_rec(size - 1, head, toe - 1, puppets) * head * 2;
+		const auto add_child_rr = solve_rec(size - 1, head, toe - 1, puppets) * (toe - 1);
+		const auto add_child_lr = solve_rec(size - 1, head + 1, toe, puppets) * (head + 1) * 2 * toe;
+		result += add_top_rr + add_top_lr + add_child_rr + add_child_lr;
+	}
+	result %= MOD;
+	return cache[size][head][toe] = result;
+}
+int main() {
+	int n; std::cin >> n;
+	std::vector<std::pair<int, int>> puppets(n);
+	for (auto& [min, max] : puppets) {
+		std::cin >> min >> max;
+	}
+	cache.resize(n + 1, std::vector<std::vector<long long int>>(n + 1, std::vector<long long int>(n + 1, -1)));
+	const auto result = solve_rec(n, 1, 0, puppets);
+	std::cout << result << '\n';
+}

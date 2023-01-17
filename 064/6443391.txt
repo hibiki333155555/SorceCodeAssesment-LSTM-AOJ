@@ -1,0 +1,9 @@
+n = int(input())
+n_list = [int(i) for i in input().split()]
+
+for j in range(n-1,-1,-1):
+    print(n_list[j],end='')
+    if 0 < j :
+        print(' ',end='')
+
+print()

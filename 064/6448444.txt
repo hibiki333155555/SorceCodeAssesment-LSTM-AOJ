@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    string s;
+    cin>>s;
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        string t, p;
+        int a,b;
+        cin>>t>>a>>b;
+        if(t == "replace"){
+            cin>>p;
+            int j=0;
+            for(int i=a;i<=b;i++){
+                s[i] = p[j];
+                j++;
+            }
+        }else if(t == "reverse"){
+            while(b > a){
+                swap(s[a], s[b]);
+                a++;
+                b--;
+            }
+        }else{
+           for(int i=a;i<=b;i++){
+               cout<<s[i];
+           }
+           cout<<endl;
+        }
+    }
+    return(0);
+}
+

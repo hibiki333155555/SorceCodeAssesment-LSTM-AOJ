@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main ()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+	map<string,int> m;
+    int q, x;
+    string s;
+	cin>>q;
+	while(q--){
+        cin >> x >> s;
+        if(!x)
+        {
+			cin>>x;
+			m[s]=x;
+		}
+        else
+        {
+            if (m.find(s)==m.end())
+                cout << 0 << endl;
+            else cout << m[s] << endl;
+        }
+	}
+    return 0;
+}
+

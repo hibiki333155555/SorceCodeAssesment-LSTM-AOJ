@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+
+int main()
+{
+    int count = 0;
+
+    std::string word;
+    std::cin >> word;
+    std::cin.ignore(1024, '\n');
+
+    while ( true ) {
+        std::string str;
+
+        std::getline(std::cin, str);
+        if (str == "END_OF_TEXT")
+            break;
+        
+        for (int i = 0;i < str.length();++i)
+            if ('A' <= str[i] && str[i] <= 'Z')
+                str[i] += 0x20;
+
+        int index = str.find(' ');
+        while ( index != -1 ) {
+            std::string buff(str.begin(), str.begin()+index);
+            if (buff == word)
+                ++count;
+
+            str.assign( ++str.begin()+index, str.end() );
+
+            index = str.find(' ');
+        }
+
+        if (str == word)
+            ++count;
+    }
+
+    std::cout << count << std::endl;
+    return 0;
+}

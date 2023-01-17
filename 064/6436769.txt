@@ -1,0 +1,61 @@
+#include <stdio.h>
+#define N 100
+#define INF 10000
+
+int G[N][N];
+
+int cost_list[N] = {[0 ... N - 1] = INF};
+int visited[N];
+int count = 0;
+
+void prim(int n) {
+  cost_list[0] = 0;
+  while (count != n) {
+    int min_cost = INF;
+    int min_v = -1;
+    for (int i = 0; i < n; i++) {
+      if (!visited[i] && min_cost > cost_list[i]) {
+        min_cost = cost_list[i];
+        min_v = i;
+      }
+    }
+
+    if (min_v == -1) {
+      break;
+    }
+
+    visited[min_v] = 1;
+    count++;
+    for (int i = 0; i < n; i++) {
+      int cost = G[min_v][i];
+      if (cost == -1) {
+        continue;
+      }
+      if (!visited[i] && cost_list[i] > cost) {
+        cost_list[i] = cost;
+      }
+    }
+  }
+}
+
+int main(void) {
+  printf("%d", cost_list[N - 1]);
+  int n;
+  scanf("%d", &n);
+  int in;
+  for (int i = 0; i < n; i++) {
+    for (int k = 0; k < n; k++) {
+      scanf("%d", &in);
+      G[i][k] = in;
+    }
+  }
+  prim(n);
+  int sum = 0;
+  for (int i = 0; i < n; i++) {
+    if (cost_list[i] != INF) {
+      sum += cost_list[i];
+    }
+  }
+  printf("%d\n", sum);
+}
+

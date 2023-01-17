@@ -1,0 +1,49 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<string>
+#include<cmath>
+#include<iomanip>
+#include<map>
+#include<stack>
+#include<queue>
+#include<set>
+#include<deque>
+
+using namespace std;
+using P = pair<int,int>;
+using ll = long long;
+using ld = long double;
+
+const ld EPS = 1e-10;
+const ll MOD = 1000000007LL;
+const ll INF = 1LL << 60;
+const double PI = M_PI;
+
+int main(){
+
+  int n, c;
+  int count = 0;
+  string name;
+  int time;
+  queue<pair<string, int>> q;
+  cin >> n >> c;
+  for( int i = 0 ; i < n ; i++ ){
+    cin >> name >> time;
+    q.push(make_pair(name,time));
+  }
+  while(!q.empty()){
+    pair<string, int> p = q.front();
+    if(p.second > c){
+      count += c;
+      q.push(make_pair(p.first, p.second-c));
+    }
+    else{
+      count += p.second;
+      cout << p.first << " " << count << endl;
+    }
+    q.pop();
+  }
+
+}
+

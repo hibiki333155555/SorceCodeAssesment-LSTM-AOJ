@@ -1,0 +1,15 @@
+#include<stdio.h>
+int main(){
+int w , h,x,y,r,a,b;
+scanf("%d %d %d %d %d",&w,&h,&x,&y,&r);
+a=w-r;
+b=h-r;
+if( x>=r && a>=x && y>=r && b>=y){
+    printf("Yes\n");
+}
+else{
+    printf("no\n");
+}
+
+    return 0;
+}

@@ -1,0 +1,33 @@
+class NewString{
+    java.lang.String string;
+
+    public NewString(java.lang.String string) {
+        this.string = string;
+    }
+
+    public void setString(java.lang.String string) {
+        this.string = string;
+    }
+
+    public java.lang.String getString() {
+        return string;
+    }
+
+    // 指定された回数だけ文字列を表示する
+    public void showString(int times){
+        for (int i = 0; i < times; i++) {
+            System.out.println(string);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // クラスを宣言
+        NewString string = new NewString("Hello World");
+
+        // 1000回文字列を表示させる
+        string.showString(1000);
+    }
+}
+

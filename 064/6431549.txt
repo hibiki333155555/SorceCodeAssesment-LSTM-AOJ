@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        String w = scan.next().toLowerCase();
+
+        String str = "";
+        int count = 0;
+        while (scan.hasNext()){
+            str = scan.nextLine().toLowerCase();
+            if (str.equals("end_of_text")){
+                break;
+            }
+            while (str.contains(w)){
+                str = str.substring(str.indexOf(w) + w.length());
+                count++;
+            }
+        }
+
+        System.out.println(count);
+    }
+}

@@ -1,0 +1,17 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+int main() {
+    int n, num_max = -1000001, num_min = 1000001, tmp;
+    long long int sum = 0;
+    
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        cin >> tmp;
+        sum += tmp;
+        num_max = max(num_max, tmp);
+        num_min = min(num_min, tmp);
+    }
+    cout << num_min << " " << num_max << " " << sum << endl;
+}

@@ -1,0 +1,21 @@
+#include<stdio.h>
+int main()
+{
+    int a = 0, b;
+    a = a+ 1, b = 3;
+    printf("case %d: %d\n", a, b);
+    a = a + 1, b = 5;
+    printf("case %d: %d\n", a, b);
+     a = a + 1, b = 11;
+    printf("case %d: %d\n", a, b);
+     a = a + 1, b = 7;
+    printf("case %d: %d\n", a, b);
+     a = a + 1, b = 8;
+    printf("case %d: %d\n", a, b);
+     a = a + 1, b = 19;
+    printf("case %d: %d\n", a, b);
+     a = a + 1, b = 0;
+    printf("%d", a, b);
+    return 0;
+}
+

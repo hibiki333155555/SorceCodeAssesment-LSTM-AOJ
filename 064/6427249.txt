@@ -1,0 +1,50 @@
+#include<stdio.h>
+#define MAX 100
+
+int to[MAX][MAX], d[MAX], f[MAX], visited[MAX];
+int time = 0, n;
+
+void dfs_visit(int u){
+  d[u] = ++time;
+  visited[u] = 1;
+  for(int v = 0; v < n; v++ ){
+    if(to[u][v] == 1 && visited[v] == 0) dfs_visit(v);
+  }
+  f[u] = ++time;
+}
+
+void dfs(){
+  for(int i = 0; i < MAX; i++ ) visited[i] = 0;
+
+  for(int i = 0; i < n; i++ ){
+    if(visited[i] == 0) dfs_visit(i);
+  }
+}
+
+
+int main(){
+  int u, k, v;
+  scanf("%d", &n);
+
+  for(int i = 0; i < MAX; i++ ){
+    for(int j = 0; j < MAX; j++ ){
+      to[i][j] = 0;
+    }
+  }
+
+  for(int i = 0; i < n; i++ ){
+    scanf("%d %d", &u, &k);
+    for(int j = 0; j < k; j++ ){
+      scanf("%d", &v);
+      to[u - 1][v - 1] = 1;
+    }
+  }
+
+  dfs();
+
+  for(int i = 0; i < n; i++ ){
+    printf("%d %d %d\n", i + 1, d[i], f[i]);
+  }
+
+  return 0;
+}

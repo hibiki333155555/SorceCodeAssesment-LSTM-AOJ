@@ -1,0 +1,3 @@
+a,b=(longint(x) for x in input().split())
+c=a+b
+print(a//b,int(a%b),float(a/b))

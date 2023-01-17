@@ -1,0 +1,6 @@
+const x = require('fs').readFileSync('/dev/stdin', 'utf8');
+const arr = x.split(' ').map(Number);
+const area = (arr[0] * arr[1]).toString();
+const p = (arr[0] * 2 + arr[1] * 2).toString();
+const ans = `${area} ${p}`;
+console.log(ans);

@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+#define rep(i,cc,n) for(int i=cc;i<n;++i)
+#define drep(i,cc,n) for(int i=cc;i>=n;--i)
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+const long long INF = 1LL << 60;
+const long long  MOD = 1e9 + 7;
+long double PI = 3.14159265358979;
+typedef long long ll;
+using namespace std;
+
+//乗算
+long long pow(long long x, long long n) {
+    long long ret = 1;
+    while (n > 0) {
+        if (n & 1) ret = ret * x % MOD;  // n の最下位bitが 1 ならば x^(2^i) をかける
+        x = x * x % MOD;
+        n >>= 1;  // n を1bit 左にずらす
+    }
+    return ret;
+}
+
+int main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+
+    ll m, n;
+    cin >> m >> n;
+    cout << pow(m, n) << endl; 
+    return 0;        
+}

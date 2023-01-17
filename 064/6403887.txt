@@ -1,0 +1,8 @@
+let number = +require(`fs`).readFileSync(`/dev/stdin`, `utf-8`);
+let out = [];
+for (let i=1; i<number+1; i++) {
+    if (i % 3 == 0 || i % 10 == 3) {
+        out.push(i);
+    }
+}
+console.log(` ` + out.join(` `));

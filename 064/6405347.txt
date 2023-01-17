@@ -1,0 +1,9 @@
+w = input()
+count = 0
+while True:
+    str = input()
+    if str == 'END_OF_TEXT':
+        break
+    if str.find(w) > -1:
+        count += 1
+print(count)

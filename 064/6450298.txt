@@ -1,0 +1,25 @@
+import sys,random,bisect
+from collections import deque,defaultdict
+from heapq import heapify,heappop,heappush
+from itertools import permutations
+from math import gcd
+from fractions import Fraction
+
+input = lambda :sys.stdin.readline().rstrip()
+mi = lambda :map(int,input().split())
+li = lambda :list(mi())
+
+A,B = mi()
+if A > B:
+    A,B = B,A
+
+if A==0 and B==0:
+    exit(print(1))
+
+n = B.bit_length()
+for i in range(n)[::-1]:
+    if A>>i & 1 != B>>i & 1:
+        print(n-i-1)
+        break
+else:
+    print(n)

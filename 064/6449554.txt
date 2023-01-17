@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+using ld=long double;
+ll inf=10010010010010010;
+ll mod=998244353;
+ll modpow(ll x, ll n) {
+  if(n==0) return 1;  //再帰の終了条件
+
+  else if(n%2==1) {
+    return (x*modpow(x, n-1));  //nが奇数ならnを1ずらす
+  }
+  else return modpow((x*x), n/2);  //nが偶数ならnが半分になる
+}
+vector<ll> lcs(vector<ll> &A, vector<ll> &B){
+	vector<vector<ll>> dp(A.size() + 1, vector<ll>(B.size() + 1, 0));
+	for (ll i = 0; i < A.size(); i++){
+		for (ll j = 0; j < B.size(); j++){
+			if (A[i] == B[j]){
+				dp[i + 1][j + 1] = dp[i][j] + 1;
+			} else {
+				dp[i + 1][j + 1] = max(dp[i + 1][j], dp[i][j + 1]);
+			}
+		}
+	}
+    vector<ll>ans;
+	ll i = A.size();
+	ll j = B.size();
+	while (dp[i][j] > 0){
+		if (dp[i - 1][j] == dp[i][j]){
+			i--;
+		} else if (dp[i][j - 1] == dp[i][j]){
+			j--;
+		} else {
+			i--;
+			j--;
+			ans.push_back(A[i]);
+		}
+	}
+	reverse(ans.begin(), ans.end());
+	return ans;
+}
+int main(){
+    ll a,b;
+    cin >> a >> b;
+    ll c=max(a,b);
+    ll d=min(a,b);
+    vector<ll>x,y;
+    for (ll i = 0; modpow(2,i) <=c; i++)
+    {
+        if (modpow(2,i)&c)
+        {
+            x.push_back(1);
+        }else{
+            x.push_back(0);
+        }
+        if (modpow(2,i)&d)
+        {
+            y.push_back(1);
+        }else{
+            y.push_back(0);
+        }
+    }
+    if (c==0)
+    {
+        cout << 1 << endl;
+        return 0;
+    }
+    reverse(x.begin(),x.end());
+    reverse(y.begin(),y.end());
+    ll ans=0;
+    for (ll i = 0; i < x.size(); i++)
+    {
+        if (x[i]==y[i])
+        {
+            ans+=1;
+        }else{
+            break;
+        }
+        
+    }
+    cout << ans << endl;
+}

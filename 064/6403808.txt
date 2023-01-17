@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+using Int = int_fast64_t;
+
+void add(vector<pair<Int, Int>>& S, int k, int l, int r, int s, int t, Int x)
+{
+	if (l >= r || r <= s || t <= l) return;
+	if (s <= l && r <= t) {
+		S[k].first += x;
+		x *= r - l;
+		for (int i = k / 2; i > 0; i /= 2) S[i].second += x;
+		return;
+	}
+	int m = (l + r) / 2;
+	add(S, 2 * k, l, m, s, t, x);
+	add(S, 2 * k + 1, m, r, s, t, x);
+}
+
+Int sum(vector<pair<Int, Int>>& S, int k, int l, int r, int s, int t)
+{
+	if (l >= r || r <= s || t <= l) return 0;
+	if (s <= l && r <= t) {
+		Int x = 0;
+		for (int i = k; i > 0; i /= 2) x += S[i].first;
+		x *= r - l;
+		x += S[k].second;
+		return x;
+	}
+	int m = (l + r) / 2;
+	return sum(S, 2 * k, l, m, s, t) + sum(S, 2 * k + 1, m, r, s, t);
+}
+
+int main()
+{
+	int n, nn, q, c, s, t, x; cin >> n >> q;
+	for (nn = 1; nn < n; nn *= 2) ;
+	vector<pair<Int, Int>> S(nn * 2, {0, 0});
+	for (cin >> c >> s >> t; --q >= 0; cin >> c >> s >> t) switch (c) {
+	case 0: cin >> x; add(S, 1, 0, nn, s - 1, t, x); break;
+	case 1: cout << sum(S, 1, 0, nn, s - 1, t) << endl; break;
+	}
+	return 0;
+}
+

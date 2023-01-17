@@ -1,0 +1,9 @@
+while True:
+  x = input()
+  sum = 0
+  if x == 0:
+    break
+  else:
+    for d in x:
+      sum += int(d)
+    print(sum)

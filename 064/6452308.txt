@@ -1,0 +1,28 @@
+#include<stdio.h>
+
+int main(void)
+{
+	unsigned int n;
+	scanf("%d",&n);
+	printf("%d:",n);
+	int i;
+	int m = n;
+
+	for(i=2;i<=m/2;i++){
+
+		while(n%i == 0){
+			printf(" %d",i);
+			n = n/i;
+		}
+
+	//printf("%d",i);
+	}
+	//printf("%d",i);
+
+	return 0;
+}
+
+
+
+
+

@@ -1,0 +1,14 @@
+#include<stdio.h>
+#include<math.h>
+
+int main(void){
+    float xp1,yp1,xp2,yp2,kyo;
+    
+    scanf("%f %f %f %f",&xp1,&yp1,&xp2,&yp2);
+    
+    kyo = sqrt(((xp2 - xp1) * (xp2 - xp1)) + pow((yp2 - yp1),2));
+    
+    printf("%f\n",kyo);
+    
+    return 0;
+}

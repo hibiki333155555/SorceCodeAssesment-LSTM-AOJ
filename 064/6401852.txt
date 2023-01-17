@@ -1,0 +1,35 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void call(int n) {
+        int i = 1;
+
+        do {
+            int x = i;
+            // 文末
+            if (x % 3 == 0) {
+                System.out.print(" " + i);
+            } else if (x % 10 == 3) {
+                System.out.print(" " + i);
+            } else {
+                x /= 10;
+                if (x > 0) {
+                    if (x % 10 == 3) {
+                        System.out.print(" " + i);
+                    }
+                }
+            }
+        } while (++i <= n);
+        System.out.println("");
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        call(n);
+    }
+
+
+}
+

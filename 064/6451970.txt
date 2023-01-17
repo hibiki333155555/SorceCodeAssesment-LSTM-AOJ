@@ -1,0 +1,4 @@
+s = gets.chomp.downcase
+("a".."z").each do |alpha|
+    puts "#{alpha} : #{s.count(alpha)}"
+end

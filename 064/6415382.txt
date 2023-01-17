@@ -1,0 +1,46 @@
+#include "bits/stdc++.h"
+using namespace std;
+
+int main(){
+    int m,n,mi=1e9+5;
+    cin>>m>>n;
+    vector<vector<char> >s(m,vector<char>(n));
+    vector<pair<int,int> >J(n);
+    vector<pair<int,int> >I(m);
+    for(int i=0;i<m;i++){
+        I[i].first=0;
+        I[i].second=0;
+        for(int j=0;j<n;j++){
+            cin>>s[i][j];
+            if(i==0){J[j].first=0;J[j].second=0;}
+            if(s[i][j]=='o'){J[j].first++;I[i].first++;}
+            else {J[j].second++;I[i].second++;}
+        }
+    }
+    int p=0,sum=0,num1=0,num2=0;
+    for(int i=0;i<m;i++){
+        num1+=I[i].first;
+        num2+=I[i].second;
+        for(int j=0;j<m;j++){
+            if(j==i)continue;
+            num1+=I[j].second;
+            num2+=I[j].first;
+        }
+        sum=min(num1,num2);
+        mi=min(mi,sum);
+        num1=0,num2=0;
+    }
+    for(int i=0;i<n;i++){
+         num1+=J[i].first;
+         num2+=J[i].second;
+        for(int j=0;j<m;j++){
+            if(j==i)continue;
+            num1+=J[j].second;
+            num2+=J[j].first;
+        }
+        sum=min(num1,num2);
+        mi=min(mi,sum);
+        num1=0,num2=0;
+    }
+    cout<<mi<<endl;
+}

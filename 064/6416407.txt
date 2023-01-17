@@ -1,0 +1,22 @@
+#include<stdio.h>
+
+int main()
+
+{
+    int r;
+    float area,circum;
+    scanf("%d",&r);
+    if(r<1000)
+{
+    area=3.1415926535897932*r*r;
+    circum=2*r*3.1415926535897932;
+    printf("%0.6f %0.6f\n",area,circum);
+}
+    else 
+{
+    printf("wrong");
+}
+    return 0;
+
+}
+

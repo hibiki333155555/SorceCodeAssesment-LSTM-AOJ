@@ -1,0 +1,42 @@
+def resolve(s, t)
+  count = 0
+  t.each do |val|
+    if contain?(s, val)
+      count += 1
+    end
+  end
+  puts count
+end
+
+def contain?(arr, target)
+  mid = (arr.size - 1) / 2
+  map = {}
+ # p mid
+  loop do
+  #  puts "arr: #{arr[mid]}"
+   # puts "target: #{target}"
+    return true if arr[mid] == target
+
+    if arr[mid] > target
+      size = arr[(mid + 1)..-1].size
+      mid = (size - 1) / 2
+    else
+      size = arr[0...mid].size
+      mid = (size - 1) / 2
+    end
+
+    return false if map[mid]
+
+    map[mid] = true
+  end
+end
+
+
+n = gets.to_i
+s = gets.split(' ').map(&:to_i)
+
+q = gets.to_i
+t = gets.split(' ').map(&:to_i)
+
+resolve(s, t)
+

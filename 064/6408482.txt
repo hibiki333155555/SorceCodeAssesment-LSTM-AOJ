@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+#define rep(i, f, n) for (int i = f; i < (int)(n); i++)
+using namespace std;
+
+int main()
+{
+    int n, a[22], q, m[300];
+    cin >> n;
+    rep(i, 0, n) cin >> a[i];
+    cin >> q;
+    rep(i, 0, q) cin >> m[i];
+    rep(i, 0, q)
+    {
+        bool flag = false;
+        rep(j, 0, (1 << n))
+        {
+            int val = 0;
+            rep(k, 0, n)
+            {
+                if (j & 1 << k)
+                    val += a[k];
+            }
+            if (val == m[i])
+                flag = true;
+        }
+        if (flag)
+            cout << "yes" << endl;
+        else
+            cout << "no" << endl;
+    }
+}

@@ -1,0 +1,32 @@
+import sys,random,bisect
+from collections import deque,defaultdict
+from heapq import heapify,heappop,heappush
+from itertools import permutations
+from math import gcd
+from fractions import Fraction
+
+input = lambda :sys.stdin.readline().rstrip()
+mi = lambda :map(int,input().split())
+li = lambda :list(mi())
+
+N = int(input())
+S = [input() for i in range(N)]
+n = len(S[0])
+
+res = 0
+for i in range(N):
+    flag = 0
+    for j in range(N):
+        if i==j:
+            continue
+        diff = 0
+        for k in range(n):
+            if S[i][k]!=S[j][k]:
+                diff += 1
+        if diff <= 1:
+            flag = 1
+    res += flag
+
+print(res)
+
+

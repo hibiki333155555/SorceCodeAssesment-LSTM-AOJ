@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+int main(){
+    int n;cin>>n;
+    vector<int> x(n);
+    vector<int> y(n);
+    for(int i=0;i<n;i++){
+        cin>>x.at(i);
+    }
+    for(int i=0;i<n;i++){
+        cin>>y.at(i);
+    }
+    int p1,temp,pinf=0;
+    for(int i=0;i<n;i++){
+        temp=abs(x.at(i)-y.at(i));
+        if(temp>pinf){
+            pinf=temp;
+        }
+        p1+=temp;
+    }
+    double p2=0;
+    for(int i=0;i<n;i++){
+        temp=abs(x.at(i)-y.at(i));
+        temp=temp*temp;
+        p2+=(double)temp;
+    }
+    p2=sqrt(p2);
+    double p3=0;
+    for(int i=0;i<n;i++){
+        temp=abs(x.at(i)-y.at(i));
+        temp=pow(temp,3);
+        p3+=temp;
+    }
+    p3=pow(p3,1.0/3.0);
+    cout<<fixed<<setprecision(12)<<p1<<"\n";
+    cout<<p2<<"\n";
+    cout<<p3<<"\n";
+    cout<<pinf<<"\n";
+}

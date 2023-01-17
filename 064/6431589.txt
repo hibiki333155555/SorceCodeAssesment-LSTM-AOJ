@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        String w = scan.next().toLowerCase();
+
+        int count = 0;
+        while (scan.hasNext()){
+            String temp = scan.next();
+            if (temp.equals("END_OF_TEXT")){
+                break;
+            }
+            if (temp.toLowerCase().equals(w)){
+                count++;
+            }
+        }
+
+        System.out.println(count);
+    }
+}

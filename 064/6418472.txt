@@ -1,0 +1,56 @@
+class Node:
+    def __init__(self, key, parent):
+        self.key = key
+        self.parent = parent
+        self.left = None
+        self.right = None
+    
+def Insert(tree_root, node):
+    parent = None
+    root = tree_root
+
+    while root != None:
+        parent = root
+        if node.key < root.key:
+            root = root.left
+        else:
+            root = root.right
+    
+    node.parent = parent
+
+    if tree_root == None:
+        tree_root = node
+    elif node.key < parent.key:
+        parent.left = node
+    else:
+        parent.right = node
+    
+    return tree_root
+
+def print_pre(root):
+    if root != None:
+        print(f' {root.key}',end = '')
+        print_pre(root.left)
+        print_pre(root.right)
+
+def print_in(root):
+    if root != None:
+        print_in(root.left)
+        print(f' {root.key}',end = '')
+        print_in(root.right)
+
+n = int(input())
+tree_root = None
+
+for i in range(n):
+    im =list(input().split())
+    if im[0] == 'insert':
+        key = int(im[1])
+        node = Node(key, -1)
+        tree_root = Insert(tree_root, node)
+    else:
+        print_in(tree_root)
+        print()
+        print_pre(tree_root)
+        print()
+

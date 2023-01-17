@@ -1,0 +1,32 @@
+#include <iostream>
+#include <iomanip>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+   int n, x;
+
+   while(true) {
+      cin >> n >> x;
+
+      int num[n];
+      for(int i=0; i<n; i++) {
+         num[i] = i + 1;
+      }
+
+      int count = 0;
+      for(int i=0; i<n; i++) {
+         for(int j=0; j<n; j++) {
+            if(i==j) continue;
+
+            for(int k=0; k<n; k++) {
+               if(i==k || j==k) continue;
+               int sum = num[i] + num[j] + num[k];
+               if(sum == x) count++;
+            }
+         }
+      }
+
+      cout << count << "\n";
+   }
+}

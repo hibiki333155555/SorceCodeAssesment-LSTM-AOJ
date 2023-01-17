@@ -1,0 +1,28 @@
+from collections import deque
+inf = float('INF')
+n = int(input())
+#隣接ノード
+G = [ [] for _ in range(n+1)]
+for _ in range(n):
+    u,_,*vs = map(int, input().split())
+    for v in vs:
+        G[u].append(v)
+
+q = deque([])
+distance = [inf for _ in range(n+1)]
+distance[1] = 0
+q.append(1)#出発地点
+while q:
+    v = q.popleft()
+    d = distance[v]
+    #print(v, G[v])
+    for u in G[v]:
+        if distance[u]==inf:
+            distance[u] = d+1
+            q.append(u)
+        else:
+            pass
+
+for i,d in enumerate(distance[1:]):
+    print(i+1, d)
+

@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define N 700
+vector<int> vec[N];
+int match[N];
+int visited[N];
+bool letsFly(int u)
+{
+    for(int i=0;i<vec[u].size();i++)
+    {
+        if(visited[vec[u][i]])
+            return false;
+        visited[vec[u][i]]=1;
+        if(match[vec[u][i]]==0||letsFly(match[vec[u][i]]))
+        {
+            match[vec[u][i]]==u;
+            return true;
+        }
+    }
+    return false;
+}
+int main()
+{
+    //freopen("inputA.txt","r",stdin);
+    int x,y,z,u,v,res=0;
+    cin>>x>>y>>z;
+    for(int i=0; i<z; i++)
+    {
+        cin>>u>>v;
+        vec[u+1].push_back(v+1);
+    }
+    for(int i=1; i<=x+y; i++)
+    {
+        memset(visited,0,sizeof(visited));
+        if(letsFly(i))
+            res++;
+
+    }
+    cout<<res<<endl;
+    return 0;
+}
+

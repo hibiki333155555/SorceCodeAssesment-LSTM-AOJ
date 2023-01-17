@@ -1,0 +1,582 @@
+//https://qiita.com/square1001/items/1aa12e04934b6e749962
+//https://github.com/mayakovskyj/Arbitrary-precision-arithmetic/blob/master/long_number.cpp
+//https://github.com/cliffxzx/toom-3-in-biginteger/blob/master/release.cpp
+//https://github.com/hamsterjam/bigfact/blob/197a93f14872c00ab2630f5b4cd320cda4f06353/bint.c
+//https://stackoverflow.com/questions/65647279/how-to-improve-multiplication-efficiency-in-big-integer
+//https://codeforces.com/contest/528/submission/116243845
+//https://atcoder.jp/contests/practice2/submissions/26262709
+//https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.47.565&rep=rep1&type=pdf
+//@verified ABC233E_Σ[k=0..10^100]floor(X/10^k)
+//@verified DivisionOfBigIntegers https://onlinejudge.u-aizu.ac.jp/problems/NTL_2_D
+//#pragma region opt
+//#pragma GCC target("avx2")
+//#pragma GCC optimize("O3")
+//#pragma endregion opt
+//#pragma region header
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+//#include<stdarg.h>
+//#include<assert.h>
+//#include<errno.h>
+#include<stdbool.h>
+//#include<stddef.h>
+//#pragma endregion header
+//#pragma region macro
+#define REP(i,N) for(size_t i=0;i<(size_t)N;i++)
+//#pragma endregion macro
+//#pragma region io
+/*static void PUT(char c)
+{
+  static char buf[1<<15],*ptr=buf;
+  if(ptr==buf+strlen(buf)||c==0){fwrite(buf,1,ptr-buf,stdout),ptr=buf;}*ptr++=c;
+}
+static int IN(void)
+{
+  int x=0,f=1,c;while(c=getchar(),c<48||c>57)if(c==45){f=-f;}
+  while(c>47&&c<58){x=(x<<3)+(x<<1)+c-48,c=getchar();}return f*x;
+}
+static void OUT(int a)
+{
+  char d[20]={0};size_t i=0;if(a<0){PUT('-'),a=-a;}
+  do{d[i++]=a-a/10*10+48;}while(a/=10);
+  while(i--){PUT(d[i]);}PUT(' ');
+}*/
+//#pragma endregion io
+//#pragma region montgomery
+typedef unsigned long U64;
+static unsigned MOD=998244353u,TWICE=1996488706u,R1=301989884u,R2=932051910u,INV=3296722945u,
+gs[]=
+{
+  691295370,307583142,566821959,878217029,375146819,138254384,500602490,79119218,
+  790898700,978335284,651424567,308706579,723000027,474797508,683394121,44141573,
+  536892010,945865189,175417726,536169764,831722880,721458245
+},
+igs[]=
+{
+  306948983,888603487,138723248,65668869,842568658,953245971,195169681,118717521,
+  792052763,828450244,908724728,218560432,628507989,248210924,566568154,6285593,
+  82571768,49985074,225413092,349167278,61514562,763211248
+};
+static unsigned _one(unsigned mod){unsigned x=4294967295u;x-=x/mod*mod;return x+1;}
+static unsigned _r2(U64 mod){U64 x=18446744073709551615ul;x-=x/mod*mod;return x+1;}
+static unsigned _inv(unsigned mod){unsigned inv=mod,four=4;while(four--){inv*=2-mod*inv;}return inv;}
+static unsigned Reduce(U64 a){long z=(a>>32)-((((unsigned)a*INV)*(U64)MOD)>>32);return z<0?z+MOD:(unsigned)z;}
+static unsigned To(U64 a){return Reduce(a*R2);}
+static unsigned From(U64 a){unsigned t=Reduce(a)-MOD;return t+(MOD&-(t>>31));}
+static unsigned UAdd(unsigned a,unsigned b){a+=b-TWICE;a+=TWICE&-(a>>31);return a;}
+static unsigned USub(unsigned a,unsigned b){a-=b;a+=TWICE&-(a>>31);return a;}
+//static unsigned UMin(unsigned a){return USub(0,a);}
+static unsigned UMul(U64 a,U64 b){return Reduce(a*b);}
+static unsigned UPow(unsigned a,size_t b){return b?UMul(UPow(UMul(a,a),b>>1),b&1?a:R1):R1;}
+static unsigned UInv(unsigned a)
+{
+  a=From(a);int b=MOD,p=1,q=0;
+  while(b){int c=a/b,d=a;a=b;b=d-c*b;d=p;p=q;q=d-c*q;}
+  return To(p<0?p+MOD:(unsigned)p);
+}
+//static unsigned UDiv(unsigned a,unsigned b){return UMul(a,UInv(b));}
+static size_t BSF(size_t x){__asm__("bsfq %0,%0":"=r"(x):"0"(x));return x;}
+/*static size_t CLZ32(unsigned x)
+{
+  int c=1;if(!x){return 32;}
+  if(!(x>>16)){c+=16;x<<=16;}
+  if(!(x>>24)){c+=8;x<<=8;}
+  if(!(x>>28)){c+=4;x<<=4;}
+  if(!(x>>30)){c+=2;x<<=2;}
+  return c-(x>>31);
+}*/
+static size_t CTZ32(unsigned v)
+{
+  if(!v){return 0;}
+  static const size_t CountTrailZero[32]=
+  {
+    0,1,28,2,29,14,24,3,30,22,20,15,25,17,4,8,
+    31,27,13,23,21,19,16,7,26,12,18,6,11,5,10,9
+  };
+  return CountTrailZero[1u*((v&-(int)v)*0x077CB531U)>>27];
+}
+static size_t _lb(size_t x)
+{
+  int c=0;if(!x){return 0;}
+  if(x&0xFFFF0000){x&=0xFFFF0000;c|=0x10;}
+  if(x&0xFF00FF00){x&=0xFF00FF00;c|=0x08;}
+  if(x&0xF0F0F0F0){x&=0xF0F0F0F0;c|=0x04;}
+  if(x&0xCCCCCCCC){x&=0xCCCCCCCC;c|=0x02;}
+  if(x&0xAAAAAAAA){c|=0x01;}
+  return 31-(c^31);
+}
+static size_t Logb(size_t x){return(x>=(1ul<<32))?_lb(x>>32ul)+32:_lb(x);}
+//static size_t Logb(size_t n){double f=n;return(((int*)&f)[1]>>20)-1023;}
+//static unsigned MAdd(unsigned a,unsigned b){return a+b<MOD?a+b:a+b-MOD;}
+//static unsigned MSub(unsigned a,unsigned b){return a<b?MOD-b+a:a-b;}
+/*static unsigned MMul(unsigned a,unsigned b)
+{
+  U64 x=a;x*=b;unsigned xh=(unsigned)(x>>32),xl=(unsigned)x,d,m;
+  __asm__("divl %4;\n\t":"=a"(d),"=d"(m):"d"(xh),"a"(xl),"r"(MOD));
+  return m;
+}*/
+static unsigned MPow(unsigned a,size_t b){return b?(U64)MPow((U64)a*a%MOD,b>>1)*(b&1?a:1)%MOD:1;}
+//static unsigned MInv(unsigned a){int b=MOD,p=1,q=0;while(b){int c=a/b,d=a;a=b;b=d-c*b;d=p;p=q;q=d-c*q;}return p<0?p+MOD:p;}
+//static unsigned MDiv(unsigned a,unsigned b){return MMul(a,MInv(b));}
+static unsigned PrimitiveRoot(void)
+{
+  if(MOD==2){return 1;}
+  if(MOD==167772161||MOD==469762049||MOD==998244353){return 3;}
+  if(MOD==754974721){return 11;}
+  const unsigned phi=MOD-1;unsigned g=2u,m=phi,p=5u,q=7u,pr[32]={2};size_t psz=1;
+  while((m&1)==false){m>>=1;}
+  if(m==m/3*3){pr[psz++]=3;do{m/=3;}while(m==m/3*3);}
+  while(p*p<=m)
+  {
+    if(m==m/p*p){pr[psz++]=p;do{m/=p;}while(m==m/p*p);}p+=6;
+    if(m==m/q*q){pr[psz++]=q;do{m/=q;}while(m==m/q*q);}q+=6;
+  }
+  if(m!=1){pr[psz++]=m;}
+  while(true)
+  {
+    bool f=true;REP(i,psz){if(!f){break;}f&=(MPow(g,phi/pr[i])!=1);}
+    if(f){return g;}g++;
+  }
+}
+static void Init(const unsigned mod)
+{
+  MOD=mod;TWICE=mod<<1;R1=_one(MOD);R2=_r2(MOD);INV=_inv(MOD);
+  size_t ct2=BSF(MOD-1);unsigned now=R1,inow=R1,es[32],ies[32],
+  e=UPow(To(PrimitiveRoot()),(MOD-1)>>ct2),ie=UInv(e);
+  REP(i,ct2-1){es[ct2-2-i]=e;e=UMul(e,e);ies[ct2-2-i]=ie;ie=UMul(ie,ie);}
+  REP(i,ct2-1)
+  {
+    gs[i]=UMul(es[i],now);now=UMul(now,ies[i]);
+    igs[i]=UMul(ies[i],inow);inow=UMul(inow,es[i]);
+  }
+}
+//#pragma endregion montgomery
+//#pragma region ntt
+static void Butterfly(int *A,size_t h,bool inv)
+{
+  REP(k,h)
+  {
+    size_t ph=inv?h-k:k+1,w=1<<(ph-1),p=1<<(h-ph);unsigned now=R1;
+    REP(s,w)
+    {
+      size_t offset=s<<(h-ph+1);
+      REP(i,p)
+      {
+        unsigned l=A[offset+i],r=A[offset+p+i];
+        if(!inv){r=UMul(r,now);}
+        A[offset+i]=UAdd(l,r);
+        A[offset+p+i]=USub(l,r);
+        if(inv){A[offset+p+i]=UMul(A[offset+p+i],now);}
+      }
+      now=UMul(now,inv?igs[CTZ32(~s)]:gs[CTZ32(~s)]);
+    }
+  }
+  if(inv)
+  {
+    unsigned inv2t=UInv(To(1<<h));
+    REP(i,1<<h){A[i]=UMul(A[i],inv2t);}
+  }
+}
+static void Conv(int *A,size_t alen,int *B,size_t blen)
+{
+  if(!alen||!blen){return;}
+  const size_t clen=Logb(alen+blen-1)+1;
+  Init(998244353);
+  REP(i,alen){A[i]=To(A[i]);}
+  REP(i,blen){B[i]=To(B[i]);}
+  Butterfly(A,clen,false);
+  Butterfly(B,clen,false);
+  REP(i,1<<clen){A[i]=UMul(A[i],B[i]);}
+  Butterfly(A,clen,true);
+  REP(i,1<<clen){A[i]=From(A[i]);}
+}
+//#pragma endregion ntt
+static char *SubStr(char *src,size_t m,size_t n)
+{
+  size_t len=n-m;char *dest=(char*)malloc(sizeof(char)*(len+1));
+  REP(i,len){if(*(src+m+i)=='\0'){break;}*dest=*(src+m+i);dest++;}
+  *dest='\0';return dest-len;
+}
+typedef struct{int *digit;size_t len;bool sign;}BIGNUM;
+static size_t BASEDIGIT=0b100,SCALE=73*137-1;
+static BIGNUM ToInt(char *a)
+{
+  BIGNUM b;b.sign=(a[0]=='-');b.len=0;size_t pos=strlen(a);
+  b.digit=(int*)calloc((strlen(a)-b.sign+BASEDIGIT-1)>>2,sizeof(int));
+  while(pos+1>BASEDIGIT){b.digit[b.len++]=(int)strtol(SubStr(a,pos-BASEDIGIT,pos),NULL,10);pos-=BASEDIGIT;}
+  b.digit[b.len++]=(int)strtol(SubStr(a,b.sign,pos),NULL,10);
+  return b;
+}
+static char *ToString(BIGNUM c)
+{
+  char *numstr=(char*)malloc(sizeof(char)*(c.len*BASEDIGIT+c.sign+1));size_t nlen=0;
+  if(c.len==1&&!c.digit[0]){c.sign=false;}
+  if(c.sign){numstr[nlen++]='-';}
+  REP(i,c.len)
+  {
+      char num[5]={};sprintf(num,"%d",c.digit[c.len-1-i]);
+      if(!i){REP(j,strlen(num)){numstr[nlen++]=num[j];}}
+      else{REP(j,BASEDIGIT){numstr[nlen++]=BASEDIGIT-j>strlen(num)?'0':num[j+strlen(num)-BASEDIGIT];}}
+  }
+  numstr[nlen]='\0';return numstr;
+}
+static BIGNUM Carry(BIGNUM fix)
+{
+  REP(i,fix.len-1)
+  {
+    if(fix.digit[i]>=(int)SCALE){fix.digit[i+1]+=fix.digit[i]/SCALE;fix.digit[i]-=fix.digit[i]/SCALE*SCALE;}
+    if(fix.digit[i]<0){fix.digit[i+1]+=(fix.digit[i]+1)/SCALE-1;fix.digit[i]-=(fix.digit[i]+1)/SCALE*SCALE-SCALE;}
+  }
+  while(fix.digit[fix.len-1]>=(int)SCALE)
+  {
+    int *p=(int*)realloc(fix.digit,(fix.len+1)*sizeof(int));if(p){fix.digit=p;p=NULL;free(p);}
+    fix.digit[fix.len]=fix.digit[fix.len-1]/SCALE;
+    fix.digit[fix.len-1]-=SCALE*fix.digit[fix.len];fix.len++;
+  }
+  while(fix.len>=2&&fix.digit[fix.len-1]==0){fix.len--;}
+  return fix;
+}
+static BIGNUM Zero(void)
+{
+  BIGNUM z;z.sign=false;z.len=1-z.sign;
+  z.digit=(int*)malloc(sizeof(int)*z.len);
+  REP(i,z.len){z.digit[i]=0;}return z;
+}
+static int Compare(BIGNUM a,BIGNUM b)
+{
+  if(a.len>b.len){return 1;}if(a.len<b.len){return -1;}
+  REP(i,a.len){if(a.digit[a.len-1-i]>b.digit[a.len-1-i]){return 1;}else if(a.digit[a.len-1-i]<b.digit[a.len-1-i]){return -1;}}
+  return 0;
+}
+static BIGNUM Add(BIGNUM a,BIGNUM b,bool subt)
+{
+  BIGNUM sum;sum.len=a.len>b.len?a.len:b.len;
+  sum.digit=(int*)calloc(sum.len+1,sizeof(int));
+  if(a.sign!=b.sign)
+  {
+    if(!subt)
+    {
+      if(Compare(a,b)<0){sum.sign=b.sign;BIGNUM c=a;a=b;b=c;}
+      else{sum.sign=a.sign;}subt=true;
+    }
+    else
+    {
+      if(a.sign){sum.sign=true;subt=false;}
+      else{subt=sum.sign=false;}
+    }
+  }
+  else
+  {
+    if(subt)
+    {
+      if(Compare(a,b)<0){sum.sign=!a.sign;BIGNUM c=a;a=b;b=c;}
+      else sum.sign=a.sign;
+    }
+    if(!subt){sum.sign=a.sign;}
+  }
+  REP(i,sum.len)
+  {
+    if(!subt){sum.digit[i]=(i<a.len?a.digit[i]:0)+(i<b.len?b.digit[i]:0);}
+    else sum.digit[i]=(i<a.len?a.digit[i]:0)-(i<b.len?b.digit[i]:0);
+  }
+  a.digit=NULL;free(a.digit);b.digit=NULL;free(b.digit);
+  return Carry(sum);
+}
+static void GradeSchool(int *a,int *b,int *c,size_t n){REP(i,n<<1){c[i]=0;}REP(i,n)REP(j,n){c[i+j]+=a[i]*b[j];}}
+static void Karatsuba(int *a,int *b,int *c,size_t n)
+{
+  if(n<=1){return GradeSchool(a,b,c,n);}
+  int *ar=a,*al=a+n/2,*br=b,*bl=b+n/2,*asum=c+5*n,*bsum=c+5*n+n/2,*d1=c,*d2=c+n,*d3=c+2*n;
+  REP(i,n>>1){asum[i]=al[i]+ar[i];bsum[i]=bl[i]+br[i];}
+  Karatsuba(ar,br,d1,n>>1);
+  Karatsuba(al,bl,d2,n>>1);
+  Karatsuba(asum,bsum,d3,n>>1);
+  REP(i,n){d3[i]-=d2[i]+d1[i];}
+  REP(i,n){c[n/2+i]+=d3[i];}
+}
+static void ToomCook3(int *a,int *b,int *c,size_t n)
+{
+  if(n<=9){return GradeSchool(a,b,c,n);}
+  size_t cbrt=n/3;
+  int *a_m2=(int*)calloc(cbrt,sizeof(int)),*a_m1=(int*)calloc(cbrt,sizeof(int)),*a_1=(int*)calloc(cbrt,sizeof(int)),
+  *b_m2=(int*)calloc(cbrt,sizeof(int)),*b_m1=(int*)calloc(cbrt,sizeof(int)),*b_1=(int*)calloc(cbrt,sizeof(int)),
+  *c_m2=(int*)calloc(cbrt<<1,sizeof(int)),*c_m1=(int*)calloc(cbrt<<1,sizeof(int)),*c_1=(int*)calloc(cbrt<<1,sizeof(int)),
+  *c1=(int*)calloc(cbrt<<1,sizeof(int)),*c3=(int*)calloc(cbrt<<1,sizeof(int));
+  REP(i,cbrt){a_m2[i]=(a[(cbrt<<1)+i]<<2)-(a[cbrt+i]<<1)+a[i];b_m2[i]=(b[(cbrt<<1)+i]<<2)-(b[cbrt+i]<<1)+b[i];}
+  REP(i,cbrt){a_m1[i]=a[(cbrt<<1)+i]-a[cbrt+i]+a[i];b_m1[i]=b[(cbrt<<1)+i]-b[cbrt+i]+b[i];}
+  REP(i,cbrt){a_1[i]=a[(cbrt<<1)+i]+a[cbrt+i]+a[i];b_1[i]=b[(cbrt<<1)+i]+b[cbrt+i]+b[i];}
+  ToomCook3(a_m2,b_m2,c_m2,cbrt);
+  a_m2=NULL;free(a_m2);b_m2=NULL;free(b_m2);
+  ToomCook3(a_m1,b_m1,c_m1,cbrt);
+  a_m1=NULL;free(a_m1);b_m1=NULL;free(b_m1);
+  ToomCook3(a,b,c,cbrt);
+  ToomCook3(a_1,b_1,c_1,cbrt);
+  a_1=NULL;free(a_1);b_1=NULL;free(b_1);
+  ToomCook3(a+(cbrt<<1),b+(cbrt<<1),c+(cbrt<<2),cbrt);
+  REP(i,cbrt<<1)
+  {
+    c3[i]=-c_m2[i];
+    c3[i]+=(c_m1[i]<<1)+c_m1[i];
+    c3[i]-=(c[i]<<1)+c[i];
+    c3[i]+=c_1[i];
+    c3[i]+=(c[(cbrt<<2)+i]<<3)+(c[(cbrt<<2)+i]<<2);
+    c3[i]/=6;
+  }
+  REP(i,cbrt<<1)
+  {
+    c[(cbrt<<1)+i]=(c_m1[i]<<1)+c_m1[i];
+    c[(cbrt<<1)+i]-=(c[i]<<2)+(c[i]<<1);
+    c[(cbrt<<1)+i]+=(c_1[i]<<1)+c_1[i];
+    c[(cbrt<<1)+i]-=(c[(cbrt<<2)+i]<<2)+(c[(cbrt<<2)+i]<<1);
+    c[(cbrt<<1)+i]/=6;
+  }
+  REP(i,cbrt<<1)
+  {
+    c1[i]=c_m2[i];
+    c1[i]-=(c_m1[i]<<2)+(c_m1[i]<<1);
+    c1[i]+=(c[i]<<1)+c[i];
+    c1[i]+=(c_1[i]<<1);
+    c1[i]-=(c[(cbrt<<2)+i]<<3)+(c[(cbrt<<2)+i]<<2);
+    c1[i]/=6;
+  }
+  c_m2=NULL;free(c_m2);c_m1=NULL;free(c_m1);c_1=NULL;free(c_1);
+  REP(i,cbrt<<1){c[cbrt+i]+=c1[i];}
+  REP(i,cbrt<<1){c[3*cbrt+i]+=c3[i];}
+  c1=NULL;free(c1);c3=NULL;free(c3);
+}
+static BIGNUM Multiply(BIGNUM a,BIGNUM b)
+{
+  BIGNUM prod;prod.sign=a.sign^b.sign;prod.len=a.len+b.len-1;a.sign=b.sign=false;
+  char type=prod.len<177147?2:prod.len<200000?1:3;//現状カラツバの上限200000
+  switch(type)
+  {
+    case 1:while(prod.len!=(prod.len&-prod.len)){prod.len++;}break;
+    case 2:prod.len=1;while(prod.len<a.len+b.len-1){prod.len*=3;}break;
+    case 3:prod.len=Logb(prod.len)+1;prod.len=1<<prod.len;break;
+    default:prod.len=a.len+b.len-1;
+  }
+  int *u=(int*)calloc((type==1?6:1)*prod.len,sizeof(int)),
+  *v=(int*)calloc((type==1?6:1)*prod.len,sizeof(int)),
+  *w=(int*)calloc(((type==1?3:1)*prod.len)<<1,sizeof(int));
+  REP(i,a.len){u[i]=a.digit[i];}
+  REP(i,b.len){v[i]=b.digit[i];}
+  if(type==1){Karatsuba(u,v,w,prod.len);}
+  else if(type==2){ToomCook3(u,v,w,prod.len);}
+  else{REP(i,a.len){w[i]=a.digit[i];}Conv(w,a.len,v,b.len);}
+  u=NULL;free(u);v=NULL;free(v);
+  REP(i,prod.len-1)if(w[i]>=10){w[i+1]+=w[i]/10;w[i]-=w[i]/10*10;}
+  prod.len=a.len+b.len;
+  prod.digit=(int*)calloc(prod.len,sizeof(int));
+  REP(i,prod.len){prod.digit[i]=w[i];}
+  w=NULL;free(w);
+  return Carry(prod);
+}
+static BIGNUM Power(BIGNUM b,size_t r)
+{
+  if(!r){BIGNUM one=Zero();one.digit[0]++;return one;}
+  if(r==1){return b;}
+  if(b.digit[b.len-1]&1){return Multiply(b,Power(b,--r));}
+  else{BIGNUM c=Power(b,r>>1);return Multiply(c,c);}
+}
+static void Primary(BIGNUM a,BIGNUM b,BIGNUM p[2])
+{
+  if(a.len<b.len){p[0]=Zero();p[1]=a;return;}
+  if(a.len==1&&!a.digit[0]){p[0]=a;p[1]=Zero();return;}
+  BIGNUM apart,quot,r,temp;
+  quot.sign=r.sign=apart.sign=temp.sign=false;
+  quot.len=a.len-b.len;apart.len=temp.len=b.len;
+  quot.digit=(int*)calloc(quot.len+1,sizeof(int));
+  apart.digit=(int*)calloc(apart.len+1,sizeof(int));
+  temp.digit=(int*)calloc(temp.len,sizeof(int));
+  REP(i,apart.len){apart.digit[i]=a.digit[quot.len+i];}
+  if(Compare(apart,b)>=0){quot.len++;}
+  apart.digit=NULL;free(apart.digit);
+  if(!quot.len){p[0]=Zero();p[1]=a;return;}
+  r.len=a.len-quot.len+1;
+  r.digit=(int*)calloc(r.len,sizeof(int));
+  REP(i,r.len){r.digit[i]=a.digit[quot.len-1+i];}
+  temp=Carry(temp);
+  REP(i,quot.len)
+  {
+    quot.digit[quot.len-1-i]=9;
+    REP(j,9)
+    {
+      temp.digit[0]=j+1;
+      if(Compare(Multiply(b,temp),r)==1){quot.digit[quot.len-1-i]=j;break;}
+    }
+    temp.digit[0]=quot.digit[quot.len-1-i];
+    r=Add(r,Multiply(b,temp),true);
+    if(i+1<quot.len)
+    {
+      if(r.len==1&&!r.digit[0]){r.digit[0]=a.digit[quot.len-2-i];}
+      else
+      {
+        REP(j,r.len){r.digit[r.len-j]=r.digit[r.len-j-1];}
+        r.digit[0]=a.digit[quot.len-2-i];r.len++;
+      }
+    }
+  }
+  temp.digit=NULL;free(temp.digit);
+  p[0]=Carry(quot);
+  quot.digit=NULL;free(quot.digit);
+  while(r.sign){r=Add(r,b,false);}
+  p[1]=Carry(r);
+  r.digit=NULL;free(r.digit);
+}
+static BIGNUM Over(BIGNUM lhs,long divisor)
+{
+  long remain=0;lhs.sign^=(divisor<0);
+  if(divisor<0){divisor=0-divisor;}
+  REP(i,lhs.len)
+  {
+    long temp=10*remain+lhs.digit[lhs.len-1-i];
+    lhs.digit[lhs.len-1-i]=temp/divisor;
+    remain=temp-lhs.digit[lhs.len-1-i]*divisor;
+  }
+  return Carry(lhs);
+}
+static BIGNUM ShiftRight(BIGNUM,int,bool);
+static BIGNUM ShiftLeft(BIGNUM a,int n,bool decimal)
+{
+  if(!n){return a;}
+  if(n<0){return ShiftRight(a,-n,decimal);}
+  if(a.len==1&&!a.digit[0]){return a;}
+  if(decimal)
+  {
+    BIGNUM instead;instead.sign=a.sign;instead.len=a.len+n;
+    instead.digit=(int*)calloc(sizeof(int),instead.len);
+    REP(i,instead.len){instead.digit[instead.len-1-i]=i<a.len?a.digit[a.len-1-i]:0;}
+    return Carry(instead);
+  }
+  else{BIGNUM two=Zero();two.digit[0]=2;return Multiply(a,Power(two,n));}
+  return Carry(a);
+}
+static BIGNUM ShiftRight(BIGNUM a,int n,bool decimal)
+{
+  if(!n){return a;}
+  if(n<0){return ShiftLeft(a,-n,decimal);}
+  if(a.len==1&&!a.digit[0]){return a;}
+  BIGNUM instead;instead.sign=a.sign;instead.len=a.len;
+  instead.digit=(int*)calloc(instead.len,sizeof(int));
+  if(decimal)
+  {
+    if((size_t)n>=a.len){return Zero();}
+    REP(i,n){instead.digit[instead.len-1-i]=0;}
+    REP(i,a.len-n){instead.digit[i]=a.digit[n+i];}
+  }
+  else
+  {
+    REP(i,a.len){instead.digit[i]=a.digit[i];}
+    while(n>32){instead=Over(instead,4294967296L);n-=32;}
+    while(n>5){instead=Over(instead,32);n-=5;}
+    while(n--){instead=Over(instead,2);}
+  }
+  return Carry(instead);
+}
+static size_t BitLength(BIGNUM a)
+{
+  BIGNUM dividend;dividend.sign=false;dividend.len=a.len;
+  dividend.digit=(int*)malloc(sizeof(int)*dividend.len);
+  REP(i,dividend.len){dividend.digit[i]=a.digit[i];}
+  size_t bits=0;long num=0;
+  while(dividend.len>315650){dividend=ShiftRight(dividend,1<<20,false);bits+=1<<20;}
+  while(dividend.len>39456){dividend=ShiftRight(dividend,1<<17,false);bits+=1<<17;}
+  while(dividend.len>3082){dividend=ShiftRight(dividend,(1<<11)|(1<<13),false);bits+=(1<<11)|(1<<13);}
+  while(dividend.len>308){dividend=ShiftRight(dividend,1<<10,false);bits+=1<<10;}
+  while(dividend.len>38){dividend=ShiftRight(dividend,1<<7,false);bits+=1<<7;}
+  while(dividend.len>9){dividend=ShiftRight(dividend,1<<5,false);bits+=1<<5;}
+  REP(i,dividend.len){num=(num<<3)+(num<<1)+dividend.digit[dividend.len-1-i];}
+  dividend.digit=NULL;free(dividend.digit);
+  return bits+Logb(num+!a.sign)+1;
+}
+const size_t BURNIKELZIEGLERTHRESHOLD=2;
+static void D42(BIGNUM,BIGNUM,size_t,BIGNUM[2]);
+static void D32(BIGNUM a,BIGNUM b,size_t n,BIGNUM c[2])
+{
+  if(a.len<b.len){c[0]=Zero();c[1]=a;return;}
+  if(a.len==1&&!a.digit[0]){c[0]=a;c[1]=a;return;}
+  if(n<BURNIKELZIEGLERTHRESHOLD){return Primary(a,b,c);}
+  BIGNUM aHi=ShiftRight(a,n,true),aTop=ShiftRight(aHi,n,true),
+  bTop=ShiftRight(b,n,true),q,r,s,one=Zero();one.digit[0]=1;
+  if(Compare(aTop,bTop)<0){D42(aHi,bTop,n>>1,c);q=c[0];r=c[1];}
+  else
+  {
+    q=Add(ShiftLeft(one,n,true),one,true);
+    r=Add(Add(aHi,ShiftLeft(bTop,n,true),true),bTop,false);
+  }
+  BIGNUM d=Multiply(q,Add(b,ShiftLeft(bTop,n,true),true));
+  s=ShiftLeft(r,n,true);
+  r.digit=NULL;free(r.digit);
+  s=Add(s,Add(a,ShiftLeft(aHi,n,true),true),false);
+  aTop.digit=NULL;free(aTop.digit);
+  bTop.digit=NULL;free(bTop.digit);
+  aHi.digit=NULL;free(aHi.digit);
+  while(Compare(s,d)<0){q=Add(q,one,true);s=Add(s,b,false);}
+  c[1]=Add(s,d,true);
+  d.digit=NULL;free(d.digit);
+  c[0]=Carry(q);
+  q.digit=NULL;free(q.digit);
+  s.digit=NULL;free(s.digit);
+}
+static void D42(BIGNUM a,BIGNUM b,size_t n,BIGNUM c[2])
+{
+  if(a.len<b.len){c[0]=Zero();c[1]=a;return;}
+  if(a.len==1&&!a.digit[0]){c[0]=a;c[1]=a;return;}
+  if(n<BURNIKELZIEGLERTHRESHOLD){return Primary(a,b,c);}
+  BIGNUM aHi=ShiftRight(a,n,true);
+  D32(aHi,b,n,c);
+  BIGNUM qHi=ShiftLeft(Carry(c[0]),n,true),
+  rHi=Add(ShiftLeft(Carry(c[1]),n,true),Add(a,ShiftLeft(aHi,n,true),true),false);
+  aHi.digit=NULL;free(aHi.digit);
+  D32(rHi,b,n,c);
+  c[0]=Add(qHi,Carry(c[0]),false);
+  c[1]=Carry(c[1]);
+  qHi.digit=NULL;free(qHi.digit);
+  rHi.digit=NULL;free(rHi.digit);
+}
+static void BurnikelZiegler(BIGNUM a,BIGNUM b,BIGNUM c[2])
+{
+  if(a.len==1&&!a.digit[0]){a.digit=NULL;free(a.digit);b.digit=NULL;free(b.digit);c[0]=c[1]=Zero();return;}
+  if(a.len<b.len){b.digit=NULL;free(b.digit);c[0]=Zero();c[1]=a;return;}
+  if(a.len<BURNIKELZIEGLERTHRESHOLD||b.len<BURNIKELZIEGLERTHRESHOLD){return Primary(a,b,c);}
+  size_t sigma=1<<Logb(b.len-((1ul<<Logb(b.len))==b.len)),adjust=(sigma<<1)-b.len,t=(a.len+(sigma<<1)-1)/(sigma<<1);
+  a=ShiftLeft(a,adjust,true);
+  b=ShiftLeft(b,adjust,true);
+  BIGNUM aHi=ShiftRight(a,(t<2?0:t-1)*sigma<<1,true),q=Zero(),r=Add(a,ShiftLeft(aHi,(t<2?0:t-1)*sigma<<1,true),true);
+  while(t--)
+  {
+    if(aHi.len<b.len){c[0]=Zero();c[1]=aHi;}else{D42(aHi,b,sigma,c);}
+    q=Add(ShiftLeft(q,sigma<<1,true),c[0],false);
+    aHi=ShiftLeft(c[1],sigma<<1,true);
+    aHi=Add(aHi,ShiftRight(r,(t<1?0:t-1)*sigma<<1,true),false);
+    r=Add(r,ShiftLeft(ShiftRight(r,(t<1?0:t-1)*sigma<<1,true),(t<1?0:t-1)*sigma<<1,true),true);
+  }
+  c[0]=Carry(q);c[0].sign=a.sign^b.sign;
+  c[1]=ShiftRight(c[1],adjust,true);
+  aHi.digit=NULL;free(aHi.digit);
+  q.digit=NULL;free(q.digit);
+  r.digit=NULL;free(r.digit);
+}
+static BIGNUM Divide(BIGNUM a,BIGNUM b,bool mod)
+{
+  if(a.len==1&&!a.digit[0]){a.digit=NULL;free(a.digit);b.digit=NULL;free(b.digit);return Zero();}
+  if(a.len<b.len){b.digit=NULL;free(b.digit);a.sign=false;return mod?a:Zero();}
+  char v=Compare(a,b);
+  if(!v)
+  {
+    a.digit=NULL;free(a.digit);b.digit=NULL;free(b.digit);
+    BIGNUM one=Zero();one.digit[0]++;one.sign=a.sign^b.sign;
+    return mod?Zero():one;
+  }
+  else if(v<0){b.sign=false;while(a.sign){a=Add(a,b,false);}return mod?a:Zero();}
+  BIGNUM c[2];bool sign=a.sign^b.sign;a.sign=b.sign=false;
+  BurnikelZiegler(a,b,c);c[0].sign=sign;
+  return Carry(mod?c[1]:c[0]);
+}
+int main(void)
+{
+  char S[200002],T[200002];
+  if(!scanf("%s %s",S,T)){return 1;}
+  return !puts(ToString(Add(ToInt(S),ToInt(T),false)));
+}

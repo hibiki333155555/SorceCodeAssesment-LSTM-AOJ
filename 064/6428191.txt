@@ -1,0 +1,49 @@
+import copy
+import collections
+
+while True:
+    W,H = map(int, input().split())
+    if W==0 and H==0:
+        break
+    
+    fld = []
+    for _ in range(H):
+        l = list(map(int, input().split()))
+        fld.append(l)
+
+    seen = copy.copy(fld)
+
+    stack = collections.deque([])
+
+    dh, dw = [1,0,-1,0], [0,1,0,-1]
+    cnt = 0
+    for w in range(W):
+        for h in range(H):
+            #print(h,w)
+            if fld[h][w] == 1:
+                cnt += 1
+                stack.append([h,w])
+
+                #発見した島から到達可能な地点までを全探索
+                while stack:
+                    v = stack.pop()
+                    seen[v[0]][v[1]] = 0 #探索済みは0に変更
+                    for dir_h in range(4):
+                        for dir_w in range(4):
+                            nh = v[0] + dh[dir_h]
+                            nw = v[1] + dw[dir_w]
+                            if nh<0 or nh>=H or nw<0 or nw>=W:
+                                continue
+                            if fld[nh][nw] == 0: #到達不可or 探索済み
+                                continue
+                            ''' if seen[nh][nw]==-1: #探索済み
+                                continue '''
+                            #seen[nh][nw] = -1
+                            stack.append([nh, nw])
+            else:
+                pass
+
+    #print(seen)
+    print(cnt)
+
+

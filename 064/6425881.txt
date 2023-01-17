@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+#define MYTUL ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+using namespace std;
+int main()
+{
+    MYTUL
+    long long int t; cin>>t;
+    map<string, long long int>mp;
+    for(int i=0; i<t; i++)
+    {
+        int x; cin>>x;
+        if(x==0)
+        {
+            string key;
+            long long int val;
+            cin>>key>>val;
+            mp[key]=val;
+        }
+        if(x==1)
+        {
+            string s;
+            cin>>s;
+            cout<<mp[s]<<endl;
+        }
+        if(x==2)
+        {
+            string s;
+            cin>>s;
+            mp.erase(s);
+        }
+    }
+}

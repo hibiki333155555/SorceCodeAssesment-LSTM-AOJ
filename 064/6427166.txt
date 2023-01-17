@@ -1,0 +1,28 @@
+n=int(input())
+A=list(map(int,input().split()))
+
+#反転数
+
+data=[0]*(10**9+1)
+def add(k,x):
+    while k<=n:
+        data[k]+=x
+        k+=k&-k
+def get(k):
+    s=0
+    while k>0:
+        s+=data[k]
+        k-=k&-k
+    return s
+
+ans = 0
+for i,a in enumerate(A):
+    #左にあるのに自分より大きい数を調べる
+    #BITの配列の総和(sum(a))は、iより左にあるaより小さい個数
+    #これまでに見てきた数字の個数はiとなる
+    #これまでに見てきた数字の個数-aより左にある個数
+    ans += i -get(a) 
+    #配列の左から要素を取り出して、その要素をindexとしてBITに1を足していく
+    add(a,1)
+print(ans)
+

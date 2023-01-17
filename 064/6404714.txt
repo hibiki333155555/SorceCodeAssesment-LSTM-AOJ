@@ -1,0 +1,17 @@
+n = int(input())
+a_score=0
+b_score=0
+
+for _ in range(n):
+    a,b= map(str, (input().split()))
+    tmp=[a,b]
+    tmp.sort()
+    if a == b:
+        a_score += 1; b_score +=1
+    elif [a,b] == tmp:
+        b_score += 3
+    elif [b,a] == tmp:
+        a_score +=3
+    
+print (f"{a_score} {b_score}")
+

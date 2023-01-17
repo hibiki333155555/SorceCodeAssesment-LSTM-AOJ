@@ -1,0 +1,43 @@
+from sys import stdin
+input=lambda :stdin.readline()[:-1]
+
+import math
+def lcm(a,b):return a*b//math.gcd(a,b)
+
+d={1:0}
+id=1
+for i in range(1,21):
+  for j in d.copy():
+    if lcm(i,j) not in d:
+      d[lcm(i,j)]=id
+      id+=1
+
+size=960
+n,m=map(int,input().split())
+edge=[[] for i in range(n)]
+for _ in range(m):
+  a,b,c=map(int,input().split())
+  edge[a-1].append((b-1,c))
+
+def conv(i,j):return i*size+j
+
+seen=[False]*size*n
+
+seen[conv(0,d[1])]=True
+todo=[(0,1)]
+while todo:
+  x,y=todo.pop()
+  for to,c in edge[x]:
+    l=lcm(c,y)
+    if seen[conv(to,d[l])]==False:
+      seen[conv(to,d[l])]=True
+      todo.append((to,l))
+
+ans=[]
+for i in d:
+  if seen[conv(n-1,d[i])]:
+    ans.append(i)
+if ans:
+	print(min(ans),max(ans))
+else:
+	print('IMPOSSIBLE')

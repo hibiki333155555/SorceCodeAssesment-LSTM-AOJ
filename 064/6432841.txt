@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+
+int main(){
+    int n;
+    cin >> n;
+    vector<int> num(n);
+    vector<int> sorted(n);
+    for(int i=0;i<n;i++){
+        cin >> num.at(i);
+        sorted.at(i) = num.at(i);
+    }
+    sort(sorted.begin(),sorted.end());
+    int judge = 0;
+    for(int i=0;i<n;i++){
+        if(num.at(i) != sorted.at(i)){
+            judge++;
+        }
+    }
+    if(judge == 0){
+        cout << 0 << endl;
+        return(0)
+    }
+    int q;
+    cin >> q;
+    for(int i=0;i<q;i++){
+        int a,b;
+        cin >> a >> b;
+        --a;--b;
+        if(num.at(a) == sorted.at(b)){
+            --judge;
+        }
+        if(num.at(b) == sorted.at(a)){
+            --judge;
+        }
+        swap(num.at(a),num.at(b));
+        if(judge == 0){
+            cout << i+1 << endl;
+            return(0);
+        }
+        if(num.at(a) == sorted.at(b)){
+            ++judge;
+        }
+        if(num.at(b) == sorted.at(a)){
+            ++judge;
+        }
+    }
+    cout << -1 << endl;
+
+    return(0);
+}

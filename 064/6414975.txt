@@ -1,0 +1,239 @@
+#include "bits/stdc++.h"
+#include <unistd.h>
+using namespace std;
+
+#include <algorithm>
+
+#ifdef _MSC_VER
+#include <intrin.h>
+#endif
+
+namespace atcoder {
+
+namespace internal {
+
+int ceil_pow2(int n) {
+    int x = 0;
+    while ((1U << x) < (unsigned int)(n)) x++;
+    return x;
+}
+
+int bsf(unsigned int n) {
+#ifdef _MSC_VER
+    unsigned long index;
+    _BitScanForward(&index, n);
+    return index;
+#else
+    return __builtin_ctz(n);
+#endif
+}
+
+}  // namespace internal
+
+}  // namespace atcoder
+
+#include <cassert>
+#include <vector>
+
+namespace atcoder {
+
+template <class S, S (*op)(S, S), S (*e)()> struct segtree {
+  public:
+    segtree() : segtree(0) {}
+    segtree(int n) : segtree(std::vector<S>(n, e())) {}
+    segtree(const std::vector<S>& v) : _n(int(v.size())) {
+        log = internal::ceil_pow2(_n);
+        size = 1 << log;
+        d = std::vector<S>(2 * size, e());
+        for (int i = 0; i < _n; i++) d[size + i] = v[i];
+        for (int i = size - 1; i >= 1; i--) {
+            update(i);
+        }
+    }
+
+    void set(int p, S x) {
+        assert(0 <= p && p < _n);
+        p += size;
+        d[p] = x;
+        for (int i = 1; i <= log; i++) update(p >> i);
+    }
+
+    S get(int p) {
+        assert(0 <= p && p < _n);
+        return d[p + size];
+    }
+
+    S prod(int l, int r) {
+        assert(0 <= l && l <= r && r <= _n);
+        S sml = e(), smr = e();
+        l += size;
+        r += size;
+
+        while (l < r) {
+            if (l & 1) sml = op(sml, d[l++]);
+            if (r & 1) smr = op(d[--r], smr);
+            l >>= 1;
+            r >>= 1;
+        }
+        return op(sml, smr);
+    }
+
+    S all_prod() { return d[1]; }
+
+    template <bool (*f)(S)> int max_right(int l) {
+        return max_right(l, [](S x) { return f(x); });
+    }
+    template <class F> int max_right(int l, F f) {
+        assert(0 <= l && l <= _n);
+        assert(f(e()));
+        if (l == _n) return _n;
+        l += size;
+        S sm = e();
+        do {
+            while (l % 2 == 0) l >>= 1;
+            if (!f(op(sm, d[l]))) {
+                while (l < size) {
+                    l = (2 * l);
+                    if (f(op(sm, d[l]))) {
+                        sm = op(sm, d[l]);
+                        l++;
+                    }
+                }
+                return l - size;
+            }
+            sm = op(sm, d[l]);
+            l++;
+        } while ((l & -l) != l);
+        return _n;
+    }
+
+    template <bool (*f)(S)> int min_left(int r) {
+        return min_left(r, [](S x) { return f(x); });
+    }
+    template <class F> int min_left(int r, F f) {
+        assert(0 <= r && r <= _n);
+        assert(f(e()));
+        if (r == 0) return 0;
+        r += size;
+        S sm = e();
+        do {
+            r--;
+            while (r > 1 && (r % 2)) r >>= 1;
+            if (!f(op(d[r], sm))) {
+                while (r < size) {
+                    r = (2 * r + 1);
+                    if (f(op(d[r], sm))) {
+                        sm = op(d[r], sm);
+                        r--;
+                    }
+                }
+                return r + 1 - size;
+            }
+            sm = op(d[r], sm);
+        } while ((r & -r) != r);
+        return 0;
+    }
+
+  private:
+    int _n, size, log;
+    std::vector<S> d;
+
+    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+};
+
+}  // namespace atcoder
+
+using namespace atcoder;
+using i64 = long long;
+using u64 = unsigned long long;
+using ld = long double;
+using i_i = pair<int, int>;
+using i_b = pair<int, bool>;
+using l_l = pair<i64, i64>;
+using d_d = pair<double, double>;
+using s_s = pair<string, string>;
+using i_i_i = tuple<int, int, int>;
+using i_i_i_i = tuple<int, int, int, int>;
+using l_l_l = tuple<i64, i64, i64>;
+using l_l_l_l = tuple<i64, i64, i64, i64>;
+#define rep(i, n) for(int i = 0; i < n; i++)
+#define ifbit(n,k) ((n>>k)&1) //if kth bit of n is on then true (sitakara, 0-indexed)
+#define zpad(i) cout << setfill('0') << setw(i)
+#define dout cout << fixed << setprecision(10)
+#define pcnt __builtin_popcount
+constexpr int INF = 2147483647;
+constexpr i64 I64F = 9223372036854775807;
+constexpr int m1007 = 1000000007;
+constexpr int m9982 = 998244353;
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+using mint = modint998244353;
+struct cord {
+	//support coordinate compression
+	public:
+		cord() : cord(vector<i64>{}) {}
+		explicit cord (const vector<i64>& v) : ov(v), cv(v) {
+			set<i64> s(v.begin(), v.end());
+			int cnt = 0;
+			for (auto x : s) conv[x] = cnt++;
+			for (auto &x : cv) x = conv[x];
+			for (auto [k, u] : conv) rconv[u] = k;
+			conv[I64F] = cnt;
+		}
+		//ex
+		//index            {0, 1, 2, 3, 4, 5}
+		//original   value {5, 9, 3, 1, 6, 3}
+		//compressed value {2, 4, 1, 0, 3, 1} 
+
+		//input:index
+		//output:compressed value
+		i64 &operator[](int i) {
+			assert(0 <= i and i < (int)cv.size());
+			return cv[i]; }
+
+		//input:compressed value
+		//output:original value
+		i64 get(int v) { 
+			assert(rconv.find(v) != rconv.end());
+			return rconv[v];
+		}
+
+		int size() const { return (int)rconv.size(); }
+
+		//input:original value
+		//output:index
+		int lower_bound(i64 v) { return conv.lower_bound(v) -> second;}
+
+		int upper_bound(i64 v) { return conv.upper_bound(v) -> second;}
+
+	private:
+		//original, compressed
+		vector<i64> ov, cv;
+		//key:original value, value:compressed value
+		map<i64, int> conv;
+		//key:compressed value, value:origirnal value
+		map<int, i64> rconv;
+};
+using S = i64;
+S op(S a, S b) { return a + b; }
+S e() { return 0LL; }
+int main() {
+	int n; cin >> n;
+	vector<int> a(n); rep(i, n) cin >> a[i];
+	vector<i64> v(n);
+	for (int i = 0; i < n; i++) {
+		v[i] = a[i] + i + 1;
+	}
+	cord c(v);
+	segtree<S, op, e> seg(n);
+	vector<mint> dp(n + 1);
+	dp[0] = 1;
+	for (int i = 0; i < n; i++) {
+		dp[i + 1] += dp[i];
+		int l = c.upper_bound(i + 1);
+		dp[i + 1] += seg.prod(l, n) * dp[i];
+		seg.set(c[i], seg.get(c[i]) + 1);
+	}
+	cout << dp[n].val() << endl;
+	return 0;
+}

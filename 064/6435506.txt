@@ -1,0 +1,59 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    node_list = [[-1, [], -1] for _ in range(n)]
+    for _ in range(n):
+        i_list = list(map(int, f.readline().split()))
+        p = i_list[0]
+        c_list = i_list[2:]
+        node_list[p][1] = c_list
+        for c in c_list:
+            node_list[c][0] = p
+
+    root = -1
+    for i in range(n):
+        if node_list[i][0] == -1:
+            root = i
+            break
+
+    node_list[root][2] = 0
+    stack = [(root, 0)]
+    while len(stack) > 0:
+        node_idx, depth = stack.pop()
+        n_depth = depth + 1
+        for c_idx in node_list[node_idx][1]:
+            node_list[c_idx][2] = n_depth
+            stack.append((c_idx, n_depth))
+
+    for i in range(n):
+        p = node_list[i][0]
+        c_list = node_list[i][1]
+        d = node_list[i][2]
+        print(f'node {i}: parent = {p}, depth = {d}, ', end='')
+        if p == -1:
+            print('root, [', end='')
+        elif len(c_list) > 0:
+            print('internal node, [', end='')
+        else:
+            print('leaf, [', end='')
+        print(*c_list, end='')
+        print(']')
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

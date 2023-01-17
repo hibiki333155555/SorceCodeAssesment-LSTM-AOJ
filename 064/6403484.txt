@@ -1,0 +1,6 @@
+[n,...a]=require('fs').readFileSync(0,'utf8').split(/ |\n/g).map(x=>+x);M=Math;console.log([M.min(...a),M.max(...a),a.reduce((y,z)=>y+z)].join` `);
+
+/*
+[,...a]=`5 
+10 1 5 4 17`.split(/\s|\n/g).map(x=>+x);M=Math;console.log([M.min(...a),M.max(...a),a.reduce((y,z)=>y+z)].join` `);
+*/

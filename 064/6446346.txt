@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+using namespace std;
+int f[1500][1500],a[1500][1500];
+int main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0),cout.tie(0);
+	int n,m,max1=INT_MIN;
+	cin>>n>>m;
+	for(int i=1;i<=n;i++) {
+	for(int j=1;j<=m;j++) {
+		cin>>a[i][j];
+	}
+	}
+	for(int i=1;i<=n;i++) {
+	for(int j=1;j<=m;j++) {
+	if(a[i][j]==1) f[i][j]=0;
+	else {
+	f[i][j]=min(min(f[i-1][j],f[i][j-1]),f[i-1][j-1])+1;
+	}
+	max1=max(max1,f[i][j]);
+	}
+	}
+	cout<<max1;}

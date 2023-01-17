@@ -1,0 +1,21 @@
+n = int(input())
+report = []
+for i in range(n):
+  report.append(list(input()))
+
+leng = len(report[0])
+husei = set()
+for i in range(n-1):
+  for j in range(i+1,n):
+    cnt = 0
+    for k in range(leng):
+      if report[i][k] != report[j][k]:
+        cnt += 1
+    if cnt <= 1:
+      husei.add(i)
+      husei.add(j)
+
+print(len(husei))
+
+      
+

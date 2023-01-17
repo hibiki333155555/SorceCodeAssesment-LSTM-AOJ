@@ -1,0 +1,92 @@
+#include <stdio.h>
+
+typedef struct {
+	int key, id;
+} data;
+
+typedef struct {
+	data obj[200001];
+	int size;
+} min_heap;
+
+void push(min_heap* h, data x)
+{
+	int i = ++(h->size), j = i >> 1;
+	data tmp;
+	h->obj[i] = x;
+	while (j > 0) {
+		if (h->obj[i].key < h->obj[j].key) {
+			tmp = h->obj[j];
+			h->obj[j] = h->obj[i];
+			h->obj[i] = tmp;
+			i = j;
+			j >>= 1;
+		} else break;
+	}
+}
+
+data pop(min_heap* h)
+{
+	int i = 1, j = 2;
+	data output = h->obj[1], tmp;
+	h->obj[1] = h->obj[(h->size)--];
+	while (j <= h->size) {
+		if (j < h->size && h->obj[j^1].key < h->obj[j].key) j ^= 1;
+		if (h->obj[j].key < h->obj[i].key) {
+			tmp = h->obj[j];
+			h->obj[j] = h->obj[i];
+			h->obj[i] = tmp;
+			i = j;
+			j <<= 1;
+		} else break;
+	}
+	return output;
+}
+
+int main()
+{
+	int i, N, A[200001];
+	char S[200001];
+	scanf("%d", &N);
+	scanf("%s", S);
+	for (i = 0; i < N; i++) scanf("%d", &(A[i]));
+	
+	int k;
+	long long ans = 0;
+	min_heap h;
+	data d;
+	h.size = 0;
+	for (i = 0, k = 0; i < N; i++) {
+		if (S[i] == '(') k++;
+		else {
+			k--;
+			d.key = A[i];
+			d.id = i;
+			push(&h, d);
+		}
+		if (k < 0) {
+			k += 2;
+			d = pop(&h);
+			ans += d.key;
+			S[d.id] = '(';
+		}
+	}
+	for (i = N - 1, k = 0; i >= 0; i--) {
+		if (S[i] == ')') k++;
+		else {
+			k--;
+			d.key = A[i];
+			d.id = i;
+			push(&h, d);
+		}
+		if (k < 0) {
+			k += 2;
+			d = pop(&h);
+			ans += d.key;
+			S[d.id] = ')';
+		}
+	}
+	printf("%lld\n", ans);
+	fflush(stdout);
+	return 0;
+}

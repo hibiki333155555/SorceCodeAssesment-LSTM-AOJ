@@ -1,0 +1,15 @@
+w = input()
+num = 0
+while True:
+    s = input().split()
+    if s[0] == 'END_OF_TEXT':
+        break
+    else:
+        s = [i.lower() for i in s]
+        for i in s:
+            if w == i:
+                num += 1
+            else:
+                pass
+print(num)
+

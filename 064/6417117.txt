@@ -1,0 +1,14 @@
+a=raw_input()
+B=[]
+while True:
+    b=raw_input().split()
+    if b == "END_OF_TEXT":
+        break
+    B.append(b)
+a=0
+for i in range(len(B)):
+    if B[i]==a:
+        a+=1
+    else:
+        a+=0
+print a

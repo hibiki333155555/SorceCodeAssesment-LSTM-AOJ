@@ -1,0 +1,4 @@
+import math
+
+r = float(int())
+print('{0:.6f} {1:.6f}'.format(r*r*math.pi, 2*math.pi))

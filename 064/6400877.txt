@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define all(A) A.begin(),A.end()
+using vll = vector<ll>;
+using vvll = vector<vll>;
+#define rep(i, n) for (long long i = 0; i < (long long)(n); i++)
+ll gcd(ll(a), ll(b)) {
+    ll c = a;
+    while (a % b != 0) {
+        c = a % b;
+        a = b;
+        b = c;
+    }
+    return b;
+}
+
+
+int main() {
+    string S;
+    cin >> S;
+    while (1) {
+        if (S == "ABC") {
+            cout << "Yes" << endl;
+            return 0;
+        }
+        ll A = 0, B = 0, C = 0;
+        rep(i, S.size()) {
+            if (S[i] == 'A')A++;
+            if (S[i] == 'B')B++;
+            if (S[i] == 'C')C++;
+        }
+        string T = "";
+        bool P = false;
+        if (A <= B && A <= C) {
+            rep(i, S.size()) {
+
+                if (i < S.size() - 2) {
+                    if (S[i] == 'A' && S[i + 1] == 'B' && S[i + 2] == 'C') {
+                        T.push_back('A');
+                        i += 2;
+                        P = true;
+                    }
+                    else T.push_back(S[i]);
+                }
+                else T.push_back(S[i]);
+            }
+        }
+        else if (B <= C) {
+            rep(i, S.size()) {
+
+                if (i < S.size() - 2) {
+                    if (S[i] == 'A' && S[i + 1] == 'B' && S[i + 2] == 'C') {
+                        T.push_back('B');
+                        i += 2;
+                        P = 1;
+                    }
+                    else T.push_back(S[i]);
+                }
+                else T.push_back(S[i]);
+            }
+        }
+        else {
+            rep(i, S.size()) {
+                if (i < S.size() - 2) {
+                    if (S[i] == 'A' && S[i + 1] == 'B' && S[i + 2] == 'C') {
+                        T.push_back('C');
+                        i += 2;
+                        P = 1;
+                    }
+                    else T.push_back(S[i]);
+                }
+                else T.push_back(S[i]);
+            }
+        }
+        S = T;
+        if (!P) {
+            cout << "No" << endl;
+            return 0;
+        }
+    }
+
+
+}
+

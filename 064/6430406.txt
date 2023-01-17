@@ -1,0 +1,8 @@
+x,y = int(input())
+while True:
+    if x <= y:
+        print(x y)
+    else x >= y:
+        print(y x)
+    if x,y ==0:
+        break

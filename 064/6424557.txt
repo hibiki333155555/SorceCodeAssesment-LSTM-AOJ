@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+int V,E;
+int mp[110][110];
+bool Instack[110];
+bool flag;
+bool vis[110];
+void dfs(int now){
+	vis[now]=true;
+	if(flag==true) return;
+	Instack[now]=true;
+	for(int i=0;i<V;i++){
+		if(flag==true) return;
+		if(mp[now][i]){//有now到i的一条边 
+			if(Instack[i]){
+				//如果now到i有边并且i在栈内(是now的dfs祖先结点) 
+				flag=true;
+				if(flag==true) return;
+			}
+			else{
+				if(!vis[i]) dfs(i);
+			}
+		}
+	}
+	Instack[now]=false;
+	return;
+}
+
+int main(){
+	memset(vis,false,sizeof(vis));
+	memset(mp,0,sizeof(mp));
+	scanf("%d %d",&V,&E);
+	int u,v;
+	for(int i=0;i<E;i++){
+		scanf("%d %d",&u,&v);
+		mp[u][v]=1;
+	}
+	flag=false;
+	for(int i=0;i<V;i++){
+		if(!vis[i]) dfs(i);
+	}
+	if(flag) printf("1\n");
+	else printf("0\n");
+	return 0;
+}

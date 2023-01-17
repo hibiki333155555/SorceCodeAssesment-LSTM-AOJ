@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+void Print(vector<int> &v){
+	int a;
+	for(int i=0;i<v.size();i++){
+		cout<<v[i];
+		if(i==v.size()-1)
+		cout<<"\n";
+		else
+		cout<<" "; 
+		
+	}
+}
+void SelectionSort(vector<int> &arr){
+	int count=0;
+	int n=arr.size(),pos;
+	for(int i=n-1;i>0;i--){
+		pos=i;
+		for(int j=i-1;j>=0;j--){
+			if(arr[pos]<arr[j]){
+				pos=j;
+			
+			}
+		}
+		if(i!=pos){
+			swap(arr[pos],arr[i]);
+	    	coun
+	    	t++;
+		}
+		
+	}
+	Print(arr);
+	cout<<count;
+}
+
+int main(){
+	int n,count;cin>>n;
+	vector<int> v(n);
+	for(int i=0;i<n;i++){
+		cin>>v[i];
+	}
+	SelectionSort(v);
+	cout<<"\n";
+	return 0;
+}

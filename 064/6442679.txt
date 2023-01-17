@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+	int q, flag, x, d, p = -1;
+	deque<int>arr;
+	cin >> q;
+	for (int i = 0; i < q; i++)
+	{
+		cin >> flag;
+		switch (flag)
+		{
+		case 0:
+			cin >> x;
+			if (p == -1) { arr.push_back(x); p = arr.size() - 1; }
+			else { arr.insert(arr.begin() + p, x); }
+			break;
+		case 1:
+			cin >> d;
+			((p + d) == arr.size()) ? (p = -1) : (p += d);
+			break;
+		case 2:
+			if (p != -1)
+			{
+				arr.erase(arr.begin() + p);
+			}
+		}
+
+	}
+	for (int i = 0; i < arr.size(); i++) { cout << arr[i] << endl; }
+	return 0;
+}

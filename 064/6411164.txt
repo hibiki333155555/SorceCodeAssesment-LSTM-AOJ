@@ -1,0 +1,6 @@
+n=input()
+a=list(map(int,input().split()))
+ans=" "
+ans+=" ".join([str(i) for i in sorted(a,reverse=True)])
+print(ans)
+

@@ -1,0 +1,183 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+// グラフ
+using Node = int;              // ノード番号
+using EdgeWeight = long long;  // 枝の重み
+
+// エッジ重みの最大値
+constexpr EdgeWeight kEdgeWeightInf = numeric_limits<EdgeWeight>::max() >> 16;  // 2^32を足し引きしてもオーバーフローしない十分大きな数
+
+typedef struct structEdge {
+   structEdge(const Node from_node, const Node to_node, const EdgeWeight edge_weight) {
+      from = from_node;
+      to = to_node;
+      weight = edge_weight;
+   }
+
+   structEdge(const structEdge& edge) {
+      from = edge.from;
+      to = edge.to;
+      weight = edge.weight;
+   }
+
+   bool operator<(const structEdge& right) const {
+      return weight < right.weight;
+   }
+
+   Node from;
+   Node to;
+   EdgeWeight weight;
+} Edge;
+
+// Graph(隣接リスト)
+// ノード番号は1-indexedで保持
+class Graph {
+  public:
+   Graph();
+
+   // Nノードで初期化
+   explicit Graph(const size_t N);
+
+   // ノードの追加
+   // @retval 追加したノードのノード番号
+   Node AddNode();
+
+   // 無向エッジの追加
+   // @param node_1, node_2: 枝の端点となるノード
+   // @param weight エッジの重み(default: 1)
+   void AddUndirectedEdge(const Node node_1, const Node node_2, const EdgeWeight weight = 1);
+
+   // 有向エッジの追加
+   // @param from, to: 枝の始点、終点となるノード
+   // @param weight エッジの重み(default: 1)
+   void AddDirectedEdge(const Node from, const Node to, const EdgeWeight weight = 1);
+
+   // 幅優先探索で単一始点最短路を求める
+   // @pre 各エッジの重みがすべて同一であること
+   // @note Debug時は各エッジの重みが同一かのチェックを行う
+   // @note 計算量: O(E)
+   // @note 連結していないノードの重みはkEdgeWeightInfになる
+   void ShortestPathBFS(const Node start, vector<EdgeWeight>* min_weight_list) const;
+
+  private:
+   vector<Node> node_list_;         // Nodeのリスト
+   vector<vector<Edge>> adj_list_;  // 隣接リスト: NodeにつながっているEdgeのリスト
+};
+
+Graph::Graph()
+    : adj_list_(1, vector<Edge>())  // 1-indexにするためダミーノードを追加
+{
+}
+
+Graph::Graph(const size_t N)
+    : adj_list_(1, vector<Edge>())  // 1-indexにするためダミーノードを追加
+{
+   for (size_t i = 0; i < N; i++) {
+      AddNode();
+   }
+}
+
+Node Graph::AddNode() {
+   Node node = (Node)node_list_.size() + 1;  // Node番号は1-indexed
+
+   node_list_.push_back(node);
+   adj_list_.push_back(vector<Edge>());
+
+   return node;
+}
+
+void Graph::AddUndirectedEdge(const Node node_1, const Node node_2, const EdgeWeight weight) {
+   adj_list_[node_1].emplace_back(node_1, node_2, weight);
+   adj_list_[node_2].emplace_back(node_2, node_1, weight);
+}
+
+void Graph::AddDirectedEdge(const Node from, const Node to, const EdgeWeight weight) {
+   Edge edge(from, to, weight);
+   adj_list_[from].push_back(edge);
+}
+
+void Graph::ShortestPathBFS(const Node start, vector<EdgeWeight>* min_weight_list) const {
+#ifndef NDEBUG
+   // 各エッジの重みが同一かチェックする
+   EdgeWeight min_weight = kEdgeWeightInf;
+   EdgeWeight max_weight = -kEdgeWeightInf;
+
+   for (const Node node : node_list_) {
+      for (const Edge& edge : adj_list_[node]) {
+         min_weight = min(min_weight, edge.weight);
+         max_weight = max(max_weight, edge.weight);
+      }
+   }
+
+   if (min_weight != max_weight) {
+      cerr << "Edge weights are not same, BFS may not work correctly." << endl;
+   }
+#endif  // NDEBUG
+
+   // 重みリストの初期化
+   size_t size = node_list_.size() + 1;  // ノード番号は1-indexed
+
+   min_weight_list->clear();
+   min_weight_list->resize(size);
+   fill(min_weight_list->begin(), min_weight_list->end(), kEdgeWeightInf);
+
+   (*min_weight_list)[start] = 0;
+
+   // 最短路が求まったノードを管理する
+   queue<Node> node_queue;
+   node_queue.push(start);
+
+   while (!node_queue.empty()) {
+      const Node min_node = node_queue.front();
+      node_queue.pop();
+
+      // 隣接するノードうち未訪問のものを更新する
+      for (const Edge& edge : adj_list_[min_node]) {
+         const Node node_to = edge.to;
+
+         if ((*min_weight_list)[node_to] == kEdgeWeightInf) {
+            (*min_weight_list)[node_to] = (*min_weight_list)[min_node] + edge.weight;
+            node_queue.push(node_to);
+         }
+      }
+   }
+}
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   int n;
+   cin >> n;
+
+   Graph graph(n);
+
+   for (int i = 1; i <= n; i++) {
+      int u, k;
+      cin >> u >> k;
+
+      for (int j = 1; j <= k; j++) {
+         int to;
+         cin >> to;
+
+         graph.AddDirectedEdge(u, to);
+      }
+   }
+
+   vector<EdgeWeight> dist_list;
+   graph.ShortestPathBFS(1, &dist_list);
+
+   for (int i = 1; i <= n; i++) {
+      if (dist_list[i] == kEdgeWeightInf) {
+         cout << i << ' ' << -1 << endl;
+
+      } else {
+         cout << i << ' ' << dist_list[i] << endl;
+      }
+   }
+
+   return 0;
+}
+

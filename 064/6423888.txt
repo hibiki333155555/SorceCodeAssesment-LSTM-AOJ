@@ -1,0 +1,3 @@
+suite = 'SHCD'
+n = int(input())
+print(n)

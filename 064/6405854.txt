@@ -1,0 +1,11 @@
+
+while op != ?:
+    a, op, b =int(input().split())
+    if op == +:
+        print(a+b)
+    elif op == -:
+        print(a-b)
+    elif op == *:
+        print(a*b)
+    elif op ==/:
+        print(a/b)

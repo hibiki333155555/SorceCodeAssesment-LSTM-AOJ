@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+const int MAX = 207;
+vector<int> g[1000 + 9];
+vector<bool> used(MAX);
+vector<int> p(MAX, -1);
+
+bool dfs(int v) {
+  if(used[v]) return false;
+  used[v] = true;
+  for(auto u : g[v]) {
+    if(p[u] == -1 || dfs(p[u])) {
+      p[u] = v;
+      return true;
+    }
+  }
+  return false;
+}
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  int x, y, e;
+  cin >> x >> y >> e;
+  for(int i = 0; i < e; i++) {
+    int a, b;
+    cin >> a >> b;
+    b += x;
+    g[a].push_back(b);
+    g[b].push_back(a);
+  }
+  int total_match = 0;
+  for(int i = 0; i < x; i++) {
+    used.assign(MAX, false);
+    total_match += dfs(i);
+  }
+  cout << total_match << '\n';
+  
+  return 0;
+}
+

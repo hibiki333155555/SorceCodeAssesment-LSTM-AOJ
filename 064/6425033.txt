@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int main(void){
+    char str[1024];
+    
+    
+    while(scanf("%s",str)!=EOF){
+        if(strcmp(str,"Hoshino")==0){
+            strcpy(str,"Hoshina");
+        }
+        printf("%s ",str);
+        
+    }
+    
+    return 0;
+}

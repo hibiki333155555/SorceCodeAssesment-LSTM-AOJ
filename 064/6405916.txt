@@ -1,0 +1,269 @@
+
+#if 1
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <stack>
+#include <array>
+#include <deque>
+#include <algorithm>
+#include <utility>
+#include <cstdint>
+#include <functional>
+#include <iomanip>
+#include <numeric>
+#include <assert.h>
+#include <bitset>
+#include <list>
+#include <cmath>
+
+auto& in = std::cin;
+auto& out = std::cout;
+#define all_range(C) std::begin(C), std::end(C)
+const double PI = 3.141592653589793238462643383279502884197169399375105820974944;
+
+
+template<typename T, typename U>
+std::enable_if_t<std::rank<T>::value == 0> fill_all(T& arr, const U& v) {
+    arr = v;
+}
+template<typename ARR, typename U>
+std::enable_if_t<std::rank<ARR>::value != 0> fill_all(ARR& arr, const U& v) {
+    for (auto& i : arr) {
+        fill_all(i, v);
+    }
+}
+
+
+
+int H, W;
+int sH, sW;
+char map[20][20];
+enum { HP, HM, WP, WM };
+
+std::tuple<int, int> move_forward(int h, int w, int dir) {
+    switch (dir) {
+    case HP: ++h; break;
+    case HM: --h; break;
+    case WP: ++w; break;
+    case WM: --w; break;
+    default: assert(false); break;
+    }
+    return { h,w };
+}
+
+class Program {
+public:
+    virtual std::tuple<int, int, int, int> Do(int h, int w, int dir, int pc)const = 0;
+    virtual void Print()const = 0;
+};
+class Goto : public Program {
+private:
+    int target;
+public:
+    Goto() {}
+    static const Goto* get(int i) {
+        static std::array<Goto, 10000> arr;
+        static bool inited = false;
+        if (!inited) {
+            for (size_t i = 0; i < arr.size(); i++) {
+                arr[i].target = i;
+            }
+            inited = true;
+        }
+        return &arr[i];
+    }
+    std::tuple<int, int, int, int> Do(int h, int w, int dir, int pc)const override {
+        return { h, w, dir, target };
+    }
+    void Print()const override {
+        out << "GOTO " << target+1 << '\n';
+    }
+};
+class IF_OPEN : public Program {
+private:
+    int target;
+public:
+    IF_OPEN() { }
+    static const IF_OPEN* get(int i) {
+        static std::array<IF_OPEN, 10000> arr;
+        static bool inited = false;
+        if (!inited) {
+            for (size_t i = 0; i < arr.size(); i++) {
+                arr[i].target = i;
+            }
+            inited = true;
+        }
+        return &arr[i];
+    }
+    std::tuple<int, int, int, int> Do(int h, int w, int dir, int pc)const override {
+        auto [nh, nw] = move_forward(h, w, dir);
+        if (map[nh][nw] != '#') {
+            return { h, w, dir, target };
+        }
+        return { h, w, dir, pc+1 };
+    }
+    void Print()const override {
+        out << "IF-OPEN " << target+1 << '\n';
+    }
+};
+class FORWARD : public Program {
+public:
+    std::tuple<int, int, int, int> Do(int h, int w, int dir, int pc)const override {
+        auto [nh, nw] = move_forward(h, w, dir);
+        if (map[nh][nw] != '#') {
+            return { nh, nw, dir, pc + 1 };
+        }
+        return { h, w, dir, pc + 1 };
+    }
+    void Print()const override {
+        out << "FORWARD\n";
+    }
+}Program_FORWARD;
+class Left : public Program {
+public:
+    std::tuple<int, int, int, int> Do(int h, int w, int dir, int pc)const override {
+        switch (dir) {
+        case HP: dir = WP; break;
+        case HM: dir = WM; break;
+        case WP: dir = HM; break;
+        case WM: dir = HP; break;
+        default: assert(false); break;
+        }
+        return { h, w, dir, pc + 1 };
+    }
+    void Print()const override {
+        out << "LEFT\n";
+    }
+}Program_Left;
+class Right : public Program {
+public:
+    std::tuple<int, int, int, int> Do(int h, int w, int dir, int pc)const override {
+        switch (dir) {
+        case HP: dir = WM; break;
+        case HM: dir = WP; break;
+        case WP: dir = HP; break;
+        case WM: dir = HM; break;
+        default: assert(false); break;
+        }
+        return { h, w, dir, pc + 1 };
+    }
+    void Print()const override {
+        out << "RIGHT\n";
+    }
+}Program_Right;
+
+
+bool used[20][20][4][5];
+bool check(const std::vector<const Program*>& program) {
+    int h = sH, w = sW, dir = HP, pc = 0;
+    fill_all(used, false);
+
+    for (;;) {
+        if (map[h][w] == 'G') {
+            return true;
+        }
+        if (pc == program.size()) { pc = 0; }
+        auto& memo = used[h][w][dir][pc];
+        if (memo) { return false; }
+        memo = true;
+        std::tie(h, w, dir, pc) = program[pc]->Do(h, w, dir, pc);
+    }
+}
+
+bool func(std::vector<const Program*>& program, int num) {
+    if (program.size() == num) {
+        return check(program);
+    }
+
+    for (int i = 0; i < num; i++) {
+        program.push_back(Goto::get(i));
+        if (func(program, num)) {
+            return true;
+        }
+        program.pop_back();
+    }
+    for (int i = 0; i < num; i++) {
+        program.push_back(IF_OPEN::get(i));
+        if (func(program, num)) {
+            return true;
+        }
+        program.pop_back();
+    }
+
+    const Program* const Programs[] = {
+        &Program_FORWARD , &Program_Left , &Program_Right
+    };
+    for (auto p: Programs) {
+        program.push_back(p);
+        if (func(program, num)) {
+            return true;
+        }
+        program.pop_back();
+    }
+
+    return false;
+}
+
+int main()
+{
+    using std::endl;
+    in.sync_with_stdio(false);
+    out.sync_with_stdio(false);
+    in.tie(nullptr);
+    out.tie(nullptr);
+
+    fill_all(map, '#');
+    in >> H >> W;
+    for (int i = 1; i <= H; i++)
+    {
+        in >> map[i];
+        map[i][W + 1] = '#';
+        for (int j = W; j >= 1; --j) {
+            map[i][j] = map[i][j - 1];
+        }
+        map[i][0] = '#';
+    }
+    for (int i = 1; i <= H; i++)
+    {
+        for (int j = W; j >= 1; --j) {
+            if (map[i][j] == 'S') {
+                sH = i;
+                sW = j;
+            }
+        }
+    }
+
+
+    std::vector<const Program*> program;
+    for (int i = 0; i < 10; i++) {
+        if (func(program, i + 1)) {
+            break;
+        }
+    }
+    //右壁の法則
+    //if (program.empty()) {
+    //    program.push_back(&Program_Right);
+    //    program.push_back(&Program_IF_OPEN_4);
+    //    program.push_back(&Program_Left);
+    //    program.push_back(&Program_GOTO_1);
+    //    program.push_back(&Program_FORWARD);
+    //}
+    assert(check(program));
+
+    out << program.size() << '\n';
+    for (auto& p : program) {
+        p->Print();
+    }
+
+
+    return 0;
+}
+#endif
+

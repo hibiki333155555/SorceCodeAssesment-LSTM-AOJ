@@ -1,0 +1,24 @@
+#include<iostream>
+#include<string>
+using namespace std;
+string Transform_str(string a)
+{
+	for (int i = 0; i < a.size(); i++)
+	{
+		if (isupper(a[i])) { a[i] = tolower(a[i]); }
+		else if(islower(a[i])) { a[i] = toupper(a[i]); }
+	}
+	return a;
+}
+int main()
+{
+	int m, n;
+	string x, y;
+	string a = "", b = "";
+	cin >> m;
+	for (int i = 0; i < m; i++) { cin >> x; a+=x; }
+	cin >> n;
+	for (int i = 0; i < n; i++) { cin >> y; b+=y; }
+	cout << (Transform_str(a) < Transform_str(b)) << endl;
+	return 0;
+}

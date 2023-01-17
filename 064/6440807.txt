@@ -1,0 +1,128 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+internal class Program
+{
+    public static void Main()
+    {
+        var input = Console.ReadLine();
+        var terrain = new Terrain(input);
+
+        var result = terrain.Puddle();
+
+        Console.WriteLine(result.Sum());
+        Console.WriteLine($"{result.Length}" + ((result.Length > 0) ? " " + result.StringJoin(" ") : ""));
+    }
+
+}
+class Terrain
+{
+    public string First;
+    public string ReverseLast;
+    public Terrain(string terrain)
+    {
+        var highestPoint = 0;
+        var highest = 0;
+        var hight = 0;
+        for (int i = 0; i < terrain.Length; i++)
+        {
+            switch (terrain[i])
+            {
+                case '\\':
+                    hight--;
+                    break;
+                case '/':
+                    hight++;
+                    if (hight > highest)
+                    {
+                        highest = hight;
+                        highestPoint = i + 1;
+                    }
+                    break;
+            }
+        }
+        First = terrain.Substring(0, highestPoint);
+        ReverseLast = new String(terrain.Substring(highestPoint).Reverse().Select(s =>
+        {
+            switch (s)
+            {
+                case '\\':
+                    return '/';
+                case '/':
+                    return '\\';
+                default:
+                    return s;
+            }
+        }).ToArray());
+    }
+
+    public int[] Puddle()
+    {
+        var result1 = Puddle(First);
+        var result2 = Puddle(ReverseLast).Reverse();
+        return result1.Concat(result2).ToArray();
+    }
+    IEnumerable<int> Puddle(string ter)
+    {
+        if (ter.Length == 0)
+            return Enumerable.Empty<int>();
+        var water = new Stack<RefInt>();
+        var result = new Stack<int>();
+        foreach (var mark in ter)
+        {
+            switch (mark)
+            {
+                case '\\':
+                    if (water.Count == 0)
+                        result.Push(0);
+                    foreach (var dep in water)
+                    {
+                        dep.Add(2);
+                    }
+                    water.Push(new RefInt() { Value = 1});
+                    break;
+                case '_':
+                    foreach (var dep in water)
+                    {
+                        dep.Add(2);
+                    }
+                    break;
+                case '/':
+                    var pop = default(RefInt);
+                    if (water.TryPop(out pop))
+                        result.Push(result.Pop() + pop + 1);
+                    foreach (var dep in water)
+                    {
+                        dep.Add(2);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (result.Count != 0 && result.Peek() == 0)
+            result.Pop();
+        return result.Select(i => i / 2).Reverse();
+    }
+
+    class RefInt
+    {
+        public int Value;
+        public void Add(int value) => Value += value;
+        public static implicit operator int(RefInt rint)
+        {
+            return rint.Value;
+        }
+        public static implicit operator RefInt(int i)
+        {
+            return new RefInt() { Value = i };
+        }
+    }
+}
+
+
+internal static class Extensions
+{
+    public static string StringJoin<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+}

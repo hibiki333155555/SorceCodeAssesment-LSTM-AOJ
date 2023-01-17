@@ -1,0 +1,20 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+	double a[4];
+	double changex;
+	double changey;
+	double distance;
+	for (int i = 0; i < 4; i++) {
+		cin >> a[i];
+	}
+	changex = a[0] - a[2];
+	changey = a[1] - a[3];
+	changex = pow(changex, 2);
+	changey = pow(changey, 2);
+	distance = sqrt(changey + changex);
+	cout << setprecision(9) << distance << endl;
+}

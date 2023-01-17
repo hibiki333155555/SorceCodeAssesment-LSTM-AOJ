@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long LL;
+typedef long double LD;
+
+#define rep(i,n) for(LL i=0;i<(n);i++)
+
+int main(){
+    LL n;
+
+    cin >> n;
+
+    map<LL,pair<LL,LL>> data;   // i j
+    set<LL> find;
+
+    rep(i,n){
+
+        rep(j,n){
+            LL a; cin >> a;
+            LL prev = find.size();
+
+            find.insert(a);
+
+            if(prev != find.size()){
+                data[a] = make_pair(i+1,j+1);
+            }
+
+        }
+
+    }
+
+    LL q; cin >> q;
+
+    rep(i,q){
+        LL t; cin >> t;
+        LL result = find.count(t);
+
+        if(result == 0){
+            cout << -1 << endl;
+        }
+        else{
+            cout << data[t].first << " " << data[t].second << endl;
+        }
+
+    }
+
+    return 0;
+}

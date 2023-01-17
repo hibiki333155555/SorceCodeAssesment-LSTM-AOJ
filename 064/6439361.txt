@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int x[10000];
+  int i = 1;
+  while (1) {
+    cin >> x[i];
+    if (x[i] == 0) break;
+    i++;
+  }
+  for (int j = 1; j < i; j++)
+  cout << "Case " << j << ": " << x[j] << endl;
+
+  return 0;
+}
+

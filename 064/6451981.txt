@@ -1,0 +1,27 @@
+#include<stdio.h>
+
+int main()
+{
+    int x,s,m,h;
+    scanf("%d",&x);
+    m=x/60;
+    if(m>60)
+    {
+        h=m/60;
+        m=m-h*60;
+        s=x-h*60*60-m*60;
+         printf("%d:%d:%d\n",h,m,s);
+    }
+    else if(m>0 && m<=60)
+    {
+        m=m;
+        s=x-m*60;
+        printf("%d:%d\n",m,s);
+    }
+    else
+    {
+        printf("%d",x);
+    }
+    return 0;
+}
+

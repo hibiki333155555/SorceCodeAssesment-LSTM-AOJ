@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main(){
+int h,w,i=0,j=0,k=0;
+
+while(k<=300){
+        scanf("%d%d",&h,&w);
+  k++;
+ if(h==0&&w==0)
+    break;
+for(i=0;i<h;i++){
+    for(j=0;j<w;j++){
+    printf("#");}printf("\n");
+
+} printf("\n");}
+return 0;
+}
+

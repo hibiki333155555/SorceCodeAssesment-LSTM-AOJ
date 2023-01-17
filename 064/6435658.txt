@@ -1,0 +1,17 @@
+N = int(input())
+n = N
+koko = int(N**0.5)
+ans = []
+
+for i in range(1,koko+1):
+  if i != 1:
+    while n%i == 0:
+      n = n//i
+      ans.append(i)
+      
+if n != 1:
+  ans.append(n)
+  
+print(str(N) + ": ", end="")
+for i in ans:
+  print(i, end=" ")

@@ -1,0 +1,15 @@
+using System;
+class program
+{
+    static void Main(string[] args)
+    {
+        string[] s = Console.ReadLine().Split();
+        int h = int.Parse(s[0]);
+        int w = int.Parse(s[1]);
+        var f = new string(w);
+        for(int i = 0; i <= h; i++)
+        {
+            Console.WriteLine("#" * w);
+        }
+    }
+}

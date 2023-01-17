@@ -1,0 +1,43 @@
+#include <iostream>
+#include <tuple> // tuple, make_tuple
+#include <cstdio> // printf
+using namespace std;
+
+int top, S[1000];
+void pu(int x){
+    S[++top] = x;
+}
+
+int po(){
+    top--;
+    return S[top+1];
+}
+
+int main() {
+    int a, b;
+    top = 0;
+    char s[1000];
+    while(scanf("%s", s) != EOF){
+        if(s[0] == '+'){
+            a = po();
+            b = po();
+            pu(a + b);
+        }
+        else if(s[0] == '-'){
+            a = po();
+            b = po();
+            pu(a - b);
+        }
+        else if(s[0] == '*'){
+            a = po();
+            b = po();
+            pu(a * b);
+        }
+        else{
+            pu(atoi(s));
+        }
+
+    }
+  cout << po() << endl;
+}
+

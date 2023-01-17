@@ -1,0 +1,21 @@
+def separate(pre, inor):
+    global post
+    root = pre[0]
+    center = inor.index(root)
+    inleft = inor[:center]
+    inright = inor[center+1:]
+    l = len(inleft)
+    preleft = pre[1:l+1]
+    preright = pre[l+1:]
+    if len(preleft) != 0:
+        separate(preleft, inleft)
+    if len(preright) != 0:
+        separate(preright, inright)
+    post.append(root)
+
+n = int(input())
+pre = list(map(int,input().split()))
+inor = list(map(int,input().split()))
+post = []
+separate(pre,inor)
+print(' '.join(map(str,post)))

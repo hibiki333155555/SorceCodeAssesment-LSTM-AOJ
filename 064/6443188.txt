@@ -1,0 +1,10 @@
+#include <stdio.h>
+int main(void)
+{
+    int X;
+    do {
+        scanf("%d",&X);
+    } while(!(1 <= X && X <= 100));
+    printf("%d\n",(X % 21));
+    return 0;
+}

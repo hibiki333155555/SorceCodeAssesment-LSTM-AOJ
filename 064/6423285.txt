@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int V,E,r;
+  cin >> V >> E >> r;
+  vector<vector<int>> dist(V,vector<int>(V,-1)),node(V);
+  for(int i=0; i<E; i++){
+    int s,t,d;
+    cin >> s >> t >> d;
+    dist.at(s).at(t) = d;
+    //dist.at(t).at(s) = d;
+    node.at(s).push_back(t);
+    //node.at(t).push_back(s);
+  }
+  
+  vector<long> ans(V,-1);
+  priority_queue<long, vector<long>, greater<long>> que;
+  que.push(r);
+  
+  while(!que.empty()){
+    long d = que.top()/V, v = que.top()%V;
+    que.pop();
+    if(ans.at(v) == -1){
+      ans.at(v) = d;
+    }else{
+      continue;
+    }
+    for(int i=0; i<node.at(v).size(); i++){
+      long nv = node.at(v).at(i);
+      long nd = d + dist.at(v).at(nv);
+      que.push(nd*V + nv);
+    }
+  }
+  
+  for(int i=0; i<V; i++){
+    if(ans.at(i) == -1) cout << "INF" << endl;
+    else cout << ans.at(i) << endl;
+  }
+  
+  return 0; 
+}

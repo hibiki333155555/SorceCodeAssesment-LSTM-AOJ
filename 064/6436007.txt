@@ -1,0 +1,44 @@
+#include <iostream>
+using namespace std;
+#define MAX 250
+int Parent(int i){return i/2;}
+int left(int i){return 2*i;}
+int right(int i){return 2*i+1;}
+
+
+int n;
+void maxHeapify(int A[],int i){
+    int l=left(i);
+    int r=right(i);
+    int largest;
+    if (l<=n && A[l]>A[i]) largest =l;
+    else largest=i;
+    
+    if (r<=n && A[r]>A[largest]) largest=r;
+    
+    if(largest!=i){
+        swap(A[i],A[largest]);
+        maxHeapify(A,largest);
+    }
+    return ;
+}
+
+
+void builMaxHeap(int A[]){
+    for (int i=n/2;i>=1;i--){
+        maxHeapify(A,i) ;
+    }
+}
+int main(void){
+    // Your code here!
+    int H[MAX];
+    cin>>n;
+    for(int i=1;i<=n;i++)cin>>H[i];
+    builMaxHeap(H);
+    for(int i=1;i<=n;i++){
+        cout<<" ";
+        cout<<H[i];
+    }
+    cout << endl;
+}
+

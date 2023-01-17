@@ -1,0 +1,14 @@
+let str = Array.from(require(`fs`).readFileSync(`/dev/stdin`, `utf-8`).toLowerCase());
+
+let alphabet = Array.from(`abcdefghijklmnopqrstuvwxyz`);
+let dict = alphabet.reduce((obj, item) => {
+    obj[item] = 0;
+    return obj;
+}, {});
+
+str.forEach(item => {
+    if (!alphabet.includes(item)) return;
+    dict[item]++;
+})
+
+alphabet.forEach(item => console.log(`${item} : ${dict[item]}`));

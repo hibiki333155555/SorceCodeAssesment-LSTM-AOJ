@@ -1,0 +1,15 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ITP1_10_A
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var pos = Console.ReadLine().Split().Select(p => double.Parse(p)).ToArray();
+            Console.WriteLine(Math.Sqrt(Math.Pow(pos[2] - pos[0], 2) + Math.Pow(pos[3] - pos[1], 2)));
+        }
+    }
+}
+

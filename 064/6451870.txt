@@ -1,0 +1,12 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int a,b,c; cin>>a>>b>>c;
+    int ans = 0;
+    for(int i=5; i<=14; i++) {
+        if(c%i==0) ans++;
+    }
+    cout<<ans<<endl;
+    return 0;
+}

@@ -1,0 +1,13 @@
+H,W = input().split()
+
+while True:
+    
+    
+    if W ==0 and H==0:
+        break
+    
+    for i=0 in H:
+        for k=0 in W:
+            print("#")
+            
+    print("")

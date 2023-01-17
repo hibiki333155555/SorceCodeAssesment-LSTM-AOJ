@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    int M, N;
+    cin >> M >> N;
+    vector<string> S(M);
+    for(int i = 0; i < M; i++) cin >> S[i];
+    int summ = 0, sumb = 0;
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            if(S[i][j] == 'o') summ++;
+            else sumb++;
+        }
+    }
+    int cntm = 0;
+    int ans = N * M;
+    for(int i = 0; i < M - 1; i++){
+        for(int j = 0; j < N; j++){
+            if(S[i][j] == 'o') cntm++;
+        }
+        ans = min({N * (i + 1) - cntm +  (summ - cntm), cntm + sumb - (N * (i + 1) - cntm), ans});
+    }
+    cntm = 0;
+    for(int i = 0; i < N - 1; i++){
+        for(int j = 0; j < M; j++){
+            if(S[j][i] == 'o') cntm++;
+        }
+        ans = min({M * (i + 1) - cntm + (summ - cntm), cntm + sumb - (M * (i + 1) - cntm), ans});
+    }
+    cout << ans << endl;
+}

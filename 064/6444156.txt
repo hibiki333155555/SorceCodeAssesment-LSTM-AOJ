@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int r,c;
+    cin >> r >> c;
+    vector<vector<int> > A(r+1,vector<int>(c+1,0));
+    for(int i = 0;i < r;i++){
+        for(int j = 0;j < c;j++) cin >> A[i][j];
+    }
+    for(int i = 0;i < r;i++){
+        int sum = 0;
+        for(int j = 0;j < c;j++) sum += A[i][j];
+        A[i][c] = sum;
+    }
+    for(int i = 0;i <= c;i++){
+        int sum = 0;
+        for(int j = 0;j < r;j++) sum += A[j][i];
+        A[r][i] = sum;
+    }
+    for(int i = 0;i <= r;i++){
+        for(int j = 0;j <= c;j++){
+            if(j) cout << ' ';
+            cout << A[i][j];
+        }
+        cout << endl;
+    }
+}

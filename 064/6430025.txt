@@ -1,0 +1,10 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int n,r;
+    cin>>n;
+    r=log2(n);
+    cout<<pow(2,r)<<endl;
+    return(0);
+}    
+

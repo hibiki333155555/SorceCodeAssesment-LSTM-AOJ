@@ -1,0 +1,20 @@
+n=int(input())
+a=list(map(int,input().split()))
+a.append(1000000001)
+n=int(input())
+b=list(map(int,input().split()))
+j=0
+bool=True
+for i in b:
+    while j<len(a):
+        if a[j]==i:
+            break
+        elif a[j]>i:
+            bool=False
+            break
+        j+=1
+if bool:
+    print(1)
+else:
+    print(0)
+#123

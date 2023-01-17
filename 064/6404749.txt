@@ -1,0 +1,23 @@
+while True:
+    m,f,r = map(int, input().split(" "))
+    mf = m+f
+    
+    if m == f == r == -1:
+        break
+    
+    if m==-1 or f==-1:
+        print("F")
+    else:
+        if mf >= 80:
+            print("A")
+        if 65 <= mf < 80:
+            print("B")
+        if 50<= mf < 65:
+            print("C")
+        if 30 <= mf < 50:
+            if r >= 50:
+                print("C")
+            else:
+                print("D")
+        if mf < 30:
+            print("F")

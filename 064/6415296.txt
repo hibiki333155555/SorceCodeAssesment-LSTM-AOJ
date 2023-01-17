@@ -1,0 +1,76 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+static const int N = 100000;
+static const int white = 0;
+static const int black = 2;
+
+/*边结点结构体*/
+struct Edge {
+	int weight = 0;
+	int end=0;
+};
+
+/*图的邻接矩阵*/
+vector<Edge> Graph[N];
+
+/*从结点到x点的距离，我们选取其中最大的点作为x*/
+int dis_to_x[N] = {};
+
+/*从x结点到y点的距离，我们选取最大的距离作为y*/
+int dis_to_y[N] = {};
+
+/*用来记录图中的结点的访问状态*/
+int colour[N] = {};
+
+void dfs_dis(int u, int dis[])
+{
+	colour[u] = black;
+	for (int i = 0; i < Graph[u].size(); i++)
+	{
+		int next = Graph[u][i].end;
+		if (colour[next] != black)
+		{
+			dis[next] = dis[u] + Graph[u][i].weight;
+			dfs_dis(next, dis);
+		}
+	}
+}
+
+int main()
+{
+	int n = 0;
+	cin >> n;
+	Edge temp;
+	for (int i = 0; i < n - 1; i++)
+	{
+		int s,t; 
+		cin >> s >> t >> temp.weight;
+		
+		temp.end=t;
+		Graph[s].push_back(temp);
+		
+		temp.end=s;
+		Graph[t].push_back(temp);
+	}
+	/*求出起始点到所有点的最大距离，取最大值为中间点x,顺便初始化colour*/
+	dfs_dis(0, dis_to_x);
+	int x = 0;
+	for (int i = 0; i < n; i++)
+	{
+		if (dis_to_x[i] > dis_to_x[x])
+			x = i;
+		colour[i] = white;
+	}
+	
+	/*求出中间点x到其他所有点的距离，取最大值为最终点y，xy即为直径*/
+	dfs_dis(x, dis_to_y);
+	int y = 0;
+	for(int i=0;i<n;i++)
+		if (dis_to_y[i] > dis_to_y[y])
+			y = i;
+	cout << dis_to_y[y] << endl;
+	return 0;
+}

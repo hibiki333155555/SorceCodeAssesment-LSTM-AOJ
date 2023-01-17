@@ -1,0 +1,50 @@
+#include<iostream>
+
+int main()
+{
+	int a[5][14];
+	int n;
+	int y;
+	char x;
+	int i = 1;
+
+	std::cin >> n;
+
+	while (i < n+1) {
+		std::cin >> x >> y;
+
+		if (x == 'S') {
+			a[1][y] = true;
+		}
+		else if (x == 'H') {
+			a[2][y] = true;
+		}
+		else if (x == 'C') {
+			a[3][y] = true;
+		}
+		else if (x == 'D') {
+			a[4][y] = true;
+		}
+		i = i + 1;
+
+	}
+
+	for (int j = 1; j < 5; j++) {
+		for (int k = 1; k < 14; k++) {
+			if (a[j][k] != true && j==1) {
+				std::cout << 'S' <<" "<< k << "\n";
+			}
+			else if(a[j][k] != true && j == 2){
+				std::cout << 'H' << " " << k << "\n";
+			}
+			else if (a[j][k] != true && j == 3) {
+				std::cout << 'C' << " " << k << "\n";
+			}
+			else if (a[j][k] != true && j == 4) {
+				std::cout << 'D' << " " << k << "\n";
+			}
+		}
+	}
+	
+
+}

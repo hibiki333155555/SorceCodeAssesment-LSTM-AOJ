@@ -1,0 +1,9 @@
+def main():
+    N = int(input())
+    a = list(map(int, input().split()))
+
+    print("{} {} {}".format(min(a), max(a), sum(a)))
+    
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using pll = pair<ll, ll>;
+#define drep(i, cc, n) for (ll i = (cc); i <= (n); ++i)
+#define rep(i, n) drep(i, 0, n - 1)
+#define all(a) (a).begin(), (a).end()
+#define pb push_back
+#define fi first
+#define se second
+
+const ll MOD = 1000000007;
+const ll MOD2 = 998244353;
+const ll INF = 1LL << 60;
+const ll N_MAX = 2e5;
+
+struct UnionFind{
+    vector<ll> parent;
+    vector<ll> sizes;
+    
+    UnionFind(ll N) : parent(N), sizes(N, 1){
+        rep(i, N) parent[i] = i;
+    }
+    
+    ll root(ll x){
+        if (parent[x] == x) return x;
+        return parent[x] = root(parent[x]);
+    }
+
+    void unite(ll x, ll y){
+        ll rx = root(x);
+        ll ry = root(y);
+        if (rx == ry) return;
+        if (sizes[rx] < sizes[ry]) swap(rx, ry);
+        sizes[rx] += sizes[ry];
+        parent[ry] = rx;
+    }
+
+    bool same(ll x, ll y){
+        ll rx = root(x);
+        ll ry = root(y);
+        return rx == ry;
+    }
+
+    ll size(ll x){
+        return sizes[root(x)];
+    }
+};
+
+int main(){
+    ll n;
+    cin >> n;
+
+    vector<string> report(n);
+    rep(i, n) cin >> report[i];
+
+    UnionFind T(n);
+    for(ll i=0; i<n-1; i++){
+        for(ll j=i+1; j<n; j++){
+            if(T.same(i, j)) continue;
+            ll cnt = 0;
+            for(ll k=0; k<(ll)report[i].size(); k++){
+                if(report[i][k] == report[j][k]) cnt++;
+            }
+
+            if((ll)report[i].size()-1 <= cnt){
+                T.unite(i, j);
+            }
+        }
+    }
+
+    ll ans = n;
+    rep(i, n){
+        if(T.size(i) == 1) ans--;
+    }
+
+    cout << ans << endl;
+}

@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+int main(void){
+    float r;
+    float pi = 3.14;
+    float area, circ;
+    
+    cin >> r;
+    
+    area = r*r*pi;
+    circ = 2*r*pi;
+    
+    cout.precision(5);
+    cout << area << " " << circ << endl;
+     
+    return 0;
+}

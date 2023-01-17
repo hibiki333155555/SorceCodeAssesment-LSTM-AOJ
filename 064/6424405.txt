@@ -1,0 +1,23 @@
+#include <iostream>  
+using namespace std;
+int main()
+{
+	int n = 0;
+	cin >> n;
+	int a[n];
+	for (int i = 0; i < n; i++) {
+		cin >> a[i];
+	}
+	int b, m = 0, sum = 0;
+	cin >> b;
+	for (int j = 0; j < b; j++) {
+		cin >> m;
+		if (a[(lower_bound(a, a + n, m) - a)] == m) {
+			sum++;
+		}
+
+	}
+	cout << sum;
+	return 0;
+}
+

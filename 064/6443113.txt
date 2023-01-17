@@ -1,0 +1,12 @@
+#include <stdio.h>
+
+int main(void)
+{
+    int n,d;
+    do
+    {
+        (void)scanf("%d %d",&n,&d);
+    }while(!(1 <= n && n <= 100) && (1 <= d && d <= 100));
+    printf("%d\n",(n + d -1) / d);
+    return 0;
+}

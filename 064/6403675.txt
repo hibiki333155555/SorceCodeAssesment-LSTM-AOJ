@@ -1,0 +1,12 @@
+#include <stdio.h>
+
+
+int main(){
+    int num,h,m,s:
+    scanf("%d", &num
+    h = num/3600;
+    m = (num-3600*h)/60;
+    s =num-3600*h-60*m;
+
+    printf("%d:%d:%d,h,m,s);
+}

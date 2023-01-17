@@ -1,0 +1,95 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define MAX 100100
+#define NIL -1
+
+struct Node{
+    int parent, left, right;
+};
+
+struct Node T[MAX];
+int D[MAX];
+
+int getDepth(int u){
+    int d = 0;
+    while(T[u].parent != NIL){
+        d++;
+        u = T[u].parent;
+    }
+    return d;
+}
+
+void setDepth(int u, int p){
+    D[u] = p;
+    if(T[u].right != NIL){
+        setDepth(T[u].right, p);
+    }
+    if(T[u].left != NIL){
+        setDepth(T[u].left, p + 1);
+    }
+}
+
+void printChildren(int u){
+    int i = 0;
+    int c = T[u].left;
+    while(c != NIL){
+        if(i > 0){
+            cout << ", ";
+        }
+        cout << c ;
+        c = T[c].right;
+        i++;
+    }
+}
+
+
+int main(){
+    for(int i = 0; i < MAX; i++){
+        T[i].parent = NIL;
+        T[i].left = NIL;
+        T[i].right = NIL;
+    }
+    int n, u, d, c, prec;
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        cin >> u >> d;
+        prec = NIL;
+        for(int j = 0; j < d; j++){
+            cin >> c;
+            if(j == 0){
+                T[u].left = c;
+            }
+            if(prec != NIL){
+                T[prec].right = c;
+            }
+            T[c].parent = u;
+            prec = c;
+        }
+
+    }
+    for(int i = 0; i < n; i++){
+        if(T[i].parent == NIL){
+            setDepth(i, 0);
+            break;
+        }
+    }
+    for(int i = 0; i < n; i++){
+        cout << "node " << i <<": ";
+        cout << "parent = " << T[i].parent << ", ";
+        cout << "depth = " << D[i] << ", ";
+        //cout << "depth = " << getDepth(i) << ", ";
+        if(T[i].parent == NIL){
+            cout << "root, ";
+        }
+        else if(T[i].left == NIL){
+            cout << "leaf, ";
+        }
+        else{
+            cout << "internal node, ";
+        }
+        cout << "[";
+        printChildren(i);
+        cout << "]" << endl;
+    }
+}

@@ -1,0 +1,14 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main(){
+  int n,x;cin>>n>>x;
+  vector<int> A(n);
+  for(int i = 0; n > i; i++){
+    cin>>A[i];
+  }
+  sort(A.begin(),A.end());
+  cout << A.end()-lower_bound(A.begin(),A.end(),x) << endl;
+}
+

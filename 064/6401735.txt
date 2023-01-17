@@ -1,0 +1,57 @@
+import java.util.Scanner;
+
+class Rectangle {
+    private int height;
+    private int width;
+
+    public Rectangle(int height, int width) {
+        this.height = height;
+        this.width = width;
+    }
+
+    // 描画する
+    public void disp() {
+        char c = '.';
+        for (int i = 0; i < height; i++) {
+
+            // 最初の行と最後の行は'#'とする
+            if (i == 0 || i == height - 1) {
+                c = '#';
+            }
+
+            // 最初の列は'#'とする
+            System.out.print('#');
+            for (int j = 1; j < width - 1; j++) {
+                System.out.print(c);
+            }
+            // 最後の列は'#'とする
+            System.out.println("#");
+            c = '.';
+        }
+        // 改行
+        System.out.println("");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            int height = sc.nextInt();
+            int width = sc.nextInt();
+
+            // 終了条件
+            if (height == 0 && width == 0) {
+                break;
+            }
+
+            // クラスを宣言
+            Rectangle rectangle = new Rectangle(height, width);
+
+            // 描画する
+            rectangle.disp();
+        }
+    }
+}
+

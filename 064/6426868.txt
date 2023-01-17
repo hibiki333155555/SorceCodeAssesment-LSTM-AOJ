@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+import sys
+import math
+from functools import lru_cache
+from heapq import heappush, heappop, heappushpop
+from itertools import permutations, accumulate
+from operator import itemgetter, le
+from collections import deque, Counter, defaultdict
+from bisect import bisect_right as br
+from bisect import bisect_left as bl
+inf = float('inf')
+mod = 998244353
+input=lambda: sys.stdin.readline().rstrip("\r\n")
+def I(): return int(sys.stdin.readline())
+def LI(): return list(map(int, sys.stdin.readline().split()))
+
+n = input()
+m = len(n)
+k = I()
+fact = [1] * (max(k, m)+1)
+for i in range(2, max(k, m)+1):
+    fact[i] = i * fact[i-1]
+    fact[i] %= mod
+
+inv_fact = [1] * (max(k, m)+1)
+inv_fact[-1] = pow(fact[-1], mod-2, mod)
+for i in range(2, max(k, m))[::-1]:
+    inv_fact[i] = (i+1) * inv_fact[i+1]
+    inv_fact[i] %= mod
+
+def comb(a, b):
+    if a < 0 or b < 0: return 0
+    if a < b: return 0
+    return fact[a]*inv_fact[a-b]*inv_fact[b] % mod
+
+ans = 0
+cnt = 0
+t = 0
+for i in range(m):
+    ni = int(n[i])
+    if ni:
+        if cnt > k: break
+        ans += ((1<<(m-i-1))-1)*comb(m-i-2, k-cnt-1) + t*comb(m-i-1, k-cnt)
+        ans %= mod
+        t += (1<<(m-i-1))
+        t %= mod
+        cnt += 1
+
+if cnt == k:
+    ans += t
+    ans %= mod
+print(ans)
+

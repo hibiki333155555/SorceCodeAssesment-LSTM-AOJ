@@ -1,0 +1,9 @@
+from math import sqrt
+
+while 1:
+    n = int(input())
+    *s, = map(int, input().split())
+    if n == 0:
+        break
+    av = sum(s) / n
+    print(sqrt(sum((a - av) ** 2 for a in s) / n) * 0.50)

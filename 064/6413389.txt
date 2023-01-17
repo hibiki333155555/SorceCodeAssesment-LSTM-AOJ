@@ -1,0 +1,39 @@
+#include <iostream>
+#include <algorithm>
+#include <cstdio>
+using namespace std;
+
+const int N = 300;
+
+struct Node
+{
+    int key;
+    bool vis = false;
+};
+
+Node a[N];
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; ++i)
+    {
+        scanf("%d", &a[i].key);
+        a[i].vis = true;
+    }
+
+    for (int i = 1; i <= n; ++i)
+    {
+        printf("node %d: key = %d, ", i, a[i].key);
+        if (a[i / 2].vis)
+            printf("parent key = %d, ", a[i / 2].key);
+        if (a[i << 1].vis)
+            printf("left key = %d, ", a[i << 1].key);
+        if (a[(i << 1) + 1].vis)
+            printf("right key = %d, ", a[(i << 1) + 1].key);
+        puts("");
+    }
+
+    return 0;
+}

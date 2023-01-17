@@ -1,0 +1,16 @@
+import math
+a, b, C = input().split()
+
+a = float(a)
+b = float(b)
+C = math.radians(int(C))
+
+h = b*math.sin(C)
+c = math.sqrt(a**2+b**2-2*a*b*math.cos(C))
+S = a*h/2
+L = a+b+c
+
+print(S)
+print(L)
+print(h)
+

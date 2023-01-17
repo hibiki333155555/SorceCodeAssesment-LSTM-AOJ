@@ -1,0 +1,126 @@
+import java.util.Scanner;
+
+class Main{
+    
+    static class DoublyLinkedNode{
+        int key;
+        DoublyLinkedNode next,prev;
+        DoublyLinkedNode(int x){
+            key = x;
+        } 
+
+    }
+
+    static class CellList{
+        static DoublyLinkedNode head = null;
+        static DoublyLinkedNode tail = null;
+
+        CellList(){
+        }
+
+        static void insert(int key){
+            if(head == null){
+                head = new DoublyLinkedNode(key);
+                tail = head;
+                return;
+            }
+            if(head.next == null){
+                DoublyLinkedNode node = new DoublyLinkedNode(key);
+                node.next = head;
+                head.prev = node;
+                head = node;
+                return;
+            }
+            DoublyLinkedNode node = new DoublyLinkedNode(key);
+            node.next = head;
+            head.prev = node;
+            head = node;
+        }
+
+        static void delete(int key){
+            if(head == null){
+                return;
+            }
+            if(head.key == key){
+                DoublyLinkedNode prev = null;
+                DoublyLinkedNode next = head.next;
+                head = next;
+                head.prev = prev;  
+                return;
+            }
+
+            DoublyLinkedNode cur = head;
+            while(cur.key != key){
+                cur = cur.next;
+                if(cur.key != key && cur.next == null){
+                    return;
+                }
+            }
+            DoublyLinkedNode prev = cur.prev;
+            DoublyLinkedNode next = cur.next;
+            if(next == null){
+                tail = prev;
+                tail.next = null;
+            }else{
+                prev.next = next;
+                next.prev = prev;
+            }
+    }
+
+        static void deleteFirst(){
+            if(head == null){
+                return;
+            }
+            if(head.next != null){
+                head = head.next;
+                head.prev = null;
+                return;
+            }
+            if(head.next == null){
+                head = null; 
+            }
+        }
+
+        static void deleteLast(){
+            if(head == null){
+                return;
+            }
+            if(tail.prev == null){
+                head = null;
+                return;
+            }
+            
+            tail = tail.prev;
+            tail.next = null;
+
+        }
+
+        static void print(){
+            DoublyLinkedNode cur = head;
+            while(true){
+                System.out.print(cur.key);
+                if(cur.next == null){
+                    System.out.println();
+                    break;
+                }else System.out.print(" ");
+                cur = cur.next;   
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+        Scanner s = new Scanner(System.in);
+        int n = s.nextInt();
+        CellList cell = new CellList();
+        for(int i=0;i<n;i++){
+            String order = s.next();
+                switch(order){
+                    case "insert" : cell.insert(s.nextInt()); break;
+                    case "delete" : cell.delete(s.nextInt()); break;
+                    case "deleteFirst" : cell.deleteFirst(); break;
+                    case "deleteLast" : cell.deleteLast(); break;
+                }
+            }
+            cell.print();
+        }
+    }

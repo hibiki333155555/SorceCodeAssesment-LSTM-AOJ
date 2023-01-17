@@ -1,0 +1,52 @@
+#include<iostream>
+#include<string>
+#include<map>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int n,p;
+map<string,int>mp;
+int vis[1000005];
+int ans;
+
+int main() {
+	while(cin>>n && n) {
+		mp.clear();
+		memset(vis,0,sizeof(vis));
+		for(int i=0;i<n;i++) {
+			string name;
+			int d,t;
+			cin>>name>>d>>t;
+			t = t % 100 + (t-600)/100*60+d*1440;
+			mp[name] = t;
+		}
+		cin>>p;
+		ans = p;
+		for(int i=0;i<p;i++) {
+			string name;
+			cin>>name;
+			auto it = mp.find(name);
+			int t = it->second;
+			for(int j=0;j<30;j++) {
+				if(vis[t+j])
+					ans = -1;
+				vis[t+j]++;
+			}
+		}
+		if(ans >= 0) {
+			vector<int>v;
+			for(auto it=mp.begin();it!=mp.end();it++) 
+				v.push_back(it->second);
+			sort(v.begin(),v.end());
+			for(int i=0;i<v.size();i++) {
+				if(!vis[v[i]]&&!vis[v[i]+29]) {
+					ans++;
+					for(int j=0;j<30;j++)
+						vis[v[i]+j] = 1;
+				}
+			}
+		}
+		cout<<ans<<endl;
+	}
+}

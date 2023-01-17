@@ -1,0 +1,22 @@
+import math
+ll = []
+while True:
+    n = input()
+    n = int(n)
+    if n == 0 : break
+    l = list(map(int, input().split()))
+    total = 0
+    for i in range (len(l)):
+        total = total + l[i]
+    total = float(total)
+    avg = total / n
+    var = 0
+    for i in range (len(l)):
+        var = var + (l[i]-avg)**2
+    var = var / n
+    var = math.sqrt(var)
+    ll = ll + [var]
+
+for i in range(len(ll)):
+    print('{:.8f}'.format(ll[i]))
+

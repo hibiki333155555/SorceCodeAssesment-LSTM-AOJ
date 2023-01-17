@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+int main( )
+{
+   int H,W;
+  string sq = "#";
+ 
+  cin >> H >> W;
+  while ( H != 0){
+  for (int i = 0;i < H; i++){
+      for (int j = 0; j < W; j++){
+          cout << sq;
+      }
+      cout << endl;
+  } 
+  cout << endl;
+  cin >> H >> W;
+ 
+  }
+}

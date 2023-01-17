@@ -1,0 +1,19 @@
+#include <iostream>
+#include <stdio.h>
+#include <math.h>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    float x1;
+    float y1; 
+    float x2;
+    float y2;
+    cin >> x1;
+    cin >>y1;
+    cin>>x2;
+    cin >> y2;
+
+    float distance = sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
+    std::cout<<fixed << std::setprecision(9)<<distance <<endl;
+}

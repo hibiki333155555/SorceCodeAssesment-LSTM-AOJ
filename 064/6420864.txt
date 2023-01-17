@@ -1,0 +1,24 @@
+#include <iostream>
+#include <algorithm>
+#include <stdio.h>
+using namespace std;
+static const int MAX=200000;
+int main(){
+    int r,n;
+    
+    cin>>n;
+    cin>>r;
+    
+    int maxv=-20000000;
+    int minv=r;
+    
+    for(int i=0;i<n;i++){
+        cin>>r;
+        maxv=max(maxv,r-minv);
+        minv=min(minv,r);
+        
+    }
+    cout<<maxv<<endl;
+
+    return 0;
+}

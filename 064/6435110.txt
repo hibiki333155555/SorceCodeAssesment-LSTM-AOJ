@@ -1,0 +1,44 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args){
+    	final int none = 0;
+    	final int presence = 1;
+    	
+    	Scanner sc = new Scanner(System.in);
+    	int n = sc.nextInt();
+//     	4組13枚のカード
+		int[][] trump = new int[4][13];
+//		手元のn枚分指定したトランプを加える
+		for (int i = 0; i < n; i++) {
+//			トランプの絵柄
+			String mark = sc.next();
+//			トランプの数字
+			int rank = sc.nextInt();
+			
+			if (mark.equals("S"))
+				trump[0][rank - 1] = presence;
+			else if (mark.equals("H"))
+				trump[1][rank - 1] = presence;
+			else if (mark.equals("C"))
+				trump[2][rank - 1] = presence;
+			else
+				trump[3][rank - 1] = presence;
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 13; j++) {
+				if (trump[i][j] == none)
+					if (i == 0)
+						System.out.println("S " + (j + 1));
+					else if (i == 1)
+						System.out.println("H " + (j + 1));
+					else if (i == 2)
+						System.out.println("C " + (j + 1));
+					else
+						System.out.println("D " + (j + 1));
+			}
+		}
+    	sc.close();
+    }
+}

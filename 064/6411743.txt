@@ -1,0 +1,28 @@
+#include<stdio.h>
+#include<string.h>
+#include <ctype.h>
+
+
+int upper(char);
+int lower(char);
+
+int main(void){
+    char moji[1200]; 
+    char *p,c;
+    
+    gets(moji);
+    p=moji;
+
+    while(*p!='\0'){
+    c=*p++;
+    if(islower(c)){
+        c=toupper(c);
+    }
+    else if(isupper(c)){
+        c=tolower(c);
+    }
+    putchar(c);
+    }
+    printf("\n");
+    return 0;
+}

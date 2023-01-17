@@ -1,0 +1,58 @@
+#include <iostream>
+#include <utility>
+using namespace std;
+using ll=long long;
+ll a[100000];
+int b[100000];
+int c[100000];
+ll onigari[100002];
+ll dsum[100002];
+int getmaxcindex(int nowpos, int n){
+	int ret = 0;
+	for(int i=0;i<n;i++){
+		if(b[i] <= nowpos && c[i] >= nowpos){
+			if(c[ret] < c[i]) {
+				ret = i;
+			}
+		}
+	}
+	return ret;
+}
+int main(){
+	int n,m,q;
+	cin>>n>>m;
+	fill(onigari, onigari+100002, 0LL);
+	for(int i=0;i<n;i++){
+		cin>>a[i]>>b[i]>>c[i];
+		onigari[b[i]] += a[i];
+		onigari[c[i] + 1] -= a[i];
+	}
+	// for(int i=1;i<100002;i++){
+	// 	onigari[i] += onigari[i-1];
+	// }
+	fill(dsum, dsum+100002, 0LL);
+	cin>>q;
+	for(int i=0;i<q;i++){
+		ll d;
+		int e;
+		cin>>d>>e;
+		dsum[e] += d;
+	}
+	ll ans = 0;
+	for(int i=1;i<m+1;i++){
+		onigari[i] += onigari[i-1];
+		if(onigari[i] < dsum[i]) {
+			if(onigari[i] == 0) {
+				cout<<-1<<endl;
+				return 0;
+			}
+			int slayerindex = getmaxcindex(i, n);
+			ans += dsum[i] - onigari[i];
+			onigari[c[slayerindex] + 1] -= (dsum[i] - onigari[i]);
+			onigari[i] = dsum[i];
+			// onigari[c[slayerindex] + 1] -= (dsum[i] - onigari[i]);
+		}
+	}
+	cout<<ans<<endl;
+	return 0;
+}

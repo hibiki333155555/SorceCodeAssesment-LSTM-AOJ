@@ -1,0 +1,11 @@
+import sys
+readline=sys.stdin.readline
+N,K=map(int,readline().split())
+mod=998244353
+if K>=3:
+    ans=pow(2,N,mod)
+elif K>=2:
+    ans=N+1
+else:
+    ans=1
+print(ans)

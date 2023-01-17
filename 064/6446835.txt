@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define rep(i, n) for(int i = 0; i < (n); i++)
+#define coutf(f) cout << fixed << setprecision(f)
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+#define pb push_back
+using Graph = vector<vector<int>>;
+
+int main(){
+	int n;
+    cin >> n;
+    vector<int> s(n);
+    rep (i,n) cin >> s[i];
+    sort(all(s));
+    int q;
+    cin >> q;
+    int ans = 0;
+    rep (i,q) {
+        int t;
+        cin >> t;
+        if(binary_search(all(s), t)) ans++;
+    }
+    cout << ans << endl;
+}

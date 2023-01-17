@@ -1,0 +1,25 @@
+#include <stdio.h>
+int main(void)
+{
+    int S,h,m,s;
+    do
+    {
+        scanf("%d",&S);
+    }while(!(0<=S&&S<86400));
+    for (int i = 1; i <= S;i++)
+    {
+        s++;
+        if(s > 60)
+        {
+            s = 0;
+            m++;
+        }
+        else if(m > 60)
+        {
+            m = 0;
+            h++;
+        }
+    }
+    printf("%d:%d:%d\n",h,m,s);
+    return 0;
+}

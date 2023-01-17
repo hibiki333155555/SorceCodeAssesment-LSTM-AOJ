@@ -1,0 +1,10 @@
+#include<stdio.h>
+int main(){
+    float r;
+    scanf("%f",&r);
+
+    printf("%.6f %.6f\n",3.14159*r*r,2*3.14159*r);
+
+return 0;
+}
+

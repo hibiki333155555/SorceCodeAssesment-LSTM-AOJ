@@ -1,0 +1,25 @@
+def main():
+    from sys import stdin 
+    input = stdin.readline 
+    from collections import deque 
+    
+    n = int(input())
+    que = deque()
+    for _ in range(n):
+        command = input().split()
+        if command[0] == 'insert':
+            x = int(command[1])
+            que.appendleft(x)
+        elif command[0] == 'delete':
+            x = int(command[1])
+            if x in que:
+                que.remove(x)
+        elif command[0] == 'deleteFirst':
+            que.popleft()
+        elif command[0] == 'deleteLast':
+            que.pop()
+            
+    print(*que)
+    
+    
+main()

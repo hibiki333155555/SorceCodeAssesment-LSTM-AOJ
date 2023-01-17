@@ -1,0 +1,62 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+public class Main {
+    public static void main(String[] args) {
+        Scanner std = new Scanner(System.in);
+        int a, b;
+        a = std.nextInt();
+        b = std.nextInt();
+        greatestCommonDivisor(a, b);
+    }
+
+    public static void greatestCommonDivisor(int x, int y) {
+        ArrayList<Integer> commonDivisor = new ArrayList<>();
+        int commonDivisorSize = 0;
+        ArrayList<Integer> x_divisor = new ArrayList<>();
+        ArrayList<Integer> y_divisor = new ArrayList<>();
+        for (int i = 1; i <= x; i++) {
+            if (x % i == 0) {
+                x_divisor.add(i);
+            }
+        }
+        for (int i = 1; i <= y; i++) {
+            if (y % i == 0) {
+                y_divisor.add(i);
+            }
+        }
+        /*
+        System.out.println("x_divisor size = " + x_divisor.size());
+        System.out.println("y_divisor size = " + y_divisor.size());
+        
+        for(int i=0; i<x_divisor.size(); i++){
+            System.out.println("x_divisor " + i + " " + x_divisor.get(i));
+        }
+        for(int i=0; i<y_divisor.size(); i++){
+            System.out.println("y_divisor " + i + " " + y_divisor.get(i));
+        }
+        */
+        for(int i=0; i<x_divisor.size(); i++){
+            for(int j=0; j<y_divisor.size(); j++){
+                /*
+                System.out.println("common i counter " + i);
+                System.out.println("common j counter " + j);
+                 */
+                if(x_divisor.get(i).equals(y_divisor.get(j))){
+                    commonDivisor.add(x_divisor.get(i));
+                    /*
+                    System.out.println("common i counter " + i);
+                    System.out.println("common j counter " + j);
+                     */
+                }
+            }
+        }
+        /*
+        for(int i=0; i<commonDivisor.size(); i++){
+            System.out.println("commonDivisor" + i + " " + commonDivisor.get(i));
+        }
+        */
+        commonDivisorSize = commonDivisor.size();
+        System.out.println(commonDivisor.get(commonDivisorSize-1));
+    }
+}
+

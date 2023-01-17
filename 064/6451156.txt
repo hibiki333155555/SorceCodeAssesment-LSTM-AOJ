@@ -1,0 +1,77 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("unroll-loops")
+
+#include <algorithm>
+#include <bitset>
+#include <climits>
+#include <cmath>
+#include <cstring>
+#include <deque>
+#include <forward_list>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <list>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+#define ALL(x) (x).begin(), (x).end()
+#define PC(x) __builtin_popcount(x)
+#define PCL(x) __builtin_popcountll(x)
+
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+struct edge {
+    int to, cost, id;
+};
+const double PI = 3.14159265358979323846;
+const double PI2 = PI * 2.0;
+const double EPS = 1E-09;
+const ll MOD = 1E+09 + 7; // =998244353;
+const ll INFL = 1E18;
+const int INFI = 1E09;
+const int MAX_N = 1E+05;
+
+ll dx[4] = { -1, 1, 0, 0 }, dy[4] = { 0, 0, -1, 1 };
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    while (true) {
+        int n, x;
+        cin >> n >> x;
+
+        if (n == 0 && x == 0)
+            break;
+
+        ll ans = 0;
+        for (ll a = 1; a <= n; ++a) {
+            for (ll b = a + 1; b <= n; ++b) {
+                ll c = x - (a + b);
+                if (c > b && c <= n)
+                    ans++;
+            }
+        }
+        cout << ans << "\n";
+    }
+
+    // for (int i = 0; i < N; i++) {
+    //     for (int j = 0; j < N; j++) {
+    //         cout << "i = " << i << ", j = " << j << ", dp = " << dp[i][j] << "\n";
+    //     }
+    // }
+
+    return 0;
+}

@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define fol(i,s,g) for(int i=(int)(s); i<(int)(g); i++)
+#define fix(ans,k) fixed << setprecision(k) << ans
+
+int main(){
+    int d,l;
+    cin>>d>>l;
+    int ans = d/l;
+    ans += d%l;
+    cout<<ans<<'\n';
+    return 0;
+}

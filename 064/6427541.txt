@@ -1,0 +1,17 @@
+ans=0
+while True:
+    a=int(input())
+    b=input()
+    c=int(input())
+    d=input()
+    if d=="=":
+        if b=="+":ans=a+c
+        print(ans)
+        break
+    e=int(input())
+    f=input()
+    if f=="=":
+        if b=="-"and d=="*":ans=(a-c)*e
+        elif b=="/"and d=="*":ans=a//c*e
+        print(ans)
+        break

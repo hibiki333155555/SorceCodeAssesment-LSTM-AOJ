@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+namespace {
+using namespace std;
+#define rep(i,n) for(int i = 0; i < (int)(n); i++)
+#define rrep(i,n) for(int i = (int)(n) - 1; i >= 0; i--)
+#define all(x) begin(x), end(x)
+#define rall(x) rbegin(x), rend(x)
+template<class T> bool chmax(T& a, const T& b) { if (a < b) { a = b; return true; } else return false; }
+template<class T> bool chmin(T& a, const T& b) { if (b < a) { a = b; return true; } else return false; }
+using ll = long long;
+using P = pair<int,int>;
+using VI = vector<int>;
+using VVI = vector<VI>;
+using VL = vector<ll>;
+using VVL = vector<VL>;
+
+const int di[] = {1, 0, -1, 0};
+const int dj[] = {0, 1, 0, -1};
+
+} int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  int h, w, n;
+  cin >> h >> w >> n;
+  int sx, sy, gx, gy;
+  cin >> sx >> sy >> gx >> gy;
+  sx--, sy--, gx--, gy--;
+  VVI g1(h, VI(w)), g2(h, VI(w));
+  auto idxchk = [&](int i, int j) { return 0 <= i && i < h && 0 <= j && j < w; };
+  rep(_, n) {
+    int x, y, k;
+    cin >> x >> y >> k;
+    x--, y--;
+    g1[x-k][y]++;
+    if (idxchk(x+1, y-k-1)) g1[x+1][y-k-1]--;
+    g1[x][y+k]++;
+    if(idxchk(x+k+1, y-1)) g1[x+k+1][y-1]--;
+    g2[x-k][y]++;
+    if (idxchk(x+1, y+k+1)) g2[x+1][y+k+1]--;
+    g2[x][y-k]++;
+    if (idxchk(x+k+1, y+1)) g2[x+k+1][y+1]--;
+  }
+  rep(i, h) rep(j, w) {
+    int ni = i + 1, nj = j - 1;
+    if (idxchk(ni, nj)) g1[ni][nj] += g1[i][j];
+  }
+
+  rep(i, h) rep(j, w) {
+    int ni = i + 1, nj = j + 1;
+    if (idxchk(ni, nj)) g2[ni][nj] += g2[i][j];
+  }
+
+  rep(i, h) rep(j, w) g1[i][j] += g2[i][j];
+
+  vector<vector<char>> visited(h, vector<char>(w));
+  queue<P> q;
+  q.emplace(sx, sy);
+  while(!q.empty()) {
+    auto [i, j] = q.front(); q.pop();
+    rep(k, 4) {
+      int ni = i + di[k], nj = j + dj[k];
+      if (!idxchk(ni, nj) || g1[ni][nj] || visited[ni][nj]) continue;
+      visited[ni][nj] = true;
+      q.emplace(ni, nj);
+    }
+  }
+  cout << (visited[gx][gy] ? "Yes\n" : "No\n");
+
+  // rep(i, h) rep(j, w) cout << g1[i][j] << " \n"[j + 1 == w];
+}

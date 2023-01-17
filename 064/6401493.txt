@@ -1,0 +1,113 @@
+import sys
+
+# sys.setrecursionlimit(200005)
+int1 = lambda x: int(x)-1
+pDB = lambda *x: print(*x, end="\n", file=sys.stderr)
+p2D = lambda x: print(*x, sep="\n", end="\n\n", file=sys.stderr)
+def II(): return int(sys.stdin.readline())
+def LI(): return list(map(int, sys.stdin.readline().split()))
+def LLI(rows_number): return [LI() for _ in range(rows_number)]
+def LI1(): return list(map(int1, sys.stdin.readline().split()))
+def LLI1(rows_number): return [LI1() for _ in range(rows_number)]
+def SI(): return sys.stdin.readline().rstrip()
+dij = [(0, 1), (-1, 0), (0, -1), (1, 0)]
+# dij = [(0, 1), (-1, 0), (0, -1), (1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+inf = (1 << 63)-1
+# inf = (1 << 31)-1
+# md = 10**9+7
+md = 998244353
+
+from collections import Counter
+
+class Sieve:
+    def __init__(self, n):
+        self.plist = [2]  # n以下の素数のリスト
+        min_prime_factor = [2, 0]*(n//2+1)
+        for x in range(3, n+1, 2):
+            if min_prime_factor[x] == 0:
+                min_prime_factor[x] = x
+                self.plist.append(x)
+                if x**2 > n: continue
+                for y in range(x**2, n+1, 2*x):
+                    if min_prime_factor[y] == 0:
+                        min_prime_factor[y] = x
+        self.min_prime_factor = min_prime_factor
+
+    def isprime(self, x):
+        return self.min_prime_factor[x] == x
+
+    # これが素因数分解(prime factorization)
+    def pfct(self, x):
+        pp, ee = [], []
+        while x > 1:
+            mpf = self.min_prime_factor[x]
+            if pp and mpf == pp[-1]:
+                ee[-1] += 1
+            else:
+                pp.append(mpf)
+                ee.append(1)
+            x //= mpf
+        return pp, ee
+
+sv = Sieve(10**6)
+
+def mos_algorithm():
+    def pack(i, l, r):
+        res = l//h
+        if res & 1: res = l//h*(n+1)+n-r
+        else: res = l//h*(n+1)+r
+        res = res*n+l
+        return res*q+i
+
+    def unpack(ilr):
+        ilr, i = divmod(ilr, q)
+        ilr, l = divmod(ilr, n)
+        ilr, r = divmod(ilr, n+1)
+        if ilr & 1: r = n-r
+        return i, l, r
+
+    # insert aa[i]
+    def ins(i):
+        nonlocal now
+        pp, _ = sv.pfct(aa[i])
+        now = now*aa[i]%md
+        for p in pp:
+            cnt[p] += 1
+            if cnt[p] == 1: now = now*(p-1)%md*pow(p, md-2, md)%md
+
+    # remove aa[i]
+    def rem(i):
+        nonlocal now
+        pp, _ = sv.pfct(aa[i])
+        now = now*pow(aa[i], md-2, md)%md
+        for p in pp:
+            cnt[p] -= 1
+            if cnt[p] == 0: now = now*p%md*pow(p-1, md-2, md)%md
+
+    # input
+    n = II()
+    aa = LI()
+    q = II()
+    h = round(n**0.5) if n < q else round(n/q**0.5)
+    lr = []
+    for i in range(q):
+        l, r = LI()
+        lr.append(pack(i, l-1, r))
+
+    cnt = Counter()
+    now = 1
+    ans = [-1]*len(lr)
+    L = R = 0
+    for ilr in sorted(lr):
+        i, l, r = unpack(ilr)
+        while L < l: L, _ = L+1, rem(L)
+        while L > l: L, _ = L-1, ins(L-1)
+        while R < r: R, _ = R+1, ins(R)
+        while R > r: R, _ = R-1, rem(R-1)
+        ans[i] = now
+
+    return ans
+
+ans = mos_algorithm()
+print(*ans, sep="\n")
+

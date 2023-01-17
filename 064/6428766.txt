@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int main(void) {
+	int a, b, area, perimeter;
+	
+	/*入力*/
+	scanf("%d %d", &a, &b);
+	
+	/*計算*/
+	area = a * b;
+	perimeter = 2 * a + 2 * b;
+	
+	/*出力*/
+	printf("%d %d\n", area, perimeter);
+	return 0;
+}

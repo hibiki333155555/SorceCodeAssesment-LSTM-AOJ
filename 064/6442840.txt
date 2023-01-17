@@ -1,0 +1,18 @@
+n, m = map(int, input().split())
+A = []
+for _ in range(n):
+  A.append([a for a in map(int, input().split())])
+  
+b = []
+for _ in range(m):
+  b.append(int(input()))
+  
+c = []
+for a_i in A:
+  c_i = 0
+  for idx, b_i in enumerate(b):
+    c_i += a_i[idx]*b_i
+  c.append(c_i)
+    
+for r in c:
+    print(r)

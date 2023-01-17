@@ -1,0 +1,17 @@
+n = int(input())
+w = [*map(int, input().split())]
+ws = sorted(w)
+
+cost = 0 #コスト総和の最小値
+for cyc_min in range(n):
+    i = w.index(ws[cyc_min])
+    cyc_l = 0
+    #荷物の整列
+    while i > cyc_min:
+        cyc_l += 1
+        i_pre = w.index(ws[i])
+        cost += w[i_pre]
+        w[i], w[i_pre] = w[i_pre], w[i]
+        i = i_pre
+    cost += min(ws[cyc_min] * cyc_l, ws[cyc_min] * 2 + ws[0] * (cyc_l + 2)) #コスト総和
+print(cost)

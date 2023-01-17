@@ -1,0 +1,16 @@
+import string
+
+alp = dict.fromkeys(string.ascii_lowercase, 0)
+while True:
+    try:
+        words = input().lower()
+    except:
+        break
+    for i in alp:
+        alp[i] += words.count(i)
+        
+for i in alp:
+    print(a + " : " + str(alp[i]))
+        
+
+

@@ -1,0 +1,23 @@
+n = int(input())
+maxd = 0
+maxr = 0
+minr = ""
+flag = False
+for i in range(n):
+    x = int(input())
+    if i == 0:
+        maxr = x
+        minr = x
+    if maxr < x:
+        maxr = x
+    if minr > x:
+        minr = x
+        maxr = x
+    if maxd  < maxr-minr:
+        print("KKD:",i)
+        maxd = maxr-minr
+        flag = True
+if flag:
+    print(maxd)
+else:
+    print(-1)

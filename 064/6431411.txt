@@ -1,0 +1,10 @@
+N = int(input())
+K = list(map(int, input().split()))
+for i in range(0,N):
+    v = K[i]
+    j = i - 1
+    while j >= 0 and K[j] > v:
+        K[j+1] = K[j]
+        j-= 1
+    K[j+1] = v
+    print(*K)

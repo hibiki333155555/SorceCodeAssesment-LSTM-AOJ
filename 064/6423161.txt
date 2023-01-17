@@ -1,0 +1,58 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+n = -1
+a_list = []
+
+
+def dfs(m, s, i):
+    if s == m:
+        return True
+
+    if s > m:
+        return False
+
+    if i == n:
+        return False
+
+    if dfs(m, s + a_list[i], i + 1):
+        return True
+
+    if dfs(m, s, i + 1):
+        return True
+
+    return False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    global n, a_list
+    n = int(f.readline())
+    a_list = list(map(int, f.readline().split()))
+
+    int(f.readline())
+    for m in list(map(int, f.readline().split())):
+        if m in a_list:
+            print('yes')
+            continue
+
+        if dfs(m, 0, 0):
+            print('yes')
+        else:
+            print('no')
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

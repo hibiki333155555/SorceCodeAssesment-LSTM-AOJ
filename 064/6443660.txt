@@ -1,0 +1,16 @@
+def sosu_desuka(x):
+    nrange = int(x**(1/2))+1
+    if x == 2:
+            return True
+    else:
+        for i in range(2,nrange):
+            if x%2==0 or x%i==0:
+                return False
+                break
+        return True
+n = int(input())
+sum = 0
+for j in range(n):
+    if sosu_desuka(int(input())):
+        sum += 1
+print(sum)

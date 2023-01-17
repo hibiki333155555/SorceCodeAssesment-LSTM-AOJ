@@ -1,0 +1,93 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+const bool debug = false;
+
+struct Point {
+  int x, y;
+  double angle;
+  double length;
+};
+
+int cross(const Point& left, const Point& center, const Point& right) {
+    int a_x = right.x - center.x;
+    int a_y = right.y - center.y;
+    int b_x = left.x - center.x;
+    int b_y = left.y - center.y;
+    int cross = a_x * b_y - a_y * b_x;
+    if (debug) {
+      std::cout << "calculate cross product ";
+      std::cout << ", left = Point(x=" << left.x << ", y=" << left.y << ")";
+      std::cout << ", center = Point(x=" << center.x << ", y=" << center.y << ")";
+      std::cout << ", right = Point(x=" << right.x << ", y=" << right.y << ")";
+      std::cout << ", cross=" << cross << std::endl;
+    }
+    return cross;
+}
+
+int main() {
+  int n; std::cin >> n;
+  std::vector<Point> points(n);
+  for (int i=0; i<n; i++) std::cin >> points[i].x >> points[i].y;
+  
+  int min_idx = 0;
+  for (int i=1; i<n; i++) {
+    if (points[i].y < points[min_idx].y) min_idx = i;
+    if (points[i].y == points[min_idx].y && points[i].x < points[min_idx].x) min_idx = i;
+  }
+  for (int i=0; i<n; i++) {
+    if (i == min_idx) {
+      points[i].angle = -1.0 * M_PI / 2.0;
+    } else {
+      points[i].angle = std::atan2(
+          points[i].y - points[min_idx].y,
+          points[i].x - points[min_idx].x
+      );
+    }
+    points[i].length = std::sqrt(
+      std::pow(points[i].x - points[min_idx].x, 2.0) +
+      std::pow(points[i].y - points[min_idx].y, 2.0)
+    );
+  }
+  
+  std::sort(points.begin(), points.end(), [](const Point& lhs, const Point& rhs) {
+    if (lhs.angle == rhs.angle) return lhs.length < rhs.length;
+    return lhs.angle < rhs.angle;
+  });
+  
+  if (debug) {
+    for (int i=0; i<n; i++) {
+      std::cout << "points[" << i << "] = ";
+      std::cout << "Point(x=" << points[i].x;
+      std::cout << ", y=" << points[i].y;
+      std::cout << ", angle=" << points[i].angle;
+      std::cout << ", length=" << points[i].length;
+      std::cout << ")" << std::endl;
+    }
+  }
+  
+  std::vector<int> accepted;
+  accepted.push_back(0);
+  accepted.push_back(1);
+  for (int i=2; i<n; i++) {
+    if (debug) std::cout << "examine Points(x=" << points[i].x << ", y=" << points[i].y << ")" << std::endl;
+    while(cross(points[accepted[accepted.size()-2]], points[accepted[accepted.size()-1]], points[i]) < 0) {
+      accepted.pop_back();
+    }
+    accepted.push_back(i);
+    if (debug) {
+      std::cout << "current accepted = [ ";
+      for (int idx : accepted) std::cout << idx << ", ";
+      std::cout << "]" << std::endl;
+    }
+    
+  }
+  
+  std::cout << accepted.size() << std::endl;
+  for (int idx: accepted) {
+    std::cout << points[idx].x << " " << points[idx].y << std::endl;
+  }
+  
+}

@@ -1,0 +1,24 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define MAX 200002
+
+int main()
+{
+  int N;
+  int A[MAX];
+  int min_index = 0;
+  scanf("%d", &N);
+  for(int i = 0; i < N; i++ ){
+    scanf("%d", &A[i]);
+    if(A[min_index] > A[i]) min_index = i; 
+  }
+
+  int temp;
+  temp = A[min_index];
+  A[min_index] = A[N - 1];
+  A[N - 1] = temp;
+
+  for(int i = 0; i < N; i++ ) printf("%d ", A[i]);
+  return 0;
+}

@@ -1,0 +1,19 @@
+import java.util.Scanner;
+
+public class Main {
+    void solve() {
+        Scanner scanner = new Scanner(System.in);
+        int input = scanner.nextInt();
+        final int c = 60;
+        int second = input % c;
+        input /= c;
+        int minute = input % c;
+        input /= c;
+        int degree = input % c;
+        System.out.println(degree + " " + minute + " " + second);
+    }
+
+    public static void main(String[] args) {
+        new Main().solve();
+    }
+}

@@ -1,0 +1,7 @@
+d = int(input())
+a = d/3600
+b = (d%3600)/60
+c = d%60
+print a,
+print b,
+print c

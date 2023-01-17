@@ -1,0 +1,14 @@
+a = int(input())
+X = input().split()
+
+list1 = list(map(int, X))
+S = set(sorted(list1))
+S1 = [str(i) for i in S]
+
+
+d = {}
+for i in S1:
+    d[i] = X.count(i)  # 字典
+
+print(min(d, key=d.get))
+

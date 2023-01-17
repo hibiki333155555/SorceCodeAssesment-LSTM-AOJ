@@ -1,0 +1,42 @@
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <string>
+#include <vector>
+using namespace std;
+
+
+int main()
+{
+    
+    vector<int> vec;
+    vec.push_back(2);
+    for(int i = 3; i < 10000; i+=2)
+        if(find_if(vec.begin(), vec.end(), [i](int e){return (i%e==0);}) != vec.end())
+            continue;
+        else
+            vec.push_back(i);
+    
+    int n, val, cnt = 0;
+    cin >> n;
+    while(n-- != 0)
+    {
+        cin >> val;
+        if(val < 10000)
+        {
+            int i = 0;
+            while(val > vec[i++]);
+            if(val == vec[i-1])
+                cnt++;
+        }
+        else if(find_if(vec.begin(), vec.end(), [val](int e){return (val%e==0);}) != vec.end())
+            continue;
+        else
+            cnt++;
+    }
+    cout << cnt << endl;
+    return 0;
+}

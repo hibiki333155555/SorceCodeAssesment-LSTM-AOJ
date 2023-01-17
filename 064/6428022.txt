@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 入力
+long long N, M, Q;
+long long A[1 << 18], B[1 << 18], C[1 << 18];
+long long D[1 << 18], E[1 << 18];
+vector<int> G[1 << 18];
+
+// 個数
+long long Needed[1 << 18];
+long long Force[1 << 18];
+
+int main() {
+	// Step #1. 入力
+	cin >> N >> M;
+	for (int i = 1; i <= N; i++) cin >> A[i] >> B[i] >> C[i];
+	cin >> Q;
+	for (int i = 1; i <= Q; i++) cin >> D[i] >> E[i];
+
+	// Step #2. 個数を数える
+	for (int i = 1; i <= N; i++) {
+		Needed[B[i]] -= A[i]; Needed[C[i] + 1] += A[i];
+		G[B[i]].push_back(i);
+	}
+	for (int i = 1; i <= M + 1; i++) Needed[i] += Needed[i - 1];
+	for (int i = 1; i <= Q; i++) Needed[E[i]] += D[i];
+
+	// Step #3. 貪欲法
+	pair<int, int> maxn = make_pair(-1, -1);
+	long long Answer = 0, Current = 0;
+	for (int i = 1; i <= M; i++) {
+		for (int j : G[i]) maxn = max(maxn, make_pair((int)C[j], j));
+
+		// 値の更新
+		Current -= Force[i];
+		Needed[i] -= Current;
+		if (Needed[i] < 0) continue;
+
+		// 不可能な場合
+		if (maxn.first < i) {
+			cout << "-1" << endl;
+			return 0;
+		}
+
+		// そうでない場合
+		Force[maxn.first + 1] += Needed[i];
+		Answer += Needed[i];
+		Current += Needed[i];
+	}
+
+	// Step #4. 答えの出力
+	cout << Answer << endl;
+	return 0;
+}

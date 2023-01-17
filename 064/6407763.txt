@@ -1,0 +1,23 @@
+n = int(input())
+rc = []
+for _ in range(n):
+    r, c = map(int, input().split())
+    rc.append((r,c))
+
+mem = {}
+def func(i, j):
+    if i == j:
+        return 0
+    if (i, j) in mem:
+        return mem[(i,j)]
+    ret = float('inf')
+    ri, ci = rc[i]
+    rj, cj = rc[j]
+    for k in range(i, j):
+        rk, ck = rc[k]
+        ret = min(ret, func(i, k) + func(k+1, j) + ri*ck*cj)
+    mem[(i,j)] = ret
+    return ret
+
+ans = func(0, n-1)
+print(ans)

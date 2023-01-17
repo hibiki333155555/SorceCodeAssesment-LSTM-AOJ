@@ -1,0 +1,4 @@
+Num = map(int, input().split())
+ans = sorted(Num)
+
+print(ans)

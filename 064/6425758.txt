@@ -1,0 +1,13 @@
+alphabets = list(map(chr, range(ord('a'), ord('z')+1)))
+d = dict(zip(alphabets, [0] * len(alphabets)))
+
+while True:
+  line = input()
+  if not line: break
+  line = line.lower()
+  for c in line:
+    if c in alphabets: d[c] += 1
+
+for c in alphabets:
+  print(f"{c} : {d[c]}")
+

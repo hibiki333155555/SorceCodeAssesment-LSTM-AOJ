@@ -1,0 +1,6 @@
+n=int(input())
+date=list(map(int,input().split()))
+dmin=min(date)
+dmax=max(date)
+dsum=sum(date)
+print(dmin,dmax,dsum)

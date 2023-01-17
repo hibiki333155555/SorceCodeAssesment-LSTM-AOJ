@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+int main(void){
+    // Your code here!
+    double p;
+    p=3.141592653589;
+    
+    double r;
+    scanf("%lf", &r);
+    
+    double S;
+    S=p*r*r;
+    
+    double l;
+    l=2*p*r;
+    
+    printf("%f %f\n", S, l);
+}
+

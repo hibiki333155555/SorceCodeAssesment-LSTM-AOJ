@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+using Int = int_fast64_t;
+using Pair = pair<Int, int>;
+using Status = vector<pair<Pair, vector<Pair>>>;
+
+const int HUGE = (int) ((1U << 31) - 1);
+
+Int find(Status& S, int k)
+{
+	auto [x, q] = S[k].first;
+	for (int i = k; i > 0; i /= 2) {
+		const auto& Si = S[i].second;
+		for (int j = Si.size() - 1; j >= 0 && Si[j].second < q; --j) {
+			auto [xx, qq] = Si[j];
+			S[k].first = {S[k].first.first + xx, min(S[k].first.second, qq)};
+		}
+	}
+	return S[k].first.first;
+}
+
+void add(Status& S, int k)
+{
+	for (int i = k; i > 1; i /= 2) {
+		S[i / 2].first.first = min(find(S, i), find(S, i ^ 1));
+		S[i / 2].first.second = min(S[i].first.second, S[i ^ 1].first.second);
+	}
+}
+
+void add(Status& S, int k, int l, int r, int s, int t, Pair x)
+{
+	if (l >= r || r <= s || t <= l) return;
+	if (s <= l && r <= t) {
+		S[k].second.push_back(x);
+		add(S, k);
+		return;
+	}
+	add(S, 2 * k, l, (l + r) / 2, s, t, x);
+	add(S, 2 * k + 1, (l + r) / 2, r, s, t, x);
+}
+
+Int find(Status& S, int k, int l, int r, int s, int t)
+{
+	if (l >= r || r <= s || t <= l) return HUGE;
+	if (s <= l && r <= t) {
+		auto r = find(S, k);
+		return r;
+	}
+	return min(find(S, 2 * k, l, (l + r) / 2, s, t), find(S, 2 * k + 1, (l + r) / 2, r, s, t));
+}
+
+int main()
+{
+	int n, nn, q, c, s, t, x; cin >> n >> q;
+	for (nn = 1; nn < n; nn *= 2) ;
+	Status S(nn * 2);
+	for (auto& [p, v] : S) p.second = q;
+	for (cin >> c >> s >> t; --q >= 0; cin >> c >> s >> t) switch (c) {
+	case 0: cin >> x; add(S, 1, 0, nn, s, t + 1, {x, q}); break;
+	case 1: cout << find(S, 1, 0, nn, s, t + 1) << endl; break;
+	}
+	return 0;
+}
+

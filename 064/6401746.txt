@@ -1,0 +1,15 @@
+n = int(input())
+type_list = ['S', 'H', 'C', 'D']
+list_ = [[0 for i in range(13)] for j in range(len(type_list))]
+
+for i in range(n):
+    type, num = input().split()
+    for j in range(len(type_list)):
+        if type == type_list[j]:
+            list_[j][int(num)-1] = int(num)
+
+for i, l in enumerate(list_):
+    for j, k in enumerate(l):
+        if k == 0:
+            print('{} {}'.format(type_list[i], j+1))
+

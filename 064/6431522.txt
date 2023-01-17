@@ -1,0 +1,29 @@
+V,E = input().split()
+V,E = int(V),int(E)
+
+discard = [0 for x in range(V)]
+degree = [0 for x in range(V)]
+edge = [[] for x in range(V)]
+for i in range(E):
+    X,Y = input().split()
+    X,Y = int(X), int(Y)
+    edge[X].append(Y)
+    degree[Y] = Y + 1
+
+def dfs(u):
+    discard[u] = 1
+    for i in edge[u]:
+        degree[i] = degree[i] - 1
+        if discard[i] == 0 and degree[i] == 0:
+            dfs(i)
+
+
+for i in range(V):
+    if degree[i] == 0 and discard[i] == 0:
+        dfs(i)
+
+if sum(degree) == 0:
+    print(0)
+else:
+    print(1)
+

@@ -1,0 +1,22 @@
+#include <iostream>
+
+using namespace std;
+
+
+int main() {
+    int n;
+    int x;
+    cin >> n;
+
+    int MIN = 1000001, MAX = -1000001;
+    long long sum = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> x;
+        sum += x;
+        MIN = min(MIN, x);
+        MAX = max(MAX, x);
+    }
+    printf("%d %d %ld\n", MIN, MAX, sum);
+    return 0;
+}
+

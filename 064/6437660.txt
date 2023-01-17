@@ -1,0 +1,80 @@
+#include <iostream>
+using namespace std;
+#define N 8
+#define FREE -1
+#define NOT_FREE 1
+
+int row[N], col[N], dpos[2 * N - 1], dneg[2 * N - 1];
+bool X[N][N];
+
+void initialize() {
+    for (int i = 0; i < N; ++i) {
+        row[i] = FREE;
+        col[i] = FREE;
+    }
+    for (int i = 0; i < 2 * N - 1; ++i) {
+        dpos[i] = FREE;
+        dneg[i] = FREE;
+    }
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            X[i][j] = false;
+        }
+    }
+}
+
+void printBoard() {
+    // 入力された条件と一致していなければ出力しない
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            if (X[i][j] == true && row[i] != j) return;
+        }
+    }
+    // 条件を満たしていれば解答として出力
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            cout << ((row[i] == j) ? "Q" : ".");
+        }
+        cout << endl;
+    }
+}
+
+void recursive(int i) {
+    // すべてのクイーンの配置に成功
+    if (i == N) {
+        printBoard();
+        return;
+    }
+
+    for (int j = 0; j < N; ++j) {
+        // (i, j)が他のクイーンに襲撃されている場合は無視
+        if (NOT_FREE == col[j] || NOT_FREE == dpos[i + j] || NOT_FREE == dneg[i - j + N - 1]) {
+            continue;
+        }
+
+        // (i, j)にクイーンを配置する
+        row[i] = j;
+        col[j] = dpos[i + j] = dneg[i - j + N - 1] = NOT_FREE;
+
+        // 次の行を試す
+        recursive(i + 1);
+
+        // (i, j)に配置されているクイーンを取り除く
+        row[i] = col[j] = dpos[i + j] = dneg[i - j + N - 1] = FREE;
+    }
+    // クイーンの配置に失敗
+}
+
+int main() {
+    initialize();
+
+    int k;
+    cin >> k;
+    for (int i = 0; i < k; ++i) {
+        int r, c;
+        cin >> r >> c;
+        X[r][c] = true;
+    }
+
+    recursive(0);
+}

@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+  int N;
+  cin >> N;
+  vector<int> A(N);
+  for (int i = 0; i < N; i++){
+    cin >> A[i];
+  }
+  int Q;
+  cin >> Q;
+  stack<vector<int>> st;
+  vector<int> p(N);
+  for (int i = 0; i < N; i++){
+    p[i] = i;
+  }
+  st.push(p);
+  for (int i = 0; i < Q; i++){
+    int t;
+    cin >> t;
+    if (t == 1){
+      int x, y;
+      cin >> x >> y;
+      x--;
+      y--;
+      vector<int> cp = st.top();
+      swap(cp[x], cp[y]);
+      st.push(cp);
+    }
+    if (t == 2){
+      st.pop();
+    }
+    if (t == 3){
+      int k;
+      cin >> k;
+      vector<int> cp = st.top();
+      vector<int> q(N, -1);
+      for (int j = 0; j < N; j++){
+        if (q[j] == -1){
+          vector<int> id;
+          id.push_back(j);
+          while (true){
+            int x = cp[id.back()];
+            if (x == j){
+              break;
+            }
+            id.push_back(x);
+          }
+          int cnt = id.size();
+          for (int l = 0; l < cnt; l++){
+            int T = (l + k) % cnt;
+            q[id[l]] = id[T];
+          }
+        }
+      }
+      vector<int> A2(N);
+      for (int j = 0; j < N; j++){
+        A2[j] = A[q[j]];
+      }
+      swap(A, A2);
+    }
+  }
+  for (int i = 0; i < N; i++){
+    cout << A[i];
+    if (i < N - 1){
+      cout << ' ';
+    }
+  }
+  cout << endl;
+}

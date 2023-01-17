@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+int a[20];
+int b=-1,c=-1;
+signed main(){
+    int N;
+    cin>>N;
+    for(int i=0;i<N;i++)cin>>a[i];
+    for(int i=0;i<N;i++){
+        int h; cin>>h;
+        if(a[i]){
+            if(b<0)b=h;
+            else b=min(b,h);
+        }
+        else{
+            if(c<0)c=h;
+            else c=min(c,h);
+        }
+    }
+    if(b<0||c<0)cout<<0<<endl;
+    else cout<<b+c<<endl;
+}

@@ -1,0 +1,11 @@
+while True:
+    w=str(input())
+    if(w==-):break
+    s=int(input())
+    for i in range(s):
+        h=int(input())
+        x=w[0:h]
+        y=w[h:]
+        z=y+x
+print(z)        
+

@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+string str;
+int cur=0;
+int spilit_word(int dir=1)
+{
+    int flag=0;
+    for (int i=0;cur+i<str.length()&&cur+i>=0;i+=dir)
+        if (flag&&str[cur+i]==' ') return cur+i;
+        else flag=1;
+    return dir==1?str.length():0;
+}
+void move(int next)
+{
+    if (next<0) cur=0;
+    else if (next>str.length()) cur=str.length();
+    else cur=next;
+}
+void forward_char() {move(cur+1);}
+void backward_char() {move(cur-1);}
+void forward_word() {move(spilit_word());}
+void backward_word() {move(spilit_word(-1)+1);}
+void insert(string x,int len) {str.insert(cur,x);move(cur+len);}
+void delete_char() {if (cur!=str.length()) str.erase(cur,1);}
+void delete_word() {str.erase(cur,spilit_word()-cur);}
+int main()
+{
+    int k,n;
+    scanf("%d",&k);
+    //getchar();
+    while (k--)
+    {
+        char tmp[1005]={0},x[1005]={0};
+        fgets(tmp,1005,stdin);
+        tmp[strlen(tmp)-1]=0;
+        str=tmp;
+        scanf("%d",&n);
+        while (n--)
+        {
+            scanf("%s %s",tmp,x);
+
+            //printf("%s^%s\n",str.substr(0,cur).c_str(),str.substr(cur).c_str());
+        }
+        printf("%s^%s\n",str.substr(0,cur).c_str(),str.substr(cur).c_str());
+        cur=0;str.clear();getchar();
+    }
+}

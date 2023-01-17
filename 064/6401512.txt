@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+#define FOR(i, a, b) for(ll i = (a); i < (b); ++i)
+#define FORR(i, a, b) for(ll i = (a); i > (b); --i)
+#define REP(i, n) for(ll i = 0; i < (n); ++i)
+#define REPR(i, n) for(ll i = n; i >= 0; i--)
+#define FOREACH(x, a) for(auto &(x) : (a))
+#define dump(x) cout << #x << " = " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define SP << " " <<
+using namespace std;
+using ll = long long;
+using P = pair<ll, ll>;
+
+#define int long long
+
+struct Node {
+  int parent = -1;
+  int left = -1;
+  int right = -1;
+};
+
+vector<Node> nodes;
+
+vector<int> preorders;
+vector<int> inorders;
+vector<int> postorders;
+
+void preorder(int id) {
+  preorders.push_back(id);
+  if(nodes[id].left != -1) { preorder(nodes[id].left); }
+  if(nodes[id].right != -1) { preorder(nodes[id].right); }
+}
+
+void inorder(int id) {
+  if(nodes[id].left != -1) { inorder(nodes[id].left); }
+  inorders.push_back(id);
+  if(nodes[id].right != -1) { inorder(nodes[id].right); }
+}
+
+void postorder(int id) {
+  if(nodes[id].left != -1) { postorder(nodes[id].left); }
+  if(nodes[id].right != -1) { postorder(nodes[id].right); }
+  postorders.push_back(id);
+}
+
+signed main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  int n;
+  cin >> n;
+
+  nodes.resize(n);
+  REP(i, n) { nodes[i] = Node{}; }
+
+  REP(i, n) {
+    int id, left, right;
+    cin >> id >> left >> right;
+    nodes[id].left = left;
+    if(left != -1) { nodes[left].parent = id; }
+    nodes[id].right = right;
+    if(right != -1) { nodes[right].parent = id; }
+  }
+
+  int root;
+  REP(id, n) {
+    if(nodes[id].parent == -1) { root = id; }
+  }
+
+  preorder(root);
+  inorder(root);
+  postorder(root);
+
+  cout << "Preorder" << endl;
+  REP(i, preorders.size()) { cout << " " << preorders[i]; }
+  cout << endl;
+  cout << "Inorder" << endl;
+  REP(i, inorders.size()) { cout << " " << inorders[i]; }
+  cout << endl;
+  cout << "Postorder" << endl;
+  REP(i, postorders.size()) { cout << " " << postorders[i]; }
+
+  return 0;
+}
+

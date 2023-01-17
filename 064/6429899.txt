@@ -1,0 +1,35 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+class Main(){
+    public static void main(String[] args){
+        Scanner std = new Scanner(System.in);
+        int a, b;
+        a = std.nextInt();
+        b = std.nextInt();
+        greatestCommonDivisor(a, b);
+    }
+    
+    public static void greatestCommonDivisor(int x, int y){
+        ArrayList<Integer> commonDivisour = new ArrayList<>();
+        ArrayList<Integer> x_divisor = new ArrayList<>();
+        ArrayList<Integer> y_divisor = new ArrayList<>();
+        for(int i=2; i<=x; i++){
+            if(x%i==0){
+                x_divisor.add(i);
+            }
+        }
+        for(int i=2; i<=y; i++){
+            if(y%i==0){
+                y_divisor.add(i);
+            }
+        }
+        for(int i=0; i<x; i++){
+            for(int j=0; j<y; j++){
+                if(x_divisour.get(i) == y_divisour(get(j)){
+                    commonDivisour.add(x_divisour.get(i);
+                }
+            }
+        }
+        System.out.println(commonDivisour.get(commonDivisour.size());
+    }
+}

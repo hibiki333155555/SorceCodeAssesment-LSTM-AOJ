@@ -1,0 +1,14 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b, z;
+    cin >> a >> b >> z;
+    int j = a + b;
+    if(j <= z){
+        cout << 1 << endl;
+        return 0;
+    } 
+    cout << 0 << endl;
+    return 0;
+}

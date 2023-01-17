@@ -1,0 +1,10 @@
+n, m = gets.split.map(&:to_i)
+a = n.times.map{gets.split.map(&:to_i)}
+b = m.times.map{gets.to_i}
+a.each do |arr|
+    ans = 0
+    m.times do |k|
+        ans += arr[k] * b[k]
+    end
+    puts ans
+end

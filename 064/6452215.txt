@@ -1,0 +1,94 @@
+#pragma GCC optimize("Ofast")
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <queue>
+#include <cstdio>
+#include <ctime>
+#include <assert.h>
+#include <chrono>
+#include <random>
+#include <numeric>
+#include <set>
+#include <deque>
+#include <stack>
+#include <sstream>
+#include <utility>
+#include <cstring>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
+#include <array>
+#include <bitset>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long ull;
+
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll myRand(ll B) {
+    return (ull)rng() % B;
+}
+inline ll time() {
+    return static_cast<long double>(chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch()).count()) * 1e-9;
+}
+
+struct UnionFind{
+    vector<int> par,num;
+    UnionFind(int n):par(n),num(n,1){
+        iota(par.begin(),par.end(),0);  //include<numeric>
+    }
+    int find(int v){
+        return (par[v]==v)?v:(par[v]=find(par[v]));
+    }
+    void unite(int u,int v){
+        u=find(u),v=find(v);
+        if(u==v)return;
+        if(num[u]<num[v])swap(u,v);
+        num[u]+=num[v];
+        par[v]=u;
+    }
+    bool same(int u,int v){
+        return find(u) == find(v);
+    }
+    int size(int v){
+        return num[find(v)];
+    }
+};
+
+int main(){
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    int n; cin >> n;
+    UnionFind uf(n);
+    map<string,vector<int>> mp;
+    for(int i=0;i<n;i++){
+        string s; cin >> s;
+        mp[s].push_back(i);
+    }
+    for(auto p:mp){
+        for(int i:p.second){
+            uf.unite(i, p.second[0]);
+        }
+        string s = p.first;
+        for(int i=0;i<s.size();i++){
+            char c = s[i];
+            for(char d='a';d<='z';d++){
+                s[i] = d;
+                if(mp.find(s) != mp.end()){
+                    uf.unite(mp[s][0], p.second[0]);
+                }
+            }
+            s[i] = c;
+        }
+    }
+    int res = 0;
+    for(int i=0;i<n;i++){
+        if(uf.find(i) == i and uf.size(i) > 1){
+            res += uf.size(i);
+        }
+    }
+    cout << res << endl;
+}
+
+

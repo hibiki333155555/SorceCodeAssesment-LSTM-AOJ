@@ -1,0 +1,16 @@
+import math
+
+n = int(input())
+a = list(map(int,input().split()))
+b = list(map(int,input().split()))
+sum1 = 0
+sum2 = 0
+sum3 = 0
+sumin = 0
+for i in range(n):
+    ab = abs(a[i]-b[i])
+    sum1 += ab
+    sum2 += ab ** 2
+    sum3 += ab ** 3
+    sumin = max(sumin,ab)
+print(sum1,sum2**(1/2),sum3**(1/3),sumin,sep='\n')

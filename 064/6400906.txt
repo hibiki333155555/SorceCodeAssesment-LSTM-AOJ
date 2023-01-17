@@ -1,0 +1,47 @@
+#include<iostream>
+using namespace std;
+int Partition(int* A, int start, int n);
+
+int main()
+{
+	int n{ 0 };
+	cin >> n;
+	int* A = new int[n] {0};
+	for (int i = 0; i < n; ++i)
+		cin >> A[i];
+	int x = Partition(A, 0, n-1);
+	for (int i = 0; i < n; ++i)
+	{
+		if (i == x)
+		{
+			cout << "[" << A[i] << "]";
+		}
+		else
+			cout << A[i];
+		if (i < n - 1)
+			cout << " ";
+		//else
+		//{
+			//cout << endl;
+		//}
+	}
+
+	return 0;
+}
+int Partition(int* A, int start, int n)
+{
+	int i = start - 1, x = A[n];
+	int tem{ 0 };
+	for (int j = start; j < n; ++j)
+	{
+		if (A[j] <= x)
+		{
+			tem = A[++i];
+			A[i] = A[j];
+			A[j] = tem;
+		}
+	}
+	A[n] = A[++i];
+	A[i] = x;
+	return i;
+}

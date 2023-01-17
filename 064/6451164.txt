@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using pll = pair<ll, ll>;
+#define drep(i, cc, n) for (ll i = (cc); i <= (n); ++i)
+#define rep(i, n) drep(i, 0, n - 1)
+#define all(a) (a).begin(), (a).end()
+#define pb push_back
+#define fi first
+#define se second
+
+const ll MOD = 1000000007;
+const ll MOD2 = 998244353;
+const ll INF = 1LL << 60;
+const ll N_MAX = 2e5;
+
+int main(){
+    ll n, m;
+    cin >> n >> m;
+
+    vector<tuple<ll, ll, ll>> s(n);
+    rep(i, n){
+        ll a, b, c;
+        cin >> a >> b >> c;
+        s[i] = {b, c, a};
+    }
+    sort(all(s));
+
+    ll q;
+    cin >> q;
+
+    vector<ll> check(m+1, 0);
+    rep(i, q){
+        ll d, e;
+        cin >> d >> e;
+        check[e] += d;
+    }
+    
+    vector<pll> d;
+    rep(i, m+1) if(check[i] != 0) d.pb({i, check[i]});
+
+    vector<ll> power(n);
+    rep(i, n) power[i] = get<2>(s[i]);
+
+    ll sum_power = 0;
+    set<pll> ss; //slayer set
+    ll r = 0;
+    ll ans = 0;
+    rep(i, (ll)d.size()){
+        //条件を満たさない鬼がりを消去
+        if((ll)ss.size() != 0){
+            while ((*ss.begin()).fi < d[i].fi){
+                sum_power -= power[(*ss.begin()).se];
+                ss.erase(ss.begin());
+                if ((ll)ss.size() == 0) break;
+            }
+        }
+
+        //条件を満たす鬼狩りを追加
+        if(r != n){
+            while (get<0>(s[r]) <= d[i].fi){
+                if (d[i].fi <= get<1>(s[r])){
+                    ss.insert({get<1>(s[r]), r});
+                    sum_power += power[r];
+                }
+                r++;
+                if (r == n) break;
+            }
+        }
+
+        if((ll)ss.size() == 0){
+            cout << -1 << endl;
+            return 0;
+        }
+
+        auto itr = ss.end();
+        itr--;
+        if(sum_power < d[i].se){
+            ans += (d[i].se - sum_power);
+            power[(*itr).se] += (d[i].se - sum_power);
+            sum_power = d[i].se;
+        }
+    }
+
+    cout << ans << endl;
+}

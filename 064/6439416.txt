@@ -1,0 +1,17 @@
+#include<iostream>
+using namespace std;
+
+int main(){
+    int a, b, c;
+    int i,count=0;
+    cin >> a >> b >> c;
+    for(i=a;i<b;i++){
+        if(c%a==0){
+            count += 1;
+        }
+    }
+    if(a == b){
+        count = 1;
+    }
+    cout << count << endl;
+}

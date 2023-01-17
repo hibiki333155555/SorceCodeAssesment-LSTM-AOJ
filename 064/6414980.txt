@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+
+int main(){
+    ll N;
+    cin >> N;
+    vector<pair<ll, ll>> H(N);
+    for(ll i = 0; i < N; i++){
+        cin >> H[i].second;
+        H[i].first = i;
+    }
+    vector<pair<ll, ll>> st;
+    for(auto h : H){
+        while(st.size() >= 2){
+            auto [x1, y1] = st.rbegin()[1];
+            auto [x2, y2] = st.back();
+            auto [x3, y3] = h;
+            if((x2 - x1) * (y3 - y2) - (x3 - x2) * (y2 - y1) >= 0) st.pop_back();
+            else break;
+        }
+        st.push_back(h);
+    }
+    ll ans = 0;
+    for(ll i = 1; i < st.size(); i++) ans = max(ans, st[i].first - st[i - 1].first);
+    cout << ans << endl;
+}
+

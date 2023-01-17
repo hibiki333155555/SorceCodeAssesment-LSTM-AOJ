@@ -1,0 +1,12 @@
+a = int(input())
+X = input().split()
+list1 = list(map(int, X))  #str转list
+S = sorted(list1)  #排序
+S1 = [str(i) for i in S]  #list转str
+
+d = {}
+for i in S1:
+    d[i] = X.count(i)  # 字典
+
+print(min(d, key=d.get))
+

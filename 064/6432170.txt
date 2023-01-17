@@ -1,0 +1,7 @@
+W, H, x, y, z = gets.split.map(&:to_f)
+if (r<=x && x<=W-r && r<=y && y<= H-r)
+    puts "Yes"
+else
+    puts "No"
+end
+

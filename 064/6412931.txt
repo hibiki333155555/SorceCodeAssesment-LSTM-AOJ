@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int fib(int n,vector<int> &v){
+  if(n == 0){return 1;}
+  else if(n == 1){return 1;}
+  else{
+    if(v.at(n-1) != -1){return v.at(n-1);}
+    else{
+      return fib(n-1,v) + fib(n-2,v);
+    }
+  }
+}
+
+
+int main(){
+  int n;
+  scanf("%d\n",&n);
+  vector<int> vec(n,-1);
+  printf("%d\n",fib(n,vec));
+}
+

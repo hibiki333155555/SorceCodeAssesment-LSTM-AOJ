@@ -1,0 +1,18 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int order(string s) {
+	if (s.length() == 1) return s[0] - 'A';
+	return 26 + (s[0] - 'A') * 26 + (s[1] - 'A');
+}
+
+int main() {
+	string c1, c2;
+	int r1, r2;
+	cin >> c1 >> r1 >> c2 >> r2;
+	int ord1 = order(c1);
+	int ord2 = order(c2);
+	cout << (ord2 - ord1 + 1) * (r2 - r1 + 1) << endl;
+	return 0;
+}

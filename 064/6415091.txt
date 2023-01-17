@@ -1,0 +1,14 @@
+from copy import deepcopy
+
+F = [list(input()) for _ in range(8)]
+
+for d in range(3):
+    print(90 * (d + 1))
+    ANS = deepcopy(F)
+    for i in range(8):
+        for j in range(8):
+            ANS[i][j] = F[7 - j][i]
+    for i in range(8):
+        print(''.join(ANS[i]))
+    F = ANS
+

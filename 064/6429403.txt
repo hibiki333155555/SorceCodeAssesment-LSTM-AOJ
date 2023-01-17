@@ -1,0 +1,31 @@
+from heapq import *
+
+def dijkstra(n, s, edges):
+    hq = [(0, s)]
+    cost = [float('inf')] * n
+    cost[s] = 0
+    while hq:
+        c, v = heappop(hq)
+        if c > cost[v]:
+            continue
+        for u, d in edges[v]:
+            tmp = d + cost[v]
+            if tmp < cost[u]:
+                cost[u] = tmp
+                heappush(hq, (tmp, u))
+    return cost
+
+
+n, m, r = map(int, input().split())
+edges = [[] for _ in range(n)]
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    edges[a].append((b, c))
+    
+dist = dijkstra(n, r, edges)
+for d in dist:
+    if d == float("inf"):
+        print("INF")
+    else:
+        print(d)
+

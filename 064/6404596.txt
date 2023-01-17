@@ -1,0 +1,63 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+MOVE_FORWARD = 1
+GET_MONEY = 2
+LOSE_MONEY = 3
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test1.txt', 'r')
+    else:
+        f = sys.stdin
+    while True:
+        x, y, z = map(int, f.readline().split())
+        if x == y == z == 0:
+            break
+
+        v_list = list(map(int, f.readline().split()))
+        c_list = [(0, 0)] * (y + 1)
+        for _ in range(z):
+            n, e, a = map(int, f.readline().split())
+            c_list[n] = (e, a)
+
+        dp = [{} for _ in range(y + 1)]
+        dp[0] = {0: 1.0}
+        for i in range(y):
+            for c_money, prob in dp[i].items():
+                for v in v_list:
+                    j = i + v
+                    j = min(j, y)
+                    e, a = c_list[j]
+
+                    n_money = c_money
+                    if e == MOVE_FORWARD:
+                        j += a
+                        j = min(j, y)
+                    elif e == GET_MONEY:
+                        n_money = c_money + a
+                    elif e == LOSE_MONEY:
+                        n_money = max(0, c_money - a)
+
+                    if n_money not in dp[j]:
+                        dp[j][n_money] = prob /  x
+                    else:
+                        dp[j][n_money] += prob / x
+
+        expected_money = 0.0
+        for money, prob in dp[y].items():
+            expected_money += money * prob
+
+        print(int(expected_money))
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

@@ -1,0 +1,30 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int n;
+int arr[10];
+
+int main() {
+  cin >> n;
+  for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < 10; ++i)
+      cin >> arr[i];
+    vector<int> left, right;
+    bool f = true;
+    for (int i = 0; i < 10; ++i) {
+      if (left.empty() || left.back() < arr[i]) {
+        left.push_back(arr[i]);
+      } else if (right.empty() || right.back() < arr[i]) {
+        right.push_back(arr[i]);
+      } else {
+        f = false;
+        break;
+      }
+    }
+    if (f)
+      cout << "YES\n";
+    else
+      cout << "NO\n";
+  }
+}

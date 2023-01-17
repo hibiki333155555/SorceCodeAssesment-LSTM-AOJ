@@ -1,0 +1,14 @@
+T = 0
+H = 0
+N = int(input())
+for i in range(N):
+    Taro,Hana = input().split()
+    if Taro == Hana:
+        T += 1
+        H += 1
+    elif Taro > Hana:
+        T += 3
+    else:
+        H += 3
+print(T,H)
+

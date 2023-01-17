@@ -1,0 +1,57 @@
+#pragma GCC optimize("03")
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+struct UnionFind {
+	int fsize;
+	std::vector<int> par;
+	UnionFind(int n) {
+		par.assign(n, -1);
+		fsize = n;
+	}
+	int root(int x) {
+		if (par[x] < 0) return x;
+		return par[x] = root(par[x]);
+	}
+	bool merge(int x, int y) {
+		x = root(x);
+		y = root(y);
+		if (x == y) return false;
+		if (par[x] > par[y]) std::swap(x, y);
+		par[x] += par[y];
+		par[y] = x;
+		fsize--;
+		return true;
+	}
+	bool same(int x, int y) {
+		return root(x) == root(y);
+	}
+	int size(int x) {
+		return -par[root(x)];
+	}
+	int forest_size() {
+		return fsize;
+	}
+};
+
+void solve() {
+	int n, q;
+	cin >> n >> q;
+	UnionFind uf(n);
+	while (q--) {
+		int com, x, y;
+		cin >> com >> x >> y;
+		if (com) cout << uf.same(x, y) << '\n';
+		else uf.merge(x, y);
+	}
+}
+
+int main() {
+	std::cin.tie(nullptr);
+	std::ios_base::sync_with_stdio(false);
+	std::cout << fixed << setprecision(10);
+	solve();
+	return 0;
+}
+

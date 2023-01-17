@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+	int q, flag, x, d;
+	list<int>arr;
+	int p=-1;
+	cin >> q;
+	for (int i = 0; i < q; i++)
+	{
+		cin >> flag;
+		switch (flag)
+		{
+		case 0:
+			cin >> x;
+			if (p == -1) { arr.push_back(x); p = arr.size() - 1; }
+			else 
+			{
+				auto z = arr.begin();
+				for (int i = 0; i < p; i++) { z++; }
+				arr.insert(z, x);
+			}
+			break;
+		case 1:
+			cin >> d;
+			((p + d) == arr.size()) ? (p = -1) : (p += d);
+			break;
+		case 2:
+			if (p != -1)
+			{
+				auto z = arr.begin();
+				for (int i = 0; i < p; i++) { z++; }
+				arr.erase(z);
+			}
+		}
+
+	}
+	list<int> ::iterator it = arr.begin();
+	while (it != arr.end()) { cout << *it << endl; it++; }
+	return 0;
+}

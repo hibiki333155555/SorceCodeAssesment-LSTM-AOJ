@@ -1,0 +1,30 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+    int n, e;
+    vector<int> a, b;
+    cin>>n;
+    while(n--){
+        cin>>e;
+        a.push_back(e);
+    }
+    cin>>n;
+    while(n--){
+        cin>>e;
+        b.push_back(e);
+    }
+    for(int i = 0; i < 1 + min(a.size(), b.size()); i++){
+        if(b.size() == i) cout << 0 << endl;
+        if(a.size() == i) cout << 1 << endl;
+        if(b.at(i) > a.at(i)){
+            cout << 1 << endl;
+            break;
+        }
+        if(a.at(i)>b.at(i)){
+            cout << 0 << endl;
+            break;
+        }
+    }
+}

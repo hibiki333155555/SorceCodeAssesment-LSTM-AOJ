@@ -1,0 +1,14 @@
+downs, ponds = [], []
+
+for i, s in enumerate(input()):
+  if s == "\\":
+    downs.append(i)
+  elif s == "/" and downs:
+    i_down = downs.pop()
+    area = i - i_down
+    while ponds and ponds[-1][0] > i_down:
+      area += ponds.pop()[1]
+    ponds.append([i_down, area])
+
+print(sum(p[1] for p in ponds))
+print(len(ponds), *(p[1] for p in ponds))

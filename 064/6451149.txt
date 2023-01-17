@@ -1,0 +1,25 @@
+def main():
+    n=int(input())
+    a=list(map(int,input().split()))
+    q=int(input())
+    ml=list(map(int,input().split()))
+    for m in ml:
+        print(f(a,m,n))
+
+def f(a,m,n):
+    dp=[[0]*(m+1) for _ in range(n)]
+    a0=a[0]
+    for i in range(a0,m):
+        dp[0][i]=a0
+    for i in range(1,n):
+        ai=a[i]
+        for j in range(m+1):
+            kouho=dp[i-1][j-ai]+ai if j-ai>=0 else 0
+            dp[i][j]=max(dp[i-1][j],kouho)
+            if j==m:
+                if dp[i][m]==m:
+                    return "yes"
+    return "no"
+
+if __name__=="__main__":
+    main()

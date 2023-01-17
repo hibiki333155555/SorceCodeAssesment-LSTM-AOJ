@@ -1,0 +1,13 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+
+    int A, B;
+    cin >> A >> B;
+
+
+    int ans = (B + A - 1) / A;
+    cout << ans << endl;
+
+}

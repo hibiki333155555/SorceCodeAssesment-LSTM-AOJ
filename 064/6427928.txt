@@ -1,0 +1,19 @@
+#include<stdio.h>
+int main()
+{
+int cnt=0;
+int x,a,b,c;
+scanf("%d %d %d", &a,&b,&c);
+for(x=a; x<=b; x++)
+{
+    if(c%x==0)
+    {
+        cnt++;
+        }
+}
+printf("%d\n",cnt);
+
+
+
+}
+

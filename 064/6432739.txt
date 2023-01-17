@@ -1,0 +1,12 @@
+#include <iostream>
+using namespace std;
+
+int main () {
+    int r;
+    double pie = 3.141592653589
+    
+    cin >> r;
+    
+    printf("%f, %f\n", 2 * pie * r, r * r * pie);
+    
+}

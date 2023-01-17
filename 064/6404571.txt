@@ -1,0 +1,22 @@
+while True:
+    a,b,c= map(int, input().split())
+    if(a==-1 and b==-1 and c==-1):
+        break
+    elif(a == -1 or b == -1):
+        print("F")
+    elif(a+b>=80):
+        print("A")
+    elif(65<=a+b<80):
+        print("B")
+    elif(50<=a+b<65):
+        print("C")
+    elif(30<=a+b<50):
+        if(c>=50):
+            print("C")
+        else:
+            print("D")
+    elif(a+b<30):
+        print("F")
+            
+    
+

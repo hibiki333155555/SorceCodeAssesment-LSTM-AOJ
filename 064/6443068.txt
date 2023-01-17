@@ -1,0 +1,12 @@
+def main():
+    N = int(input())
+    dic = dict()
+    def fib(x):
+        ret = 0
+        if x==0: return 1
+        if x==1: return 1
+        if not N in dic:
+            dic[x] = fib(x-1)+fib(x-2)
+        return dic[x]
+    print(fib(N))
+main()

@@ -1,0 +1,24 @@
+#include<stdio.h>
+int main()
+
+{
+    while(3)
+    {  int H,W,i,j;
+    scanf("%d%d",&H,&W);
+     if(H==0&&W==0)
+        break;
+
+    for(i=1; i<=H; i++)
+    {
+        for(j=1; j<=W; j++)
+        {
+            printf("#");
+        }
+        printf("\n");
+    }
+    }
+//joy
+
+
+}
+

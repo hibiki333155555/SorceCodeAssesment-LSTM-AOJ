@@ -1,0 +1,10 @@
+w = input()
+count = 0
+while True:
+    try:
+        str = input()
+    except EOError:
+        break
+    if str.find(w) > -1:
+        count += 1
+print(count)

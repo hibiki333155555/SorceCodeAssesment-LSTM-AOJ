@@ -1,0 +1,52 @@
+#include <stdio.h>
+int table[100][10000+1];
+int value[100],weight[100];
+int N,W;
+
+int max(int a,int b){
+    if(a>b){
+        return a;
+    }else{
+        return b;
+    }
+}
+
+int calcMaxValue(int index,int W){
+    int maxValue;
+    if(index>=N){
+        return 0;
+    }
+    if(table[index][W]!=-1){
+        return table[index][W];
+    }else{
+        if (W<weight[index]){
+            maxValue=calcMaxValue(index+1,W);
+        }else{
+            maxValue=max(calcMaxValue(index+1,W),calcMaxValue(index+1,W-weight[index])+value[index]);
+        }
+        table[index][W]=maxValue;
+        return maxValue;
+    }
+}
+
+int main(void){
+    // Your code here!
+    scanf("%d %d\n",&N,&W);
+    int i,j,maxValue;
+    for(i=0;i<N;i++){
+        scanf("%d %d\n",&value[i],&weight[i]);
+    }
+    
+    for(i=0;i<N;i++){    /*tableを初期化、データがない場所を-1にする*/
+        for(j=0;j<=W;j++){
+            table[i][j]=-1;
+        }
+    }
+    
+    maxValue=calcMaxValue(0,W);
+    
+    printf("%d\n",maxValue);
+    
+    
+}
+

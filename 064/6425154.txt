@@ -1,0 +1,9 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int m,f,d; cin>>m>>f>>d;
+    if(m>=d) cout<<0<<endl;
+    else if(d>f+m) cout<<"NA"<<endl;
+    else if(d>m) cout<<d-m<<endl;
+    return 0;
+}

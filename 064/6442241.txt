@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    int H,W;
+    
+    for(int i = 0; i < 1;){
+        cin >> H >> W;
+        if(H == 0 && W == 0) break;
+        for(int j = 0; j < H; j++){
+            for(int k = 0; j < W; k++){
+                if(j == 0 || j == H - 1){
+                    cout << '#';
+                } 
+                else if(k == 0 || k == W - 1) {
+                    cout << '#';
+                }
+                else cout << '.';
+            }
+                cout << endl;
+        }
+        
+        cout << endl;
+    }
+    
+    return 0;
+}

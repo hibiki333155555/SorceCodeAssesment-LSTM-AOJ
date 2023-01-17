@@ -1,0 +1,5 @@
+a, b = map(int, input().split(" "))
+d = int(a/b)
+r = a%b
+f = round(a/b, 5)
+print(f"{d} {r} {f}")

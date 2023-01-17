@@ -1,0 +1,7 @@
+/*
+require('fs').readFileSync(0,'utf8').split(`
+`).some(l=>([a,o,b]=l.split` `,a=+a,b=+b,o=='?'||console.log(~~({'+':a+b,'-':a-b,'*':a*b,'/':a/b}[o]))))
+*/
+require('fs').readFileSync(0,'utf8').split(`
+`).map(l=>([a,o,b]=l.split` `,a=+a,b=+b,o=='?'||console.log(~~({'+':a+b,'-':a-b,'*':a*b,'/':a/b}[o]))))
+

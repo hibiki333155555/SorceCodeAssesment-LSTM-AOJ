@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main()
+{
+    int a,b,c;
+    scanf("%d %d %d",&a,&b,&c);
+    int h,m,l;
+    if(a>b)
+    {
+        m=a;
+        l=b;
+    }
+    else
+    {
+        m=b;
+        l=a;
+    }
+    if(m>c)
+    {
+        h=m;
+        if(l>c){
+            m=l;
+            l=c;
+        }
+        else{
+            m=c;
+        }
+    }
+    else
+    {
+        h=c;
+    }
+    printf("%d %d %d\n",l,m,h);
+    return 0;
+}

@@ -1,0 +1,69 @@
+/***
+ * https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_6_B&lang=ja
+ ***/
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <string>
+#include <cstring>
+#include <iomanip>
+#include <cmath>
+#include <stack>
+#include <queue>
+// #include "comp.h"
+using namespace std;
+using ll = long long;
+
+// #define DEBUG
+#define FOR(i, a, b) for (int i = (int)(a); i < (int)(b); ++i)
+#define rep(i, n) for (int i = 0; i < (int)(n); ++i)
+
+struct schedule
+{
+    string s;
+    int time;
+};
+
+int main()
+{
+#ifndef DEBUG
+
+    int n, q, count = 0;
+    cin >> n >> q;
+    queue<schedule> task, res;
+    schedule tmp;
+
+    rep(i, n)
+    {
+        cin >> tmp.s >> tmp.time;
+        task.push(tmp);
+    }
+
+    while (!task.empty())
+    {
+        tmp = task.front();
+        task.pop();
+
+        tmp.time -= q;
+        if (tmp.time <= 0)
+        {
+            count = count + tmp.time + q;
+            tmp.time = count;
+            res.push(tmp);
+            continue;
+        }
+        count += q;
+        task.push(tmp);
+    }
+
+    while (!res.empty())
+    {
+        cout << res.front().s << " " << res.front().time << endl;
+        res.pop();
+    }
+#else
+
+#endif
+}
+

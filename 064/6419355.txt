@@ -1,0 +1,189 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"sort"
+	"strconv"
+)
+
+var sc = bufio.NewScanner(rd)
+var wr = bufio.NewWriter(os.Stdout)
+
+var rd = os.Stdin
+
+// var rd = bytes.NewBufferString(
+// 	`6
+//    2 1
+//    2 2
+//    4 2
+//    6 2
+//    3 3
+//    5 4
+//    2
+//    2 4 0 4
+//    4 10 2 5
+//   `)
+
+type Node struct {
+	point *Point
+	left  int
+	right int
+}
+
+type Tree []*Node
+
+func NewTree(n int) *Tree {
+	var t Tree = make([]*Node, n)
+
+	for i := 0; i < n; i++ {
+		t[i] = &Node{left: -1, right: -1}
+	}
+
+	return &t
+}
+
+func (t *Tree) index(id int) *Node {
+	return (*t)[id]
+}
+
+func (t *Tree) find(id int, sx, tx, sy, ty int, depth int, res *[]Point) {
+	pt := t.index(id).point
+	x := pt.x
+	y := pt.y
+
+	if sx <= x && x <= tx && sy <= y && y <= ty {
+		(*res) = append(*res, *pt)
+	}
+
+	if depth%2 == 0 {
+		if t.index(id).left >= 0 && sx <= x {
+			t.find(t.index(id).left, sx, tx, sy, ty, depth+1, res)
+		}
+		if t.index(id).right >= 0 && x <= tx {
+			t.find(t.index(id).right, sx, tx, sy, ty, depth+1, res)
+		}
+	} else {
+		if t.index(id).left >= 0 && sy <= y {
+			t.find(t.index(id).left, sx, tx, sy, ty, depth+1, res)
+		}
+		if t.index(id).right >= 0 && y <= ty {
+			t.find(t.index(id).right, sx, tx, sy, ty, depth+1, res)
+		}
+	}
+}
+
+var idx int = 0
+
+func (t *Tree) buildKDTree(pts []Point, l, r, depth int) int {
+	if l >= r {
+		return -1
+	}
+
+	mid := (l + r) / 2
+	i := idx
+	idx++
+
+	if depth%2 == 0 {
+		By(sortByX).Sort(pts[l:r])
+	} else {
+		By(sortByY).Sort(pts[l:r])
+	}
+
+	(*t)[i].point = &pts[mid]
+	(*t)[i].left = t.buildKDTree(pts, l, mid, depth+1)
+	(*t)[i].right = t.buildKDTree(pts, mid+1, r, depth+1)
+
+	return i
+}
+
+type Point struct {
+	id int
+	x  int
+	y  int
+}
+
+func (p *Point) Print() {
+	fmt.Println(p.id)
+}
+
+type PointSorter struct {
+	points []Point
+	by     By
+}
+
+type By func(u, v *Point) bool
+
+func (by By) Sort(points []Point) {
+	ps := &PointSorter{
+		points: points,
+		by:     by,
+	}
+
+	sort.Sort(ps)
+}
+
+func sortByX(u, v *Point) bool {
+	return u.x < v.x
+}
+
+func sortByY(u, v *Point) bool {
+	return u.y < v.y
+}
+
+func sortById(u, v *Point) bool {
+	return u.id < v.id
+}
+
+func (ps *PointSorter) Len() int {
+	return len(ps.points)
+}
+
+func (ps *PointSorter) Swap(i, j int) {
+	ps.points[i], ps.points[j] = ps.points[j], ps.points[i]
+}
+
+func (ps *PointSorter) Less(i, j int) bool {
+	return ps.by(&ps.points[i], &ps.points[j])
+}
+
+func scanInt() int {
+	sc.Scan()
+	i, _ := strconv.Atoi(sc.Text())
+	return i
+}
+
+func main() {
+	sc.Split(bufio.ScanWords)
+	defer wr.Flush()
+
+	n := scanInt()
+	points := make([]Point, n)
+	tree := NewTree(n)
+
+	for i := 0; i < n; i++ {
+		points[i] = Point{id: i, x: scanInt(), y: scanInt()}
+	}
+
+	root := tree.buildKDTree(points, 0, n, 0)
+
+	q := scanInt()
+	res := make([]Point, 0, n)
+	for i := 0; i < q; i++ {
+		sx, tx, sy, ty := scanInt(), scanInt(), scanInt(), scanInt()
+
+		tree.find(root, sx, tx, sy, ty, 0, &res)
+		By(sortById).Sort(res)
+		printResult(res)
+		res = res[0:0]
+	}
+}
+
+func printResult(res []Point) {
+	for i := 0; i < len(res); i++ {
+		res[i].Print()
+	}
+	fmt.Println()
+}
+

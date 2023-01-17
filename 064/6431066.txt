@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  int n;
+  cin >> n;
+  
+  vector<int> data(n); // n個のデータ
+  
+  //n個のデータを受け取る
+  for (int i=0; i<n; i++){
+    cin >> data.at(i);
+  }
+  
+  reverse(data.begin(), data.end());
+  
+  //逆順で出力する
+  for (int i=0; i<n; i++){
+    if (i != n-1){
+      cout << data.at(i) << " ";
+    }
+    
+    else{
+      cout << data.at(i) << endl;
+    }
+    
+  }
+  
+  
+}

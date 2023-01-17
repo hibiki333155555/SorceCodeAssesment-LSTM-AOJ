@@ -1,0 +1,33 @@
+#include<stdio.h>
+
+int main(void)
+{
+    int n,m;
+    int x,y,z;
+    int i;
+    int a[n][m];
+    int b[m];
+    scanf("%d %d",&n,&m);
+    
+    for(x=0;x<n;x++)
+    {
+        for(y=0;y<m;y++)
+        {
+            scanf("%d",a[x][y]);
+        }
+    }
+    for(z=0;z<m;z++)
+    {
+        scanf("%d",b[z]);
+    }
+    for(x=0;x<n;x++)
+    {
+        i=0;
+        for(y=0;y<m;y++)
+        {
+            i+=a[x][y]*b[y];
+        }
+        printf("%d\n",i);
+    }
+    return 0;
+}

@@ -1,0 +1,172 @@
+#define READ_FROM_FILE 0
+
+#if READ_FROM_FILE
+#include <fstream>
+#endif
+
+#include <iostream>
+#include <map>
+#include <vector>
+
+using namespace std;
+
+const int house = 1;
+const int church = 2;
+const int dx[] = { 1, 0, -1, 0 };
+const int dy[] = { 0, -1, 0, 1 };
+const int max_num_houses_in_dp = 23;
+int width = -1;
+int height = -1;
+vector<vector<char>> index_grid;
+int church_x = -1;
+int church_y = -1;
+unsigned char num_houses = -1;
+int max_num_houses = -1;
+map<int, int> dp;
+
+
+inline bool is_inside(int x, int y) {
+	return 0 <= x && x < width && 0 <= y && y < height;
+}
+
+int count_visited_houses(const int& visited_houses) {
+	int counter = 0;
+	int v = visited_houses;
+
+	for (int i = 0; i < num_houses; i++) {
+		counter += v & 1;
+		v >>= 1;
+	}
+
+
+	return counter;
+}
+
+bool is_visited(char idx, const int& visited_houses) {
+	return (visited_houses & (1 << idx)) > 0;
+}
+
+bool can_go_ahead(int x, int y, const int& visited_houses) {
+	int num_visited_houses = count_visited_houses(visited_houses);
+	char c_idx = -1;
+
+	if (x == church_x && y == church_y) {
+		if (num_visited_houses < num_houses) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	if (index_grid[y][x] < 0) {
+		return true;
+	}
+	
+	c_idx = index_grid[y][x];
+	return is_visited(c_idx, visited_houses);
+}
+
+void add_house(unsigned char house_idx, int& visited_houses) {
+	visited_houses|= (1 << house_idx);
+	return;
+}
+
+int dfs(int dp_state, int x, int y) {
+	int num_visited_houses = count_visited_houses(dp_state);
+	unsigned char c_idx = index_grid[y][x];
+	int num_paths = 0;
+
+	dp_state = dp_state & ((1 << num_houses) - 1) | (c_idx << num_houses);
+	if (num_visited_houses >= num_houses) {
+		if (x == church_x and y == church_y) {
+			return 1;
+		}
+	}
+
+	if (num_visited_houses < max_num_houses) {
+		if (dp.count(dp_state) > 0) {
+			return dp[dp_state];
+		}
+	}
+
+	for (int i = 0; i < 4; i++) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		char n_idx = -1;
+		int n_dp_state = dp_state;
+
+		while (is_inside(nx, ny) && can_go_ahead(nx, ny, dp_state)) {
+			nx += dx[i];
+			ny += dy[i];
+		}
+
+		if (!is_inside(nx, ny)) {
+			continue;
+		}
+		
+		n_idx = index_grid[ny][nx];
+		add_house(n_idx, n_dp_state);
+		num_paths += dfs(n_dp_state, nx, ny);
+	}
+
+	if (num_visited_houses < max_num_houses) {
+		dp[dp_state] = num_paths;
+	}
+	return num_paths;
+}
+
+
+
+int main(int argc, char** argv) {
+#if READ_FROM_FILE
+	ifstream ifs("test0.txt");
+	cin.rdbuf(ifs.rdbuf());
+#endif
+
+	while (true) {
+		vector<vector<char>> grid;
+
+		cin >> width >> height;
+		if (width == 0 && height == 0) {
+			break;
+		}
+		
+		index_grid.clear();
+		for (int y = 0; y < height; y++) {
+			vector<char> row(width, -1);
+
+			index_grid.push_back(row);
+			for (int x = 0; x < width; x++) {
+				int cell = -1;
+
+				cin >> cell;
+				row[x] = cell;
+			}
+			grid.push_back(row);
+		}
+		
+		num_houses = 0;
+		church_x = -1;
+		church_y = -1;
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (grid[y][x] == house) {
+					index_grid[y][x] = num_houses;
+					num_houses++;
+				}
+				else if (grid[y][x] == church) {
+					church_x = x;
+					church_y = y;
+				}
+			}
+		}
+
+		max_num_houses = min(max_num_houses_in_dp, int(num_houses));
+		dp.clear();
+		dp[0] = 0;
+		cout << dfs(0, church_x, church_y) << endl;
+	}
+	return 0;
+}
+

@@ -1,0 +1,6 @@
+a = list(map(list,input().split()))
+a.sort()
+b = str(a[0])
+c = str(a[1])
+d = str(a[2])
+print(b+" "+c+" "+d)

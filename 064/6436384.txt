@@ -1,0 +1,6 @@
+l= list(map(int,input().split()))
+new_list = sorted(l)
+print(new_list)
+#別海
+#l.sort()
+#print(l)

@@ -1,0 +1,7 @@
+import numpy as np
+points = list(map(int, input().split()))
+a = np.array([points[0], points[1]])
+b = np.array([points[2], points[3]])
+distance = np.linalg.norm(a-b)
+print(distance)
+

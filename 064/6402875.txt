@@ -1,0 +1,6 @@
+n, a = input().splitlines()
+a1 = sorted(a.split(" "))
+min = a1[0]
+max = a1[n-1]
+s = sum(a1)
+print(min, max, s)

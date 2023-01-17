@@ -1,0 +1,23 @@
+//#include<bits/stdc++.h>
+#include<iostream>
+#include<math.h>
+#include<string.h>
+#include<stdio.h>
+using namespace std;
+
+int main()
+{	
+	
+	double r,pi=3.1415926535898;
+	double area,circ;
+	
+	cin>>r;
+	
+	area=pi*r*r;
+	circ=2*pi*r;
+	
+	printf("%.6f %.6f",area,circ);  //这样也可以用 
+
+return 0;
+}
+

@@ -1,0 +1,12 @@
+#include <stdio.h>
+#include <math.h>
+
+int main(void){
+
+    double PI = 3.14159265358979;
+    double r;
+    scanf("%lf", &r);
+    printf("%.6lf %.6lf", r * r * PI, r * 2 * PI);
+
+    return 0;
+}

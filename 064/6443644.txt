@@ -1,0 +1,23 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+    int N,Red;
+    string S;
+    cin >> N >> Red >> S;
+    int White=N-Red;
+    for(int i=0; i<N-1; i++){
+        if(S[i]=='R'){
+            Red--;
+        }
+        else{
+            White--;
+        }
+    }
+    if(Red==1){
+        cout << 'R' << endl;
+    }
+    else{
+        cout << 'W' << endl;
+    }
+}

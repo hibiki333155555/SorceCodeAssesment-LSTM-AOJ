@@ -1,0 +1,25 @@
+using System;
+
+class Lesson09
+{
+    public static void Main()
+    {
+        string input = Console.ReadLine();
+        int number = int.Parse(Console.ReadLine());
+        int count = 0;
+        for (int i = 0; i < number; i++)
+        {
+            string kokuin = Console.ReadLine();
+            kokuin += kokuin;
+            for (int j = 0; j <= kokuin.Length - input.Length; j++)
+            {
+                if (kokuin.Substring(j, input.Length) == input)
+                {
+                    count++;
+                    break;
+                }
+            }
+        }
+        Console.WriteLine(count);
+    }
+}

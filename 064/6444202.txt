@@ -1,0 +1,65 @@
+#include<stdio.h>
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+static const int MAX_V = 10000;
+static const int MAX_EDGE = 100000;
+typedef pair<int, int> edge;
+typedef pair<int, edge> widget_edge;
+vector<widget_edge> edges;
+int parent[MAX_V];
+void add_edge(int vertex_1, int vertex_2, int cost) {
+	edges.push_back(widget_edge(cost, edge(vertex_1, vertex_2)));
+}
+//并查集操作函数
+void init(int size) {
+	for (int i = 0; i < size; i++)
+		parent[i] = i;
+}
+int find(int num) {
+	if (parent[num] == num)
+		return num;
+	find(parent[num]);
+}
+bool same(int num1, int num2) {
+	int parent_1 = find(num1);
+	int parent_2 = find(num2);
+	if (parent_1 == parent_2)
+		return true;
+	else
+		return false;
+
+}
+bool unite(int num1, int num2) {
+	if (same(num1, num2))
+		return false;
+	int parent_1 = find(num1);
+	int parent_2 = find(num2);
+	parent[parent_2] = parent_1;
+	return true;
+}
+int Kruskal(int VERTEX) {
+	sort(edges.begin(), edges.end());
+	init(VERTEX);
+	int sum = 0;
+	for (int i = 0; i < edges.size(); i++) {
+		widget_edge wi = edges[i];
+		int widget = wi.first;
+		int u = wi.second.first;
+		int v = wi.second.second;
+		if (unite(u, v))
+			sum = sum + widget;
+	}
+	return sum;
+}
+int main() {
+	int EDGE, VERTEX,vertex_1,vertex_2,cost;
+	cin >> VERTEX >> EDGE;
+	for (int i = 0; i < EDGE; i++) {
+		cin >> vertex_1 >> vertex_2 >> cost;
+		add_edge(vertex_1, vertex_2, cost);
+	}
+	cout << Kruskal(VERTEX) << endl;
+	return 0;
+}

@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+const bool debug = false;
+
+struct Point {
+  int x, y;
+};
+
+int rot(const Point& p1, const Point& p2, const Point& p3) {
+  return (p3.x-p2.x)*(p1.y-p2.y) - (p3.y-p2.y)*(p1.x-p2.x);
+}
+
+int main() {
+  int n; std::cin >> n;
+  std::vector<Point> points(n);
+  for (int i=0; i<n; i++) std::cin >> points[i].x >> points[i].y;
+  std::sort(points.begin(), points.end(), [](const Point& lhs, const Point& rhs) {
+    if (lhs.y == rhs.y) return lhs.x < rhs.x;
+    return lhs.y < rhs.y;
+  });
+  if (debug) {
+    std::cout << "sorted points" << std::endl;
+    for (const auto& point : points) {
+      std::cout << "Point(x=" << point.x << ", y=" << point.y << ")" << std::endl;
+    }
+  }
+  std::vector<Point> ret;
+  ret.push_back(points[0]);
+  ret.push_back(points[1]);
+  for (int i=2; i<n; i++) {
+    while(rot(ret[ret.size()-2], ret[ret.size()-1], points[i]) < 0) ret.pop_back();
+    ret.push_back(points[i]);
+    if (debug) {
+      std::cout << "ret" << std::endl;
+      for (const auto& point : ret) {
+        std::cout << "Point(x=" << point.x << ", y=" << point.y << ")" << std::endl;
+      }
+    }
+  }
+  for (int i=n-2; i >= 0; i--) {
+    while(rot(ret[ret.size()-2], ret[ret.size()-1], points[i]) < 0) ret.pop_back();
+    if (i != 0) ret.push_back(points[i]);
+    if (debug) {
+      std::cout << "ret" << std::endl;
+      for (const auto& point : ret) {
+        std::cout << "Point(x=" << point.x << ", y=" << point.y << ")" << std::endl;
+      }
+    }
+  }
+  std::cout << ret.size() << std::endl;
+  for (const auto& point : ret) {
+    std::cout << point.x << " " << point.y << std::endl;
+  }
+}

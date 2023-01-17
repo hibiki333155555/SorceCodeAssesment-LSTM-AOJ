@@ -1,0 +1,91 @@
+class Dice:
+
+    def __init__(self, numbers):
+        self.numbers_fr = [i for i in numbers]
+        self.numbers_to = [0 for i in range(6)]
+    
+    def copy_numbers(self):
+        for i, num in enumerate(self.numbers_to):
+            self.numbers_fr[i] = num
+    
+    def move_n(self):
+        self.numbers_to[0] = self.numbers_fr[1]
+        self.numbers_to[1] = self.numbers_fr[5]
+        self.numbers_to[2] = self.numbers_fr[2]
+        self.numbers_to[3] = self.numbers_fr[3]
+        self.numbers_to[4] = self.numbers_fr[0]
+        self.numbers_to[5] = self.numbers_fr[4]
+        self.copy_numbers()
+        return self.numbers_to
+
+    def move_s(self):
+        self.numbers_to[0] = self.numbers_fr[4]
+        self.numbers_to[1] = self.numbers_fr[0]
+        self.numbers_to[2] = self.numbers_fr[2]
+        self.numbers_to[3] = self.numbers_fr[3]
+        self.numbers_to[4] = self.numbers_fr[5]
+        self.numbers_to[5] = self.numbers_fr[1]
+        self.copy_numbers()
+        return self.numbers_to
+
+    def move_w(self):
+        self.numbers_to[0] = self.numbers_fr[2]
+        self.numbers_to[1] = self.numbers_fr[1]
+        self.numbers_to[2] = self.numbers_fr[5]
+        self.numbers_to[3] = self.numbers_fr[0]
+        self.numbers_to[4] = self.numbers_fr[4]
+        self.numbers_to[5] = self.numbers_fr[3]
+        self.copy_numbers()
+        return self.numbers_to
+
+    def move_e(self):
+        self.numbers_to[0] = self.numbers_fr[3]
+        self.numbers_to[1] = self.numbers_fr[1]
+        self.numbers_to[2] = self.numbers_fr[0]
+        self.numbers_to[3] = self.numbers_fr[5]
+        self.numbers_to[4] = self.numbers_fr[4]
+        self.numbers_to[5] = self.numbers_fr[2]
+        self.copy_numbers()
+        return self.numbers_to
+
+    # 右方向に回転
+    def move_r(self):
+        self.numbers_to[0] = self.numbers_fr[0]
+        self.numbers_to[1] = self.numbers_fr[2]
+        self.numbers_to[2] = self.numbers_fr[4]
+        self.numbers_to[3] = self.numbers_fr[1]
+        self.numbers_to[4] = self.numbers_fr[3]
+        self.numbers_to[5] = self.numbers_fr[5]
+        self.copy_numbers()
+        return self.numbers_to
+
+numbers = list(map(int, input().split()))
+
+dice = Dice(numbers)
+
+q = int(input())
+
+for i in range(q):
+    
+    u, f = map(int, input().split())
+
+    # N方向に3回、回転して上の目の数を確認、一致したら抜ける
+    for i in range(3):
+        if numbers[0] == u:
+            break
+        numbers = dice.move_n()
+
+    # W方向に3回、回転して上の目の数を確認、一致したら抜ける
+    for i in range(3):
+        if numbers[0] == u:
+            break
+        numbers = dice.move_w()
+
+    # 右方向に3回、回転して前面の目の数を確認、一致したら抜ける
+    for i in range(3):
+        if numbers[1] == f:
+            break
+        numbers = dice.move_r()
+
+    print(f'{numbers[2]}')
+

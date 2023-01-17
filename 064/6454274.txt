@@ -1,0 +1,97 @@
+/* ファイル名：ALDS1_9_A.c	*/
+/* 内容：完全二分木で表された二分ヒープを読み込み、以下の形式で二分ヒープの各節点の情報を出力する。			*/
+/*       node id: key = k, parent key = pk, left key = lk, right key = rk,									*/
+/*       (idは節点の番号（インデックス）、kは節点の値、pkは親の値、lkは左の子の値、rkは右の子の値を示す。	*/
+/*       ただし、該当する節点が存在しない場合は、出力を行わないものとする。)								*/
+/* 入力：1行目:二分ヒープのサイズH																			*/
+/*       2行目:ヒープの節点の値（キー）を表すH個の整数がそれらの節点の番号順に空白区切りで与えられる。		*/
+/* 出力：上記形式で二分ヒープの節点の情報をインデックスが1からHに向かって出力する。(行の最後は空白)			*/
+
+/* include	*/
+#include <stdio.h>
+
+/* 外部変数宣言	*/
+#define TRUE 1					/* 真						*/
+#define FALSE 0					/* 偽						*/
+#define HEAP_SIZE_MAX 250		/* 二分ヒープのサイズの最大	*/
+#define HEAP_SIZE_MIN 1			/* 二分ヒープのサイズの最小	*/
+#define KEY_NUM_MAX 2000000000	/* 節点の値の最大			*/
+#define KEY_NUM_MIN -2000000000	/* 節点の値の最小			*/
+
+/* 関数名:main	*/
+/* 処理内容:二分ヒープを入力し、キーの書く情報を出力する。	*/
+int main( void )
+{
+	/* 内部変数定義	*/
+	/* 入力	*/
+	unsigned int heap_size;	/* 二分ヒープのサイズ	*/
+	signed int heap[HEAP_SIZE_MAX + 1];/* 二分ヒープ(添え字を1から始めるため、+1している。)	*/
+	
+	/* 処理	*/
+	unsigned int input_boundary_flag;	/* 入力確認用フラグ	*/
+	unsigned int roop;					/* ループ用変数		*/
+	
+	/* 入力処理	*/
+	/* 二分ヒープのサイズを入力	*/
+	do{
+		input_boundary_flag = FALSE;	/* 入力確認用フラグの初期化	*/
+		scanf( "%d", &heap_size );		/* 二分ヒープのサイズを入力	*/
+		
+		/* 二分ヒープのサイズが規定値外だった場合	*/
+		if(( heap_size > HEAP_SIZE_MAX )
+		|| ( heap_size < HEAP_SIZE_MIN )){
+			printf( "二分ヒープのサイズが規定値外です。再入力をお願いします。\n" );
+			input_boundary_flag = TRUE;
+		}
+		else{
+			/* 処理なし	*/
+		}
+	}while( input_boundary_flag == TRUE );
+	
+	/* 二分ヒープのサイズだけキーを入力	*/
+	for( roop = 1; roop < heap_size; roop++ ){
+		do{
+			input_boundary_flag = FALSE;	/* 入力確認用フラグの初期化	*/
+			scanf( "%d", &heap[roop] );		/* キーを入力				*/
+			
+			/* キーの値が規定値外だった場合	*/
+			if(( heap_size > HEAP_SIZE_MAX )
+			|| ( heap_size < HEAP_SIZE_MIN )){
+				printf( "キーの値が規定値外です。再入力をお願いします。\n" );
+				input_boundary_flag = TRUE;
+			}
+			else{
+				/* 処理なし	*/
+			}
+		}while( input_boundary_flag == TRUE );
+	}
+	
+	/* 出力処理*/
+	for( roop = 1; roop < heap_size; roop++ ){
+		/* 節点の番号とキー(どの節点でも必ず出力)	*/
+		printf( "node %d: key = %d, ", roop, heap[roop] );
+		
+		/* 節点の親(根でなければ出力)	*/
+		if( roop != 0 ){
+			printf( "parent key = %d, ", heap[roop /  2]);
+		}
+		else{
+			/* 処理なし	*/
+		}
+		
+		/* 節点の左の子(節点の番号を2倍して二分ヒープのサイズを超えなければ出力)	*/
+		if( roop * 2 <= heap_size ){
+			printf("left key = %d, ", heap[roop * 2]);
+		}
+		else{
+			/* 処理なし	*/
+		}
+		/* 節点の右の子(節点の番号を2倍+1して二分ヒープのサイズを超えなければ出力)	*/
+		if( roop * 2 + 1 <= heap_size ){
+			printf("right key = %d, ", heap[roop * 2 + 1]);
+		}
+	}
+	
+	return 0;
+}
+

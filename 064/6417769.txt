@@ -1,0 +1,86 @@
+#pragma GCC optimize("Ofast")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define REP(i,n) for(int i=0;i<(n);i++)
+#define ALL(v) v.begin(),v.end()
+#define debug(a) cerr<<#a<<":"<<a<<endl;
+#define debug2(a,b) cerr<<"("<<#a<<","<<#b<<"):("<<a<<","<<b<<")"<<endl;
+#define debug3(a,b,c) cerr<<"("<<#a<<","<<#b<<","<<#c<<"):("<<a<<","<<b<<","<<c<<")"<<endl;
+#define debug4(a,b,c,d) cerr<<"("<<#a<<","<<#b<<","<<#c<<","<<d<<"):("<<a<<","<<b<<","<<c<<","<<d<<")"<<endl;
+
+template<typename T>
+istream& operator>>(istream&is,vector<T>&v){
+  for(T&p:v)is>>p;
+  return is;
+}
+template<typename T>
+ostream& operator<<(ostream&os,const vector<T>&v){
+  if(&os==&cerr)os<<"[";
+  for(int i=0;i<v.size();i++){
+    os<<v[i];
+    if(i+1<v.size())os<<(&os==&cerr?",":" ");
+  }
+  if(&os==&cerr)os<<"]";
+  return os;
+}
+
+template<typename T,typename ...Args>
+auto make_vector(T x,int arg,Args ...args){
+  if constexpr(sizeof...(args)==0)return vector<T>(arg,x);
+  else return vector(arg,make_vector<T>(x,args...));
+}
+
+int dy[4]={-1,1,0,0},dx[4]={0,0,-1,1};
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int h,w,n;cin>>h>>w>>n;
+  swap(h,w);
+  auto d=make_vector<int>(0,h+3,w+3);
+  int sx,sy,gx,gy;cin>>sx>>sy>>gx>>gy;
+  REP(_,n){
+    int x,y,k;cin>>x>>y>>k;
+    //cerr<<y-k<<" "<<x<<" "<<y+k+2<<" "<<x<<" "<<y+1<<" "<<x-k-1<<" "<<y+1<<" "<<x+k+1<<endl;
+    d[y-k][x]++;
+    d[y+k+2][x]++;
+    d[y+1][x-k-1]--;
+    d[y+1][x+k+1]--;
+  }
+
+  for(int i=0;i<h+2;i++){
+    for(int j=1;j<w+3;j++){
+      d[i+1][j-1]+=d[i][j];
+    }
+  }
+  for(int i=0;i<h+2;i++){
+    for(int j=0;j<w+2;j++){
+      d[i+1][j+1]+=d[i][j];
+    }
+  }
+  
+  auto use=make_vector<bool>(false,h+3,w+3);
+  use[sy][sx]=true;
+  queue<pair<int,int>> que;
+  que.push({sy,sx});
+  while(que.size()){
+    auto [y,x]=que.front();que.pop();
+    REP(dd,4){
+      int Y=y+dy[dd],X=x+dx[dd];
+      if(Y<=0||Y>h||X<=0||X>w)continue;
+      if(d[Y][X])continue;
+      if(use[Y][X])continue;
+      if(Y==gy&&X==gx){
+        cout<<"Yes"<<endl;
+        return 0;
+      }
+      use[Y][X]=true;
+      que.push({Y,X});
+    }
+  }
+  cout<<"No"<<endl;
+}
+
+

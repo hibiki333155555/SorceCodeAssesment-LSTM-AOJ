@@ -1,0 +1,10 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    double a, t, r, ans;
+    cin >> a >> t >> r;
+    ans = r/a*t;
+    printf("%lf\n", ans);
+    return 0;
+}

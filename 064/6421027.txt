@@ -1,0 +1,36 @@
+#define rep(i,n) for(int i=0;i<(int)(n);i++)
+#define ALL(v) v.begin(),v.end()
+typedef long long ll;
+ 
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+
+  string s;
+  cin>>s;
+  int n=s.size();
+  stack<int> sta;
+  int rot=0;
+  int cnt=0;
+  string ans;
+  rep(i,n){
+    if(s[i]>='1' && s[i]<='9'){
+      sta.push(s[i]-'0');
+      rot+=s[i]-'0';
+    }
+    else if(s[i]=='(');
+    else if(s[i]==')'){
+      auto t=sta.top(); sta.pop();
+      rot-=t;
+    }
+    else{
+      ans+=(char)((s[i]-'a'+rot)%26+'a');
+    }
+  }
+  cout<<ans<<endl;
+        
+  return 0;
+}

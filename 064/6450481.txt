@@ -1,0 +1,110 @@
+#include <algorithm>
+#include <iostream>
+#include <queue>
+#include <map>
+using namespace std;
+
+const int p[8] = {2, 3, 5, 7, 11, 13, 17, 19};
+
+int gcd(int n, int m){
+    if(m == 0) return n;
+    return gcd(m, n % m);
+}
+
+int lcm(int n, int m){
+    int g = gcd(n, m);
+    return n / g * m;
+}
+
+void dfs(int i, int x, vector<int> &v){
+    if(p[i] > 20){
+        v.push_back(x);
+        return;
+    };
+    int u = 1;
+    while(u <= 20){
+        dfs(i + 1, x * u, v);
+        u *= p[i];
+    }
+}
+
+struct Graph
+{
+    int n;
+    std::vector<std::vector<int>> g;
+    
+    Graph(){}
+    
+    Graph(int n) : n(n){
+        g.resize(n);
+    }
+    
+    void add_edge(int from, int to){
+        g[from].push_back(to);
+    }
+};
+
+std::vector<int> bfs(Graph &g, int s){
+    int n = g.n;
+    std::vector<int> d(n);
+    fill(d.begin(), d.end(), -1);
+    std::queue<int> que;
+    d[s] = 0;
+    que.push(s);
+    while(que.size()){
+        int u = que.front();
+        que.pop();
+        for(int v : g.g[u]){
+            if(d[v] == -1){
+                d[v] = d[u] + 1;
+                que.push(v);
+            }
+        }
+    }
+    return d;
+}
+
+int e[1000][22];
+
+int main()
+{
+    vector<int> v;
+    dfs(0, 1, v);
+    sort(v.begin(), v.end());
+    int k = v.size();
+    map<int, int> mp;
+    for(int i = 0; i < k; i++) mp[v[i]] = i;
+    for(int i = 0; i < k; i++){
+        for(int c = 1; c <= 20; c++){
+            e[mp[v[i]]][c] = mp[lcm(v[i], c)];
+        }
+    }
+    int n, m;
+    cin >> n >> m;
+    Graph g(n * k);
+    for(int i = 0; i < m; i++){
+        int a, b, c;
+        cin >> a >> b >> c;
+		a--; b--;
+        for(int j = 0; j < k; j++){
+            g.add_edge(a * k + j, b * k + e[j][c]);
+        }
+    }
+    vector<int> d = bfs(g, 0);
+    int ans0 = -1, ans1 = -1;
+    for(int j = 0; j < k; j++){
+        if(d[(n - 1) * k + j] >= 0){
+            ans0 = v[j];
+            break;
+        }
+    }
+    for(int j = k - 1; j >= 0; j--){
+        if(d[(n - 1) * k + j] >= 0){
+            ans1 = v[j];
+            break;
+        }
+    }
+	if(ans0 == -1) cout << "IMPOSSIBLE" << endl;
+    else cout << ans0 << " " << ans1 << endl;
+}
+

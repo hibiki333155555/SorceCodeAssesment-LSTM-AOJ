@@ -1,0 +1,61 @@
+MASK = (1 << 64) - 1
+
+x = 0
+def c_test(i):
+    return+(x & (1 << i) > 0)
+def c_set(m):
+    global x
+    x |= M[m]
+def c_clear(m):
+    global x
+    m = M[m]
+    x = (x | m) ^ m
+def c_flip(m):
+    global x
+    x ^= M[m]
+def c_all(m):
+    m = M[m]
+    return+(x & m == m)
+def c_any(m):
+    m = M[m]
+    return+(x & m > 0)
+def c_none(m):
+    m = M[m]
+    return+(x & m == 0)
+def c_count(m):
+    m = M[m]
+    return bin(x & m).count('1')
+def c_val(m):
+    m = M[m]
+    return x & m
+
+
+fmap = [
+    c_test,
+    c_set,
+    c_clear,
+    c_flip,
+    c_all,
+    c_any,
+    c_none,
+    c_count,
+    c_val,
+]
+
+def query(Q):
+    for q in range(Q):
+        t, *cmd = map(int, input().split())
+        res = fmap[t](*cmd)
+        if res is not None:
+            yield res
+
+
+M = []
+N = int(input())
+for i in range(N):
+    k, *B = map(int, input().split())
+    M.append(sum(1 << b for b in B))
+
+Q = int(input())
+
+print(*query(Q), sep='\n')

@@ -1,0 +1,35 @@
+V,E = input().split()
+V,E = int(V),int(E)
+matrix = [[] for i in range(V)]
+for i in range(E):
+    edge = [int(x) for x in input().split()]
+    matrix[edge[0]].append((edge[1],edge[2]))
+    matrix[edge[1]].append((edge[0],edge[2]))
+
+distance = [float('inf') for i in range(V)]
+discovered = [0 for i in range(V)]
+
+def prim():
+    discovered[0] = 1
+    weight = 0
+    for i in matrix[0]:
+        if discovered[i[0]] == 0:
+            distance[i[0]] = min(distance[i[0]],i[1])    
+    while(1):
+        u = -1
+        du = float('inf')
+        for i in range(V):
+            if discovered[i] == 0 and distance[i] < du:
+                u = i
+                du = distance[i]
+        if u == -1:
+            break
+        discovered[u] = 1
+        weight = weight + du
+
+        for i in matrix[u]:
+            if discovered[i[0]]  == 0:
+                distance[i[0]] = min(distance[i[0]],i[1])    
+    return weight
+print(prim())
+

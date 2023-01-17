@@ -1,0 +1,40 @@
+// Author : Arfi
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+
+	vector<int> v(6);
+	for (int i = 0; i < 6; i++) {
+		cin >> v.at(i);
+	}
+	string s;
+	cin >> s;
+	int l = s.length();
+
+	for (int i = 0; i < l; i++) {
+		if (s.at(i) == 'S') {
+			swap(v.at(0), v.at(1));
+			swap(v.at(0), v.at(5));
+			swap(v.at(0), v.at(4));
+		}
+		else if(s.at(i) == 'E') {
+			swap(v.at(2), v.at(5));
+			swap(v.at(0), v.at(2));
+			swap(v.at(0), v.at(3));
+		}
+		else if(s.at(i) == 'W') {
+			swap(v.at(0), v.at(3));
+			swap(v.at(0), v.at(2));
+			swap(v.at(2), v.at(5));
+		}
+		else {
+			swap(v.at(0), v.at(4));
+			swap(v.at(0), v.at(5));
+			swap(v.at(0), v.at(1));
+		}
+	}
+	cout << v.at(0);
+}

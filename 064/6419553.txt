@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+
+int main()
+{
+    bool result = false;
+
+    std::string ring;
+    std::string word;
+    std::cin >> ring >> word;
+
+    for (int i = 0;i < ring.length();++i) {
+        if ( ring[i] != word.front() )
+            continue;
+
+        std::string buff;
+        for (int j = 0;j < word.length();++j) {
+            buff += ring[ (i + j) % ring.length() ];
+        }
+
+        if (buff != word)
+            continue;
+
+        result = true;
+        break;
+    }
+
+    if (result)
+        std::cout << "Yes\n";
+    else
+        std::cout << "No\n";
+
+    return 0;
+}

@@ -1,0 +1,28 @@
+#include <iostream>
+#include<bits/stdc++.h>
+// using P=pair<int,int>;
+#define rep(i,n) for(int i=0;i<(n);i++)
+typedef long long ll;
+const int INF=1001001001;
+const int mod=1e9+7;
+#include <vector>
+using namespace std;
+
+
+
+
+
+int main() {
+    deque<int>vt;
+    while(1){
+        int n; cin>>n;
+        if(!n) {
+            cin>>vt.push_back(n);
+        }else{
+            int ans=vt.pop_back();
+            cout<<ans<<endl;
+        }
+        if(vt.size()==0) return 0;
+    }
+    return 0;
+}

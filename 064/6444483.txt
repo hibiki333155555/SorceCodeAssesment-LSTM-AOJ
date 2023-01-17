@@ -1,0 +1,36 @@
+import java.util.*;
+
+public class Main {
+	public int bSort(int[] ay, int n) {
+		int flag = 1;
+		int count = 0;
+		while (flag == 1) {
+			flag = 0;
+			for (int j = n - 1; j > 0; j--) {
+				if (ay[j] < ay[j - 1]) {
+					int tmp = ay[j];
+					ay[j] = ay[j - 1];
+					ay[j - 1] = tmp;
+					count++;
+					flag = 1;
+				}
+			}
+		}
+		return count;
+	}
+	public static void main(String[] args) {
+		Main m = new Main();
+		Scanner scan = new Scanner(System.in);
+		int num = scan.nextInt();
+		int[] a = new int[num]; 
+		for (int i = 0; i < num; i++) {
+			a[i] = scan.nextInt();
+		}
+		int c = m.bSort(a, num);
+		for (int i = 0; i < num; i++) {
+			if (i == num - 1) System.out.println(a[i]);
+			else System.out.print(a[i] + " ");
+		}
+		System.out.println(c);
+	}
+}

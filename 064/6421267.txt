@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    int N; cin >> N;
+    map< int, vector< pair<int,int> >> mp;
+    rep(i,N)rep(j,N) {
+        int a; cin >> a;
+        mp[a].push_back({i + 1, j + 1});
+    }
+
+    for(auto &[key, vec] : mp) sort(vec.begin(), vec.end());
+
+    int Q; cin >> Q;
+    rep(_,Q) {
+        int T; cin >> T;
+        if(mp.count(T)) {
+            cout << mp[T][0].first << " " << mp[T][0].second << endl;
+        } else {
+            cout << -1 << endl;
+        }
+    }
+}

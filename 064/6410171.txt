@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    string s,p;
+    cin>>s>>p;
+    s+=s;
+    bool finish=true;
+    int i=0;
+    while(finish){
+        if(s.substr(i,p.size())==p) {
+            cout<< "Yes"<<endl;
+            finish=false;
+        }
+        else if(i !=s.size()-p.size()-1) i++;
+        else if(i==s.size()-p.size()-1){
+            cout<<"No"<<endl;
+            finish=false;
+        }
+    }
+}

@@ -1,0 +1,24 @@
+x,y,z = input().split()
+x,y,z = int(x),int(y),int(z)
+G = x + y
+while True:
+    if x == -1 and y == -1 and z == -1:
+        break
+    if x == -1 or y == -1:
+        print('F')
+        break
+    elif G >= 80:
+        print('A')
+        break
+    elif G >= 65:
+        print('B')
+        break
+    elif G >= 50 or z >= 50:
+        print('C')
+        break
+    elif G >=30:
+        print('D')
+        break
+    elif G < 30:
+        print('F')
+        break

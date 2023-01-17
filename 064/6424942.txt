@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+int clc(int x, int y);
+
+int main(void)
+{
+    //int  a[26];for(int i=0; i<26; i++) a[i] = 0;
+    //char bf[1250];fgets(bf, 1250, stdin);
+    //scanf("%1249[^\n]%*[^\n]", bf);
+    //scanf("%1000[^\n]%*c", s);
+    //while(scanf("%c", &c) != EOF){
+    //if(*s == '0') break;  //if(isalpha(c)){
+    int a, b;
+    scanf("%d %d", &a, &b);
+    //int a[101]; 
+    //for(int i=0; i<n; i++){ scanf("%d", &a[i]); }
+    
+    printf("%d\n", clc(a, b));
+    //printf("%.10lf\n", dc);
+    //ds = hypot(x2-x1, y2-y1);
+    //t = strcmp(tc, hc);
+    //strcpy(ss, s);strcat(ss, s);
+    //char *idx = strstr(ss, p);
+    //if(idx != NULL) puts("Yes");
+    //memcpy(ss, s, strlen(s));
+    //puts(strstr(ss, p) ? "Yes" : "No");
+	//putchar('\n');
+	return 0;
+}
+int clc(int x, int y){
+    int nl, ns;
+    if(x >= y) {
+        nl = x;
+        ns = y;
+    }else{
+        nl = y;
+        ns = x;
+    }
+    int t;
+    while(nl%ns != 0){
+        t=nl;
+        nl=ns;
+        ns=t%ns;
+    }
+    return ns;
+//    if(ns == 0){ return nl; }
+//    else{ return clc(ns, nl%ns); }
+}

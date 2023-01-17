@@ -1,0 +1,12 @@
+n = int(input())
+taro = 0
+hana = 0
+for i in range(n):
+    l = input().split()
+    if l[0].lower() == l[1].lower():
+        taro += 1; hana += 1;
+    elif l[0].lower() > l[1].lower():
+        taro += 3;
+    else:
+        hana += 3;
+print(taro,hana)

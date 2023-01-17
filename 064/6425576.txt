@@ -1,0 +1,6 @@
+from statistics import mode
+
+
+N = int(input())
+L = list(map(int,input().split()))
+print(mode(L))

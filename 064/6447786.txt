@@ -1,0 +1,23 @@
+#include <iostream>
+#include <bits/stdc++.h>
+#include <string>
+using namespace std;
+
+int main() {
+   string t;
+   int c=0;
+
+   while(cin >> t) {
+      if(c!=0) cout << " ";
+      for(int i=0; i<t.size(); i++) {
+         if(islower(t[i])) {
+            t[i] = toupper(t[i]);
+         }else if(isupper(t[i])) {
+            t[i] = tolower(t[i]);
+         }
+      }
+      cout << t;
+      c++;
+   }
+   cout << "\n";
+}

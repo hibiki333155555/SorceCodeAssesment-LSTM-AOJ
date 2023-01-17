@@ -1,0 +1,8 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int x,y; cin>>x>>y;
+    int z=__gcd(x,y);
+    cout<<x+y-z+1<<endl;
+    return(0);
+}

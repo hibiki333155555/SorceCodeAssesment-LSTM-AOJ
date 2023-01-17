@@ -1,0 +1,90 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#define MAX 100000
+#define NIL -1
+
+int n;
+
+typedef struct Node{
+  int key;
+  struct Node *next;
+}Node;
+
+Node G[MAX];
+int color[MAX], S[MAX], top_stack = 0;
+
+void insert(int i, int key){
+  Node *ptr = (Node *)malloc(sizeof(Node));
+  ptr->key = key;
+  ptr->next = G[i].next;
+  G[i].next = ptr;
+}
+
+void push(int key){
+  S[top_stack++] = key;
+}
+
+void pop(){
+  top_stack--;
+}
+
+int top(){
+  return S[top_stack - 1];
+}
+
+bool empty(){
+  return top_stack == 0;
+}
+
+void dfs(int r, int c){
+  int u;
+  Node *ptr = (Node *)malloc(sizeof(Node));
+  push(r);
+  color[r] = c;
+  while(!empty()){
+    u = top();
+    pop();
+    ptr = G[u].next;
+    while(ptr!=NULL){
+      if(color[ptr->key] == NIL){
+        color[ptr->key] = c;
+        push(ptr->key);
+      }
+      ptr = ptr->next;
+    }
+  }
+}
+
+void assignColor(){
+  int id = 1;
+  for(int i = 0; i < n; i++ ) color[i] = NIL;
+  for(int i = 0; i < n; i++ ){
+    if(color[i] == NIL) dfs(i, id++);
+  }
+}
+
+int main()
+{
+  int m, s, t, q;
+  scanf("%d %d", &n, &m);
+
+  for(int i = 0; i < n; i++ ) G[i].next = NULL;
+
+  for(int i = 0; i < m; i++ ){
+    scanf("%d %d", &s, &t);
+    insert(s, t);
+    insert(t, s);
+  }
+
+  assignColor();
+
+  scanf("%d", &q);
+  for(int i = 0; i < q; i++ ){
+    scanf("%d %d", &s, &t);
+    if(color[s] == color[t]) printf("yes\n");
+    else printf("no\n");
+  }
+
+  return 0;
+}

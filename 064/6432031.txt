@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Solve{
+    private Scanner sc = new Scanner(System.in);
+    private String ans = "";
+    private void Finish(){
+        this.sc.close();
+    }
+    private void quickReverse(int[] arr){
+        int len = arr.length;
+        if(len%2 == 0){
+            for(int i=0,l2=len/2;i<l2;i++){
+                int b = len-1 - i;
+                int t = arr[i];
+                arr[i] = arr[b];
+                arr[b] = t;
+            }
+        }
+        else{
+            len--;
+            for(int i=0,l2=len/2;i<l2;i++){
+                int b = len - i;
+                int t = arr[i];
+                arr[i] = arr[b];
+                arr[b] = t;
+            }
+        }
+    }
+    public void Do(){
+        int n = sc.nextInt();
+        int[] a = new int[n];
+        for(int i=0;i<n;i++){
+            a[i] = sc.nextInt();
+        }
+        this.quickReverse(a);
+        for(int e : a){
+            this.ans+=e+" ";
+        }
+        System.out.println( this.ans.trim() );
+        Finish();
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

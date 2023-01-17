@@ -1,0 +1,23 @@
+
+import java.util.*;
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String s = "";
+		PriorityQueue<Integer> qu = new PriorityQueue<>();
+		
+		while(!s.equals("end")) {
+			s = sc.nextLine();
+			if(s.equals("extract"))
+				System.out.println(qu.poll());
+			else{
+				int num = sc.nextInt();
+				qu.add(num);
+			}
+			
+		}
+	}
+
+}
+

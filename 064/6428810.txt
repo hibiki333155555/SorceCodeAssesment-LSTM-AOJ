@@ -1,0 +1,14 @@
+from bisect import bisect
+
+
+N = int(input())
+S = list(map(int, input().split()))
+Q = int(input())
+T = list(map(int, input().split()))
+Tset = list(set(T))
+ret = 0
+for i in range(len(Tset)):
+    id = bisect(S, Tset[i])
+    if S[id-1] == Tset[i]:
+        ret += 1
+print(ret)

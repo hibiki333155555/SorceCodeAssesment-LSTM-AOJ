@@ -1,0 +1,14 @@
+str = input()
+q = int(input())
+
+for i in range(q):
+    ins = input().split()
+    
+    if ins[0] == "print":
+        print(str[int(ins[1]):int(ins[2])+1])
+        
+    elif ins[0] == "reverse":
+        str = str[int(ins[1]):int(ins[2])+1:-1]
+        
+    elif ins[0] == "replace":
+        str[int(ins[1]):int(ins[2])+1] = ins[3]

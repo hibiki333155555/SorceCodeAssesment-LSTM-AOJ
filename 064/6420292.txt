@@ -1,0 +1,21 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	const int M = 1000;
+	int N, m = 0; cin >> N;
+	vector<vector<int>> C(M + 1, vector<int>(M + 1, 0));
+	for (int x1, y1, x2, y2; --N >= 0; ) {
+		cin >> x1 >> y1 >> x2 >> y2;
+		++C[y1][x1]; ++C[y2][x2]; --C[y1][x2]; --C[y2][x1];
+	}
+	for (int y = 0; y <= M; ++y) for (int x = 1; x <= M; ++x) C[y][x] += C[y][x - 1];
+	for (int y = 1; y <= M; ++y) for (int x = 0; x <= M; ++x) C[y][x] += C[y - 1][x];
+	for (int y = 0; y <= M; ++y) for (int x = 0; x <= M; ++x) m = max(m, C[y][x]);
+	cout << m << endl;
+	return 0;
+}
+

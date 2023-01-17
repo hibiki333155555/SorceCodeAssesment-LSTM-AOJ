@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <climits>
+#include <algorithm>
+#include <sstream>
+
+#include <functional>
+
+
+//#include <windows.h>
+//#pragma comment(lib, "winmm.lib")
+
+using namespace std;
+typedef long Int;
+
+Int N = 0;
+long long Ans = 0;
+ostringstream Oss;
+
+// 出力
+
+void output()
+{
+    //bool isON = false;
+    //for (Int i = 0; i < N; ++i) {
+    //    if (isON) cout << " ";  else isON = true;
+    //    cout << A[i];
+    //}
+    //cout << "\n";
+
+    cout << Ans << "\n";
+}
+
+// 解析
+
+void analysis()
+{
+    Ans = N / 4;
+}
+
+int main()
+{
+	cin.tie(0);						// cin高速化
+	ios::sync_with_stdio(false);	// cin高速化
+
+	cin >> N;
+
+	//long sTime = timeGetTime();	// スタート時間
+
+    // 解析
+
+    analysis();
+
+	// 出力
+
+    output();
+
+    //cout << Oss.str() << "\n";
+    //cout << "処理時間 " << (double)(timeGetTime() - sTime) / 1000 << "秒\n";
+}

@@ -1,0 +1,6 @@
+from math import*
+r = int(input())
+a = pie * r *r 
+b = 2 * pie * r
+print(f"{a:.f6} {b:.f6}")
+

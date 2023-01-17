@@ -1,0 +1,24 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main(){
+    int A,B; 
+    cin >> A >> B; 
+    int max,min;
+    if(A-B<=A+B){
+        max=A+B;
+    }
+    else{
+        max=A-B;
+    }
+    if(A-B<=A+B){
+        min=A-B;
+    }
+    else{
+        min=A+B;
+    }
+    cout << max << endl << min << endl;
+}
+

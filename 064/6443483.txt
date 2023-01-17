@@ -1,0 +1,4 @@
+x = input()
+ans = x**3
+print(f'{ans}\n')
+

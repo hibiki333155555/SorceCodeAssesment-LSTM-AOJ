@@ -1,0 +1,100 @@
+/**
+ *  author: hanyu
+**/
+#include <bits/stdc++.h>
+using namespace std;
+
+template <typename T>
+struct LazySegmentTree {
+  int n = 1, height = 0;
+  vector<T> tree, lazy;
+  using F = function<T(T, T)>;
+  const F f, g, h;
+  const T ut, ul;
+
+  T eval(int k) {
+    if (lazy[k] == ul) return tree[k];
+    if (k < n) {
+      lazy[2 * k] = h(lazy[2 * k], lazy[k]);
+      lazy[2 * k + 1] = h(lazy[2 * k + 1], lazy[k]);
+    }
+    tree[k] = g(tree[k], lazy[k]);
+    lazy[k] = ul;
+    return tree[k];
+  }
+
+  void eval_down(int k) {
+    for (int i = height; i > 0; i--) eval(k >> i);
+  }
+
+  void calc_up(int k) {
+    while (k >>= 1) tree[k] = f(eval(2 * k), eval(2 * k + 1));
+  }
+
+  LazySegmentTree(F f, F g, F h, T ut, T ul) : f(f), g(g), h(h), ut(ut), ul(ul) {}
+
+  void init(int _n) {
+    n = 1, height = 0;
+    while (n < _n) n <<= 1, height++;
+    tree.assign(2 * n, ut);
+    lazy.assign(2 * n, ul);
+  }
+
+  void init(const vector<T> &v) {
+    init((int) v.size());
+    for (int i = 0; i < (int) v.size(); i++) tree[n + i] = v[i];
+    for (int i = n - 1; i > 0; i--) tree[i] = f(tree[2 * i], tree[2 * i + 1]);
+  }
+
+  void update(int s, int t, const T &x) {
+    s += n, t += n;
+    eval_down(s), eval_down(t - 1);
+    int l = s, r = t;
+    while (l < r) {
+      if (l & 1) lazy[l] = h(lazy[l], x), l++;
+      if (r & 1) r--, lazy[r] = h(lazy[r], x);
+      l >>= 1, r >>= 1;
+    }
+    calc_up(s), calc_up(t - 1);
+  }
+
+  T query(int s, int t) {
+    s += n, t += n;
+    eval_down(s), eval_down(t - 1);
+    int l = s, r = t;
+    T lacc = ut, racc = ut;
+    while (l < r) {
+      if (l & 1) lacc = f(lacc, eval(l)), l++;
+      if (r & 1) r--, racc = f(eval(r), racc);
+      l >>= 1, r >>= 1;
+    }
+    return f(lacc, racc);
+  }
+};
+
+int main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  int n, q;
+  cin >> n >> q;
+
+  auto f = [](int a, int b) { return min(a, b); };
+  auto g = [](int a, int b) { return b; };
+  
+  LazySegmentTree<int> lst(f, g, g, (1 << 31) - 1, -1);
+  lst.init(n);
+
+  while (q--) {
+    int num, s, t;
+    cin >> num >> s >> t;
+    if (num == 0) {
+      int x;
+      cin >> x;
+      lst.update(s, t + 1, x);
+    }
+    else {
+      cout << lst.query(s, t + 1) << '\n';
+    }
+  }
+}

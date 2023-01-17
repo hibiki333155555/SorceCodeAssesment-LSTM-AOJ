@@ -1,0 +1,14 @@
+a,op,b=input().split()
+a=int(a)
+b=int(b)
+
+if op=="+":
+	num=a + b
+if op=="-":
+	num = a-b
+if op=="*":
+	num= a*b
+if op=="/":
+	num=a//b
+print(str(num))
+

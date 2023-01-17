@@ -1,0 +1,28 @@
+"""
+## Binary Tree/二分木
+"""
+n=int(input())
+PR=[0]*n
+r=set(range(n))
+for _ in [0]*n:
+    x,y,z=map(int,input().split())
+    PR[x]=[y,z]+[0]*5
+    r-={y,z}
+def f(i,p,s,d):
+    if i<0:
+        return -1
+    l,r=PR[i][:2]
+    PR[i][2:]=[p,s,(l!=-1)+(r!=-1),d,max(f(l,i,r,d+1),f(r,i,l,d+1))+1]
+    return PR[i][-1]
+f(r.pop(),-1,-1,0)
+
+def type(i):
+    if not PR[i][5]:
+        return 'root'
+    elif not PR[i][4]:
+        return 'leaf'
+    else:
+        return 'internal node'
+
+for i in range(n):
+    print(f'node {i}: parent = {PR[i][2]}, sibling = {PR[i][3]}, degree = {PR[i][4]}, depth = {PR[i][5]}, height = {PR[i][6]}, {type(i)}')

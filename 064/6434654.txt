@@ -1,0 +1,42 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def partition(a_list, p, r):
+    x = a_list[r]
+    i = p - 1
+    for j in range(p, r):
+        if a_list[j] <= x:
+            i += 1
+            a_list[i], a_list[j] = a_list[j], a_list[i]
+
+    i += 1
+    a_list[i], a_list[r] = a_list[r], a_list[i]
+    return i
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    a_list = list(map(int, f.readline().split()))
+
+    i = partition(a_list, 0, n - 1)
+
+    result = [str(a) for a in a_list]
+    result[i] = f'[{a_list[i]}]'
+    print(' '.join(result))
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+using lint = long long;
+template <typename T> bool chmin(T &m, const T q) { return m > q ? (m = q, true) : false; }
+
+constexpr int D = 60;
+
+__int128 lift(lint vec) {
+    return __int128(vec) << D;
+}
+
+int main() {
+    cin.tie(nullptr), ios::sync_with_stdio(false);
+    int K;
+    cin >> K;
+    vector<int> N(K);
+    for (auto &n : N) cin >> n;
+
+    vector<vector<lint>> B;
+    for (auto n : N) {
+        B.push_back({});
+        while (n--) {
+            lint a;
+            cin >> a;
+            for (auto b : B.back()) chmin(a, a ^ b);
+            if (a) B.back().push_back(a);
+        }
+    }
+
+    unsigned long long ret = 0;
+
+    vector<vector<lint>> basis(1 << K);
+    for (int d = 0; d < D; ++d) basis.front().push_back(1LL << d);
+
+    for (int S = 1; S < 1 << K; ++S) {
+        int d = __builtin_ctz(S), Sprv = S - (1 << d);
+
+        vector<__int128> btmp;
+        for (auto b : basis[Sprv]) btmp.push_back(lift(b));
+
+        for (__int128 b : B[d]) {
+            b ^= lift(b);
+            for (auto x : btmp) chmin(b, b ^ x);
+            if (b != 0) btmp.push_back(b);
+        }
+
+        for (auto x : btmp) {
+            if (x < 1LL << D) basis[S].push_back(x);
+        }
+        unsigned long long tmp = 1ULL << basis[S].size();
+        if (__builtin_parity(S))
+            ret += tmp;
+        else
+            ret -= tmp;
+    }
+    cout << ret << '\n';
+}
+

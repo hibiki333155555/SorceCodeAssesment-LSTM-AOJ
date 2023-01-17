@@ -1,0 +1,9 @@
+#include<stdio.h>
+int main(){
+	float r,c,a;
+	scanf("%f",&r);
+	c=2*(3.1416)*r;
+	a=(3.1416)*r*r;
+	printf("%f %f\n",a,c);//munawarshafi67
+	return 0;
+}

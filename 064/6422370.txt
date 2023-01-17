@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+#define rep(i,n) for(int i = 0; i < (n); i++)
+using namespace std;
+typedef long long ll;
+
+vector<int> permmul(vector<int> &a, vector<int> &b){
+    vector<int> res(a.size());
+    for(int i = 0; i < (int)a.size(); i++){
+        res[i] = b[a[i]];
+    }
+    return res;
+}
+
+vector<int> permpow(vector<int> s, ll n){
+    vector<int> res(s.size());
+    iota(res.begin(), res.end(), 0);
+    while(n){
+        if(n & 1) res = permmul(res, s);
+        s = permmul(s, s);
+        n >>= 1;
+    }
+    return res;
+}
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(0);
+    
+    int N; cin >> N;
+    vector<int> A(N);
+    rep(i,N) cin >> A[i];
+
+    stack< vector< int > > st;
+    vector<int> p(N);
+    iota(p.begin(), p.end(), 0);
+    st.push(p);
+    
+    int Q; cin >> Q;
+    rep(_,Q) {
+        int t; cin >> t;
+        switch(t) {
+            case 1: {
+                int x,y; cin >> x >> y; x--; y--;
+                vector<int> np = st.top();
+                swap(np[x], np[y]);
+                st.push(np);
+            } break;
+
+            case 2: {
+                st.pop();
+            } break;
+
+            case 3: {
+                int k; cin >> k;
+                vector<int> np = st.top();
+                np = permpow(np, k);
+                vector<int> nA(N);
+                rep(i,N) nA[i] = A[np[i]];
+                A = nA;
+            } break;
+        }
+    }
+
+    rep(i,N) cout << A[i] << " \n"[i == N - 1];
+}

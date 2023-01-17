@@ -1,0 +1,14 @@
+n = int(input())
+cards = [[False for i in range(13)] for j in range(4)]
+pattern = ["S", "H", "C", "D"]
+
+for i in range(n):
+    char, rank = map(str, input().split())
+    cards[pattern.index(char)][int(rank) - 1] = True
+
+for k in range(4):
+    for m in range(13):
+        if cards[k][m] == False:
+            print(cards[k][m])
+    
+    

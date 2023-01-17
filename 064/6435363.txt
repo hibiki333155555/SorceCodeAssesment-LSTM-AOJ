@@ -1,0 +1,36 @@
+import sys
+from itertools import repeat
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    f.readline()
+    a_list = list(map(int, f.readline().split()))
+    k = 10_001
+    c_list = [0] * k
+
+    for a in a_list:
+        c_list[a] += 1
+
+    b_list = []
+    for i, c in enumerate(c_list):
+        if c > 0:
+            b_list += repeat(str(i), c)
+
+    print(' '.join(b_list))
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

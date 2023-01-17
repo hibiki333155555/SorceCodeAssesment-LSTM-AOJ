@@ -1,0 +1,60 @@
+#include <iostream>
+#include <stack>
+#include <vector>
+#define N 100000
+
+using namespace std;
+vector<vector<int> > G(N);
+vector<int> id_list(N, 0);
+
+void dfs(int start, int id) {
+  stack<int> S;
+  S.push(start);
+  id_list[start] = id;
+  while (!S.empty()) {
+    int top = S.top();
+    S.pop();
+    for (int i = 0; i < G[top].size(); i++) {
+      int next_v = G[top][i];
+      if (id_list[next_v] == 0) {
+        id_list[next_v] = id;
+        S.push(next_v);
+      }
+    }
+  }
+}
+
+void print(int x, int y) {
+  if (id_list[x] == id_list[y]) {
+    cout << "yes" << endl;
+  } else {
+    cout << "no" << endl;
+  }
+}
+int main(void) {
+  int n, m;
+  cin >> n >> m;
+
+  int a, b;
+  for (int i = 0; i < m; i++) {
+    cin >> a >> b;
+    G[a].push_back(b);
+    G[b].push_back(a);
+  }
+
+  int id = 0;
+  for (int i = 0; i < n; i++) {
+    if (id_list[i] == 0) {
+      dfs(i, ++id);
+    }
+  }
+
+  int q;
+  cin >> q;
+  int x, y;
+  for (int i = 0; i < q; i++) {
+    cin >> x >> y;
+    print(x, y);
+  }
+}
+

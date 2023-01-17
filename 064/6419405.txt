@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+
+using std::cout; using std::cin;
+using std::endl;
+
+const int length = 1200;
+
+int main()
+{
+    string buff;
+    cin >> buff;
+    
+    for (char& s : buff) {
+        if ('A' <= s && s <= 'Z')
+            s += 0x20;
+        else if ('a' <= s && s <= 'z')
+            s -= 0x20;
+    }
+    
+    cout << buff << endl;
+    return 0;
+}

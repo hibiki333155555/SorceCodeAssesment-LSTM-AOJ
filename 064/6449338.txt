@@ -1,0 +1,31 @@
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <complex>
+
+using namespace std;
+
+complex<double> in() {double x, y; cin >> x >> y; return {x, y};}
+
+int main()
+{
+	int n; cin >> n;
+	vector<complex<double>> P(n);
+	for (auto& p : P) p = in();
+	int q; cin >> q;
+	for (; q > 0; --q) {
+		auto p1 = in(), p2 = in() - p1; p2 = abs(p2) / p2;
+		auto PP = P;
+		for (auto& pp : PP) pp = (pp - p1) * p2;
+		double a = 0;
+		for (int i = 0, j = 1; i < n; ++i, j = (j + 1) % n) {
+			auto dp = PP[i] - PP[j];
+			auto pi = max(PP[i].imag(), 0.), pj = max(PP[j].imag(), 0.);
+			auto dy = dp.imag() == 0 ? 1 : (pi - pj) / dp.imag();
+			a += (pi + pj) * dp.real() * dy;
+		}
+		cout << fixed << setprecision(8) << a * 0.5 << endl;
+	}
+	return 0;
+}
+

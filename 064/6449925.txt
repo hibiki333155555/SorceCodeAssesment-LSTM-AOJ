@@ -1,0 +1,15 @@
+N,M=map(int,input().split())
+A=list(map(int,input().split()))
+DP=[[0]*(N+2) for i in range(M+1)]
+mod=998244353
+DP[0][0]=1
+for i in range(M):
+  for j in range(N+1):
+    DP[i+1][j]+=DP[i][j]
+    DP[i+1][min(j+A[i]+1,N+1)]-=DP[i][j]
+  for j in range(N+1):
+    DP[i+1][j+1]+=DP[i+1][j]
+    DP[i+1][j]%=mod
+for i in range(1,N+1):
+  DP[M][N]=DP[M][N]*i%mod
+print(DP[M][N])

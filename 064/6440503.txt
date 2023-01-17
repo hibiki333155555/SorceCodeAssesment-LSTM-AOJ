@@ -1,0 +1,12 @@
+X = int(input())
+Y = int(input())
+Z = int(input())
+
+x = X * 60
+y = Y * 60
+z = Z * 60
+
+if (x + y) < (z + 30):
+    print('1')
+else:
+    print('0')

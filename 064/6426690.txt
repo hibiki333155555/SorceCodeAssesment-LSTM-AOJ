@@ -1,0 +1,12 @@
+f = input().split()
+s = []
+for i in f:
+    if i == "+":
+        s.append(int(s.pop()) + int(s.pop()))
+    elif i == "-":
+        s.append(-int(s.pop()) + int(s.pop()))
+    elif i == "*":
+        s.append(int(s.pop()) * int(s.pop()))
+    else:
+        s.append(int(i))
+print(s[0])

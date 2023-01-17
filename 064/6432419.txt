@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define rep(i, n) for(int i = 0; i < (n); i++)
+
+int dp[105][10005];
+int main(){
+    //1.Input
+    int n, w;
+    cin >> n >> w;
+    vector<int> value(n), weight(n);
+    rep(i,n) cin >> value[i] >> weight[i];
+    //2.Process
+    rep(i,w+1) dp[0][i] = 0;
+    rep(i,n){
+        rep(j, w+1){
+            if(j >= weight[i]) dp[i+1][j] = max(dp[i][j-weight[i]] + value[i], dp[i][j]);
+            else dp[i+1][j] = dp[i][j];
+        }
+    }
+    //3.Output
+    cout << dp[n][w] << endl;
+}

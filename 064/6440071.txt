@@ -1,0 +1,20 @@
+#include<iostream>
+using namespace std;
+int main(){
+    char a;
+    int b;
+    int n;
+    bool cards[4][13];
+    cin >> n;
+    for(int i=0;i<n;i++){
+        cin >> a >> b;
+        if(a=='S')cards[0][b]=true;
+        if(a=='H')cards[1][b]=true;
+        if(a=='C')cards[2][b]=true;
+        if(a=='D')cards[3][b]=true;
+    }
+    for(int i=0;i<52;i++){
+        if(cards[0][b]!=true) cout<<cards[0][b]<<endl;
+        
+    }
+}

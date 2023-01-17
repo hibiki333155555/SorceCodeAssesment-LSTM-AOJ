@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define rep(i, n) for(int i = 0; i < (n); i++)
+#define coutf(f) cout << fixed << setprecision(f)
+#define all(v) (v).begin(), (v).end()
+#define pb push_back
+using Graph = vector<vector<int>>;
+
+int main(){
+    //1.Input    
+    vector<bool> cnt(30, false);
+    //2.Process
+    rep(i,28){
+        int a;
+        cin >> a;
+        cnt[a-1] = true;
+    }
+    //3.Output
+    rep(i,30){
+        if(!cnt[i]) cout << i+1 << endl;
+    }
+}

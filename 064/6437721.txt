@@ -1,0 +1,190 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+using Cell = tuple<double, double, double, double>;
+
+// UnionFindで素集合を管理するクラス
+// 同一グループ判定、結合をおよそO(log N)（実際にはずっと速く定数時間に近い）でできる
+// ノードIDは1-indexed
+// @ref https://www.slideshare.net/chokudai/union-find-49066733/1
+class UnionFind {
+  public:
+   UnionFind(const size_t N);
+
+   // node_1とnode_2が所属する集合を結合する(Union by size)
+   // 計算量: O(almost 1)
+   void Unite(size_t node_1, size_t node_2);
+
+   // node_1とnode_2が同じ集合に入っているか
+   // 計算量: O(almost 1)
+   bool IsSameGroup(size_t node_1, size_t node_2);
+
+   // nodeが所属する集合のサイズを返す
+   // 計算量: O(almost 1)
+   size_t size(size_t node);
+
+   // 各グループのサイズを返す
+   // @param group_size_list: (グループのサイズ、グループの親ノード)ペアのリスト
+   // 計算量: O(N)
+   void GroupSize(vector<pair<long long, size_t>>* group_size_list);
+
+  private:
+   // nodeの親のnode_idを返す
+   size_t root(size_t node);
+
+   // parent_node_id_[i]: 親ノードのノードID, rootの場合はparent_node_id_[i] ==
+   // iになる
+   vector<size_t> parent_node_id_;
+
+   // tree_size_[i]: ルートノードiに含まれる集合のサイズ
+   vector<size_t> tree_size_;
+};
+
+UnionFind::UnionFind(const size_t N)
+    : parent_node_id_(N + 1), tree_size_(N + 1, 1) {
+   // 全ノードをrootで初期化する
+   for (size_t i = 0; i <= N; i++) {
+      parent_node_id_[i] = i;
+   }
+}
+
+size_t UnionFind::root(size_t node) {
+   // ルートノード以外のノードを記録し直接、親ノードをルートノードにつなぎ変える(経路圧縮)
+   vector<size_t> internal_nodes;
+
+   while (parent_node_id_[node] != node) {
+      internal_nodes.push_back(node);
+      node = parent_node_id_[node];
+   }
+
+   for (auto n : internal_nodes) {
+      parent_node_id_[n] = node;
+   }
+
+   return node;
+}
+
+bool UnionFind::IsSameGroup(size_t node_1, size_t node_2) {
+   auto parent_1 = root(node_1);
+   auto parent_2 = root(node_2);
+
+   return parent_1 == parent_2;
+}
+
+void UnionFind::Unite(size_t node_1, size_t node_2) {
+   if (IsSameGroup(node_1, node_2)) {
+      // すでに同じ木の場合は何もしない
+      return;
+   }
+
+   // サイズの小さい方を大きいにつなぐ
+   auto size_1 = size(node_1);
+   auto size_2 = size(node_2);
+
+   size_t union_from = node_1, union_to = node_2;
+
+   if (size_1 > size_2) {
+      union_from = node_2;
+      union_to = node_1;
+   }
+   auto parent_from = root(union_from);
+   auto parent_to = root(union_to);
+
+   parent_node_id_[parent_from] = parent_to;
+   tree_size_[parent_to] = tree_size_[parent_to] + tree_size_[parent_from];
+}
+
+size_t UnionFind::size(size_t node) {
+   auto parent = root(node);
+   return tree_size_[parent];
+}
+
+void UnionFind::GroupSize(vector<pair<long long, size_t>>* group_size_list) {
+   group_size_list->clear();
+
+   for (size_t i = 1; i < parent_node_id_.size(); i++) {
+      if (parent_node_id_[i] != i) {
+         continue;
+      }
+
+      group_size_list->emplace_back(size(i), i);
+   }
+}
+
+bool is_connected(const Cell& c1, const Cell& c2) {
+   const auto [x1, y1, z1, r1] = c1;
+   const auto [x2, y2, z2, r2] = c2;
+
+   double sq_dist = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2);
+
+   return sq_dist <= (r1 + r2) * (r1 + r2);
+}
+
+double calc_cost(const Cell& c1, const Cell& c2) {
+   const auto [x1, y1, z1, r1] = c1;
+   const auto [x2, y2, z2, r2] = c2;
+
+   double dist = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
+
+   return dist - r1 - r2;
+}
+
+using Edge = pair<double, pair<int, int>>;
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   while (true) {
+      int n;
+      cin >> n;
+
+      vector<Cell> cell_list;
+      cell_list.emplace_back(0.0, 0.0, 0.0, 0.0);  // dummy
+
+      for (int i = 0; i < n; i++) {
+         double x, y, z, r;
+         cin >> x >> y >> z >> r;
+
+         cell_list.emplace_back(x, y, z, r);
+      }
+
+      UnionFind uf(n);
+      priority_queue<Edge, vector<Edge>, greater<Edge>> edge_list;
+
+      for (int i = 1; i <= n; i++) {
+         for (int j = i + 1; j <= n; j++) {
+            auto& cell1 = cell_list[i];
+            auto& cell2 = cell_list[j];
+
+            if (is_connected(cell1, cell2)) {
+               uf.Unite(i, j);
+            } else {
+               double cost = calc_cost(cell1, cell2);
+               edge_list.emplace(cost, make_pair(i, j));
+            }
+         }
+      }
+
+      double total_cost = 0;
+
+      while (uf.size(1) != n) {
+         auto [cost, edge] = edge_list.top();
+         auto [i, j] = edge;
+         edge_list.pop();
+
+         if (uf.IsSameGroup(i, j)) {
+            continue;
+         }
+
+         total_cost += cost;
+         uf.Unite(i, j);
+      }
+
+      cout << total_cost << endl;
+   }
+
+   return 0;
+}
+

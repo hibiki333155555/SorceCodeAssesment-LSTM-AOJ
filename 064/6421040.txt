@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll,ll> PP;
+//#define MOD 1000000007
+#define MOD 998244353
+#define INF 2305843009213693951
+//#define INF 810114514
+#define PI 3.141592653589
+#define setdouble setprecision
+#define REP(i,n) for(ll i=0;i<(n);++i)
+#define OREP(i,n) for(ll i=1;i<=(n);++i)
+#define RREP(i,n) for(ll i=(n)-1;i>=0;--i)
+#define ALL(v) (v).begin(), (v).end()
+#define GOODBYE do { cout << "-1" << endl; return 0; } while (false)
+#define MM <<" "<<
+#define Endl endl
+#define debug true
+#define debug2 false
+
+
+
+int main(void){
+    
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+
+    string S;
+    cin >> S;
+    ll N = S.size();
+
+    string T;
+    REP(i,N){
+        T.push_back(S[i]);
+        if(S[i]==')'){
+            string R;
+            while(T.back()!='('){
+                R.push_back(T.back());
+                T.pop_back();
+            }
+            R.push_back(T.back());
+            T.pop_back();
+            R.push_back(T.back());
+            T.pop_back();
+            reverse(ALL(R));
+
+
+            ll v = R[0]-'0';
+            for(int j=2;j+1<(int)R.size();j++){
+                ll a = (R[j]-'a');
+                a = (a+v)%26;
+                T.push_back('a'+a);
+            }
+        }
+    }
+
+    cout << T << endl;
+
+    return 0;
+}
+

@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+
+int main(){
+	cin.tie(nullptr);
+	ios::sync_with_stdio(false);
+	int n; cin >> n;
+	string s; cin >> s;
+	sort(s.begin(), s.end(),[](auto i,auto j){
+		if(i=='J'){
+			if(j=='O')return true;
+			else if(j=='I')return true;
+			else return i<j;
+		}
+		else if(i=='O'){
+			if(j=='J')return false;
+			else if(j=='I')return true;
+			else return i<j;
+		}
+		else{
+			if(i==j)return i<j;
+			else return false;
+		}
+	});
+	cout << s << endl;
+}

@@ -1,0 +1,17 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+   while(true) {
+      int a, b, val;
+      char ope;
+      cin >> a >> ope >> b;
+
+      if(ope == '+') val = a + b;
+      else if(ope == '-') val = a - b;
+      else if(ope == '*') val = a * b;
+      else if(ope == '/') val = a / b;
+      else break;
+      cout << val << "\n";
+   }
+}

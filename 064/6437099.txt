@@ -1,0 +1,28 @@
+#include <iostream>
+#include <stdio.h>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+int main(void){
+    int n;
+    int i;
+    int x;
+
+    i = 1;
+    cin >> n;
+    while (i <= n) {
+        x = i;
+        if ( x % 3 == 0) {
+            cout << " " << i; 
+        } else {
+            while (x /= 10) {
+                if (x % 10 == 3) {
+                    cout << " " << i;
+                }
+            }
+        } 
+        if ( i <= n ) i++;
+    }
+    return 0;
+}

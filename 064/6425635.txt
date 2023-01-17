@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+#ifdef MY_DEBUG
+  #include "dprint.cpp"
+  # define dprint(a, ...);                 \
+      do {                                 \
+          printf("line : %d, func : %s\n", \
+                __LINE__, __func__);       \
+          dprint(#a,a,##__VA_ARGS__ );     \
+      } while (0)
+#else
+  #define dprint(a,...) 
+#endif
+using namespace std;
+
+int main() {
+  int N,W;
+  cin >>N>>W;
+  vector<vector<int>> vec(N+1, vector<int>(2));
+  for (int i = 1; i <= N; i++){
+    for(int j=0;j<2;j++){
+      cin >> vec[i][j];
+    }
+  }
+
+vector<vector<int>> memo (N+1,vector<int>(W+1,0));
+for (int i = 1; i <= N; i++)
+{
+      for (int j = 0; j <= W; j++)
+    {
+      if(j-vec[i][1]>=0){
+ memo[0][j]=max(memo[0][j],memo[0][j-vec[i][1]]+vec[i][0]);
+     
+      }
+       
+    } 
+}
+int ret=0;
+for (int i = 0; i <= W; i++)
+{
+  ret =max(ret,memo[0][i]);
+}
+
+cout << ret << endl;
+return 0;
+}

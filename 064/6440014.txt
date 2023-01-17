@@ -1,0 +1,129 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+struct P
+{
+    double x, y;
+};
+
+P p0, p1, p2, p3;
+
+double cp2d(P a, P b, P c, P d)
+{
+    return (b.x - a.x) * (d.y - c.y) - (b.y - a.y) * (d.x - c.x);
+}
+
+void cal()
+{
+    if ((p1.y - p0.y) * (p3.x - p2.x) == (p3.y - p2.y) * (p1.x - p0.x))
+    {
+        if (p0.x == p1.x)
+        {
+            if (p0.x != p2.x)
+            {
+                cout << 0 << endl;
+            }
+            else
+            {
+                int t;
+                t = min(p0.y, p1.y);
+                p1.y = p0.y + p1.y - t;
+                p0.y = t;
+                t = min(p2.y, p3.y);
+                p3.y = p2.y + p3.y - t;
+                p2.y = t;
+                if (p0.y <= p2.y && p2.y <= p1.y)
+                {
+                    cout << 1 << endl;
+                }
+                else
+                {
+                    if (p2.y > p1.y)
+                    {
+                        cout << 0 << endl;
+                    }
+                    else
+                    {
+                        if (p3.y >= p0.y)
+                            cout << 1 << endl;
+                        else
+                            cout << 0 << endl;
+                    }
+
+                }
+            }
+        }
+        else
+		{
+            if ((p3.x-p1.x)/(p2.x-p1.x)!=(p3.y-p1.y)/(p2.y-p1.y))
+            {
+                cout << 0 << endl;
+                return;
+            }
+            int t;
+            t = min(p0.x, p1.x);
+            p1.x = p0.x + p1.x - t;
+            p0.x = t;
+            t = min(p2.x, p3.x);
+            p3.x = p2.x + p3.x - t;
+            p2.x = t;
+            if (p0.x <= p2.x && p2.x <= p1.x)
+            {
+                cout << 1 << endl;
+            }
+            else
+            {
+                if (p2.x > p1.x)
+                {
+                    cout << 0 << endl;
+                }
+                else
+                {
+                    if (p3.x >= p0.x)
+                        cout << 1 << endl;
+                    else
+                        cout << 0 << endl;
+                }
+
+            }
+        }
+    }
+    else
+    {
+        double a, b, c, d;
+        P p5 = { p2.x + p1.x - p3.x, p2.y + p1.y - p3.y };
+        P p4 = { p2.x + p0.x - p3.x, p2.y + p0.y - p3.y };
+        a = cp2d(p3, p2, p2, p0);
+        b = cp2d(p1, p0, p2, p1);
+        c = cp2d(p2, p3, p2, p5);
+        d = cp2d(p0, p1, p2, p4);
+
+        if (a >= 0 && b >= 0 && c >= 0 && d >= 0 || a <= 0 && b <= 0 && c <= 0 && d <= 0)
+        {
+            cout << 1 << endl;
+        }
+        else
+        {
+            cout << 0 << endl;
+        }
+    }
+}
+
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    int q;
+    cin >> q;
+    while (q--)
+    {
+        cin >> p0.x >> p0.y >> p1.x >> p1.y >> p2.x >> p2.y >> p3.x >> p3.y;
+        cal();
+    }
+    return 0;
+}
+

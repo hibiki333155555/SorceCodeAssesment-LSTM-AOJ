@@ -1,0 +1,24 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+int main()
+{
+	int N, K; cin >> N >> K;
+	vector<int> A(N);
+	int k = N + 1;
+	unordered_map<int, int> S;
+	for (int i = 0, j = 0; i < N; ++i) {
+		cin >> A[i];
+		if (A[i] <= K) ++S[A[i]];
+		if ((int) S.size() < K) continue;
+		for (; (int) S.size() >= K; ++j) if (A[j] <= K && --S[A[j]] == 0) S.erase(A[j]);
+		k = min(k, i - j + 2);
+	}
+	if (k == N + 1) k = 0;
+	cout << k << endl;
+	return 0;
+}
+

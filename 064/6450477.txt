@@ -1,0 +1,149 @@
+import sys
+from operator import itemgetter
+from collections import defaultdict, deque
+import heapq
+from heapq import heapify, heappop, _heapify_max, heappush
+from bisect import bisect_left, bisect_right
+import math
+import itertools
+import copy
+
+stdin=sys.stdin
+sys.setrecursionlimit(10 ** 8)
+## import pypyjit
+## pypyjit.set_param('max_unroll_recursion=-1')
+
+ip=lambda: int(sp())
+fp=lambda: float(sp())
+lp=lambda:list(map(int,stdin.readline().split()))
+sp=lambda:stdin.readline().rstrip()
+Yp=lambda:print('Yes')
+Np=lambda:print('No')
+inf = 1 << 60
+inf = float('inf')
+mod = 10 ** 9 + 7
+mod = 998244353
+eps = 1e-9
+sortkey1 = itemgetter(0)
+sortkey2 = lambda x: (x[0], x[1])
+
+## _heapify_maxしてから
+def _heappush_max(heap, item):
+    heap.append(item)
+    heapq._siftdown_max(heap, 0, len(heap)-1)
+def _heappop_max(heap):
+    lastelt = heap.pop()
+    if heap:
+        returnitem = heap[0]
+        heap[0] = lastelt
+        heapq._siftup_max(heap, 0)
+        return returnitem
+    return lastelt
+def factorization(n):
+    arr = []
+    temp = n
+
+    for i in range(2, int(-(-n**0.5//1))+1):
+        if temp%i==0:
+            cnt=0
+            while temp%i==0:
+                cnt+=1
+                temp //= i
+            arr.append([i, cnt])
+    if temp!=1:
+        arr.append([temp, 1])
+
+    if arr==[]:
+        arr.append([n, 1])
+
+    return arr
+###############################################################
+
+N, M = lp()
+adj = [[] for _ in range(N)]
+dic = defaultdict(int)
+dic[2] = 0
+dic[3] = 4
+dic[5] = 6
+dic[7] = 7
+dic[11] = 8
+dic[13] = 9
+dic[17] = 10
+dic[19] = 11
+
+dic1 = defaultdict(int)
+
+dic1[6] = 5
+dic1[7] = 7
+dic1[8] = 11
+dic1[9] = 13
+dic1[10] = 17
+dic1[11] = 19
+for _ in range(M):
+    a, b, c = lp()
+    a -= 1; b -= 1
+    res = factorization(c)
+    now = 0
+    if c == 1:
+        now = 0
+    else:
+        for x, y in res:
+            if x == 2:
+                for i in range(0, y):
+                    now ^= 1 << i
+            elif x == 3:
+                for i in range(4, 4 + y):
+                    now ^= 1 << i
+            else:
+                now ^= 1 << (dic[x])
+
+    adj[a].append((b, now))
+
+q = deque([(0 ,0)])
+dp = [set() for _ in range(N)]
+dp[0].add(0)
+while q:
+    now, c = q.popleft()
+    for nex, cost in adj[now]:
+        nex_cost = c | cost
+        if not nex_cost in dp[nex]:
+            dp[nex].add(nex_cost)
+            q.append((nex, nex_cost))
+
+def f(x):
+    l = x.bit_length()
+    t = 1
+    for i in range(l):
+        if 0 <= i <= 3:
+            if (x >> i) & 1:
+                t *= 2
+        elif 4 <= i <= 5:
+            if (x >> i) & 1:
+                t *= 3
+        else:
+            if (x >> i) & 1:
+                t *= dic1[i]
+    return t
+
+
+if not dp[-1]:
+    ans = 'IMPOSSIBLE' 
+    print(ans)
+else:
+    x = inf
+    y = -inf
+    for t in dp[-1]:
+        now = f(t)
+        x = min(x, now)
+        y = max(y, now)
+    print(x, y)
+
+
+
+
+
+
+
+
+
+exit()

@@ -1,0 +1,374 @@
+#include <iostream> // cout, endl, cin
+#include <string> // string, to_string, stoi
+#include <vector> // vector
+#include <algorithm> // min, max, swap, sort, reverse, lower_bound, upper_bound
+#include <utility> // pair, make_pair
+#include <tuple> // tuple, make_tuple
+#include <cstdint> // int64_t, int*_t
+#include <cstdio> // printf
+#include <map> // map
+#include <queue> // queue, priority_queue
+#include <set> // set
+#include <stack> // stack
+#include <deque> // deque
+#include <unordered_map> // unordered_map
+#include <unordered_set> // unordered_set
+#include <bitset> // bitset
+#include <cctype> // isupper, islower, isdigit, toupper, tolower
+#include<math.h>
+#include <iomanip>
+using namespace std;
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+#define repi(i, a, b) for (int i = (int)(a); i < (int)(b); i++)
+using namespace std;
+typedef long long ll;
+
+
+
+
+//const long long mod=1000000007;
+//const long long mod2=998244353;
+using ll=long long;
+
+const ll inf=1e18+1;
+using P= pair<ll, ll>;
+
+const int MAX = 10000;
+// 今回採用する大きい素数
+const int MOD = 1e9+7;
+
+// メモを保管する場所
+ll fact[MAX], inv_fact[MAX], inv[MAX];
+
+// メモを計算する
+void init() {
+    // 初期値設定と1はじまりインデックスに直す
+    fact[0] = 1;
+    fact[1] = 1;
+    inv[0] = 1;
+    inv[1] = 1;
+    inv_fact[0] = 1;
+    inv_fact[1] = 1;
+    // メモの計算
+    repi(i, 2, MAX){
+        // 階乗
+        fact[i] = fact[i - 1] * i % MOD;
+        // 逆元
+        inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;
+        // 逆元の階乗
+        inv_fact[i] = inv_fact[i - 1] * inv[i] % MOD;
+    }
+}
+
+// 二項係数の実体
+ll nCk(int n, int k) {
+    ll x = fact[n]; // n!の計算
+    ll y = inv_fact[n-k]; // (n-k)!の計算
+    ll z = inv_fact[k]; // k!の計算
+    if (n < k) return 0; // 例外処理
+    if (n < 0 || k < 0) return 0; // 例外処理
+    return x * ((y * z) % MOD) % MOD; //二項係数の計算
+}
+
+
+ll pow_pow(ll x,ll n,ll mod){
+    if(n==0) return 1;
+    x%=mod;
+   
+    ll res=pow_pow(x*x%mod,n/2,mod);
+    if(n&1)res=res*x%mod;
+    return res;
+}
+
+
+
+int extgcd(int a,int b,int &x,int &y){
+  int d=a;
+  if(b!=0){
+    d=extgcd(b,a%b,y,x);
+    y-=(a/b)*x;
+  }else{
+    x=1;y=0;
+  }
+  return d;
+}
+int mod_inverse(int a,int m){
+  int x,y;
+  extgcd(a,m,x,y);
+  return (m+x%m)%m;
+}
+
+struct UnionFind {
+    vector<int> par, siz;
+
+    UnionFind(int n) : par(n, -1) , siz(n, 1) { }
+
+    // 根を求める
+    int root(int x) {
+        if (par[x] == -1) return x;
+        else return par[x] = root(par[x]);
+    }
+
+    // x と y が同じグループに属するかどうか (根が一致するかどうか)
+    bool issame(int x, int y) {
+        return root(x) == root(y);
+    }
+
+    // x を含むグループと y を含むグループとを併合する
+    bool unite(int x, int y) {
+        x = root(x), y = root(y);
+        if (x == y) return false; 
+        if (siz[x] < siz[y]) swap(x, y);
+        par[y] = x;
+        siz[x] += siz[y];
+        return true;
+    }
+
+    // x を含むグループのサイズ
+    int size(int x) {
+        return siz[root(x)];
+    }
+};
+  
+  //min(x,y)が0以下の場合はmax(x,y)が返される
+//ユークリッドの互除法を元に実装
+ll gcd(ll x,ll y){
+    if(y==0)return x;
+    return gcd(y,x%y);
+}
+
+//オーバフローしないようにかける順番を気を付ける
+ll lcm(ll x,ll y){
+    return ll(x/gcd(x,y))*y;
+}
+
+
+
+
+template<class T> bool chmin(T& a, T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    else return false;
+}
+template<class T> bool chmax(T& a, T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    else return false;
+}
+
+//using Graph1=vector<vector<Edge> >;
+//using Graph=vector<vector<int> >;
+
+// auto mod int
+// https://youtu.be/L8grWxBlIZ4?t=9858
+// https://youtu.be/ERZuLAxZffQ?t=4807 : optimize
+// https://youtu.be/8uowVvQ_-Mo?t=1329 : division
+const ll mod =998244353;
+struct mint {
+  ll x; // typedef long long ll;
+  mint(ll x=0):x((x%mod+mod)%mod){}
+  mint operator-() const { return mint(-x);}
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) { (x *= a.x) %= mod; return *this;}
+  mint operator+(const mint a) const { return mint(*this) += a;}
+  mint operator-(const mint a) const { return mint(*this) -= a;}
+  mint operator*(const mint a) const { return mint(*this) *= a;}
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+ 
+  // for prime mod
+  mint inv() const { return pow(mod-2);}
+  mint& operator/=(const mint a) { return *this *= a.inv();}
+  mint operator/(const mint a) const { return mint(*this) /= a;}
+};
+istream& operator>>(istream& is, const mint& a) { return is >> a.x;}
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
+// combination mod prime
+// https://www.youtube.com/watch?v=8uowVvQ_-Mo&feature=youtu.be&t=1619
+struct combination {
+  vector<mint> fact, ifact;
+  combination(int n):fact(n+1),ifact(n+1) {
+    //assert(n < mod);
+    fact[0] = 1;
+    for (int i = 1; i <= n; ++i) fact[i] = fact[i-1]*i;
+    ifact[n] = fact[n].inv();
+    for (int i = n; i >= 1; --i) ifact[i-1] = ifact[i]*i;
+  }
+  mint operator()(int n, int k) {
+    if (k < 0 || k > n) return 0;
+    return fact[n]*ifact[k]*ifact[n-k];
+  }
+  mint p(int n, int k) {
+    return fact[n]*ifact[n-k];
+  }
+} c(2000005);
+ 
+
+
+
+//const ll INF=1e18;
+
+
+class segment_tree {
+private:
+	int sz;
+	std::vector<int> seg;
+	std::vector<int> lazy;
+	void push(int k) {
+		if (k < sz) {
+			lazy[k * 2] = max(lazy[k * 2], lazy[k]);
+			lazy[k * 2 + 1] = max(lazy[k * 2 + 1], lazy[k]);
+		}
+		seg[k] = max(seg[k], lazy[k]);
+		lazy[k] = 0;
+	}
+	void update(int a, int b, int x, int k, int l, int r) {
+		push(k);
+		if (r <= a || b <= l) return;
+		if (a <= l && r <= b) {
+			lazy[k] = x;
+			push(k);
+			return;
+		}
+		update(a, b, x, k * 2, l, (l + r) >> 1);
+		update(a, b, x, k * 2 + 1, (l + r) >> 1, r);
+		seg[k] = max(seg[k * 2], seg[k * 2 + 1]);
+	}
+	int range_max(int a, int b, int k, int l, int r) {
+		push(k);
+		if (r <= a || b <= l) return 0;
+		if (a <= l && r <= b) return seg[k];
+		int lc = range_max(a, b, k * 2, l, (l + r) >> 1);
+		int rc = range_max(a, b, k * 2 + 1, (l + r) >> 1, r);
+		return max(lc, rc);
+	}
+public:
+	segment_tree() : sz(0), seg(), lazy() {};
+	segment_tree(int N) {
+		sz = 1;
+		while (sz < N) {
+			sz *= 2;
+		}
+		seg = std::vector<int>(sz * 2, 0);
+		lazy = std::vector<int>(sz * 2, 0);
+	}
+	void update(int l, int r, int x) {
+		update(l, r, x, 1, 0, sz);
+	}
+	int range_max(int l, int r) {
+		return range_max(l, r, 1, 0, sz);
+	}
+  //cin.tie(0);
+  //ios_base::sync_with_stdio(false); これらをmain関数の先頭に
+};
+struct  Edge{
+  int to;ll id;
+  Edge(int to,ll id):to(to),id(id){};
+};
+
+
+ll extgcd(ll a,ll b,ll &x,ll &y){
+  ll d=a;
+  if(b!=0){
+    d=extgcd(b,a%b,y,x);
+    y-=(a/b)*x;
+  }
+  else{
+    x=1;y=0;
+  }
+  return d;
+}
+using graph = vector<vector<ll> > ;
+int vx[]={0,-1,0,1},vy[]={-1,0,1,0};
+
+
+void comp(vector<ll>&a){
+  set<ll>s(a.begin(),a.end());
+  map<ll,ll>d;
+  int cnt=0;
+  for(auto x:s)d[x]=cnt++;
+  for(auto&x:a)x=d[x];
+}
+
+const ll seg_size=200100;
+ll seg[seg_size*2];
+
+void seg_set(ll l,ll r,ll v){
+  l+=seg_size;
+  r+=seg_size;
+  while(l<r){
+    if(l%2==1){
+      chmin(seg[l],v);
+      l++;
+    }
+    l/=2;
+    if(r%2==1){
+      chmin(seg[r-1],v);
+      r--;
+    }
+    r/=2;
+  }
+}
+
+ll seg_take(ll ind){
+  ind+=seg_size;
+  ll ans=inf;
+  while(ind>0){
+    ind/=2;
+    chmin(ans,seg[ind]);
+  }
+  return ans;
+}
+int f(ll x,ll y,ll a,ll b,ll c){
+  ll tot=(a+x-1)/x+(b+x-1)/x+(c+x-1)/x;
+  if(tot<=y)return 1;
+  return 0;
+}
+int g(ll x,ll y,ll a,ll b,ll c){
+  ll tot=(a+y-1)/y;
+  x-=tot;
+  if(x<=0)return 0;
+  tot=(b+x-1)/x+(c+x-1)/x;
+  if(tot<=y)return 1;
+  else return 0;
+}
+
+int main(){
+  vector<ll> anss;
+  while(1){
+    ll x;cin >> x;
+    if(x==0)break;
+    ll div=-1;
+    for(ll i=1; i*i*i<=x; i++){
+      if(x%i==0)div=i;
+    }
+    x/=div;
+    ll ans=inf;
+    for(ll i=sqrt(x); i*i<=x; i--){
+       if(x%i==0){
+         chmin(ans,i+x/i);
+         break;
+       }
+    }
+    ans+=div;
+    anss.push_back(ans);
+  }
+  for(auto u:anss)cout << u << endl;
+  return 0;
+}

@@ -1,0 +1,24 @@
+#include <stdio.h>
+int main (void)
+{
+    int i,j,N;
+    int key;
+    int a[100];
+    scanf ("%d\n",&N);
+    for(int i=0;i<N;i++)
+    scanf ("%d\n" ,&a[i]);
+    for (int j=0;j<N;j++)
+    {
+        i=j-1;
+        while(i>0&&a[i]>a[i+1])
+        {
+            a[i+1]=a[i];
+            i--;
+        }
+        
+        
+    }
+    
+  return 0;  
+    
+}

@@ -1,0 +1,169 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll,ll> PP;
+//#define MOD 1000000007
+#define MOD 998244353
+#define INF 2305843009213693951
+//#define INF 810114514
+#define PI 3.141592653589
+#define setdouble setprecision
+#define REP(i,n) for(ll i=0;i<(n);++i)
+#define OREP(i,n) for(ll i=1;i<=(n);++i)
+#define RREP(i,n) for(ll i=(n)-1;i>=0;--i)
+#define ALL(v) (v).begin(), (v).end()
+#define GOODBYE do { cout << "-1" << endl; return 0; } while (false)
+#define MM <<" "<<
+#define Endl endl
+#define debug true
+#define debug2 false
+
+class Dijkstra{
+    /*
+    Copyright (c) 2021 0214sh7
+    https://github.com/0214sh7/library/
+    */
+    private:
+    typedef std::pair<long long,int> P;
+    std::vector<std::vector<P>> G;
+    int V;
+    std::priority_queue<P,std::vector<P>,std::greater<P>> que;
+    
+    public:
+    void init(int N,std::vector<std::pair<std::pair<int,int>,long long>> edge){
+        //頂点数を決定する
+        V=N;
+        
+        //辺集合を扱いやすい形式に変換する
+        G.resize(V);
+        for(int i=0;i<edge.size();i++){
+            int from=edge[i].first.first,to=edge[i].first.second;
+            long long cost=edge[i].second;
+            G[from].push_back({cost,to});
+        }
+    }
+    
+    Dijkstra(int N,std::vector<std::pair<std::pair<int,int>,long long>> edge){
+        init(N,edge);
+    }
+
+    std::vector<long long> solve(int s){
+        std::vector<long long> d;
+        //INFで初期化する
+        for(int i=0;i<V;i++){
+            d.push_back(INF);
+        }
+        d[s]=0;
+        que.push({0,s});
+        //queは{cost,to}をコストが小さい順に出す
+        while(!que.empty()){
+            P p = que.top();
+            que.pop();
+            int v=p.second;
+            if(d[v]<p.first)continue;
+            for(int i=0;i<G[v].size();i++){
+                P e = G[v][i];
+                if(d[e.second]>d[v]+e.first){
+                    d[e.second] = d[v]+e.first;
+                    que.push({d[e.second],e.second});
+                }
+            }
+        }
+        return d;
+    }
+};
+
+int main(void){
+    
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+
+    ll H,W;
+    cin >> H >> W;
+    vector<string> C(H);
+    REP(i,H){cin >> C[i];}
+
+    ll sy,sx,gy,gx;
+    REP(i,H){
+        REP(j,W){
+            if(C[i][j]=='S'){
+                sy=i;sx=j;
+            }
+            if(C[i][j]=='G'){
+                gy=i;gx=j;
+            }
+        }
+    }
+
+    ll dx[4] = {1,0,-1,0};
+    ll dy[4] = {0,1,0,-1};
+
+    vector<pair<pair<int,int>,long long>> edge;
+    pair<pair<int,int>,long long> h;
+
+    REP(i,H){
+        REP(j,W){
+
+            if(C[i][j]=='U'){
+                if(i!=0 && C[i-1][j]!='#'){
+                    h.first.first = i*W+j;
+                    h.first.second = (i-1)*W+j;
+                    h.second = 0;
+                    edge.push_back(h);
+                }
+            }else if(C[i][j]=='D'){
+                if(i!=H-1 && C[i+1][j]!='#'){
+                    h.first.first = i*W+j;
+                    h.first.second = (i+1)*W+j;
+                    h.second = 0;
+                    edge.push_back(h);
+                }
+            }else if(C[i][j]=='L'){
+                if(j!=0 && C[i][j-1]!='#'){
+                    h.first.first = i*W+j;
+                    h.first.second = i*W+(j-1);
+                    h.second = 0;
+                    edge.push_back(h);
+                }
+            }else if(C[i][j]=='R'){
+                if(j!=W-1 && C[i][j+1]!='#'){
+                    h.first.first = i*W+j;
+                    h.first.second = i*W+(j+1);
+                    h.second = 0;
+                    edge.push_back(h);
+                }
+            }else{
+                REP(k,4){
+                    ll y = i+dy[k], x = j+dx[k];
+                    if(!(0<=y && y<H))continue;
+                    if(!(0<=x && x<W))continue;
+                    if(C[y][x]=='#')continue;
+                    
+                    h.first.first = i*W+j;
+                    h.first.second = y*W+x;
+                    h.second = 1;
+                    edge.push_back(h);
+                }
+            }
+
+        }
+    }
+
+    Dijkstra dijk(H*W,edge);
+    vector<ll> d = dijk.solve(sy*W+sx);
+    ll Ans = d[gy*W+gx];
+    
+    if(Ans==INF)Ans = -1;
+    cout << Ans << endl;
+
+    /*REP(i,H){
+        REP(j,W){
+            ll r = d[i*W+j];
+            if(r==INF)r=-1;
+            cout << r << " ";
+        }cout << endl;
+    }*/
+
+    return 0;
+}
+

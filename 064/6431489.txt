@@ -1,0 +1,20 @@
+import java.util.*;
+
+class Solve{
+    private Scanner sc = new Scanner(System.in);
+    private void Finish(){
+        this.sc.close();
+    }
+    public void Do(){
+        double r = sc.nextDouble();
+        double area = Math.pow(r,2)*Math.PI;
+        double len = 2*r*Math.PI;
+        System.out.println( String.format("%.6f", area) +" "+ String.format("%.6f", len) );
+        Finish();
+    }
+}
+class Main{
+    public static void main(final String[] _args){
+        new Solve().Do();
+    }
+}

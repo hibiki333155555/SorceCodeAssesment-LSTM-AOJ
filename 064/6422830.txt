@@ -1,0 +1,106 @@
+use std::io::Read;
+
+#[derive(Debug, Copy, Clone)]
+struct Edge {
+    to: usize,
+}
+
+struct Lca {
+    g: Vec<Vec<Edge>>,
+    depth: Vec<Option<usize>>,
+    parent: Vec<Vec<Option<usize>>>,
+}
+
+impl Lca {
+    fn new(g: Vec<Vec<Edge>>, root: usize) -> Self {
+        let n = g.len();
+        let log = (0..n).map(|i| n >> i).take_while(|&x| x > 0).count();
+        let parent = vec![vec![None; n]; log];
+        let depth = vec![None; n];
+
+        let mut lca = Lca { g, depth, parent };
+        lca.dfs(root, None, 0);
+
+        for k in 1..log {
+            for u in 0..n {
+                if let Some(v) = lca.parent[k - 1][u] {
+                    lca.parent[k][u] = lca.parent[k - 1][v];
+                }
+            }
+        }
+
+        lca
+    }
+
+    fn dfs(&mut self, v_idx: usize, p_idx: Option<usize>, depth: usize) {
+        self.depth[v_idx] = Some(depth);
+        self.parent[0][v_idx] = p_idx;
+        for edge in self.g[v_idx].clone() {
+            if p_idx.is_none() || edge.to != p_idx.unwrap() {
+                self.dfs(edge.to, Some(v_idx), depth + 1);
+            }
+        }
+    }
+
+    fn query(&mut self, mut u: usize, mut v: usize) -> usize {
+        // uの方が深いとする
+        if self.depth[u] < self.depth[v] {
+            std::mem::swap(&mut u, &mut v);
+        }
+        let k_max = self.parent.len();
+        for k in 0..k_max {
+            if ((self.depth[u].unwrap() - self.depth[v].unwrap()) >> k & 1) == 1 {
+                u = self.parent[k][u].unwrap();
+            }
+        }
+        if u == v {
+            return u;
+        }
+        for k in (0..k_max).rev() {
+            if self.parent[k][v] != self.parent[k][v] {
+                u = self.parent[k][u].unwrap();
+                v = self.parent[k][v].unwrap();
+            }
+        }
+        self.parent[0][u].unwrap()
+    }
+}
+
+fn main() {
+    let mut s = String::new();
+    std::io::stdin().read_line(&mut s).unwrap();
+    let mut it = s.trim().split_whitespace();
+    let n: usize = it.next().unwrap().parse().unwrap();
+    let mut g = vec![vec![]; n];
+    for i in 0..n {
+        let mut s = String::new();
+        std::io::stdin().read_line(&mut s).unwrap();
+        let mut it = s.trim().split_whitespace();
+        let len: usize = it.next().unwrap().parse().unwrap();
+        for _ in 0..len {
+            let to: usize = it.next().unwrap().parse().unwrap();
+            g[i].push(Edge { to });
+        }
+    }
+    let mut lca = Lca::new(g, 0);
+    let mut s = String::new();    
+    std::io::stdin().read_line(&mut s).unwrap();
+    let mut it = s.trim().split_whitespace();
+
+    let q: usize = it.next().unwrap().parse().unwrap();
+    let mut qs = vec![];
+    for _ in 0..q {
+        let mut s = String::new();    
+        std::io::stdin().read_line(&mut s).unwrap();
+        let mut it = s.trim().split_whitespace();
+    
+        let u: usize = it.next().unwrap().parse().unwrap();
+        let v: usize = it.next().unwrap().parse().unwrap();
+        qs.push((u, v));
+    }
+
+    for (u, v) in qs {
+        println!("{}", lca.query(u, v));
+    }
+}
+

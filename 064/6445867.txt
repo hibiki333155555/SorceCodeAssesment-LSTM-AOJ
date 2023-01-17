@@ -1,0 +1,46 @@
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+using ull = unsigned long long;
+const ull p = 1000000007;
+
+int main(){
+    int H, W; cin >> H >> W;
+    vector<string> field(H);
+    for(int i=0; i<H; ++i) cin >> field[i];
+
+    int R, C; cin >> R >> C;
+    vector<string> pattern(R);
+    for(int i=0; i<R; ++i) cin >> pattern[i];
+
+    ull h = 0, q = 1;
+    for(int i=0; i<C; ++i) q *= p;
+    for(int i=0; i<R; ++i){
+        ull temp = 0;
+        for(int j=0; j<C; ++j){
+            temp = temp*p + pattern[i][j];
+        }
+        h = h*q + temp;
+    }
+
+    vector<vector<ull>> hash_raw(H, vector<ull>(W-C+1, 0));
+    for(int i=0; i<H; ++i){
+        for(int j=0; j<=W-C; ++j){
+            for(int k=0; k<C; ++k){
+                hash_raw[i][j] = hash_raw[i][j]*p + field[i][j+k];
+            }
+        }
+    }
+    vector<vector<ull>> hash(H-R+1, vector<ull>(W-C+1, 0));
+    for(int i=0; i<=H-R; ++i){
+        for(int j=0; j<=W-C; ++j){
+            for(int k=0; k<R; ++k){
+                hash[i][j] = hash[i][j]*q + hash_raw[i+k][j];
+            }
+            if(hash[i][j] == h) cout << i << " " << j << endl;
+        }
+    }
+    return 0;
+}
+

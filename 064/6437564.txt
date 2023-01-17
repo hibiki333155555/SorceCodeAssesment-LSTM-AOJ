@@ -1,0 +1,40 @@
+V,E,r=map(int,input().split())
+
+connect=[[]*V for _ in range(V)]
+
+for i in range(E):
+    s,t,d=map(int,input().split())
+    connect[s].append([t,d])
+    
+
+
+confirmed=[False]*V
+dist=[10**20]*V
+dist[r]=0#始点
+
+import heapq
+que=list()
+heapq.heappush(que,[0,r])#[a,b] a:dist b:出発点
+
+while len(que)>0:
+    now_cost,now_place=heapq.heappop(que)
+
+    if confirmed[now_place]==True:#すでに訪れていたら
+        continue
+
+    confirmed[now_place]=True
+
+    for next,dis in connect[now_place]:
+        if confirmed[next]==False:
+            if dis+now_cost<dist[next]:
+                dist[next]=now_cost+dis
+                heapq.heappush(que,[dist[next],next])
+
+
+for i in dist:
+    if i==10**20:
+        print('INF')
+
+    else:
+        print(i)
+

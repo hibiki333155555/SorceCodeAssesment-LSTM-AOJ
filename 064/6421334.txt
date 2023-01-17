@@ -1,0 +1,119 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for(ll i=0;i<n;i++)
+#define repl(i,l,r) for(ll i=(l);i<(r);i++)
+#define per(i,n) for(ll i=(n)-1;i>=0;i--)
+#define perl(i,r,l) for(ll i=r-1;i>=l;i--)
+#define fi first
+#define se second
+#define pb push_back
+#define ins insert
+#define pqueue(x) priority_queue<x,vector<x>,greater<x>>
+#define all(x) (x).begin(),(x).end()
+#define CST(x) cout<<fixed<<setprecision(x)
+#define vtpl(x,y,z) vector<tuple<x,y,z>>
+#define rev(x) reverse(x);
+using ll=long long;
+using vl=vector<ll>;
+using vvl=vector<vector<ll>>;
+using pl=pair<ll,ll>;
+using vpl=vector<pl>;
+using vvpl=vector<vpl>;
+const ll MOD=1000000007;
+const ll MOD9=998244353;
+const int inf=1e9+10;
+const ll INF=4e18;
+const ll dy[9]={0,1,-1,0,1,1,-1,-1,0};
+const ll dx[9]={1,0,0,-1,1,-1,1,-1,0};
+template<class T> inline bool chmin(T& a, T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+
+const int mod = MOD9;
+const int max_n = 400010;
+struct mint {
+  ll x; // typedef long long ll;
+  mint(ll x=0):x((x%mod+mod)%mod){}
+  mint operator-() const { return mint(-x);}
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) { (x *= a.x) %= mod; return *this;}
+  mint operator+(const mint a) const { return mint(*this) += a;}
+  mint operator-(const mint a) const { return mint(*this) -= a;}
+  mint operator*(const mint a) const { return mint(*this) *= a;}
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+  bool operator==(const mint &p) const { return x == p.x; }
+  bool operator!=(const mint &p) const { return x != p.x; }
+  // for prime mod
+  mint inv() const { return pow(mod-2);}
+  mint& operator/=(const mint a) { return *this *= a.inv();}
+  mint operator/(const mint a) const { return mint(*this) /= a;}
+};
+istream& operator>>(istream& is, mint& a) { return is >> a.x;}
+ostream& operator<<(ostream& os, const mint& a) { return os << a.x;}
+using vm=vector<mint>;
+using vvm=vector<vm>;
+struct combination {
+  vector<mint> fact, ifact;
+  combination(int n):fact(n+1),ifact(n+1) {
+    assert(n < mod);
+    fact[0] = 1;
+    for (int i = 1; i <= n; ++i) fact[i] = fact[i-1]*i;
+    ifact[n] = fact[n].inv();
+    for (int i = n; i >= 1; --i) ifact[i-1] = ifact[i]*i;
+  }
+  mint operator()(int n, int k) {
+    if (k < 0 || k > n) return 0;
+    return fact[n]*ifact[k]*ifact[n-k];
+  }
+}comb(max_n);
+
+
+int main(){
+    string s;cin >> s;
+    ll k;cin >> k;
+    if(k==0)cout << 0 << endl,exit(0);
+    ll preone=0;
+    mint prefix=0;//prefixの数
+    mint ans=0;
+    ll n=s.size();
+    rep(i,n){
+        if(s[i]=='1'){
+            if(preone<=k){
+                ans+=prefix*mint(2).pow(n-i)*comb(n-i-1,k-preone);
+                //cout << ans << endl;
+                ans+=comb(n-i-2,k-preone-1)*(mint(2).pow(n-i-1)-1);
+            }
+        }
+        prefix*=2;prefix+=ll(s[i]-'0');
+        if(s[i]=='1')preone++;
+        //cout << ans << endl;
+    }
+    if(preone==k)ans+=prefix;
+    cout << ans << endl;
+}
+

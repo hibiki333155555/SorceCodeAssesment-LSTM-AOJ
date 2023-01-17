@@ -1,0 +1,21 @@
+n = int(input())
+s = list(map(int, input().split()))
+q = int(input())
+t = list(map(int, input().split()))
+count = 0
+left = 0
+right = n
+for i in range(q):
+	key = t[i]
+	while left < right:
+		mid = (left + right)//2
+	
+		if key > s[mid]:
+			left = mid + 1
+		elif key == s[mid]:
+			count += 1
+			break
+		else:
+		 	right = mid
+		
+print(count)

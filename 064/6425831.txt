@@ -1,0 +1,52 @@
+#include <stdio.h>
+
+int main(void){
+    char tile[128][128];
+    int i,j,h,w,pX,pY;
+    
+    while(1){
+        scanf("%d %d",&h,&w);
+        if(h*w==0) break;
+        for(i=0;i<h;i++){
+            scanf("%s",&tile[i][0]);
+        }
+        /*for(i=0;i<h;i++){
+            for(j=0;j<w;j++){
+                printf("%c",tile[i][j]);
+            }
+            puts("");
+        }*/
+        pX=0;
+        pY=0;
+        for(i=0;;i++){
+            switch(tile[pY][pX]){
+                case '>':
+                    pX++;
+                    break;
+                    
+                case '<':
+                    pX--;
+                    break;
+                    
+                case 'v':
+                    pY++;;
+                    break;
+                    
+                case '^':
+                    pY--;
+                    break;
+                    
+                case '.':
+                    printf("%d %d\n",pX,pY);
+                    goto finish;
+            }
+            if(i>=10000){
+                printf("LOOP\n");
+                goto finish;
+            }
+        }
+    finish:
+    i=0;
+    }
+    return 0;
+}

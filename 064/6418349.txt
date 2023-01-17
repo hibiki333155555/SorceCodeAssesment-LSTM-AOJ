@@ -1,0 +1,14 @@
+T = int(input())
+for _ in range(T):
+    N, M, v, a, b = map(int, input().split())
+    v = v % M
+    s = set()
+    for i in range(N):
+        if v in s:
+            print("Yes")
+            break
+        s.add(v)
+        v = (a*v+b) % M
+    else:
+        print("No")
+

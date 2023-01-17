@@ -1,0 +1,21 @@
+xs = []
+i = 0
+while i < 3000:
+    i += 1
+    x = input()
+    if not x:
+        break
+    else:
+        xs.append(list(map(int, x.split())))
+
+ret = []
+for i, (x1, x2) in enumerate(xs):
+    if x1 == 0 and x2 == 0:
+        break
+
+    if x1 > x2:
+        ret.append(f"{x2} {x1}")
+    else:
+        ret.append(f"{x1} {x2}")
+
+print("\n".join(ret))

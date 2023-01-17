@@ -1,0 +1,136 @@
+#ifdef LOCAL
+//#define _GLIBCXX_DEBUG
+#endif
+//#pragma GCC target("avx512f,avx512dq,avx512cd,avx512bw,avx512vl")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<ll, ll> P;
+typedef pair<int, int> Pi;
+typedef vector<ll> Vec;
+typedef vector<int> Vi;
+typedef vector<string> Vs;
+typedef vector<char> Vc;
+typedef vector<P> VP;
+typedef vector<VP> VVP;
+typedef vector<Vec> VV;
+typedef vector<Vi> VVi;
+typedef vector<Vc> VVc;
+typedef vector<VV> VVV;
+typedef vector<VVV> VVVV;
+#define MAKEVV(variable, a, ...) VV variable(a, Vec(__VA_ARGS__))
+#define MAKEVVc(variable, a, ...) VVc variable(a,Vc(__VA_ARGS__))
+#define MAKEVVV(variable, a, b, ...) VVV variable(a, VV(b, Vec(__VA_ARGS__)))
+#define MAKEVVVV(variable, a, b, c, ...) VVVV variable(a, VVV(b, (VV(c, Vec(__VA_ARGS__)))))
+
+#define endl '\n'
+#define REP(i, a, b) for(ll i=(a); i<(b); i++)
+#define PER(i, a, b) for(ll i=(a); i>=(b); i--)
+#define rep(i, n) REP(i, 0, n)
+#define per(i, n) PER(i, n, 0)
+const ll INF=1e18+18;
+const ll MOD=998244353;
+#define Yes(n) cout << ((n) ? "Yes" : "No") << endl;
+#define YES(n) cout << ((n) ? "YES" : "NO") << endl;
+#define ALL(v) v.begin(), v.end()
+#define rALL(v) v.rbegin(), v.rend()
+#define pb(x) push_back(x)
+#define mp(a, b) make_pair(a,b)
+#define Each(a,b) for(auto &a :b)
+#define rEach(i, mp) for (auto i = mp.rbegin(); i != mp.rend(); ++i)
+#define SUM(a) accumulate(ALL(a),0LL)
+#ifdef LOCAL
+#define dbg(x_) cerr << #x_ << ":" << x_ << endl;
+#define dbgmap(mp) cerr << #mp << ":"<<endl; for (auto i = mp.begin(); i != mp.end(); ++i) { cerr << i->first <<":"<<i->second << endl;}
+#define dbgset(st) cerr << #st << ":"<<endl; for (auto i = st.begin(); i != st.end(); ++i) { cerr << *i <<" ";}cerr<<endl;
+#define dbgarr(n,m,arr) rep(i,n){rep(j,m){cerr<<arr[i][j]<<" ";}cerr<<endl;}
+#define dbgdp(n,arr) rep(i,n){cerr<<arr[i]<<" ";}cerr<<endl;
+#else
+#define dbg(...)
+#define dbgmap(...)
+#define dbgset(...)
+#define dbgarr(...)
+#define dbgdp(...)
+#endif
+#define out(a) cout<<a<<endl
+#define outminusone(a) cout<< ( a==INF ? -1 : a ) <<endl
+#define out2(a,b) cout<<a<<" "<<b<<endl
+#define vout(v) rep(i,v.size()){cout<<v[i]<<" ";}cout<<endl
+#define Uniq(v) v.erase(unique(v.begin(), v.end()), v.end())
+#define fi first
+#define se second
+
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return true; } return false; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return true; } return false; }
+template<class T>auto lb(T &X, ll x){return lower_bound(ALL(X),x) - X.begin();}
+template<class T>auto ub(T &X, ll x){return upper_bound(ALL(X),x) - X.begin();}
+ll floor(ll y,ll x){assert(x != 0);if(x < 0){y *= -1; x *= -1;}if(y < 0){return (y-x+1)/x;}return y/x;};
+ll ceil(ll y, ll x){assert(x != 0);if(x < 0){y *= -1; x *= -1;}if(y < 0){return y/x;}return (y+x-1)/x;};
+
+template<typename T1, typename T2>
+ostream &operator<<(ostream &s, const pair<T1, T2> &p) { return s<<"("<<p.first<<", "<<p.second<<")"; }
+
+template<typename T1, typename T2>
+istream &operator>>(istream &i, pair<T1, T2> &p) { return i>>p.first>>p.second; }
+
+template<typename T>istream& operator>>(istream&i,vector<T>&v)
+{rep(j,v.size())i>>v[j];return i;}
+
+// vector
+template<typename T>
+ostream &operator<<(ostream &s, const vector<T> &v) {
+    int len=v.size();
+    for(int i=0; i<len; ++i) {
+        s<<v[i];
+        if(i<len-1) s<<"	";
+    }
+    return s;
+}
+
+// 2 dimentional vector
+template<typename T>
+ostream &operator<<(ostream &s, const vector<vector<T> > &vv) {
+    s<<endl;
+    int len=vv.size();
+    for(int i=0; i<len; ++i) {
+        s<<vv[i]<<endl;
+    }
+    return s;
+}
+
+ll topbit(ll t){
+    return t==0?-1:63-__builtin_clzll(t);
+}
+
+int solve(){
+    ll a,b;
+    cin>>a>>b;
+    ll mx = max(a,b);
+    ll tbit = topbit(mx);
+    ll ans = 0;
+    auto hasbit = [](ll x, ll i )->bool{return (1LL<<i) & x;};
+    per(i,tbit){
+        if(hasbit(a,i) != hasbit(b,i)){
+            break;
+        }
+        ans++;
+    }
+    out(ans);
+    return  0;
+}
+
+int main() {
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cout<<std::setprecision(10);
+//    ll T;
+//    cin>>T;
+//    while(T--)
+    solve();
+}
+

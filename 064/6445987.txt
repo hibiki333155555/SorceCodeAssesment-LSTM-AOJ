@@ -1,0 +1,2 @@
+X=int(input())
+y=x*x*x

@@ -1,0 +1,30 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+    bool a[2001];
+    for(int i=0; i<2001; i++){
+        a[i]=true;
+    }
+    int N,M;
+    cin >> N >> M;
+    int A[N],B[M];
+    for(int i=0; i<N; i++){
+        cin >> A[i];
+    }
+    for(int i=0; i<M; i++){
+        cin >> B[i];
+    }
+    int sum=0;
+    for(int i=0; i<M; i++){
+        if(a[B[i]]==true){
+            for(int j=0; j<N; j++){
+                if(B[i]==A[j]){
+                    sum++;
+                }
+            }
+            a[B[i]]=false;
+        }
+    }
+    cout << endl << sum << endl;
+}

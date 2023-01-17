@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+int n;
+int num1[10],num2[10],num3[10];
+
+bool fun(int x,int y,int c)
+{
+	if(c==10)
+	return true;
+	
+	if( x==0 || num1[c]>num2[x-1])
+	{
+		num2[x]=num1[c];
+		if(fun(x+1,y,c+1))
+		return true;
+		num2[x]=-1;
+	}
+
+	if( y==0 || num1[c]>num3[y-1])
+	{
+		num3[y]=num1[c];
+		if(fun(x,y+1,c+1))
+		return true;
+		num3[y]=-1;
+	}
+	
+	return false;
+	
+}
+
+int main(void)
+{
+	cin>>n;
+	while(n--)
+	{
+		for(int i=0;i<10;i++)
+		{
+			cin>>num1[i];
+			num2[i]=-1;
+			num3[i]=-1;
+		}
+		
+		if(fun(0,0,0))
+		cout<<"YES"<<endl;
+		else
+		cout<<"NO"<<endl;
+	}	
+	
+	return 0;
+	
+ } 

@@ -1,0 +1,92 @@
+#include <algorithm>
+#include <bits/stdc++.h>
+#include <cmath>
+using namespace std;
+using ll = long long;
+template <typename T> using MaxHeap = priority_queue<T>;
+template <typename T> using MinHeap = priority_queue<T, vector<T>, greater<T>>;
+#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define ff first
+#define ss second
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define all(a) a.begin(), a.end()
+
+const ll INF = 1e18;
+const ll mod = 998244353;
+
+int main() {
+    ll h, w;
+    cin >> h >> w;
+    string kabe = "";
+    rep(i, w + 2) kabe += "#";
+    vector<string> s(h + 2);
+    s[0] = kabe;
+    s[h + 1] = kabe;
+    pll start = {0,0};
+    pll goal = {0,0};
+    rep(i, h) {
+        string ch;
+        cin >> ch;
+        rep(j, w)if(ch[j] == 'S')start = {i+1,j+1};
+        rep(j, w)if(ch[j] == 'G')goal = {i+1,j+1};
+        s[i + 1] = "#" + ch + "#";
+    }
+
+    int idou[] = {-1, 1}; //上下左右1マス移動用
+    queue<pll> q;
+    q.push(start); // start
+    map<pll, ll> dist;
+    dist[start] = 0;
+    while (!q.empty()) {
+        auto v = q.front();
+        q.pop();
+        bool p = 0;
+        if(dist.count(v))continue;
+        for (auto c : idou) {
+            ll ch = 1;
+            if(s[v.ff][v.ss] == 'U'){
+                if(c == -1)ch = 0;  
+                if(c == 1)continue;
+            }
+            if(s[v.ff][v.ss] == 'D'){
+                if(c == 1)ch = 0;  
+                if(c == -1)continue;
+            }
+            if(s[v.ff][v.ss] == 'L')continue;
+            if(s[v.ff][v.ss] == 'R')continue;
+            ll x = v.ff + c;
+            ll y = v.ss;
+            if (s[x][y] == '#') continue;
+            if(s[x][y] == 'G')p = 1;
+            dist[{x, y}] = dist[v] + ch;
+            q.push({x, y});
+        }
+        for (auto c : idou) {
+            ll ch = 1;
+            if(s[v.ff][v.ss] == 'L'){
+                if(c == -1)ch = 0;  
+                if(c == 1)continue;
+            }
+            if(s[v.ff][v.ss] == 'R'){
+                if(c == 1)ch = 0;  
+                if(c == -1)continue;
+            }
+            if(s[v.ff][v.ss] == 'U')continue;
+            if(s[v.ff][v.ss] == 'D')continue;
+            ll x = v.ff;
+            ll y = v.ss + c;
+            if (s[x][y] == '#') continue;
+            if(s[x][y] == 'G')p = 1;
+            dist[{x, y}] = dist[v] + ch;
+            q.push({x, y});
+        }
+        if(p)break;
+    }
+    if(dist.count(goal)){
+        cout<<dist[goal]<<endl;
+    }else{
+        cout<<-1<<endl;
+    }
+}
+

@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main () {
+    int q;
+    cin>>  q;
+    map <string, int > mp;
+
+    while(q--) {
+        int  k, t;
+        string s;
+        cin>> k;
+        if(k==0) {
+            cin>> s>> t;
+            mp[s]= t;
+        }
+
+        else if(k== 1) {
+            cin>> s;
+            if(mp.find(s) != mp.end())
+            cout<< mp[s]<< endl;
+            else
+                cout<< "0"<< endl;
+        }
+        else if(k==2) {
+            cin>> s;
+            if(mp.find(s) != mp.end())
+            mp.erase(s);
+        }
+
+        else {
+            string l, r;
+
+
+            cin>> l>> r;
+
+            for(auto it= mp.begin() ; it != mp.end(); it++) {
+                string st= it-> first;
+
+
+                    if(st >= l && st <= r)
+                    cout<< st<< " "<< it-> second<< endl;
+                    else if(st > r)
+                        break;
+
+            }
+
+        }
+
+    }
+
+    return 0;
+}

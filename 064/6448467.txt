@@ -1,0 +1,20 @@
+#include<stdio.h>
+
+int Relation(int a,int b){
+    if(a>b){
+        return printf("a > b\n");
+    }else if(a<b){
+        return printf("a < b\n");
+    }else{
+        return printf("a == b\n");
+    }
+}
+
+int main(void){
+    int a,b;
+
+    scanf("%d %d",&a,&b);
+    Relation(a,b);
+
+    return 0;
+}

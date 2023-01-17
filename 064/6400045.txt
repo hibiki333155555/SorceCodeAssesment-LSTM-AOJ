@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+using i64 = long long;
+constexpr i64 INF=1234567899876543210;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout << fixed << setprecision(9);
+    
+    
+    double x1,y1,x2,y2,x0,y0,q;
+    cin >> x1 >> y1 >> x2 >> y2 ;
+    cin >> q ;
+
+    //p1がp2より左側にくるようにする
+    if (x1>x2){
+        swap(x1,x2);
+        swap(y1,y2);
+    }
+
+    //p1,p2の直線の傾きaと法線の傾きbを求める
+    //各軸に平行なものは別途処理する
+    double a,b,resx,resy;
+    
+    //y軸に平行(aが無限大)
+    if (x1==x2){
+        a=INF;
+        b=0;
+    } 
+    
+    //x軸に平行(a=0)
+    else if (y1==y2){
+        a=0;
+        b=INF;
+    }   
+    else{
+        a=(y2-y1)/(x2-x1);
+        b=-(x2-x1)/(y2-y1);
+    } 
+
+    rep(i,q){
+        cin >> x0 >> y0 ;
+        resx=(y1-y0+b*x0-a*x1)/(b-a);
+        resy=b*resx+y0-b*x0;
+        cout << resx << " " << resy << "\n";
+    }
+
+}

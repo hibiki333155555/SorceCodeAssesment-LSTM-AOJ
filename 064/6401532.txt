@@ -1,0 +1,2 @@
+require('fs').readFileSync(0,'utf8').split`
+`.some(l=>{[a,o,b]=l.split` `;return'00'=='?'||console.log({'+':a+b}[o])});

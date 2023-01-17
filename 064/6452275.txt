@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+#include <iostream>
+using namespace std;
+
+int main()
+{
+  int n;
+  cin >> n;
+  std::set<string> set;
+
+  for (int i = 0; i < n; i++)
+  {
+    string operation, value;
+    cin >> operation, value;
+    if (operation == "insert")
+    {
+      set.insert(value);
+    }
+    else if (operation == "find")
+    {
+      if (set.find(value) != set.end())
+      {
+        printf("yes");
+      }
+      else
+      {
+        printf("yes");
+      }
+    }
+  }
+
+  return 0;
+}
+

@@ -1,0 +1,108 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+long gcd(long a, long b)
+{
+    if(a % b == 0){
+        return b;
+    }else{
+        return gcd(b, a % b);
+    }
+}
+
+int main()
+{
+    long a, b;
+    cin >> a >> b;
+    
+    bool flag = false;
+    if (a < b)
+    {
+        flag = true; 
+        std::swap(a,b);
+    }
+    long G = gcd(a, b);
+    cout << G << endl;
+    long A = a / G;
+    long B = b / G;
+    
+    long sol_x = 1;
+    long sol_y = 0;
+    if (B == 1)
+    {
+        sol_x = 0;
+        sol_y = 1;
+    }
+    else
+    {
+        for (; sol_x < 10000000; sol_x++)
+            if ((A * sol_x) % B == 1)
+                break;
+        sol_y = -1 * (A * sol_x) / B;
+    }    
+
+    long x = sol_x;
+    long y = sol_y;
+    
+    long dist = abs(x) + abs(y);
+
+    while (1)
+    {
+        long candX = x - B;
+        long candY = y + A;
+        long d = abs(candX) + abs(candY);
+        if (dist < d)
+        {   
+            break;
+        }
+        else if (dist == d)
+        {
+            dist = d;
+            if (candX >= candY)
+            {
+                x = candX;
+                y = candY;
+            }
+        }
+        else
+        {
+            x = candX;
+            y = candY;
+            dist = d;
+        }
+    }
+    while (1)
+    {
+        long candX = x + B;
+        long candY = y - A;
+        long d = abs(candX) + abs(candY);
+        if (dist < d)
+        {
+            break;
+        }
+        else if (dist == d)
+        {
+            dist = d;
+            if (candX >= candY)
+            {
+                x = candX;
+                y = candY;
+            }
+        }
+        else
+        {
+            x = candX;
+            y = candY;
+            dist = d;
+        }
+
+    }
+
+    if (flag)
+        cout << y << " " << x << endl;
+    else
+        cout << x << " " << y << endl;
+
+    return 0;
+}

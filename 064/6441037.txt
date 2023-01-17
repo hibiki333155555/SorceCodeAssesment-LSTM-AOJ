@@ -1,0 +1,57 @@
+use std::io::Read;
+
+fn main() {
+    let mut input = String::new();
+    std::io::stdin().read_to_string(&mut input).unwrap();
+    let mut v = input
+        .lines()
+        .skip(1)
+        .map(|e| e.parse::<i64>().expect("failed to parse a number"))
+        .collect::<Vec<_>>();
+
+    let mut strides = (0usize..).take_while(|e| (3 * e + 1) < v.len()).map(|e|e*3 + 1).collect::<Vec<_>>();
+    strides.reverse();
+    
+    println!("{}", strides.len());
+    strides.iter().enumerate().for_each(|(i, e)| {
+        if i != 0 {
+            print!(" ");
+        }
+        print!("{}", e);
+    });
+
+    print!("\n");
+    let cnt = shell_sort(&mut v, &strides);
+    println!("{}", cnt);
+
+    v.iter().for_each(|e| {
+        println!("{}", e);
+    });
+}
+
+fn shell_sort<T: PartialOrd + Copy + Clone>(v: &mut Vec<T>, strides : & Vec<usize>) -> u64 {
+    fn shell_sort_inner<T: PartialOrd + Copy + Clone>(v: &mut Vec<T>, stride: usize) -> u64 {
+        let mut cnt = 0u64;
+        for i in stride..v.len() {
+            let tmp = v[i];
+            let mut j = i - stride;
+            while v[j] > tmp {
+                v[j + stride] = v[j];
+                if j < stride {
+                    cnt += 1;
+                    break;
+                } else {
+                    j -= stride;
+                    cnt += 1;
+                }
+            }
+            v[if j < stride { j } else { j + stride }] = tmp;
+        }
+        cnt
+    }
+
+    strides
+        .iter()
+        .fold(0u64, |cnt, stride| cnt + shell_sort_inner(v, *stride))
+}
+

@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main(void){
+    int i,j;
+    scanf("%d",&j);
+    for(i=0;i<1000;i++){
+        if(j==0){
+            break;
+            printf("Case %d:%d",i,j);
+        }
+        
+    }
+    return 0;
+}

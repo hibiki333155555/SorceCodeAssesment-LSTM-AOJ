@@ -1,0 +1,10 @@
+#include<bits/stdc++.h>
+using namespace std;
+    #define all v.begin(),v.end()
+    #define ll long long
+int main(){
+    int f;
+    cin>>f;
+    cout<<(f-30)/2<<endl;
+    return(0);
+}

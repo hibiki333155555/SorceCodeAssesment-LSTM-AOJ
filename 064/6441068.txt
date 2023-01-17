@@ -1,0 +1,12 @@
+while True:
+    H, W = map(int, input().split())
+    for i in range(H):
+        i += 1
+        for j in range(W):
+            j += 1
+            if (i+j) % 2 == 0:
+                print("#", end="")
+            else:
+                print(".", end="")
+        print()
+

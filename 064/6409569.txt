@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+#define FOR(i, a, b) for(ll i = (a); i < (b); ++i)
+#define FORR(i, a, b) for(ll i = (a); i > (b); --i)
+#define REP(i, n) for(ll i = 0; i < (n); ++i)
+#define REPR(i, n) for(ll i = n; i >= 0; i--)
+#define FOREACH(x, a) for(auto &(x) : (a))
+#define dump(x) cout << #x << " = " << (x) << endl;
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define SP << " " <<
+using namespace std;
+using ll = long long;
+using P = pair<ll, ll>;
+
+#define int long long
+
+int n, m;
+
+vector<vector<int>> matrix;
+
+bool solve(int s, int t) {
+  stack<int> q;
+  vector<bool> seen(n, false);
+
+  q.push(s);
+  while(!q.empty()) {
+    int v = q.top();
+    q.pop();
+    REP(i, matrix[v].size()) {
+      if(!seen[matrix[v][i]]) {
+        seen[matrix[v][i]] = true;
+        q.push(matrix[v][i]);
+      }
+    }
+  }
+  return seen[t];
+}
+
+signed main() {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  cin >> n >> m;
+  matrix.assign(n, vector<int>());
+
+  REP(i, m) {
+    int s, t;
+    cin >> s >> t;
+    matrix[s].push_back(t);
+    matrix[t].push_back(s);
+  }
+
+  int q;
+  cin >> q;
+  REP(i, q) {
+    int s, t;
+    cin >> s >> t;
+    solve(s, t) ? cout << "yes" << endl : cout << "no" << endl;
+  }
+
+  return 0;
+}
+

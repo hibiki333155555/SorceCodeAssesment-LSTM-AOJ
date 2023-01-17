@@ -1,0 +1,20 @@
+#include<stdio.h>
+int main()
+{
+    float pi=3.14159275,r,a,c;
+
+    scanf("%f",&r);
+    a=pi*r*r;
+    c=2*pi*r;
+    if(r>0)
+    {
+        printf("%f %f",c,a);
+
+    }
+//rdthdtrysgdy
+    return 0;
+
+}
+
+
+

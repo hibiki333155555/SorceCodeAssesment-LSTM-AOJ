@@ -1,0 +1,64 @@
+#include<iostream>
+#include<queue>
+#include<algorithm>
+#include<vector>
+using namespace std;
+#define N 10000
+static const int white=0;
+static const int black=1;
+
+/*图的邻接表*/
+vector<int> Graph[N];
+
+/*存储图的入度信息*/
+int indegree[N] = {};
+
+/*存储图的访问状态*/
+int colour[N] = {};
+
+void topo(int start)
+{
+	queue<int> MtQueue;
+	MtQueue.push(start);
+	colour[start] = black;
+	while (!MtQueue.empty())
+	{
+		int u = MtQueue.front();
+		MtQueue.pop();
+		cout << u << endl;
+		for (int i = 0; i < Graph[u].size(); i++)
+		{
+			indegree[Graph[u][i]]--;
+			if (indegree[Graph[u][i]] == 0 && colour[Graph[u][i]] == white)
+			{
+				MtQueue.push(Graph[u][i]);
+				colour[Graph[u][i]]=black;
+			}
+		}
+	}
+}
+
+void topicalsort(int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		if (indegree[i] == 0 && colour[i] == white)
+			topo(i);
+	}
+}
+
+int main()
+{
+	/*结点数，边数*/
+	int n, e;
+	cin >> n >> e;
+	for (int i = 0; i < e; i++)
+	{
+		int s, t;
+		cin >> s >> t;
+		Graph[s].push_back(t);
+		indegree[t]++;
+	}
+	topicalsort(n);
+	return 0;
+}

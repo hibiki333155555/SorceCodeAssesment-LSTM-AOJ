@@ -1,0 +1,37 @@
+#include<iostream>
+#include<cmath>
+#include<cstdio>
+using namespace std;
+int main() {
+    int n;
+    cin >> n;
+    int x[n];
+    int y[n];
+    for(int x2 = 0; x2 < n; x2++) {
+        cin >> x[x2];
+    }
+    for(int y2 = 0; y2 < n; y2++) {
+        cin >> y[y2];
+    }
+    double D1 = 0;
+    for(int i = 0; i < n; i++) {
+        D1 += fabs(x[i] - y[i]);
+    }
+    printf("%.6lf\n", pow(D1, 1.0/1.0));
+    double D2 = 0;
+    for(int i = 0; i < n; i++) {
+        D2 += pow(fabs(x[i] - y[i]), 2.0);
+    }
+    printf("%.6lf\n", pow(D2, 1.0/2.0));
+    double D3 = 0;
+    for(int i = 0; i < n; i++) {
+        D3 += pow(fabs(x[i] - y[i]), 3.0);
+    }
+    printf("%.6lf\n", pow(D3, 1.0/3.0));
+    double Dinf = 0;
+    for(int i = 0; i < n; i++) {
+        Dinf += pow(fabs(x[i] - y[i]), INFINITY);
+    }
+    printf("%.6lf", pow(Dinf, 1.0/INFINITY));
+    cout << endl;
+}

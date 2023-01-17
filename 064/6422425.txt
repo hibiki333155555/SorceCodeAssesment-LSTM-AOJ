@@ -1,0 +1,11 @@
+r,c=map(int,input().split())
+total_num=[[False for i in range(r)] for j in range(c+1)]
+for k in range(r):
+    num_list=[int(x) for x in input().split()]
+    sum_num=sum(num_list)
+    num_list.append(sum(num_list))
+    print(" ".join(map(str,num_list)))
+    for m in range(c+1):
+        total_num[m][k]=num_list[m]
+total_list=[sum(total_num[n]) for n in range(c+1)]
+print(" ".join(map(str,total_list)))

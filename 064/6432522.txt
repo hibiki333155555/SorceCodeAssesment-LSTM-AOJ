@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cstdio>
+#include <fstream>
+#include <algorithm>
+#include <cmath>
+#include <deque>
+#include <vector>
+#include <queue>
+#include <string>
+#include <cstring>
+#include <map>
+#include <stack>
+#include <set>
+#include <sstream>
+#define mod 1000000007
+#define eps 1e-6
+#define ll long long
+#define INF 0x3f3f3f3f
+#define ME0(x) memset(x,0,sizeof(x))
+using namespace std;
+bool isprime(int x)
+{
+    if(x==2)
+        return true;
+    if(x<2||x%2==0)
+        return false;
+    int i=3;
+    while(i<=sqrt(x))
+    {
+        if(x%i==0)
+            return false;
+        i+=2;
+    }
+    return true;
+}
+int n;
+int main()
+{
+    int total=0;
+    int m;
+    cin>>n;
+    while(n--)
+    {
+        cin>>m;
+        if(isprime(m))
+          total++;
+    }
+    cout<<total<<endl;
+}

@@ -1,0 +1,29 @@
+"""
+## Rooted Trees/根付き木
+"""
+n=int(input())
+depth=[0]*n
+PR=[-1]*n
+G=[None]*n
+for _ in range(n):
+    i,k,*C=map(int,input().split())
+    G[i]=C
+    for v in G[i]:
+        PR[v]=i
+
+def dfs(v,d):
+    depth[v]=d
+    for w in G[v]:
+        dfs(w,d+1)
+dfs(PR.index(-1),0)
+
+def type(i):
+    if PR[i]==-1:
+        return 'root'
+    elif len(G[i])==0:
+        return 'leaf'
+    else:
+        return 'internal node'
+
+for i in range(n):
+    print(f'node {i}: parent = {PR[i]}, depth = {depth[i]}, {type(i)}, {G[i]}')

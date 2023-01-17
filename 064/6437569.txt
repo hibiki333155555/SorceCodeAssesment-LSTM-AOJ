@@ -1,0 +1,23 @@
+def print_list(lst):
+    print(" ".join([str(i) for i in lst]))
+
+
+def insertion_sort(lst):
+    print_list(lst)
+    for i, v in enumerate(lst):
+        if i == 0:
+            continue
+        j = i - 1
+        while(j >= 0 and lst[j] > v):
+            lst[j+1] = lst[j]
+            j -= 1
+        lst[j + 1] = v
+        print_list(lst)
+    return lst
+
+
+if __name__ == "__main__":
+    _ = int(input())
+    a = list(map(int, input().split()))
+    res = insertion_sort(a)
+

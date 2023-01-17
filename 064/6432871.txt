@@ -1,0 +1,63 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int A[400000], sorted_A[400000];
+int N;
+
+int main() {
+    cin >> N;
+    for (int i = 0; i < N; i++) {
+        cin >> A[i];
+        sorted_A[i] = A[i];
+    }
+    sort(sorted_A, sorted_A + N);
+    
+    int diff = 0;
+    for (int i = 0; i < N; i++) {
+        if (A[i] != sorted_A[i]) {
+            diff++;
+        }
+    }
+
+    if (diff == 0) {
+        cout << 0 << endl;
+        return 0;
+    }
+		
+    int Q, x, y, temp;
+    cin >> Q;
+    for (int i = 0; i < Q; i++) {
+        cin >> x >> y;
+        x--; y--;
+        
+        if (A[x] == sorted_A[x]) {
+            diff++;
+        }
+        if (A[y] == sorted_A[y]) {
+            diff++;
+        }
+        
+        // swap
+        temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+        
+        if (A[x] == sorted_A[x]) {
+            diff--;
+        }
+        if (A[y] == sorted_A[y]) {
+            diff--;
+        }
+
+        if (diff == 0) {
+            cout << i + 1 << endl;
+            return 0;
+        }
+    }
+    
+    cout << -1 << endl;
+    
+    return 0;
+}
+

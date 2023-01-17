@@ -1,0 +1,4 @@
+while True:
+    h, w = input().split(" ")
+    for i in h:
+        print("#" * w)

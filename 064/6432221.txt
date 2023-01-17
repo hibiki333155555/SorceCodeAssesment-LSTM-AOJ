@@ -1,0 +1,43 @@
+import sys
+while True:
+  H,W,N = map(int,input().split())
+  if H==0 and W==0 and N==0:
+    sys.exit()
+  else:
+    List1 = [list(map(int,input().split())) for _ in range(H)]
+    DP = [[[0 for k in range(2)] for j in range(W)] for i in range(H)]
+    if (N-1)%2 != 0:
+      DP[0][0][List1[0][0]] = (N//2)%2
+      DP[0][0][1-List1[0][0]] = (N//2-1)%2
+    else:
+      DP[0][0][0] = ((N-1)//2)%2
+      DP[0][0][1] = ((N-1)//2)%2
+    for i in range(H):
+      for j in range(W):
+        if i == 0 and j == 0:
+          M = -1
+        elif i == 0 and j >= 1:
+          M = DP[i][j-1][1]
+        elif j == 0 and i >= 1:
+          M = DP[i-1][j][0]
+        else:
+          M = DP[i][j-1][1] + DP[i-1][j][0]
+        if M >= 0 and M%2 == 1:
+          DP[i][j][List1[i][j]] = ((M+1)//2)%2
+          DP[i][j][1-List1[i][j]] = ((M-1)//2)%2
+        elif M >=0 and M%2 == 0:
+          DP[i][j][0] = (M//2)%2
+          DP[i][j][1] = (M//2)%2
+    #print(DP)
+    start = [0,0]
+    while start[0] < H and start[1] < W:
+      x = start[0]
+      y = start[1]
+      val = List1[x][y] + DP[x][y][0] + DP[x][y][1]
+      if val%2 == 0:
+        start = [x+1,y]
+      else:
+        start = [x,y+1]
+    start[0] += 1
+    start[1] += 1
+    print(*start)

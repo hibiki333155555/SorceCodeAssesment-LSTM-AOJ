@@ -1,0 +1,63 @@
+#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <vector>
+#include <numeric>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <random>
+#include <array>
+#include <climits>
+#include <map>
+#include <cassert>
+#include <stack>
+#include <iomanip>
+#include <cfloat>
+#include <bitset>
+#include <fstream>
+#include <chrono>
+
+
+int main() {
+	int n; std::cin >> n;
+	std::vector<int> altitude(n);
+	for (auto& h : altitude) {
+		std::cin >> h;
+	}
+	std::vector<int> sorted_by_altitude(n);
+	for (auto i = 0; i < n; ++i) {
+		sorted_by_altitude[altitude[i] - 1] = i + 1;
+	}
+	std::vector<int> next(n + 2), prev(n + 2);
+	std::iota(next.begin(), next.end(), 1); std::iota(prev.begin(), prev.end(), -1);
+	std::vector<int> single_max(n + 2, 0), inner_max(n + 2, 0), double_sum_max(n + 2, 0);
+	std::vector<int> left_max(n + 2, -1), right_max(n + 2, -1);
+	for (const auto i : sorted_by_altitude) {
+		int left_height{ -1 }, right_height{ -1 }, inner{ 0 }, double_max{ 0 };
+		if (left_max[i] != -1) {
+			const auto left = left_max[i];
+			left_height = single_max[left];
+			inner = std::max(inner, double_sum_max[left]);
+			double_max = std::max(double_max, double_sum_max[left]);
+		}
+		if (right_max[i] != -1) {
+			const auto right = right_max[i];
+			right_height = single_max[right];
+			inner = std::max(inner, double_sum_max[right]);
+			double_max = std::max(double_max, double_sum_max[right]);
+		}
+		inner_max[i] = std::max(inner, left_height + right_height + 2);
+		single_max[i] = std::max(left_height + 1, right_height + 1);
+		double_sum_max[i] = std::max(left_height + right_height + 1, double_max + 1);
+		const auto r = next[i];
+		const auto l = prev[i];
+		left_max[r] = i;
+		right_max[l] = i;
+		next[l] = r;
+		prev[r] = l;
+	}
+	const auto result = *std::max_element(inner_max.begin(), inner_max.end());
+	std::cout << result << '\n';
+}

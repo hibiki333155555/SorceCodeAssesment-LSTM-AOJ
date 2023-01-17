@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ld = long double;
+
+//only for atcoder
+//#include<atcoder/all>
+//using namespace atcoder;
+
+#define rep(i,l,r) for(ll i=(l); i<(r); i++)
+#define rrep(i,l,r) for(ll i=(r)-1; i>=(l); i--)
+#define ALL(c) (c).begin(), (c).end()
+#define RALL(c) (c).rbegin(), (c).rend()
+#define SORT(c) sort(ALL(c))
+#define RSORT(c) sort(RALL(c))
+#define MINV(c) *min_element(ALL(c))
+#define MAXV(c) *max_element(ALL(c))
+
+using VI = vector<int>;
+using VVI = vector<VI>;
+using VL = vector<ll>;
+using VVL = vector<VL>;
+using VS = vector<string>;
+using VVS = vector<VS>;
+using VB = vector<bool>;
+using VVB = vector<VB>;
+using VC = vector<char>;
+using VVC = vector<VC>;
+using VD = vector<ld>;
+using VVD = vector<VD>;
+using P = pair<ll,ll>;
+using VP = vector<P>;
+using VVP = vector<VP>;
+const ll LINF = 2e18;
+const int INF = 2e9;
+using mint = modint998244353;
+const ll MOD = 998244353;
+
+int calc(string S){
+  if(S.size() == 1){
+    return S[0] - 'A';
+  }
+  rep(i,0,26){
+    rep(j,0,26){
+      if(S[0]-'A' == i && S[1]-'A' == j){
+        return 26 + i*26 + j;
+      }
+    }
+  }
+}
+
+int main(){
+  string A, B;
+  int a, b;
+  cin >> A >> a >> B >> b;
+  ll X = calc(B) - calc(A) + 1;
+  ll Y = b - a + 1;
+  cout << X*Y << endl;
+}

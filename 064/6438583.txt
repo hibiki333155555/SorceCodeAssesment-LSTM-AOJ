@@ -1,0 +1,105 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static Tools;
+
+internal class Program
+{
+    public static void Main()
+    {
+        Console.ReadLine();
+        var cards = Console.ReadLine().Split().Select(s => new Card() { Suit = s[0], Number = s[1] - '0' }).ToArray();
+        var cardsB = (Card[])cards.Clone();
+        var cardsS = (Card[])cards.Clone();
+        BubbleSort(cardsB);
+        SelectionSort(cardsS);
+        Console.WriteLine(cardsB.StringJoin(" "));
+        Console.WriteLine(IsStableSort(cards, cardsB) ? "Stable" : "Not stable");
+        Console.WriteLine(cardsS.StringJoin(" "));
+        Console.WriteLine(IsStableSort(cards, cardsS) ? "Stable" : "Not stable");
+
+    }
+
+    struct Card : IComparable<Card>, IEquatable<Card>
+    {
+        public char Suit;
+        public int Number;
+        public int CompareTo(Card other)
+        {
+            return Number.CompareTo(other.Number);
+        }
+        public bool Equals(Card other)
+        {
+            return this.Suit == other.Suit && this.Number == other.Number;
+        }
+        public override string ToString()
+        {
+            return Suit.ToString() + Number.ToString();
+        }
+    }
+
+    static bool IsStableSort(IEnumerable<Card> unsorted, IEnumerable<Card> sorted)
+    {
+        foreach (var sortedDupNums in sorted.GroupBy(c => c.Number).Where(g => g.Count() != 1))
+        {
+            var cardsEn = sortedDupNums.GetEnumerator();
+            cardsEn.MoveNext();
+            var isStable = false;
+            foreach (var uCard in unsorted)
+            {
+                if (uCard.Equals(cardsEn.Current))
+                    if (cardsEn.MoveNext() == false)
+                    {
+                        isStable = true;
+                        break;
+                    }
+            }
+            if (!isStable)
+                return false;
+        }
+        return true;
+    }
+    static void BubbleSort<T>(T[] seq) where T : IComparable<T>
+    {
+        for (int i = 0; i < seq.Length; i++)
+        {
+            for (int j = seq.Length - 1; j > i; j--)
+            {
+                if (seq[j].CompareTo(seq[j - 1]) < 0)
+                    Swap(ref seq[j], ref seq[j - 1]);
+            }
+        }
+    }
+    static void SelectionSort<T>(T[] seq) where T : IComparable<T>
+    {
+        for (int i = 0; i < seq.Length; i++)
+        {
+            var minj = i;
+            for (int j = i; j < seq.Length; j++)
+            {
+                if (seq[j].CompareTo(seq[minj]) < 0)
+                {
+                    minj = j;
+                }
+            }
+            Swap(ref seq[i], ref seq[minj]);
+        }
+    }
+}
+
+internal class Tools
+{
+    public static void Swap<T>(ref T a, ref T b)
+    {
+        var t = a;
+        a = b;
+        b = t;
+    }
+}
+
+internal static class Extensions
+{
+    public static int ParseInt(this string s) => int.Parse(s);
+    public static double ParseDouble(this string s) => double.Parse(s);
+    public static string StringJoin<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+}

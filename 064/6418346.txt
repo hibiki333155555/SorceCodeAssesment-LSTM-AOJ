@@ -1,0 +1,402 @@
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#include<iostream>
+#include<string>
+#include<cstdio>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+#include<functional>
+#include<iomanip>
+#include<queue>
+#include<ciso646>
+#include<random>
+#include<map>
+#include<set>
+#include<bitset>
+#include<stack>
+#include<unordered_map>
+#include<unordered_set>
+#include<utility>
+#include<cassert>
+#include<complex>
+#include<numeric>
+#include<array>
+#include<chrono>
+using namespace std;
+
+//#define int long long
+typedef long long ll;
+
+typedef unsigned long long ul;
+typedef unsigned int ui;
+constexpr ll mod = 998244353;
+//constexpr ll mod = 1000000007;
+const ll INF = mod * mod;
+typedef pair<int, int>P;
+
+#define rep(i,n) for(int i=0;i<n;i++)
+#define per(i,n) for(int i=n-1;i>=0;i--)
+#define Rep(i,sta,n) for(int i=sta;i<n;i++)
+#define rep1(i,n) for(int i=1;i<=n;i++)
+#define per1(i,n) for(int i=n;i>=1;i--)
+#define Rep1(i,sta,n) for(int i=sta;i<=n;i++)
+#define all(v) (v).begin(),(v).end()
+typedef pair<ll, ll> LP;
+
+template<typename T>
+void chmin(T& a, T b) {
+	a = min(a, b);
+}
+template<typename T>
+void chmax(T& a, T b) {
+	a = max(a, b);
+}
+template<typename T>
+void cinarray(vector<T>& v) {
+	rep(i, v.size())cin >> v[i];
+}
+template<typename T>
+void coutarray(vector<T>& v) {
+	rep(i, v.size()) {
+		if (i > 0)cout << " "; cout << v[i];
+	}
+	cout << "\n";
+}
+ll mod_pow(ll x, ll n, ll m = mod) {
+	if (n < 0) {
+		ll res = mod_pow(x, -n, m);
+		return mod_pow(res, m - 2, m);
+	}
+	if (abs(x) >= m)x %= m;
+	if (x < 0)x += m;
+	//if (x == 0)return 0;
+	ll res = 1;
+	while (n) {
+		if (n & 1)res = res * x % m;
+		x = x * x % m; n >>= 1;
+	}
+	return res;
+}
+struct modint {
+	int n;
+	modint() :n(0) { ; }
+	modint(ll m) {
+		if (m < 0 || mod <= m) {
+			m %= mod; if (m < 0)m += mod;
+		}
+		n = m;
+	}
+	operator int() { return n; }
+};
+bool operator==(modint a, modint b) { return a.n == b.n; }
+bool operator<(modint a, modint b) { return a.n < b.n; }
+modint operator+=(modint& a, modint b) { a.n += b.n; if (a.n >= mod)a.n -= mod; return a; }
+modint operator-=(modint& a, modint b) { a.n -= b.n; if (a.n < 0)a.n += mod; return a; }
+modint operator*=(modint& a, modint b) { a.n = ((ll)a.n * b.n) % mod; return a; }
+modint operator+(modint a, modint b) { return a += b; }
+modint operator-(modint a, modint b) { return a -= b; }
+modint operator*(modint a, modint b) { return a *= b; }
+modint operator^(modint a, ll n) {
+	if (n == 0)return modint(1);
+	modint res = (a * a) ^ (n / 2);
+	if (n % 2)res = res * a;
+	return res;
+}
+
+ll inv(ll a, ll p) {
+	return (a == 1 ? 1 : (1 - p * inv(p % a, a)) / a + p);
+}
+modint operator/(modint a, modint b) { return a * modint(inv(b, mod)); }
+modint operator/=(modint& a, modint b) { a = a / b; return a; }
+const int max_n = 1 << 20;
+modint fact[max_n], factinv[max_n];
+void init_f() {
+	fact[0] = modint(1);
+	for (int i = 0; i < max_n - 1; i++) {
+		fact[i + 1] = fact[i] * modint(i + 1);
+	}
+	factinv[max_n - 1] = modint(1) / fact[max_n - 1];
+	for (int i = max_n - 2; i >= 0; i--) {
+		factinv[i] = factinv[i + 1] * modint(i + 1);
+	}
+}
+modint comb(int a, int b) {
+	if (a < 0 || b < 0 || a < b)return 0;
+	return fact[a] * factinv[b] * factinv[a - b];
+}
+modint combP(int a, int b) {
+	if (a < 0 || b < 0 || a < b)return 0;
+	return fact[a] * factinv[a - b];
+}
+
+ll gcd(ll a, ll b) {
+	a = abs(a); b = abs(b);
+	if (a < b)swap(a, b);
+	while (b) {
+		ll r = a % b; a = b; b = r;
+	}
+	return a;
+}
+typedef long double ld;
+typedef pair<ld, ld> LDP;
+const ld eps = 1e-8;
+const ld pi = acosl(-1.0);
+template<typename T>
+void addv(vector<T>& v, int loc, T val) {
+	if (loc >= v.size())v.resize(loc + 1, 0);
+	v[loc] += val;
+}
+/*const int mn = 100005;
+bool isp[mn];
+vector<int> ps;
+void init() {
+	fill(isp + 2, isp + mn, true);
+	for (int i = 2; i < mn; i++) {
+		if (!isp[i])continue;
+		ps.push_back(i);
+		for (int j = 2 * i; j < mn; j += i) {
+			isp[j] = false;
+		}
+	}
+}*/
+
+//[,val)
+template<typename T>
+auto prev_itr(set<T>& st, T val) {
+	auto res = st.lower_bound(val);
+	if (res == st.begin())return st.end();
+	res--; return res;
+}
+
+//[val,)
+template<typename T>
+auto next_itr(set<T>& st, T val) {
+	auto res = st.lower_bound(val);
+	return res;
+}
+using mP = pair<modint, modint>;
+
+
+int dx[4] = { 1,0,-1,0 };
+int dy[4] = { 0,1,0,-1 };
+//-----------------------------------------
+
+typedef vector<vector<modint>> mat;
+typedef vector<modint> vec;
+mat mtmul(mat& A, mat& B) {
+	mat C(A.size(), vec(B[0].size()));
+	rep(i, (int)A.size()) {
+		rep(k, (int)B.size()) {
+			rep(j, (int)B[0].size()) {
+				C[i][j] += A[i][k] * B[k][j];
+			}
+		}
+	}
+	return C;
+}
+mat mtpow(mat A, ll n) {
+	mat B(A.size(), vec(A.size()));
+	rep(i, (int)A.size()) {
+		B[i][i] = 1;
+	}
+	while (n > 0) {
+		if (n & (ll)1)B = mtmul(B, A);
+		A = mtmul(A, A);
+		n >>= 1;
+	}
+	return B;
+}
+
+int n, m;
+
+modint val[26];
+
+using ar = array<modint, 27>;
+
+ar term(string& s, int& i) {
+	ar res;
+	rep(j, 27)res[j] = 0;
+	int coef = 1;
+	if (s[i] == '-') {
+		coef *= -1;
+		i++;
+	}
+	if ('0' <= s[i] && s[i] <= '9') {
+		modint cur = 0;
+		while (i < s.size() && '0' <= s[i] && s[i] <= '9') {
+			cur = (modint)10 * cur + (modint)(s[i] - '0');
+			i++;
+		}
+		res[26] = cur;
+	}
+	else {
+		assert('a' <= s[i] && s[i] <= 'z');
+		res[s[i] - 'a'] = 1;
+		i++;
+	}
+	rep(j, 27)res[j] *= coef;
+	return res;
+}
+ar expr(string& s, int& i) {
+	ar res = term(s, i);
+	while (i < s.size() && (s[i] == '+' || s[i] == '-')) {
+		int coef = 1;
+		if (s[i] == '-') {
+			coef = -1;
+		}
+		i++;
+		ar val = term(s, i);
+		rep(j, 27)res[j] += val[j] * (modint)coef;
+	}
+	return res;
+}
+modint trans(ar a) {
+	modint res = a[26];
+	rep(i, 26)res += a[i] * (modint)val[i];
+	return res;
+}
+
+vector<P> calc(vector<string> vs) {
+	vector<P> res;
+	//rep(i, 26)val[i] = 0;
+	for (auto s : vs) {
+		if (s.size() == 1 && 'a' <= s[0] && s[0] <= 'z') {
+			//declear
+			val[s[0] - 'a'] = 0;
+		}
+		else if (s.size() >= 2 && s[0] == 'p' && s[1] == 'r') {
+			//print
+			string u = s.substr(6, s.size() - 6 - 1);
+			int i = 0;
+			int v = trans(expr(u, i));
+			res.push_back({ v,1 });
+			assert(i == u.size());
+		}
+		else if (s.size() >= 2 && s[0] == 'f' && s[1] == 'o') {
+			//for
+			int pro = 1;
+			int loc = 0;
+			while (true) {
+				if (loc + 1 < s.size() && s[loc] == 'f' && s[loc + 1] == 'o') {
+					//for(
+					loc += 4;
+
+					int ri = loc;
+					while (s[ri] != ')')ri++;
+					string u = s.substr(loc, ri - loc);
+					int i = 0;
+					pro *= trans(expr(u, i));
+					assert(i == u.size());
+
+					loc = ri;
+					//)
+					loc++;
+				}
+				else break;
+			}
+			if (pro > 0) {
+				if (s[loc] == 'p' && s[loc + 1] == 'r') {
+					//print
+					loc += 6;
+					string u = s.substr(loc, s.size() - 1 - loc);
+					int i = 0;
+					int v = trans(expr(u, i));
+					if (pro > 0)res.push_back({ v,pro });
+					assert(i == u.size());
+				}
+				else {
+					//assign
+					int id = s[loc] - 'a';
+					assert(0 <= id && id < 26);
+					assert(s[loc + 1] == '<' && s[loc + 2] == '-');
+					loc += 3;
+					string u = s.substr(loc, s.size() - loc);
+					int i = 0;
+					auto a = expr(u, i);
+					assert(i == u.size());
+					modint sum = 0;
+					rep(i, 27)if (i != id)sum += a[i];
+					//cout << "e? " << a[0] << "\n";
+					//cout << "?? " << u << "\n";
+
+					{
+						mat A = { {a[id],sum},{0,1} };
+						A = mtpow(A, pro);
+						val[id] = A[0][0] * (modint)val[id] + A[0][1];
+					}
+					/*{
+						if (a[id] == (modint)1) {
+							val[id] += (modint)pro * sum;
+						}
+						else {
+							modint p = a[id];
+							modint q = sum;
+							modint x = mod_pow(p, pro) - 1;
+							x /= (p - (modint)1);
+							x *= q;
+							x += val[id] * (modint)mod_pow(p, pro);
+							val[id] = x;
+						}
+					}*/
+				}
+			}
+		}
+		else {
+			//assign
+			int id = s[0] - 'a';
+			string u = s.substr(3, s.size() - 3);
+			int i = 0;
+			int x = trans(expr(u, i));
+			val[id] = x;
+			assert(i == u.size());
+		}
+		//cout << "fin " << s << "\n";
+	}
+	return res;
+}
+vector<LP> ttt(vector<P> v) {
+	vector<LP> res;
+	rep(i, v.size()) {
+		ll sum = v[i].second;
+		while (i + 1 < v.size() && v[i].first == v[i + 1].first) {
+			i++; sum += v[i].second;
+		}
+		res.push_back({ v[i].first,sum });
+	}
+	return res;
+}
+void solve() {
+	vector<string> vs(n), vt(m);
+	rep(i, n)cin >> vs[i];
+	rep(i, m)cin >> vt[i];
+	vector<P> cs = calc(vs), ct = calc(vt);
+	auto s = ttt(cs), t = ttt(ct);
+	//cout << "hello s\n";
+	//rep(i, s.size())cout << s[i].first << " " << s[i].second << "\n";
+	//cout << "hello t\n";
+	//rep(i, t.size())cout << t[i].first << " " << t[i].second << "\n";
+	if (s == t) {
+		cout << "Yes" << endl;
+	}
+	else {
+		cout << "No" << endl;
+	}
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	//cout << fixed << setprecision(10);
+	//init_f();
+	//init();
+	//while(true)
+	//expr();
+	//int t; cin >> t; rep(i, t)
+	while (cin >> n >> m, n)
+		solve();
+	return 0;
+}
+
+
+

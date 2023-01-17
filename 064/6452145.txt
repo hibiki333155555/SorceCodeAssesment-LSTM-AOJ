@@ -1,0 +1,14 @@
+import math
+
+N = int(input())
+
+c_min = math.inf
+c_p = -math.inf
+for _ in range(N):
+    v = int(input())
+    p = v - c_min
+    c_min = min(v, c_min)
+    c_p = max(p, c_p)
+
+print(c_p)
+

@@ -1,0 +1,31 @@
+N = int(input())
+ls = list(map(int, input().split()))
+
+count = 0
+
+def merge_sort(ls, left, right):
+    if left + 1 < right:
+        mid = (left + right) // 2
+        merge_sort(ls, left, mid)
+        merge_sort(ls, mid, right)
+        merge(ls, left, mid, right)
+
+def merge(ls, left, mid, right):
+    l_ls = [ls[i] for i in range(left, mid)]
+    r_ls = [ls[i] for i in range(mid, right)]
+    l_idx, r_idx = 0, 0
+    for i in range(left, right):
+        count += 1
+        if l_idx == len(l_ls) or l_ls[l_idx] > r_ls[r_idx]:
+            ls[i] = r_ls[r_idx]
+            r_idx += 1
+        else:
+            ls[i] = l_ls[l_idx]
+            l_idx += 1
+
+merge_sort(ls, 0, len(ls))
+print(*ls)
+print(count)
+    
+    
+

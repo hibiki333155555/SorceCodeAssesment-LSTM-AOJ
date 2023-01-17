@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector> // vector
+#include <algorithm> // min, max, swap, sort, reverse, lower_bound, upper_bound
+#include <utility> // pair, make_pair
+#include <stack> // stack
+#include<string>
+using namespace std;
+typedef long long ll;
+int main() {
+    char s;
+    stack<ll> u;
+    stack<pair<ll, ll>> d;
+    ll S1 = 0;
+    for(ll i = 0; cin >> s;i++){
+        cin >> s;
+        if(s == '\\'){
+            u.push(i);
+        }
+        else if(s == '/' && u.size() > 0){
+            ll j, a;
+            j = u.top();
+            u.pop();
+            a = i - j;
+            S1 += i - j;
+            while(d.size() > 0 && d.top().first > j){
+                a += d.top().second;
+                d.pop();
+            }
+            d.push(make_pair(j, a));
+        }
+    }
+cout << S1 << endl;
+    vector<ll> ans;
+    while(d.size() > 0){
+        ans.push_back(d.top().second);
+        d.pop();
+    }
+    reverse(ans.begin(), ans.end());
+    cout << ans.size();
+    for(int i = 0; i < ans.size();i++){
+        cout << " ";
+        cout << ans.at(i);
+    }
+    cout << endl;
+
+}
+

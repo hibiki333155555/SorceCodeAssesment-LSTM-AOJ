@@ -1,0 +1,1 @@
+[,a]=require('fs').readFileSync(0,'utf8').split(/ |\n/g).map(x=>+x);M=Math;console.log(`${M.min(...a)} ${M.max(...a)} ${a.reduce((a,b)=>a+b)}`)

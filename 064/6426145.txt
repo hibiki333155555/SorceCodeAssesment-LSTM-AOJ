@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+void solve(bool& flag)
+{
+	int n, k;
+	cin >> n >> k;
+	if (n == 0 && k == 0)
+	{
+		flag = true;
+		return;
+	}
+	vector<string>numbers(n);
+	vector<int>indexs(n);
+	for (int a = 0; a < n; a++)
+	{
+		string num;
+		cin >> num;
+		numbers.at(a) = num;
+		indexs.at(a) = a;
+	}
+	set<string>MixedNumbers;
+	do
+	{
+		string mixedNumber;
+		for (int a = 0; a < k; a++)
+		{
+			mixedNumber += numbers.at(indexs.at(a));
+		}
+		MixedNumbers.insert(mixedNumber);
+	} 
+	while (next_permutation(indexs.begin(), indexs.end()));
+	cout << MixedNumbers.size() << endl;
+}
+int main()
+{
+	bool flag = false;
+	while (!flag)
+		solve(flag);
+}

@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int n;
+  cin >> n;
+  while(n!=0){
+    vector<int> s(86410, 0);
+    string t, u;
+    for(int i=0;i<n;i++){
+      cin >> t >> u;
+      s[((t[0]-'0')*10+(t[1]-'0'))*3600+((t[3]-'0')*10+(t[4]-'0'))*60+(t[6]-'0')*10+(t[7]-'0')]--;
+      s[((u[0]-'0')*10+(u[1]-'0'))*3600+((u[3]-'0')*10+(u[4]-'0'))*60+(u[6]-'0')*10+(u[7]-'0')]++;
+    }
+    int ans=-1, tmp=0;
+    for(int i=0;i<=86400;i++){
+      tmp+=s[i];
+      ans = min(ans, tmp);
+    }
+    cout << ans*(-1) << endl;
+    cin >> n;
+  }
+  return 0;
+}

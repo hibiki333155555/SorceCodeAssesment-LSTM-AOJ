@@ -1,0 +1,42 @@
+class unionfind:
+    """
+    0-index
+    数字でやるときはこっちがいいっぽい。
+    """
+    def __init__(self,n):
+        self.n = n
+        self.parents = [i for i in range(n)]
+    
+    def find(self,x):
+        if x == self.parents[x]:
+            return x
+        else:
+            self.parents[x] = self.find(self.parents[x])
+            return self.parents[x]
+    
+    def union(self,x,y):
+        x = self.find(x)
+        y = self.find(y)
+        if x == y:
+            return 
+        if y < x:
+            x,y = y,x
+        self.parents[y] = x
+
+    def same(self,x,y):
+        return self.find(x) == self.find(y)
+    
+
+n,q = map(int,input().split())
+u = unionfind(n)
+query = [list(map(int,input().split())) for _ in range(q)]
+for i in range(q):
+    s,a,b = query[i]
+    if s == 0:
+        u.union(a,b)
+    else:
+        if u.same(a,b):
+            print(1)
+        else:
+            print(0)
+

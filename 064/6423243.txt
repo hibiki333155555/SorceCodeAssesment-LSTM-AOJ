@@ -1,0 +1,30 @@
+using System;
+using System.Linq;
+
+namespace AOJ_ITP1_9_C
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            var round = int.Parse(Console.ReadLine());
+            (int Taro, int Hanako) score = (0, 0);
+            for (int i = 0; i < round; i++)
+            {
+                var cards = Console.ReadLine().Split().ToArray();
+                var comparison = string.Compare(cards[0], cards[1]);
+                if (comparison > 0)
+                    score.Taro += 3;
+                else if (comparison == 0)
+                {
+                    score.Taro++;
+                    score.Hanako++;
+                }
+                else
+                    score.Hanako += 3;
+            }
+            Console.WriteLine($"{score.Taro} {score.Hanako}");
+        }
+    }
+}
+

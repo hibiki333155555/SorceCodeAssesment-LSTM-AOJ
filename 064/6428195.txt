@@ -1,0 +1,22 @@
+#include<stdio.h>
+int main()
+
+{
+ int x,count=1;
+ for(x=1; ;x++)
+ {
+   scanf("%d",&x);
+ if(x==0)
+    break;
+    printf("Case %d: %d\n",count,x);
+    count++;
+ }
+
+
+ 
+     //joy
+   
+
+
+
+}

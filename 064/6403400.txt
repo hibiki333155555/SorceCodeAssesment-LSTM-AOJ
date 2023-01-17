@@ -1,0 +1,235 @@
+#pragma GCC optimize("O3")
+#include<bits/stdc++.h> 
+using namespace std;
+using ll=long long;
+using P=pair<ll,ll>;
+template<class T> using V=vector<T>; 
+#define fi first
+#define se second
+#define all(v) (v).begin(),(v).end()
+const ll inf=(1e18);
+//const ll mod=998244353;
+const ll mod=1000000007;
+const vector<int> dy={-1,0,1,0},dx={0,-1,0,1};
+ll GCD(ll a,ll b) {return b ? GCD(b,a%b):a;}
+ll LCM(ll c,ll d){return c/GCD(c,d)*d;}
+struct __INIT{__INIT(){cin.tie(0);ios::sync_with_stdio(false);cout<<fixed<<setprecision(20);}} __init;
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+template<class T>void debag(const vector<T> &a){cerr<<"debag :";for(auto v:a)cerr<<v<<" ";cerr<<"\n";}
+template<class T>void print(const vector<T> &a){for(auto v:a)cout<<v<<" ";cout<<"\n";}
+struct mint{
+using ull=unsigned long long int;
+ull v;
+mint(ll vv=0){s(vv%mod+mod);}
+mint& s(ull vv){
+v=vv<mod?vv:vv-mod;
+return *this;
+}
+//オーバーロード
+mint operator-()const{return mint()-*this;}//mint型にキャスト
+mint&operator+=(const mint&val){return s(v+val.v);}
+mint&operator-=(const mint&val){return s(v+mod-val.v);}
+mint&operator*=(const mint&val){
+v=ull(v)*val.v%mod;
+return *this;
+}
+mint&operator/=(const mint&val){return *this*=val.inv();}
+mint operator+(const mint&val){return mint(*this)+=val;}
+mint operator-(const mint&val){return mint(*this)-=val;}
+mint operator*(const mint&val){return mint(*this)*=val;}
+mint operator/(const mint&val){return mint(*this)/=val;}
+mint pow(ll n)const{
+mint res(1),x(*this);
+while(n){
+if(n&1)res*=x;
+x*=x;
+n>>=1ll;
+}
+return res;
+}
+mint inv()const{return pow(mod-2);}
+//拡張ユークリッドの互除法
+/* mint inv()const{
+int x,y;
+int g=extgcd(v,mod,x,y);
+assert(g==1);
+if(x<0)x+=mod;
+return mint(x);
+}*/
+friend ostream& operator<<(ostream&os,const mint&val){
+return os<<val.v;
+}//出力
+bool operator<(const mint&val)const{return v<val.v;}
+bool operator==(const mint&val)const{return v==val.v;}
+bool operator>(const mint&val)const{return v>val.v;}
+};
+template<class T> struct Matrix{
+    vector<vector<T>> A;
+ 
+    Matrix() {}
+    Matrix(size_t n,size_t m):A(n,vector<T>(m,0)) {}
+    Matrix(size_t n):A(n,vector<T>(n,0)) {}
+ 
+    size_t height() const{return (A.size());}
+    size_t width() const{return (A[0].size());}
+    inline const vector<T> &operator[](int k)const{return (A.at(k));}
+    inline vector<T> &operator[](int k){return (A.at(k));}
+ 
+   //単位行列
+    static Matrix I(size_t n){
+        Matrix mat(n);
+        for(int i=0;i<n;i++)mat[i][i]=(T)(1);
+        return mat;
+    }
+ 
+    Matrix &operator+=(const Matrix &B){
+        size_t n=height(),m=width();
+        assert(n==B.height()&&m==B.width());
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                (*this)[i][j]+=B[i][j];
+            }
+        }
+        return (*this);
+    }
+    Matrix &operator-=(const Matrix &B){
+        size_t n=height(),m=width();
+        assert(n==B.height()&&m==B.width());
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                (*this)[i][j]-=B[i][j];
+            }
+        }
+        return (*this);
+    }
+    Matrix &operator*=(const Matrix &B){
+        size_t n=height(),m=B.width(),w=height();
+        assert(w==B.height());
+        vector<vector<T>> C(n,vector<T>(m,0));
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                for(int k=0;k<w;k++){
+                    C[i][j]+=(*this)[i][k]*B[k][j];
+                }
+            }
+        }
+        A.swap(C);
+        return (*this);
+    }
+ 
+    //累乗計算
+    Matrix &operator^=(long long k){
+        Matrix B=Matrix::I(height());
+        while(k>0){
+            if(k&1){
+                B*=(*this);
+            }
+            (*this)*=(*this);
+            k>>=1ll;
+        }
+        A.swap(B.A);
+        return (*this);
+    }
+ 
+    Matrix operator+(const Matrix &B)const{return (Matrix(*this)+=B);}
+    Matrix operator-(const Matrix &B)const{return (Matrix(*this)-=B);}
+    Matrix operator*(const Matrix &B)const{return (Matrix(*this)*=B);}
+    Matrix operator^(const long long k)const{return (Matrix(*this)^=k);}
+ 
+    friend ostream &operator<<(ostream &os,Matrix &mat){
+        size_t n=mat.height(),m=mat.width();
+        for(int i=0;i<n;i++){
+            os<<"[";
+            for(int j=0;j<m;j++){
+                os<<mat[i][j]<<(j+1==m?"]\n":",");
+            }
+        }
+        return (os);
+    }
+ 
+    //行列式
+    T det(){
+        Matrix B(*this);
+        assert(height()==width());
+        T ret=(T)(1);
+        for(int i=0;i<width();i++){
+            int idx=-1;
+            for(int j=i;j<width();j++){
+                if(!(B[j][i]==(T)(0)))idx=j;
+            }
+            if(idx==-1)return (T)(0);
+            if(i!=idx){
+                ret*=(T)(-1);
+                swap(B[i],B[idx]);
+            }
+            ret*=B[i][i];
+            T v=B[i][i];
+            for(int j=0;j<width();j++){
+                B[i][j]/=v;
+            }
+            for(int j=i+1;j<width();j++){
+                T a=B[j][i];
+                for(int k=0;k<width();k++){
+                    B[j][k]-=B[i][k]*a;
+                }
+            }
+        }
+        return (ret);
+    }
+};
+const int sz=105;//個数 長さ 個数+長さ
+const int mid=51;
+int main(){
+    ll n,k;
+    cin>>n>>k;
+    Matrix<mint> mat(sz,sz);
+    mat=mat.I(sz);
+    for(int i=0;i<n;i++){
+        int a;cin>>a;
+        Matrix<mint> cp=mat,tp=mat.I(sz);
+        // for(int i=1;i<=a;i++){
+        //     tp[a][i]=mint(1);
+        //     tp[a+mid][i]=mint(1);
+        //     tp[a+mid][i+mid]=mint(1);
+        // }
+        // tp[a][0]=mint(1);
+        // tp[a][a]=mint(2);
+        // tp[a+mid][0]=mint(1);
+        // tp[a+mid][a+mid]=mint(2);
+        // tp*=mat;
+        // swap(tp,mat);
+        V<mint> tmp(sz,mint(0));
+        for(int i=0;i<=a;i++)tmp[i]=mint(1);
+        tmp[a]=mint(2);
+        for(int i=0;i<sz;i++){//計算部分
+            mint res=mint(0);
+            for(int j=0;j<sz;j++){
+                res+=tmp[j]*mat[j][i];
+            }
+            cp[a][i]=res;
+        }
+        tmp=V<mint>(sz,mint(0));
+        for(int i=1;i<=a;i++){
+            tmp[i]=mint(1);
+            tmp[i+mid]=mint(1);
+        }
+        tmp[0]=mint(1);
+        tmp[a+mid]=mint(2);
+        for(int i=0;i<sz;i++){//総和部分
+            mint res=mint(0);
+            for(int j=0;j<sz;j++){
+                res+=tmp[j]*mat[j][i];
+            }
+            cp[a+mid][i]=res;
+        }
+        swap(mat,cp);
+    }
+    Matrix<mint> dp(sz,1);
+    dp[0][0]=mint(1);
+    mat^=k;
+    mat*=dp;
+    mint ans=mint(0);
+    for(int i=mid;i<sz;i++)ans+=mat[i][0];
+    cout<<ans<<"\n";
+}

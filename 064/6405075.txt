@@ -1,0 +1,10 @@
+package パソコン甲子園;
+import java.util.Scanner;
+public class Pck0455 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+
+	}
+
+}
+

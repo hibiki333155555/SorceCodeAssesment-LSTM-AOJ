@@ -1,0 +1,14 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+   int a, b;
+   cin >> a >> b;
+
+   int d = a / b;
+   int r = a % b;
+   double f;
+   f = 1.0 * r / b;
+
+   cout << d << " " << r << " " << d << f << "\n";
+}

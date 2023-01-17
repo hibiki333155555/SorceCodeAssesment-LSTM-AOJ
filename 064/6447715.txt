@@ -1,0 +1,81 @@
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+#include<vector>
+#include<algorithm>
+#include<cmath>
+#include<map>
+#include<stack>
+#define maxn 100010
+using namespace std;
+struct edge{
+  int to,ne;
+}e[maxn<<2];
+int indo[maxn],outdo[maxn];
+int head[maxn],cnt=0;
+int fa[maxn];
+int depth[maxn];
+int height[maxn];
+int sibling[maxn];
+int scale[maxn];
+int n;
+void nico(int u,int v)
+{
+  e[++cnt].to=v;
+  e[cnt].ne=head[u];
+  head[u]=cnt;
+  return;
+}
+void dfs(int u)
+{
+  scale[u]=1;
+  if(outdo[u]==0)
+  {
+    height[u]=0;
+    return;
+  }
+  for(int i=head[u];i;i=e[i].ne)
+  {
+    depth[e[i].to]=depth[u]+1;
+    dfs(e[i].to);
+    scale[u]+=scale[e[i].to];
+    height[u]=max(height[u],height[e[i].to]+1);
+  }
+  return;
+}
+int main()
+{
+  cin>>n;
+  for(int i=1;i<=n;i++)
+  {
+    int u,v1,v2;
+    cin>>u>>v1>>v2;
+    u++,v1++,v2++;
+    if(v1!=0)
+    nico(u,v1),outdo[u]++,indo[v1]++,fa[v1]=u,sibling[v1]=v2;
+    if(v2!=0)
+    nico(u,v2),outdo[u]++,indo[v2]++,fa[v2]=u,sibling[v2]=v1;
+  }
+  int rt;
+  // for(int i=1;i<=n;i++)
+  // cout<<i-1<<" "<<indo[i]<<" "<<outdo[i]<<endl;
+  for(int i=1;i<=n;i++)
+  {
+    if(indo[i]==0)
+    rt=i;
+  }
+  fa[rt]=0;
+  depth[rt]=0;
+  dfs(rt);
+  for(int i=1;i<=n;i++)
+  {
+    printf("node %d: parent = %d, sibling = %d, degree = %d, depth = %d, height = %d, ",i-1,fa[i]-1,sibling[i]-1,outdo[i],depth[i],height[i]);
+    if(indo[i]==0)
+    printf("root\n");
+    else if(outdo[i]==0)
+    printf("leaf\n");
+    else
+    printf("internal node\n");
+  }
+	return 0;
+}

@@ -1,0 +1,61 @@
+/*
+完成
+*/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+std::vector<int> InputNNumbers(int N)
+{
+    std::vector<int> N_numbers;
+    for (int i = 0; i < N; i++)
+    {
+        int number;
+        std::cin >> number;
+        N_numbers.push_back(number);
+    }
+    return N_numbers;
+}
+
+void ShowNNumbers(std::vector<int> N_numbers)
+{
+    int N = N_numbers.size();
+    for (int i = 0; i < N; i++)
+    {
+        std::cout << N_numbers[i];
+        if (i < N - 1)
+        {
+            std::cout << ' ';
+        }
+    }
+    std::cout << std::endl;
+}
+
+void InsertionSort(std::vector<int> &A) // N個の要素を含む0-オリジンの配列A
+{
+    int N = A.size();
+    for (int i = 1; i <= N - 1; i++)
+    {
+        int v = A[i];
+        int j = i - 1;
+        while (j >= 0 && A[j] > v)
+        {
+            A[j + 1] = A[j];
+            j--;
+        }
+        A[j + 1] = v;
+        ShowNNumbers(A);
+    }
+}
+
+int main(void)
+{
+    int N;
+    std::cin >> N;
+    std::vector<int> N_numbers = InputNNumbers(N);
+    ShowNNumbers(N_numbers);
+    InsertionSort(N_numbers);
+    return 0;
+}

@@ -1,0 +1,10 @@
+using System;
+class Program
+{
+static void Main()
+{
+Console.ReadLine();
+var input = Console.ReadLine();
+Console.WriteLine(input.Replace("joi", "JOI"));
+}
+}

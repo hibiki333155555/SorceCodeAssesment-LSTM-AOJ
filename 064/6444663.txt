@@ -1,0 +1,12 @@
+import collections
+a = input()
+A = input()
+
+for i in set(A):
+    aa = A.count('a')
+    ae = A.count('e')
+    au = A.count('u')
+    ai = A.count('i')
+    ao = A.count('o')
+
+print(ai + aa + au + ae + ao)

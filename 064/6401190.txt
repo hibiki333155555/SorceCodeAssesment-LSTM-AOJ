@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+typedef unsigned long long int ull;
+#define chmin(x,y) x = min(x,y)
+#define chmax(x,y) x = max(x,y)
+#define BIG_NUM 2000000000
+#define HUGE_NUM 4000000000000000000 //オーバーフローに注意
+#define MOD 1000000007
+#define EPS 0.000000001
+
+
+
+#define SIZE 10005
+
+int A[26],B[26];
+int table[SIZE][2][26];
+
+int main(){
+
+	int N;
+	scanf("%d",&N);
+
+	string S1,S2;
+
+	cin >> S1 >> S2;
+
+	for(int i = 0; i < S1.size(); i++){
+
+		A[S1[i]-'a']++;
+	}
+	for(int i = 0; i < S2.size(); i++){
+
+		B[S2[i]-'a']++;
+	}
+
+
+	for(int i = 0; i < N; i++){
+
+		string T1,T2;
+
+		cin >> T1 >> T2;
+		for(int k = 0; k < T1.size(); k++){
+
+			table[i][0][T1[k]-'a']++;
+		}
+		for(int k = 0; k < T2.size(); k++){
+
+			table[i][1][T2[k]-'a']++;
+		}
+	}
+
+	for(int i = 0; i < 26; i++){
+		for(int k = 0; k < 26; k++){
+			if(A[i] == 0 || B[k] == 0)continue;
+
+			bool FLG = true;
+			for(int p = 0; p < N; p++){
+
+				if(table[p][0][i] > 0 && table[p][1][k] > 0){
+
+					FLG = false;
+					break;
+				}
+			}
+			if(FLG){
+				printf("Yes\n");
+				printf("%c%c\n",'a'+i,'a'+k);
+				return 0;
+			}
+		}
+	}
+
+	printf("No\n");
+
+	return 0;
+}
+

@@ -1,0 +1,16 @@
+xs = []
+while True:
+    x = input()
+    if not x:
+        break
+    else:
+        xs.append(int(x))
+
+ret = []
+for i, x in enumerate(xs):
+    if x != 0:
+        ret.append(f"Case {i+1}: {x}")
+    else:
+        break
+
+print("\n".join(ret))

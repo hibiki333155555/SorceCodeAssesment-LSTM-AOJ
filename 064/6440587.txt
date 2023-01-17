@@ -1,0 +1,44 @@
+#include<iostream>
+#include<vector>
+#include<cmath>
+#include<numeric>
+#include<algorithm>
+using namespace std;
+const int N = 8;
+
+int main(){
+    int k; cin >> k;
+    vector<int> r(N), c(N);
+    for(int i=0; i<k; ++i) cin >> r[i] >> c[i];
+
+    vector<int> p(N);
+    iota(p.begin(), p.end(), 0);
+    bool ng = false;
+    while(next_permutation(p.begin(), p.end())){
+        for(int i=0; i<k; ++i){
+            if(p[r[i]] != c[i]){
+                ng = true; break;
+            }
+        }
+        if(ng){ ng = false; continue; }
+
+        for(int i=0; i<N-1; ++i){
+            for(int j=i+1; j<N; ++j){
+                if( abs(i-j) == abs(p[i]-p[j]) ){
+                    ng = true; break;
+                }
+            }
+            if(ng) break;
+        }
+        if(ng){ ng = false; continue; }
+        else break;
+    }
+    vector<vector<char>> B(N, vector<char>(N, '.'));
+    for(int i=0; i<N; ++i) B[i][p[i]] = 'Q';
+    for(int i=0; i<N; ++i){
+        for(int j=0; j<N; ++j) cout << B[i][j];
+        cout << endl;
+    }
+    return 0;
+}
+

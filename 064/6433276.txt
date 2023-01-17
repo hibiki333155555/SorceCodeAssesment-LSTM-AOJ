@@ -1,0 +1,21 @@
+# 右利きのグループと左利きのグループを分けて並べて、
+# 不満度の小さい右利きと不満度の小さい左利きを真横に並べれば良い
+
+N = int(input())
+a = list(map(int, input().split()))
+w = list(map(int, input().split()))
+right = []
+left = []
+for i in range(N):
+    if a[i] == 0:
+        right.append(w[i])
+    else:
+        left.append(w[i])
+right = sorted(right)
+left = sorted(left)
+
+if len(right) == 0 or len(left) == 0:
+    print(0)
+else:
+    print(right[0] + left[0])
+

@@ -1,0 +1,50 @@
+S = [[[2,3],[3,5],[5,4],[4,2]]]
+S = S + [[[3,1],[6,3],[4,6],[1,4]]]
+S = S + [[[1,2],[2,6],[6,5],[5,1]]]
+S = S + [[[2,1],[6,2],[5,6],[1,5]]]
+S = S + [[[1,3],[3,6],[6,4],[4,1]]]
+S = S + [[[3,2],[5,3],[4,5],[2,4]]]
+
+T = []
+for i in range (6):
+    for j in range (4):
+        T = T + [[i,S[i][j][0]-1,S[i][j][1]-1,6-S[i][j][1],6-S[i][j][0],5-i]]
+
+n = input()
+n = int(n)
+U = []
+for i in range (n):
+    u = list(map(int, input().split()))
+    U = U + [u]
+
+V = []
+for i in range(n):
+    for j in range(n):
+        if i < j:
+            V = V + [[i,j]]
+
+#ここからサイコロ同一判定
+f = 0
+g = 0
+
+for k in range(len(V)):
+    d1 = U[V[k][0]]
+    d2 = U[V[k][1]]
+    for i in range(len(T)):
+        e = []
+        for j in range(6):
+            e = e + [d2[T[i][j]]]
+        if e == d1:
+            f = 1
+            break
+    if f == 1:
+        g = 1
+        break
+    else:
+        g = 0
+
+if g == 0:
+    print("Yes")
+else:
+    print("No")
+

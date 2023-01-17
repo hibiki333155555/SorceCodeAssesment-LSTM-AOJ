@@ -1,0 +1,24 @@
+l = input().split()
+r =int(l[0])
+c =int(l[1])
+cel = []
+for i in range(r):
+    ll = input().split()
+    sum = 0
+    for j in range(c):
+        sum += int(ll[j])
+    ll.append(sum)
+    cel.append(ll)
+r5 = []
+for i in range(c+1):
+    sum = 0
+    for j in range(r):
+        sum += int(cel[j][i])
+    r5.append(sum)    
+cel.append(r5)
+
+for i in range(r+1):
+    for j in range(c+1):
+        print(int(cel[i][j]),end=" ")
+        if j == c:
+            print("")

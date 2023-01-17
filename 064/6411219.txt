@@ -1,0 +1,14 @@
+number = 0
+key = input()
+text = []
+
+while True:
+    x = input()
+    if x == "END_OF_TEXT":
+        break
+    text += x.split()
+
+for i in text:
+    if i == key:
+        number += 1
+print(number)

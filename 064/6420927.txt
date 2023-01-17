@@ -1,0 +1,3 @@
+input('int()')
+print('input**3')
+

@@ -1,0 +1,131 @@
+import sys
+readline = sys.stdin.readline
+write = sys.stdout.write
+def solve():
+    W, H = map(int, readline().split())
+    if W == H == 0:
+        return False
+    f, m, o = map(int, readline().split())
+    C = [list(map(int, readline().split())) for i in range(H)]
+    INF = 10**18
+    X = [[[INF]*(m+1) for i in range(W)] for j in range(H)]
+    X0 = X[0]
+    for j in range(W):
+        X0[j][o] = 0
+    for i in range(H-1):
+        X0 = X[i]
+        X1 = X[i+1]
+        Ci = C[i]
+        for j in range(W):
+            for k in range(1, m+1):
+                if X0[j][k] == INF:
+                    continue
+
+                if Ci[j] < 0:
+                    c0 = X0[j][k] - Ci[j]
+                    e0 = k-1
+                else:
+                    c0 = X0[j][k]
+                    e0 = min(k-1 + Ci[j], m)
+                if e0 <= 0 or c0 > f:
+                    continue
+                X1[j][e0] = min(X1[j][e0], c0)
+
+                c1 = c0; e1 = e0
+                p = j-1
+                while p >= 0:
+                    if Ci[p] < 0:
+                        c1 -= Ci[p]
+                        e1 -= 1
+                    else:
+                        e1 = min(e1-1 + Ci[p], m)
+                    if e1 <= 0 or c1 > f:
+                        break
+                    X1[p][e1] = min(X1[p][e1], c1)
+
+                    c2 = c1; e2 = e1
+                    q = p+1
+                    while q < W:
+                        if q <= j:
+                            e2 -= 1
+                        elif Ci[q] < 0:
+                            c2 -= Ci[q]
+                            e2 -= 1
+                        else:
+                            e2 = min(e2-1 + Ci[q], m)
+                        if e2 <= 0 or c2 > f:
+                            break
+                        X1[q][e2] = min(X1[q][e2], c2)
+
+                        e3 = e2
+                        r = q-1
+                        while p <= r:
+                            e3 -= 1
+                            if e3 <= 0:
+                                break
+                            X1[r][e3] = min(X1[r][e3], c2)
+                            r -= 1
+
+                        q += 1
+
+                    p -= 1
+                c1 = c0; e1 = e0
+                p = j+1
+                while p < W:
+                    if Ci[p] < 0:
+                        c1 -= Ci[p]
+                        e1 -= 1
+                    else:
+                        e1 = min(e1-1 + Ci[p], m)
+                    if e1 <= 0 or c1 > f:
+                        break
+                    X1[p][e1] = min(X1[p][e1], c1)
+
+                    c2 = c1; e2 = e1
+                    q = p-1
+                    while q > 0:
+                        if j <= q:
+                            e2 -= 1
+                        elif Ci[q] < 0:
+                            c2 -= Ci[q]
+                            e2 -= 1
+                        else:
+                            e2 = min(e2-1 + Ci[q], m)
+                        if e2 <= 0 or c2 > f:
+                            break
+                        X1[q][e2] = min(X1[q][e2], c2)
+
+                        e3 = e2
+                        r = q+1
+                        while r <= p:
+                            e3 -= 1
+                            if e3 <= 0:
+                                break
+                            X1[r][e3] = min(X1[r][e3], c2)
+                            r += 1
+
+                        q -= 1
+                    p += 1
+    ans = INF
+    XH = X[H-1]
+    Ci = C[H-1]
+    for j in range(W):
+        for k in range(1, m+1):
+            if XH[j][k] == INF:
+                continue
+            if Ci[j] < 0:
+                c = XH[j][k] - Ci[j]
+                e = k-1
+            else:
+                c = XH[j][k]
+                e = min(k-1 + Ci[j], m)
+            if e <= 0 or c > f:
+                continue
+            ans = min(ans, c)
+    if ans < INF:
+        write("%d\n" % ans)
+    else:
+        write("NA\n")
+    return True
+while solve():
+    ...

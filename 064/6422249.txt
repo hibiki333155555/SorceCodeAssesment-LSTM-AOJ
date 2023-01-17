@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int main() {
+    int x, y, ans = 1;
+    cin >> x >> y;
+    if (x < y) swap(x, y);
+
+    while (y > 0) {
+        int s=x;
+        int t = y;
+        if (x % y == 0) {
+            ans = y;
+            break;
+        }
+        x = t;
+        y = s % t;
+
+    }
+    cout << ans << endl;
+
+}

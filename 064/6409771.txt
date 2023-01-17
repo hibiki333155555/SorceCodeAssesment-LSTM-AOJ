@@ -1,0 +1,5 @@
+for num in range(10000):
+    x = input()
+    print("Case " + str(num) + ": " + x)
+    if x == "0":
+        break

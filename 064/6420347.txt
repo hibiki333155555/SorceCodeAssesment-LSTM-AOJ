@@ -1,0 +1,24 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int W = 0;
+    int H = 0;
+    cin>>H>>W;
+    while(W != 0 && H != 0)
+    {
+        for(int i = 0;i < H; i++)
+        {
+            for(int j = 0; j < W; j++)
+            {
+                cout<<"#";
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+    }
+    return 0;
+}
+

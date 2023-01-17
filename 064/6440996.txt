@@ -1,0 +1,81 @@
+#define PROBLEM "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_A"
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct UnionFind {
+    vector<int> par, siz;
+
+    UnionFind() = default;
+
+    UnionFind(int n) { init(n); }
+
+    void init(int n) {
+        par.resize(n);
+        siz.resize(n);
+        iota(par.begin(), par.end(), 0);
+        fill(siz.begin(), siz.end(), 1);
+    }
+
+    int find(int u) {
+        if (u == par[u])
+            return u;
+        return par[u] = find(par[u]);
+    }
+
+    bool merge(int u, int v) {
+        u = find(u), v = find(v);
+        if (u == v)
+            return false;
+        if (siz[u] > siz[v]) {
+            par[v] = u;
+            siz[u] += siz[v];
+        } else {
+            par[u] = v;
+            siz[v] += siz[u];
+        }
+        return true;
+    }
+
+    int size(int u) { return siz[find(u)]; }
+};
+
+
+template<class graph>
+vector<vector<T>> kruskal(int n, vector<tuple<int, int, T>> E) {
+	graph<T> mst(n);
+	if (n <= 1)
+		return mst;
+	UnionFind dsu(n);
+	sort(E.begin(), E.end(), 
+		[](auto a, auto b) { 
+			return get<2>(a) < get<2>(b); 
+		}
+	);
+	for (auto [u, v, w] : E) {
+		if (dsu.merge(u, v)) {
+			mst[u].emplace_back(v, w);
+			mst[v].emplace_back(u, w);
+		}
+		if (dsu.size(0) == n)
+			break;
+	}
+	return mst;
+}
+
+int main() {
+	int N, M;
+	cin >> N >> M;
+	vector<tuple<int, int, long long>> E;
+	for (int i = 0; i < M; i++) {
+		int u, v; long long w;
+		cin >> u >> v >> w;
+		E.emplace_back(u, v, w);
+	}
+	auto T = kruskal(N, E);
+	long long ans = 0;
+	for (int u = 0; u < N; u++)
+		for (auto [v, w] : T[u])
+			ans += w;
+	cout << ans / 2 << '\n';
+}

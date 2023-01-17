@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+int main() {
+    char String[1200];
+    int i=0;
+    
+    while(1) {
+        scanf("%c", &String[i]);
+        
+        if(String[i] == '\n') {
+            printf("\n");
+            break;
+        }
+        
+        if(String[i]>='A' && String[i]<='Z') {
+            String[i] += 32;
+        }
+        else if(String[i]>='a' && String[i]<='z') {
+            String[i] -= 32;
+        }
+        
+        printf("%c", String[i]);
+        
+        i++;
+    }
+      
+    return 0;
+}

@@ -1,0 +1,40 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int top,K[1000];
+
+void push(int x){
+  K[++top] = x;
+}
+
+int pop(){
+  return K[top--];
+}
+
+int main(){
+  int a,b;
+  top = 0;
+  char k[100];
+  while(scanf("%s",k) != EOF){
+    if(k[0] == '+'){
+      a = pop();
+      b = pop();
+      push(a + b);
+    }else if(k[0] == '-'){
+      b = pop();
+      a = pop();
+      push(a - b);
+    }else if(k[0] == '*'){
+      a = pop();
+      b = pop();
+      push(a * b);
+    }else {
+      push(atoi(k));
+    }
+  }
+  
+  printf("%d\n",pop());
+
+  return 0;
+}

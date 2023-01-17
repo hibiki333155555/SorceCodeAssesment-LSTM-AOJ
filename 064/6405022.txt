@@ -1,0 +1,17 @@
+import java.util.Scanner;
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		double d;
+		double a;
+		int i=1;
+		d = sc.nextInt();
+		if(4<=d&&d<=400&&(d/4)==i) {
+			for(i=1;(d/4)==i;i++) {
+				a=d/4;
+				System.out.print(a);
+			}
+		}
+		sc.close();
+	}
+}

@@ -1,0 +1,13 @@
+str = input()
+q = int(input())
+for i in range(q):
+    in_list = input().split()
+    a = int(in_list[1])
+    b = int(in_list[2])
+    if len(in_list) == 4:
+        str = str[:a] + in_list[3] + str[b+1:]
+    elif in_list[0] == 'print':
+        print(str[a:b+1])
+    else:
+        p = str[a:b+1]
+        str = str[:a] + p[::-1] + str[b+1:]

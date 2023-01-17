@@ -1,0 +1,16 @@
+import math
+
+a, b, c = map(int, input().split())
+
+d = c // 2
+
+ret = 1
+for i in range(2, b):
+    if i > d:
+        break
+
+    if c % i == 0:
+        if a <= i <= b:
+            ret += 1
+
+print(ret)

@@ -1,0 +1,11 @@
+import math
+n=input()
+x=list(map(int,raw_input().split()))
+y=list(map(int,raw_input().split()))
+p=[1,2,3,float("inf")]
+for i in range(n):
+    for j in range(len(p)):
+        d=math.fabs(x[i]-y[i])*p[j]
+        D.append(d)
+for j in range(len(p)):
+    print sum(D)**(1/p)

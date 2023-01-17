@@ -1,0 +1,34 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args){
+        Scanner scan = new Scanner(System.in);
+//      リング状の文字列  
+        String s = scan.next().toLowerCase();
+        String p = scan.next().toLowerCase();
+        int slen = s.length();
+        int plen = p.length();
+        int j = 0;
+        
+        for (int i = 0; i < slen; i++) {
+//          文字が一致したとき
+        	if( p.charAt( 0 ) == s.charAt( i ) ) {
+        		int ij = i;
+                for( j = 0; j<plen; j++ ) {
+//                	インデックスを配列の長さで割った余りを求める
+                	ij = ( i+j ) % slen;
+                	if( p.charAt( j ) != s.charAt( ij ) ) {
+                		break;
+                    }
+                }
+            }
+        	if( plen == j ) { break; }
+        }
+        
+        if( plen == j ) {
+        	System.out.println( "Yes" );            
+        } else {
+            System.out.println( "No" );
+        }        
+    }
+}

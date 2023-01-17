@@ -1,0 +1,7 @@
+var x = require('fs').readFileSync('/dev/stdin', 'utf8');
+x=x-0;
+let s=x%60;
+let m=((x-s)%3600)/60;
+let d=(x-s)%3600;
+let h=(x-d-s)/3600;
+console.log(h+":"+m+":"+s);

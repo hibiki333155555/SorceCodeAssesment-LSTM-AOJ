@@ -1,0 +1,24 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    int n;
+    int x;
+    int count = 0;
+    cin >> n >> x;
+    while (n != 0 && x != 0)
+    {
+        for(int i = 1;i <= x;i++){
+            for(int j = i + 1;j <= x;j++){
+                for(int k = j + 1;k <= x;k++){
+                    if(i + j + k == x){
+                        count++;
+                    }
+                }
+            }
+        }
+    cout << count << endl;
+    cin >> n >> x;
+    }
+return 0;
+}

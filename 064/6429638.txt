@@ -1,0 +1,399 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TreesLab.AvlTrees301;
+
+namespace OnlineTest.WBTrees.AOJ
+{
+	// Test: https://onlinejudge.u-aizu.ac.jp/courses/lesson/8/ITP2/1/ITP2_1_C
+	class List_ITP2_1_C
+	{
+		static int[] Read() => Array.ConvertAll(Console.ReadLine().Split(), int.Parse);
+		static void Main() => Console.WriteLine(Solve());
+		static object Solve()
+		{
+			var qc = int.Parse(Console.ReadLine());
+
+			var l = new AvlList<int>();
+			var i = 0;
+
+			while (qc-- > 0)
+			{
+				var q = Read();
+				if (q[0] == 0)
+					l.Insert(i, q[1]);
+				else if (q[0] == 1)
+					i += q[1];
+				else
+					l.RemoveAt(i);
+			}
+
+			return string.Join("\n", l);
+		}
+	}
+}
+
+// A list by a weighted height-balanced binary tree
+namespace TreesLab.AvlTrees301
+{
+	[System.Diagnostics.DebuggerDisplay(@"\{{Item}\}")]
+	public class Node<T>
+	{
+		#region Properties
+
+		public T Item { get; internal set; }
+		public Node<T> Parent { get; internal set; }
+		public Node<T> Left { get; private set; }
+		public Node<T> Right { get; private set; }
+
+		internal void SetLeft(Node<T> node)
+		{
+			Left = node;
+			if (node != null) node.Parent = this;
+		}
+
+		internal void SetRight(Node<T> node)
+		{
+			Right = node;
+			if (node != null) node.Parent = this;
+		}
+
+		public int Height { get; private set; } = 1;
+		public int LeftHeight => Left?.Height ?? 0;
+		public int RightHeight => Right?.Height ?? 0;
+
+		public int Count { get; private set; } = 1;
+		public int LeftCount => Left?.Count ?? 0;
+		public int RightCount => Right?.Count ?? 0;
+
+		internal void UpdateStates(bool recursive = false)
+		{
+			Height = Math.Max(LeftHeight, RightHeight) + 1;
+			Count = LeftCount + RightCount + 1;
+			if (recursive) Parent?.UpdateStates(true);
+		}
+
+		#endregion
+
+		#region Get Node
+
+		public Node<T> GetPrevious() => Left?.GetLast() ?? GetPreviousAncestor();
+		public Node<T> GetNext() => Right?.GetFirst() ?? GetNextAncestor();
+
+		Node<T> GetPreviousAncestor() => Parent?.Right == this ? Parent : Parent?.GetPreviousAncestor();
+		Node<T> GetNextAncestor() => Parent?.Left == this ? Parent : Parent?.GetNextAncestor();
+
+		public Node<T> GetFirst() => Left?.GetFirst() ?? this;
+		public Node<T> GetLast() => Right?.GetLast() ?? this;
+
+		#endregion
+
+		#region Get Node (by Index)
+
+		// out of range: null
+		public Node<T> GetAt(int index)
+		{
+			var d = index - LeftCount;
+			if (d == 0) return this;
+			else if (d < 0) return Left?.GetAt(index);
+			else return Right?.GetAt(d - 1);
+		}
+
+		#endregion
+
+		#region Get Index
+
+		public int GetIndex()
+		{
+			if (Parent == null) return LeftCount;
+			else if (Parent.Left == this) return Parent.GetIndex() - RightCount - 1;
+			else return Parent.GetIndex() + LeftCount + 1;
+		}
+
+		#endregion
+
+		public void Walk(Action<Node<T>> preorder, Action<Node<T>> inorder, Action<Node<T>> postorder)
+		{
+			preorder?.Invoke(this);
+			Left?.Walk(preorder, inorder, postorder);
+			inorder?.Invoke(this);
+			Right?.Walk(preorder, inorder, postorder);
+			postorder?.Invoke(this);
+		}
+	}
+
+	public static class NodeHelper
+	{
+		public static bool Exists<T>(this Node<T> node) => node != null;
+
+		public static T GetItemOrDefault<T>(this Node<T> node, T defaultItem = default(T)) => node != null ? node.Item : defaultItem;
+		public static bool TryGetItem<T>(this Node<T> node, out T item)
+		{
+			item = node != null ? node.Item : default(T);
+			return node != null;
+		}
+	}
+
+	[System.Diagnostics.DebuggerDisplay(@"Count = {Count}")]
+	public class AvlList<T> : IEnumerable<T>
+	{
+		#region Properties
+
+		public Node<T> Root { get; private set; }
+		public int Count => Root?.Count ?? 0;
+
+		// Call this method to update the Root object.
+		protected void SetRoot(Node<T> node)
+		{
+			Root = node;
+			if (node != null) node.Parent = null;
+		}
+
+		#endregion
+
+		#region Initialize Tree
+
+		public void Clear() => SetRoot(null);
+
+		public void Initialize(IEnumerable<T> items)
+		{
+			if (items == null) throw new ArgumentNullException(nameof(items));
+			var a = items as T[] ?? items.ToArray();
+			SetRoot(CreateSubtree(a, 0, a.Length));
+		}
+
+		static Node<T> CreateSubtree(T[] items, int l, int r)
+		{
+			if (r == l) return null;
+			if (r == l + 1) return new Node<T> { Item = items[l] };
+
+			var m = (l + r) / 2;
+			var node = new Node<T> { Item = items[m] };
+			node.SetLeft(CreateSubtree(items, l, m));
+			node.SetRight(CreateSubtree(items, m + 1, r));
+			node.UpdateStates();
+			return node;
+		}
+
+		#endregion
+
+		#region Get/Remove Items
+
+		public IEnumerator<T> GetEnumerator() => GetItems().GetEnumerator();
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetItems().GetEnumerator();
+		public IEnumerable<T> GetItems()
+		{
+			for (var n = Root?.GetFirst(); n != null; n = n.GetNext())
+				yield return n.Item;
+		}
+
+		public IEnumerable<T> GetItemsDescending()
+		{
+			for (var n = Root?.GetLast(); n != null; n = n.GetPrevious())
+				yield return n.Item;
+		}
+
+		#endregion
+
+		#region Get/Remove Items (by Index)
+
+		public IEnumerable<T> GetItems(int startIndex, int endIndex)
+		{
+			if (startIndex < 0) startIndex = 0;
+			for (var n = Root?.GetAt(startIndex); n != null && startIndex < endIndex; n = n.GetNext(), ++startIndex)
+				yield return n.Item;
+		}
+
+		public IEnumerable<T> GetItemsDescending(int startIndex, int endIndex)
+		{
+			if (endIndex > Count) endIndex = Count;
+			for (var n = Root?.GetAt(--endIndex); n != null && startIndex <= endIndex; n = n.GetPrevious(), --endIndex)
+				yield return n.Item;
+		}
+
+		public int RemoveItems(int startIndex, int endIndex)
+		{
+			if (startIndex < 0) startIndex = 0;
+			var nodes = new List<Node<T>>();
+			for (var n = Root?.GetAt(startIndex); n != null && startIndex < endIndex; n = n.GetNext(), ++startIndex)
+				nodes.Add(n);
+
+			for (int i = nodes.Count - 1; i >= 0; --i) RemoveNode(nodes[i]);
+			return nodes.Count;
+		}
+
+		#endregion
+
+		#region Get/Remove Node
+
+		public Node<T> GetFirst() => Root?.GetFirst();
+		public Node<T> GetLast() => Root?.GetLast();
+		public Node<T> RemoveFirst() => RemoveNode(GetFirst());
+		public Node<T> RemoveLast() => RemoveNode(GetLast());
+
+		#endregion
+
+		#region Get/Remove Node (by Index)
+
+		public Node<T> GetAt(int index) => Root?.GetAt(index);
+		public Node<T> RemoveAt(int index) => RemoveNode(GetAt(index));
+
+		public T this[int index]
+		{
+			get
+			{
+				var node = GetAt(index) ?? throw new ArgumentOutOfRangeException(nameof(index));
+				return node.Item;
+			}
+			set
+			{
+				var node = GetAt(index) ?? throw new ArgumentOutOfRangeException(nameof(index));
+				node.Item = value;
+			}
+		}
+
+		#endregion
+
+		#region Insert Item(s)
+
+		public Node<T> Insert(int index, T item) => InsertNode(index, item);
+		public Node<T> Prepend(T item) => InsertNode(0, item);
+		public Node<T> Add(T item) => InsertNode(Count, item);
+
+		public int InsertItems(int index, IEnumerable<T> items)
+		{
+			if (items == null) throw new ArgumentNullException(nameof(items));
+			var c = Count;
+			foreach (var x in items) InsertNode(index++, x);
+			return Count - c;
+		}
+		public int PrependItems(IEnumerable<T> items) => InsertItems(0, items);
+		public int AddItems(IEnumerable<T> items) => InsertItems(Count, items);
+
+		#endregion
+
+		#region Protected Methods
+
+		protected Node<T> InsertNode(int index, T item)
+		{
+			if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
+			if (index > Count) throw new ArgumentOutOfRangeException(nameof(index));
+
+			if (Root == null)
+			{
+				SetRoot(new Node<T> { Item = item });
+				return Root;
+			}
+
+			Node<T> node = Root, newNode;
+			while (true)
+			{
+				var d = index - node.LeftCount - 1;
+				if (d < 0)
+				{
+					if (node.Left == null)
+					{
+						node.SetLeft(newNode = new Node<T> { Item = item });
+						break;
+					}
+					node = node.Left;
+				}
+				else
+				{
+					if (node.Right == null)
+					{
+						node.SetRight(newNode = new Node<T> { Item = item });
+						break;
+					}
+					node = node.Right;
+					index = d;
+				}
+			}
+
+			for (; node != null; node = node.Parent)
+				node = Balance(node);
+			return newNode;
+		}
+
+		// The specified instance will be removed from the tree.
+		protected Node<T> RemoveNode(Node<T> node)
+		{
+			if (node == null) return null;
+
+			Node<T> dirty;
+			if (node.Left == null || node.Right == null)
+			{
+				UpdateChild(node, node.Left ?? node.Right);
+				dirty = node.Parent;
+			}
+			else
+			{
+				var node2 = dirty = node.Right.GetFirst();
+				if (node2 != node.Right)
+				{
+					dirty = node2.Parent;
+					UpdateChild(node2, node2.Right);
+					node2.SetRight(node.Right);
+				}
+				node2.SetLeft(node.Left);
+				UpdateChild(node, node2);
+			}
+			dirty?.UpdateStates(true);
+			return node;
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		// Suppose node != null.
+		void UpdateChild(Node<T> node, Node<T> newNode)
+		{
+			var parent = node.Parent;
+			if (parent == null) SetRoot(newNode);
+			else if (parent.Left == node) parent.SetLeft(newNode);
+			else parent.SetRight(newNode);
+		}
+
+		// Suppose t != null.
+		Node<T> Balance(Node<T> t)
+		{
+			var lrh = t.LeftHeight - t.RightHeight;
+			if (lrh > 2 || lrh == 2 && t.Left.LeftHeight >= t.Left.RightHeight)
+			{
+				t = RotateToRight(t);
+			}
+			else if (lrh < -2 || lrh == -2 && t.Right.LeftHeight <= t.Right.RightHeight)
+			{
+				t = RotateToLeft(t);
+			}
+			t.UpdateStates();
+			return t;
+		}
+
+		// Suppose t != null.
+		Node<T> RotateToRight(Node<T> t)
+		{
+			var p = t.Left;
+			UpdateChild(t, p);
+			t.SetLeft(p.Right);
+			p.SetRight(t);
+			t.UpdateStates();
+			return p;
+		}
+
+		// Suppose t != null.
+		Node<T> RotateToLeft(Node<T> t)
+		{
+			var p = t.Right;
+			UpdateChild(t, p);
+			t.SetRight(p.Left);
+			p.SetLeft(t);
+			t.UpdateStates();
+			return p;
+		}
+
+		#endregion
+	}
+}
+

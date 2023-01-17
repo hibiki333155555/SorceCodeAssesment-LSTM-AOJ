@@ -1,0 +1,13 @@
+X=[]
+while True:
+    a,b=map(int,raw_input().split())
+    if a ==0 and b==0:
+        break
+    X.append(a,b)
+for i in range(len(X)):
+    X[i]==a,b
+    if X[i] == a>b:
+        print(b, a)
+    else:
+        print(a, b)
+

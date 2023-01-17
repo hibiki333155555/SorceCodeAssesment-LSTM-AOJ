@@ -1,0 +1,32 @@
+import sys
+
+n = int(input())    #int n行
+if 2 > n or n > 200000:
+    print("2<= n <= 200,000の範囲で入力してください")
+    sys.exit()
+
+R = []
+#Rをリストに全て格納
+for i in range(n):
+    data = int(input())
+    if 1 <= data and data <= 10**9:
+        R.append(data)
+    else:
+        print("制約を満たしていません")
+        sys.exit()
+
+max = -(30**18)
+tmpI = 30**18
+tmpJ = max
+
+for i in range(0, len(R)-1):
+    if tmpI < R[i]:
+        continue
+    for j in range(i+1, len(R)):
+        if tmpJ > R[j]:
+            continue
+        if max < R[j] - R[i]:
+            max = R[j] - R[i]
+            tmpI = R[i]
+            tmpJ = R[j]
+print(max)

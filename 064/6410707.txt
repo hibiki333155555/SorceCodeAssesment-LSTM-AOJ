@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+const double PI =acos(-1);
+const long double EPS = 1e-14;
+
+void BubbleSort(vector<string>& S){
+  for(long i = 0; i < S.size(); i++){
+    for(long j = S.size() - 1; i < j; j--){
+      if(S[j - 1][1] > S[j][1]){
+        string tmp = S[j - 1];
+        S[j - 1] = S[j];
+        S[j] = tmp;
+      }
+    }
+  }
+}
+
+void SelectionSort(vector<string>& SS){
+  for(long i = 0; i < SS.size(); i++){
+    long minj = i;
+    for(long j = i + 1; j < SS.size(); j++){
+      if(SS[j][1] < SS[minj][1]){
+        minj = j;
+      }
+    }
+    string tmp = SS[i];
+    SS[i] = SS[minj];
+    SS[minj] = tmp;
+  }
+}
+
+int main(){
+  long N;
+  cin >> N;
+  vector<string> S(N), SS(N);
+  for(long i = 0; i < N; i++){
+    cin >> S[i];
+    SS[i] = S[i];
+  }
+  BubbleSort(S);
+  for(long i = 0; i < S.size(); i++){
+    cout << S[i];
+    if(i == N - 1){
+      cout << endl;
+    }else{
+      cout << " ";
+    }
+  }
+  cout << "Stable" << endl;
+  SelectionSort(SS);
+  for(long i = 0; i < S.size(); i++){
+    cout << SS[i];
+    if(i == N - 1){
+      cout << endl;
+    }else{
+      cout << " ";
+    }
+  }
+  if(S == SS){
+    cout << "Stable" << endl;
+  }else{
+    cout << "Not stable" << endl;
+  }
+  return 0;
+}

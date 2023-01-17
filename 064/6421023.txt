@@ -1,0 +1,42 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+const long long MOD = 998244353;
+const long long BASE = 123456789;
+struct rolling_hash{
+  vector<long long> S;
+  vector<long long> POW;
+  rolling_hash(string s){
+    int N = s.size();
+    S = vector<long long>(N + 1, 0);
+    for (int i = N - 1; i >= 0; i--){
+      S[i] = (S[i + 1] * BASE + s[i]) % MOD;
+    }
+    POW = vector<long long>(N + 1, 1);
+    for (int i = 0; i < N; i++){
+      POW[i + 1] = POW[i] * BASE % MOD;
+    }
+  }
+  long long get(int L, int R){
+    return (S[L] - S[R] * POW[R - L] % MOD + MOD) % MOD;
+  }
+};
+int main(){
+  int N;
+  cin >> N;
+  string S;
+  cin >> S;
+  string T = S;
+  reverse(S.begin(), S.end());
+  rolling_hash R1(S), R2(T);
+  int ans = 0;
+  for (int i = 1; i < N; i++){
+    int L = min(i, N - i);
+    long long hash1 = R1.get(i, i + L);
+    long long hash2 = R2.get(N - i, N - i + L);
+    if (hash1 == hash2){
+      ans++;
+    }
+  }
+  cout << ans << endl;
+}

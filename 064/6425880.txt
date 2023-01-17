@@ -1,0 +1,27 @@
+import sys, math
+sys.setrecursionlimit(1000000)
+INF = 1 << 100
+#mod = 1000000007
+mod = 998244353
+input = lambda: sys.stdin.readline().rstrip()
+li = lambda: list(map(int, input().split()))
+
+N = int(input())
+A = li()
+
+ans = 0
+stack = [(A[0], 0)]
+for i in range(1, N):
+    if A[i] > stack[-1][0]:
+        stack.append((A[i], i))
+    elif A[i] < stack[-1][0]:
+        while stack and stack[-1][0] > A[i]:
+            x, y = stack.pop()
+            ans = max(ans, (i-y) * x)
+        stack.append((A[i], y))
+
+while stack:
+    x, y = stack.pop()
+    ans = max(ans, (N-y) * x)
+
+print(ans)

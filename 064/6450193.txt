@@ -1,0 +1,4 @@
+N=int(input())
+table=map(int,input().split())
+table.reverse()
+print("".join(map(str,table)))

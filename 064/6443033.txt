@@ -1,0 +1,54 @@
+import numpy as np
+
+while True:
+    w, h = map(int, input().strip().split())
+    if w == 0 and h == 0:
+        break
+
+    c = []
+    for _ in range(h):
+        row = list(map(int, input().strip().split()))
+        c.append(row)
+
+    c = np.array(c, dtype=np.int)
+
+    # 番兵を配置
+    c2 = np.zeros((h + 2, w + 2), dtype=np.int)
+    c2[1:h+1, 1:w+1] = c
+
+    # チェック済みマス
+    checked = np.zeros((w + 2, h + 2))
+
+    check_num = 1
+    # 深さ優先探索
+    def dfs(x, y):
+        global checked
+        # 現在値がチェック済みならリターン
+        if checked[y, x] > 0:
+            return
+
+        # 現在値が海ならリターン
+        if c2[y, x] == 0:
+            return
+
+        # そうでなければチェック済みにする。
+        checked[y, x] = check_num
+        # 隣接マスの探索
+        adjacents = [(x - 1, y), (x - 1, y + 1), (x, y + 1), (x + 1, y + 1),
+                     (x + 1, y), (x + 1, y - 1), (x, y - 1), (x - 1, y - 1)]
+        for next_x, next_y in adjacents:
+            if c2[next_y, next_x] == 1:
+                dfs(next_x, next_y)
+
+    count = 0
+    # マスを一つずつ見ていく
+    for x in range(1, w + 1):
+        for y in range(1, h + 1):
+            if c2[y, x] == 1 and checked[y, x] == 0:
+                check_num += 1
+                # 未チェックの陸地を発見
+                count += 1
+                dfs(x, y)
+
+    print(count)
+

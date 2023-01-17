@@ -1,0 +1,4 @@
+Num = map(str, input().split())
+ans = sorted(Num)
+
+print(' '.join(ans))

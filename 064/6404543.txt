@@ -1,0 +1,6 @@
+a,b = gets.split(' ').map(&:to_i)
+d = a/b
+r = a%b
+f = a.to_f/b
+# print "#{d} #{r} #{f}"
+printf("%d %d %f\n", d, r, f)

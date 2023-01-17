@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+
+constexpr size_t W = 5;
+
+int eval_cells(std::vector<std::vector<int>> &cells) {
+    int H = cells.size();
+    int ret = 0;
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < W; j++) {
+            int start_pos = j;
+            int cnt = 1, cur_cell = cells[i][j];
+            while (j+1 < W && cells[i][j+1] == cur_cell) {
+                cnt++; j++;
+            }
+            if (cnt >= 3) {
+                for (int k = start_pos; k <= j; k++) cells[i][k] = 0;
+                ret += cur_cell * cnt;
+            }
+        }
+    }
+    return ret;
+}
+
+void drop_cells(std::vector<std::vector<int>> &cells) {
+    int H = cells.size();
+    bool finish = false;
+    while (!finish) {
+        finish = true;
+        for (int i = 0; i < H-1; i++) {
+            for (int j = 0; j < W; j++) {
+                if (cells[i][j] != 0 && cells[i+1][j] == 0) {
+                    std::swap(cells[i][j], cells[i+1][j]);
+                    finish = false;
+                }
+            }
+        }
+    }
+}
+
+void solve(int H) {
+    std::vector<std::vector<int>> cells(H, std::vector<int>(W));
+
+    for (int i = 0; i < H; i++) {
+        for (auto &e : cells[i]) std::cin >> e;
+    }
+
+    int ans = 0;
+    while (1) {
+        int ret = eval_cells(cells);
+        if (ret == 0) break;
+        ans += ret;
+        drop_cells(cells);
+    }
+    printf("%d\n", ans);
+}
+
+int main() {
+    while (1) {
+        int h; std::cin >> h;
+        if (h == 0) break;
+        solve(h);
+    }
+}

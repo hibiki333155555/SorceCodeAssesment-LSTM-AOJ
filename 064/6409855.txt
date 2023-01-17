@@ -1,0 +1,20 @@
+n, m = map(int, input().split())
+matrix_A = [[0 for i in range(m)] for j in range(n)]
+vecter_b = []
+
+for i in range(n) :
+  a = list(map(int, input().split()))
+  matrix_A[i] = a
+
+for i in range(m) :
+  b = int(input())
+  vecter_b.append(b)
+  
+sum_c = 0
+  
+for i in range(n) :
+  for j in range(m) :
+    c = matrix_A[i][j] * vecter_b[j]
+    sum_c += c
+  print(sum_c)
+  sum_c = 0

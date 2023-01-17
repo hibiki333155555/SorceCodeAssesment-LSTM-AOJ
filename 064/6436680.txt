@@ -1,0 +1,20 @@
+def mergecount(n):
+    global count 
+    mid = n // 2
+    lft = mid 
+    rgt = n - mid 
+    
+    if lft > 1:
+        mergecount(lft)
+    if rgt > 1:
+        mergecount(rgt)    
+        
+    count += n 
+    
+n = int(input())
+seq = list(map(int, input().split()))
+seq.sort()
+count = 0
+mergecount(n)
+print(*seq)
+print(count)

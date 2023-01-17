@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int MAX = 17; // 2^MAX > 100000
+
+void f(vector<int>& D, const vector<int>& P, int n)
+{
+	if (D[n] >= 0) return;
+	f(D, P, P[n]);
+	D[n] = D[P[n]] + 1;
+}
+
+int main()
+{
+	int n; cin >> n;
+	vector<vector<int>> P(MAX, vector<int>(n)); P[0][0] = -1;
+	for (int i = 0, k, c; i < n; ++i) for (cin >> k; --k >= 0; P[0][c] = i) cin >> c;
+	for (int k = 1; k < MAX; ++k) for (int i = 0; i < n; ++i) {
+		if (P[k - 1][i] < 0) P[k][i] = -1; else P[k][i] = P[k - 1][P[k - 1][i]];
+	}
+	vector<int> D(n, -1); D[0] = 0;
+	for (int i = 1; i < n; ++i) f(D, P[0], i);
+	int q, u, v, j;
+	for (cin >> q; --q >= 0;) {
+		cin >> u >> v;
+		if (D[u] < D[v]) swap(u, v);
+		for (int k = MAX - 1, pk = 1 << k; k >= 0; --k, pk /= 2) if (D[u] - D[v] >= pk) u = P[k][u];
+		if (u != v) {
+			for (int k = MAX - 1, pk = 1 << k; k >= 0; --k, pk /= 2) if (P[k][u] != P[k][v]) {
+				u = P[k][u];
+				v = P[k][v];
+			}
+			u = P[0][u];
+		}
+		cout << u << endl;
+	}
+	return 0;
+}
+

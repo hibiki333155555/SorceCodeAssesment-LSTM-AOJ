@@ -1,0 +1,9 @@
+package main
+
+import "fmt"
+
+func main() {
+	s:=0
+	fmt.Scanln(&s)
+	fmt.Printf("%d:%d:%d",s/3600,(s%3600)/60,s%60)
+}

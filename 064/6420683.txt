@@ -1,0 +1,8 @@
+N, X = map(int, input().split())
+ans = 0
+for _ in range(N):
+    m = int(input())
+    if m >= X:
+        ans += 1
+print(ans)
+

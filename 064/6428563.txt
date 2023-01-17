@@ -1,0 +1,39 @@
+#include <iostream>
+#include <math.h>
+#include <stdio.h>
+using namespace std;
+typedef struct P{double x,y;} Point;
+Point p1={0,0},p2={100,0};
+void print_point(Point p1){
+    printf("%.8f %.8f\n",p1.x,p1.y);
+    
+}
+void Koch_curve(int d,Point a, Point b){
+    if (d==0)return;
+    Point s,t,u;
+    double th=M_PI*60/180;
+    s.x=(2*a.x+1.0*b.x)/3.0;
+    s.y=(2*a.y+1.0*b.y)/3.0;
+    t.x=(1.0*a.x+2.0*b.x)/3.0;
+    t.y=(1*a.y+2.0*b.y)/3.0;
+    u.x=(t.x-s.x)*cos(th)-(t.y-s.y)*sin(th)+s.x;
+    u.y=(t.x-s.x)*sin(th)+(t.y-s.y)*cos(th)+s.y;
+    if(d==1){ 
+        print_point(a);
+        print_point(s);
+        print_point(u);
+        print_point(t);
+        print_point(b);
+        return;
+    }
+    
+    Koch_curve(d-1,p1,s);
+    Koch_curve(d-1,s,u);
+    Koch_curve(d-1,u,t);
+    Koch_curve(d-1,t,p2);
+}
+int main(void){
+    // Your code here!
+    Koch_curve(2,p1,p2);
+}
+

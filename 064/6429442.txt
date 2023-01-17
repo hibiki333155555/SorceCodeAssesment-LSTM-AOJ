@@ -1,0 +1,14 @@
+#include <iostream>
+using namespace std;
+typedef long long ll;
+
+int main(){
+    int a,b,c,d,e;
+    cin >> a >> b >> c >> d >> e;
+    
+    int ans=0;
+    if(a<0) ans+=c*abs(a)+d;
+    ans+=e*b;
+    cout << ans << endl;
+    return 0;
+}    

@@ -1,0 +1,6 @@
+l = input()
+a,b = map(int, l.split())
+x = a*b
+y = 2(a+b)
+print(x,y)
+

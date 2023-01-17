@@ -1,0 +1,19 @@
+n, w = map(int, input().split())
+mvw = [tuple(map(int, input().split())) for _ in range(n)]
+
+dp = [[-1] * (w+1) for _ in range(n+1)]
+dp[0][0] = 0
+
+for i in range(n):
+    for j in range(w+1):
+        if dp[i][j] == -1:
+            continue
+
+        dp[i+1][j] = max(dp[i+1][j], dp[i][j])
+
+        if j+mvw[i][1] <= w:
+            dp[i+1][j+mvw[i][1]] = max(dp[i+1]
+                                       [j+mvw[i][1]], dp[i][j] + mvw[i][0])
+
+print(max(dp[-1]))
+

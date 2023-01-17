@@ -1,0 +1,43 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main() {
+    int Taro = 0;
+    int Hanako = 0;
+    int turn;
+    cin >> turn;
+    for (int n = 0; n < turn; n++) {
+        string taro, hanako;
+        cin >> taro >> hanako;
+        if(taro == hanako) {
+            Taro++;
+            Hanako++;
+        } else {
+            int size;
+            if(taro.size() > hanako.size()) {
+                size = hanako.size();
+                Taro += 3;
+            } else {
+                size = taro.size();
+                Hanako += 3;
+            }
+            for(int m = 0; m < size; m++) {
+                int ask = taro[m];
+                if(ask > hanako[m]) {
+                    if(Taro == 0) {
+                        Taro += 3;
+                        Hanako -= 3;
+                    }
+                    break;
+                } else if(ask < hanako[m]) {
+                    if(Hanako == 0) {
+                        Hanako += 3;
+                        Taro -= 3;
+                    }
+                    break;
+                } else {}
+            }
+        }
+    }
+    cout << Taro << " " << Hanako << endl;
+}

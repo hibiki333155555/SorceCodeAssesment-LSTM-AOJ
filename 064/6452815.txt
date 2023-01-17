@@ -1,0 +1,26 @@
+#include <iostream>
+#include <iomanip>
+#include <complex>
+
+using namespace std;
+
+pair<complex<double>, double> in() {double x, y, r; cin >> x >> y >> r; return {{x, y}, r};}
+
+int main()
+{
+	auto [c1, r1] = in();
+	auto [c2, r2] = in();
+	c2 -= c1;
+	auto d = abs(c2);
+	auto x = 0.5 * (d * d + r1 * r1 - r2 * r2) / d;
+	auto y = sqrt(r1 * r1 - x * x);
+	complex<double> p1 = {x, y}, p2 = {x, -y};
+	p1 = p1 * c2 / d + c1;
+	p2 = p2 * c2 / d + c1;
+	if (p1.real() > p2.real() || p1.real() == p2.real() && p1.imag() > p2.imag()) swap(p1, p2);
+	cout << fixed << setprecision(8);
+	cout << p1.real() << ' ' << p1.imag() << ' ' << p2.real() << ' ' << p2.imag() << endl;
+
+	return 0;
+}
+

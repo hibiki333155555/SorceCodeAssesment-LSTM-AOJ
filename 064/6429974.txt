@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define vi vector<int>
+#define all(v) v.begin(),v.end()
+#define fi first
+#define se second
+#define P pair<int,int>
+#define mp(a,b) make_pair(a,b)
+#define pb(a) push_back(a)
+
+int mod=1e9+7;
+int inf=INT_MAX;
+
+
+int main(){
+    cin.tie(nullptr);
+    ios_base::sync_with_stdio(false);
+
+    cout<<"Hello World\n";
+
+    return 0;
+}
+

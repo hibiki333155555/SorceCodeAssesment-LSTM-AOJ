@@ -1,0 +1,15 @@
+H, W = [], []
+while True:
+    h, w = map(int, input().split())
+    if h==0 and w==0:
+        break
+    H.append(h)
+    W.append(w)
+    
+for i in range(len(H)):
+    for _ in range(H[i]):
+        x = ""
+        for _ in range(W[i]):
+            x += "#"
+        print(x)
+    print()

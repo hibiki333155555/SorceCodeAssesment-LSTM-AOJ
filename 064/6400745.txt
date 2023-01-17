@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   while (true) {
+      int N, M;
+      cin >> N >> M;
+
+      if (N == 0 && M == 0) {
+         break;
+      }
+
+      vector<int> code_book;
+
+      for (int i = 0; i < M; i++) {
+         int code;
+         cin >> code;
+
+         code_book.emplace_back(code);
+      }
+
+      vector<int> input_seq;
+
+      for (int i = 0; i < N; i++) {
+         int x;
+         cin >> x;
+
+         input_seq.emplace_back(x);
+      }
+
+      vector<array<ll, 256>> dp(N + 1, array<ll, 256>());
+      constexpr ll INF = numeric_limits<ll>::max();
+
+      for (int i = 0; i <= N; i++) {
+         for (int j = 0; j < 256; j++) {
+            dp[i][j] = INF;
+         }
+      }
+
+      dp[0][128] = 0;
+
+      for (int i = 0; i < N; i++) {
+         int x = input_seq[i];
+
+         for (int j = 0; j < 256; j++) {
+            if (dp[i][j] == INF) {
+               continue;
+            }
+
+            for (int k = 0; k < M; k++) {
+               int y = j + code_book[k];
+
+               y = max(0, y);
+               y = min(y, 255);
+
+               int dist = (x - y) * (x - y);
+
+               dp[i + 1][y] = min(dp[i + 1][y], dp[i][j] + dist);
+            }
+         }
+      }
+
+      ll min_sq_dist = INF;
+
+      for (int y = 0; y < 256; y++) {
+         min_sq_dist = min(min_sq_dist, dp[N][y]);
+      }
+
+      cout << min_sq_dist << endl;
+   }
+
+   return 0;
+}
+

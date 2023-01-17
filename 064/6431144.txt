@@ -1,0 +1,6 @@
+while(1):
+    a,op,b=input().split()
+    if(op = ?):
+        break
+    print a op b
+

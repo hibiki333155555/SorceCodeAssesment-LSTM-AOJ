@@ -1,0 +1,12 @@
+#include<stdio.h>
+#define pie 3.1416
+int main(){
+   float r,area,cir;
+ scanf("%f",&r);
+ area=pie*r*r;
+ cir=2*pie*r;
+printf("%f %f\n",area,cir);
+    
+    return 0;
+}
+    

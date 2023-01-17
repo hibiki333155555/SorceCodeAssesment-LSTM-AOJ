@@ -1,0 +1,7 @@
+import math
+
+r = float(input())
+s = r * r * math.pi
+rnd = 2 * math.pi * r
+print('{:.08}'.format(s), '{:.08}'.format(rnd))
+

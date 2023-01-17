@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int A[1000], top;
+void push(int x){
+    A[++top] = x;
+}
+int pop(){
+    return A[top];
+    top--;
+}
+int main(){
+    char a[100];
+    int x, y, top = 0;
+    while(scanf("%s", a) != EOF){
+        if(a[0] == '+'){
+            x = pop();
+            y = pop();
+            push(x + y);
+        }
+        else if(a[0] == '-'){
+            x = pop();
+            y = pop();
+            push(x - y);
+        }
+        else if(a[0] == '*'){
+            x = pop();
+            y = pop();
+            push(x * y);
+        }
+        else push(atoi(a));
+        
+    }
+    printf("%d\n",pop());
+    
+    
+    return 0;
+}
+
+

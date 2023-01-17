@@ -1,0 +1,46 @@
+#include <vector>
+#include <queue>
+#include <numeric>
+
+#include <iostream>
+
+using graph = std::vector<std::vector<std::pair<int, int>>>;
+
+void dijkstra(graph G, int start) {
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> q;    
+    std::vector<int> dist(G.size(), std::numeric_limits<int>::max());
+
+    dist[start] = 0;
+    q.push(std::make_pair(0, start));
+
+    while (!q.empty()) {
+        auto [cur_dist, v] = q.top(); q.pop();
+        if (dist[v] < cur_dist) continue;
+        for (const auto [nv, cost] : G[v]) {
+            if (dist[nv] > dist[v] + cost) {
+                dist[nv] = dist[v] + cost;
+                q.push(std::make_pair(dist[nv], nv));
+            }
+        }
+    }
+
+    for (const auto x : dist) {
+        if (x == std::numeric_limits<int>::max()) {
+            std::cout << "INF" << std::endl;
+        } else {
+            std::cout << x << std::endl;
+        }
+    }
+}
+
+int main() {
+    int V, E, r; std::cin >> V >> E >> r;
+    graph G(V);
+
+    for (int i = 0; i < E; i++) {
+        int s, t, d; std::cin >> s >> t >> d;
+        G[s].push_back(std::make_pair(t, d));
+    }
+
+    dijkstra(G, r);
+}

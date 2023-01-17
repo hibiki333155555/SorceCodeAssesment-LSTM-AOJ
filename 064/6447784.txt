@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+struct BIT{
+    vector<T> b;
+    
+    BIT(const int n) { //配列長n
+        b.resize(n + 1);
+        for (int i = 0; i <= n; i++){
+            b[i] = 0;
+        }
+        //1-indexにするため、領域を一つ多く取っている
+    }
+
+    void add(const int n, const T m){//n番目にmを足す
+        for (int i = n; i < (int)b.size(); i += (i & -i)){
+            b[i] += m;
+        }
+        return;
+    }
+
+    T rsq(const int n, const int m){ //[n, m]の和
+        T pos = 0;
+        for (int i = m; i > 0; i -= (i & -i)){
+            pos += b[i];
+        }
+        for (int i = n - 1; i > 0; i -= (i & -i)){
+            pos -= b[i];
+        }
+        return pos;
+    }
+};
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    BIT<int> b(n + 1);
+
+    for (int i = 0; i < q; i++){
+        int c, x, y;
+        cin >> c >> x >> y;
+
+        if (c == 0){
+            b.add(x, y);
+        }
+
+        else {
+            cout << b.rsq(x, y) << endl;
+        }
+    }
+}
+

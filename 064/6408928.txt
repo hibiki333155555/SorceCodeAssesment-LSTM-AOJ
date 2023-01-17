@@ -1,0 +1,11 @@
+bilding = [[[0 for x in range(10)] for x in range(3)]for x in range(4)] 
+n = int(input())
+for k in range(n):
+    b, f, r, v = map(int, raw_input().split())
+    bilding[b-1][f-1][r-1] += v
+
+for b in range(4):
+    for f in range(3):
+        print(" "+" ".join(map(str, bilding[b][f])))
+    if b != 3:
+        print("#"*20)

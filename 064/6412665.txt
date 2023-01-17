@@ -1,0 +1,96 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+#define N 4
+#define N2 16
+#define LIMIT 100
+
+static const int dx[4] = {1,0,-1,0};
+static const int dy[4] = {0,1,0,-1};
+static const char dir[4] = {'l','u','r','d'};
+int MDT[N2][N2];
+
+struct Puzzle{int f[N2], space, MD;};
+Puzzle state;
+int limit; // limit of depth
+int path[LIMIT];
+
+int getAIIMD(Puzzle pz)
+{
+    int sum =0;
+    for(int i = 0; i< N2 ; i++)
+    {
+        if(pz.f[i] == N2)continue;
+        sum += MDT[i][pz.f[i] -1];
+    }
+    return sum;
+}
+bool dfs(int depth, int prev)
+{
+    if(state.MD == 0)return true;//complete
+    //when now state + heuristic value > limit, it is cut;
+    if(depth + state.MD > limit) return false;
+    int sx = state.space % N;
+    int sy = state.space / N;
+    Puzzle tmp;
+
+    for(int r = 0 ; r < 4;r++)
+    {
+        int tx = sx + dx[r];
+        int ty = sy + dx[r];
+        if(tx < 0 || ty < 0 || tx >= N || ty >= N)continue;//cant move
+        if(max(prev,r) - min(prev, r) == 2)continue;//?????
+        tmp = state;//memorize prev state;
+        //calcu the distance of manhattan and take the diference of between the distance and next point
+        state.MD -= MDT[tx + ty * N][state.f[tx + ty + N] - 1];
+        state.MD += MDT[sx + sy * N][state.f[tx + ty * N] - 1];
+        swap(state.f[tx + ty * N], state.f[sx + sy * N]);
+        state.space = tx + ty * N;
+        if(dfs(depth + 1 , r) ){path[depth] = r; return true;}
+        state = tmp;
+    }
+    return false;
+}
+string iterative_deepening(Puzzle in)
+{
+    in.MD = getAIIMD(in);//first manhattan distance
+    for(limit = in.MD; limit <= LIMIT ; limit++)
+    {
+        state = in;//memorize the now state
+        if(dfs(0,-100))
+        {
+            string ans = "";
+            for(int i = 0; i < limit; i++) ans += dir[path[i]];
+            return ans;
+        }
+    }
+    return "unsolvable";
+}
+class MyClass
+{
+public:
+    //Strurecures
+    //Prototype Declarations
+    //Global Variables
+    //function------------------------------------------------------------------------
+};
+int main()
+{
+    for(int i = 0; i < N2; i++)
+        for(int j = 0 ; j < N2; j++)
+            MDT[i][j] = abs(i / N - j / N) + abs(i % N - j % N);
+    Puzzle in;
+    for(int i = 0; i < N2; i++)
+    {
+        cin >> in.f[i];
+        if(in.f[i] == 0)
+        {
+            in.f[i] = N2;
+            in.space = i;
+        }
+    }
+    string ans = iterative_deepening(in);
+    cout << ans.size() << endl;
+
+    return 0;
+}

@@ -1,0 +1,134 @@
+import sys
+input = sys.stdin.readline
+MOD = 998244353
+def Mod(n):
+   return pow(n, 1, MOD)
+
+class Parser:
+   def __init__(self, n, s):
+      self.n = n
+      self.s = '\n'.join(s) + '\n' + '.'
+      self.cur = 0
+      self.output = [[0, -1]]
+      self.values = { '?' : 0 }
+
+   def parse(self):
+      self.__program()
+
+   def __program(self):
+      while self.__peek(1) != '.':
+         if self.__peek(1) == '\n':
+            self.cur += 1
+         elif self.__peek(2)[1] == '<':
+            self.__assignment()
+         elif self.__peek(2) == 'fo':
+            self.__for()
+         elif self.__peek(2) == 'pr':
+            self.__print()
+         else:
+            self.__declaration()
+
+   def __declaration(self):
+      self.values[self.__value_name()] = 0
+
+   def __assignment(self, n_loops=1):
+      name = self.__value_name()
+      self.__skip('<-')
+      val = self.__expression(n_loops=n_loops, name=name)
+      self.values[name] = val
+
+   def __print(self, n_loops=1):
+      self.__skip('print(')
+      val = self.__expression()
+      self.__skip(')')
+      
+      if n_loops == 0:
+         pass
+      elif self.output[-1][1] == val:
+         self.output[-1][0] += n_loops
+      else:
+         self.output.append([n_loops, val])
+
+   def __for(self):
+      n_loops = 1
+      while self.__peek(2) == 'fo':
+         self.__skip('for(')
+         n_loops *= self.__expression()
+         self.__skip(')')
+
+      if self.__peek(2) == 'pr':
+         self.__print(n_loops)
+      else:
+         self.__assignment(n_loops)
+
+   def __expression(self, n_loops=1, name='?'):
+      p, q = 0, 0
+      sgn = 1
+      while True:
+         if self.__peek(1) == '+':
+            sgn = 1
+            self.cur += 1
+         if self.__peek(1) == '-':
+            sgn = -1
+            self.cur += 1
+         
+         if self.__peek(1).isdigit():
+            q += sgn * self.__number()
+         elif self.__peek(1).isalpha():
+            if self.__peek(1) == name:
+               p += sgn
+               self.cur += 1
+            else:
+               q += sgn * self.values[self.__value_name()]
+         else:
+            break
+
+      a = self.values[name]
+      if n_loops == 0:
+         return a
+      elif n_loops >= 1 and p == 1:
+         return Mod(a + n_loops * q)
+      else:
+         num = Mod(q * (pow(p, n_loops, MOD) - 1))
+         den_inv = pow(p - 1, MOD - 2, MOD)
+         cnst = Mod(a * pow(p, n_loops, MOD))
+         return Mod(num * den_inv + cnst)
+
+   def __number(self):
+      res = 0
+      while self.__peek(1).isdigit():
+         res = 10*res + int(self.__peek(1))
+         self.cur += 1
+      return res
+
+   def __value_name(self):
+      name = self.__peek(1)
+      self.cur += 1
+      return name
+
+   def __skip(self, s):
+      for c in s:
+         assert(c == self.__peek(1))
+         self.cur += 1
+
+   def __peek(self, n):
+      return self.s[self.cur : self.cur + n]
+
+def main():
+   while True:
+      n, m = map(int, input().split())
+      if n == 0 and m == 0:
+         break
+      s = [input() for _ in range(n)]
+      t = [input() for _ in range(m)]
+
+      yuchan = Parser(n, s)
+      yuchan.parse()
+
+      reikun = Parser(m, t)
+      reikun.parse()
+
+      print('Yes' if yuchan.output == reikun.output else 'No')
+
+if __name__ == '__main__':
+   main()

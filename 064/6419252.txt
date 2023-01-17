@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main( int argc, char** argv ) {
+    int i = 1;
+    while (true) {
+        int x;
+        cin >> x;
+        if (x == 0) break;
+        else {
+            cout << "Case" << ' ' << i << ':' << ' ' << x << endl;
+        }
+        i++;
+    }
+}

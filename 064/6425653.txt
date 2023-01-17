@@ -1,0 +1,11 @@
+#include <iostream>
+#include<stdio.h>
+
+using namespace std;
+
+int main() {
+	double rad;
+	cin >> rad;
+	printf("%f %f\n", rad * rad * 3.141592653589, 2 * 3.141592653589 * rad);
+	return 0;
+}

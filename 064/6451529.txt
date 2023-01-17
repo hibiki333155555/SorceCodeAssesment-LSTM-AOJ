@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int H,W;
+    
+    int i,j,k=1;
+    
+    while(1){
+        scanf("%d %d",&H,&W);
+        if(H==0 && W==0){
+            break;
+        }else{
+            for(i=1;i<=H;i++){
+                for(j=1;j<=W;j++){
+                    if(k == 1){
+                        printf("#");
+                    }else{
+                        printf(".");
+                    }k *= -1;
+                }if(W/2 == 0){
+                    k *= -1;
+                }printf("\n");
+            }
+        }printf("\n");
+        
+        k = 1;
+    }
+    
+    return 0;
+}
+

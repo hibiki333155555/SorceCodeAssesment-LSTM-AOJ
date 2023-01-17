@@ -1,0 +1,7 @@
+#include <stdio.h>
+int main() {
+int a;
+a=x*x*x;
+printf("%d\n",x);
+return 0;
+}

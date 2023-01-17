@@ -1,0 +1,50 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+class DisjointSet{
+    public:
+        vector <int>rank,p;
+        DisjointSet(){}
+        DisjointSet(int size){
+            rank.resize(size,0);
+            p.resize(size,0);
+            for(int i=0;i<size;i++)p[i]=i;
+
+        }
+        
+        bool same(int x,int y){return find(x)==find(y);}
+        
+        void unite(int x,int y){link(find(x),find(y));}
+        
+        int find(int x){
+            if(x!=p[x])p[x]=find(p[x]);
+            return p[x];
+        }
+        
+        void link(int x,int y){
+            if(rank[x]>rank[y]){p[y]=x;}
+            else if(rank[x]<rank[y]){p[x]=y;}
+            else if(rank[x]==rank[y]){
+                p[x]=y;
+                rank[y]++;
+            }
+        }
+};
+
+int main(){
+    
+    int n,q;
+    int com,x,y;
+    cin>>n>>q;
+    DisjointSet ds= DisjointSet(n);
+    
+    for(int i=0;i<q;i++){
+        cin>>com>>x>>y;
+        if(com==0){ds.unite(x,y);}
+        else if(com==1){cout<<ds.same(x,y)<<endl;}
+    }
+    return 0;
+}
+

@@ -1,0 +1,103 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using ll = long long;
+template <class t>
+using vvector = vector<vector<t>>;
+using pii = pair<int,int>;
+
+template<long long B, long long MOD>
+class rolling_hash{
+public:
+    using ll = long long;
+    int n;
+    vector<ll> hash;
+    vector<ll> Bp;
+    vector<ll> Bin;
+    ll modpow(ll x,ll y){
+        ll res = 1;
+        ll sum = x;
+        while(y){
+            if(y&1)res = res * sum % MOD;
+            sum = sum * sum % MOD;
+            y >>= 1;
+        }
+        return res;
+    }
+    ll modinv(ll x){
+        return modpow(x,MOD-2);
+    }
+
+    void build(vector<int> xs){
+        vector<ll> xs_;
+        for(auto i:xs)xs_.emplace_back(i);
+        build(xs_);
+    }
+
+    void build(string xs){
+        vector<ll> xs_;
+        for(auto i:xs)xs_.emplace_back(i);
+        build(xs_);
+    }
+
+    void build(vector<ll> xs){
+        n = xs.size();
+        hash.resize(n+1);
+        Bp.resize(n+1);
+        Bin.resize(n+1);
+        hash[0] = 0;
+        Bp[0] = Bin[0] = 1;
+        Bp[1] = B;
+        Bin[1] = modinv(B);
+        for(int i=1;i<n;++i){
+            Bp[i+1] = Bp[i] * Bp[1] % MOD;
+            Bin[i+1] = Bin[i] * Bin[1] % MOD;
+        }
+        for(int i=0;i<n;++i){
+            hash[i+1] = (hash[i] + xs[i] * Bp[i+1]) % MOD;
+        }
+    }
+
+    // [l,r)
+    ll query(int l,int r){
+        return (((hash[r] - hash[l]) % MOD) + MOD) % MOD * Bin[l+1] % MOD;
+    }
+};
+
+using RH1 = rolling_hash<71, 1000000007>;
+using RH2 = rolling_hash<13, 1000000009>;
+
+int func(){
+    int n;
+    cin >> n;
+    string str;
+    string stl;
+    cin >> str;
+    stl = str;
+    reverse(stl.begin(),stl.end());
+    RH1 rh1l;
+    RH1 rh1r;
+    RH2 rh2l;
+    RH2 rh2r;
+
+    rh1l.build(str);
+    rh1r.build(stl);
+    rh2l.build(str);
+    rh2r.build(stl);
+    int res = 0;
+    for(int i=1;i<n;++i){
+        int left = i;
+        int right = (n - i);
+        int width = min(left,right);
+        if(rh1l.query(i-width,i) != rh1r.query(n-i-width,n-i))continue;
+        if(rh2l.query(i-width,i) != rh2r.query(n-i-width,n-i))continue;
+        ++res;
+    }
+    return res;
+}
+
+int main(){
+    cout << func() << endl;
+}
+

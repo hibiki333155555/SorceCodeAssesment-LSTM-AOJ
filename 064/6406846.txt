@@ -1,0 +1,153 @@
+#include <bits/stdc++.h>
+#pragma GCC target("avx2")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#define ll long long
+#define int long long
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+#define ALL(a) (a).begin(), (a).end()
+#define fore(i, a) for (auto& i : a)
+#define MP make_pair
+using namespace std;
+using ld = long double;
+using pll = pair<ll, ll>;
+using pdd = pair<ld, ld>;
+using Graph = vector<vector<ll>>;
+using in = int;
+using vin = vector<in>;
+using vvin = vector<vector<int>>;
+using PQS = priority_queue<int, vector<int>, greater<int>>;
+using PQ = priority_queue<int>;
+const ll MOD = 1e9 + 7;
+const ll INF = 1LL << 60;
+const string YYY = "YES";
+const string yyy = "Yes";
+const string NNN = "NO";
+const string nnn = "No";
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, 1, 0, -1};
+template <class T>
+bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  } else {
+    return false;
+  }
+}
+template <typename A, size_t N, typename T>
+void Fill(A (&array)[N], const T& val) {
+  std::fill((T*)array, (T*)(array + N), val);
+}
+template <class T>
+bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  } else {
+    return false;
+  }
+}
+bool cmp(const pll& a, const pll& b) { return a.second > b.second; }
+ll GD(ll num) {  //各桁の和
+  ll digit = 0;
+  while (num != 0) {
+    digit += num % 10;
+    num /= 10;
+  }
+  return digit;
+}
+bool if_integer(ld x) {  //整数判定
+  return std::floor(x) == x;
+}
+bool if_prime(ll x) {
+  bool a = true;
+  for (ll i = 2; i * i <= x; i++) {
+    if (x % i == 0) {
+      a = false;
+      break;
+    }
+  }
+  if (x == 1) a = false;
+  return a;
+}
+ll gcd(ll x, ll y) {
+  if (x % y == 0) {
+    return (y);
+  } else {
+    return (gcd(y, x % y));
+  }
+}
+ll lcm(ll x, ll y) { return x / gcd(x, y) * y; }
+int GetDigit(int num) {
+  int digit = 0;
+  while (num != 0) {
+    num /= 10;
+    digit++;
+  }
+  return digit;
+}
+vector<int> bfs(Graph G, int N, int s) {
+  vin d(N, -1);
+  d[s] = 0;
+  queue<int> que;
+  que.push(s);
+  while (!que.empty()) {
+    int v = que.front();
+    que.pop();
+    for (auto nv : G[v]) {
+      if (d[nv] != -1) {
+        continue;
+      }
+      d[nv] = d[v] + 1;
+      que.push(nv);
+    }
+  }
+  return d;
+}
+void dfs(int N) {
+  for (in i = 1; i * i <= N; i++) {
+  }
+}
+vector<pair<long long, long long>> prime_factorize(long long N) {
+  vector<pair<long long, long long>> res;
+  for (long long a = 2; a * a <= N; ++a) {
+    if (N % a != 0) continue;
+    long long ex = 0;
+    while (N % a == 0) {
+      ++ex;
+      N /= a;
+    }
+    res.push_back({a, ex});
+  }
+  if (N != 1) res.push_back({N, 1});
+  return res;
+}
+signed main() {
+  ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+  cout << std::fixed << std::setprecision(50);
+  ////////////////////////////
+  ///////////////////////////
+  in N;
+  cin >> N;
+  auto v = prime_factorize(N);
+  in NN = 0;
+  in M = v.size();
+  for (in i = 0; i < (1 << M); i++) {
+    in c = __builtin_popcount(i);
+    in s = 1;
+    rep(j, M) if ((i >> j) & 1) s *= v[j].first;
+    if (c % 2 == 1) {
+      NN -= N / s;
+    } else {
+      NN += N / s;
+    }
+  }
+  cout << NN << endl;
+}
+
+//
+// rm -rf test/ && oj d
+// g++ main.cpp
+//  oj t --ignore-spaces-and-newline

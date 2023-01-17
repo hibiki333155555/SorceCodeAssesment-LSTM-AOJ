@@ -1,0 +1,84 @@
+import sys
+from bisect import bisect
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+DOWN = 0
+LEFT = 1
+UP = 2
+RIGHT = 3
+
+
+class Point:
+    def __init__(self, x, y, p_type, length):
+        self.x = x
+        self.y = y
+        self.p_type = p_type
+        self.length = length
+        return
+
+    def __lt__(self, other):
+        if self.y != other.y:
+            return self.y < other.y
+        elif self.p_type != other.p_type:
+            return self.p_type < other.p_type
+        else:
+            return self.x < other.x
+
+
+def line_sweep(point_list):
+    bt = []
+    counter = 0
+    point_list.sort()
+
+    for p in point_list:
+        if p.p_type == DOWN:
+            bt.append(p.x)
+            bt = sorted(set(bt))
+        elif p.p_type == LEFT:
+            counter += bisect(bt, p.x + p.length) - bisect(bt, p.x)
+        elif p.p_type == UP:
+            bt.pop(bt.index(p.x))
+
+    return counter
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    point_list = []
+    for _ in range(n):
+        x0, y0, x1, y1 = map(int, f.readline().split())
+        if y0 == y1:
+            if x0 > x1:
+                x0, x1 = x1, x0
+
+            p0 = Point(x0, y0, LEFT, x1 - x0)
+            p1 = Point(x1, y1, RIGHT, 0)
+            point_list.append(p0)
+            point_list.append(p1)
+        else:
+            if y0 > y1:
+                y0, y1 = y1, y0
+
+            p0 = Point(x0, y0, DOWN, 0)
+            p1 = Point(x1, y1, UP, 0)
+            point_list.append(p0)
+            point_list.append(p1)
+
+    print(line_sweep(point_list))
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

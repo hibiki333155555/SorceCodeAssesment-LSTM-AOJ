@@ -1,0 +1,21 @@
+// E - A/B Problem
+// input: 3 2
+// output: 1 1 1.50000
+
+#include <iostream>
+#include <math.h>
+#include <stdio.h>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    int a,b;
+    cin >> a >>b;
+    
+    int d = a/b;
+    int r = a%b;
+    double f = (a*1.0)/b;
+    cout << d<< " ";
+    cout << r<<" ";
+    std::cout<<std::fixed<<std::setprecision(6)<<f <<endl;
+}

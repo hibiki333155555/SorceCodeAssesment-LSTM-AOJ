@@ -1,0 +1,19 @@
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+ii = lambda: int(input())
+mi = lambda: map(int, input().split())
+li = lambda: list(mi())
+
+a, b = mi()
+
+m = max(len(bin(a)), len(bin(b))) - 2
+cnt = 0
+for i in range(m - 1, -1, -1):
+    now1 = 1 & (a >> i)
+    now2 = 1 & (b >> i)
+    if now1 == now2:
+        cnt += 1
+    else:
+        break
+
+print(cnt)

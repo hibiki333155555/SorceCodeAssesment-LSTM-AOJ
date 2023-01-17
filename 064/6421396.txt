@@ -1,0 +1,84 @@
+import sys
+import operator
+import math
+from bisect import bisect_left, bisect_right
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def solve(f):
+    n = int(f.readline())
+
+    x_list = []
+    y_list = []
+    idx_list = []
+    for i in range(n):
+        x, y = map(int, f.readline().split())
+        x_list.append(x)
+        y_list.append(y)
+        idx_list.append(i)
+
+    width = max(x_list) - min(x_list)
+    height = max(y_list) - min(y_list)
+    if width > height:
+        point_list = list(zip(x_list, y_list, idx_list))
+    else:
+        point_list = list(zip(y_list, x_list, idx_list))
+    point_list.sort()
+
+    interval = int(math.sqrt(n))
+
+    low = [v0 for v0, v1, _ in point_list[::interval]]
+    high = [v0 for v0, v1, _ in point_list[interval - 1::interval]] + [math.inf]
+
+    point_list_i_list = []
+    v1_i_list = []
+    for i in range(0, n, interval):
+        point_list_i = point_list[i:i + interval]
+        point_list_i.sort(key=operator.itemgetter(1))
+        v1_i = [v1 for (_, v1, _) in point_list_i]
+        v1_i_list.append(v1_i)
+        point_list_i_list.append(point_list_i)
+
+    num_query = int(f.readline())
+
+    for _ in range(num_query):
+        sx, tx, sy, ty = map(int, f.readline().split())
+        idx_list = []
+        if width > height:
+            for i in range(bisect_left(high, sx), bisect_right(low, tx)):
+                val = point_list_i_list[i]
+                key = v1_i_list[i]
+                for j in range(bisect_left(key, sy), bisect_right(key, ty)):
+                    if sx <= val[j][0] <= tx:
+                        idx_list.append(val[j][2])
+        else:
+            for i in range(bisect_left(high, sy), bisect_right(low, ty)):
+                val = point_list_i_list[i]
+                key = v1_i_list[i]
+                for j in range(bisect_left(key, sx), bisect_right(key, tx)):
+                    if sy <= val[j][0] <= ty:
+                        idx_list.append(val[j][2])
+        idx_list.sort()
+        for idx in idx_list:
+            print(idx)
+        print()
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    solve(f)
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

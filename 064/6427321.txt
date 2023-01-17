@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+#define dou double
+#define ll long long
+#define all(x) x.begin(),x.end()
+#define gi greater<int>
+#define int2 int,int
+#define pb push_back
+#define mp make_pare
+#define emp emplace
+#define rep(i,a,n) for(int i=(int)(a);i<(int)(n);i++)
+#define p_rep(i,a,n) for(int i=(int)(a);i<=(int)(n);i++)
+#define r_rep(i,a,n) for(int i=(int)(a);i>(int)(n);i--)
+#define rp_rep(i,a,n) for(int i=(int)(a);i>=(int)(n);i--)
+#define fir first
+#define sec second
+#define uns unsigned
+#define INF 10e9
+#define fix(x,k) fixed<<setprecision(k)<<x
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    while(n!=0){
+        int k,two=0;
+        vector<int> a;
+        rep(i,0,n){
+            cin>>k;
+            if(k>=2) two++;
+            if(k!=0) a.pb(k);
+        }
+        if(two==0){
+            cout<<"NA\n";
+            cin>>n;
+            continue;
+        }
+        int s[a.size()]={},i=0,ans=0;
+        while(1){
+            s[i]++;
+            ans++;
+            if(s[i]>=2) break;
+            i++;
+            if(i>=n) i=0;
+        }
+        cout<<ans<<"\n";
+        cin>>n;
+    }
+    return 0;
+}

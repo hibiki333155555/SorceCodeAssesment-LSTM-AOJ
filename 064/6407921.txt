@@ -1,0 +1,62 @@
+#include<stdio.h>
+int main(void)
+{
+    int a;
+    scanf("%d",&a);
+    int i,j,n,p[4][14];
+    char s,dl[2][a+1];
+    for(i = 0 ; i < a;i++)
+    {
+        scanf("%c",&s);
+        scanf("%c %d",&dl[0][i],&dl[1][i]);
+    }
+    for(i = 0 ; i < a;i++)
+    {
+        if(dl[0][i]=='S')
+        {
+            n = dl[1][i];
+            p[0][n] = n;
+        }
+        else if(dl[0][i] == 'H')
+        {
+            n = dl[1][i];
+            p[1][n] = n;
+        }
+        else if(dl[0][i] == 'C')
+        {
+            n = dl[1][i];
+            p[2][n] = n;
+        }
+        else if(dl[0][i] == 'D')
+        {
+            n = dl[1][i];
+            p[3][n] = n;
+        }
+    }
+    for(i = 0 ; i < 4 ; i++)
+    {
+        for(j = 1 ; j <= 13 ; j++)
+        {
+            if(p[i][j] != j)
+            {
+                if(i == 0)
+                {
+                    printf("S %d\n",j);
+                }
+                else if(i == 1)
+                {
+                    printf("H %d\n",j);
+                }
+                else if(i == 2)
+                {
+                    printf("C %d\n",j);
+                }
+                else if(i == 3)
+                {
+                    printf("D %d\n",j);
+                }
+            }
+        }
+    }
+    return 0;
+}

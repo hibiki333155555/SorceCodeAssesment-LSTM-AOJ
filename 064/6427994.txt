@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct _node{
+    long long value;
+    _node* prev;
+    _node* next;
+};
+
+class _list{
+    _node* first;
+    _node* last;
+    
+    _list(){
+        first = nullptr;
+        last = nullptr;
+    }
+    ~_list(){};
+    void insert(long long x){
+        auto* n = new _node;
+        n->value = x;
+        n->prev = nullptr;
+        n->next = first;
+        first = n;
+    }
+    void del(long long x){
+        _node* n = first;
+        while(n != nullptr ){
+            if(n->value != x) continue;
+            if(n->prev = nullptr) first = n->next;
+            if(n->next = nullptr) last = n->prev;
+            n->prev->next = n->next;
+            n.next.prev = n->prev;
+            delete n;
+            n = nullptr;
+        }
+    }
+    void deleteFirst(){
+        _node* tmp = first;
+        first = first->next;
+        first->prev = nullptr;
+        delete tmp;
+    }
+    void deleteLast(){
+        _node* tmp = last;
+        last = last->prev;
+        last->next = nullptr;
+        delete tmp;
+    }
+};
+
+int main(){
+    int que, x;
+    string op;
+    cin>>que;
+    _list l;
+    while(que--){
+        cin>>op;
+        switch(op){
+            case "insert":
+            cin>>x;
+            l.insert(x);
+            break;
+            case "delete":
+            cin>>x;
+            l.del(x);
+            break;
+            case "deleteFirst":
+            l.deleteFirst();
+            break;
+            case "deleteLast":
+            l.deleteLast();
+        }
+    }
+    bool first = true;
+    for(_node* n = l->first; n != nullptr; n = n->next){
+        if (first) first = false;
+        else cout << " ";
+        cout << n->value;
+    }
+    cout << endl;
+    return 0;
+}

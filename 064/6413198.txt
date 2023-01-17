@@ -1,0 +1,87 @@
+// g++ -std=c++17 -D DEV=1 main.cpp
+#include <stdio.h>
+#include <cassert>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using std::cin;
+using std::cout;
+using std::endl;
+using std::terminate;
+using std::vector;
+using std::sort;
+using std::string;
+
+#define rep(i, a, n) for (int i = (a); i < (n); ++i)
+#define bit(n, k) ((n >> k) & 1)
+
+class Program {
+private:
+
+    bool min(int &a, const int b) {
+        if (a > b) {
+            a = b;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+public:
+
+    Program() {
+    }
+
+    void solve() {
+        int n; cin >> n;
+        string s; cin >> s;
+
+        int jn = 0, on = 0, in = 0;
+        rep(i, 0, n) {
+            if (s[i] == 'J') {
+                jn++;
+            } else if (s[i] == 'O') {
+                on++;
+            } else {
+                assert(s[i] == 'I');
+                in++;
+            }
+        }
+
+        string t;
+        rep(i, 0, jn) {
+            t.append(1, 'J');
+        }
+        rep(i, 0, on) {
+            t.append(1, 'O');
+        }
+        rep(i, 0, in) {
+            t.append(1, 'I');
+        }
+
+        cout << t << endl;
+    }
+};
+
+int main() {
+
+#ifdef DEV
+    std::ifstream in("input");
+    cin.rdbuf(in.rdbuf());
+
+    int t; cin >> t;
+    for (int x = 1; x <= t; ++x) {
+        Program p;
+        p.solve();
+    }
+#else
+    Program p;
+    p.solve();
+#endif
+
+    return 0;
+}
+

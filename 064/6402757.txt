@@ -1,0 +1,23 @@
+#include <iostream>
+#include <cctype>
+#include <string>
+using namespace std;
+
+int main(){
+    string W;
+    int sum = 0;
+    cin >> W;
+    while(1){
+        string x;
+        cin >> x;
+        if(x == "END_OF_TEXT") break;
+        for(int i = 0; i < x.size(); i++){
+            x[i] = tolower(x[i]);
+        }
+        if(x == W) sum++;
+        
+    }
+    cout << sum << endl;
+    
+    return 0;
+}

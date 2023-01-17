@@ -1,0 +1,7 @@
+A, B = map(int, input())
+if(A>B):
+    print("a > b")
+elif(A<B):
+    print("a < b")
+elif(A ==B ):
+    print("a == b")

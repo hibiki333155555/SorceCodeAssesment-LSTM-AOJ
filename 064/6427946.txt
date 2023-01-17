@@ -1,0 +1,21 @@
+#include <stdio.h>
+int main (){
+
+    int cas = 1;
+    int x,i;
+    while(1)
+    {
+        scanf("%d",&x);
+        if (x == 0)
+        {
+            
+            break;
+        }
+
+        printf("Case %d: %d\n",cas,x);
+        cas++;
+        
+    }
+    
+
+}

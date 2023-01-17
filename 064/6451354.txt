@@ -1,0 +1,10 @@
+#include<stdio.h>
+int main(void)
+{
+    double a;
+    int b;
+    scanf("%lf",&a);
+    b=a/4;
+    printf("%d\n",b);
+    return 0;
+}

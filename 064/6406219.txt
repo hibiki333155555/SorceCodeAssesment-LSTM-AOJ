@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int main(void){
+    int mid[50],last[50],re[50],sekiseki[50];
+    int i;
+    for(i=1;i<=50;i++){
+        mid[i]=0;last[i]=0;re[i]=0;sekiseki[i]=0;
+    }
+    i=1;
+    while(scanf("%d %d %d",mid[i],last[i],re[i]),mid[i]!=-1 && last[i]!=-1 && re[i]!=-1){
+        
+        sekiseki[i]=mid[i]+last[i];
+        
+        if(sekiseki[i]>=80){
+            printf("A\n");
+        }
+        else if(sekiseki[i]>=65){
+            printf("B\n");
+        }
+        else if(sekiseki[i]>=50){
+            printf("C\n");
+        }
+        else if(sekiseki[i]>=30){
+            if(re[i]>=50){
+                printf("C\n");
+            }
+            else{
+            printf("D\n");
+            }
+        }
+        else {
+            printf("F\n");
+        }
+        i++;
+    }
+    
+}

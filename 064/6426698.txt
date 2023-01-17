@@ -1,0 +1,7 @@
+def re(a, b):
+    s = a * b
+    l = (a + b) * 2
+    print(s,l)
+
+a, b = map(int, input().split())
+re(a, b)

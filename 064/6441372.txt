@@ -1,0 +1,17 @@
+#include<stdio.h>
+
+int main(){
+    
+    int S;
+    int h,m,s;
+    
+    h=S/3600;
+    m=(S-h)/60;
+    s=S-h-m;
+    
+    printf("%d:%d:%d",h,m.s);
+    
+    return 0;
+    
+}
+

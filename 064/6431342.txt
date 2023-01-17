@@ -1,0 +1,49 @@
+#include<iostream>
+using namespace std;
+
+static const int NMAX = 100;
+static const int WMAX = 10000;
+
+/*用来存储各个物品的价值*/
+int V[NMAX+1] = {};
+
+/*用来存储各个物品的重量*/
+int W[NMAX+1] = {};
+
+
+/*C[j][w]存储的是考虑0到j物品，背包容量为w时最大的价值*/
+int C[NMAX+1][WMAX+1] = {};
+
+/*返回二者中较大的值*/
+int maxin(int a, int b)
+{
+	return a > b ? a : b;
+}
+
+void solve(int n,int w)
+{
+	for (int i = 1; i <=n; i++)
+	{
+		for (int j = 1; j <= w; j++)
+		{
+			/*只有小于等于j这个物品才有被选择的可能*/
+			if (W[i]+j <= w)
+				C[i][j] = maxin(C[i - 1][j], C[i][j - W[i]] + V[i]);
+			else
+				C[i][j]=C[i - 1][j];
+		}
+	}
+}
+
+int main()
+{
+	int w, n;
+	cin >> n >> w;
+	for (int i = 0; i < n; i++)
+		cin >> V[i] >> W[i];
+	solve(n, w);
+	cout << C[n][w] << endl;
+	return 0;
+}
+
+

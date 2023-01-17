@@ -1,0 +1,8 @@
+while True:
+    a,op,b=input().split()
+    if op=='?':
+        break
+    elif op in ('+','-','/','*'):
+        print(eval(str(a+op+b)))
+    else:
+        continue

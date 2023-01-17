@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100005
+
+int main(void){
+    // Your code here!
+    int A[MAX], n, q;
+    for (int i = 0; i < MAX; i++){
+        A[i] = 0;
+    }
+    
+    scanf(" %d %d", &n, &q);
+    for (int i = 0; i < q; i++){
+        int com, x, y;
+        scanf(" %d %d %d", &com, &x, &y);
+        if (com == 0) {
+            A[x] += y;
+        } else if (com == 1) {
+            int sum = 0;
+            for (int j = x; j <= y; j++){
+                sum += A[j];
+            }
+            printf("%d\n", sum);
+        }
+    }
+    
+    return 0;
+}
+

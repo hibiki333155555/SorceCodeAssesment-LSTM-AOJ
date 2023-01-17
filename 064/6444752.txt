@@ -1,0 +1,23 @@
+n, m = map(int, input().split())
+a_matrix = [[0 for j in range(m)]for i in range(n)]
+
+#print(f'a_matrix ={a_matrix}')
+vector = []
+vector_output = []
+for i in range(0,n):
+    mat_input = [int(k) for k in input().split()]
+    for j in range(0,m):
+        a_matrix[i][j] = mat_input[j]
+
+#print(f'a_matrix ={a_matrix}')
+        
+for i in range(m):
+    vector.append(int(input()))
+
+#print(vector)
+    
+for i in range(0,n):
+    seki = 0
+    for j in range(0,m):
+        seki += a_matrix[i][j] * vector[j]
+    print(seki)

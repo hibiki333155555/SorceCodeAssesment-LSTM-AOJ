@@ -1,0 +1,182 @@
+#ifdef LOGX
+#define _GLIBCXX_DEBUG
+#endif
+#include <bits/stdc++.h>
+using namespace std;
+//#include <atcoder/all>
+//using namespace atcoder;
+
+/*---------macro---------*/
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+#define rep2(i, s, n) for (int i = s; i < (int)(n); i++)
+#define unless(x) if(!(x))
+#define until(x) while(!(x))
+#define ALL(a) a.begin(),a.end()
+#define RALL(a) a.rbegin(),a.rend()
+#define mybit(i,j) (((i)>>(j))&1)
+
+/*---------type/const---------*/
+constexpr int big=1000000007;
+//constexpr int big=998244353;
+constexpr double EPS=1e-8; //適宜変える
+typedef long long ll;
+typedef unsigned long long ull;
+typedef std::string::const_iterator state; //構文解析
+constexpr int dx[4]={1,0,-1,0};
+constexpr int dy[4]={0,1,0,-1};
+constexpr char newl='\n';
+struct{
+    constexpr operator int(){return -int(1e9)-10;}
+    constexpr operator ll(){return -ll(1e18)-10;}
+}neginf;
+struct{
+    constexpr operator int(){return int(1e9)+10;}
+    constexpr operator ll(){return ll(1e18)+10;}
+    constexpr auto operator -(){return neginf;}
+}inf;
+
+/*---------debug---------*/
+#ifdef LOGX
+#include <template/debug.hpp>
+#else
+#define dbg(...) ;
+#define dbgnewl ;
+#define prt(x) ;
+#define _prt(x) ;
+#endif
+
+/*---------function---------*/
+template<typename T> T max(const std::vector<T> &a){T ans=a[0];for(T elem:a){ans=max(ans,elem);}return ans;}
+template<typename T> T min(const std::vector<T> &a){T ans=a[0];for(T elem:a){ans=min(ans,elem);}return ans;}
+template<typename T,typename U> bool chmin(T &a,const U b){if(a>b){a=b;return true;}return false;}
+template<typename T,typename U> bool chmax(T &a,const U b){if(a<b){a=b;return true;}return false;}
+bool valid(int i,int j,int h,int w){return (i>=0 && j>=0 && i<h && j<w);}
+template<class T,class U>T expm(T x,U y,const ll mod=big){T res=1;while(y){if(y&1)(res*=x)%=mod;(x*=x)%=mod;y>>=1;}return res;}
+template<class T,class U>T exp(T x,U y){T res=1;while(y){if(y&1)res*=x;x*=x;y>>=1;}return res;}
+
+vector<int> vec(vector<int> v){
+    auto res=v;
+    rep(i,4){
+        vector<int> nxt(4);
+        rep(i,4)nxt[(i+1)%4]=v[i];
+        v=nxt;
+        chmin(res,v);
+    }
+    reverse(v.begin(),v.end());
+    rep(i,4){
+        vector<int> nxt(4);
+        rep(i,4)nxt[(i+1)%4]=v[i];
+        v=nxt;
+        chmin(res,v);
+    }
+    return res;
+}
+
+int main(){
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout << std::fixed << std::setprecision(10);
+/*------------------------------------*/
+    
+    set<vector<int>> st;
+    rep(i,3)rep(j,3)rep(k,3)rep(l,3){
+        vector<int> now={i+1,j+1,k+1,l+1};
+        now=vec(now);
+        st.insert(now);
+    }
+    st.erase({2,3,2,3});
+    int t;
+    cin >> t;
+    while(t--){
+        int n,s;
+        cin >> n >> s;
+        //点対称
+        if(s==1){
+            bool exi=false;
+            int sum=0;
+            rep(i,n){
+                array<int,4> a;
+                rep(i,4)cin >> a[i];
+                int cnt_1=0;
+                rep(i,4){
+                    if(a[i]==1)cnt_1++;
+                    else sum+=(a[i]==2 ? 1:-1);
+                }
+                if(cnt_1==3)exi=true;
+            }
+            array<int,4> ans;
+            //(3)-(2)=sum
+            //(3)+(2)=4
+            if(!exi){
+                if(sum==4)ans={3,3,3,3};
+                else if(sum==0)ans={2,3,2,3};
+                else ans={2,2,2,2};
+            }
+            //(3)-(2)=sum
+            //(3)+(2)=2
+            else{
+                if(sum==2)ans={1,3,1,3};
+                else ans={1,2,1,2};
+            }
+            rep(i,4)cout << ans[i] << " \n"[i==3];
+        }
+        else{
+            array<int,4> ans;
+            int haji_cnt=0;//3つ普通辺があるやつ
+            int kado_cnt=0;//2つ普通辺があるやつ
+            int sum=0;
+            int sum_with_haji=0;//普通辺を持つやつ
+            rep(i,n){
+                array<int,4> a;
+                int cnt1=0;
+                rep(i,4)cin >> a[i],cnt1+=(a[i]==1);
+                rep(i,4)if(a[i]!=1)sum+=(a[i]==2 ? 1:-1);
+                if(cnt1==3)haji_cnt++;
+                if(cnt1==2)kado_cnt++;
+                if(cnt1){
+                    rep(i,4)if(a[i]!=1)sum_with_haji+=(a[i]==2 ? 1:-1);
+                }
+            }
+            //(3)-(2)=sum
+            //直線、端を取る
+            if(haji_cnt==1){
+                if(sum==1)ans={1,1,1,3};
+                else ans={1,1,1,2};
+            }
+            //直線、端以外を取る 点対称ではないので……
+            else if(haji_cnt==2){
+                ans={1,2,1,3};
+            }
+            //角
+            else if(kado_cnt==3){
+                if(sum==2)ans={1,1,3,3};
+                else if(sum==0)ans={1,1,2,3};
+                else ans={1,1,2,2};
+            }
+            //角でない端
+            else if(sum%2==1){
+                if(sum_with_haji==2)ans={1,3,-1,3};
+                else if(sum_with_haji==0)ans={1,2,-1,3};
+                else ans={1,2,-1,2};
+                sum+=(ans[1]==2 ? 1:-1);
+                sum+=(ans[3]==2 ? 1:-1);
+                if(sum==1)ans[2]=3;
+                else ans[2]=2;
+            }
+            //角でも端でもない内側
+            //(3)-(2)=sum
+            else{
+                for(auto t:st){
+                    bool ok=true;
+                    rep(i,4)ok&=(t[i]!=1);
+                    if(!ok)continue;
+                    int nowsum=0;
+                    rep(i,4)nowsum+=(t[i]==3 ? 1:-1);
+                    if(nowsum!=sum)continue;
+                    rep(i,4)ans[i]=t[i];
+                }
+            }
+            rep(i,4)cout << ans[i] << " \n"[i==3];
+        }
+    }
+}

@@ -1,0 +1,111 @@
+#line 1 "J.cpp"
+// #define _GLIBCXX_DEBUG // for STL debug (optional)
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <string>
+#include <cstring>
+#include <deque>
+#include <list>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <utility>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <complex>
+#include <cmath>
+#include <limits>
+#include <cfloat>
+#include <climits>
+#include <ctime>
+#include <cassert>
+#include <numeric>
+#include <fstream>
+#include <functional>
+#include <bitset>
+using namespace std;
+using ll = long long int;
+using int64 = long long int;
+ 
+template<typename T> void chmax(T &a, T b) {a = max(a, b);}
+template<typename T> void chmin(T &a, T b) {a = min(a, b);}
+template<typename T> void chadd(T &a, T b) {a = a + b;}
+ 
+int dx[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0};
+const int INF = 1LL << 29;
+const ll LONGINF = 1LL << 60;
+const ll MOD = 1000000007LL;
+
+#line 1 "/home/tsutaj/Documents/compro/cpp_library/string/str_009_manacher.cpp"
+// Manacher のアルゴリズム
+// 各インデックスについて回文半径を線形時間で求める
+// ダミー文字を挟むことにより偶数長回文にも対応
+template <typename ArrayType, typename ElemType>
+struct Manacher {
+    ArrayType v;
+    ElemType dummy;
+    vector<int> rad;
+
+    ArrayType insert_dummy_elem(ArrayType vec, ElemType dummy) {
+        int N = vec.size();
+        ArrayType res(2*N - 1, dummy);
+        for(int i=0; i<N; i++) res[2*i] = vec[i];
+        return res;
+    }
+
+    void build() {
+        int N = v.size(), i, j;
+        rad = vector<int>(N);
+        for(i=j=0; i<N; ) {
+            while(i-j >= 0 and i+j < N and v[i-j] == v[i+j]) j++;
+            rad[i] = j;
+
+            int k;
+            for(k=1; i-k >= 0 and rad[i]-k > rad[i-k]; k++) rad[i+k] = rad[i-k];
+
+            i += k;
+            j = max(0, j-k);
+        }
+    }
+
+    Manacher(ArrayType v_, ElemType dummy_) :
+        v(v_), dummy(dummy_) {
+        v = insert_dummy_elem(v, dummy);
+        build();
+    }
+
+    // idx を中心とする回文半径 (0-indexed)
+    int get_rad(int idx) {
+        return (rad[2*idx] + 1) / 2;
+    }
+
+    // 部分文字列 [l, r) が回文かどうか (0-indexed) 
+    bool is_palindrome(int l, int r) {
+        if(l == r) return true;
+        int idx = l + r - 1, len = r - l;
+        return rad[idx] >= len;
+    }
+};
+#line 42 "J.cpp"
+ 
+int main() {
+    int N; cin >> N;
+    string s; cin >> s;
+
+    int ans = 0;
+    Manacher<string, char> manacher(s, '#');
+    for(int i=1; i<N; i++) {
+        // i-1 と i の間に隙間がある
+        int lhs = i, rhs = N - i;
+        int len = min(lhs, rhs);
+
+        int l = i - len, r = i + len;
+        if(manacher.is_palindrome(l, r)) ans++;
+    }
+    cout << ans << endl;
+    return 0;
+}
+

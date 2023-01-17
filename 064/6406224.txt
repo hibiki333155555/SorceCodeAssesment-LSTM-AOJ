@@ -1,0 +1,16 @@
+# coding: utf-8
+
+import sys
+input = sys.stdin.readline
+
+_ = input()
+A = list(map(int, input().split()))
+n = int(input())
+
+for _ in range(n):
+    q, b, e = map(int, input().split())
+    
+    if q:
+        print(max(A[b:e]))
+    else:
+        print(min(A[b:e]))

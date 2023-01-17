@@ -1,0 +1,5 @@
+s = input().lower()
+s = re.sub(r'[^a-z]+', '', s)
+alp = 'abcdefghijklmnopqrstuvwxyz'
+for target in alp:
+    print(f"{target} : {s.count(target)}")

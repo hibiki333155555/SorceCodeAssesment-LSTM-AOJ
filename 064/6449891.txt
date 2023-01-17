@@ -1,0 +1,55 @@
+#include<iostream>
+#include<vector>
+#include<set>
+using namespace std;
+int N,M,Q;
+vector<pair<int,long> >A[1<<17];
+long ATK[1<<17];
+int main()
+{
+	cin>>N>>M;
+	for(int i=0;i<N;i++)
+	{
+		int a,b,c;cin>>a>>b>>c;
+		A[b-1].push_back(make_pair(c,a));
+	}
+	cin>>Q;
+	for(int i=0;i<Q;i++)
+	{
+		int d,e;cin>>d>>e;
+		ATK[e-1]+=d;
+	}
+	multiset<pair<int,long> >S;
+	long sum=0,usd=0;
+	for(int i=0;i<M;i++)
+	{
+		while(!S.empty()&&S.begin()->first<=i)
+		{
+			sum-=S.begin()->second;
+			S.erase(S.begin());
+		}
+		for(pair<int,long>p:A[i])
+		{
+			sum+=p.second;
+			S.insert(p);
+		}
+		if(ATK[i]>sum)
+		{
+			if(S.empty())
+			{
+				cout<<-1<<endl;
+				return 0;
+			}
+			long need=ATK[i]-sum;
+			auto it=S.end();
+			pair<int,long>p=*--it;
+			S.erase(it);
+			p.second+=need;
+			S.insert(p);
+			sum+=need;
+			usd+=need;
+		}
+	}
+	cout<<usd<<endl;
+}
+

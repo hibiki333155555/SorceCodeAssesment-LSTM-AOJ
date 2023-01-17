@@ -1,0 +1,28 @@
+let input = require(`fs`).readFileSync(`/dev/stdin`, `utf8`).split(` `).reverse();
+let stack = [];
+
+while(1) {
+    if (input.length) break;
+    let v = input.pop();
+    if (v == `+`) {
+        let x = stack.pop();
+        let y = stack.pop();
+        stack.push(x + y);
+    }
+    else if (v == `-`) {
+        let x = stack.pop();
+        let y = stack.pop();
+        stack.push(y - x);
+    }
+    else if (v == `*`) {
+        let x = stack.pop();
+        let y = stack.pop();
+        stack.push(x * y);
+    }
+    else {
+        stack.push(+v);
+    }
+}
+
+
+console.log(stack[0]);

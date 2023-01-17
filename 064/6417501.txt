@@ -1,0 +1,60 @@
+#define _USE_MATH_DEFINES
+#include <bits/stdc++.h>
+using namespace std;
+#define FOR(i,m,n) for(int i=(m);i<(n);++i)
+#define REP(i,n) FOR(i,0,n)
+#define ALL(v) (v).begin(),(v).end()
+using ll = long long;
+constexpr int INF = 0x3f3f3f3f;
+constexpr long long LINF = 0x3f3f3f3f3f3f3f3fLL;
+constexpr double EPS = 1e-8;
+constexpr int MOD = 1000000007;
+// constexpr int MOD = 998244353;
+constexpr int DY4[]{1, 0, -1, 0}, DX4[]{0, -1, 0, 1};
+constexpr int DY8[]{1, 1, 0, -1, -1, -1, 0, 1};
+constexpr int DX8[]{0, -1, -1, -1, 0, 1, 1, 1};
+template <typename T, typename U>
+inline bool chmax(T& a, U b) { return a < b ? (a = b, true) : false; }
+template <typename T, typename U>
+inline bool chmin(T& a, U b) { return a > b ? (a = b, true) : false; }
+struct IOSetup {
+  IOSetup() {
+    std::cin.tie(nullptr);
+    std::ios_base::sync_with_stdio(false);
+    std::cout << fixed << setprecision(20);
+  }
+} iosetup;
+
+int main() {
+  int h, w, n, sy, sx, gy, gx; cin >> h >> w >> n >> sy >> sx >> gy >> gx; --sy; --sx; --gy; --gx;
+  vector dist(h, vector(w, -2));
+  priority_queue<pair<int, pair<int, int>>> que;
+  while (n--) {
+    int y, x, k; cin >> y >> x >> k; --y; --x;
+    if (chmax(dist[y][x], k)) que.emplace(dist[y][x], make_pair(y, x));
+  }
+  while (!que.empty()) {
+    const auto [m, ij] = que.top(); que.pop();
+    const auto [i, j] = ij;
+    if (m < dist[i][j] || dist[i][j] == 0) continue;
+    REP(k, 4) {
+      const int y = i + DY4[k], x = j + DX4[k];
+      if (chmax(dist[y][x], dist[i][j] - 1)) que.emplace(dist[y][x], make_pair(y, x));
+    }
+  }
+  queue<pair<int, int>> que2({{sy, sx}});
+  dist[sy][sx] = -1;
+  while (!que2.empty()) {
+    const auto [i, j] = que2.front(); que2.pop();
+    REP(k, 4) {
+      const int y = i + DY4[k], x = j + DX4[k];
+      if (0 <= y && y < h && 0 <= x && x < w && dist[y][x] == -2) {
+        dist[y][x] = -1;
+        que2.emplace(y, x);
+      }
+    }
+  }
+  cout << (dist[gy][gx] == -1 ? "Yes\n" : "No\n");
+  return 0;
+}
+

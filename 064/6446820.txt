@@ -1,0 +1,18 @@
+n = int(input())
+temparr = input().split()
+arr = []
+for i in temparr:
+    arr.append(int(i))
+flag = True
+shigi = 0
+while flag:
+    flag = False
+    
+    for i in range(n-1):
+        ii = n-i-1
+        if arr[ii] < arr[ii-1]:
+            arr[ii],arr[ii-1] = arr[ii-1],arr[ii]
+            flag = True
+            shigi += 1
+print(*arr)
+print(shigi)

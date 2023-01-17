@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<string.h>
+int main(void)
+{
+    char cards[201],sub1[100];
+    int m,h,i,j,k,s,leng;
+    while(1)
+    {
+        scanf("%s %d",cards,&m);
+        if(!(strcmp(cards,"-")))break;
+        for(k=0;cards[k]!=0;k++)
+        {
+            leng++;
+        }
+        for(i=0;i<m;i++)
+        {
+            scanf("%d",&h);
+            s=leng-h;
+            for(j=0;j<h;j++)
+            {
+                sub1[j+s]=cards[j];
+            }
+            for(j=s;sub1[j]!=cards[0];j++)
+            {
+                sub1[j-s]=cards[j];
+            }
+        }
+        printf("%s\n",sub1);
+    }
+    return 0;
+}

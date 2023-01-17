@@ -1,0 +1,49 @@
+from collections import defaultdict
+
+n = int(input())
+edges = [[] for _ in range(n)]
+for _ in range(n-1):
+    u, v, c = input().split()
+    u = int(u)-1
+    v = int(v)-1
+    edges[u].append((v, 1<<(ord(c) - ord('a'))))
+    edges[v].append((u, 1<<(ord(c) - ord('a'))))
+
+def dfs(v, p, b):
+    global d
+    if d[v] == -1:
+        d[v] = b
+    for u, c in edges[v]:
+        if u == p:
+            continue
+        dfs(u, v, b^c)
+    return
+
+def bin_to_int(b: str)->int:
+    res = 0
+    for i in range(len(b))[::-1]:
+        if b[i] == '1':
+            res += 1<<(len(b)-(i+1))
+    return res
+
+d = [-1] * n
+d[0] = 0
+dfs(0, -1, 0)
+ans = 0
+cnt = defaultdict(lambda : 0)
+for i in range(n):
+    ans += cnt[d[i]]
+    b = ['0'] * 26    
+    for j in range(26):
+        if d[i]>>j & 1: b[26-(j+1)] = '1'
+    for j in range(26):
+        if b[j] == '0':
+            s = ''.join(b[:j]) + '1' + ''.join(b[j+1:])
+            t = bin_to_int(s)
+        else:
+            s = ''.join(b[:j]) + '0' + ''.join(b[j+1:])
+            t = bin_to_int(s)
+        ans += cnt[t]
+    cnt[d[i]] += 1
+print(ans)
+

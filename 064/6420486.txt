@@ -1,0 +1,9 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    vector<long long> H(2), W(2);
+    for(int i = 0; i < 2; i++) cin >> H[i] >> W[i];
+    long long t = (H[0] + H[1] - 1) / H[1];
+    long long y = (W[0] + W[1] - 1) / W[1];
+    cout << t * y << endl;
+}

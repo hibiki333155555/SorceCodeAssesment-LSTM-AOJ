@@ -1,0 +1,63 @@
+import sys
+
+# READ_FROM_FILE = True
+READ_FROM_FILE = False
+
+
+def partition(a_list, p, r):
+    x = a_list[r][0]
+    i = p - 1
+    for j in range(p, r):
+        if a_list[j][0] <= x:
+            i += 1
+            a_list[i], a_list[j] = a_list[j], a_list[i]
+
+    i += 1
+    a_list[i], a_list[r] = a_list[r], a_list[i]
+    return i
+
+
+def quiq_sort(a_list, p, r):
+    if p < r:
+        q = partition(a_list, p, r)
+        quiq_sort(a_list, p, q - 1)
+        quiq_sort(a_list, q + 1, r)
+    return
+
+
+def main():
+    if READ_FROM_FILE:
+        f = open('test0.txt', 'r')
+    else:
+        f = sys.stdin
+
+    n = int(f.readline())
+    a_list = []
+    for i in range(n):
+        suit, a = f.readline().split()
+        a = int(a)
+        a_list.append((a, suit, i))
+
+    quiq_sort(a_list, 0, n - 1)
+    is_stable = True
+    for i in range(n - 1):
+        if a_list[i][0] == a_list[i + 1][0] and a_list[i][2] > a_list[i + 1][2]:
+            is_stable = False
+            break
+
+    if is_stable:
+        print('Stable')
+    else:
+        print('Not stable')
+
+    result = [suit + ' ' + str(a) for a, suit, _ in a_list]
+    print('\n'.join(result))
+
+    if READ_FROM_FILE:
+        f.close()
+    return
+
+
+if __name__ == '__main__':
+    main()
+

@@ -1,0 +1,84 @@
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+#include <functional>
+using namespace std;
+
+int main() {
+  int k;
+  int n, m;
+  scanf("%d%d%d", &k, &n, &m);
+  vector<int> row(n + 1, -1);
+  vector<int> col(m + 1, -1);
+  vector<int> p(k);
+  vector<int> px = {1, 1, n, n};
+  vector<int> py = {1, m, 1, m};
+  vector<int> sp(4, -1);  
+  for (int i = 0; i < k; i++) p[i] = i;
+  
+  function<int(int)> find = [&](int u) {
+    if (p[u] == u) return p[u];
+    return p[u] = find(p[u]);
+  };
+  
+  auto merge = [&](int u, int v) {
+    int x = find(u), y = find(v);
+    if (x != y) p[y] = x;
+  };
+  
+  vector<int> X(k), Y(k);
+  
+  for (int i = 0; i < k; i++) {
+    int x, y;
+    scanf("%d%d", &x, &y);
+    X[i] = x, Y[i] = y;
+    for (int j = 0; j < 4; j++) {
+      if (x == px[j] && y == py[j]) {
+        sp[j] = i;
+      }
+    }
+    if (row[x] == -1) { 
+      row[x] = i;
+    } else {
+      merge(row[x], i);
+    }
+    if (col[y] == -1) {
+      col[y] = i; 
+    } else {
+      merge(col[y], i);
+    }
+  }
+  int cnt = 0;
+  vector<int> vis(k + 1, 0);
+  vector<int> seq;
+  for (int i = 0; i < k; i++) {
+    int u = find(i);
+    if (!vis[u]) {
+      seq.push_back(u);
+      vis[u] = 1;
+      cnt++;
+    }
+  }
+  if (cnt == 1) printf("%d\n", k - 1);
+  else {
+    vector<int> l(k, m + 1);
+    vector<int> r(k, -1);
+    vector<int> up(k, n + 1);
+    vector<int> down(k, -1);
+    for (int i = 0; i < k; i++) {
+      int u = find(i);
+      l[u] = min(l[u], Y[i]);
+      r[u] = max(r[u], Y[i]);
+      up[u] = min(up[u], X[i]);
+      down[u] = max(down[u], X[i]);
+    }
+    int ans = k - 1 - (cnt - 1) + 2 * cnt - 1;
+    int find = 0;
+    for (int u: seq) {
+      if (l[u] == 1 || r[u] == m || up[u]==1 || down[u] == n) find = 1; 
+    }
+    ans -= find;
+    printf("%d\n", ans);
+  }
+  return 0; 
+}

@@ -1,0 +1,38 @@
+let [n, inputArr] = require(`fs`).readFileSync(`/dev/stdin`, `utf8`).split(`\n`);
+let arrBubble = inputArr.split(` `);
+let arrSelection = [...arrBubble];
+
+function bubbleSort(arr) {
+    let flag = 1;
+    while (flag) {
+        flag = 0;
+        for (let i=n-1; i>0; i--) {
+            if (+arr[i][1] < +arr[i-1][1]) {
+                [arr[i], arr[i-1]] = [arr[i-1], arr[i]];
+                flag = 1;
+            }
+        }
+    }
+}
+
+function selectionSort(arr) {
+    for (let i=0; i<+n; i++) {
+        let minIndex = i;
+        for (let j=i; j<+n; j++) {
+            if (+arr[minIndex][1] > +arr[j][1]) minIndex = j;
+        }
+        if (minIndex > i) {
+            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+        }
+    }
+}
+
+
+bubbleSort(arrBubble);
+selectionSort(arrSelection);
+
+let arrBubbleSorted = arrBubble.join(` `);
+let arrSelectionSorted = arrSelection.join(` `);
+console.log(`${arrBubbleSorted}\nStable`);
+console.log(arrSelectionSorted);
+console.log(arrBubbleSorted == arrSelectionSorted ? `Stable` : `Not stable`);

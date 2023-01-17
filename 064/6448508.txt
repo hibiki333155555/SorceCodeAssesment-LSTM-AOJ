@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	double r;
+	cin >> r;
+
+	printf("%lf %lf\n", r * r * M_PI, M_PI * r * 2);
+
+	return (0);
+}
+

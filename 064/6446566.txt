@@ -1,0 +1,21 @@
+inf = 10**18
+
+def main():
+    N, W = map(int, input().split())
+    dp = [inf]*10005
+    #dp[i][j] is the minimum weight when i chose until j
+    dp[0]=0
+    for i in range(N):
+        ndp = [inf]*10005
+        v,w = map(int, input().split()) 
+        for j in range(10005):
+            ndp[j] = min(dp[j], dp[j-v]+w)
+        dp = ndp
+
+    for i in range(10005)[::-1]:
+        if dp[i]<=W:
+            print(i)
+            return
+
+main()
+

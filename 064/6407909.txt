@@ -1,0 +1,22 @@
+#include <stdio.h>
+int main(){
+ 
+  int a,b,i,j;
+ 
+  while(1){
+      if(a==0 && b==0)break;
+      scanf("%d %d",&a,&b);
+      
+ 
+  for(i=0;i<b;i++){
+      for(j=0;j<a;j++){
+          printf("#");
+          
+      printf("\n");}
+  }
+  }
+  
+ 
+  return 0;
+  }
+

@@ -1,0 +1,20 @@
+#include <iostream>
+#include <cctype>
+using namespace std;
+
+int main() {
+    char ch[1200];
+    int i = 0;
+    while (true) {
+        scanf("%c", &ch[i]);
+        if (ch[i] == '\n') break;
+        if (islower(ch[i])) {
+            printf("%c", toupper(ch[i]));
+        } else if (isupper(ch[i])) {
+            printf("%c", tolower(ch[i]));
+        } else cout << ch[i];
+        i++;
+    }
+
+    return 0;
+}

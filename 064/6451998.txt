@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main ()
+{
+    int a,b,A,P;
+    scanf("%d %d",&a,&b);
+    A=a*b;
+    P=2*(a+b);
+    printf("%d %d\n",A,P);
+
+
+    return 0;
+}
+

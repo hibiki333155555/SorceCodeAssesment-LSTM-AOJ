@@ -1,0 +1,79 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<vector>
+#include<iomanip>
+#include<tuple>
+#include<map>
+#include<queue>
+using namespace std;
+
+//実行するときは「g++ File名.cpp」 としたあと「a.exe」と出力すればいい
+
+const long long INF = 1000000000000000;
+
+vector<vector<pair<int,long long>>> G(1005);
+
+long long gcd(long long x, long long y) {
+    if(x < y) swap(x, y); //この式はなくても良い。
+
+    while (y > 0) {
+        long long r = x % y;
+        x = y;
+        y = r;
+    }
+    return x;
+}
+
+vector<long long> dist(100005,-1);
+int N,M;
+long long ma,mi,mm;
+
+void dijkstra(int i){
+    priority_queue<pair<long long,int>,vector<pair<long long,int>>,greater<pair<long long,int>>> Q;
+    for(int j=1;j<=N;j++){
+        dist[j]=-1;
+    }
+    Q.push(make_pair(1,i));
+    while(!Q.empty()){
+        int pos=Q.top().second;
+        long long cost=Q.top().first;
+        Q.pop();
+        if(pos==N){
+            mi=min(mi,cost);
+            ma=max(ma,cost);
+        }
+        if(dist[pos]!=cost){
+            dist[pos]=cost;
+            for(int j=0;j<G[pos].size();j++){
+                long long g=gcd(cost,G[pos][j].second);
+                //if(dist[G[pos][j].first]!=dist[pos]/g*G[pos][j].second){
+                    Q.push(make_pair(dist[pos]/g*G[pos][j].second,G[pos][j].first));
+                //}
+            }
+        }
+    }
+}
+
+int main(){
+    cin >> N >> M;
+    int a,b;
+    long long c;
+    for(int i=0;i<M;i++){
+        cin >> a >> b >> c;
+        G[a].push_back(make_pair(b,c));
+    }
+    ma=-1;
+    mi=1;
+    for(long long i=1;i<=20;i++){
+        mi=mi/gcd(mi,i)*i;
+    }
+    mm=mi;
+    dijkstra(1);
+    if(dist[N]==-1){
+        cout << "IMPOSSIBLE" << endl;
+        return 0;
+    }
+    //cout << dist[N] << endl;
+    cout << mi << " " << ma << endl;
+}

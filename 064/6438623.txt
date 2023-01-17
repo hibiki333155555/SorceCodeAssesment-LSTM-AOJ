@@ -1,0 +1,97 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
+type BTnode struct {
+	left  int
+	right int
+}
+
+func Preorder(BT map[int]*BTnode, id int) {
+	fmt.Print(" ", id)
+	if BT[id].left != -1 {
+		Preorder(BT, BT[id].left)
+	}
+	if BT[id].right != -1 {
+		Preorder(BT, BT[id].right)
+	}
+}
+
+func Inorder(BT map[int]*BTnode, id int) {
+	if BT[id].left != -1 {
+		Inorder(BT, BT[id].left)
+	}
+	fmt.Print(" ", id)
+	if BT[id].right != -1 {
+		Inorder(BT, BT[id].right)
+	}
+}
+
+func Postorder(BT map[int]*BTnode, id int) {
+	if BT[id].left != -1 {
+		Postorder(BT, BT[id].left)
+	}
+	if BT[id].right != -1 {
+		Postorder(BT, BT[id].right)
+	}
+	fmt.Print(" ", id)
+}
+
+var sc = bufio.NewScanner(os.Stdin)
+
+func main() {
+	//buf := make([]byte, 1024*4096)
+	//sc.Buffer(buf, bufio.MaxScanTokenSize)
+	sc.Scan()
+	n, _ := strconv.Atoi(sc.Text())
+	BT := make(map[int]*BTnode)
+	for i := 0; i < n; i++ {
+		sc.Scan()
+		nd := strings.Split(sc.Text(), " ")
+		id, _ := strconv.Atoi(nd[0])
+		left, _ := strconv.Atoi(nd[1])
+		right, _ := strconv.Atoi(nd[2])
+		BT[id] = &BTnode{
+			left:  left,
+			right: right,
+		}
+	}
+
+	BTmap := make(map[int]bool)
+	for i := 0; i < n; i++ {
+		if BT[i].left != -1 {
+			BTmap[BT[i].left] = true
+		}
+		if BT[i].right != -1 {
+			BTmap[BT[i].right] = true
+		}
+	}
+	pn := 0
+	for i := 0; i < n; i++ {
+		if _, ok := BTmap[i]; ok {
+			continue
+		} else {
+			pn = i
+			break
+		}
+	}
+
+	fmt.Println("Preorder")
+	Preorder(BT, pn)
+	fmt.Println()
+
+	fmt.Println("Inorder")
+	Inorder(BT, pn)
+	fmt.Println()
+
+	fmt.Println("Postorder")
+	Postorder(BT, pn)
+	fmt.Println()
+}
+

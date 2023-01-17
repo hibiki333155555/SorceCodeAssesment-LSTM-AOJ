@@ -1,0 +1,41 @@
+#include <iostream>
+#include<queue>
+#include <iomanip>
+#include<math.h>
+
+using namespace std;
+
+/*
+ bubbleSort(A)
+   cnt = 0 // 反転数
+   for i = 0 to A.length-1
+     for j = A.length-1 downto i+1
+       if A[j] < A[j-1]
+     swap(A[j], A[j-1])
+     cnt++
+
+   return cnt
+ */
+int bubbleSort(vector<int>&A){
+    int cnt = 0;
+    for (int i = 0; i < A.size(); i++){
+        for (int j = A.size()-1; j >= (i+1); j--){
+            if (A[j] < A[j-1]){
+                swap(A[j],A[j-1]);
+                cnt++;
+            }
+        }
+    }
+    return cnt;
+}
+
+int main(){
+    int n;
+    cin >> n;
+    vector<int>a(n);
+    for (int i = 0; i < n; i++){
+        cin >> a[i];
+    }
+    cout << bubbleSort(a) << endl;
+}
+

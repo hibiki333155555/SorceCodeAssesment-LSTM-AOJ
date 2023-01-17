@@ -1,0 +1,13 @@
+import collections
+X = input().split()
+A = input().split()
+B = input().split()
+x = int(X[0]) + int(X[1])
+
+AB = [int(x) for x in A] + [int(y) for y in B]
+AB.sort()
+
+i = 0
+while i < x:
+    print(AB[i])
+    i = i + 1

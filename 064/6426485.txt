@@ -1,0 +1,33 @@
+#include<iostream>
+using namespace std;
+
+int search(int a[],int key,int n){
+    int i;
+    int count = 0;
+    for(i=0;i<n;i++){
+        if(a[i] == key){
+            count++;
+        }
+    }
+    return count;
+}
+int main(){
+    int i,n;
+    int count = 0;
+    cin >> n;
+    int a[n];
+    for(i=0;i<n;i++){
+        cin >> a[i];
+    }
+    int m;
+    cin >> m;
+    int b[m];
+    for(i=0;i<m;i++){
+        cin >> b[i];
+    }
+    for(i=0;i<n;i++){
+     count += search(a,b[i],m);   
+    }
+    cout << cout << endl;
+    return 0;
+}

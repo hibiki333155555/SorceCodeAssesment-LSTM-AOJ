@@ -1,0 +1,5 @@
+import Text.Printf
+main = getLine >>=
+  (\[a,b] -> printf "%d %d" a*b 2*(a+b))
+  . map read . words
+

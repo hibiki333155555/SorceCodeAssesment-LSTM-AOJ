@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+#include <atcoder/all>
+using namespace std;
+using namespace atcoder;
+using ll = long long;
+using ld = long double;
+using P = pair<ll,ll>;
+using vl = vector<ll>;
+const int INF = 1e9;
+const ll LINF = 1e18;
+const double eps = 1e-10;
+#define fi first
+#define se second
+#define eb emplace_back
+#define rep(i,n) for(ll i = 0; i < (ll)(n); ++i)
+#define srep(i, s, n) for (ll i = s; i < (ll)(n); ++i)
+#define drep(i,n) for(int i = (n)-1; i >= 0; --i)
+#define fore(i,x) for(auto &i:x)
+#define ALL(x) x.begin(),x.end()
+#define RALL(x) x.rbegin(),x.rend()
+#define sz(x) (ll)x.size()
+template<typename T> using vc = vector<T>;
+template<typename T> using vv = vc<vc<T>>;
+template<typename T> using PQ = priority_queue<T,vc<T>,greater<T>>;
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+void _main(); int main() { cin.tie(0); ios::sync_with_stdio(false); _main(); }
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+struct UnionFind {
+    vector<int> par, rank, siz;
+
+    // 構造体の初期化
+    UnionFind(int n) : par(n,-1), rank(n,0), siz(n,1) { }
+
+    // 根を求める
+    int root(int x) {
+        if (par[x]==-1) return x; // x が根の場合は x を返す
+        else return par[x] = root(par[x]); // 経路圧縮
+    }
+
+    // x と y が同じグループに属するか (= 根が一致するか)
+    bool issame(int x, int y) {
+        return root(x)==root(y);
+    }
+
+    // x を含むグループと y を含むグループを併合する
+    bool unite(int x, int y) {
+        int rx = root(x), ry = root(y); // x 側と y 側の根を取得する
+        if (rx==ry) return false; // すでに同じグループのときは何もしない
+        // union by rank
+        if (rank[rx]<rank[ry]) swap(rx, ry); // ry 側の rank が小さくなるようにする
+        par[ry] = rx; // ry を rx の子とする
+        if (rank[rx]==rank[ry]) rank[rx]++; // rx 側の rank を調整する
+        siz[rx] += siz[ry]; // rx 側の siz を調整する
+        return true;
+    }
+
+    // x を含む根付き木のサイズを求める
+    int size(int x) {
+        return siz[root(x)];
+    }
+};
+void _main()
+{
+  ll v, e;
+  cin >> v >> e;
+  vc<pair<ll,P>> to;
+  rep(i,e){
+    ll s,t,w;
+    cin >> s >> t >> w;
+    to.emplace_back(w,P(s,t));
+  }
+  sort(ALL(to));
+  UnionFind uf(v);
+  ll ans = 0;
+  fore(t,to){
+    ll w = t.fi, x = t.se.fi, y = t.se.se;
+    if(uf.issame(x,y)) continue;
+    uf.unite(x,y);
+    ans += w;
+  }
+  cout << ans << '\n';
+}

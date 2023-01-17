@@ -1,0 +1,32 @@
+#include <iostream>
+#include <bitset>
+
+using namespace std;
+
+bool BitOperation2(unsigned int a, unsigned int b) {
+
+	bitset<32> bita = a;
+	bitset<32> bitb = b;
+	cout << (bita&=bitb) << endl;
+	cout << (bita|=bitb) << endl;
+	cout << (bita^=bitb) << endl;
+
+	return true;
+
+}
+
+int main() {
+
+	unsigned int a,b = 0;
+
+	cin >> a >> b;
+
+	if (BitOperation2(a, b)) {
+		return 0;
+	}
+	else {
+		return -1;
+	}
+
+	return 0;
+}

@@ -1,0 +1,8 @@
+x, y = list(map(int, input().split(" ")))
+
+while y != 0:
+    r = x % y
+    x = y
+    y = r
+print(x)
+

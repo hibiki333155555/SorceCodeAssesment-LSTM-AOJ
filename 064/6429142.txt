@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  int a, b, c;
+  cin >> a >> b >> c;
+  
+  vector<int> vec(3);
+  vec.at(0) = a;
+  vec.at(1) = b;
+  vec.at(2) = c;
+  
+  sort(vec.begin(), vec.end());
+  
+  for (int i = 0; i < vec.size(); i++) {
+        cout << vec.at(i) << " ";
+    }
+  
+}

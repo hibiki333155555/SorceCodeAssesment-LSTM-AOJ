@@ -1,0 +1,138 @@
+#pragma GCC target("avx2")
+#pragma GCC optimize("unroll-loops")
+
+#include <algorithm>
+#include <bitset>
+#include <climits>
+#include <cmath>
+#include <cstring>
+#include <deque>
+#include <forward_list>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <list>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+#define ALL(x) (x).begin(), (x).end()
+#define PC(x) __builtin_popcount(x)
+#define PCL(x) __builtin_popcountll(x)
+
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair<int, int> pii;
+typedef pair<ll, ll> pll;
+struct edge {
+    int to, cost, id;
+};
+const double PI = 3.14159265358979323846;
+const double PI2 = PI * 2.0;
+const double EPS = 1E-09;
+const ll MOD = 1E+09 + 7; // =998244353;
+const ll INFL = 1E18;
+const int INFI = 1E09;
+const int MAX_N = 8;
+
+ll dx[4] = { -1, 1, 0, 0 }, dy[4] = { 0, 0, -1, 1 };
+
+int K;
+
+pii P[MAX_N + 1];
+bool ans[MAX_N + 1][MAX_N + 1];
+
+void eraseGrid(set<pii>& st, pii p)
+{
+    int x = p.first;
+    int y = p.second;
+    for (int i = -7; i <= 7; ++i) {
+        if (x + i > 7 || x + i < 0)
+            continue;
+        st.erase({ x + i, y });
+    }
+    for (int j = -7; j <= 7; ++j) {
+        if (y + j > 7 || y + j < 0)
+            continue;
+        st.erase({ x, y + j });
+    }
+    for (int i = -7; i <= 7; ++i) {
+        if (x + i < 0 || y + i < 0)
+            continue;
+        if (x + i > 7 || y + i > 7)
+            break;
+        st.erase({ x + i, y + i });
+    }
+    for (int i = -7; i <= 7; ++i) {
+        if (x + i < 0 || y - i > 7)
+            continue;
+        if (x + i > 7 || y - i < 0)
+            break;
+        st.erase({ x + i, y - i });
+    }
+}
+
+bool dfs(int x, set<pii>& st)
+{
+    if (x + K >= 8) {
+        return true;
+    }
+
+    for (auto g : st) {
+        set<pii> temp = st;
+        eraseGrid(temp, g);
+        if (dfs(x + 1, temp)) {
+            ans[g.first][g.second] = true;
+            return true;
+        }
+    }
+    return false;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin >> K;
+
+    for (int i = 1; i <= K; i++) {
+        cin >> P[i].first >> P[i].second;
+        ans[P[i].first][P[i].second] = true;
+    }
+
+    set<pii> st;
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            st.insert({ i, j });
+        }
+    }
+
+    for (int i = 1; i <= K; ++i) {
+        eraseGrid(st, P[i]);
+    }
+
+    dfs(0, st);
+
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            cout << (ans[i][j] ? 'Q' : '.');
+        }
+        cout << "\n";
+    }
+
+    // for (int i = 0; i < N; i++) {
+    //     for (int j = 0; j < N; j++) {
+    //         cout << "i = " << i << ", j = " << j << ", dp = " << dp[i][j] << "\n";
+    //     }
+    // }
+
+    return 0;
+}

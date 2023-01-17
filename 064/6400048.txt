@@ -1,0 +1,2 @@
+S = int(input())
+print('{}:{}:{}'.format(int(S/3600), int((S%3600)/60), int(S%60)))

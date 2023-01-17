@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+int main(void){
+
+    int rooms[4][3][10];
+    int b, f, r, v;
+    int n, i;
+
+    for(b = 0; b < 4; b++)
+        for(f = 0; f < 3; f++)
+            for(r = 0; r < 10; r++) rooms[b][f][r] = 0;
+    
+    scanf("%d", &n);
+    while(n--){
+        scanf("%d%d%d%d", &b, &f, &r, &v);
+        // printf("b:%d f:%d r:%d v:%d\n", b, f, r, v);
+        rooms[b - 1][f - 1][r - 1] += v;
+    }
+
+    for(b = 0; b < 4; b++){
+        if(b){
+            for(i = 0; i < 20; i++) putchar('#');
+            putchar('\n');
+        }
+        for(f = 0; f < 3; f++){
+            for(r = 0; r < 10; r++) printf(" %d", rooms[b][f][r]);
+            putchar('\n');
+        }
+    }
+    return 0;
+}

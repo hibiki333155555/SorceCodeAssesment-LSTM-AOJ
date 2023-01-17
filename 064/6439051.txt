@@ -1,0 +1,108 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+
+using Edge = pair<int, int>;       // node, dist
+using TownState = pair<int, int>;  // node, visit_state
+
+int main() {
+   cout << fixed << setprecision(15);
+
+   int N, E;
+   cin >> N >> E;
+
+   vector<vector<Edge>> adj_edge_list(N, vector<Edge>());
+   vector<vector<Edge>> back_edge_list(N, vector<Edge>());
+
+   for (int i = 0; i < E; i++) {
+      int s, t, d;
+      cin >> s >> t >> d;
+
+      adj_edge_list[s].emplace_back(t, d);
+      back_edge_list[t].emplace_back(s, d);
+   }
+
+   int INF = numeric_limits<int>::max();
+   vector<vector<int>> dp((1 << 15), vector<int>(N, INF));
+
+   // start node = 0
+   deque<TownState> next_town_visit_state;
+
+   int node = 0;
+   int visit_state = 1 << node;
+
+   dp[visit_state][node] = 0;
+
+   for (auto& e : adj_edge_list[node]) {
+      int next_visit_state = visit_state | (1 << e.first);
+      next_town_visit_state.emplace_back(e.first, next_visit_state);
+   }
+
+   for (int t = 2; t <= N; t++) {
+      deque<TownState> town_visit_state(next_town_visit_state);
+      next_town_visit_state.clear();
+
+      while (!town_visit_state.empty()) {
+         auto elem = town_visit_state.front();
+         town_visit_state.pop_front();
+
+         auto& [node, visit_state] = elem;
+
+         for (auto& edge : back_edge_list[node]) {
+            int prev_node = edge.first;
+            int prev_visit_state = visit_state ^ (1 << node);
+            int dist = edge.second;
+
+            if (dp[prev_visit_state][prev_node] == INF) {
+               continue;
+            }
+
+            dp[visit_state][node] = min(dp[visit_state][node], dp[prev_visit_state][prev_node] + dist);
+         }
+
+         if (t == N) {
+            continue;
+         }
+
+         for (auto e : adj_edge_list[node]) {
+            int node_mask = (1 << e.first);
+
+            if ((visit_state & node_mask) != 0) {
+               continue;
+            }
+
+            int next_visit_state = visit_state | node_mask;
+
+            next_town_visit_state.emplace_back(e.first, next_visit_state);
+         }
+      }
+   }
+
+   int ans = INF;
+   int all_visit = (1 << N) - 1;
+
+   for (int n = 0; n < N; n++) {
+      if (dp[all_visit][n] == INF) {
+         continue;
+      }
+
+      for (auto& e : adj_edge_list[n]) {
+         if (e.first != 0) {
+            continue;
+         }
+
+         // return to 0
+         ans = min(ans, dp[all_visit][n] + e.second);
+      }
+   }
+
+   if (ans == INF) {
+      cout << -1 << endl;
+   } else {
+      cout << ans << endl;
+   }
+
+   return 0;
+}
+

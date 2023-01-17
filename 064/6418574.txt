@@ -1,0 +1,85 @@
+#include <cassert>
+#include <iostream>
+#include <limits>
+#include <vector>
+
+constexpr int M = 500;
+
+constexpr int inf = std::numeric_limits<int>::max() / 2;
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n;
+    std::cin >> n;
+
+    std::vector<int> a(n), b(n);
+    for (auto &e : a) std::cin >> e;
+    for (auto &e : b) std::cin >> e;
+
+    std::vector<std::vector<int>> g(n);
+    for (int i = 0; i < n - 1; ++i) {
+        int u, v;
+        std::cin >> u >> v;
+        --u, --v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+
+    auto merge = [&](const std::vector<std::vector<int>> &pd, const std::vector<int> &x) {
+        int siz_l = pd.size(), siz_r = x.size();
+        std::vector dp(siz_l + siz_r - 1, std::vector<int>(M + 1, -inf));
+        for (int i = 0; i < siz_l; ++i) for (int j = 0; j < siz_r; ++j) {
+            int ni = pd[i].size();
+            for (int pos = 0; pos < ni; ++pos) {
+                int next_pos = std::min(M, pos + std::max(x[j], 0));
+                dp[i + j][next_pos] = std::max(dp[i + j][next_pos], pd[i][pos] + x[j]);
+            }
+        }
+        return dp;
+    };
+
+    std::vector dp(n, std::vector<int>{});
+
+    auto dfs = [&](auto dfs, int u, int p) -> void {
+        if (p >= 0 and g[u].size() == 1) {
+            // leaf
+            if (a[u] >= b[u]) {
+                dp[u] = { a[u], a[u] };
+            } else {
+                dp[u] = { a[u], a[u] - b[u] };
+            }
+            return;
+        }
+        std::vector<std::vector<int>> dp2 { { 0 } };
+        for (int v : g[u]) {
+            if (v == p) continue;
+            dfs(dfs, v, u);
+            dp2 = merge(dp2, dp[v]);
+        }
+        int siz = dp2.size();
+        dp[u].resize(siz + 1, -inf);
+        for (int i = 0; i < siz; ++i) for (int j = 0; j <= M; ++j) {
+            if (a[u] + j >= b[u]) {
+                dp[u][i + 1] = std::max(dp[u][i + 1], dp2[i][j] + a[u]);
+            } else {
+                dp[u][i] = std::max(dp[u][i], dp2[i][j] + a[u]);
+                dp[u][i + 1] = std::max(dp[u][i + 1], std::min(-b[u], dp2[i][j] + a[u]));
+            }
+        }
+    };
+    dfs(dfs, 0, -1);
+
+    int siz = dp[0].size();
+    for (int i = siz - 1; i >= 0; --i) {
+        if (dp[0][i] >= 0) {
+            std::cout << i << std::endl;
+            return 0;
+        }
+    }
+
+    assert(false);
+
+    return 0;
+}

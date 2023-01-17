@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+
+#define ll long long
+#define ld long double
+#define rep(i,a,b) for (int i = a; i < b; i++)
+#define irep(i,a,b) for (int i = a; i > b; i--)
+
+using namespace std;
+
+int main(){
+    int x;
+    int i = 1;
+    while (true){
+        cin >> x;
+        if (x == 0) break;
+        cout << "Case " << i <<": " << x;
+        i++;
+    }
+    //system("pause");
+    return 0;
+}

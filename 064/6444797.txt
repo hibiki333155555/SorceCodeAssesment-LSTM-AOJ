@@ -1,0 +1,64 @@
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <set>
+#include <vector>
+#include <stack>
+#include  <map>
+#include <queue>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> pii;
+const int maxn=100005,K=105;
+int n,k;
+int dp[maxn][K];
+int c[maxn];
+int tai[maxn];
+int fa[maxn];
+vector<int> e[maxn];
+void dfs(int x,int p)
+{
+    fa[x]=p;
+    for(int i=0;i<(int)e[x].size();i++){
+        int to=e[x][i];
+        if(to==p) continue;
+        dfs(to,x);
+    }
+    int t=0;
+    while(t<k){
+        if(dp[x][t]){
+            t++;
+        }
+        else{
+            break;
+        }
+    }
+    tai[x]=t;
+    int now=p;
+    for(int i=0;i<k;i++){
+        if(now!=-1) dp[now][t]=1;
+        else break;
+        now=fa[now];
+    }
+}
+int main()
+{
+    ios::sync_with_stdio(false),cin.tie(0);
+    cin>>n>>k;
+    for(int i=0;i<n;i++) cin>>c[i];
+    int a,b;
+    for(int i=0;i<n-1;i++){
+        cin>>a>>b;
+        e[a].push_back(b);
+        e[b].push_back(a);
+    }
+    dfs(0,-1);
+    int ans=0;
+    for(int i=0;i<n;i++){
+        if(c[i]&1) ans^=tai[i];
+    }
+    if(ans==0) cout<<"Beet"<<endl;
+    else cout<<"Aizu"<<endl;
+    return 0;
+}
+

@@ -1,0 +1,34 @@
+dice = list(input().split())
+m = int(input())
+for i in range(m):
+    a, b = map(int, input().split())
+    if a == dice[0]:
+        if b == dice[1]: print(dice[2])
+        if b == dice[2]: print(dice[4])
+        if b == dice[3]: print(dice[1])
+        if b == dice[4]: print(dice[3])
+    if a == dice[1]:
+        if b == dice[0]: print(dice[3])
+        if b == dice[2]: print(dice[0])
+        if b == dice[3]: print(dice[5])
+        if b == dice[5]: print(dice[2])
+    if a == dice[2]:
+        if b == dice[0]: print(dice[1])
+        if b == dice[1]: print(dice[5])
+        if b == dice[4]: print(dice[0])
+        if b == dice[5]: print(dice[4])
+    if a == dice[3]:
+        if b == dice[0]: print(dice[4])
+        if b == dice[1]: print(dice[0])
+        if b == dice[4]: print(dice[5])
+        if b == dice[5]: print(dice[1])
+    if a == dice[4]:
+        if b == dice[0]: print(dice[2])
+        if b == dice[2]: print(dice[5])
+        if b == dice[3]: print(dice[0])
+        if b == dice[5]: print(dice[3])
+    if a == dice[5]:
+        if b == dice[1]: print(dice[3])
+        if b == dice[2]: print(dice[1])
+        if b == dice[3]: print(dice[4])
+        if b == dice[4]: print(dice[2])

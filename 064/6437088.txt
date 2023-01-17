@@ -1,0 +1,12 @@
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args){
+        Scanner s = new Scanner(System.in);
+        int a=s.nextInt();
+        int b=s.nextInt();
+        int total = a*b;
+        int length=a*2+b*2;
+        System.out.println(total+" "+length);
+    }
+}

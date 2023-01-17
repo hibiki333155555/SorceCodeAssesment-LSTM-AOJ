@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for (int i = 1; i <= (n); ++i)
+#define  MAX 100000
+
+int parent(int i) {
+    return i / 2;
+}
+
+int left(int i){
+    return 2*i;
+}
+
+int right(int i){
+    return 2*i+1;
+}
+
+int main() {
+    int n, A[MAX+1];
+    cin >> n;
+    rep(i, n){
+        cin >> A[i];
+    }
+    rep(i, n){
+        cout << "node " << i << ": key =" << A[i] << ", ";
+        if(parent(i) >= 1) cout << "parent key = " << A[parent(i)] << ", ";
+        if(left(i) <= n) cout << "left key = " << A[left(i)] << ", ";
+        if(right(i) <= n) cout << "right key = " << A[right(i)] << ", ";
+        cout << endl;
+    }
+    return 0;
+}

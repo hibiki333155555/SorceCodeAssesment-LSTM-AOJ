@@ -1,0 +1,11 @@
+
+#include<stdio.h>
+int main(){
+int a,x;
+a=2;
+x=a*a*a;
+printf("print the cubr ot x in a line:%d\n",x);
+
+return 0;
+}
+

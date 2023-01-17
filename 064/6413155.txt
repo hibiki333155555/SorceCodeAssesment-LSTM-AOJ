@@ -1,0 +1,112 @@
+#include<iostream>
+#include<vector>
+#include <algorithm>
+#include<cstring>
+#include<cstdio>
+using namespace std;
+int n,m,s;
+struct din
+{
+	int t,nxt;
+ } e[500010<<3];
+int head[500010],tot=0,lg[500010],dep[500010],res,z[500010],fa[100010][25];
+int sg()
+{
+	for(int i=0;i<n;i++)
+	{
+		if(z[i]!=1)
+		{
+			return i;
+		}
+	}
+}
+void add(int p,int h)
+{
+	
+	e[++tot].t=h;
+	e[tot].nxt=head[p];
+	head[p]=tot;
+	//cout<<'&'<<tot<<' '<<p<<' '<<head[p]<<endl;
+}
+void dfs(int tt,int fat)
+{
+	fa[tt][0]=fat;
+	dep[tt]=dep[fat]+1;
+	for(int i=1;i<=lg[dep[tt]];i++)
+	{
+		fa[tt][i]=fa[fa[tt][i-1]][i-1];
+	}
+	for(int i=head[tt];i!=-1;i=e[i].nxt)
+	{
+		//cout<<i<<endl;
+		if(e[i].t!=fat)
+		{
+			dfs(e[i].t,tt);
+		}
+	}
+}
+int lca(int xx,int yy)
+{
+	if(dep[xx]<dep[yy]) swap(xx,yy); 
+	while(dep[xx]>dep[yy])
+	{
+		xx=fa[xx][lg[dep[xx]-dep[yy]]-1];
+	}
+	if(xx==yy)
+	{
+		return yy;
+	}
+	for(int k=lg[dep[xx]]-1;k>=0;k--)
+	{
+		//cout<<x<<"          "<<y<<endl; 
+		if(fa[xx][k]!=fa[yy][k])
+		{
+			xx=fa[xx][k];
+			yy=fa[yy][k];
+		}
+	}
+	return fa[xx][0];
+}
+int main()
+{
+	cin>>n;
+	int x,y;
+	
+	for(int i=0;i<n;i++)
+	{
+		scanf("%d",&x);
+		head[i]=-1;
+		for(int j=1;j<=x;j++)
+		{
+			scanf("%d",&y);
+			z[y]=1;
+			add(i,y);
+			//-add(y,i);
+		}
+	}
+	cin>>m;
+//	if(n==1)
+//	{
+//		printf("0");
+//		return 0;
+//	 } 
+	for(int i=0;i<n;i++)
+	{
+		lg[i]=lg[i-1]+(1<<lg[i-1]==i);
+	}
+	//cout<<"***************"<<endl;
+	s=sg();
+	dfs(s,0);
+
+	for(int i=1;i<=m;i++)
+	{
+		scanf("%d%d",&x,&y);
+		if(x==y)
+		{
+			printf("%d\n",fa[x][0]);
+			continue;
+		}
+		res=lca(x,y);
+		printf("%d\n",res);
+	}
+}

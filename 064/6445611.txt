@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	int n, q, T=0;
+	struct pro {
+		string name;
+		int time;
+	};
+	pro P={0,0};
+	queue<pro> Q;
+
+	cin >> n >> q;
+	for (int i = 0;i < n;i++) {
+		cin >> P.name >> P.time;
+		Q.push(P);
+	}
+
+	while (!Q.empty()) {
+		if (Q.front().time <= q) {
+			T += Q.front().time;
+			cout << Q.front().name <<" "<< T << endl;
+			Q.pop();
+		}
+		else {
+			T += q;
+			Q.front().time -= q;
+			Q.push(Q.front());
+			Q.pop();
+		}
+	}
+}

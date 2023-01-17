@@ -1,0 +1,25 @@
+#include <iostream>
+#include <algorithm>
+#define rep(i, a, b) for(int i=a; i<b; i++)
+using namespace std;
+int main() {
+	int W, H, x, y, r, cnt = 0;
+	cin >> W >> H >> x >> y >> r;
+	vector<vector<int>> point = {
+		{x + r, y},
+		{x - r, y},
+		{x, y + r},
+		{x, y - r},
+	};
+	rep(i, 0, 4) {
+		if (point.at(i).at(1) < 0 || point.at(i).at(1) > W || point.at(i).at(2) < 0 || point.at(i).at(2) > H) {
+			cout << "No";
+			break;
+		}
+		else {
+			cnt++;
+		}
+	}
+	if (cnt == 4) cout << "Yes";
+	return 0;
+}

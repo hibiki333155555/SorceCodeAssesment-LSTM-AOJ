@@ -1,0 +1,1 @@
+puts gets.chomp.tr("A-Za-z","a-zA-Z")

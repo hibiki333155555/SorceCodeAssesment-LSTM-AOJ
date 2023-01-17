@@ -1,0 +1,166 @@
+use std::io;
+
+fn main() {
+    let mut line = String::new();
+    io::stdin().read_line(&mut line).unwrap();
+    let mut iter = line.split_whitespace();
+    let n: usize = iter.next().unwrap().parse::<usize>().unwrap();
+    let mut points = Vec::new();
+    for i in 0..n {
+        let mut line = String::new();
+        io::stdin().read_line(&mut line).unwrap();
+        let mut iter = line.split_whitespace();
+        let x: i32 = iter.next().unwrap().parse::<i32>().unwrap();
+        let y: i32 = iter.next().unwrap().parse::<i32>().unwrap();
+
+        points.push(Point { id: i, x, y })
+    }
+
+    let mut t = KdTree {
+        points,
+        nodes: Vec::new(),
+    };
+    t.make_kdtree(0, n, 0);
+    let mut line = String::new();
+    io::stdin().read_line(&mut line).unwrap();
+    let mut iter = line.split_whitespace();
+    let q: usize = iter.next().unwrap().parse::<usize>().unwrap();
+    for _ in 0..q {
+        let mut line = String::new();
+        io::stdin().read_line(&mut line).unwrap();
+        let mut iter = line.split_whitespace();
+        let sx: i32 = iter.next().unwrap().parse::<i32>().unwrap();
+        let tx: i32 = iter.next().unwrap().parse::<i32>().unwrap();
+        let sy: i32 = iter.next().unwrap().parse::<i32>().unwrap();
+        let ty: i32 = iter.next().unwrap().parse::<i32>().unwrap();
+        // let mut out = Vec::<usize>::new();
+        let mut out = vec![];
+        find(sx, tx, sy, ty, 0, 0, &t.points, &t.nodes, &mut out);
+        out.sort();
+
+        for x in out {
+            println!("{}", x);
+        }
+        println!();
+    }
+}
+
+struct Node {
+    l: Option<usize>,
+    r: Option<usize>,
+    point_index: usize,
+}
+
+struct Point {
+    id: usize,
+    x: i32,
+    y: i32,
+}
+
+struct KdTree {
+    nodes: Vec<Node>,
+    points: Vec<Point>,
+}
+
+impl KdTree {
+    fn make_kdtree(&mut self, l: usize, r: usize, depth: usize) -> Option<usize> {
+        if l >= r {
+            return None;
+        }
+        let mid: usize = (l + r) / 2;
+        if depth % 2 == 0 {
+            self.points[l..r].sort_by_key(|p| p.x);
+        } else {
+            self.points[l..r].sort_by_key(|p| p.y);
+        }
+
+        let t = self.nodes.len();
+        self.nodes.push(Node {
+            point_index: mid,
+            l: None,
+            r: None,
+        });
+        self.nodes[t].point_index = mid;
+        self.nodes[t].l = self.make_kdtree(l, mid, depth + 1);
+        self.nodes[t].r = self.make_kdtree(mid + 1, r, depth + 1);
+        return Some(t);
+    }
+}
+
+fn find(
+    sx: i32,
+    tx: i32,
+    sy: i32,
+    ty: i32,
+    depth: usize,
+    node_index: usize,
+    points: &[Point],
+    nodes: &[Node],
+    out: &mut Vec<usize>,
+) {
+    let node = &nodes[node_index];
+    let p = &points[node.point_index];
+    if sx <= p.x && p.x <= tx && sy <= p.y && p.y <= ty {
+        out.push(p.id);
+    }
+    // 偶数はxを見る
+    if depth % 2 == 0 {
+        // p.xは分割に使った点のx座標。
+        // node.l.unwrap()で管理している点のx座標はp.x以下である
+        // pxがp.x以下の場合、左の子に条件を満たす値があるかもしれないので、検索する。
+        if node.l.is_some() && sx <= p.x {
+            find(
+                sx,
+                tx,
+                sy,
+                ty,
+                depth + 1,
+                node.l.unwrap(),
+                points,
+                nodes,
+                out,
+            );
+        }
+        if node.r.is_some() && p.x <= tx {
+            find(
+                sx,
+                tx,
+                sy,
+                ty,
+                depth + 1,
+                node.r.unwrap(),
+                points,
+                nodes,
+                out,
+            );
+        }
+    } else {
+        if node.l.is_some() && sy <= p.y {
+            find(
+                sx,
+                tx,
+                sy,
+                ty,
+                depth + 1,
+                node.l.unwrap(),
+                points,
+                nodes,
+                out,
+            );
+        }
+        if node.r.is_some() && p.y <= ty {
+            find(
+                sx,
+                tx,
+                sy,
+                ty,
+                depth + 1,
+                node.r.unwrap(),
+                points,
+                nodes,
+                out,
+            );
+        }
+    }
+}
+

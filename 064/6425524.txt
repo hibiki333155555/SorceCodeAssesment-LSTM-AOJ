@@ -1,0 +1,11 @@
+num = int(input())
+n=1
+a=1
+list=""
+while n<=num:
+    if(n%3==0):
+       list+=" {0}".format(n)
+       n=n+1
+    else :
+        n=n+1
+print(list)        

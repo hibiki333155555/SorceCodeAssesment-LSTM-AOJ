@@ -1,0 +1,12 @@
+while True: 
+    n,x = map(int, input().split())
+    if(n+x ==0):
+        break
+    a = 0
+    for i in range(1,n-1):
+        for j in range(1,n):
+            for k in range(1,n+1):
+                if(i+j+k==x and i!=j and j!= k and k!=i):
+                    a += 1
+    print(a)
+    

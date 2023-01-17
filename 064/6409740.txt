@@ -1,0 +1,14 @@
+while True:
+    s = input()
+    if s != '-':
+        s = list(s)
+        c = int(input())
+        for i in range(c):
+            v = int(input())
+            for j in range(v):
+                s.append(s[j])
+                del s[0]
+        print(''.join(s))
+    else:
+        break
+

@@ -1,0 +1,84 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+
+class Dice{
+    int T, S, E, W, N, B; 
+    Dice(int[] dr){
+        T=dr[0]; S=dr[1]; E=dr[2]; W=dr[3]; N=dr[4]; B=dr[5]; 
+    }
+    void West(){
+        int t = W;
+        W=T; T=E; E=B; B=t;
+    }
+    void East(){
+        int t=E;
+        E=T; T=W; W=B; B=t;
+  }
+    void North(){
+        int t=N;
+        N=T; T=S; S=B; B=t;
+    }
+    void South(){
+        int t=S;
+        S=T; T=N; N=B; B=t;
+    }
+}
+
+class Main {
+    public static void main (String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        //char[] al = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        //sc.hasNext(); sc.nextLine(); s.equals("0");
+        //s.length(); s.charAt(i); 
+        //int a[] = new int[26]; for(int i=0; i<26; i++){a[i] = 0;}
+        //StringBuilder s = new StringBuilder(sc.next());
+        //String[] inl1 = br.readLine().split(" ");
+        //int[] a = new int[6];
+        //for(int i=0; i<6; i++){  a[i]= Integer.parseInt(inl1[i]); }
+        //n = Integer.parseInt(br.readLine());
+
+        int n = sc.nextInt();
+        int[][] d = new int[n][6];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<6; j++){d[i][j] = sc.nextInt();}
+        }
+        boolean flg = false;
+        for(int i=0; i<n-1; i++){
+            Dice  ds = new Dice(d[i]);
+            //System.out.println(ds.T+" "+ds.S+" "+ds.B+" "+ds.W+" "+ds.N+" "+ds.B);
+            for(int j=i+1; j<n; j++){
+                if(d[j][1] ==ds.W || d[j][1] ==ds.E){
+                    ds.West();
+            }
+            for(int k=0; k<3; k++){
+                if(d[j][1] == ds.S){ break; }
+                ds.South();
+            }
+            for(int k=0; k<3; k++){
+                if(d[j][0] == ds.T){ break; }
+                ds.West();
+            }
+            //cout<<d[j][0]<<" "<<d[j][1]<<" "<<d[j][2]<<" "<<d[j][3]<<" "<<d[j][4]<<" "<<d[j][5]<<".."<<endl;
+            if(d[j][0] == ds.T && d[j][1] == ds.S && d[j][2] == ds.E && d[j][3] == ds.W && d[j][4] == ds.N && d[j][5] == ds.B) {
+                flg = true;
+                break;
+            } //else flg = false;
+        }
+        if(flg) break;
+        //System.out.println(d[i][1]+" "+ds.T);
+    }
+    if(flg)  System.out.println("No");
+    else  System.out.println("Yes");
+        //System.out.printf("%.10f\n", dc);
+        //int cmp = tc.compareTo(hc);
+        //s = s.substring(h) + s.substring(0, h);
+        //ss = ss.concat(s);  ss += s;
+        //if(ss.indexOf(p) == -1) ot = "No";
+        //System.out.println(al[i] + " : " + a[i]);  
+        //sb.append(ch);tc.equals(hc
+        //sc.close();
+    }
+}
+

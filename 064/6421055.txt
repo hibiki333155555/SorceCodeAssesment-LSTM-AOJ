@@ -1,0 +1,140 @@
+#include<bits/stdc++.h>
+using namespace std;
+#include <unordered_set>
+#include <random>
+#define int long long
+#define REP(i,m,n) for(int i=(m);i<(n);i++)
+#define rep(i,n) REP(i,0,n)
+#define pb push_back
+#define all(a) a.begin(),a.end()
+#define rall(c) (c).rbegin(),(c).rend()
+#define mp make_pair
+#define endl '\n'
+//#define vec vector<ll>
+//#define mat vector<vector<ll> >
+#define fi first
+#define se second
+#define double long double
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair<ll,ll> pll;
+//typedef long double ld;
+typedef complex<double> Complex;
+const ll INF=1e9+7;
+const ll MOD=998244353;
+const ll inf=INF*INF;
+const ll mod=MOD;
+const ll MAX=200010;
+const double PI=acos(-1.0);
+typedef vector<vector<ll> > mat;
+typedef vector<ll> vec;
+
+//dijkstra(O(ElogV))
+//0-indexed
+void dijkstra(ll n,ll s,vector<vector<pll> >&G,vector<ll> &d){
+    priority_queue<pll,vector<pll>,greater<pll> >pq;
+    rep(i,n){
+        d[i]=inf;
+    }
+    d[s]=0;
+    pq.push(mp(0,s));
+    while(!pq.empty()){
+        pll k=pq.top();pq.pop();
+        ll v=k.second;
+        if(d[v]<k.first)continue;
+        for(auto e:G[v]){
+            if(d[e.first]>d[v]+e.second){
+                d[e.first]=d[v]+e.second;
+                pq.push(mp(d[e.first],e.first));
+            }
+        }
+    }
+}
+
+ll dx[]={0,1,0,-1};
+ll dy[]={1,0,-1,0};
+
+void solve(){
+    ll h,w;cin>>h>>w;
+    vector<string>c(h);
+    rep(i,h)cin>>c[i];
+    queue<pll>q;
+    vector<ll>d(h*w);
+    ll st,gl;
+    vector<vector<pll> >G(h*w);
+    rep(i,h){
+        rep(j,w){
+            ll v=i*w+j;
+            if(c[i][j]=='S'){
+                st=v;
+                rep(l,4){
+                    ll nx=i+dx[l],ny=j+dy[l];
+                    if(nx<0||nx>=h||ny<0||ny>=w||c[nx][ny]=='#')continue;
+                    ll nv=nx*w+ny;
+                    G[v].pb(mp(nv,1));
+                }
+            }
+            if(c[i][j]=='G'){
+                gl=v;
+            }
+            if(c[i][j]=='#')continue;
+            if(c[i][j]=='.'){
+                rep(l,4){
+                    ll nx=i+dx[l],ny=j+dy[l];
+                    if(nx<0||nx>=h||ny<0||ny>=w||c[nx][ny]=='#')continue;
+                    ll nv=nx*w+ny;
+                    G[v].pb(mp(nv,1));
+                }
+            }
+            if(c[i][j]=='D'){
+                if(i+1<h){
+                    ll nx=i+1,ny=j;
+                    ll nv=nx*w+ny;
+                    if(c[nx][ny]!='#'){
+                        G[v].pb(mp(nv,0));
+                    }
+                }
+            }
+            if(c[i][j]=='U'){
+                if(i-1>=0){
+                    ll nx=i-1,ny=j;
+                    ll nv=nx*w+ny;
+                    if(c[nx][ny]!='#'){
+                        G[v].pb(mp(nv,0));
+                    }
+                }
+            }
+            if(c[i][j]=='L'){
+                if(j-1>=0){
+                    ll nx=i,ny=j-1;
+                    ll nv=nx*w+ny;
+                    if(c[nx][ny]!='#'){
+                        G[v].pb(mp(nv,0));
+                    }
+                }
+            }
+            if(c[i][j]=='R'){
+                if(j+1<w){
+                    ll nx=i,ny=j+1;
+                    ll nv=nx*w+ny;
+                    if(c[nx][ny]!='#'){
+                        G[v].pb(mp(nv,0));
+                    }
+                }
+            }
+        }
+    }
+    dijkstra(h*w,st,G,d);
+    ll ans=d[gl];
+    if(ans==inf){
+        cout<<-1<<endl;
+    }else{
+        cout<<ans<<endl;
+    }
+}
+
+signed main(){
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    solve();
+}

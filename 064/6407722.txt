@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+inline int in() { int x; scanf("%d", &x); return x; }
+inline long long inll() { long long x; scanf("%lld", &x); return x; }
+inline double indb() { double x; scanf("%lf", &x); return x; }
+inline void printline(int x) { printf("%d\n", x); }
+inline void printline(long long x) { printf("%lld\n", x); }
+inline void printline(double x) { printf("%lf\n", x); }
+inline void printline(string str) { cout << str << "\n"; }
+
+void dfs(vector<vector<int>> &G, int v, vector<int> &used, vector<int> &res) {
+    used[v] = true;
+    for ( auto u : G[v] ) {
+        if ( !used[u] ) { dfs(G, u, used, res); }
+    }
+    res.emplace_back(v);
+}
+vector<int> topological_sort(vector<vector<int>> &G) {
+    int n = (int)G.size();
+    vector<int> res;
+    vector<int> used(n, false);
+    for ( int v = 0; v < n; ++v ) {
+        if ( !used[v] ) { dfs(G, v, used, res); }
+    }
+    reverse(res.begin(), res.end());
+    return res;    
+}
+
+int main() {
+    int N = in(), M = in();
+    vector<vector<int>> G(N);
+    for ( int i = 0; i < M; ++i ) {
+        int s = in(), t = in();
+        G[s].emplace_back(t);
+    }
+
+    auto ans = topological_sort(G);
+    for ( int i = 0; i < N; ++i ) {
+        printline(ans[i]);
+    }
+    return 0;
+}
+
+// https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_4_B&lang=ja

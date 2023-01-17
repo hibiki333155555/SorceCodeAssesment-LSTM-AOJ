@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	stack<int> S;
+	int a, b;
+	string s;
+
+	while (cin >> s) {
+		if (s == "+") {
+			b = S.top(); S.pop();
+			a = S.top(); S.pop();
+			S.push(a + b);
+		}
+		else if (s == "-") {
+			b = S.top(); S.pop();
+			a = S.top(); S.pop();
+			S.push(a - b);
+		}
+		else if (s == "*") {
+			b = S.top(); S.pop();
+			a = S.top(); S.pop();
+			S.push(a * b);
+		}
+		else {
+			S.push(atoi(s.c_str()));
+		}
+	}
+
+	cout << S.top() << endl;
+
+	return 0;
+}

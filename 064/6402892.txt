@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+#define ii pair<int,int>
+#define endl "\n"
+using namespace std ;
+
+int main(){
+    int tt ; cin >> tt ;
+
+
+        vector<ii> v;
+        for(int i = 0; i < tt ; i++){
+            int x , y ; cin >> x >> y ;
+            v.push_back({x,y}) ;
+        }
+        sort(v.begin() , v.end()) ;
+        for(int i = 0; i < tt; i++){
+            cout << v[i].first << " " << v[i].second << endl;
+        }
+
+
+
+
+
+return 0 ;
+
+ }
+
+
+
+
