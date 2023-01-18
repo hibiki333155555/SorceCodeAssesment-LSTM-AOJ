@@ -5,7 +5,6 @@ from tokenizers.pre_tokenizers import Digits, Whitespace
 from tokenizers.processors import TemplateProcessing
 from tokenizers.trainers import WordLevelTrainer
 
-#自分で考えた
 SMALL_TRAINING_CORPUS = []
 
 for i in range(6400000, 6454000):
@@ -18,7 +17,7 @@ for i in range(6400000, 6454000):
     #[open("./064/6400000.txt", "r").read()]
 
 
-# ↓パクリ　https://huggingface.co/robot-test/dummy-tokenizer-wordlevel
+#　https://huggingface.co/robot-test/dummy-tokenizer-wordlevel
 tokenizer = Tokenizer(WordLevel(unk_token="[UNK]"))
 tokenizer.normalizer = normalizers.Sequence([NFD(), Lowercase(), StripAccents()])
 
@@ -38,3 +37,5 @@ trainer = WordLevelTrainer(vocab_size=400, special_tokens=["[UNK]", "[CLS]", "[S
 tokenizer.train_from_iterator(SMALL_TRAINING_CORPUS, trainer=trainer)
 
 tokenizer.save("tokenizer.json")
+
+output = tokenizer.encode([open("./o64/6400000.txt", "r").read()])
