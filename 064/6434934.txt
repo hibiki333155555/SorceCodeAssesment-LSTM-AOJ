@@ -1,4 +1,0 @@
-import Text.Printf
-main = getLine >>=
-       (\[a,b] -> printf "%d %d %.8f\n" (a `div` b) (a `mod` b) ((fromIntegral a / fromIntegral b) :: Double))
-       . map read . words

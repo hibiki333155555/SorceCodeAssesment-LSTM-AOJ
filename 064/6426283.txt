@@ -1,8 +1,0 @@
-n = int(input())
-l = list(map(int, input().split()))   # 1行にある複数の値を整数にして、リストにしまう
-#
-vmin = min(l)  # 最小値
-vmax = max(l)  # 最大値
-vsum = sum(l)  # 合計
-#
-print(vmin, vmax, vsum)  # 結果表示

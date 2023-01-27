@@ -1,7 +1,0 @@
-i = 1
-while True:
-    x=int(input())
-    print("Case",i,":",x)
-    if x==0:
-        break
-    i=i+1

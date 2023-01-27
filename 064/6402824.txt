@@ -1,6 +1,0 @@
-import random
-a=list(map(random.randint,input().split()))
-a=min(random)
-a=max(random)
-a=sum(random)
-print()

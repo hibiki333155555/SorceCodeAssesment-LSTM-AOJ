@@ -1,8 +1,0 @@
-ans = []
-for line in open(0).readlines():
-    a, b = map(int, line.split())
-    if a == 0 and b == 0: break
-    small = min([a, b])
-    large = max([a, b])
-    ans.append(f"{small} {large}\n")
-open(1,'w').writelines(ans)

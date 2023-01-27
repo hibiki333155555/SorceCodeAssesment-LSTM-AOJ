@@ -1,9 +1,0 @@
-#include<stdio.h>
-int main(void){
-    
-    scanf( "%d %d\n, &a ,&b);
-    
-    printf( "%d %d/n" , a*b , a*2+b*2);
-    
-    return 0;
-}

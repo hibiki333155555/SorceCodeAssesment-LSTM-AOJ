@@ -1,6 +1,0 @@
-class Main{
-    public static int main(int x){
-        answer = 2+x;
-        System.out.println(answer);
-    }
-}

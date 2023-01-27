@@ -1,7 +1,0 @@
- a = x*x*x
- 
- x = int(input())
- 
- print(a)
- 
- 

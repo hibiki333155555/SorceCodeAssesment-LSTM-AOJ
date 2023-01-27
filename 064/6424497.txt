@@ -1,8 +1,0 @@
-a = int(input())
-b = int(input())
-c = a*b
-d = a+a+b+b
-c = str(c)
-d = str(d)
-print(c+" "+d)
-

@@ -1,9 +1,0 @@
-ans = 0
-while True:
-    try:
-        S = list(input())
-    except:
-        break
-    if S == S[::-1]:
-        ans += 1
-print(ans)

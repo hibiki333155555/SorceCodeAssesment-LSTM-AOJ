@@ -1,3 +1,0 @@
-S = input()
-print(S.capitalize())S = input()
-print(S.swapcase())

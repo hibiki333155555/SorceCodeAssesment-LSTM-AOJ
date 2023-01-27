@@ -1,2 +1,0 @@
-L = input()
-a,b = map(int,L. split())

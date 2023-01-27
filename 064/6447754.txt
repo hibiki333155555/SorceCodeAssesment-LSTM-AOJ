@@ -1,4 +1,0 @@
-a=input()
-l = input().split()
-l=map(int,l)
-print(min(l),max(l),sum(l))

@@ -1,7 +1,0 @@
-N = int(input())
-for i in range(0, N): 
-    A = (map(int, input().split()))
-    a = min(A)
-    b = max(A)
-    c = sum(A)
-print(a, b, c)

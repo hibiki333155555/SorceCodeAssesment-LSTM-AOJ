@@ -1,4 +1,0 @@
-N, M, K, X =map(int, input().split())
-As = list(map(int, input().split()))
-
-print("Yes" if max(As) * K >= X * M else "No")

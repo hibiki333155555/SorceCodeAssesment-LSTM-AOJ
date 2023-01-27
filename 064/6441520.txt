@@ -1,8 +1,0 @@
-n = int(input())
-input_list = [int(i) for i in input().split()]
-
-min = min(input_list)
-max = max(input_list)
-sum = sum(input_list)
-
-print(min, max, sum)

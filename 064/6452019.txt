@@ -1,4 +1,0 @@
-n = gets
-s = gets.chars.uniq
-
-puts s.length

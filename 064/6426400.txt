@@ -1,3 +1,0 @@
-a,b,c = map(int,input().split())
-count_a,count_b= a//b,c//b
-print(count_b-count_a-2)

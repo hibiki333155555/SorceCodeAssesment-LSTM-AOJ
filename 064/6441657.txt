@@ -1,2 +1,0 @@
-a, b = map(int, input().split())#map関数は第一因数に関数名、第二因数にリスト名
-print((a*b),(2*(a+b))

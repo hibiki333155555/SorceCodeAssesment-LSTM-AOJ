@@ -1,9 +1,0 @@
-flg = True
-i = 0
-while(flg):
-    x = input()
-    if x != 0:
-        print("Case" + i + ":" + input())
-    else:
-        flg = False
-

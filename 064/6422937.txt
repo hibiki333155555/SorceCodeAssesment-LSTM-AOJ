@@ -1,9 +1,0 @@
-n = int(input())
-
-r = [int(input()) for x in range(n)]
-t = []
-for i in range(n):
-    for j in range(n):
-        if i < j:
-            t.append(r[j] - r[i])
-print(max(t))

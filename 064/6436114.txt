@@ -1,7 +1,0 @@
-import math
-s=input()
-r=float(s)
-zone=math.pi*r**2
-nagasa=2*math.pi*r
-
-print("{0:6f} {1:6f}".format(zone,nagasa))

@@ -1,3 +1,0 @@
-a,b=[int(i)for i in input().split()]
-f=a/b
-print(f'{a//b} {a%b} {f:.5f}')

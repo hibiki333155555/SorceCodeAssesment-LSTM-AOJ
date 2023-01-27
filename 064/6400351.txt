@@ -1,4 +1,0 @@
-x = input(int())
-
-print(x*x*x)
-

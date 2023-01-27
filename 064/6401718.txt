@@ -1,5 +1,0 @@
-while True:
-    li = sorted(list(map(int, input().split())))
-    if [li[0], li[1]] == [0, 0]:
-        break
-    print(*li)

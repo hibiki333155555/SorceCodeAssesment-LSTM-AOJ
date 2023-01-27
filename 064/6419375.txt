@@ -1,6 +1,0 @@
-n = int(input())
-
-
-l= [int(input()) for i in range(n + 1)]
-
-print(min(l) + " " + max(l) + " " + reduce(lambda x, total: x + total, l))

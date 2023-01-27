@@ -1,4 +1,0 @@
-n = input()
-a = input().split(" ")
-reverse(a)
-print(" ".join(a))

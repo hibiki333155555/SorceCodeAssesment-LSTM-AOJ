@@ -1,7 +1,0 @@
-num = int(input())
-
-h = num//3600
-m = (num-3600*h)//60
-s =num-3600*h-60*m
-
-print("{0}:{1}:{2}".format(h,m,s))

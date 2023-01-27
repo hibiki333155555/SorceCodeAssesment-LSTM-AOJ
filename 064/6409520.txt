@@ -1,9 +1,0 @@
-z = input()
-
-while z != "0":
-  sum = 0
-  for i in z:
-    sum += int(i)
-  print(sum)
-  
-  z = input()

@@ -1,7 +1,0 @@
-while True:
-	try:
-		words = input().lower()
-	except:
-		break
-for i in range(97, 124):
-	print("%d" % (words.count(chr(i))))

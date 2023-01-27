@@ -1,3 +1,0 @@
-x=int(input('数字をいれてください'))
-result=x^3
-print(result)

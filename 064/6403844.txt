@@ -1,6 +1,0 @@
-N=int(input())
-L=set(list(input().split()))
-if len(L) >= 3:
-    print("Yes")
-else:
-    print("No")

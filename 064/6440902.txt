@@ -1,4 +1,0 @@
-def solve(x):
-    return x**3
-
-solve(int(input())

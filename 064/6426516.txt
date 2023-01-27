@@ -1,7 +1,0 @@
-import math
-
-r=float(input())
-a=math.pi*2*r
-b=math.pi*r**2
-print(f'{b:.6f} {a:.6f}')
-

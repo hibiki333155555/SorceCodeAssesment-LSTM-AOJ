@@ -1,9 +1,0 @@
-while True:
-    h,w=(int(x) for x in input()split())
-    if h==0 and w==0:
-        break
-    for h:
-        for w:
-            print("#",end"")
-        print()
-    print

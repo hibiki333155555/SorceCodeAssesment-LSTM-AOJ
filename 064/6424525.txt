@@ -1,6 +1,0 @@
-N = int(input())
-money = 100000
-for _ in range(N):
-    money *= 1.05
-    money = -(-1 * money//1000) * 1000
-print(int(money))

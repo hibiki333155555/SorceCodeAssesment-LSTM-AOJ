@@ -1,6 +1,0 @@
-a, b, c = list(map(int, input().split()))
-
-ans = a, b, c
-ans = sorted(ans)
-
-print(*ans)

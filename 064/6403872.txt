@@ -1,2 +1,0 @@
-A,B=int(input().split())
-print(B-A)

@@ -1,3 +1,0 @@
-input()
-print('Yes' if len(list(set(input().strip()))) >= 3 else 'No')
-

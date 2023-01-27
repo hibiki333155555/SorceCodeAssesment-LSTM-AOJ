@@ -1,8 +1,0 @@
-quantity=input()
-numbers=input().split()
-max=max(numbers)
-min=min(numbers)
-sum=sum(numbers)
-primt(min,max,sum)
-
-

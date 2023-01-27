@@ -1,5 +1,0 @@
-d = int(input())
-k = d//3600
-f = d%3600//60
-b = d%60
-print(k,f,b)

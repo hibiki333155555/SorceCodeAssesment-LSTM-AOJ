@@ -1,6 +1,0 @@
-for(
-    s='',i=1;
-    i <= +(''+require('fs').readFileSync(0));
-    i++
-) if(i%3==0||i!=0&&/3/.test(3))s+=' '+i;
-console.log(s);

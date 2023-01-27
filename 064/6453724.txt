@@ -1,9 +1,0 @@
-n = int(input())
-a = list(map(int, input().split()))
-a.sort()
-
-mini = a[0]
-maxi = a[-1]
-summ = sum(a)
-
-print(mini, maxi, summ)

@@ -1,7 +1,0 @@
-n=input()
-num=list(input().split())
-
-newlist=[]
-
-for i in range(n):
-    newlist.append(num[-i-1])

@@ -1,5 +1,0 @@
-s='';
-[...Array(+30/*(''+require('fs').readFileSync(0))*/)].map((_,i)=>{
-    ( ++i%3==0||/3/.test(i) )&&(s+=' '+i)
-}).join` `;
-console.log(' '+s)

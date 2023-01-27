@@ -1,9 +1,0 @@
-r, c = map(int, input().split())
-for i in range(r):
-    list_ = list(map(int, input().split()))
-    list_.append(sum(list_))
-    for num, j in enumerate(list_):
-        if num != 0:
-            print(' ', end='')
-        print(j)
-    print()

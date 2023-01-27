@@ -1,7 +1,0 @@
-quantity=input()
-numbers=input().split()
-integer_numbers=map(int,numbers)
-max=max(numbers)
-min=min(numbers)
-sum=sum(integer_numbers)
-print(min,max,sum)

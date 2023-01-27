@@ -1,8 +1,0 @@
-x,y = map(int,input().split())
-while True:
-    if x <= y:
-        print(x y)
-    elif x >= y:
-        print(y x)
-    else x,y ==0:
-        break

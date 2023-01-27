@@ -1,8 +1,0 @@
-n = int(input())
-prev = 10**18
-ans = -10**18
-for i in range(n):
-    r = int(input())
-    ans = max(ans, r - prev)
-    prev = min(prev, r)
-print(ans)

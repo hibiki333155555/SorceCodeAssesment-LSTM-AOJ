@@ -1,7 +1,0 @@
-n = int(input())
-a = list(map(int,input().split()))
-
-ans_2 = max(a)
-ans_1 = min(a)
-ans_3 = sum(a)
-print(ans_1,ans_2,ans_3)

@@ -1,7 +1,0 @@
-n=int(input())
-for i in range(n):
-    x,y,b,p=[int(i)for i in input().split()]
-    l1=(x*b)+(y*p)
-    l2=int(((5*x)+(y*2))*0.8)
-    l3=int(((6*x)+(y*2))*0.8)
-    print(min(l1,l3 if b==6 else l2))

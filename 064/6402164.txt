@@ -1,8 +1,0 @@
-i = input().split(" ")
-x = int(i[0])
-y = int(i[1])
-
-s = x * y
-l = (x + y) * 2
-
-print(s + " " + l)

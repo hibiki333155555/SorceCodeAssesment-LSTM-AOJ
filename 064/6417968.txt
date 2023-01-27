@@ -1,4 +1,0 @@
-a,b = gets.split(",").chomp
-c = a*b
-d = 2 * (a + b)
-p c d

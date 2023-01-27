@@ -1,9 +1,0 @@
-#include<bits/stdc++.h>
-using namespace std;
-#define ll long long
-int main(){
-    int w;
-    cin>>w;
-    cout<<w*32<<endl;
-    return 0;
-}

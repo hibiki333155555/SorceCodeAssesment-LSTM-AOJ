@@ -1,9 +1,0 @@
-while (str = gets.chomp) != '-'
-    gets.to_i.times do
-        shuffle_range = 0..(gets.to_i - 1)
-        str += str[shuffle_range]
-        str.slice!(shuffle_range)
-    end
-    puts str
-end
-

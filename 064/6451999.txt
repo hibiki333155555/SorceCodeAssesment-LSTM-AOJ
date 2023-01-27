@@ -1,9 +1,0 @@
-x = gets
-y = gets
-z = gets
-
-if x + y >= z
-  puts 1
-else
-  puts 0
-end

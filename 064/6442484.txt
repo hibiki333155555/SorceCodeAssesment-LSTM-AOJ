@@ -1,7 +1,0 @@
-import math
-a,b,c = map(float,input().split())
-c = math.radians(c)
-S = a * b * math.sin(c) / 2.
-L = math.sqrt(a*a+b*b-2.*a*b*math.cos(c))
-H = 2. * S / a
-print(f"{S:.8f}\n{L+a+b:.8f}\n{H:.8f}\n")

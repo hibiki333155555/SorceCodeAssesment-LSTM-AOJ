@@ -1,4 +1,0 @@
-[a,b,c]=require('fs').readFileSync(0,'utf8').split(` `).map(Number);for(i=0;b-a+1;b--){
-    if(c % b === 0) i++
-};
-console.log(i)

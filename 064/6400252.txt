@@ -1,8 +1,0 @@
-while True:
-    a,b = map(int, input().split())
-    if a+b == 0:
-        break
-    if a>b:
-        print('{} {}'.format(b, a))
-    else:
-        print('{} {}'.format(a, b))

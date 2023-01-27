@@ -1,5 +1,0 @@
-second = int(input())
-h = int(second / (60 * 60))
-m = int((second - h * 60 * 60) / 60)
-s = (second - h * 60 * 60 - m * 60)
-print(f"{h}:{m}:{s}")

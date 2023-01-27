@@ -1,7 +1,0 @@
-import math
-points = list(map(int, input().split()))
-distance = math.sqrt(
-    pow(2, abs(points[0]-points[2])) + pow(2, abs(points[1] - points[3]))
-)
-print(distance)
-

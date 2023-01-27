@@ -1,9 +1,0 @@
-time = int(input())
-
-h = time / 3600
-ms = time % 3600
-m = ms / 60
-s = ms % 60
-
-print(str(h)+":"+str(m)+":"+str(s))
-

@@ -1,9 +1,0 @@
-//"Hello World" と標準出力にプリントするプログラムを作成してください。
-
-#include<iostream>
-
-using namespace std;
-
-int main(){
-    cout <<"Hello World"<<endl;
-}

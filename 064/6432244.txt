@@ -1,3 +1,0 @@
-a, b, c = gtes.split.map(&:to_i)
-puts "#{a/b}#{a%b}#{(a%b)%b}"
-

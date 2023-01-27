@@ -1,8 +1,0 @@
-#include <iostream>
-using namespace std;
-int main(){
-  int a, b, area, length;
-  cin>>a>>b;
-  cout<<a*b<<(a+b)*2<<endl;
-  return 0;
-}

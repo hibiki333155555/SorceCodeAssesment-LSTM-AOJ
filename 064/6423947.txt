@@ -1,8 +1,0 @@
-import re
-import sys
-
-s = sys.stdin.read().lower()
-s = re.sub(r'[^a-z]+', '', s)
-alp = [chr(i) for i in range(97, 97+26)]
-for target in alp:
-    print(f"{target} : {s.count(target)}")

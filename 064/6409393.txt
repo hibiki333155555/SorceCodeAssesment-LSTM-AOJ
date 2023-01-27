@@ -1,3 +1,0 @@
-
-[...Array(+(''+require('fs').readFileSync(i=0)))].map(()=>(!(++i%3)||/3/.test(i))&&(s+=' '+i)).join` `;
-console.log(' '+s);

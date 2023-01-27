@@ -1,9 +1,0 @@
-import sys
-
-s=sys.stdin.read()
-f = [0 for i in range(26)]
-for i in s:
-    if 'a' <= i.lower() <= 'z':
-        f[ord(i.lower()) - ord('a')] += 1
-for i in range(26):
-    print(chr(ord('a') + i), ':', f[i])

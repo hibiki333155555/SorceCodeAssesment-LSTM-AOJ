@@ -24,7 +24,6 @@ embedding_dim = 10
 hidden_dim = 100
 vocab_size = 400
 
-
 tokenizer = Tokenizer.from_file("./tokenizer.json")
 
 input = tokenizer.encode(json_load[0][1])

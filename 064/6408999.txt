@@ -1,8 +1,0 @@
-while True:
-  total=0
-  num=map(str,input())
-  if num=='0':
-    break
-  for i in num:
-    total+=int(i)
-  print(total)

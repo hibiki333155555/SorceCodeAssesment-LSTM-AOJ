@@ -1,6 +1,0 @@
-second = int(input())
-h = second // 3600
-m = second % 3600 // 60
-s = second % 60
-print(f"{h}:{m}:{s}")
-

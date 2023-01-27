@@ -1,3 +1,0 @@
-a,b,c = map(int,input().split())
-
-print(sum(c % x for x in range(a,b+1)))

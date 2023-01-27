@@ -1,6 +1,0 @@
-n = input()
-i = 1
-while not n=="0":
-    print ("Case :{} {}".format(i,n))
-    n = input()
-    i += 1

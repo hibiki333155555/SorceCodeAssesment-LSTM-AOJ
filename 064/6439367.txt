@@ -1,1 +1,0 @@
-main = getLine >> getLine >>= mapM_ print . reverse . words

@@ -1,3 +1,0 @@
-for l in open(0).readlins():
-    if l == '0 0': break
-    print(*sorted(l.split()))

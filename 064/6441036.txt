@@ -1,8 +1,0 @@
-import math
-
-r = float(input())
-
-circumference = 2 * r * math.pi
-area = r * r * math.pi
-
-print(f'{area:.6f}', f'{circumference:.6f}')

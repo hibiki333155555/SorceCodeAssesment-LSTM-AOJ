@@ -1,9 +1,0 @@
-l = input().split('\n')
-
-for i in l:
-    if i == 0:
-        break
-    r = 0
-    for n in str(i):
-        r += int(n)
-    print(r)

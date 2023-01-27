@@ -1,8 +1,0 @@
-n = int(input())
-
-# input n numbers of list (split space)
-a = list(map(int, input().split()))
-
-# print max, min and sum of list (one line)
-print(min(a), max(a),  sum(a))
-

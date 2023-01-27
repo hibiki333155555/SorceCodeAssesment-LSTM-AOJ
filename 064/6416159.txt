@@ -1,8 +1,0 @@
-while True:
-    a,op,b=input().split()
-    if op=='?':
-        break
-    elif op in ('+','-','/','*'):
-        print(round(eval(str(a+op+b)),5))
-    else:
-        continue

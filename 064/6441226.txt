@@ -1,9 +1,0 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-int main(void) {
-    unsigned a, b; cin >> a >> b;
-    if(a|b) cout << ((a^b)? __builtin_clz(a ^ b) : 32) - __builtin_clz(max(a, b)) << '\n';
-    else cout << "1\n";
-}
-

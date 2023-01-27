@@ -1,7 +1,0 @@
-i = input().split()
-a, b = i
-a = int(a)
-b = int(b)
-
-print(a - b)
-

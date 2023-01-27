@@ -1,2 +1,0 @@
-//[a,b]=require('fs').readFileSync(0, 'utf8').split` `;console.log(`${~~(a/b)} ${a%b} ${(a/b).toFixed(8)}`);
-[a,b]=require('fs').readFileSync(0, 'utf8').split` `;console.log([~~(a/b),a%b,(a/b).toFixed(8)].join` `);

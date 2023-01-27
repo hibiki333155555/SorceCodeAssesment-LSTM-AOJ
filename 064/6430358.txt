@@ -1,8 +1,0 @@
-cnt = 0
-wile True:
-    x = int(input())
-    if x == 0:
-        break
-    cnt += 1
-    print("case",cnt,": ",sep="")
-    

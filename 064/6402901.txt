@@ -1,3 +1,0 @@
-n = int(input())
-a1 = sorted(map(int, input().split(" ")))
-print(a1[0], a1[n-1], sum(a1))

@@ -1,4 +1,0 @@
-n = int(input())
-a_lst = list(map(int, input().split()))
-
-print(min(a_lst), max(a_lst), sum(a_lst), sep=" ")

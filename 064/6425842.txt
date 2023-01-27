@@ -1,9 +1,0 @@
-line = input()
-keyword = input()
-
-ret = False
-for i in range(len(line)):
-  if keyword in line[i:] + line[0:i]:
-    ret = True
-    break
-print('Yes' if ret else 'No')

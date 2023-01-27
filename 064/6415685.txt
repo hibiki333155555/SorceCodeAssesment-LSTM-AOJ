@@ -1,8 +1,0 @@
-str = input()
-for c in str:
-  if c.islower():
-    print(c.upper(), end="")
-  elif c.isupper():
-    print(c.lower(), end="")
-  else:
-    print(c, end="")

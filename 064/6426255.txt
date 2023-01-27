@@ -1,4 +1,0 @@
-i = 0
-while i < 1000:         # i が0から9までの間繰り返す
-    print("Hello World")
-    i = i + 1

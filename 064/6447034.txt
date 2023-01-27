@@ -1,9 +1,0 @@
-x=input()
-x=x*x*x
-print('x')
-
-
-x=input()
-x=x*x*x
-print(x)
-

@@ -1,8 +1,0 @@
-class Main{
-    public static void main(string[] args){
-        Scanner scanner = new scanner(System.in);
-        System.out.println("整数を入力してね");
-        int l = scaner nextInt();
-        System.out.println(l*l*l);
-    }
-}

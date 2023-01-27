@@ -1,6 +1,0 @@
-wile True:
-    x = int(input())
-    if x == 0:
-        break
-    print("case x: ")
-    x += 1

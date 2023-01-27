@@ -1,8 +1,0 @@
-n = int(input())
-data = list(map(int,input().split()))
-
-vmin = min(data)
-vmax = max(data)
-vsum = sum(data)
-
-print(vmin, vmax, vsum)

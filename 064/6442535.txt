@@ -1,5 +1,0 @@
-W, H, x, y, r = map(int, input().split())
-if x+r >= W or x-r < 0:
-    print('No')
-elif x-r > 0 and x+r <= W:
-    print('Yes')

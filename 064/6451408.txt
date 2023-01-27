@@ -1,3 +1,0 @@
-x=integer(input())
-pribt(x**3)
-

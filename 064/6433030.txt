@@ -1,7 +1,0 @@
-e = sorted(list(map(int, input().split())))
-
-if e[0] == e[3] and e[4] == e[7] and e[8] == e[11]:
-    print("yes")
-else:
-    print("no")
-

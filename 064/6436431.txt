@@ -1,6 +1,0 @@
-l= list(map(int,input().split()))
-new_list = sorted(l)
-new_list = [str(n) for n in new_list]
-separator = " "
-print(separator.join(new_list))
-

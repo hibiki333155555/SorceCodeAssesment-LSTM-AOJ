@@ -1,5 +1,0 @@
-import sys
-input = sys.stdin.readline
-x = int(input().rstrip())
-
-print(x**3)

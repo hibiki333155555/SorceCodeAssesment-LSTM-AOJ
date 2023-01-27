@@ -1,9 +1,0 @@
-#include <stdio.h>
-
-int main(void) { 
-    int x;
-    scanf("%d\n",&x);
-    if(1<=x && x<=100);
-    printf("%d\n",x);
-	return 0;
-}

@@ -1,9 +1,0 @@
-while True:
-    n=int(input())
-    if n==0: break
-
-    T=[list(map(int, input().split())) for _ in range(n)]
-    S=[[] for _ in range(5)]
-    for i in range(5):
-        for j in reversed(range(len(T))):
-            S[i].append(T[j][i])

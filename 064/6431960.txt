@@ -1,3 +1,0 @@
-s=input()
-a,b=map(int,s.split())
-print(str(a*b)+" "+str(2*a+2*b))

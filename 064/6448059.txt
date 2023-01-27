@@ -1,9 +1,0 @@
-arr = Array.new(4){Array.new(3,10 ** 10)}
-gets.to_i.times do
-  b, f, r, v = gets.split(" ").map(&:to_i)
-  arr[b - 1][f - 1] += v * 10 ** (r - 1)
-end
-arr.each_with_index{|item, idx|
-  item.each{|i|puts " " + i.to_s.split(//)[1..-1].reverse.join(" ")}
-  puts "#" * 20 if idx != arr.length - 1
-  }

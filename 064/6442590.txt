@@ -1,7 +1,0 @@
-n = 0
-while True:
-    a = str(input())
-    if a == '0':
-        break
-    n+=1
-    print('Case ',n,':',a)

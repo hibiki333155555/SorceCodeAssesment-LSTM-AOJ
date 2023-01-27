@@ -1,7 +1,0 @@
-const fs=require("fs");
-
-function Main(input){
-    console.log(input*input*input);
-}
-
-Main(fs.readFile.Sync("/dev/stdin","utf8"));

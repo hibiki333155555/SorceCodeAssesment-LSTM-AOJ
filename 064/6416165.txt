@@ -1,5 +1,0 @@
-a=input()
-b=input()
-s=a+b
-r=2*(a+b)
-print(s r)

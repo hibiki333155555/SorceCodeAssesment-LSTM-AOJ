@@ -1,5 +1,0 @@
-n = 1
-while True:
-    n+=1
-    a = int(input())
-    print('Case ',n,':',a)

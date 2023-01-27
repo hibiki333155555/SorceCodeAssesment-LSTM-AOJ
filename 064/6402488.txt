@@ -1,8 +1,0 @@
-result = 0
-x, y, z = map(int, input().split(" "))
-
-for i in range(x, y):
-    if z%i == 0:
-        result += 1
-
-print(result)

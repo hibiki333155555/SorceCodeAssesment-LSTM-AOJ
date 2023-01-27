@@ -1,1 +1,0 @@
-.split(/\s|\n/g).map(x=>+x);M=Math;console.log([M.min(...a),M.max(...a),a.reduce((y,z)=>y+z)].join` `);

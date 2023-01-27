@@ -1,3 +1,0 @@
-r=float(input())
-p=3.141592653589
-print "%.5f %.5f" % (p*r*r,2*p*r)

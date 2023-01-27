@@ -1,5 +1,0 @@
-
-s = str"Hello World"
-s = s * 1000
-
-print( s )

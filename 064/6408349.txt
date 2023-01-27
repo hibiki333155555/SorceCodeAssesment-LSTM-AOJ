@@ -1,7 +1,0 @@
-x=input()
-A=list(map(int,raw_input().split()))
-Z=[]
-for i in range(x):
-    a=A[x-1-i]
-    Z.append(a)
-print(' '.join([str(i) for i in Z]))

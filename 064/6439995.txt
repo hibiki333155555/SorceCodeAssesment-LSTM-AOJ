@@ -1,8 +1,0 @@
-input = input()
-ab = input.split()
-if ab[0] > ab[1]:
-    print(ab[0] + " > " + ab[1])
-elif ab[0] < ab[1]:
-    print(ab[0] + " < " + ab[1])
-else:
-    print(ab[0] + " == " + ab[1])

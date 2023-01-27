@@ -1,5 +1,0 @@
-[...a]=require('fs').readFileSync(0,'utf8').split`
-`[1].split` `.map(x=>+x);M=Math;console.log([M.min(...a),M.max(...a),a.reduce((y,z)=>y+z)].join` `);
-
-//M=Math;console.log([M.min(...a),M.max(...a),a.reduce((y,z)=>y+z)].join` `);
-console.log((with(Math)[min(...a),max(...a),a.reduce((y,z)=>y+z)].join` `));

@@ -1,9 +1,0 @@
-while True:
-    h = input()
-    if h == "-":
-        break
-    m = int(input())
-    for i in range(m):
-        n = int(input())
-        h = h[n:] + h[:n]
-    print(h)

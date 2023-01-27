@@ -1,9 +1,0 @@
-P = 998244353
-N, K = map(int, input().split())
-if K > 2:
-    print(pow(2, N, P))
-elif K == 1:
-    print(1)
-else:
-    print(N + 1)
-

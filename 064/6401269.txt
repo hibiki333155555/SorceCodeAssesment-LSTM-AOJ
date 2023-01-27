@@ -1,2 +1,0 @@
-require('fs').readFileSync(0, 'utf8').split`
-`.some(l=>[a,o,b]=l.split` `,o=='?'||console.log({'+':a/b,'-':a-b,'*':a*b,'/':a/b}[o]));

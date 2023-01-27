@@ -1,2 +1,0 @@
-const INFINITY = (1 << 63) - 1
-

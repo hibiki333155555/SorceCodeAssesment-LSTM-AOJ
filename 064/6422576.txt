@@ -1,8 +1,0 @@
-a, b, c = map(int, input().split())
-
-r = [a, b, c]
-r.sort()
-r = [str(v) for v in r]
-
-s = ' '.join(r)
-print(s)

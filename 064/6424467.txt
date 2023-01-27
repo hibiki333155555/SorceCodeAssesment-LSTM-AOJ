@@ -1,5 +1,0 @@
-r = int(input())
-import math
-S = math.pi * r * r
-l = math.pi * 2 * r
-print(S,l)

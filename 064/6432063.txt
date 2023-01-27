@@ -1,4 +1,0 @@
-i = 0
-while i =999:
-    print("HEllo World")
-    i = i + 1

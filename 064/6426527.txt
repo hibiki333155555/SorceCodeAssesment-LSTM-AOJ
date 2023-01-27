@@ -1,8 +1,0 @@
-while True:
-  chars = input()
-  if chars == '-': break
-  n_iter = int(input())
-  for i in range(n_iter):
-    n = int(input())
-    chars = chars[n:] + chars[0:n]
-  print(chars)

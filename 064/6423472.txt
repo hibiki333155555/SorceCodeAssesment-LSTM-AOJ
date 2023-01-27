@@ -1,2 +1,0 @@
-a,o = map(int,input().split())
-print(a//3600,o//3600)

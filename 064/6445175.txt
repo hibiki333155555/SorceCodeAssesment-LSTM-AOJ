@@ -1,2 +1,0 @@
-for i, x in enumerate(open(0).readlines()):
-    print(f"Case {i+1}: {x}")

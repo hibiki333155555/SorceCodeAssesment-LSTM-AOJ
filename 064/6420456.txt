@@ -1,7 +1,0 @@
-H1, W1 = map(int, input().split())
-H2, W2 = map(int, input().split())
-h = -(-H1//H2)
-w = -(-W1//W2)
-ans = h*w
-print(ans)
-

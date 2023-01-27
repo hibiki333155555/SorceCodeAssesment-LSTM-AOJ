@@ -1,3 +1,0 @@
-import math
-A,B,C = map(int,input().split())
-print("%d" %math.lcm(A,B,C))

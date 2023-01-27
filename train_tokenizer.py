@@ -14,17 +14,6 @@ SMALL_TRAINING_CORPUS = []
 SMALL_TRAINING_CORPUS.extend(i[1] for i in json_load)
 print(len(SMALL_TRAINING_CORPUS))
 #データ数2422
-#データの重複を削除したい　（学習のコード数は200ぐらいでいい）
-"""
-for i in range(6400000, 6454000):
-    i = str(i)
-    f_name = "./064/" + i + ".txt"
-    try:
-        SMALL_TRAINING_CORPUS.append(open(f_name, "r").read())
-    except FileNotFoundError:
-        pass
-    #[open("./064/6400000.txt", "r").read()]
-"""
 
 #　https://huggingface.co/robot-test/dummy-tokenizer-wordlevel
 tokenizer = Tokenizer(WordLevel(unk_token="[UNK]"))
@@ -47,5 +36,3 @@ trainer = WordLevelTrainer(vocab_size = 400, special_tokens=["[UNK]", "[CLS]", "
 tokenizer.train_from_iterator(SMALL_TRAINING_CORPUS, trainer=trainer)
 
 tokenizer.save("tokenizer.json")
-
-# output = tokenizer.encode([open("./064/6400000.txt", "r").read()])

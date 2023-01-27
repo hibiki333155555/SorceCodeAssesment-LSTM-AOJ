@@ -1,7 +1,0 @@
-n, x = map(int, input().split())
-m = [int(input()) for _ in range(n)]
-ans = 0
-for y in m:
-    if y >= x:
-        ans += 1 
-print(ans)

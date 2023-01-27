@@ -1,9 +1,0 @@
-L=[]
-while True:
-    x=input().split()
-    x.sort()
-    if x[0]=="0" and x[1]=="0":
-        break
-    L.append(x)
-for i in range(len(L)):
-    print(f"{L[i][0]} {L[i][1]}") 

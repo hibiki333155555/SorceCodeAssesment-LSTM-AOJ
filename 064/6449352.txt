@@ -1,9 +1,0 @@
-a,b = map(int,input().split())
-num = max(a, b)
-nu = len(format(num, "b"))
-ans = 0
-a = format(a, "b").zfill(nu)
-b = format(b, "b").zfill(nu)
-while ans < nu and a[ans] == b[ans]:
-    ans += 1
-print(ans)

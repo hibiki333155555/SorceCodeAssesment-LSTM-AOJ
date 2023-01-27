@@ -1,2 +1,0 @@
-x=input()
-print int(x/3600), int((x-(int(x/3600)))/60), int((int((x-(int(x/3600)))/60))/60)

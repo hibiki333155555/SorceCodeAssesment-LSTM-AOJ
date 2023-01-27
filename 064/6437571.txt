@@ -1,6 +1,0 @@
-l=input()
-while l !='0 0':
-  l=sorted(list(map(int, l.split())))
-  print(' '.join(map(str, l)))
-  l=input()
-  

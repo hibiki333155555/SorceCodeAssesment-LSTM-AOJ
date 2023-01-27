@@ -1,6 +1,0 @@
-a,op,b = map(input().split())
-
-while True:
-    if op == "?":
-        break
-    print("{} {} {}".format(a,op,b))

@@ -1,6 +1,0 @@
-import numpy as np
-x1,x2,y1,y2=map(int,raw_input().split())
-a=np.array([x1,x2])
-b=np.array([y1,y2])
-dis=np.linalg.norm(b-a)
-print(dis)

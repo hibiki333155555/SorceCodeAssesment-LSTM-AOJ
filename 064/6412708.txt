@@ -1,5 +1,0 @@
-word = input().split()[0]
-if(word == "END_OF_FILE"):
-    exit()
-word = word.lower()
-count = 0

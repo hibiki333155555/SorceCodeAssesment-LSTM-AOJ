@@ -1,8 +1,0 @@
-l,n = map(int,input().split())
-A = list(map(int,input().split()))
-for i,a in enumerate(A,1):
-    if a >= l:
-        print(i)
-        exit()
-    l -= a
-print("No")

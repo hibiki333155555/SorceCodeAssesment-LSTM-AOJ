@@ -1,4 +1,0 @@
-a,b,c,d,e,f=map(int, raw_input().split())
-g=a+b*5+c*10+d*50+e*100+f*500
-if g>=1000: print 1
-else: print 0

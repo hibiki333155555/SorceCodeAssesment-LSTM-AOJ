@@ -1,6 +1,0 @@
-L = int(input())
-h = int(L/3600)
-m = int((L-h)/60)
-s = int(L-h-m)
-print(h,":",m,":",s)
-

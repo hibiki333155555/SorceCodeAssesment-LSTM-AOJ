@@ -1,6 +1,0 @@
-x = int(input())
-i=1
-while x!=0 :
-    print('case {}: {}'.format(i,x))
-    i=i+1
-    break

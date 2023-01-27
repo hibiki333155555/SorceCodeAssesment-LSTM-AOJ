@@ -1,5 +1,0 @@
-r = float(input())
-pie = 3.141592
-area = r**2 * pie
-rectangle = 2 * r * pie
-print(f'{area:.6f}  {rectangle:.5f}')

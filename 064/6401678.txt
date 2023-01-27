@@ -1,7 +1,0 @@
-_ = input()
-l = list(map(int, input().split()))
-for i, j in enumerate(range(1, len(l)+1)):
-    if i > 0:
-        print(' ', end='')
-    print(l[len(l)-j], end='')
-print()

@@ -1,6 +1,0 @@
-x=input()
-while True:
-    if x==0:
-        break
-    else:
-        print(sum(list(map(int,input().split()))))

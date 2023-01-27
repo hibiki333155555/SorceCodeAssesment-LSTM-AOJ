@@ -1,6 +1,0 @@
-l = input()
-a,b = list(map(int, l.split()))
-
-print(a*b)
-print((a+b)*2)
-

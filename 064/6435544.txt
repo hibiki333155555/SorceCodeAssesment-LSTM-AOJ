@@ -1,6 +1,0 @@
-L = int(input())
-h = int(L/3600)
-m = int((L-h*3600)/60)
-s = int(L-h*3600-m*60)
-print("{}:{}:{}".format(h,m,s))
-

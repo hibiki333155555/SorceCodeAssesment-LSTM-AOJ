@@ -1,5 +1,0 @@
-x = int(input())
-h = x/3600 
-m = h/60
-s = x/60
-print(str(h) + ":" + str(m) + ":" + str(s))

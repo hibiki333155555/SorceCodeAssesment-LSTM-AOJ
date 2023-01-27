@@ -1,6 +1,0 @@
-n = int(input())
-numbers = list(map(int, input().split()))
-
-numbers.reverse()
-for i in range(0,n):
-  print(numbers[i],end='  ')

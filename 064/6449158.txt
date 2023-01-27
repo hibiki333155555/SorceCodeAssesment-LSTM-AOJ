@@ -1,7 +1,0 @@
-const x = require('fs').readFileSync('/dev/stdin','utf8').trim("\n").split("\n");
-(inputs =>{
-    let ans = 0;
-    for(let i=0,len=inputs.length-1;i<len;i++){
-        console.log(`${eval(inputs[i])}`);
-    }
-})(x);

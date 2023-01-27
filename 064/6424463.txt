@@ -1,6 +1,0 @@
-n, m = map(int, input().split())
-A = [list(map(int, input().split())) for _ in range(n)]
-b = [[int(input())] for _ in range(m)]
-
-for i in range(n):
-  print(sum([b[j][0] * A[i][j] for j in range(m)]))

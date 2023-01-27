@@ -1,5 +1,0 @@
-import math
-r=map(float,input())
-S=r*r*math.pi
-L=2*r*math.pi
-print(S'{f:.5f}',L'{f:.5f}')

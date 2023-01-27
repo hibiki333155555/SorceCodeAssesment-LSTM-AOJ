@@ -1,7 +1,0 @@
-a,b=map(int,input().split())
-if(a<b):
-    print("%d<%d",%(a,b))
-if(a>b):
-    print("%d>%d",%(a,b))
-if(a=b):
-    print("%d=%d",%(a,b))

@@ -1,3 +1,0 @@
-r = gets.to_i
-p = Math::PI
-puts "#{p*(r**2)} #{2*p*r}"

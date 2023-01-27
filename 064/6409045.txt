@@ -1,8 +1,0 @@
-r = [int(input().strip()) for _ in range(int(input().strip()))]
-minv = min(r[:2])
-maxd = r[1] - r[0]
-for i in range(2, len(r)):
-  d = r[i] - minv
-  maxd = d if d > maxd else maxd
-  minv = min(minv, r[i])
-print(maxd)

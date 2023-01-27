@@ -1,4 +1,0 @@
-for i in range(2):
-    l = input().split()
-# l = map(int, l)
-print('{} {} {}'.format(min(l), max(l), l.sum()))

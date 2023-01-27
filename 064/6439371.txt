@@ -1,4 +1,0 @@
-import Data.List ((\\))
-main = getLine >> getContents >>=
-  putStr . unlines . (\\) [x ++ " " ++ show y | x<-["S","H","C","D"], y<-[1..13]] . lines
-

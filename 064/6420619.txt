@@ -1,4 +1,0 @@
-N, M, K, X = map(int, input().split())
-A = [int(a) for a in input().split()]
-a = max(A)
-print("Yes" if a * K >= X * M else "No")

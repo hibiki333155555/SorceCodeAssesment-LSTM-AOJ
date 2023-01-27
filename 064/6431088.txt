@@ -1,2 +1,0 @@
-#include <stdio.h>
-main(){char pos,a,b;pos='A';while(scanf("%c,%c ",&a,&b)!=EOF){if(pos==a){pos=b;}else if(pos==b){pos=a;}}printf("%c\n",pos);return 0;}

@@ -1,5 +1,0 @@
-while true:
-    x = int(input())
-    if x == 0:
-        break
-    print(x)

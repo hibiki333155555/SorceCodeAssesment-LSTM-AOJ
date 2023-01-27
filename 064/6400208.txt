@@ -1,6 +1,0 @@
-l = map(int, input())
-for i, x in enumerate(l):
-    if x != 0:
-        print('Case {}:{}'.format(i, x))
-    else:
-        break

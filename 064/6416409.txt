@@ -1,9 +1,0 @@
-// use std::io;
-use proconio::input;
-
-fn main() {
-    input!{
-        x: u64
-    }
-    println!("{}", x.pow(3));
-}

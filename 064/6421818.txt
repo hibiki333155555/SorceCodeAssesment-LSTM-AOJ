@@ -1,5 +1,0 @@
-#include <iostream.h>
-using namespace std;
-
-cin >> x:
-cout << x^3

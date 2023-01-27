@@ -1,2 +1,0 @@
-console.log((''+require("fs").readFileSync(0)).split`
-`.split` `.reverse().join` `);

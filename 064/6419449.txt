@@ -1,5 +1,0 @@
-n=int(input())
-t=list(input().split())
-t.reverse()
-s=" ".join(t)
-print(s)

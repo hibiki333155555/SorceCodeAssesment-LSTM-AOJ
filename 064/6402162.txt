@@ -1,2 +1,0 @@
-number = int(imput())
-print(number**3)

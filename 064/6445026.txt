@@ -1,3 +1,0 @@
-import math
-r=float(input())
-print(f"{float(2*r*math.pi):.7} {float(r**2*math.pi):.7}")

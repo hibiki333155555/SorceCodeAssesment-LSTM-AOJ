@@ -1,5 +1,0 @@
-num = 0
-while num < 100 do
-    puts "Hello World"
-end
-

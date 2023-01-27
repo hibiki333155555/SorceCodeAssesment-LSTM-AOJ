@@ -1,6 +1,0 @@
-import math
-r = float(input())
-pi = math.pi
-s = pi*r*r
-l = 2*pi*r
-print(f"{s:.7f} {l:.7f}")

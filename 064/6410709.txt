@@ -1,8 +1,0 @@
-n = int(input())
-s = list(input())
-S = set(s)
-
-if len(S) >= 3:
-  print('Yes')
-else:
-  print('No')

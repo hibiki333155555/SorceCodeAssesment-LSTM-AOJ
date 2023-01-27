@@ -1,6 +1,0 @@
-class Main {
-    static public void main (Strintgs[] args){
-        System.out.print("Hellow World");
-    }
-}
-

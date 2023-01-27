@@ -1,5 +1,0 @@
-a,op,b = input().split()
-a = int(a)
-b = int(b)
-c = a op b
-print(c)

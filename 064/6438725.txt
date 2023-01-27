@@ -1,8 +1,0 @@
-while True:
-    a = str(input())
-    
-    if a[0] == "0":
-        break
-    print(sum(int(num) for num in(a)))
-
-

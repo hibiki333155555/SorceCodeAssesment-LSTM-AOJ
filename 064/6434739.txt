@@ -1,7 +1,0 @@
-a,b=map(int,input().split())
-
-ans1=a//b
-ans2=int(a%b)
-ans3=a/b
-
-print("{} {} {:.5f}".format(ans1,ans2,ans3))

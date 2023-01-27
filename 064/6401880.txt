@@ -1,5 +1,0 @@
-let sec = require(`fs`).readFileSync(`/dev/stdin`, `utf-8`);
-let h = Math.floor(+sec/3600),
-    m = Math.floor((+sec - h * 3600) / 60),
-    s = +sec - 3600 * h - 60 * m;
-console.log(`${h}:${m}:${s}`);

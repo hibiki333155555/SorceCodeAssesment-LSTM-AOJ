@@ -1,8 +1,0 @@
-X=[]
-while True:
-    x=input()
-    if x<1:
-        break
-    X.append(x)
-for i in range(len(X)):
-    print "Case "+str(i+1)+": "+str(X[i])

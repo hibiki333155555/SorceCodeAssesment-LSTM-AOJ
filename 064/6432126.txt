@@ -1,3 +1,0 @@
-r = float(input())
-pi = 3.141592653589
-print(f"{r*r*2*pi:.5f} {2*pi*r:.5f}")

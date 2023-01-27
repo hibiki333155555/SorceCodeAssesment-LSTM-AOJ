@@ -1,2 +1,0 @@
-main = readLn >>= print . solve1
-solve1 x = x^3

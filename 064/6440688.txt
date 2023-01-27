@@ -1,6 +1,0 @@
-r = int(input())
-
-area = round(r*r*3.14159265359, 6)
-circumference = round(2*3.14159265359*r, 6)
-
-print(area, circumference)

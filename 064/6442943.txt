@@ -1,6 +1,0 @@
-time = int(input())
-s = time%60
-minu = time//60
-m = minu%60
-hour = minu//60
-print(str(hour) + ":" + str(m) + ":" +str(s))

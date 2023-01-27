@@ -1,3 +1,0 @@
-require('fs').readFileSync(0).split('\n').some(l=>0/*bug?*/||([H,W]=l.split(` `).map(n=>+n),console.log([...Array(H)].map((_,i)=>(i%2?'.#':'#.').repeat(W).substr(0,W)).join`
-`+`
-`)));

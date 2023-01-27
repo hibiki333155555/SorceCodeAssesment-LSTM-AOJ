@@ -1,4 +1,0 @@
-s1,s2 =input().split()
-D = int(s1)
-L = int(s2)
-print(D//L+D%L)

@@ -1,8 +1,0 @@
-H,W=map(int,input().split())
-
-for i in range(H):
-    for j in range(W):
-        print("#", end="")
-        if i==0 and j==0:
-        break
-    print()

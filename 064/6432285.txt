@@ -1,5 +1,0 @@
-n=int(input())
-def zen(n):
-    if n==0 or n==1 :return 1
-    return zen(n-1)+zen(n-2)
-print(zen(n))

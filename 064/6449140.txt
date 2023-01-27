@@ -1,6 +1,0 @@
-l = input()
-a,b,c = list(map(int, l.split()))
-if(a<b and b<c):
-    print("Yes")
-else:
-    print("No")

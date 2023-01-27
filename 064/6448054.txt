@@ -1,9 +1,0 @@
-while True:
-    input_str = input()
-    sum = 0
-    if input_str == '0':
-        break
-    else:
-        for i in input_str:
-            sum += int(i)
-    print(sum)

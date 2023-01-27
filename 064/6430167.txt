@@ -1,7 +1,0 @@
-while True:
-	try:
-		words = input().lower()
-	except:
-		break
-	for i in range(97, 123):
-		print("%s : %d" % (chr(i), words.count(chr(i))))

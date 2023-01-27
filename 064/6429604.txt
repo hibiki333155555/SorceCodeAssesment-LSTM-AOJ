@@ -1,4 +1,0 @@
-n = int(input())
-list = [input() for _ in range(n)]
-for index,number in enumerate(list):
-    print(f"Case {index}: {number}")

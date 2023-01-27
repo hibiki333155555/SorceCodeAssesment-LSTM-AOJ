@@ -1,3 +1,0 @@
-a = int(input())
-n = list(int(input()))
-print(min(n), max(n), sum(n))

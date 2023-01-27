@@ -1,7 +1,0 @@
-x,y=(int,input().split())
-while True:
-    if x==0 and y==0:
-        break
-    if x<y:
-        x,y=y,x
-        print("%d %d"%(x y))

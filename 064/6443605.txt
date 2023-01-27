@@ -1,8 +1,0 @@
-class x{
-    int a;
-    public:
-    x(int c):a{c}{}
-};
-int main(){
-    x(6);
-}

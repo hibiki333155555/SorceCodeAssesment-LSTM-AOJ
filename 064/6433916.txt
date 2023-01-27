@@ -1,7 +1,0 @@
-while True:
-    n=int(input())
-    if n==0:break
-    s=sorted(int(input())for i in range(n))
-    del s[0]
-    s.pop()
-    print(sum(s)//(n-2))

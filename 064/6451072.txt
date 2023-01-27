@@ -1,3 +1,0 @@
-S = int(input())
-
-print(S/120: S%120 : S%60)

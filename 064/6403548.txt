@@ -1,2 +1,0 @@
-//a=require('fs').readFileSync(0,'utf8').split`\n`[1].split` `.map(x=>+x);M=Math;console.log([M.min(...a),M.max(...a),a.reduce((y,z)=>y+z)].join` `);
-[,,...a]=require('fs').readFileSync(0,'utf8').split(/\s/g).map(x=>+x);M=Math;console.log([M.min(...a),M.max(...a),a.reduce((y,z)=>y+z)].join` `);

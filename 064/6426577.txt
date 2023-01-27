@@ -1,4 +1,0 @@
-import math
-x1,x2,y1,y2=map(int,raw_input().split())
-p=(x2-x1)**2+(y2-y1)**2
-print math.sqrt(p)

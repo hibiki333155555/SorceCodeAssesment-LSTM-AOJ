@@ -1,9 +1,0 @@
-L=[]
-while True:
-    x=input()
-    if x=="0":
-        break
-    L.append(x)
-for i in range(len(L)):
-    print(f"Case {i+1}: {L[i]}") 
-

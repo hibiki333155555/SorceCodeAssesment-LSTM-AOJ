@@ -1,9 +1,0 @@
-while True:
-	try:
-		words = input().lower()
-	except EOFError:
-		break
-for i in range(97, 123):
-    print(chr(i) + " : ", end = "")
-    print(words.count(chr(i)))
-

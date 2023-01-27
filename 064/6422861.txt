@@ -1,7 +1,0 @@
-l1 = list(map(int,input().split()))
-l2 = list(map(int,input().split()))
-dif = [(x-y)%2 for x,y in zip(l1,l2)]
-if len(set(dif)) == 1:
-    print("Yes")
-else:
-    print("No")

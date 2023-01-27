@@ -1,2 +1,0 @@
-La,Lo=map(int,input().split(' '))
-print(int(La/3600),' ',int(Lo/3600))

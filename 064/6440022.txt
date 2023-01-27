@@ -1,5 +1,0 @@
-import math
-l = input().split()
-x1,y1,x2,y2 = int(l[0]),int(l[1]),int(l[2]),int(l[3])
-sum = (x2-x1)**2 + (y2-y1)**2
-print(math.sqrt(sum))

@@ -1,8 +1,0 @@
-list=[for i in input().split(", )]
-
-for i in list:
-   i[0] = i[0].upper()
-   
-for i in list:
-    print(i,end=", ")
-            

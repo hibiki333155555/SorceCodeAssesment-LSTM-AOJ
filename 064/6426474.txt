@@ -1,2 +1,0 @@
-r=float(input())
-print(Pi*r**2,2*Pi*r)

@@ -1,5 +1,0 @@
-ans = []
-for i, x in enumerate(open(0).readlines()):
-    if int(x) == 0: break
-    ans.append(f"Case {i+1}: {x}")
-open(1,'w').writelines(ans)

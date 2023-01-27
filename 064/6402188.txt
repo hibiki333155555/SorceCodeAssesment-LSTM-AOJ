@@ -1,5 +1,0 @@
-i = int(input())
-h = int(i/3600)
-m = int((i%3600)/60)
-s = i % 60
-print(f("{h}:{m}:{s}"))

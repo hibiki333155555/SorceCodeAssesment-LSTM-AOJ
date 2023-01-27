@@ -1,9 +1,0 @@
-n = int(input())
-r = [int(input()) for x in range(n)]
-max_v = max(r)
-min_v = min(r)
-max_i = r.index(max_)
-min_i = r.index(min_)
-if max_i < min_i:
-    min_v = max(r[r.index(max_)+1:])
-print(max_v - min_v)

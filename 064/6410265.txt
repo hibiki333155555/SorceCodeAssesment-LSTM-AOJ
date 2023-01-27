@@ -1,8 +1,0 @@
-# mon8_D
-s=str(input())
-p=str(input())
-ss=s+s
-if p in ss==True:
-    print('Yes')
-elif p in ss==false:
-    print('No')

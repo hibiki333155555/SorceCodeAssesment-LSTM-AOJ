@@ -1,7 +1,0 @@
-#include<stdio.h>
-int main(void){
-    int a,b,d,r;
-    float f;
-    printf("%d %d %f\n",a/b,a%b,a/b);
-    return 0;
-}

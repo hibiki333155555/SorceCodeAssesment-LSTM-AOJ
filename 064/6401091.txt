@@ -1,2 +1,0 @@
-//r=require('fs').readFileSync(0,'utf8'),P=Math.PI;console.log((r*r*P).toFixed(6)+' '+(r*2*P).toFixed(6));
-x=require('fs').readFileSync(0,'utf8')*Math.PI;console.log((x*x).toFixed(6)+' '+(x*2).toFixed(6));

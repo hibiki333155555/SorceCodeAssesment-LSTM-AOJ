@@ -1,6 +1,0 @@
-l = input('数値を入力')
-a,b = map(int, l.split())
-area = a*b
-length = (a+b)*2
-print(area,length)
-

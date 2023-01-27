@@ -1,4 +1,0 @@
-N=int(input())
-for i in range(n)
-    k,p=map(int,input().split())
-    print((k-1)%p+1)

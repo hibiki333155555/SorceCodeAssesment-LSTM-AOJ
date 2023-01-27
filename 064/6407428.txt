@@ -1,4 +1,0 @@
-a,b,c = gets.split(' ').map(&:to_i)
-
-puts result = a < b && b < c ? 'Yes': 'No'
-

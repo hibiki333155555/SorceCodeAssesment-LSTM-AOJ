@@ -1,8 +1,0 @@
-i = input().splitlines()
-case = 1
-for n in i:
-    if n == "0":
-        break
-    else:
-        print(f"Case {case}: {n}")
-    case += 1

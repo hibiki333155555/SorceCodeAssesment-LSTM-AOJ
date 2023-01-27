@@ -1,8 +1,0 @@
-key = input()
-text = input().split()
-number = 0
-
-for i in text:
-    if i == key:
-        number += 1
-print(number)

@@ -1,4 +1,0 @@
-r=input()
-serface=r**2*3.141592653589
-rence=2*r*3.141592653589
-print("%f %f"%(serface,rence))

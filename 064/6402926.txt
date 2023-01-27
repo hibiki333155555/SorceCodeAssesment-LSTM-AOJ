@@ -1,4 +1,0 @@
-while True:
-    h, w = map(int, input().split(" "))
-    for i in h:
-        print("#" * w)

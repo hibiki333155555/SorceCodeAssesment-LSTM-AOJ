@@ -1,8 +1,0 @@
-#include<bits/stdc++.h>
-using namespace std;
-int main(){
-    double a,t,r;
-    cin>>a>>t>>r;
-    printf("%0.6f\n",r/(a/t));
-    return 0;
-}

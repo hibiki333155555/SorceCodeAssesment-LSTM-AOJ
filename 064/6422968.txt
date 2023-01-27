@@ -1,9 +1,0 @@
-r=float(input())
-p=3.141592653589
-
-circ = 2.0*p*r
-area = r**2 * p
-
-print("{0:6f} {1:6f}".format(circ,area))
-
-

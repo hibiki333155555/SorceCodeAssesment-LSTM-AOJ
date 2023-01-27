@@ -1,9 +1,0 @@
-n = int(input())
-A = [[0] * n for _ in range(n)]
-for _ in range(n):
-  u, _, *V = map(int, input().split())
-  for v in V:
-    A[u-1][v-1] = 1
-
-for a in A:
-  print(*a)

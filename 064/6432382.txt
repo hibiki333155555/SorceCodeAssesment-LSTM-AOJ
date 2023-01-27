@@ -1,7 +1,0 @@
-s=input()
-i=0
-while s != "0":
-    i=i+1
-    print(f"Case {i}: {s}")
-    s=input()
-

@@ -1,7 +1,0 @@
-while (str = gets.chomp) != '-'
-    gets.to_i.times do
-        str += str.slice!(0, gets.to_i)
-    end
-    puts str
-end
-

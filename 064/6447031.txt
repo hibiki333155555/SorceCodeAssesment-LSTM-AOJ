@@ -1,6 +1,0 @@
-const x = require('fs').readFileSync('/dev/stdin', 'utf8');
-const arr = x.split(' ').map(Number);
-if(arr[0] < arr[1] && arr[1]< arr[2]){
-    ans = `Yes`;
-}else{ans=`No`}
-console.log(ans);

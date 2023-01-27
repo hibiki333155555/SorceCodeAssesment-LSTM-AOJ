@@ -1,8 +1,0 @@
-N = int(input())
-for i in range(0, N):
-    a = list((int, input().split()))
-    e = min(a)
-    d = max(a)
-    c = sum(a)
-    print(e, d, c)
-    

@@ -1,3 +1,0 @@
-X = int(input())
-ans = X**3
-print(ans)

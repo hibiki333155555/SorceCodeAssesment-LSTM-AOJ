@@ -1,3 +1,0 @@
-import math
-r =float(input())
-print(f'{math.pi*r**2:10f}',f'{math.pi*2*r:10f}')

@@ -1,2 +1,0 @@
-main = readLn >>= putStrLn
-  . (\r -> show (pi*r*r) ++ " " ++ show (2*pi*r))

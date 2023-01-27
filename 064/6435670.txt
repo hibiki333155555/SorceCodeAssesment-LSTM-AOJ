@@ -1,6 +1,0 @@
-t1 = int(input())
-s = t1 % 60
-t2 = t1 // 60
-m = t2 % 60
-h = t2 // 60
-print(f"{h}:{m}:{s}")

@@ -1,1 +1,0 @@
-main = getLine >> getLine >>= putStrLn . unwords . reverse . words

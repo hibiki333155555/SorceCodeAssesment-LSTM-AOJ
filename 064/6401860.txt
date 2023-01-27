@@ -1,2 +1,0 @@
-let rc = require(`fs`).readFileSync(`/dev/stdin`, `utf-8`).split(` `);
-console.log(`${rc[0] * rc[1]} ${2 * (rc[0] + rc[1])}`);

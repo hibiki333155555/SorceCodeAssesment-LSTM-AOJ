@@ -1,9 +1,0 @@
-a,b,c=(int,input().split())
-i=0
-while True:
-    if c%a==0:
-        a=a+1
-        i=i+1
-    if a>b:
-        break
-print(a)

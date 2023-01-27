@@ -1,8 +1,0 @@
-A = input().split()
-a = int(A[0])
-b = int(A[1])
-c = int(A[2])
-sum1 = a + b + c
-d = min(a,b,c)
-print(sum1 - d)
-

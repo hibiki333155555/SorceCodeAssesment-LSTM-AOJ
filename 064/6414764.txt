@@ -1,7 +1,0 @@
-import math
-
-r = float(input())
-s = r * r * math.pi
-rnd = 2 * math.pi * r
-print('{:.8f}'.format(s), '{:.8f}'.format(rnd))
-

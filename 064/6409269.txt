@@ -1,5 +1,0 @@
-import math
-r=map(float,input())
-S=r*r*math.pi
-L=2*r*math.pi
-print("{0:.6f}{1:.6f}".format(S,L))

@@ -1,3 +1,0 @@
-a = int(input())
-b += 1
-print('Case',b,':',a)

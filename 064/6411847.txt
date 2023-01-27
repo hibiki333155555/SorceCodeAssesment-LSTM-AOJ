@@ -1,9 +1,0 @@
-xy = list(map(int, input().split(" ")))
-x = max(xy)
-y = min(xy)
-while y != 0:
-    r = x % y
-    x = y
-    y = r
-print(x)
-

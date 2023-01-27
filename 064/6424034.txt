@@ -1,9 +1,0 @@
-n=int(input())
-m=int(input())
-i,s=[int(l)for l in input().split()]
-a1=m+i-s
-i1,s1=[int(l)for l in input().split()]
-a2=a1+i1-s1
-i2,s2=[int(l)for l in input().split()]
-a3=a2+i2-s2
-print(max(m,a1,a2,a3))if a1>=0 and a2>=0 and a3>=0 else print(0)

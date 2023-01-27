@@ -1,7 +1,0 @@
-let x = require(`fs`).readFileSync(`/dev/stdin`, `utf-8`).split(` `);
-let op = (a, b) => {
-    if (a > b) return ` > `;
-    if (a < b) return ` < `;
-    if (a == b) return ` == `;
-}
-console.log(x.join(op(+x[0], +x[1])));

@@ -1,7 +1,0 @@
-h,w = map(int, input().split())
-while h != 0 and w != 0:
-    for _ in range(h):
-        print("#"*w)
-    print("\n")
-    h,w = map(int, input().split())
-# 2010013

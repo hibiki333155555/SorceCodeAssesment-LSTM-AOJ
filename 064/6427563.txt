@@ -1,8 +1,0 @@
-#include<stdio.h>
-int main(void){
-    int x,sum;
-    sum=x*x*x;
-    printf("%d\n",sum);
-    return 0;
-    
-}

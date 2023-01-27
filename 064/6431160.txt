@@ -1,7 +1,0 @@
-while True:
-    s=raw_input()
-    a,op,b=s.split()
-    if(op = ?):
-        break
-    print eval(s)
-

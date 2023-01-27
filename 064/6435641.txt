@@ -1,8 +1,0 @@
-n = int(input())
-card = list(map(int, input().split()))
-pattern = ["S", "H", "C", "D"]
-cards = [[False for i in range(13)] for j in range(4)]
-if (card in cards):
-    True
-if cards[i][j] == False:
-    print(pattern[i], j+1)

@@ -1,9 +1,0 @@
-r = float(int(input()))
-
-pi = 3.141592653589
-
-area = r * r * pi
-
-circumference = 2 * r * pi
-
-print('{:.6f} {:.6f}'.format(area, circumference))

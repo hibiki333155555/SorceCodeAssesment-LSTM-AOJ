@@ -1,5 +1,0 @@
-x = 100
-def cube(x):
-    print(x ** 3)
-
-cube(x)

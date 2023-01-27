@@ -1,7 +1,0 @@
-while True:
-	x = input()
-	if x == "0":
-		break
-	sum = sum(map(int, x))
-	print(sum)
-

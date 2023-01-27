@@ -1,8 +1,0 @@
-#include <iostream>
-using namespace std;
-int main(){
-    int x;
-    cin >> X;
-    cout << x*x*x << endl;
-    return 0;
-}

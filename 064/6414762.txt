@@ -1,7 +1,0 @@
-import math
-
-r = float(input())
-s = r * r * math.py
-rnd = 2 * math.py * r
-print('{:.08}'.format(s), '{:.08}'.format(rnd))
-

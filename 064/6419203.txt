@@ -1,7 +1,0 @@
-#include <iostream>
-using namespace std;
-int main(void){
-    // Your code here!
-    int i;
-    for(i=0;i<1000;i++)cout<<"Hello World"<<endl;
-}

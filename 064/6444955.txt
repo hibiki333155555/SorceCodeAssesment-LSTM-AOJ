@@ -1,4 +1,0 @@
-a,b=(int(x) for x in input().split())
-c=a/b
-c=float(c)
-print(a/b, a%b, c)

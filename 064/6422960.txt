@@ -1,9 +1,0 @@
-r=input()
-p=3.14
-
-circ = 2*p*r
-area = r**2 * p
-
-print("{} {}".format(circ,area))
-
-

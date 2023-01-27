@@ -1,3 +1,0 @@
-X = list(map(int, input().split()))
-while(X != 0): 
-    print(f"Case {len(X)}: X")

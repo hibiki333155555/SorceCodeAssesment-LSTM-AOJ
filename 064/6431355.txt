@@ -1,9 +1,0 @@
-W = input()
-H = input()
-x = input()
-y = input()
-r = input()
-if x - r > 0 and x + r < W and y - r > 0 and y + r < H:
-    print("Yes")
-else:
-    print("No")

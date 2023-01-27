@@ -1,6 +1,0 @@
-# mon8_D
-s=str(input())
-p=str(input())
-ss=s+s
-print(ss)
-print(p in ss)

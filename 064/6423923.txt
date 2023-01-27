@@ -1,4 +1,0 @@
-s = input().lower()
-alp = 'abcdefghijklmnopqrstuvwxyz'
-for target in alp:
-    print(f"{target} : {s.count(target)}")

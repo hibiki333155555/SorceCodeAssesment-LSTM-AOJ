@@ -1,6 +1,0 @@
-n = int(input())
-xs = list(map(int, input().split()))
-ret_min = min(xs)
-ret_max = max(xs)
-ret_sum = sum(xs)
-print(f"{ret_min} {ret_max} {ret_sum}")

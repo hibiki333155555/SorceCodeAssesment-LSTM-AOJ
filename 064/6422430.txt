@@ -1,4 +1,0 @@
-a, b = map(int, input().split())
-r1 = a * b
-r2 = a*2 + b*2
-print(r1, r2)

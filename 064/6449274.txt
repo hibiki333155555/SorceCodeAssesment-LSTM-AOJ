@@ -1,4 +1,0 @@
-quantity=input()
-sequence=input().split()
-rev_seq=sequence[::-1]
-print(*(rev_seq),sep=" ")

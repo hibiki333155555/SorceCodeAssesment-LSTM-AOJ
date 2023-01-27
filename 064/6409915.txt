@@ -1,6 +1,0 @@
-import math
-a, b, d = map(int, input().split(" "))
-h = b * math.sin(d)
-s = a * h * 0.5
-c = math.sqrt((b*math.cos(d) - a)**2 + h**2)
-print(s, a+b+c, h)

@@ -1,6 +1,0 @@
-a, b = map(int, input().split())
-c = a//b 
-d = a%b 
-e = a/b
-print(f"{c} {d} {e:.5f}")
-

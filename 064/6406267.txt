@@ -1,4 +1,0 @@
-i=0
-for i<1000
- print("Hello World")
- i+=1

@@ -1,2 +1,0 @@
-#include <stdio.h>
-main(){double v;while(scanf("%lf",&v)!=EOF){printf("%.0lf\n",ceil(4.9*v*v/9.8/9.8/5)+1);}}

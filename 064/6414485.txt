@@ -1,4 +1,0 @@
-a, b = (int(x) for x in input().split())
-s = a * b
-r = 2 * a + 2 * b
-print(s,r)

@@ -1,6 +1,0 @@
-while (a = gets.split.map(&:to_i)) != [0,0]
-    a[0].times do |n|
-        puts "#" * a[1]
-    end
-    puts "\n"
-end

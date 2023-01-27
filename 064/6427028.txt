@@ -1,9 +1,0 @@
-#include <stdio.h>
-
-int main()
-{
-    int i = 1,x;
-    while(scanf("%d",&x)!=EOF&&x)
-        printf("Case %d: %d",i++,x);
-    return 0;
-}

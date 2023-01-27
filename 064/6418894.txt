@@ -1,4 +1,0 @@
-while True:
-    str = input()
-    if str == "0": break
-    print(sum([int(val) for val in str]))

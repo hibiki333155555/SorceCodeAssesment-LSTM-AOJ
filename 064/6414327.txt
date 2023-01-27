@@ -1,7 +1,0 @@
-A=map(str,raw_input().split())
-B=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
-for i in range(len(B)):
-    C=[]
-    for j in range(len(A)):
-        C.append(A[j].lower().count(B[i]))
-    print (str(B[i])+" : "+str(sum(C)))

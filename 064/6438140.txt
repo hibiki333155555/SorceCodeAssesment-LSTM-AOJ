@@ -1,9 +1,0 @@
-a,b,c=[int(i) for i in input().split()]
-l=list(range(a,b+1))
-x=0
-ct=0
-for i in l:
-  if c%i==0:
-    ct+=1
-print(ct)
-  

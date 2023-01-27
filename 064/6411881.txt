@@ -1,7 +1,0 @@
-from math import sqrt,sin,cos
-a,b,c = map(float, input().split())
-S = a*b*cos(c)
-L = a + b + sqrt(a**2+b**2-2*a*bcos(c))
-h = S/a
-print(S,L,h)
-

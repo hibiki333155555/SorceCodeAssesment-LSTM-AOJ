@@ -1,5 +1,0 @@
-class Main{
-    public static void main(final String[] _args){
-        System.out.println("Hello World");
-    }
-}

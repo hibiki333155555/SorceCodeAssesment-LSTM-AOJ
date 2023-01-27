@@ -1,7 +1,0 @@
-#include<bits/stdc++.h>
-using namespace std;
-int main(){
-    double a,t,r;
-    cin>>a>>t>>r;
-    printf("%.10lf\n",(r*t)/a);
-}

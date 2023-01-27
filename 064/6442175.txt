@@ -1,7 +1,0 @@
-A = [chr(ord('a') + i) for i in range(26)]
-x = open(0).read()
-for i in range(len(A)):
-    print(A[i] + " : ", end = "" )
-    print(x.lower().count(A[i]))
-
-

@@ -1,6 +1,0 @@
-import math
-
-r = float(input())
-area = r ** 2 * math.pi
-length = r * 2 * math.pi
-print(f"{area:.6f} {length:.6f}")

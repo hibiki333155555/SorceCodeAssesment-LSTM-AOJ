@@ -1,8 +1,0 @@
-Word=str(input())
-poi=0
-T=open(0).read()
-Ti=T.split()
-for TT in Ti:
-  if TT==Word:
-    poi+=1  
-print(poi)

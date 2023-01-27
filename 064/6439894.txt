@@ -1,6 +1,0 @@
-s = input()
-ans = input()
-
-s += s
-if ans in s:
-    print("Yes")

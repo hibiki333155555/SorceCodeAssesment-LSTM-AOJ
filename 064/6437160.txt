@@ -1,9 +1,0 @@
-#include <iostream>
-using namespace std;
-
-int main() {
-	int len,b;
-	cin>>len>>b;
-	cout<<(len*b)<<" "<<(2*(len+b))<<endl;
-
-}

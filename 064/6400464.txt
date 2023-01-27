@@ -1,3 +1,0 @@
-a, l = [int(input()) for i in range(2)]
-# l = map(int, l)
-print('{} {} {}'.format(min(l), max(l), sum(l)))

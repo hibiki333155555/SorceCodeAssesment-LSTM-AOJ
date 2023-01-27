@@ -1,6 +1,0 @@
-<?php
-while($line = fgets(STDIN)) {
-$stdinArray[] = trim($line);
-}
-echo str_replace("joi","JOI",$stdinArray[1]);
-?>

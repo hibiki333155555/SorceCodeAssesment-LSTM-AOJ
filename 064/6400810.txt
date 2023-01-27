@@ -1,4 +1,0 @@
-n = int(input())
-print('3', end='')
-for i in range(4, n+1, 2):
-    print(' {}'.format(i), end='')

@@ -1,5 +1,0 @@
-while True:
-    num=sum([int(x) for x in str(input())])
-    print(num)
-    if num==0:
-        break

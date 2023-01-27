@@ -1,3 +1,0 @@
-P = 998244353
-N, K = map(int, input().split())
-print((pow(2, N, P) - 1) % P if K > 1 else 1)

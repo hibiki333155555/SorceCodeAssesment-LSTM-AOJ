@@ -1,7 +1,0 @@
-r = float(input())
-
-pie = 3.141592653589
-m = r*r*pie
-length = 2*r*pie
-
-print(f"{m:.6f} {length:.6f}")

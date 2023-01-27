@@ -1,7 +1,0 @@
-
-
-if gets.to_i + gets.to_i <=  gets.to_i+0.5
-  puts 1
-else
-  puts 0
-end

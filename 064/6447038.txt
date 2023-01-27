@@ -1,4 +1,0 @@
-const x = require('fs').readFileSync('/dev/stdin', 'utf8');
-const arr = x.split(' ').map(Number);
-arr.sort((a,b)=>{return a-b});
-console.log(arr.join(' '));

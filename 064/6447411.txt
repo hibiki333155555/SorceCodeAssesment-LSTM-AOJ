@@ -1,9 +1,0 @@
-while (a, b = gets.split.map(&:to_i)) != [0,0]
-    a.times do |n|
-        if (n == 0) || (n == a-1)
-            puts "#" * b
-        else
-            puts "#" + "." * (b-2) + "#"
-        end
-    end
-end

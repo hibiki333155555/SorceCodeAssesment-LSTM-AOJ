@@ -1,4 +1,0 @@
-while True:
-    words = input().lower()
-for i in range(97, 123):
-    print("%s : %d" % (chr(i), words.count(chr(i))))

@@ -1,4 +1,0 @@
-n = int(input())
-xs = list(map(str, input().split()))
-xs.reverse()
-print(' '.join(xs))

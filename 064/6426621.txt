@@ -1,9 +1,0 @@
-# def sanbai(n):
-#     print(n ** 3)
-#     print(\n)
-   
-# n = input()
-# sanbai()
-n = input()
-print(n ** 3)
-print(\n)

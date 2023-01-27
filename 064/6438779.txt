@@ -1,7 +1,0 @@
-number=input().split()
-a=int(number[0])
-b=int(number[1])
-a%b=r
-(a-r)/b=d
-a/b=f
-print(d,r,f)

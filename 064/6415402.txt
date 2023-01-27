@@ -1,7 +1,0 @@
-#include <iostream>
-using namespace std;
-int main(void){
-    // Your code here!
-    int a=15, b=16;
-cout<<a*b<<""<<a+b+a+b<<endl;}
-

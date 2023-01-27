@@ -1,4 +1,0 @@
-a, b, c = map(int, input().split())
-list = [a, b, c]
-sort_list = sorted(list)
-print(f'{sort_list[0]} {sort_list[1]} {sort_list[2]}')

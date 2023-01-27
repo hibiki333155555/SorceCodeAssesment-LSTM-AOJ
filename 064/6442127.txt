@@ -1,9 +1,0 @@
-while True:
-	try:
-		words = input().lower()
-	except:
-		break
-
-
-for i in range(ord('a'), ord('a') + 26):
-	print("%s : %d" % (chr(i), words.count(chr(i))))

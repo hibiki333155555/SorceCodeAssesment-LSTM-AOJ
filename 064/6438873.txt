@@ -1,2 +1,0 @@
-y = X*X*X
-print(y)

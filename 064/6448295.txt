@@ -1,6 +1,0 @@
-n = int(input())
-values = list(map(int, input().split()))
-result = []
-for val in reversed(values):
-    print(' %d' % val, end='')
-

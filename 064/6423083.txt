@@ -1,9 +1,0 @@
-n = int(input())
-minv = int(input())
-maxv = -10000000000
-for i in range(n-1):
-    r = int(input())
-    maxv = r-minv if maxv < r-minv else maxv
-    minv = r if r < minv else minv
-print(maxv)
-

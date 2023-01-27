@@ -1,2 +1,0 @@
-a, b = list(input())
-print(a*b, 2*(a + b))

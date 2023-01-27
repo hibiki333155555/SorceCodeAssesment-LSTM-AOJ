@@ -1,7 +1,0 @@
-m,f,b=map(int, raw_input().split())
-if m >= b:
-    print 0
-elif m+f >= b:
-    print b-m
-else:
-    print "NA"

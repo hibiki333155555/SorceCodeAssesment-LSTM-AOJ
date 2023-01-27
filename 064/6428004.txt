@@ -1,9 +1,0 @@
-while True:
-  s = str(input())
-  c = 0
-  if s == "0":
-    break
-  for i in range(len(s)):
-    c += int(s[i])
-  print(c)
-

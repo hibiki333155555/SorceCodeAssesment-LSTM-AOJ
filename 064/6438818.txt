@@ -1,8 +1,0 @@
-a, b, c = map(int, input().split())
-count = 0
-
-for i in range(2, int(c/2)):
-    if c % i == 0 and a <= i <= b:
-        count += 1
-
-print(count)

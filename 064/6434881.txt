@@ -1,4 +1,0 @@
-main = do
-  [a, b] <- map read . words <$> getLine
-  print . unwords . map show $ [a*b, 2*(a+b)]
-

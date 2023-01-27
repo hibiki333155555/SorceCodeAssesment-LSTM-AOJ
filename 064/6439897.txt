@@ -1,4 +1,0 @@
-x = input().split(' ')
-a=x[0]
-b=x[1]
-print(a*b, 2*(a+b))

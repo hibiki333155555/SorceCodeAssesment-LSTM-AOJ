@@ -1,9 +1,0 @@
-a = int(input())
-h = a//3600
-a -= (3600*h)
-m = a//60
-a -= (60*m)
-h = str(h)
-m = str(m)
-a = str(a)
-print(h+":"+m+":"+a)

@@ -1,5 +1,0 @@
-n,m,k,x = map(int,input().split())
-A = list(map(int,input().split()))
-ma = max(A)
-
-print("Yes" if ma*k >= x*m else "No")

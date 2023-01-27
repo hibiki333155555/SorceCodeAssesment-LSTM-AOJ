@@ -1,5 +1,0 @@
-while True:
-    if input() == "0 0":
-        break
-    i = sorted(input().split(" "))
-    print(" ".join(i))

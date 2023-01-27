@@ -1,7 +1,0 @@
-n = int(input())
-S = set(map(int,input().split()))
-q = int(input())
-T = set(map(int,input().split()))
-a = S & T
-print(len(a))
-

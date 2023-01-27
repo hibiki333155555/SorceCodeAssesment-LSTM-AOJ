@@ -1,6 +1,0 @@
-N = int(input())
-S = input()
-
-for s in range(1,N):
-    if S[s] == 'J'
-        print(S[s-1],sep='')

@@ -1,9 +1,0 @@
-#include<stdio.h>
-
-int main(){
-    int D
-    int L
-    scanf("%d%d", &D, &L);
-    printf("%d\n", D / L + D % L);
-    return 0;
-}

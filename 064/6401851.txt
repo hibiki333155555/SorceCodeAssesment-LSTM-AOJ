@@ -1,2 +1,0 @@
-let number = require(`fs`).readFileSync(`/dev/stdin`, `utf-8`);
-console.log(Math.pow(+number, 3));

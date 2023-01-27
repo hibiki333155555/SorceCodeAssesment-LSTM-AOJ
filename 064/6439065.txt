@@ -1,8 +1,0 @@
-while(True):
-    word = input()
-    m = input()
-    for i in range(m):
-        word = word[int(input()):] + word[:int(input())]
-    if input() == "-":
-        break
-

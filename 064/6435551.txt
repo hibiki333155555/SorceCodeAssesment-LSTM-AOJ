@@ -1,5 +1,0 @@
-import Text.Printf
-main :: IO ()
-main = getLine >> getLine >>=
-  (\xs -> printf "%d %d %d" (minimum xs) (maximum xs) (sum xs))
-  . map (read :: String -> Int) . words

@@ -1,5 +1,0 @@
-r=float(input())
-zone=3.14159275*r**2
-nagasa=2*3.14159275*r
-
-print("{0:6f} {1:6f}".format(zone,nagasa))

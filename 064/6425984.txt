@@ -1,6 +1,0 @@
-A,B,C = map(int,input().split())
-
-if (B-A)>=(B-C):
-  print('1')
-else:
-    ('0')

@@ -1,7 +1,0 @@
-s='';
-for(
-    i=1;
-    i <= +(require('fs').readFileSync(0,'utf8'));
-    i++
-) if(i%3==0||/3/.test(''+i))s+=' '+i;
-console.log(s);

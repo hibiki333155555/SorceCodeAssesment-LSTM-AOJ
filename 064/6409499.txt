@@ -1,9 +1,0 @@
-W = input()
-cnt = 0
-while True:
-    ai = input().lower
-    if ai == 'end_of_text':
-        break
-    else:
-        cnt += ai.count(W)
-print(cnt)

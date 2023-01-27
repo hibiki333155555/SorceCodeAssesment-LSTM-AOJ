@@ -1,5 +1,0 @@
- a = input(x*x*x)
- 
- print(a)
- 
- 

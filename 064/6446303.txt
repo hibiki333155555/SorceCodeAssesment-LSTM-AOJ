@@ -1,7 +1,0 @@
-#include<stdio.h>
-int main(void){
-    double r,p=3.1415926535;
-    scanf("%lf",&r);
-    printf("%lf %lf",p*r*r,2*p*r);
-    return 0;
-}

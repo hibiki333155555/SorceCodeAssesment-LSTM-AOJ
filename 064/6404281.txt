@@ -1,6 +1,0 @@
-from math import*
-r = int(input())
-a = 3.1418 * r *r 
-b = 2 * 3.1418 * r
-print(f"{a:.f6} {b:.f6}")
-

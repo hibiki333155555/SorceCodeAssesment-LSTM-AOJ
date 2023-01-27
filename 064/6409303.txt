@@ -1,4 +1,0 @@
-s=[...Array(+(''+require('fs').readFileSync(0)))].map((_,i)=>{
-    return ( i%3==0||/3/.test(i) )&&i;
-}).join` `;
-console.log(' '+s)

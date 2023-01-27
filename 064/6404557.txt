@@ -1,9 +1,0 @@
-a,b = gets.split(' ').map(&:to_i)
-d = a/b
-r = a%b
-f = a.to_f/b
-# print "#{d} #{r} #{f}"
-# sprintf
-# printf( "フォーマット", 表示させたい値 )
-printf("%d %d %.5f\n", d, r, f)
-

@@ -1,3 +1,0 @@
-n=int(input())
-ans=[int(n)for n in input().split()]
-print("%d %d %d"%(min(ans),max(ans),sum(ans)))

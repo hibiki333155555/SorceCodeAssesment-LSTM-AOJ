@@ -1,5 +1,0 @@
-<?php
-$stdin = trim(fgets(STDIN));
-$stdin = trim(fgets(STDIN));
-echo str_replace("joi","JOI",$stdin);
-?>

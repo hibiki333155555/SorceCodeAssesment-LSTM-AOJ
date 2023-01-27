@@ -1,5 +1,0 @@
-import math
-r = int(input())
-S = math.pi*(r**2)
-C= r*2*math.pi
-print(format(S, '.6f'), format(C, '.6f'), sep=' ')

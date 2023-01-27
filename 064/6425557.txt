@@ -1,3 +1,0 @@
-x =str(input())
-print (x*x*x)
-

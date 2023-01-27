@@ -1,2 +1,0 @@
-a, b = ls(input())
-print(a*b, 2*(a + b))

@@ -1,3 +1,0 @@
-getting = int(input())
-
-print(getting%21)

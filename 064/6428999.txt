@@ -1,5 +1,0 @@
-let s=S%60;
-let m=((S-s)%3600)/60;
-let d=(S-s)%3600;
-let h=(S-d-s)/3600;
-console.log(h+":"+m+":"+s);

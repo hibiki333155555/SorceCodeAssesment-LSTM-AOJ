@@ -1,4 +1,0 @@
-r = float(input())
-import math
-pi = math.pi
-print(pi*r**2,2*pi*r)

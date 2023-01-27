@@ -1,9 +1,0 @@
-A=list(map(str,raw_input().split()))
-S=[]
-for i in range(len(A)):
-    if A[i].islower()==True:
-        S.append(A[i].lower())
-    else:
-        S.append(A[i].upper())
-print S
-        

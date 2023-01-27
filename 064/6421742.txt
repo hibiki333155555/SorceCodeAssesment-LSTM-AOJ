@@ -1,8 +1,0 @@
-N = int(input())
-R = [int(input()) for _ in range(N)]
-ans = -float('inf')
-m = R[0]
-for r in R[1:]:
-    ans = max(ans, r - m)
-    m = min(r, m)
-print(ans)

@@ -1,6 +1,0 @@
-import math
-a, b, C=map(int,input().split())
-S=1/2*a*b*math.sin(math.radians(C))
-L=a+b+math.sqrt(a**2+b**2-2*a*b*math.cos(math.radians(C)))
-H=2*S/a
-print(S, L, H)

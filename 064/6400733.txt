@@ -1,8 +1,0 @@
-while True:
-    H, W = map(int, input().split)
-    for h in range(H):
-        for w in range(W):
-            print('#', end='')
-        print()
-    print()
-        

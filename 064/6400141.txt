@@ -1,1 +1,0 @@
-require('fs').readFileSync(0,'utf8').split(/\n|0 0/g).map(l=>l&&console.log(l.split(' ').sort((a,b)=>a-b).join(' ')));

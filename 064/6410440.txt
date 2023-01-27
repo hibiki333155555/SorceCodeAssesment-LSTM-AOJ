@@ -1,2 +1,0 @@
-X = int()
-Output = (X**3)

@@ -1,3 +1,0 @@
-F = float(input())
-C = (F - 30) / 2
-print(C)

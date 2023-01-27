@@ -1,8 +1,0 @@
-i = 1
-while true:
-    num = int(input())
-    if num == 0:
-        break
-    print(f"case {i}: {num}")
-    i += 1
-    

@@ -1,9 +1,0 @@
-#include<bits/stdc++.h>
-using namespace std;
-#define ll long long
-int main(){
-    int d,l;
-    cin>>d>>l;
-    cout<<l/d+l%d<<endl;
-    return 0;
-}

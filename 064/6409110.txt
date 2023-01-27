@@ -1,3 +1,0 @@
-L=input().split()
-L.sort()
-print(f"{L[0]} {L[1]} {L[2]}")

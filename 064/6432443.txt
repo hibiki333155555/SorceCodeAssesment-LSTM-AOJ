@@ -1,3 +1,0 @@
-r gets.split.map(&:to_i)
-puts "#{sprintf("%.sf", PI* r** 2)} #{sprintf("%.5f", PI* r* 2)}"
-

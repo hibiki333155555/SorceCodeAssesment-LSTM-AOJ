@@ -1,2 +1,0 @@
-r=float(input().split())
-print(pi*r**2,2*pi*r)

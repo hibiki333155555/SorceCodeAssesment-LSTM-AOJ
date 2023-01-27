@@ -1,9 +1,0 @@
-while True:
-    h, w = map(int, input().split(" "))
-    if h == 0 and w ==0:
-        break
-    s=""
-    for i in range(h):
-        s += "#" * w + "\n"
-    s += "\n"
-    print(s)

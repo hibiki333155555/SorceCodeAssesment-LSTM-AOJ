@@ -1,7 +1,0 @@
-case_num = 0
-while True:
-  x = int(input())
-  case_num +=1
-  if x ==0:
-    break
-  print("Case {0} : {1}".format(case_num, x))  

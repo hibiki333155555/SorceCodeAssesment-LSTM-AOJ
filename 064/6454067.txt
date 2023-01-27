@@ -1,2 +1,0 @@
-input(x)
-print(input**3)

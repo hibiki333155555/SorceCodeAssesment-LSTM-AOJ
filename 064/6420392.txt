@@ -1,8 +1,0 @@
-from collections import Counter
-N = int(input())
-S = list(input())
-C = Counter(S).keys()
-if len(C) >= 3:
-    print("Yes")
-else:
-    print("No")

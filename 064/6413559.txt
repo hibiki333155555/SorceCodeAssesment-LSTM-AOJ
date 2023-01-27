@@ -1,4 +1,0 @@
-count = 1
-while count<= 1000:
-    print('Hello world')
-    count + = 1

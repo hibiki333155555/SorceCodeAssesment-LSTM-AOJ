@@ -1,9 +1,0 @@
-n=input()
-
-l=list(map(int,input().split()))
-
-a=min(l)
-b=max(l)
-c=sum(l)
-
-print({a} {b} {c})

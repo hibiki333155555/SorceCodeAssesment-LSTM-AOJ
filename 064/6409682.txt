@@ -1,3 +1,0 @@
-X =  list(map(input().split()))
-
-print(X.swapcase())

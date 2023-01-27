@@ -1,9 +1,0 @@
-while True:
-    n=int(input())
-    if n==0 : break
-    k=list(map(int,input().split()))
-    a,b = 0,0
-    for i in k:
-        if i ==1: a+= 1
-        elif i>1: b+= 1
-    print(a+b+1 if b > 0 else "NA")

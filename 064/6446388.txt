@@ -1,6 +1,0 @@
-a = list(map(int, input().split()))
-a.sort()
-
-for i in range(len(a)):
-    print(f'{a[i]} {a[i+1]} {a[i+2]}')
-    break

@@ -1,7 +1,0 @@
-while True:
-    a,b,op=input().split()
-    if op=='?':
-        break
-    elif op=='/':
-        op='//'
-    print(eval(a + op + b))

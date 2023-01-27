@@ -1,8 +1,0 @@
-import math
-
-x,y,p,q=map(int,input().split())
-a=(p-x)**2
-b=(q-y)**2
-dd=(a-b)
-d=math.sqrt(dd)
-print(d)

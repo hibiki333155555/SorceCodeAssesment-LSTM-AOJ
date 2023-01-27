@@ -1,9 +1,0 @@
-a,b,c = map(int, input().split())
-i = 0
-for x in range(a, b + 1):
-    d = c%x   
-    if d == 0:
-        i = i + 1
-print(i)
-    
-

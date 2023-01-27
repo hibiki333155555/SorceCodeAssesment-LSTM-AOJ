@@ -1,8 +1,0 @@
-while True: 
-    A = input()
-    if(A == "0"):
-        break
-    sum =0
-    for i in A:
-        sum+=int(i)
-    print(sum)

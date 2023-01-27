@@ -1,6 +1,0 @@
-const x=require("fs").readFileSync("/dev/stdin","utf-8").trim("\n").split("\n");
-(inputs =>{
-    for(let i=0,len=inputs.length-1;i<len;i++){
-        console.log(`${inputs[i]}`)
-    }
-})(x);

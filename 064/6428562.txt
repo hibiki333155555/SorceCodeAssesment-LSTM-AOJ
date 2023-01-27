@@ -1,9 +1,0 @@
-for s in [*open(0)][::]:
-    try:
-        x = [int(i) for i in s.replace("\n", "").replace("0", "").split(" ")]
-        for j in range(x[0]):
-            print(x[1]*"#")
-    except:
-        break
-    print("\n")
-

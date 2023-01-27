@@ -1,9 +1,0 @@
-n = int(input())
-
-list = list(map(int, input().split()))
-
-vMin = min(list)
-vMax = max(list)
-vSum = sum(list)
-
-print("%d %d %d" %(vMin, vMax, vSum))

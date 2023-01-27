@@ -1,9 +1,0 @@
-#include<stdio.h>
-
-int main(){
-    int F , C;
-scanf ("%d" , &F);
-C = (F-30) / 2;
-printf("%d" , C);
-return 0;
-}

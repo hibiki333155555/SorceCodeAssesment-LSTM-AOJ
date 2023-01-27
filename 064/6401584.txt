@@ -1,5 +1,0 @@
-a = input()
-l = list(map(int, input().split()))
-print(l[len(l)-1])
-for i in range(len(l)-2, -1, -1):
-    print(' {}'.format(l[i]), end='')

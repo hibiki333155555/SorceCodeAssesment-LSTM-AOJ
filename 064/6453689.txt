@@ -1,6 +1,0 @@
-import math
-r = float(input())
-pie = math.pi
-area = r**2 * pie
-rectangle = 2 * r * pie
-print(f'{area:.6f}  {rectangle:.5f}')

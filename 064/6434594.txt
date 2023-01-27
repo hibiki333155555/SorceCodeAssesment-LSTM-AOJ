@@ -1,8 +1,0 @@
-While true :
-a,b=map(int,input().split())
-if a==0 and b==0:break
-if a<b:
-    a,b=a,b
-else:
-    a,b=b,a
-print(a,b)

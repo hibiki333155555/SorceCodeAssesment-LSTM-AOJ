@@ -1,4 +1,0 @@
-gets
-s = gets.chomp.chars.uniq
-
-puts(s.length >= 3? 'Yes': 'No')

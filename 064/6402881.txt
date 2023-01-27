@@ -1,6 +1,0 @@
-n, a = input().split()
-a1 = sorted(map(int, a.split(" ")))
-min = a1[0]
-max = a1[n-1]
-s = sum(a1)
-print(min, max, s)

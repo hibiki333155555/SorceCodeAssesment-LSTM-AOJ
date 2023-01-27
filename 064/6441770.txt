@@ -1,3 +1,0 @@
-r=input()
-import math
-print(round(2*math.pi*r, 5), round(math.pi*pow(r, 2), 5))

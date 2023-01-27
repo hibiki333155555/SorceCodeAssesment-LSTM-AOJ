@@ -1,8 +1,0 @@
-W,H,x,y,r=map(int,raw_input().split())
-if W*H =< x*y or W*H => x*y:
-    print "No"
-elif x+r > W or y+r > H:
-    print "No"
-else:
-    print "Yes"
-    

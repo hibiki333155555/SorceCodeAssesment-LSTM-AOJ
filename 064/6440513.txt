@@ -1,5 +1,0 @@
-num = int(input())
-input_list = input().split()
-
-print(" ".join(reversed(input_list))
-      

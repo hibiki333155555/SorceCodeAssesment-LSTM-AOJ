@@ -1,2 +1,0 @@
-#include <stdio.h>
-main(){int a,b,i=0,s=0,n=0;while(scanf("%d,%d",&a,&b)!=EOF){s+=a*b;n+=b;i++;}printf("%d\n%.0lf",s,n,i,round((double)n/i));}

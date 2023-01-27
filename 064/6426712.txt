@@ -1,9 +1,0 @@
-a,b,c = map(int,input().split())
-
-if a<b:
-    if b<c:
-        print("Yes")
-    else:
-        Pass
-else:
-    print("No")

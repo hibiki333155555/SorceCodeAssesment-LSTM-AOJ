@@ -1,4 +1,0 @@
-i = 0
-while i < 1000:
-    print("Hello WOrld")
-    i = i + 1

@@ -1,9 +1,0 @@
-x = gets.to_i
-y = gets.to_i
-z = gets.to_i
-
-if x + (z-y) >= z+30
-  puts 1
-else
-  puts 0
-end

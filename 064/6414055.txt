@@ -1,3 +1,0 @@
-while ( x,y = gets.split(' ').map(&:to_i)) != [0,0] do
-    puts "#{y} #{x}"
-end

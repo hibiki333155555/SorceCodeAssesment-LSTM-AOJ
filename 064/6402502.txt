@@ -1,5 +1,0 @@
-
-s = "Hello World"
-a = s * 1000
-
-print( a )

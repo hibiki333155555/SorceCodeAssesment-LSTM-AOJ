@@ -1,9 +1,0 @@
-#include <stdio.h>
-
-int main(void)
-{
-    int n,d;
-    (void)scanf("%d %d",&n,%d);
-    printf("%d",((n + d -1) / d);
-    return 0;
-}

@@ -1,9 +1,0 @@
-import scala.io.StdIn
-
-object Main {
-  def main(args: Array[String]): Unit = {
-    val Array(n, x) = StdIn.readLine().split(" ").map(_.toInt)
-    print((for (_ <- 1 to n) yield StdIn.readInt()).count(_ >= x))
-  }
-}
-

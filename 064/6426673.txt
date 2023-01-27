@@ -1,7 +1,0 @@
-n=int(input())
-array = list(map(int,input().split()))
-for i in range((n//2)):
-    tmp=array[i]
-    array[i]=array[n-1-i]
-    array[n-1-i]=tmp
-print(*array)

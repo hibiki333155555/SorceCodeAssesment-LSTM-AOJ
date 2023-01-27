@@ -1,3 +1,0 @@
-import math
-r=float(input())
-print(round(r*r*math.pi,5),round(2*r*math.pi,5))

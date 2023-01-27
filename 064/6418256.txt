@@ -1,9 +1,0 @@
-N = int(input())
-S = input()
-Sj,So,Si = S.count('J'),S.count('O'),S.count('I')
-for i in range(Sj):
-  print('J',end='')
-for i in range(So):
-  print('O',end='')
-for i in range(Si):
-  print('I',end='')

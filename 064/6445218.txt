@@ -1,4 +1,0 @@
-for l in open(0).readlines():
-    a, b = map(int, l.split())
-    if a == 0 and b == 0: break
-    print(*sorted([a, b]))

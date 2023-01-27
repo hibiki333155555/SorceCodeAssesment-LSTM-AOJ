@@ -1,5 +1,0 @@
-n = input().split()
-while not(n[0]=="0") and not(n[1] == "0"):
-    a = sorted(n)
-    print(a[0],a[1])
-    n = input().split()

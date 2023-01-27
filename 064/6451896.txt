@@ -1,7 +1,0 @@
-n = int(input())
-for _ in range(n):
-    k, p = map(int, input().split())
-    ans = k % p
-    if ans == 0:
-        ans = p
-    print(ans)

@@ -1,3 +1,0 @@
-import math
-x,y,z,w = map(int, input().split(" "))
-print(math.sqrt((z-x)**2 + (w-y)**2))

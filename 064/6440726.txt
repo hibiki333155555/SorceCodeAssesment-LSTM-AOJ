@@ -1,6 +1,0 @@
-N = int(input())
-S = input()
-for n in range(N - 1):
-    if S[n + 1] == 'J':
-        print(S[n])
-

@@ -1,9 +1,0 @@
-keyword = input()
-ret = 0
-while True:
-  line = input()
-  if line == 'END_OF_TEXT': break
-  words = line.split()
-  for w in words:
-    if w.lower() == keyword: ret += 1
-print(ret)

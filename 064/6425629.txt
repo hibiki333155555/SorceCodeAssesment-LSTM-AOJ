@@ -1,7 +1,0 @@
-import collections
-
-N = int(input())
-L = list(map(int,input().split()))
-
-LL = collections.Counter(L)
-print(LL.most_common()[-1][0])

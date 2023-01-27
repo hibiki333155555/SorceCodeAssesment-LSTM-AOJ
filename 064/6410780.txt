@@ -1,9 +1,0 @@
-x,y = map(int, input().split())
-a = max(x,y)
-b = min(x,y)
-
-while b != 0:
-  mod = a%b
-  a = b
-  b = mod
-print(a)

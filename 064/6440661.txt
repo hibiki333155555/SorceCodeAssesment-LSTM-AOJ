@@ -1,7 +1,0 @@
-a,b,c=map(int,input().split())
-ans=0
-for i in range(a,b+1):
-if c%i==o:
-    ans=ans+1
-    else:ans=ans
-print(ans)

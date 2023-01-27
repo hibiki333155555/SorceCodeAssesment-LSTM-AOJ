@@ -1,9 +1,0 @@
-l = int(input())
-min = l[0]
-max = l[0]
-for i in range(1, len(l)):
-    if min > l[i]:
-        min = l[i]
-    if max < l[i]:
-        max = l[i]
-print('{} {} {}'.format(min, max, l.sum()))

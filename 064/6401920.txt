@@ -1,3 +1,0 @@
-let x = require(`fs`).readFileSync(`/dev/stdin`, `utf-8`).split(` `);
-let op = (a, b, c) => a < b && b < c ? `Yes` : `No`;
-console.log(op(+x[0], +x[1], +x[2]));

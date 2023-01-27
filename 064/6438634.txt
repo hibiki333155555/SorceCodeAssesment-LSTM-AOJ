@@ -1,8 +1,0 @@
-num_line=1
-while true:
-    if num==0:
-         break
-    else:
-        num=int(input())
-        print("Case",num_line:,num)
-    num_line=num_line+1
