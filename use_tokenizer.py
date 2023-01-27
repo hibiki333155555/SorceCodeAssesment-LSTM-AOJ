@@ -99,7 +99,7 @@ for epoch in range(50):
         # モデルが持ってる勾配の情報をリセット
         model.zero_grad()
         # 文章を単語IDの系列に変換（modelに食わせられる形に変換）
-        inputs = tokenizer.encode(title)
+        inputs = sentence2index(title)
         # 順伝播の結果を受け取る
         out = model(inputs)
         # 正解カテゴリをテンソル化
