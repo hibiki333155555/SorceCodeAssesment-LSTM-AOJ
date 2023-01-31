@@ -1,50 +1,65 @@
-from tokenizers import Tokenizer, normalizers, pre_tokenizers
-from tokenizers.models import WordLevel
-from tokenizers.normalizers import NFD, Lowercase, StripAccents
-from tokenizers.pre_tokenizers import Digits, Whitespace
-from tokenizers.processors import TemplateProcessing
-from tokenizers.trainers import WordLevelTrainer
-
+import json
+from tokenizers import Tokenizer
 import torch
-from torch import nn
-from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision.transforms import ToTensor, Lambda, Compose
-import matplotlib.pyplot as plt
+import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-import json
-
 json_open = open('out.json', 'r')
-
 json_load = json.load(json_open)
-
-embedding_dim = 10
-hidden_dim = 100
-vocab_size = 400
 
 tokenizer = Tokenizer.from_file("./tokenizer.json")
 
-input = tokenizer.encode(json_load[0][1])
-print(input.ids, end = "\n\n")
+# 学習用データはout.jsonの2242コード中100コード
+data = []
+for i in range(0, 100):
+    input = tokenizer.encode(json_load[i][1])
+    data.extend(input.ids)
 
-# input_tensor = torch.tensor([0, 1, 2, 3])　tensorにしないとlstmに食わせられない
-input_tensor = torch.tensor(input.ids, dtype=torch.long)
 
-embeds = nn.Embedding(vocab_size, embedding_dim)
+def pre(l: list):
+    for i in range(len(l) - 1):
+        yield [l[:i + 1], l[i + 1]]
 
-sentence_matrix = embeds(input_tensor)
+# pairsは合計18873組
+pairs = list(pre(data))
 
-print(sentence_matrix)
 
-lstm_input = sentence_matrix.view(len(sentence_matrix), 1, -1)
+from torch.utils.data import Dataset
 
-lstm = nn.LSTM(embedding_dim, hidden_dim)
+class ErrorCorrectionDataset(Dataset):
+    def __init__(self, pairs, train=True):
+        # train:test = 9:1
+        ratio = 0.9
+        size = len(pairs)
+        boundary = int(size * ratio)
 
-out1, out2 = lstm(lstm_input)
+        # 前半を train データ、後半を test データに分割
+        if train:
+            self.pairs = pairs[:boundary]
+        else:
+            self.pairs = pairs[boundary:]
 
-print(out1[11])
+    def __len__(self):
+        return len(self.pairs)
+
+    def __getitem__(self, idx):
+        wa, ac = self.pairs[idx]
+        return (torch.tensor(wa), torch.tensor(ac))
+
+from torch.utils.data import DataLoader
+
+batch_num = 16
+
+train_data = ErrorCorrectionDataset(pairs, train=True)
+test_data = ErrorCorrectionDataset(pairs, train=False)
+
+train_dataloader = DataLoader(train_data, batch_size = batch_num, shuffle = True)
+test_dataloader = DataLoader(test_data, batch_size = batch_num, shuffle = False)
+
+train_size = len(train_data)
+test_size = len(test_data)
+
 
 # nn.Moduleを継承して新しいクラスを作る。決まり文句
 class LSTMClassifier(nn.Module):
@@ -80,8 +95,11 @@ class LSTMClassifier(nn.Module):
 from sklearn.model_selection import train_test_split
 
 
-traindata, testdata = train_test_split(json_load, train_size=0.7)
+# traindata, testdata = train_test_split(pairs, train_size=0.8)
 
+embedding_dim = 10
+hidden_dim = 100
+vocab_size = 400
 tagset_size = 400
 
 model = LSTMClassifier(embedding_dim, hidden_dim, vocab_size, tagset_size)
@@ -91,26 +109,36 @@ loss_function = nn.NLLLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 losses = []
-
 for epoch in range(50):
     all_loss = 0
-    for title, cat in zip(traindata["title"], traindata["category"]):
+    for i in range(100):
         # モデルが持ってる勾配の情報をリセット
         model.zero_grad()
         # 文章を単語IDの系列に変換（modelに食わせられる形に変換）
-        inputs = sentence2index(title)
+        mae = train_data[i][0]
+        next = train_data[i][1]
+        input_tensor = torch.tensor(mae, dtype=torch.long)
         # 順伝播の結果を受け取る
-        out = model(inputs)
+        out = model(input_tensor)
         # 正解カテゴリをテンソル化
-        answer = category2tensor(cat)
+
+        answer = torch.tensor([next], dtype=torch.long)
+        answer = nn.functional.one_hot(answer, num_classes = vocab_size)
+        # print(out.shape)
+        # print(answer.shape)
         # 正解とのlossを計算
-        loss = loss_function(out, answer)
+        loss = loss_function(out[0], answer[0])
         # 勾配をセット
         loss.backward()
         # 逆伝播でパラメータ更新
         optimizer.step()
         # lossを集計
         all_loss += loss.item()
+        # print(all_loss / (i + 1))
     losses.append(all_loss)
     print("epoch", epoch, "\t" , "loss", all_loss)
 print("done.")
+
+torch.save(model.state_dict(), './model.pth')
+# 1 バッチ化　<- randomにした後に　pythorch
+# 2 評価　不正解をモデルに入れてみる　-> 手動で見る
