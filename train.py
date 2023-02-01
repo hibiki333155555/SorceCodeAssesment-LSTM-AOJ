@@ -108,37 +108,39 @@ loss_function = nn.NLLLoss()
 
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
-losses = []
-for epoch in range(50):
-    all_loss = 0
-    for i in range(100):
-        # モデルが持ってる勾配の情報をリセット
-        model.zero_grad()
-        # 文章を単語IDの系列に変換（modelに食わせられる形に変換）
-        mae = train_data[i][0]
-        next = train_data[i][1]
-        input_tensor = torch.tensor(mae, dtype=torch.long)
-        # 順伝播の結果を受け取る
-        out = model(input_tensor)
-        # 正解カテゴリをテンソル化
+if __name__=="__main__":
+        
+    losses = []
+    for epoch in range(50):
+        all_loss = 0
+        for i in range(100):
+            # モデルが持ってる勾配の情報をリセット
+            model.zero_grad()
+            # 文章を単語IDの系列に変換（modelに食わせられる形に変換）
+            mae = train_data[i][0]
+            next = train_data[i][1]
+            input_tensor = torch.tensor(mae, dtype=torch.long)
+            # 順伝播の結果を受け取る
+            out = model(input_tensor)
+            # 正解カテゴリをテンソル化
 
-        answer = torch.tensor([next], dtype=torch.long)
-        answer = nn.functional.one_hot(answer, num_classes = vocab_size)
-        # print(out.shape)
-        # print(answer.shape)
-        # 正解とのlossを計算
-        loss = loss_function(out[0], answer[0])
-        # 勾配をセット
-        loss.backward()
-        # 逆伝播でパラメータ更新
-        optimizer.step()
-        # lossを集計
-        all_loss += loss.item()
-        # print(all_loss / (i + 1))
-    losses.append(all_loss)
-    print("epoch", epoch, "\t" , "loss", all_loss)
-print("done.")
+            answer = torch.tensor([next], dtype=torch.long)
+            answer = nn.functional.one_hot(answer, num_classes = vocab_size)
+            # print(out.shape)
+            # print(answer.shape)
+            # 正解とのlossを計算
+            loss = loss_function(out[0], answer[0])
+            # 勾配をセット
+            loss.backward()
+            # 逆伝播でパラメータ更新
+            optimizer.step()
+            # lossを集計
+            all_loss += loss.item()
+            # print(all_loss / (i + 1))
+        losses.append(all_loss)
+        print("epoch", epoch, "\t" , "loss", all_loss)
+    print("done.")
 
-torch.save(model.state_dict(), './model.pth')
+    torch.save(model.state_dict(), './model.pth')
 # 1 バッチ化　<- randomにした後に　pythorch
 # 2 評価　不正解をモデルに入れてみる　-> 手動で見る

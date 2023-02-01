@@ -26,14 +26,16 @@ def pre(l: list):
 
 pairs = list(pre(test_tokens.ids))
 
-
+print(pairs)
 for test in pairs:
         mae = test[0]
         next = test[1]
         input_tensor = torch.tensor(mae, dtype=torch.long)
         # 順伝播の結果を受け取る
         out = model(input_tensor)
-        answer = torch.tensor([next], dtype=torch.long)
-        answer = nn.functional.one_hot(answer, num_classes = vocab_size)
-        print(answer)
-        print(out)
+        out = out[0][next]
+        out = torch.exp(out)
+        # answer = torch.tensor([next], dtype=torch.long)
+        # answer = nn.functional.one_hot(answer, num_classes = vocab_size)
+        print(next)
+        print(out.item())
