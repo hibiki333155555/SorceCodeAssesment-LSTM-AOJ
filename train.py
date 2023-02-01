@@ -8,7 +8,7 @@ import torch.optim as optim
 json_open = open('out.json', 'r')
 json_load = json.load(json_open)
 
-tokenizer = Tokenizer.from_file("./tokenizer.json")
+tokenizer = Tokenizer.from_file("./tokenizer2.json")
 
 # 学習用データはout.jsonの2242コード中100コード
 data = []
@@ -49,7 +49,7 @@ class ErrorCorrectionDataset(Dataset):
 
 from torch.utils.data import DataLoader
 
-batch_num = 16
+batch_num = 128
 
 train_data = ErrorCorrectionDataset(pairs, train=True)
 test_data = ErrorCorrectionDataset(pairs, train=False)
@@ -99,8 +99,8 @@ from sklearn.model_selection import train_test_split
 
 embedding_dim = 10
 hidden_dim = 100
-vocab_size = 400
-tagset_size = 400
+vocab_size = 600
+tagset_size = 600
 
 model = LSTMClassifier(embedding_dim, hidden_dim, vocab_size, tagset_size)
 
