@@ -10,20 +10,17 @@ json_load = json.load(json_open)
 
 tokenizer = Tokenizer.from_file("./tokenizer2.json")
 
-# 学習用データはout.jsonの2242コード中100コード
-data = []
-for i in range(0, 100):
-    input = tokenizer.encode(json_load[i][1])
-    
-    data.extend(input.ids)
-
 
 def pre(l: list):
     for i in range(len(l) - 1):
         yield [l[:i + 1], l[i + 1]]
 
-# pairsは合計18873組
-pairs = list(pre(data))
+# 学習用データはout.jsonの2242コード中100コード
+pairs = []
+for data in json_load:
+    ids = tokenizer.encode(data[1]).ids
+    pairs.extend(pre(ids))
+
 
 
 from torch.utils.data import Dataset
@@ -93,12 +90,11 @@ class LSTMClassifier(nn.Module):
         return tag_scores
 
 
-from sklearn.model_selection import train_test_split
 
 
 # traindata, testdata = train_test_split(pairs, train_size=0.8)
 
-embedding_dim = 10
+embedding_dim = 120
 hidden_dim = 100
 vocab_size = 600
 tagset_size = 600
@@ -114,12 +110,12 @@ if __name__=="__main__":
     losses = []
     for epoch in range(50):
         all_loss = 0
-        for i in range(100):
+        for data in train_data:
             # モデルが持ってる勾配の情報をリセット
             model.zero_grad()
             # 文章を単語IDの系列に変換（modelに食わせられる形に変換）
-            mae = train_data[i][0]
-            next = train_data[i][1]
+            mae = data[0]
+            next = data[1]
             input_tensor = torch.tensor(mae, dtype=torch.long)
             # 順伝播の結果を受け取る
             out = model(input_tensor)
@@ -130,7 +126,10 @@ if __name__=="__main__":
             # print(out.shape)
             # print(answer.shape)
             # 正解とのlossを計算
-            loss = loss_function(out[0], answer[0])
+
+            loss = 0
+            for j in range(batch_num):
+                loss += loss_function(out[j], answer[j])
             # 勾配をセット
             loss.backward()
             # 逆伝播でパラメータ更新
