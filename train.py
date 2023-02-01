@@ -78,7 +78,7 @@ class LSTMClassifier(nn.Module):
         # softmaxのLog版。dim=0で列、dim=1で行方向を確率変換。
         self.softmax = nn.LogSoftmax(dim=1)
 
-    # 順伝播処理はforward関数に記載
+
     def forward(self, sentence):
         # 文章内の各単語をベクトル化して出力。2次元のテンソル
         embeds = self.word_embeddings(sentence)
