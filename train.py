@@ -14,6 +14,7 @@ tokenizer = Tokenizer.from_file("./tokenizer2.json")
 data = []
 for i in range(0, 100):
     input = tokenizer.encode(json_load[i][1])
+    
     data.extend(input.ids)
 
 
