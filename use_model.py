@@ -6,13 +6,13 @@ import numpy as np
 from tokenizers import Tokenizer
 
 
-embedding_dim = 10
+embedding_dim = 120
 hidden_dim = 100
 vocab_size = 600
 tagset_size = 600
 
 model = train.LSTMClassifier(embedding_dim, hidden_dim, vocab_size, tagset_size)
-model.load_state_dict(torch.load("./model.pth"))
+model.load_state_dict(torch.load("./model_pth_0.pth"))
 model.eval()
 
 
@@ -40,4 +40,4 @@ for test in pairs:
         # answer = nn.functional.one_hot(answer, num_classes = vocab_size)
         print(next)
         print(out.item())
-        print(out2)
+        # print(out2)

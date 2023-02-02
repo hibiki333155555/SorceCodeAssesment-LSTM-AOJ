@@ -21,54 +21,14 @@ for data in json_load:
     ids = tokenizer.encode(data[1]).ids
     pairs.extend(pre(ids))
 
+import random
+random.shuffle(pairs)
 
-def collate_fn(batch):
-    print(len(batch))
-    
-    batch = torch.tensor(batch)
-    print(batch.shape)
-    x = nn.utils.rnn.pad_sequence(batch[:, 0], batch_first=True)
-    return x
-# pairs = sorted(pairs, key=lambda x: x.shape[0], reverse=True)
+pairs = pairs[:10000]
 
+from sklearn.model_selection import train_test_split 
 
-
-from torch.utils.data import Dataset
-
-class ErrorCorrectionDataset(Dataset):
-    def __init__(self, pairs, train=True):
-        # train:test = 9:1
-        ratio = 0.9
-        size = len(pairs)
-        boundary = int(size * ratio)
-
-
-        # 前半を train データ、後半を test データに分割
-        if train:
-            self.pairs = pairs[:boundary]
-        else:
-            self.pairs = pairs[boundary:]
-
-    def __len__(self):
-        return len(self.pairs)
-
-    def __getitem__(self, idx):
-        wa, ac = self.pairs[idx]
-        return [torch.tensor(wa), torch.tensor(ac)]
-
-from torch.utils.data import DataLoader
-
-batch_num = 128
-
-train_data = ErrorCorrectionDataset(pairs, train=True)
-test_data = ErrorCorrectionDataset(pairs, train=False)
-
-train_dataloader = DataLoader(train_data, batch_size = batch_num, shuffle = True, collate_fn=collate_fn)
-test_dataloader = DataLoader(test_data, batch_size = batch_num, shuffle = False, collate_fn=collate_fn)
-
-train_size = len(train_data)
-test_size = len(test_data)
-
+traindata, testdata = train_test_split(pairs, train_size=0.9)
 
 # nn.Moduleを継承して新しいクラスを作る。決まり文句
 class LSTMClassifier(nn.Module):
@@ -116,12 +76,13 @@ loss_function = nn.NLLLoss()
 
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
+from tqdm import tqdm
 if __name__=="__main__":
         
     losses = []
-    for epoch in range(50):
+    for epoch in tqdm(range(50)):
         all_loss = 0
-        for data in train_dataloader:
+        for data in tqdm(traindata, leave=False):
             # モデルが持ってる勾配の情報をリセット
             model.zero_grad()
             # 文章を単語IDの系列に変換（modelに食わせられる形に変換）
@@ -132,17 +93,19 @@ if __name__=="__main__":
             out = model(input_tensor)
             # 正解カテゴリをテンソル化
 
-            answer = torch.tensor(next, dtype=torch.long)
+            answer = torch.tensor([next], dtype=torch.long)
             answer = nn.functional.one_hot(answer, num_classes = vocab_size)
             # print(out.shape)
             # print(answer.shape)
             # 正解とのlossを計算
-            print(answer.shape)
-            print(out.shape)
 
+            loss = loss_function(out[0], answer[0])
+            """
             loss = 0
             for j in range(out.size()[1]):
-                loss += loss_function(out[:, j, :], answer[:, j, :])
+                loss += loss_function(out[j, :], answer[j, :])
+            """
+
 
             # 勾配をセット
             loss.backward()
@@ -151,7 +114,11 @@ if __name__=="__main__":
             # lossを集計
             all_loss += loss.item()
             # print(all_loss / (i + 1))
+
         losses.append(all_loss)
+        file_name = f"./model_pth_{epoch}.pth"
+        torch.save(model.state_dict(), file_name)
+
         print("epoch", epoch, "\t" , "loss", all_loss)
     print("done.")
 

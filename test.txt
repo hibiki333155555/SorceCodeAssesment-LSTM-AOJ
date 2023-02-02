@@ -1,4 +1,8 @@
-#include <iostream> using namespace std; void printarray(int A[], int n){ int i;
+#include <iostream>
+using namespace std;
+
+void printarray(int A[], int n){
+    int i;
     for(i = 0; i < n; i++) {
         cout << A[i];
         if(i + 1 < n) cout << " ";
