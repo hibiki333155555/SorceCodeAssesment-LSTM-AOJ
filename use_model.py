@@ -20,8 +20,7 @@ def probability_error_source_code(source_code):
     model.eval()
 
 
-    tokenizer = Tokenizer.from_file("./tokenizer.json")
-    # f_name = "./test.txt"
+    tokenizer = Tokenizer.from_file("./tokenizer2.json")
     test_tokens = tokenizer.encode(source_code)
 
 
@@ -45,3 +44,8 @@ def probability_error_source_code(source_code):
             print(next)
             print(out.item())
             print(out2)
+
+if __name__=="__main__":
+    probability_error_source_code(open("./test.txt", "r").read())
+
+    
