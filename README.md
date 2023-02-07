@@ -1,7 +1,7 @@
 # SorceCodeAssesment-LSTM-AOJ
 ##　目的
-AOJから取得したsoruce_codeを学習しプログラミングコードのエラー検知モデルを作る。
-発表スライド:https://docs.google.com/presentation/d/1wgntSqGvJa_5tn8RrNulVyeR9755m6Rtl-PW5IaVnL4/edit?usp=sharing  
+AOJから取得したsoruce_codeを学習しプログラミングコードのエラー検知モデルを作る。 
+発表スライド:https://docs.google.com/presentation/d/1wgntSqGvJa_5tn8RrNulVyeR9755m6Rtl-PW5IaVnL4/edit?usp=sharing   
 (2023/2/2)
 
 ## 概要
